@@ -51,7 +51,7 @@ func _home() -> void:
 	add_child(column)
 	var play := UIKit.button("New game", UIKit.TERRA)
 	play.custom_minimum_size = Vector2(320, 54)
-	play.pressed.connect(func(): _intro("dana"))
+	play.pressed.connect(func(): _intro(GameState.slice_character_id()))
 	column.add_child(play)
 	var cont := UIKit.button("Continue", UIKit.SAGE)
 	cont.custom_minimum_size = Vector2(320, 54)

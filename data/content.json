@@ -1,10 +1,10 @@
 {
   "characters": [
-    { "id": "dana", "name": "Dana Reyes", "perk": "Spreadsheet Brain", "role": "Laid-off office worker", "blurb": "Laid-off office worker. Starts in the Garage Startup with $120.", "playable": true, "start_office": "garage", "start_money": 120 },
-    { "id": "sol", "name": "Sol", "perk": "Cafe Regular", "blurb": "Knows every regular's mug. Coming later.", "playable": false },
-    { "id": "hank", "name": "Hank", "perk": "Road Legs", "blurb": "Bumps sting a little less. Coming later.", "playable": false },
-    { "id": "milo", "name": "Milo", "perk": "Campus Buzz", "blurb": "Turns a move into a small party. Coming later.", "playable": false },
-    { "id": "bea", "name": "Bea", "perk": "Handmade Touch", "blurb": "Mends a chip in one tap. Coming later.", "playable": false }
+    { "id": "dana", "name": "Dana Reyes", "perk": "Spreadsheet Brain", "role": "Laid-off office worker", "blurb": "Laid off on a Tuesday. Starts in the Garage Startup with $120.", "playable": true, "phase": "slice", "start_office": "garage", "start_money": 120 },
+    { "id": "sol", "name": "Sol Achebe", "perk": "Cafe Regular", "blurb": "Freelancer at the cafe corner. Coming later.", "playable": false, "phase": "post_slice" },
+    { "id": "hank", "name": "Hank \"Gravel\" Dubois", "perk": "Road Legs", "blurb": "Thirty years of highway. Coming later.", "playable": false, "phase": "1.0" },
+    { "id": "milo", "name": "Milo Tran", "perk": "Campus Buzz", "blurb": "Fresh diploma, tiny desk. Coming later.", "playable": false, "phase": "1.0" },
+    { "id": "bea", "name": "Bea Lindqvist", "perk": "Handmade Touch", "blurb": "Knits and sells from the kitchen table. Coming later.", "playable": false, "phase": "1.0" }
   ],
   "buyers": [
     { "id": "steve", "name": "StaplerSteve88", "wants": ["stapler_vintage", "stapler_red"], "line": "I'll pay extra for a stapler with character." },
@@ -14,7 +14,11 @@
   "items": {
     "desk_main": { "name": "Dana's Desk", "model": "desk", "w": 1.4, "d": 0.7, "h": 0.76, "surface": 0.76, "mount": "floor", "flavor": "The folding table grew up. The mug still fits." },
     "starter_mug": { "name": "World's Okayest Mug", "model": "mug_worlds_okayest", "w": 0.16, "d": 0.14, "h": 0.11, "mount": "small", "flavor": "Honest, and dishwasher safe." },
-    "sticky_note_stack": { "name": "Sticky Note Stack", "model": "proc:sticky", "w": 0.16, "d": 0.14, "h": 0.05, "mount": "small", "flavor": "Three colors. Infinite reminders." },
+    "sticky_note_stack": { "name": "Sticky Note Stack", "model": "sticky_note_stack", "w": 0.252, "d": 0.235, "h": 0.136, "mount": "small", "flavor": "Nine years of reminders. Most say 'call back.'" },
+    "cb_radio": { "name": "Old CB Radio", "model": "cb_radio", "w": 0.315, "d": 0.198, "h": 0.403, "mount": "small", "flavor": "Mostly static. Sometimes a trucker reading the weather." },
+    "thermos_dented": { "name": "Dented Thermos", "model": "thermos_dented", "w": 0.103, "d": 0.105, "h": 0.36, "mount": "small", "flavor": "Kept coffee hot across 41 states." },
+    "ramen_kettle": { "name": "Dorm Kettle", "model": "ramen_kettle", "w": 0.21, "d": 0.17, "h": 0.22, "mount": "small", "flavor": "Makes ramen, tea, and late-night decisions." },
+    "yarn_basket": { "name": "Yarn Basket", "model": "yarn_basket", "w": 0.559, "d": 0.45, "h": 0.385, "mount": "floor", "flavor": "Every color. One mystery knot." },
     "desk_lamp": { "name": "Desk Lamp", "model": "lamp", "w": 0.36, "d": 0.36, "h": 0.58, "mount": "small", "light": true, "flavor": "Mustard shade, soft warm light." },
     "place_keyboard": { "name": "Keyboard", "model": "keyboard", "w": 0.44, "d": 0.18, "h": 0.04, "mount": "small", "flavor": "Lives in front of the old monitor." },
     "place_crt": { "name": "HomeDesk Computer", "model": "crt_computer", "w": 0.46, "d": 0.58, "h": 0.42, "mount": "small", "computer": true, "flavor": "Beige, humming, and open for business." },

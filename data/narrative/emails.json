@@ -2,8 +2,8 @@
  {
   "id": "tut_welcome",
   "from": "Marge \"Mile Marker\" Holloway",
-  "subject": "Welcome to the garage!",
-  "body": "Hi there, rookie!\n\nI started Corner Movers in a garage too. It smelled like diesel and big dreams.\n\nUnpack your boxes first. Put things wherever feels right.\n\nKeep the shiny side up,\nMile Marker",
+  "subject": "Welcome to the garage, boss",
+  "body": "Hey Dana,\n\nHeard Grayline let you go. Their loss. My first office was a garage too. Smelled like diesel and big plans.\n\nUnpack first. The whiteboard's yours to fill.\n\nKeep the shiny side up,\nMile Marker",
   "trigger": "game_start"
  },
  {

@@ -1,0 +1,47 @@
+{
+ "sticky_note_stack": {
+  "tris": 936,
+  "size_m": [
+   0.252,
+   0.235,
+   0.136
+  ],
+  "origin": "bottom"
+ },
+ "cb_radio": {
+  "tris": 772,
+  "size_m": [
+   0.315,
+   0.198,
+   0.403
+  ],
+  "origin": "bottom"
+ },
+ "thermos_dented": {
+  "tris": 684,
+  "size_m": [
+   0.103,
+   0.105,
+   0.36
+  ],
+  "origin": "bottom"
+ },
+ "ramen_kettle": {
+  "tris": 612,
+  "size_m": [
+   0.21,
+   0.17,
+   0.22
+  ],
+  "origin": "bottom"
+ },
+ "yarn_basket": {
+  "tris": 352,
+  "size_m": [
+   0.559,
+   0.45,
+   0.385
+  ],
+  "origin": "bottom"
+ }
+}

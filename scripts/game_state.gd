@@ -194,17 +194,71 @@ func fire_trigger(trigger: String) -> void:
 		emit_signal("emails_changed")
 
 
+func slice_character_id() -> String:
+	for who in _player_characters():
+		if str(who.get("phase", "")) != "slice":
+			continue
+		var raw := str(who.get("id", "pc_dana"))
+		if raw.begins_with("pc_"):
+			return raw.trim_prefix("pc_")
+		return raw
+	return "dana"
+
+
 func _read_emails() -> Array:
-	# TODO: When res://data/narrative/player_characters.json arrives with the next
-	# asset batch, replace tut_welcome with Dana Reyes's welcome email from Marge
-	# in that file. Until then, keep the current tut_welcome in emails.json.
 	if not FileAccess.file_exists("res://data/narrative/emails.json"):
 		return []
 	var file := FileAccess.open("res://data/narrative/emails.json", FileAccess.READ)
 	var parsed = JSON.parse_string(file.get_as_text())
 	if typeof(parsed) != TYPE_ARRAY:
 		return []
-	return parsed
+	var welcome := _slice_welcome_email()
+	if welcome.is_empty():
+		return parsed
+	var emails: Array = []
+	var replaced := false
+	for email in parsed:
+		var copy: Dictionary = (email as Dictionary).duplicate(true)
+		if str(copy.get("id", "")) == "tut_welcome":
+			copy["from"] = welcome.get("from", copy.get("from", ""))
+			copy["subject"] = welcome.get("subject", copy.get("subject", ""))
+			copy["body"] = welcome.get("body", copy.get("body", ""))
+			copy["trigger"] = "game_start"
+			replaced = true
+		emails.append(copy)
+	if not replaced:
+		emails.push_front({
+			"id": "tut_welcome",
+			"from": welcome.get("from", "Marge"),
+			"subject": welcome.get("subject", "Hello"),
+			"body": welcome.get("body", ""),
+			"trigger": "game_start",
+		})
+	return emails
+
+
+func _slice_welcome_email() -> Dictionary:
+	for who in _player_characters():
+		if str(who.get("phase", "")) != "slice":
+			continue
+		var email: Variant = who.get("welcome_email", {})
+		if typeof(email) == TYPE_DICTIONARY:
+			return email
+	return {}
+
+
+func _player_characters() -> Array:
+	var path := "res://data/narrative/player_characters.json"
+	if not FileAccess.file_exists(path):
+		return []
+	var file := FileAccess.open(path, FileAccess.READ)
+	var parsed = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return []
+	var characters: Variant = parsed.get("characters", [])
+	if typeof(characters) != TYPE_ARRAY:
+		return []
+	return characters
 
 
 func unread_count() -> int:

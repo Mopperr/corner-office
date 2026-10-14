@@ -42,8 +42,27 @@ func _ready() -> void:
 		failures.append("desk height")
 	if GameState.inbox.is_empty() or str(GameState.inbox[0].get("id", "")) != "tut_welcome":
 		failures.append("welcome email")
-	if GameState.character != "dana" or GameState.office_id != "garage":
+	if not str(GameState.inbox[0].get("body", "")).contains("Hey Dana") or str(GameState.inbox[0].get("subject", "")) != "Welcome to the garage, boss":
+		failures.append("dana welcome")
+	if GameState.character != "dana" or GameState.office_id != "garage" or GameState.slice_character_id() != "dana":
 		failures.append("dana start")
+	var notes_def := ItemDB.get_item("sticky_note_stack")
+	if str(notes_def.get("model", "")) != "sticky_note_stack":
+		failures.append("notes model")
+	var notes_prop := Props.make("sticky_note_stack")
+	if notes_prop == null or notes_prop.get_node_or_null("PropCollision") == null:
+		failures.append("notes mesh")
+	else:
+		notes_prop.free()
+	for model_name in ["cb_radio", "thermos_dented", "ramen_kettle", "yarn_basket"]:
+		if not FileAccess.file_exists("res://assets/models/%s.glb" % model_name):
+			failures.append("missing %s" % model_name)
+			continue
+		var made := Props.make(model_name)
+		if made == null or made.get_node_or_null("PropCollision") == null:
+			failures.append("model %s" % model_name)
+		if made != null:
+			made.free()
 	var dana_name := ""
 	for who in ItemDB.characters:
 		if str(who.get("id", "")) == "dana":

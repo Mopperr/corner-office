@@ -1,6 +1,6 @@
 # Intro
 
-You are Dana Reyes. The office let you go, and the garage is yours now.
+You are Dana Reyes. Laid off on a Tuesday. The garage opened on Wednesday.
 
 Your old desk fits in nine boxes. Maybe ten.
 
