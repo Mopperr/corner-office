@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://bvq7jqqqxnma1"
+uid="uid://dautkg3owjf3n"
 path="res://.godot/imported/amb_l01_garage_loop.ogg-154e3a87fa9a2570aaaf5842574a6461.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/amb_l01_garage_loop.ogg-154e3a87fa9a2570aaaf5
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

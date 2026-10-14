@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://dhxcvrbg65535"
+uid="uid://dk1f6vtl4hvqa"
 path="res://.godot/imported/music_rainy_office.ogg-5070ba3a768da78d6ce70d2aaf5cadcd.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/music_rainy_office.ogg-5070ba3a768da78d6ce70d
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

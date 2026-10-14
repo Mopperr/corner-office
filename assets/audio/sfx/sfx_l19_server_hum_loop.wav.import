@@ -2,7 +2,7 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://bxlcsoj7gk65t"
+uid="uid://c23je4m1ukvq4"
 path="res://.godot/imported/sfx_l19_server_hum_loop.wav-8544dc1abe7731318d16da2229976675.sample"
 
 [deps]
@@ -18,7 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop_mode=1
+edit/loop_mode=0
 edit/loop_begin=0
 edit/loop_end=-1
 compress/mode=2

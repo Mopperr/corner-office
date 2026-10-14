@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://b2ged70ltjtec"
+uid="uid://b2ogqtbrc4487"
 path="res://.godot/imported/amb_l05_park_birds_loop.ogg-ae9127177c3ef7262da1719ca264d3d6.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/amb_l05_park_birds_loop.ogg-ae9127177c3ef7262
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

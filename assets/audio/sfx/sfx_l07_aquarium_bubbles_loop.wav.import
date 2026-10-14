@@ -2,7 +2,7 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://bidsxoyyb8v6u"
+uid="uid://dd7xjpkeb4qjb"
 path="res://.godot/imported/sfx_l07_aquarium_bubbles_loop.wav-1c8e46fe83b9447fe177367684792fe2.sample"
 
 [deps]
@@ -18,7 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop_mode=1
+edit/loop_mode=0
 edit/loop_begin=0
 edit/loop_end=-1
 compress/mode=2
