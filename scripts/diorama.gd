@@ -1,5 +1,7 @@
 extends Node3D
 
+const PlaceLib = preload("res://scripts/placement.gd")
+
 signal open_computer
 signal request_drive
 signal request_results
@@ -36,12 +38,22 @@ var visitor_wait := 5.0
 var courier_seen: Dictionary = {}
 var unbox_uid := ""
 var hover_root: Node3D
+var backdrop := false
+var show_focus := Vector3.ZERO
+var show_cam := Vector3.ZERO
+var show_basis := Basis.IDENTITY
+var show_ready := false
+var drift_t := 0.0
+var settling := false
 
 
 func _ready() -> void:
 	items_root.name = "Items"
 	add_child(items_root)
 	_world()
+	if backdrop:
+		_build_showroom()
+		return
 	_build_venue()
 	_refresh_items()
 	_build_hud()
@@ -189,6 +201,14 @@ func _frame_camera() -> void:
 	var height := (max_y - min_y) * 1.16
 	var width_need := (max_x - min_x) * 1.16 / aspect
 	cam.size = maxf(height, width_need)
+	if backdrop:
+		cam.size *= 0.78
+		var slide := cam.size * aspect * 0.2
+		cam.global_position -= cam.global_transform.basis.x * slide
+		show_focus = center + xf.basis * shift
+		show_cam = cam.global_position
+		show_basis = cam.global_transform.basis
+		show_ready = true
 
 
 func _room_points() -> Array:
@@ -247,6 +267,18 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 						add_child(small)
 				xx += 1.0
 			zz += 1.0
+	var body := StaticBody3D.new()
+	body.name = "FloorBody"
+	body.collision_layer = 1
+	body.collision_mask = 1
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(w, 0.08, d)
+	box.margin = 0.001
+	shape.shape = box
+	shape.position = Vector3(x + w * 0.5, -0.04, z + d * 0.5)
+	body.add_child(shape)
+	add_child(body)
 
 
 func _needs_1m(x: float, z: float, w: float, d: float, xx: float, zz: float) -> bool:
@@ -434,15 +466,15 @@ func _dress() -> void:
 	if id == "garage":
 		_place_model("driveway_apron_2m", Vector3(2.5, 0, -1.02))
 		_place_model("driveway_apron_2m", Vector3(4.5, 0, -1.02))
-		_place_model("pegboard", Vector3(0.11, 1.15, 7.0), 90)
-		_place_model("bike_hooks", Vector3(0.11, 1.55, 1.5), 90)
+		_place_model("pegboard", Vector3(0.12, 1.15, 7.0), 90)
+		_place_model("bike_hooks", Vector3(0.12, 1.55, 1.5), 90)
 		_place_model("job_clipboard", Vector3(5.15, 0.85, 6.35))
 	if bool(venue.get("stain", false)):
 		for spot in [Vector3(2.4, 0.0, 1.3), Vector3(4.2, 0.0, 1.8)]:
 			_place_model("floor_oil_stain_1m", spot)
 	if id == "cafe":
 		_place_model("cafe_counter", Vector3(3.2, 0, 4.7))
-		_place_model("mug_rack", Vector3(0.11, 1.35, 3.2), 90)
+		_place_model("mug_rack", Vector3(0.12, 1.35, 3.2), 90)
 		_place_model("hanging_plant", Vector3(2.0, 2.15, 2.2))
 		_place_model("hanging_plant", Vector3(4.6, 2.15, 3.4))
 		_place_model("padding_roll", Vector3(1.4, 0, 1.15))
@@ -457,7 +489,7 @@ func _dress() -> void:
 			Props.play_clip(board, "loop", true)
 		_place_model("display_case", Vector3(1.6, 0, 5.15))
 		_place_model("parts_drawer_unit", Vector3(3.3, 0, 5.15))
-		_place_model("cuckoo_clock", Vector3(0.11, 1.55, 2.2), 90)
+		_place_model("cuckoo_clock", Vector3(0.12, 1.55, 2.2), 90)
 	if id == "bakery":
 		_place_model("ceiling_beam", Vector3(2.0, 2.7, 3.2))
 		_place_model("ceiling_beam", Vector3(5.2, 2.7, 3.2))
@@ -571,6 +603,9 @@ func _sync_cargo() -> void:
 
 
 func _process(delta: float) -> void:
+	if backdrop:
+		_drift_camera(delta)
+		return
 	if toast_time > 0.0:
 		toast_time -= delta
 		if toast:
@@ -595,12 +630,45 @@ func _on_cat_clip(anim_name: StringName) -> void:
 		Props.play_clip(cat_rig, "idle", true)
 
 
+func _build_showroom() -> void:
+	venue = ItemDB.venues().get("garage", {}).duplicate(true)
+	venue["id"] = "garage"
+	_build_rect(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)), true)
+	_dress()
+	_set_garage_y(float(Tuning.get_value("garage_door_open_y", 2.1)))
+	for rec in ItemDB.starter_layout():
+		var copy: Dictionary = rec.duplicate(true)
+		_spawn_record(copy, str(copy.get("item", "")), false)
+	var tall := _place_model("plant_tall", Vector3(5.2, 0, 2.2))
+	if tall:
+		tall.rotation.y = 0.4
+	_place_model("plant_small", Vector3(1.35, 0, 6.3))
+	var box_a := Props.make("box_closed")
+	box_a.position = Vector3(4.35, 0, 5.55)
+	add_child(box_a)
+	var box_b := Props.make("box_closed")
+	box_b.position = Vector3(4.35, 0.36, 5.55)
+	box_b.rotation.y = 0.18
+	add_child(box_b)
+	_frame_camera()
+
+
+func _drift_camera(delta: float) -> void:
+	if cam == null or not show_ready:
+		return
+	drift_t += delta
+	var yaw := sin(drift_t * 0.18) * 0.07
+	var spin := Basis(Vector3.UP, yaw)
+	cam.global_position = show_focus + spin * (show_cam - show_focus)
+	cam.global_transform.basis = spin * show_basis
+
+
 func _update_ghost(delta: float) -> void:
 	if held_uid == "":
 		if ghost:
 			ghost.visible = false
 		return
-	var hit: Variant = _floor_point()
+	var hit: Variant = _aim_point()
 	if hit == null:
 		return
 	var spot: Dictionary = _snap_point(hit)
@@ -618,6 +686,9 @@ func _make_ghost() -> void:
 		ghost.queue_free()
 	var def := _held_def()
 	ghost = Props.make(str(def.get("model", "box_closed")))
+	var collision := ghost.get_node_or_null("PropCollision")
+	if collision:
+		collision.free()
 	add_child(ghost)
 
 
@@ -666,7 +737,12 @@ func _paint_ghost(valid: bool) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if backdrop:
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_G:
+			_toggle_snap()
+			return
 		if event.keycode == KEY_R:
 			if held_uid != "":
 				var key := event as InputEventKey
@@ -679,8 +755,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_click()
 
 
+func _toggle_snap() -> void:
+	SaveManager.snap_to_grid = not SaveManager.snap_to_grid
+	SaveManager.save_settings()
+	_toast("Grid snap on." if SaveManager.snap_to_grid else "Free placement.")
+	_refresh_hud_buttons()
+
+
 func _click() -> void:
-	if _over_ui():
+	if settling or _over_ui():
 		return
 	var item_uid := _pick_uid()
 	if item_uid.begins_with("delivery:") and GameState.mode == "office" and GameState.office_phase == "live":
@@ -724,6 +807,34 @@ func _pick_uid() -> String:
 			return "slot:%d" % int(node.get_meta("slot"))
 		node = node.get_parent()
 	return ""
+
+
+func _aim_point() -> Variant:
+	if cam == null:
+		return null
+	var space := get_world_3d().direct_space_state
+	if space == null:
+		return _floor_point()
+	var from := cam.project_ray_origin(get_viewport().get_mouse_position())
+	var to := from + cam.project_ray_normal(get_viewport().get_mouse_position()) * 80.0
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = 1
+	query.exclude = _ghost_rids()
+	var hit := space.intersect_ray(query)
+	if not hit.is_empty():
+		return hit.position
+	return _floor_point()
+
+
+func _ghost_rids() -> Array[RID]:
+	var ids: Array[RID] = []
+	if ghost == null:
+		return ids
+	if ghost is CollisionObject3D:
+		ids.append((ghost as CollisionObject3D).get_rid())
+	for node in ghost.find_children("*", "CollisionObject3D", true, false):
+		ids.append((node as CollisionObject3D).get_rid())
+	return ids
 
 
 func _floor_point() -> Variant:
@@ -783,7 +894,7 @@ func _check_pack_done() -> void:
 
 
 func _try_place_held() -> void:
-	var hit = _floor_point()
+	var hit = _aim_point()
 	if hit == null:
 		return
 	var spot: Dictionary = _snap_point(hit)
@@ -791,18 +902,29 @@ func _try_place_held() -> void:
 		AudioDirector.play_sfx("sfx_invalid_placement")
 		_shake(ghost if ghost else self)
 		return
-	if held_source == "decor":
-		GameState.place_decor_from_queue(spot, held_uid)
+	settling = true
+	var source := held_source
+	var uid := held_uid
+	var on_wall := str(spot.get("wall", "")) != ""
+	if source == "decor":
+		GameState.place_decor_from_queue(spot, uid)
 		AudioDirector.play_sfx("sfx_item_snap", true)
-		_squash_last()
 		held_uid = ""
 		held_source = ""
-		_refresh_items()
+		if on_wall:
+			_refresh_items()
+			_squash_last()
+		else:
+			await _settle_uid(uid)
+			_squash_uid(uid)
+		settling = false
 		SaveManager.save_game()
 		return
-	var rec := GameState.find_office_item(held_uid) if held_source == "office" else GameState.job_item(held_uid)
+	var rec := GameState.find_office_item(uid) if source == "office" else GameState.job_item(uid)
 	if rec.is_empty():
 		held_uid = ""
+		held_source = ""
+		settling = false
 		return
 	rec["x"] = spot["pos"].x
 	rec["y"] = spot["pos"].y
@@ -810,18 +932,62 @@ func _try_place_held() -> void:
 	rec["rot"] = spot["rot"]
 	rec["wall"] = spot.get("wall", "")
 	rec["state"] = "placed"
-	if held_source == "office":
+	rec["settle"] = not on_wall
+	if source == "office":
 		GameState.note_first_place()
 	AudioDirector.play_sfx("sfx_item_snap", true)
 	AudioDirector.play_sfx("sfx_box_set_down", true)
 	held_uid = ""
-	_refresh_items()
-	_squash_uid(str(rec.get("uid", "")))
-	if held_source == "office":
+	held_source = ""
+	if on_wall:
+		_refresh_items()
+		_squash_uid(uid)
+	else:
+		await _settle_uid(uid)
+		_squash_uid(uid)
+	if source == "office":
 		_maybe_live()
 	else:
 		_maybe_job_done()
+	settling = false
 	SaveManager.save_game()
+
+
+func _settle_uid(uid: String) -> void:
+	_refresh_items()
+	var body := nodes_by_uid.get(uid, null) as RigidBody3D
+	if body == null:
+		return
+	var calm := 0
+	for i in 90:
+		if not is_inside_tree():
+			return
+		await get_tree().physics_frame
+		if not is_instance_valid(body) or body.freeze:
+			return
+		var speed := body.linear_velocity.length()
+		if (body.sleeping or speed < 0.05) and i > 5:
+			calm += 1
+			if calm >= 3:
+				break
+		else:
+			calm = 0
+	if not is_instance_valid(body):
+		return
+	PlaceLib.finish_settle(body)
+	var rec := _record_for(uid)
+	if not rec.is_empty():
+		rec["x"] = body.position.x
+		rec["y"] = body.position.y
+		rec["z"] = body.position.z
+		rec["settle"] = false
+
+
+func _record_for(uid: String) -> Dictionary:
+	var office := GameState.find_office_item(uid)
+	if not office.is_empty():
+		return office
+	return GameState.job_item(uid)
 
 
 func _maybe_live() -> void:
@@ -942,7 +1108,6 @@ func _snap_point(hit: Vector3) -> Dictionary:
 	var mount := str(def.get("mount", "floor"))
 	var rot := held_rot
 	var pos := Vector3(hit.x, float(Tuning.get_value("floor_y", 0.0)), hit.z)
-	var wall := ""
 	if mount == "hang" or mount == "wall_floor":
 		var point := _nearest_wall(hit, mount)
 		if point.is_empty():
@@ -950,31 +1115,28 @@ func _snap_point(hit: Vector3) -> Dictionary:
 		rot = float(point["rot"])
 		var offset := float(def.get("back_offset", -1.0))
 		if offset < 0.0:
-			offset = float(Tuning.get_value("wall_mount_offset_m", 0.11))
+			offset = float(Tuning.get_value("wall_mount_offset_m", 0.12))
 		var normal: Vector3 = point["normal"]
 		pos = Vector3(point["x"], point["y"], point["z"]) + normal * offset
-		wall = mount
-	else:
-		var grid := Tuning.snap_grid()
-		pos.x = snapped(hit.x, grid)
-		pos.z = snapped(hit.z, grid)
-		pos.y = _surface_y(pos, def)
-	var valid := _inside(pos.x, pos.z, 0.25) and not _blocked(pos, rot, def) and not _too_tall(pos, def)
-	return {"valid": valid, "pos": pos, "rot": rot, "wall": wall}
-
-
-func _surface_y(pos: Vector3, def: Dictionary) -> float:
-	if str(def.get("mount", "")) != "small":
-		return 0.0
-	for item in GameState.office_items:
-		if str(item.get("state", "")) != "placed":
+		var valid := _inside(pos.x, pos.z, -0.02) and not _blocked(pos, rot, def) and not _too_tall(pos, def)
+		return {"valid": valid, "pos": pos, "rot": rot, "wall": mount}
+	var records: Array = GameState.office_items if held_source != "job" else GameState.job.get("items", [])
+	var others: Array = []
+	for rec in records:
+		if str(rec.get("uid", "")) == held_uid:
 			continue
-		var other := ItemDB.get_item(str(item.get("item", "")))
-		if float(other.get("surface", 0)) <= 0.0:
+		if str(rec.get("state", "")) != "placed":
 			continue
-		if abs(pos.x - float(item.get("x", 0))) < float(other.get("w", 1)) * 0.45 and abs(pos.z - float(item.get("z", 0))) < float(other.get("d", 1)) * 0.45:
-			return float(other.get("surface", 0))
-	return 0.0
+		others.append(rec)
+	var room := Rect2(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)))
+	var extra: Array = []
+	if venue.has("nook"):
+		var nook: Dictionary = venue["nook"]
+		extra.append(Rect2(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"])))
+	var spot := PlaceLib.resolve(hit.x, hit.z, hit.y, rot, def, others, room, SaveManager.snap_to_grid, extra)
+	var placed: Vector3 = spot["pos"]
+	spot["valid"] = bool(spot["valid"]) and _inside(placed.x, placed.z, 0.25) and not _too_tall(placed, def)
+	return spot
 
 
 func _nearest_wall(hit: Vector3, kind: String) -> Dictionary:
@@ -1144,9 +1306,25 @@ func _spawn_office() -> void:
 
 func _spawn_record(rec: Dictionary, item_id: String, cracked: bool) -> void:
 	var def := ItemDB.get_item(item_id)
-	var root := Node3D.new()
+	var mount := str(def.get("mount", "floor"))
+	var wall := str(rec.get("wall", ""))
+	var placed := str(rec.get("state", "")) == "placed"
+	var physical := not backdrop and placed and wall == "" and mount != "hang" and mount != "wall_floor"
+	var root: Node3D
+	if physical:
+		var size := Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4)))
+		var at := Vector3(float(rec.get("x", 0)), float(rec.get("y", 0)), float(rec.get("z", 0)))
+		root = PlaceLib.make_body(size, at, float(rec.get("rot", 0)), bool(rec.get("settle", false)))
+	else:
+		root = Node3D.new()
+		root.position = Vector3(float(rec.get("x", 0)), float(rec.get("y", 0)), float(rec.get("z", 0)))
+		root.rotation.y = deg_to_rad(float(rec.get("rot", 0)))
 	root.set_meta("uid", rec.get("uid", ""))
 	var visual := Props.make(str(def.get("model", "box_closed")))
+	if physical:
+		var collision := visual.get_node_or_null("PropCollision")
+		if collision:
+			collision.free()
 	root.add_child(visual)
 	if bool(def.get("light", false)):
 		Props.attach_lamp_light(visual)
@@ -1154,17 +1332,14 @@ func _spawn_record(rec: Dictionary, item_id: String, cracked: bool) -> void:
 		Props.play_clip(visual, str(def.get("animate", "")), true)
 	if str(item_id) == "train_reward" or str(def.get("model", "")) == "train_layout_board":
 		Props.play_clip(visual, "loop", true)
-	Props.add_picker(root, Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4))))
-	root.position = Vector3(float(rec.get("x", 0)), float(rec.get("y", 0)), float(rec.get("z", 0)))
-	root.rotation.y = deg_to_rad(float(rec.get("rot", 0)))
+	if not physical:
+		Props.add_picker(root, Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4))))
 	if cracked:
 		var crack := Props.mesh_box(Vector3(0.08, 0.08, 0.08), UIKit.LOSS)
 		crack.position = Vector3(0, float(def.get("h", 0.4)) + 0.08, 0)
 		root.add_child(crack)
 	items_root.add_child(root)
 	nodes_by_uid[str(rec.get("uid", ""))] = root
-	if str(rec.get("state", "")) == "placed":
-		pass
 
 
 func _spawn_truck_slots() -> void:
@@ -1274,6 +1449,9 @@ func _refresh_hud_buttons() -> void:
 		if str(child.name).begins_with("Act"):
 			child.queue_free()
 	var y := 100.0
+	if GameState.mode == "office" or GameState.mode == "job_unpack":
+		var snap_label := "Grid snap on" if SaveManager.snap_to_grid else "Free place"
+		_act_button(layer, snap_label, Vector2(16, y), _toggle_snap)
 	if GameState.mode == "office" and GameState.office_phase == "live":
 		_act_button(layer, "Jobs", Vector2(1100, y), func(): _open_jobs())
 		y += 58
@@ -1546,19 +1724,19 @@ func _hint_text() -> String:
 			if GameState.office_phase == "pack":
 				return "Pack the old office. Click each item. R is for later, when you place things. Shift+R turns 15°."
 			if GameState.office_phase == "place":
-				return "Click a box, then the floor. R rotates 90°. Hold Shift and press R for 15°. The whiteboard and shelves snap to the wall."
+				return "Click a box, then a floor, desk, or stack. R rotates 90°. Shift+R turns 15°. G toggles the grid. Wall pieces sit 0.12 m off the wall."
 			var extra := ""
 			if not GameState.door_orders().is_empty():
 				extra = " A courier box is by the door."
 			if GameState.shop_open():
 				extra += " Vibe %d. Visitors wander in." % GameState.vibe_score()
-			return "Click the computer, open Jobs, or pick something up to move it. Drawers click. The lamp keeps its glow." + extra
+			return "Pick something up and set it on the floor or another item. G toggles grid snap. Drawers click. The lamp keeps its glow." + extra
 		"job_pack":
 			return "Click an item to drop it in the open box. Fragile things like padding. Heavy things ride alone, on the bottom."
 		"truck":
 			return "Choose a box, then a pad in the bed. Mustard pads are the floor. The espresso machine stays down there."
 		"job_unpack":
-			return "Carry each box through the door, open it, and place what's inside. Mend a scuff or keep it. Base pay still shows up."
+			return "Carry each box through the door, open it, and stack what's inside on a solid surface. Mend a scuff or keep it. Base pay still shows up."
 	return ""
 
 

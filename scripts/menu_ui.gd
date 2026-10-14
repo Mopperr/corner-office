@@ -8,16 +8,19 @@ var panel: Control
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	AudioDirector.play_music("music_main_menu")
 	_home()
 
 
 func _home() -> void:
 	_clear()
-	var bg := ColorRect.new()
-	bg.color = UIKit.CREAM
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	var card := Panel.new()
+	card.position = Vector2(48, 40)
+	card.size = Vector2(640, 640)
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 22))
+	add_child(card)
 	var title := UIKit.label("Corner Office", 72, UIKit.DARK, "title")
 	title.position = Vector2(80, 70)
 	title.size = Vector2(700, 90)
@@ -26,25 +29,6 @@ func _home() -> void:
 	sub.position = Vector2(84, 160)
 	sub.size = Vector2(640, 40)
 	add_child(sub)
-	var box := Panel.new()
-	box.position = Vector2(760, 80)
-	box.size = Vector2(420, 280)
-	box.add_theme_stylebox_override("panel", UIKit.style(UIKit.CARD, 18, 0))
-	add_child(box)
-	var flap := Panel.new()
-	flap.position = Vector2(40, 24)
-	flap.size = Vector2(340, 36)
-	flap.add_theme_stylebox_override("panel", UIKit.style(Color("E7D3B4"), 6, 0))
-	box.add_child(flap)
-	var plant := UIKit.label("Corner\nOffice", 48, UIKit.DARK, "title")
-	plant.position = Vector2(70, 80)
-	box.add_child(plant)
-	var leaf := ColorRect.new()
-	leaf.color = UIKit.SAGE
-	leaf.position = Vector2(250, 40)
-	leaf.size = Vector2(70, 28)
-	leaf.rotation = -0.4
-	box.add_child(leaf)
 	var column := VBoxContainer.new()
 	column.position = Vector2(84, 230)
 	column.add_theme_constant_override("separation", 12)
@@ -100,11 +84,12 @@ func _intro(character: String) -> void:
 
 
 func _how() -> void:
-	_sheet("How to play", "Click an item to pack it, then click the floor to place it.\nR rotates 90 degrees. Hold Shift and press R for 15 degrees.\nWall pieces snap to the wall. A soft thunk means it landed.\n\nThe beige computer buys and sells office goods. Prices move each day.\nJobs live on the clipboard: pack, pad the fragile things, load the truck, drive, unpack.\n\nBumps nick the tip, never the base pay. Mend a scuff, or keep it.\nNothing is lost, and you cannot fail a drive.\n\nWASD drives the truck. H honks. Esc pauses.")
+	_sheet("How to play", "Click an item to pack it, then click a floor, desk, or box to place it.\nItems have to rest on something. A red ghost means it would float or overlap.\nR rotates 90 degrees. Hold Shift and press R for 15 degrees.\nG toggles the 0.25 m grid. Free placement is the default.\nWall pieces sit 0.12 m off the wall. A soft thunk means it landed.\n\nThe beige computer buys and sells office goods. Prices move each day.\nJobs live on the clipboard: pack, pad the fragile things, load the truck, drive, unpack.\n\nBumps nick the tip, never the base pay. Mend a scuff, or keep it.\nNothing is lost, and you cannot fail a drive.\n\nWASD drives the truck. H honks. Esc pauses.")
 
 
 func _settings() -> void:
 	_clear()
+	_sheet_card()
 	_back_button()
 	var title := UIKit.label("Settings", 48, UIKit.DARK, "title")
 	title.position = Vector2(80, 80)
@@ -120,6 +105,20 @@ func _settings() -> void:
 		SaveManager.save_settings()
 		AudioDirector.play_sfx("sfx_ui_click")
 	)
+	var snap := CheckBox.new()
+	snap.text = "Snap to 0.25 m grid"
+	snap.button_pressed = SaveManager.snap_to_grid
+	snap.position = Vector2(80, 380)
+	snap.size = Vector2(420, 36)
+	snap.add_theme_font_override("font", UIKit.body_font())
+	snap.add_theme_font_size_override("font_size", 22)
+	snap.add_theme_color_override("font_color", UIKit.DARK)
+	snap.add_theme_color_override("font_hover_color", UIKit.DARK)
+	snap.toggled.connect(func(on):
+		SaveManager.snap_to_grid = on
+		SaveManager.save_settings()
+	)
+	add_child(snap)
 
 
 func _slider(caption: String, value: float, y: float, on_change: Callable) -> void:
@@ -145,6 +144,7 @@ func _credits() -> void:
 
 func _sheet(title_text: String, body_text: String) -> void:
 	_clear()
+	_sheet_card()
 	_back_button()
 	var title := UIKit.label(title_text, 42, UIKit.DARK, "title")
 	title.position = Vector2(80, 70)
@@ -156,6 +156,18 @@ func _sheet(title_text: String, body_text: String) -> void:
 	var body := UIKit.label(body_text, 16, UIKit.DARK)
 	body.custom_minimum_size = Vector2(1040, 0)
 	scroll.add_child(body)
+
+
+func _sheet_card() -> void:
+	var card := Panel.new()
+	card.set_anchors_preset(Control.PRESET_FULL_RECT)
+	card.offset_left = 40
+	card.offset_top = 12
+	card.offset_right = -40
+	card.offset_bottom = -12
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
+	add_child(card)
 
 
 func _back_button() -> void:

@@ -20,9 +20,10 @@ godot --headless --path . res://tests/smoke.tscn
 
 ## Controls
 
-- **Click** an item to pick it up. **Click** the floor or a wall to place it.
-- **R** rotates 90°. **Shift+R** rotates 15°.
-- Wall pieces sit 0.11 m off the wall. A soft thunk means the snap landed.
+- **Click** an item to pick it up. **Click** the floor, a desk, or the top of another item to place it. A red ghost means it would float or overlap.
+- **R** rotates 90°. **Shift+R** rotates 15°. **G** toggles the 0.25 m grid. Free placement is the default, and the choice is saved with the volume sliders.
+- Items rest on the floor or on whatever is under them, then settle and freeze so a stack stays put.
+- Wall pieces sit 0.12 m off the wall. A soft thunk means the placement landed.
 - Click the beige computer to open HomeDesk: Market, Shop, Email, Listings.
 - **Esc** or **Pause** saves and can return to the menu.
 - On a drive, **WASD** or the arrow keys drive. **H** honks. You cannot fail a drive.
@@ -42,7 +43,7 @@ godot --headless --path . res://tests/smoke.tscn
 
 TropicalForest is a computer app: categories, search, silly reviews, a wishlist, and a daily deal that simply waits until the next in-game day. Standard shipping is free and arrives tomorrow. Express is same-day for a small fee. Toucan Prime, once the jar has earned enough, makes express free.
 
-A courier walks up to the door and rings. Click the box, pop the bubble wrap, and place the item with the usual snap. A sealed box can be returned. A placed Forest item can be returned for most of the price or resold to the market. The catalog is `data/forest.json`. It points at the decor models already in the game. Coffee & Kitchen and Seasonal open with the Bakery Loft. Mystery boxes and the occasional freebie are in that same file.
+A courier walks up to the door and rings. Click the box, pop the bubble wrap, and place the item on a free surface. A sealed box can be returned. A placed Forest item can be returned for most of the price or resold to the market. The catalog is `data/forest.json`. It points at the decor models already in the game. Coffee & Kitchen and Seasonal open with the Bakery Loft. Mystery boxes and the occasional freebie are in that same file.
 
 The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only when a fixture from `data/shop.json` is placed: a coffee machine, kettle, bookshelf, filing cabinet, fern, or menu board. Visitors walk in, buy from the menu, and leave. Vibe, from plants, lights, and decor, only changes how many people come and how they tip. It never fails. Prices are Cozy, Fair, or Splurge. After the cat-cafe job, a cat bed or cushion puts Biscuit on the till. Marge emails a daily summary. Regulars sometimes ask for a TropicalForest item. Add visitors, dishes, or fixtures in `data/shop.json`.
 

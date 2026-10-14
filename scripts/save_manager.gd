@@ -7,6 +7,7 @@ var music_linear := 0.8
 var sfx_linear := 0.8
 var shake := true
 var text_scale := 1.0
+var snap_to_grid := false
 
 
 func _ready() -> void:
@@ -51,6 +52,7 @@ func save_settings() -> void:
 	cfg.set_value("audio", "sfx", sfx_linear)
 	cfg.set_value("access", "shake", shake)
 	cfg.set_value("access", "text_scale", text_scale)
+	cfg.set_value("place", "snap_to_grid", snap_to_grid)
 	cfg.save(SETTINGS_PATH)
 
 
@@ -62,3 +64,4 @@ func load_settings() -> void:
 	sfx_linear = float(cfg.get_value("audio", "sfx", sfx_linear))
 	shake = bool(cfg.get_value("access", "shake", shake))
 	text_scale = float(cfg.get_value("access", "text_scale", text_scale))
+	snap_to_grid = bool(cfg.get_value("place", "snap_to_grid", snap_to_grid))

@@ -882,11 +882,18 @@ func place_decor_from_queue(pos: Dictionary, prefer_uid := "") -> void:
 	var entry: Dictionary = decor_queue.pop_at(index)
 	entry["state"] = "placed"
 	entry["damage"] = 0
-	entry["x"] = pos.get("x", 0)
-	entry["y"] = pos.get("y", 0)
-	entry["z"] = pos.get("z", 0)
+	if pos.has("pos"):
+		var at: Vector3 = pos["pos"]
+		entry["x"] = at.x
+		entry["y"] = at.y
+		entry["z"] = at.z
+	else:
+		entry["x"] = pos.get("x", 0)
+		entry["y"] = pos.get("y", 0)
+		entry["z"] = pos.get("z", 0)
 	entry["rot"] = pos.get("rot", 0)
 	entry["wall"] = pos.get("wall", "")
+	entry["settle"] = str(entry.get("wall", "")) == ""
 	office_items.append(entry)
 
 

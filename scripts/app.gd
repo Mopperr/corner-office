@@ -23,6 +23,8 @@ func show_menu() -> void:
 	GameState.set_mode("menu")
 	_clear(view_root)
 	AudioDirector.stop_all_loops()
+	var room := preload("res://scripts/menu_room.gd").new()
+	view_root.add_child(room)
 	var menu := preload("res://scripts/menu_ui.gd").new()
 	menu.new_game.connect(_on_new_game)
 	menu.continue_game.connect(_on_continue)

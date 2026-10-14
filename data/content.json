@@ -26,7 +26,7 @@
     "starter_beanbag": { "name": "Mustard Beanbag", "model": "beanbag", "w": 0.9, "d": 0.94, "h": 0.74, "mount": "floor", "flavor": "Official seat for big thinking and small naps." },
     "mini_fridge": { "name": "Mini Fridge", "model": "mini_fridge", "w": 0.5, "d": 0.59, "h": 0.85, "mount": "floor", "drawer": true, "flavor": "Mostly sparkling water and one pickle jar." },
     "whiteboard": { "name": "Whiteboard", "model": "whiteboard", "w": 1.2, "d": 0.1, "h": 0.8, "mount": "hang", "flavor": "It fills up as the money does." },
-    "shelf": { "name": "Shelf", "model": "shelf", "w": 0.9, "d": 0.36, "h": 1.6, "mount": "wall_floor", "back_offset": 0.11, "flavor": "Room for books, trinkets, and one important box." },
+    "shelf": { "name": "Shelf", "model": "shelf", "w": 0.9, "d": 0.36, "h": 1.6, "mount": "wall_floor", "back_offset": 0.12, "flavor": "Room for books, trinkets, and one important box." },
     "plant_fern": { "name": "Fern in Terracotta", "model": "plant_tall", "w": 0.55, "d": 0.5, "h": 1.14, "mount": "floor", "price": 22 },
     "plant_cactus": { "name": "Tiny Cactus", "model": "plant_small", "w": 0.24, "d": 0.24, "h": 0.35, "mount": "small", "price": 12 },
     "rug_round": { "name": "Round Woven Rug", "model": "rug", "w": 2.0, "d": 1.4, "h": 0.03, "mount": "floor", "price": 40 },
@@ -34,7 +34,7 @@
     "beanbag_mustard": { "name": "Mustard Beanbag", "model": "beanbag", "w": 0.9, "d": 0.94, "h": 0.74, "mount": "floor", "price": 48 },
     "beanbag_sage": { "name": "Sage Beanbag", "model": "beanbag_sage", "w": 0.9, "d": 0.94, "h": 0.74, "mount": "floor", "price": 48 },
     "clock_wall": { "name": "Wall Clock", "model": "wall_clock", "w": 0.36, "d": 0.08, "h": 0.36, "mount": "hang", "price": 28 },
-    "bookshelf_wood": { "name": "Wooden Bookshelf", "model": "shelf", "w": 0.9, "d": 0.36, "h": 1.6, "mount": "wall_floor", "back_offset": 0.11, "price": 60 },
+    "bookshelf_wood": { "name": "Wooden Bookshelf", "model": "shelf", "w": 0.9, "d": 0.36, "h": 1.6, "mount": "wall_floor", "back_offset": 0.12, "price": 60 },
     "kettle": { "name": "Electric Kettle", "model": "proc:kettle", "w": 0.22, "d": 0.22, "h": 0.28, "mount": "small", "price": 20 },
     "string_lights": { "name": "String Lights", "model": "proc:lights", "w": 1.2, "d": 0.12, "h": 0.2, "mount": "hang", "price": 26 },
     "cat_bed": { "name": "Cushioned Cat Bed", "model": "proc:catbed", "w": 0.5, "d": 0.4, "h": 0.16, "mount": "floor", "price": 24 },
@@ -86,9 +86,9 @@
     { "uid": "chair", "item": "office_chair", "x": 2.5, "y": 0.0, "z": 3.25, "rot": 180 },
     { "uid": "bean", "item": "starter_beanbag", "x": 4.6, "y": 0.0, "z": 2.7, "rot": 25 },
     { "uid": "fridge", "item": "mini_fridge", "x": 5.15, "y": 0.0, "z": 6.5, "rot": 90 },
-    { "uid": "board", "item": "whiteboard", "x": 0.11, "y": 1.05, "z": 4.0, "rot": 90, "wall": "hang" },
-    { "uid": "shelf_a", "item": "shelf", "x": 0.11, "y": 0.0, "z": 2.0, "rot": 90, "wall": "wall_floor" },
-    { "uid": "shelf_b", "item": "shelf", "x": 0.11, "y": 0.0, "z": 6.4, "rot": 90, "wall": "wall_floor" }
+    { "uid": "board", "item": "whiteboard", "x": 0.12, "y": 1.05, "z": 4.0, "rot": 90, "wall": "hang" },
+    { "uid": "shelf_a", "item": "shelf", "x": 0.12, "y": 0.0, "z": 2.0, "rot": 90, "wall": "wall_floor" },
+    { "uid": "shelf_b", "item": "shelf", "x": 0.12, "y": 0.0, "z": 6.4, "rot": 90, "wall": "wall_floor" }
   ],
   "venues": {
     "garage": { "name": "Garage Startup", "x": 0, "z": 0, "w": 6, "d": 8, "opening": "garage", "open_w": 3, "windows": true, "stain": true, "music": "music_act1_home", "ambience": "amb_l01_garage_loop" },

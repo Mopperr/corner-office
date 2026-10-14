@@ -10,7 +10,7 @@
   "garage_slat_local_y": [0.0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1],
   "shop_door_open_deg": -80,
   "truck_door_open_deg": 105,
-  "wall_mount_offset_m": 0.11,
+  "wall_mount_offset_m": 0.12,
   "logo_decal_nudge_m": 0.012,
   "damage": {
     "scuffed_pct_of_base": 0.05,

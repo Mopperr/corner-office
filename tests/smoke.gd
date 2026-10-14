@@ -1,5 +1,7 @@
 extends Node
 
+const PlaceLib = preload("res://scripts/placement.gd")
+
 func _ready() -> void:
 	var failures: Array = []
 	var sample := GameState.compute_payout(120, 95, 20, 2, 0, false, 0)
@@ -76,11 +78,13 @@ func _ready() -> void:
 	GameState.money = 5
 	if not SaveManager.load_game() or GameState.money != 120:
 		failures.append("save roundtrip")
-	if abs(float(Tuning.get_value("wall_mount_offset_m", 0)) - 0.11) > 0.001:
+	if abs(float(Tuning.get_value("wall_mount_offset_m", 0)) - 0.12) > 0.001:
 		failures.append("wall offset")
 	var board := GameState.find_office_item("board")
-	if board.is_empty() or abs(float(board.get("x", 0)) - 0.11) > 0.001:
+	if board.is_empty() or abs(float(board.get("x", 0)) - 0.12) > 0.001:
 		failures.append("board clearance")
+	if abs(float(ItemDB.get_item("shelf").get("back_offset", 0)) - 0.12) > 0.001:
+		failures.append("shelf offset")
 	var mug_prop := Props.make("mug_worlds_okayest")
 	if mug_prop == null or mug_prop.get_node_or_null("PropCollision") == null:
 		failures.append("prop collision")
@@ -294,6 +298,8 @@ func _ready() -> void:
 	GameState.wishlist = []
 	if not SaveManager.load_game() or not ("tf_fern" in GameState.wishlist):
 		failures.append("wishlist save")
+	failures.append_array(_stack_checks())
+	failures.append_array(await _settle_checks())
 	if failures.is_empty():
 		print("SMOKE_OK")
 		get_tree().quit(0)
@@ -302,3 +308,78 @@ func _ready() -> void:
 		for failure in failures:
 			print(" - ", failure)
 		get_tree().quit(1)
+
+
+func _stack_checks() -> Array:
+	var found: Array = []
+	var room := Rect2(0, 0, 6, 8)
+	var mug := {"w": 0.16, "d": 0.14, "h": 0.11, "mount": "small"}
+	var desk := {"uid": "desk", "state": "placed", "x": 2.0, "y": 0.0, "z": 2.0, "rot": 0.0, "w": 1.2, "d": 0.7, "h": 0.76, "surface": 0.76}
+	var floor_spot: Dictionary = PlaceLib.resolve(2.0, 3.0, 0.0, 0.0, mug, [], room, false)
+	if not bool(floor_spot.get("valid", false)) or absf(float(floor_spot["pos"].y)) > 0.001:
+		found.append("stack floor %s" % floor_spot)
+	var on_desk: Dictionary = PlaceLib.resolve(2.0, 2.0, -1.0, 0.0, mug, [desk], room, false)
+	if not bool(on_desk.get("valid", false)) or absf(float(on_desk["pos"].y) - 0.76) > 0.02:
+		found.append("stack desk %s" % on_desk)
+	var box := {"uid": "box", "state": "placed", "x": 2.0, "y": 0.76, "z": 2.0, "rot": 0.0, "w": 0.45, "d": 0.4, "h": 0.4}
+	var on_box: Dictionary = PlaceLib.resolve(2.0, 2.0, -1.0, 0.0, mug, [desk, box], room, false)
+	if not bool(on_box.get("valid", false)) or absf(float(on_box["pos"].y) - 1.16) > 0.02:
+		found.append("stack box %s" % on_box)
+	var floating: Dictionary = PlaceLib.resolve(2.0, 3.0, 1.5, 0.0, mug, [], room, false)
+	if bool(floating.get("valid", false)):
+		found.append("float")
+	var other := {"uid": "mug2", "state": "placed", "x": 2.0, "y": 0.0, "z": 2.0, "rot": 0.0, "w": 0.16, "d": 0.14, "h": 0.11}
+	var overlap: Dictionary = PlaceLib.resolve(2.0, 2.0, 0.0, 0.0, mug, [other], room, false)
+	if bool(overlap.get("valid", false)):
+		found.append("overlap")
+	var inside: Dictionary = PlaceLib.resolve(2.0, 2.0, 0.2, 0.0, mug, [desk], room, false)
+	if bool(inside.get("valid", false)):
+		found.append("penetrate")
+	var grid: Dictionary = PlaceLib.resolve(2.13, 2.13, -1.0, 0.0, mug, [], room, true)
+	if not bool(grid.get("valid", false)) or absf(float(grid["pos"].x) - snapped(2.13, 0.25)) > 0.001:
+		found.append("snap %s" % grid)
+	return found
+
+
+func _settle_checks() -> Array:
+	var found: Array = []
+	var desk_h := 0.76
+	var crate_h := 0.4
+	var mug_h := 0.11
+	var desk := PlaceLib.make_body(Vector3(1.2, desk_h, 0.7), Vector3(0, 0, 0), 0, false)
+	var crate := PlaceLib.make_body(Vector3(0.45, crate_h, 0.4), Vector3(0, desk_h, 0), 0, true)
+	var mug := PlaceLib.make_body(Vector3(0.16, mug_h, 0.14), Vector3(0, desk_h + crate_h, 0), 0, true)
+	add_child(desk)
+	add_child(crate)
+	add_child(mug)
+	var calm := 0
+	for i in 80:
+		await get_tree().physics_frame
+		if not is_instance_valid(crate) or not is_instance_valid(mug):
+			found.append("settle missing")
+			return found
+		var settled := crate.linear_velocity.length() < 0.05 and mug.linear_velocity.length() < 0.05
+		if settled and i > 6:
+			calm += 1
+			if calm >= 4:
+				break
+		else:
+			calm = 0
+	if absf(desk.position.y) > 0.02:
+		found.append("settle desk %s" % desk.position.y)
+	if absf(crate.position.y - desk_h) > 0.03:
+		found.append("settle crate %s" % crate.position.y)
+	if absf(mug.position.y - (desk_h + crate_h)) > 0.03:
+		found.append("settle mug %s" % mug.position.y)
+	var crate_at := crate.position
+	var mug_at := mug.position
+	PlaceLib.finish_settle(crate)
+	PlaceLib.finish_settle(mug)
+	for _i in 8:
+		await get_tree().physics_frame
+	if crate.position.distance_to(crate_at) > 0.01 or mug.position.distance_to(mug_at) > 0.01:
+		found.append("settle drift")
+	desk.queue_free()
+	crate.queue_free()
+	mug.queue_free()
+	return found
