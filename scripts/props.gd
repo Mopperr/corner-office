@@ -3,6 +3,76 @@ extends RefCounted
 
 static var _cache: Dictionary = {}
 
+static func restyle_architecture(root: Node) -> void:
+	if root == null:
+		return
+	var meshes: Array = []
+	if root is MeshInstance3D:
+		meshes.append(root)
+	meshes.append_array(root.find_children("*", "MeshInstance3D", true, false))
+	for node in meshes:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var base := mesh_instance.get_active_material(i)
+			if not (base is StandardMaterial3D):
+				continue
+			var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D
+			var luma := std.albedo_color.get_luminance()
+			if luma > 0.72:
+				std.albedo_color = Color("8E8276")
+			elif luma > 0.42:
+				std.albedo_color = Color("7A5C40")
+			std.roughness = maxf(std.roughness, 0.88)
+			mesh_instance.set_surface_override_material(i, std)
+
+
+static func restyle_box(root: Node) -> void:
+	if root == null:
+		return
+	var meshes: Array = []
+	if root is MeshInstance3D:
+		meshes.append(root)
+	meshes.append_array(root.find_children("*", "MeshInstance3D", true, false))
+	for node in meshes:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var base := mesh_instance.get_active_material(i)
+			if not (base is StandardMaterial3D):
+				continue
+			var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D
+			var color := std.albedo_color
+			std.albedo_color = Color.from_hsv(0.075, clampf(color.s * 1.25 + 0.18, 0.0, 0.82), clampf(color.v, 0.42, 0.62))
+			std.roughness = 0.84
+			mesh_instance.set_surface_override_material(i, std)
+
+
+static func set_hover_outline(root: Node, on: bool) -> void:
+	if root == null:
+		return
+	var meshes: Array = []
+	if root is MeshInstance3D:
+		meshes.append(root)
+	meshes.append_array(root.find_children("*", "MeshInstance3D", true, false))
+	for node in meshes:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null:
+			continue
+		if not on:
+			mesh_instance.material_overlay = null
+			continue
+		var outline := StandardMaterial3D.new()
+		outline.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		outline.albedo_color = Color("3E2A22")
+		outline.grow = true
+		outline.grow_amount = 0.014
+		outline.cull_mode = BaseMaterial3D.CULL_FRONT
+		mesh_instance.material_overlay = outline
+
+
 static func mat(color: Color) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color
@@ -54,6 +124,8 @@ static func make(spec: String) -> Node3D:
 		node = Node3D.new()
 		node.add_child(mesh_box(Vector3(0.4, 0.3, 0.4), UIKit.CARD))
 	ensure_box_collision(node)
+	if "box" in spec:
+		restyle_box(node)
 	return node
 
 
@@ -215,7 +287,7 @@ static func attach_lamp_light(root: Node3D) -> void:
 	var light := OmniLight3D.new()
 	light.position = Vector3(0, 0.42, 0)
 	light.light_color = Color("FFD7A1")
-	light.light_energy = 0.85
+	light.light_energy = 0.4
 	light.omni_range = 3.4
 	light.shadow_enabled = false
 	root.add_child(light)

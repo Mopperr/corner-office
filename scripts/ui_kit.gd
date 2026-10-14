@@ -132,8 +132,12 @@ static func show_level_beat(host: Node, beat: Dictionary) -> void:
 	layer.layer = 16
 	host.add_child(layer)
 	var panel := Panel.new()
-	panel.position = Vector2(150, 400)
-	panel.size = Vector2(980, 200)
+	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	panel.offset_left = -490
+	panel.offset_top = -300
+	panel.offset_right = 490
+	panel.offset_bottom = -100
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_theme_stylebox_override("panel", style(CREAM_CARD, 16))
 	layer.add_child(panel)
 	var title := label("%s" % beat.get("level_name", ""), 22, TERRA, "title")

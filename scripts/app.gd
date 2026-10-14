@@ -115,8 +115,11 @@ func _pause_button() -> void:
 	layer.layer = 20
 	view_root.add_child(layer)
 	var btn := UIKit.button("Pause", UIKit.DARK)
-	btn.position = Vector2(1180, 16)
-	btn.size = Vector2(84, 40)
+	btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	btn.offset_left = -100
+	btn.offset_top = 16
+	btn.offset_right = -16
+	btn.offset_bottom = 56
 	btn.pressed.connect(_pause)
 	layer.add_child(btn)
 
