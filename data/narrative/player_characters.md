@@ -107,6 +107,6 @@ Sol designs logos from the corner table at Whisker & Bean. Priya never charges f
 > Mile Marker
 
 ## Notes for Boss
-- New spaces to build: Unit 14B Storage, Dorm Corner, Kitchen Table HQ, Cafe Corner. All are small (3-4 m) and lead to Shared Coworking on the same unlock ($1,500 + 3 jobs).
+- New spaces to build: Unit 14B Storage, Dorm Corner, Kitchen Table HQ, Cafe Corner. All are small (3-4 m) and lead to Bakery Loft on the same unlock ($1,500 + 3 jobs).
 - New items (flavor text inline in the JSON): sticky_note_stack, cb_radio, thermos_dented, ramen_kettle, yarn_basket.
 - These welcome emails replace `tut_welcome` on game_start for the chosen character.

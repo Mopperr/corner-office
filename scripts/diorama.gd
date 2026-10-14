@@ -44,6 +44,7 @@ func _ready() -> void:
 	_build_venue()
 	_refresh_items()
 	_build_hud()
+	UIKit.show_level_beat(self, GameState.present_current_slice_level())
 	if garage_door:
 		var tw := create_tween()
 		tw.tween_method(_set_garage_y, 0.0, float(Tuning.get_value("garage_door_open_y", 2.1)), 1.15)

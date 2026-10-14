@@ -15,6 +15,8 @@ func _ready() -> void:
 		show_menu()
 	else:
 		_show_saved_mode()
+	if not GameState.office_changed.is_connected(_on_office_changed):
+		GameState.office_changed.connect(_on_office_changed)
 
 
 func show_menu() -> void:
@@ -48,6 +50,12 @@ func _show_saved_mode() -> void:
 	else:
 		GameState.set_mode("office")
 		show_play()
+
+
+func _on_office_changed(_id: String) -> void:
+	if GameState.mode != "office" or view_root.get_child_count() == 0:
+		return
+	call_deferred("show_play")
 
 
 func show_play() -> void:

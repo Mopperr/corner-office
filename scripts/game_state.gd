@@ -7,6 +7,7 @@ signal box_damaged(uid, level)
 signal emails_changed
 signal mode_changed(mode)
 signal toast_requested(message)
+signal office_changed(office_id)
 
 var character := "dana"
 var money := 120
@@ -43,6 +44,7 @@ var shop_visitors_today := 0
 var freebie_day := -1
 var forest_serial := 0
 var rng := RandomNumberGenerator.new()
+var _arcs: Variant = null
 
 
 func _ready() -> void:
@@ -154,6 +156,7 @@ func try_buy_office(id: String) -> String:
 			item["state"] = "boxed"
 	office_id = id
 	office_phase = "place"
+	emit_signal("office_changed", id)
 	emit_signal("toast_requested", "Moving into the %s. Unpack when you're ready." % office.get("name", id))
 	return ""
 
@@ -192,6 +195,95 @@ func fire_trigger(trigger: String) -> void:
 			added = true
 	if added:
 		emit_signal("emails_changed")
+
+
+func loaded_arc_characters() -> int:
+	return _arc_data().get("characters", []).size()
+
+
+func slice_beats() -> Array:
+	var beats: Array = []
+	for who in _arc_data().get("characters", []):
+		if typeof(who) != TYPE_DICTIONARY:
+			continue
+		if str(who.get("phase", "")) != "slice":
+			continue
+		for entry in who.get("levels", []):
+			if typeof(entry) != TYPE_DICTIONARY:
+				continue
+			if str(entry.get("ship_in", "")) != "slice":
+				continue
+			beats.append(entry)
+	return beats
+
+
+func present_current_slice_level() -> Dictionary:
+	return present_slice_level(_current_slice_level_id())
+
+
+func present_slice_level(level_id: String) -> Dictionary:
+	if level_id == "" or character != slice_character_id():
+		return {}
+	var key := "arc_%s" % level_id
+	if fired.has(key):
+		return {}
+	var beat: Dictionary = {}
+	for entry in slice_beats():
+		var level: Dictionary = entry
+		if str(level.get("level_id", "")) == level_id:
+			beat = level
+			break
+	if beat.is_empty():
+		return {}
+	fired[key] = true
+	var mail: Variant = beat.get("marge_email", {})
+	var email: Dictionary = mail if typeof(mail) == TYPE_DICTIONARY else {}
+	inbox.append({
+		"id": key,
+		"from": "Marge \"Mile Marker\" Holloway",
+		"subject": email.get("subject", "Hello"),
+		"body": email.get("body", ""),
+		"read": false,
+	})
+	emit_signal("emails_changed")
+	AudioDirector.play_sfx("sfx_notification_soft")
+	return beat
+
+
+func _current_slice_level_id() -> String:
+	if character != slice_character_id():
+		return ""
+	if mode == "drive":
+		var drive_id := str(job.get("def", {}).get("drive", ""))
+		if drive_id == "rainy_afternoon":
+			return "L3"
+		if drive_id == "duck_pond":
+			return "L5"
+		return ""
+	if mode == "job_pack" or mode == "truck" or mode == "job_unpack":
+		var level := str(job.get("def", {}).get("level", ""))
+		if level == "L2" or level == "L4":
+			return level
+		return ""
+	if mode == "office":
+		if office_id == "bakery":
+			return "L6"
+		if office_id == "garage":
+			return "L1"
+	return ""
+
+
+func _arc_data() -> Dictionary:
+	if _arcs is Dictionary:
+		return _arcs
+	_arcs = {}
+	var path := "res://data/narrative/character_arcs.json"
+	if not FileAccess.file_exists(path):
+		return _arcs
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if typeof(parsed) == TYPE_DICTIONARY:
+		_arcs = parsed
+	return _arcs
 
 
 func slice_character_id() -> String:

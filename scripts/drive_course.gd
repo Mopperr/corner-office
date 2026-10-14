@@ -64,6 +64,7 @@ func _ready() -> void:
 	truck.position = pos
 	add_child(truck)
 	_hud()
+	UIKit.show_level_beat(self, GameState.present_current_slice_level())
 	var weather := str(course.get("weather", "clear"))
 	if weather == "rain":
 		AudioDirector.play_music(str(course.get("music", "music_rainy_office")))

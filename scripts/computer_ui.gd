@@ -305,19 +305,19 @@ func _email() -> void:
 	for mail in GameState.inbox:
 		var card := Panel.new()
 		card.position = Vector2(12, y)
-		card.size = Vector2(1000, 86)
+		card.size = Vector2(1000, 148)
 		card.add_theme_stylebox_override("panel", UIKit.style(Color("F7F1E4"), 8))
 		var subject := UIKit.label("%s  —  %s" % [mail.get("subject", ""), mail.get("from", "")], 18, UIKit.DARK, "title")
 		subject.position = Vector2(10, 6)
 		subject.size = Vector2(960, 24)
 		card.add_child(subject)
-		var text := UIKit.label(str(mail.get("body", "")).replace("\n", " "), 14, UIKit.DARK)
-		text.position = Vector2(10, 32)
-		text.size = Vector2(960, 48)
+		var text := UIKit.label(str(mail.get("body", "")), 14, UIKit.DARK)
+		text.position = Vector2(10, 34)
+		text.size = Vector2(960, 104)
 		card.add_child(text)
 		mail["read"] = true
 		body.add_child(card)
-		y += 94
+		y += 156
 
 
 func _listings() -> void:

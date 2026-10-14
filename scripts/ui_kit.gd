@@ -123,3 +123,32 @@ static func label(text: String, size := 18, color: Color = DARK, font_kind := "b
 			node.add_theme_font_override("font", body_font())
 	node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	return node
+
+
+static func show_level_beat(host: Node, beat: Dictionary) -> void:
+	if host == null or beat.is_empty():
+		return
+	var layer := CanvasLayer.new()
+	layer.layer = 16
+	host.add_child(layer)
+	var panel := Panel.new()
+	panel.position = Vector2(150, 400)
+	panel.size = Vector2(980, 200)
+	panel.add_theme_stylebox_override("panel", style(CREAM_CARD, 16))
+	layer.add_child(panel)
+	var title := label("%s" % beat.get("level_name", ""), 22, TERRA, "title")
+	title.position = Vector2(18, 12)
+	title.size = Vector2(940, 32)
+	panel.add_child(title)
+	var arrival := label(str(beat.get("arrival", "")), 16, DARK)
+	arrival.position = Vector2(18, 48)
+	arrival.size = Vector2(940, 64)
+	panel.add_child(arrival)
+	var moment := label(str(beat.get("moment", "")), 16, DARK)
+	moment.position = Vector2(18, 114)
+	moment.size = Vector2(940, 70)
+	panel.add_child(moment)
+	var tw := host.create_tween()
+	tw.tween_interval(8.5)
+	tw.tween_property(panel, "modulate:a", 0.0, 0.45)
+	tw.tween_callback(layer.queue_free)

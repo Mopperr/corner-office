@@ -52,7 +52,7 @@
   "id": "tut_next_office",
   "from": "Marge \"Mile Marker\" Holloway",
   "subject": "I saw a listing...",
-  "body": "$1,500 and three jobs done. Check Office Listings.\n\nThere's a Shared Coworking spot with an actual window. Not a garage door. A window.\n\nShiny side up,\nMile Marker",
+  "body": "$1,500 and three jobs done. Check Office Listings.\n\nThere's a Bakery Loft coworking spot with an actual window. Not a garage door. A window.\n\nShiny side up,\nMile Marker",
   "trigger": "unlock_next_office"
  },
  {

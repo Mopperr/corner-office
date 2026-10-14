@@ -46,6 +46,9 @@ func _ready() -> void:
 		failures.append("dana welcome")
 	if GameState.character != "dana" or GameState.office_id != "garage" or GameState.slice_character_id() != "dana":
 		failures.append("dana start")
+	var listing := FileAccess.get_file_as_string("res://data/narrative/emails.json")
+	if listing.contains("Shared Coworking") or not listing.contains("Bakery Loft") or not listing.contains("Hey Dana"):
+		failures.append("bakery email rename")
 	var notes_def := ItemDB.get_item("sticky_note_stack")
 	if str(notes_def.get("model", "")) != "sticky_note_stack":
 		failures.append("notes model")
@@ -103,6 +106,34 @@ func _ready() -> void:
 		var office: Node = diorama_script.new()
 		add_child(office)
 		office.queue_free()
+		if GameState.loaded_arc_characters() != 5 or GameState.slice_beats().size() != 6:
+			failures.append("arc filter %d %d" % [GameState.loaded_arc_characters(), GameState.slice_beats().size()])
+		var saw_l1 := false
+		for mail in GameState.inbox:
+			if str(mail.get("id", "")) == "arc_L1" and str(mail.get("body", "")).contains("Grayline"):
+				saw_l1 = true
+		if not saw_l1:
+			failures.append("l1 beat")
+		var l2: Dictionary = GameState.present_slice_level("L2")
+		var l3: Dictionary = GameState.present_slice_level("L3")
+		var l4: Dictionary = GameState.present_slice_level("L4")
+		var l5: Dictionary = GameState.present_slice_level("L5")
+		var l6: Dictionary = GameState.present_slice_level("L6")
+		if str(l2.get("level_name", "")) != "Cat Cafe Owner" or str(l4.get("level_name", "")) != "Grandpa's Model Train Shop":
+			failures.append("job beats")
+		if not str(l3.get("arrival", "")).contains("Rain") or not str(l5.get("level_name", "")).contains("Duck"):
+			failures.append("drive beats")
+		var l6_mail: Variant = l6.get("marge_email", {})
+		if str(l6.get("level_name", "")) != "Bakery Loft" or typeof(l6_mail) != TYPE_DICTIONARY or not str(l6_mail.get("body", "")).contains("Bakery Loft"):
+			failures.append("l6 bakery")
+		if not GameState.present_slice_level("L2").is_empty() or not GameState.present_slice_level("L7").is_empty():
+			failures.append("arc repeat")
+		GameState.fired.erase("arc_L2")
+		GameState.character = "hank"
+		if not GameState.present_slice_level("L2").is_empty():
+			failures.append("hank arc shown")
+		GameState.character = "dana"
+		GameState.fired["arc_L2"] = true
 		GameState.set_mode("truck")
 		var room: Node = diorama_script.new()
 		add_child(room)
@@ -119,6 +150,25 @@ func _ready() -> void:
 			player.seek(0.55, true)
 			if absf(door.rotation.y) > 0.05:
 				failures.append("truck door close")
+		var drive_script: GDScript = load("res://scripts/drive_course.gd")
+		if drive_script == null:
+			failures.append("drive script")
+		else:
+			GameState.set_mode("drive")
+			GameState.job = {"def": {"drive": "duck_pond", "level": "L5"}, "boxes": [], "items": []}
+			GameState.fired.erase("arc_L5")
+			var before_mail := GameState.inbox.size()
+			var drive: Node = drive_script.new()
+			add_child(drive)
+			drive.queue_free()
+			var duck_note := false
+			for mail in GameState.inbox:
+				if str(mail.get("id", "")) == "arc_L5" and str(mail.get("subject", "")).contains("Detours"):
+					duck_note = true
+			if not duck_note or GameState.inbox.size() <= before_mail:
+				failures.append("duck beat on drive")
+			GameState.job = {}
+			GameState.set_mode("office")
 	if load("res://scripts/forest_page.gd") == null or load("res://scripts/shop_page.gd") == null:
 		failures.append("store pages")
 	if Catalog.category_open("coffee", "garage"):
