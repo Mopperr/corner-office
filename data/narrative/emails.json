@@ -1,0 +1,107 @@
+[
+ {
+  "id": "tut_welcome",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "Welcome to the garage, boss",
+  "body": "Hey Dana,\n\nHeard Grayline let you go. Their loss. My first office was a garage too. Smelled like diesel and big plans.\n\nUnpack first. The whiteboard's yours to fill.\n\nKeep the shiny side up,\nMile Marker",
+  "trigger": "game_start"
+ },
+ {
+  "id": "tut_unpack",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "Nice placement",
+  "body": "Look at you, snapping things into place.\n\nThe whiteboard goes on the wall. Trust me, it'll fill up.\n\n10-4,\nMile Marker",
+  "trigger": "first_item_placed"
+ },
+ {
+  "id": "tut_market",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "The Market icon",
+  "body": "See the Market icon? Folks trade the oddest office goods there.\n\nBuy low, sell when the line goes up. If it dips, wait it out, same as a traffic jam.\n\nOver and out,\nMile Marker",
+  "trigger": "unpack_complete"
+ },
+ {
+  "id": "tut_first_sale",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "Your first profit!",
+  "body": "A sale! Write it on the whiteboard.\n\nOkay, I already did. I log everything. Ask my logbook.\n\n10-4,\nMile Marker",
+  "trigger": "first_profitable_sale"
+ },
+ {
+  "id": "tut_mover",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "Want to borrow the truck?",
+  "body": "Rather lift than trade? I've got a spare Corner Movers truck.\n\nPack it, strap it, drive it, unpack it. Bumps cost a little pay, but nothing ever breaks for good.\n\nCheck your load straps,\nMile Marker",
+  "trigger": "earned_50"
+ },
+ {
+  "id": "tut_milestone_100",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "$100!",
+  "body": "First hundred! That's worth a doodle.\n\nTreat yourself to a plant. Or a truck-stop coffee. I give the ones at Exit 12 four stars.\n\nMile Marker",
+  "trigger": "total_earned_100"
+ },
+ {
+  "id": "tut_milestone_500",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "Halfway to the next exit",
+  "body": "$500 earned. The garage is starting to look like an office.\n\nI logged it: 'Rookie doing great.' It's official now.\n\nOver and out,\nMile Marker",
+  "trigger": "total_earned_500"
+ },
+ {
+  "id": "tut_next_office",
+  "from": "Marge \"Mile Marker\" Holloway",
+  "subject": "I saw a listing...",
+  "body": "$1,500 and three jobs done. Check Office Listings.\n\nThere's a Bakery Loft coworking spot with an actual window. Not a garage door. A window.\n\nShiny side up,\nMile Marker",
+  "trigger": "unlock_next_office"
+ },
+ {
+  "id": "job_catcafe",
+  "from": "Priya Okafor",
+  "subject": "Moving Whisker & Bean",
+  "body": "Hi! Mile Marker says you're careful.\n\nOur cafe is moving two streets over. Mugs are fragile. Biscuit is... curious.\n\nCoffee on the house,\nPriya",
+  "trigger": "mover_unlocked"
+ },
+ {
+  "id": "job_clocks",
+  "from": "Delbert Finch",
+  "subject": "A delicate matter",
+  "body": "Good afternoon.\n\nI'm moving to a smaller flat with my clocks. All 41. They prefer to travel upright.\n\nWith thanks,\nD. Finch",
+  "trigger": "jobs_completed_1"
+ },
+ {
+  "id": "job_juno",
+  "from": "Juno Park",
+  "subject": "help?? moving sat",
+  "body": "hey!! new flat, same amps. also 14 plants.\n\nthe drum kit is mostly in pieces already lol\n\n- juno",
+  "trigger": "jobs_completed_2"
+ },
+ {
+  "id": "job_twins",
+  "from": "Rosa & Ray Pemberton",
+  "subject": "Shop move (we disagree on everything)",
+  "body": "Rosa: We're merging our flower shops.\nRay: Rosa is merging into MY shop.\nBoth: Please bring extra boxes.",
+  "trigger": "jobs_completed_3"
+ },
+ {
+  "id": "ty_catcafe",
+  "from": "Priya Okafor",
+  "subject": "Thank you!!",
+  "body": "Everything arrived! And thank you for finding Biscuit.\n\nHe's asleep in the new menu board. My friend Mr. Finch needs movers. I gave him your name.\n\n- Priya",
+  "trigger": "job_catcafe_complete"
+ },
+ {
+  "id": "ty_clocks",
+  "from": "Delbert Finch",
+  "subject": "All 41 ticking",
+  "body": "Every clock is ticking. Even Gerald, who usually sulks after a move.\n\nPlease accept a small tip. Also my eternal respect.\n\n- D. Finch",
+  "trigger": "job_clocks_complete"
+ },
+ {
+  "id": "ty_juno",
+  "from": "Juno Park",
+  "subject": "ur a legend",
+  "body": "plants alive. amps alive. me alive.\n\nyou're invited to our next gig. it's in a laundromat.\n\n- juno",
+  "trigger": "job_juno_complete"
+ }
+]
