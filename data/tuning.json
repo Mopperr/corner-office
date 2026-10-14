@@ -1,0 +1,91 @@
+{
+  "snap": {
+    "grid_m": 0.25,
+    "rotate_deg": 90,
+    "fine_rotate_deg": 15
+  },
+  "floor_y": 0.0,
+  "garage_door_open_y": 2.1,
+  "garage_slat_hide_y": 2.55,
+  "garage_slat_local_y": [0.0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1],
+  "shop_door_open_deg": -80,
+  "truck_door_open_deg": 105,
+  "wall_mount_offset_m": 0.11,
+  "logo_decal_nudge_m": 0.012,
+  "damage": {
+    "scuffed_pct_of_base": 0.05,
+    "chipped_pct_of_base": 0.10,
+    "cap_pct_of_base": 0.20,
+    "repair_taps": { "1": 1, "2": 3 },
+    "mesh_swap_below": 70,
+    "stress_bands": [
+      { "below": 12, "scuffed": 0, "chipped": 0 },
+      { "below": 32, "scuffed": 1, "chipped": 0 },
+      { "below": 55, "scuffed": 2, "chipped": 0 },
+      { "below": 999, "scuffed": 2, "chipped": 1 }
+    ]
+  },
+  "box_condition": {
+    "start": 100,
+    "bump_min": 3,
+    "bump_max": 8,
+    "collision": 10,
+    "hard_brake_min": 2,
+    "hard_brake_max": 4,
+    "padding_multiplier": 0.5,
+    "heavy_bottom_multiplier": 0.75,
+    "alley_wobble": 6,
+    "tip_tiers": [
+      { "min": 90, "bonus": 0.50, "stamp": "Smooth Ride" },
+      { "min": 70, "bonus": 0.30, "stamp": "" },
+      { "min": 50, "bonus": 0.15, "stamp": "" },
+      { "min": 0, "bonus": 0.05, "stamp": "" }
+    ]
+  },
+  "pay": {
+    "l2_base": 120,
+    "l4_base": 140,
+    "l5_base": 100,
+    "cat_bonus": 20,
+    "duck_friend_bonus": 15,
+    "alley_tip_bonus": 0.10,
+    "split_set_tip_loss": 8,
+    "sell_ratio": 0.75,
+    "buyer_premium": 1.35,
+    "swing_min": 0.10,
+    "swing_max": 0.25,
+    "history_days": 7
+  },
+  "rep_star_gates": [0, 2, 6, 12, 20, 30],
+  "starter_money": {
+    "dana": 120,
+    "sol": 130,
+    "hank": 100,
+    "milo": 90,
+    "bea": 110
+  },
+  "offices": [
+    { "id": "garage", "name": "Garage Startup", "cost": 0, "earned": 0, "jobs": 0, "rep": 0, "level": "L1", "playable": true },
+    { "id": "bakery", "name": "Bakery Loft", "cost": 1500, "earned": 1500, "jobs": 3, "rep": 1, "level": "L6", "playable": true },
+    { "id": "warehouse", "name": "Brick Warehouse Loft", "cost": 5000, "earned": 5000, "jobs": 8, "rep": 2, "level": "L11", "playable": false },
+    { "id": "glass", "name": "Glass Co-Working Suite", "cost": 15000, "earned": 15000, "jobs": 16, "rep": 3, "level": "L16", "playable": false },
+    { "id": "corner", "name": "Corner Office", "cost": 40000, "earned": 40000, "jobs": 24, "rep": 4, "level": "L21", "playable": false }
+  ],
+  "whiteboard_milestones": [100, 500, 1000],
+  "audio": {
+    "truck_idle_db": -10,
+    "quiet_boost_db": 6,
+    "quiet_sfx": ["sfx_box_fold", "sfx_box_open", "sfx_paper_rustle"],
+    "pitch_rand": 0.08,
+    "music_db_default": -4,
+    "sfx_db_default": -2
+  },
+  "drive": {
+    "px_per_m": 32,
+    "max_speed_mps": 4.0,
+    "accel_mps2": 2.4,
+    "brake_mps2": 3.2,
+    "rain_brake_penalty": 0.15,
+    "turn_rate": 1.7
+  }
+}

@@ -1,0 +1,795 @@
+extends Node
+
+signal money_changed(amount)
+signal rep_changed(rank, stars)
+signal job_completed(job_id, payout)
+signal box_damaged(uid, level)
+signal emails_changed
+signal mode_changed(mode)
+signal toast_requested(message)
+
+var character := "dana"
+var money := 120
+var total_earned := 0
+var rep_stars := 0
+var jobs_done := 0
+var jobs_cleared: Dictionary = {}
+var office_id := "garage"
+var day := 1
+var mode := "menu"
+var office_phase := "pack"
+var office_items: Array = []
+var decor_queue: Array = []
+var goods: Dictionary = {}
+var prices: Dictionary = {}
+var history: Dictionary = {}
+var inbox: Array = []
+var fired: Dictionary = {}
+var tutorial_done := false
+var first_placed := false
+var museum: Array = []
+var held_uid := ""
+var job: Dictionary = {}
+var payout: Dictionary = {}
+var buyer_offer: Dictionary = {}
+var pastry_day := -1
+var decor_serial := 0
+var rng := RandomNumberGenerator.new()
+
+
+func _ready() -> void:
+	Tuning.load_data()
+	rng.randomize()
+
+
+func rep_rank() -> int:
+	return Tuning.rep_rank(rep_stars)
+
+
+func new_game(who: String) -> void:
+	character = who
+	money = int(Tuning.get_value("starter_money." + who, 120))
+	total_earned = 0
+	rep_stars = 0
+	jobs_done = 0
+	jobs_cleared = {}
+	office_id = "garage"
+	day = 1
+	office_phase = "pack"
+	office_items = []
+	decor_queue = []
+	goods = {}
+	inbox = []
+	fired = {}
+	tutorial_done = false
+	first_placed = false
+	museum = []
+	held_uid = ""
+	job = {}
+	payout = {}
+	pastry_day = -1
+	decor_serial = 0
+	for entry in ItemDB.starter_layout():
+		var copy: Dictionary = entry.duplicate(true)
+		copy["state"] = "placed"
+		copy["damage"] = 0
+		office_items.append(copy)
+	_seed_market()
+	_roll_buyer()
+	fire_trigger("game_start")
+	set_mode("office")
+	emit_signal("money_changed", money)
+
+
+func set_mode(next: String) -> void:
+	mode = next
+	emit_signal("mode_changed", next)
+
+
+func add_money(amount: int, earned: bool) -> void:
+	money += amount
+	if earned and amount > 0:
+		var before := total_earned
+		total_earned += amount
+		_check_earn_triggers(before, total_earned)
+	emit_signal("money_changed", money)
+	_check_unlock_email()
+
+
+func _check_earn_triggers(before: int, after: int) -> void:
+	if before < 50 and after >= 50:
+		fire_trigger("earned_50")
+	if before < 100 and after >= 100:
+		fire_trigger("total_earned_100")
+	if before < 500 and after >= 500:
+		fire_trigger("total_earned_500")
+
+
+func _check_unlock_email() -> void:
+	if office_gate_met("bakery") and not fired.has("unlock_next_office"):
+		fire_trigger("unlock_next_office")
+
+
+func office_gate_met(id: String) -> bool:
+	var office := Tuning.office_def(id)
+	if office.is_empty():
+		return false
+	return total_earned >= int(office.get("earned", 0)) \
+		and jobs_done >= int(office.get("jobs", 0)) \
+		and rep_rank() >= int(office.get("rep", 0))
+
+
+func try_buy_office(id: String) -> String:
+	var office := Tuning.office_def(id)
+	if office.is_empty():
+		return "That listing wandered off."
+	if not bool(office.get("playable", false)):
+		return "The blueprint is in the drawer. This chapter opens the Bakery Loft."
+	if id == office_id:
+		return "You're already here."
+	if not office_gate_met(id):
+		return "Not yet. Keep earning, hauling, and being gentle."
+	var cost := int(office.get("cost", 0))
+	if money < cost:
+		return "The jar is a little light for that."
+	add_money(-cost, false)
+	for item in office_items:
+		if str(item.get("state", "")) == "placed":
+			item["state"] = "boxed"
+	office_id = id
+	office_phase = "place"
+	emit_signal("toast_requested", "Moving into the %s. Unpack when you're ready." % office.get("name", id))
+	return ""
+
+
+func mark_tutorial_live() -> void:
+	if tutorial_done:
+		return
+	tutorial_done = true
+	fire_trigger("unpack_complete")
+	fire_trigger("mover_unlocked")
+	emit_signal("toast_requested", "Your corner is open. The computer and the job clipboard are both awake.")
+
+
+func note_first_place() -> void:
+	if first_placed:
+		return
+	first_placed = true
+	fire_trigger("first_item_placed")
+
+
+func fire_trigger(trigger: String) -> void:
+	if fired.has(trigger):
+		return
+	fired[trigger] = true
+	var emails = _read_emails()
+	var added := false
+	for email in emails:
+		if str(email.get("trigger", "")) == trigger:
+			inbox.append({
+				"id": email.get("id", trigger),
+				"from": email.get("from", "Marge"),
+				"subject": email.get("subject", "Hello"),
+				"body": email.get("body", ""),
+				"read": false,
+			})
+			added = true
+	if added:
+		emit_signal("emails_changed")
+
+
+func _read_emails() -> Array:
+	if not FileAccess.file_exists("res://data/narrative/emails.json"):
+		return []
+	var file := FileAccess.open("res://data/narrative/emails.json", FileAccess.READ)
+	var parsed = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_ARRAY:
+		return []
+	return parsed
+
+
+func unread_count() -> int:
+	var count := 0
+	for email in inbox:
+		if not bool(email.get("read", false)):
+			count += 1
+	return count
+
+
+func job_available(job: Dictionary) -> bool:
+	var rule := str(job.get("unlock", ""))
+	if rule == "tutorial_done":
+		return tutorial_done
+	if rule.begins_with("job:"):
+		return jobs_cleared.has(rule.trim_prefix("job:"))
+	return false
+
+
+func start_job(id: String) -> void:
+	var def := JobDB.get_job(id)
+	if def.is_empty():
+		return
+	var items: Array = JobDB.build_job_items(def)
+	var cat_uid := ""
+	if bool(def.get("cat", false)):
+		var pool: Array = []
+		for item in items:
+			if not bool(item.get("heavy", false)):
+				pool.append(item["uid"])
+		if not pool.is_empty():
+			cat_uid = pool[rng.randi() % pool.size()]
+	job = {
+		"id": id,
+		"def": def,
+		"items": items,
+		"boxes": [],
+		"next_box": 0,
+		"cat_uid": cat_uid,
+		"cat_opened": false,
+		"condition": int(Tuning.get_value("box_condition.start", 100)),
+		"alley": false,
+		"duck_friend": false,
+		"near_miss": false,
+		"heavy_ok": true,
+		"mystery_sorted": false,
+		"phase": "pack",
+	}
+	set_mode("job_pack")
+
+
+func ensure_open_box() -> int:
+	for box in job.get("boxes", []):
+		if not bool(box.get("sealed", false)):
+			return int(box.get("id", 0))
+	return make_box()
+
+
+func make_box() -> int:
+	var id := int(job.get("next_box", 0))
+	job["next_box"] = id + 1
+	job["boxes"].append({
+		"id": id,
+		"sealed": false,
+		"padded": false,
+		"has_cat": false,
+		"slot": -1,
+		"shock": 0.0,
+	})
+	return id
+
+
+func pack_into(uid: String, box_id: int) -> String:
+	var item := job_item(uid)
+	var box := job_box(box_id)
+	if item.is_empty() or box.is_empty():
+		return "That box isn't here."
+	if bool(box.get("sealed", false)):
+		return "That box is already sealed."
+	if bool(item.get("bulky", false)) or bool(item.get("heavy", false)):
+		if box_item_count(box_id) > 0:
+			return "This one wants a box of its own."
+	if box_has_bulky(box_id) and item["uid"] != bulky_uid(box_id):
+		return "That box is already full of something hefty."
+	item["box"] = box_id
+	item["state"] = "boxed"
+	return ""
+
+
+func box_item_count(box_id: int) -> int:
+	var count := 0
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id:
+			count += 1
+	return count
+
+
+func box_has_bulky(box_id: int) -> bool:
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id and (bool(item.get("bulky", false)) or bool(item.get("heavy", false))):
+			return true
+	return false
+
+
+func bulky_uid(box_id: int) -> String:
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id and (bool(item.get("bulky", false)) or bool(item.get("heavy", false))):
+			return str(item.get("uid", ""))
+	return ""
+
+
+func box_needs_padding(box_id: int) -> bool:
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id and bool(item.get("fragile", false)):
+			return true
+	return false
+
+
+func seal_box(box_id: int) -> bool:
+	var box := job_box(box_id)
+	if box.is_empty() or box_item_count(box_id) == 0:
+		return false
+	box["sealed"] = true
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id and str(item.get("uid", "")) == str(job.get("cat_uid", "")):
+			box["has_cat"] = true
+	return true
+
+
+func all_sealed() -> bool:
+	var any := false
+	for item in job.get("items", []):
+		any = true
+		if str(item.get("state", "")) != "boxed":
+			return false
+		var box := job_box(int(item.get("box", -1)))
+		if box.is_empty() or not bool(box.get("sealed", false)):
+			return false
+	return any
+
+
+func split_sets() -> Array:
+	var members: Dictionary = {}
+	for item in job.get("items", []):
+		var set_id := str(item.get("set", ""))
+		if set_id == "":
+			continue
+		if not members.has(set_id):
+			members[set_id] = []
+		members[set_id].append(int(item.get("box", -1)))
+	var split: Array = []
+	for set_id in members.keys():
+		var boxes: Array = members[set_id]
+		var first = boxes[0]
+		for box_id in boxes:
+			if box_id != first:
+				split.append(set_id)
+				break
+	return split
+
+
+func open_cat(box_id: int) -> bool:
+	var box := job_box(box_id)
+	if box.is_empty() or not bool(box.get("has_cat", false)):
+		return false
+	if bool(job.get("cat_opened", false)):
+		return true
+	job["cat_opened"] = true
+	if not museum.has("biscuit"):
+		museum.append("biscuit")
+		decor_serial += 1
+		decor_queue.append({"uid": "decor_photo_%d" % decor_serial, "item": "museum_photo"})
+	return true
+
+
+func load_box_into(box_id: int, slot: int, floor_slots: int) -> String:
+	var box := job_box(box_id)
+	if box.is_empty() or not bool(box.get("sealed", false)):
+		return "Seal it first."
+	if slot_taken(slot):
+		return "Something's already sitting there."
+	if box_has_heavy(box_id) and slot >= floor_slots:
+		return "The espresso machine is happier on the bottom."
+	box["slot"] = slot
+	return ""
+
+
+func slot_taken(slot: int) -> bool:
+	for box in job.get("boxes", []):
+		if int(box.get("slot", -1)) == slot:
+			return true
+	return false
+
+
+func box_has_heavy(box_id: int) -> bool:
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id and bool(item.get("heavy", false)):
+			return true
+	return false
+
+
+func all_loaded() -> bool:
+	for box in job.get("boxes", []):
+		if bool(box.get("sealed", false)) and int(box.get("slot", -1)) < 0:
+			return false
+	return all_sealed()
+
+
+func heavy_respected() -> bool:
+	for box in job.get("boxes", []):
+		if box_has_heavy(int(box.get("id", -1))) and int(box.get("slot", -1)) >= 4:
+			return false
+	return true
+
+
+func apply_drive_result(result: Dictionary) -> void:
+	job["condition"] = clampi(int(result.get("condition", 100)), 0, 100)
+	job["alley"] = bool(result.get("alley", false))
+	job["duck_friend"] = bool(result.get("duck_friend", false))
+	job["near_miss"] = bool(result.get("near_miss", false))
+	_assign_damage()
+
+
+func _assign_damage() -> void:
+	var condition := int(job.get("condition", 100))
+	var stress := float(100 - condition)
+	var fragile_unpadded := false
+	for box in job.get("boxes", []):
+		if box_needs_padding(int(box.get("id", -1))) and not bool(box.get("padded", false)):
+			fragile_unpadded = true
+	if not fragile_unpadded:
+		stress *= float(Tuning.get_value("box_condition.padding_multiplier", 0.5))
+	if heavy_respected():
+		stress *= float(Tuning.get_value("box_condition.heavy_bottom_multiplier", 0.75))
+	var scuffed := 0
+	var chipped := 0
+	for band in Tuning.get_value("damage.stress_bands", []):
+		if stress < float(band.get("below", 999)):
+			scuffed = int(band.get("scuffed", 0))
+			chipped = int(band.get("chipped", 0))
+			break
+	var order: Array = []
+	for item in job.get("items", []):
+		var score := 0
+		if bool(item.get("fragile", false)):
+			score += 2
+			var box := job_box(int(item.get("box", -1)))
+			if not box.is_empty() and not bool(box.get("padded", false)):
+				score += 2
+		order.append({"uid": item["uid"], "score": score})
+	order.sort_custom(func(a, b): return int(a["score"]) > int(b["score"]))
+	var idx := 0
+	while chipped > 0 and idx < order.size():
+		var item := job_item(str(order[idx]["uid"]))
+		item["damage"] = 2
+		emit_signal("box_damaged", item["uid"], 2)
+		chipped -= 1
+		idx += 1
+	while scuffed > 0 and idx < order.size():
+		var item2 := job_item(str(order[idx]["uid"]))
+		if int(item2.get("damage", 0)) == 0:
+			item2["damage"] = 1
+			emit_signal("box_damaged", item2["uid"], 1)
+			scuffed -= 1
+		idx += 1
+
+
+func tap_repair(uid: String) -> bool:
+	var item := _find_repair_target(uid)
+	if item.is_empty():
+		return false
+	var level := int(item.get("damage", 0))
+	if level <= 0:
+		return false
+	item["taps"] = int(item.get("taps", 0)) + 1
+	if int(item["taps"]) >= Tuning.repair_taps(level):
+		item["damage"] = 0
+		item["taps"] = 0
+		return true
+	return false
+
+
+func _find_repair_target(uid: String) -> Dictionary:
+	if not job.is_empty():
+		var found := job_item(uid)
+		if not found.is_empty():
+			return found
+	for item in office_items:
+		if str(item.get("uid", "")) == uid:
+			return item
+	return {}
+
+
+func compute_payout(base: int, condition: int, bonuses: int, scuffed: int, chipped: int, alley: bool, split_count: int) -> Dictionary:
+	var ratio := Tuning.tip_ratio(condition)
+	var box_tip := int(round(float(base) * ratio))
+	if alley:
+		var alley_bonus := float(Tuning.get_value("pay.alley_tip_bonus", 0.10))
+		box_tip = int(round(float(box_tip) * (1.0 + alley_bonus)))
+	var split_loss := split_count * int(Tuning.get_value("pay.split_set_tip_loss", 8))
+	var tips := maxi(0, box_tip + bonuses - split_loss)
+	var cut := Tuning.damage_cut(base, scuffed, chipped, tips)
+	var net := tips - cut
+	return {
+		"base": base,
+		"box_tip": box_tip,
+		"bonuses": bonuses,
+		"split_loss": mini(split_loss, box_tip + bonuses),
+		"cut": cut,
+		"net_tips": net,
+		"total": base + net,
+		"stamp": Tuning.tip_stamp(condition),
+		"condition": condition,
+		"scuffed": scuffed,
+		"chipped": chipped,
+	}
+
+
+func finish_job() -> Dictionary:
+	var def: Dictionary = job.get("def", {})
+	var base := JobDB.base_pay(def)
+	var bonuses := 0
+	if bool(job.get("cat_opened", false)):
+		bonuses += int(Tuning.get_value("pay.cat_bonus", 20))
+	if bool(job.get("duck_friend", false)):
+		bonuses += int(Tuning.get_value("pay.duck_friend_bonus", 15))
+	var scuffed := 0
+	var chipped := 0
+	var all_fine := true
+	for item in job.get("items", []):
+		var level := int(item.get("damage", 0))
+		if level == 1:
+			scuffed += 1
+			all_fine = false
+		elif level >= 2:
+			chipped += 1
+			all_fine = false
+	var splits: Array = split_sets()
+	payout = compute_payout(base, int(job.get("condition", 100)), bonuses, scuffed, chipped, bool(job.get("alley", false)), splits.size())
+	payout["all_fine"] = all_fine
+	payout["cat"] = bool(job.get("cat_opened", false))
+	payout["duck"] = bool(job.get("duck_friend", false))
+	payout["job_id"] = job.get("id", "")
+	payout["title"] = def.get("title", "Job")
+	var stars := 1
+	if int(job.get("condition", 0)) >= 70:
+		stars += 1
+	if all_fine:
+		stars += 1
+	stars = mini(3, stars)
+	payout["stars"] = stars
+	add_money(int(payout["total"]), true)
+	rep_stars += stars
+	jobs_done += 1
+	jobs_cleared[str(job.get("id", ""))] = true
+	emit_signal("rep_changed", rep_rank(), rep_stars)
+	emit_signal("job_completed", job.get("id", ""), payout)
+	fire_trigger(str(job.get("id", "")) + "_complete")
+	if bool(def.get("mystery", false)) and bool(job.get("mystery_sorted", false)):
+		if not museum.has("train"):
+			museum.append("train")
+			decor_serial += 1
+			decor_queue.append({"uid": "decor_train_%d" % decor_serial, "item": "train_reward"})
+	_check_unlock_email()
+	return payout
+
+
+func sort_mystery() -> void:
+	job["mystery_sorted"] = true
+
+
+func job_item(uid: String) -> Dictionary:
+	for item in job.get("items", []):
+		if str(item.get("uid", "")) == uid:
+			return item
+	return {}
+
+
+func job_box(id: int) -> Dictionary:
+	for box in job.get("boxes", []):
+		if int(box.get("id", -2)) == id:
+			return box
+	return {}
+
+
+func _seed_market() -> void:
+	prices.clear()
+	history.clear()
+	var days := int(Tuning.get_value("pay.history_days", 7))
+	for good in ItemDB.trade_goods():
+		var id := str(good.get("id", ""))
+		var base := float(ItemDB.base_price(id))
+		var series: Array = []
+		var value := base
+		for i in days:
+			value = _swing(base, value)
+			series.append(value)
+		history[id] = series
+		prices[id] = value
+		goods[id] = int(goods.get(id, 0))
+
+
+func _swing(base: float, current: float) -> float:
+	var min_s := float(Tuning.get_value("pay.swing_min", 0.10))
+	var max_s := float(Tuning.get_value("pay.swing_max", 0.25))
+	var sign := 1.0 if rng.randf() > 0.48 else -1.0
+	var mag := rng.randf_range(min_s, max_s)
+	var nxt := current * (1.0 + sign * mag)
+	return clampf(nxt, base * 0.55, base * 1.85)
+
+
+func advance_day() -> void:
+	day += 1
+	for good in ItemDB.trade_goods():
+		var id := str(good.get("id", ""))
+		var base := float(ItemDB.base_price(id))
+		var nxt := _swing(base, float(prices.get(id, base)))
+		prices[id] = nxt
+		var series: Array = history.get(id, [])
+		series.append(nxt)
+		var keep := int(Tuning.get_value("pay.history_days", 7))
+		while series.size() > keep:
+			series.pop_front()
+		history[id] = series
+	_roll_buyer()
+
+
+func price_of(id: String) -> int:
+	return maxi(1, int(round(float(prices.get(id, ItemDB.base_price(id))))))
+
+
+func sell_price_of(id: String) -> int:
+	var ratio := float(Tuning.get_value("pay.sell_ratio", 0.75))
+	return maxi(1, int(round(float(price_of(id)) * ratio)))
+
+
+func buy_good(id: String) -> String:
+	var cost := price_of(id)
+	if money < cost:
+		return "Not quite enough in the jar."
+	add_money(-cost, false)
+	goods[id] = int(goods.get(id, 0)) + 1
+	return ""
+
+
+func sell_good(id: String) -> Dictionary:
+	if int(goods.get(id, 0)) <= 0:
+		return {"error": "You don't have one to sell."}
+	var gain := sell_price_of(id)
+	goods[id] = int(goods[id]) - 1
+	var paid_guess := ItemDB.base_price(id)
+	add_money(gain, true)
+	var profit := gain - paid_guess
+	if profit > 0:
+		fire_trigger("first_profitable_sale")
+	return {"gain": gain, "profit": profit}
+
+
+func sell_to_buyer() -> Dictionary:
+	if buyer_offer.is_empty():
+		return {"error": "Nobody's asking today."}
+	var id := str(buyer_offer.get("item", ""))
+	if int(goods.get(id, 0)) <= 0:
+		return {"error": "You don't have that one yet."}
+	var gain := int(buyer_offer.get("price", 0))
+	goods[id] = int(goods[id]) - 1
+	add_money(gain, true)
+	fire_trigger("first_profitable_sale")
+	var result := {"gain": gain, "profit": gain - ItemDB.base_price(id), "buyer": buyer_offer.get("name", "")}
+	_roll_buyer()
+	return result
+
+
+func _roll_buyer() -> void:
+	buyer_offer = {}
+	if ItemDB.buyers.is_empty() or ItemDB.trade_goods().is_empty():
+		return
+	var buyer: Dictionary = ItemDB.buyers[rng.randi() % ItemDB.buyers.size()]
+	var wants: Array = buyer.get("wants", [])
+	if wants.is_empty():
+		return
+	var item_id := str(wants[rng.randi() % wants.size()])
+	var premium := float(Tuning.get_value("pay.buyer_premium", 1.35))
+	buyer_offer = {
+		"name": buyer.get("name", "A buyer"),
+		"line": buyer.get("line", ""),
+		"item": item_id,
+		"price": maxi(1, int(round(float(price_of(item_id)) * premium))),
+	}
+
+
+func buy_decor(id: String) -> String:
+	var item := ItemDB.get_item(id)
+	var cost := int(item.get("price", 0))
+	if cost <= 0:
+		return "That's a gift, not a listing."
+	if money < cost:
+		return "The jar needs a little more."
+	add_money(-cost, false)
+	decor_serial += 1
+	decor_queue.append({"uid": "decor_%s_%d" % [id, decor_serial], "item": id})
+	return ""
+
+
+func queue_pop_to_hand() -> Dictionary:
+	if decor_queue.is_empty():
+		return {}
+	return decor_queue[0]
+
+
+func place_decor_from_queue(pos: Dictionary) -> void:
+	if decor_queue.is_empty():
+		return
+	var entry: Dictionary = decor_queue.pop_front()
+	entry["state"] = "placed"
+	entry["damage"] = 0
+	entry["x"] = pos.get("x", 0)
+	entry["y"] = pos.get("y", 0)
+	entry["z"] = pos.get("z", 0)
+	entry["rot"] = pos.get("rot", 0)
+	entry["wall"] = pos.get("wall", "")
+	office_items.append(entry)
+
+
+func find_office_item(uid: String) -> Dictionary:
+	for item in office_items:
+		if str(item.get("uid", "")) == uid:
+			return item
+	return {}
+
+
+func loose_job_items() -> Array:
+	var loose: Array = []
+	for item in job.get("items", []):
+		if str(item.get("state", "")) == "loose":
+			loose.append(item)
+	return loose
+
+
+func to_dict() -> Dictionary:
+	return {
+		"version": 1,
+		"character": character,
+		"money": money,
+		"total_earned": total_earned,
+		"rep_stars": rep_stars,
+		"jobs_done": jobs_done,
+		"jobs_cleared": jobs_cleared.duplicate(true),
+		"office_id": office_id,
+		"day": day,
+		"mode": mode,
+		"office_phase": office_phase,
+		"office_items": office_items.duplicate(true),
+		"decor_queue": decor_queue.duplicate(true),
+		"goods": goods.duplicate(true),
+		"prices": prices.duplicate(true),
+		"history": history.duplicate(true),
+		"inbox": inbox.duplicate(true),
+		"fired": fired.duplicate(true),
+		"tutorial_done": tutorial_done,
+		"first_placed": first_placed,
+		"museum": museum.duplicate(),
+		"job": _job_for_save(),
+		"payout": payout.duplicate(true),
+		"buyer_offer": buyer_offer.duplicate(true),
+		"pastry_day": pastry_day,
+		"decor_serial": decor_serial,
+	}
+
+
+func _job_for_save() -> Dictionary:
+	if job.is_empty():
+		return {}
+	var copy := job.duplicate(true)
+	return copy
+
+
+func from_dict(raw: Dictionary) -> void:
+	character = str(raw.get("character", "dana"))
+	money = int(raw.get("money", 120))
+	total_earned = int(raw.get("total_earned", 0))
+	rep_stars = int(raw.get("rep_stars", 0))
+	jobs_done = int(raw.get("jobs_done", 0))
+	jobs_cleared = raw.get("jobs_cleared", {})
+	office_id = str(raw.get("office_id", "garage"))
+	day = int(raw.get("day", 1))
+	mode = str(raw.get("mode", "office"))
+	office_phase = str(raw.get("office_phase", "live"))
+	office_items = raw.get("office_items", [])
+	decor_queue = raw.get("decor_queue", [])
+	goods = raw.get("goods", {})
+	prices = raw.get("prices", {})
+	history = raw.get("history", {})
+	inbox = raw.get("inbox", [])
+	fired = raw.get("fired", {})
+	tutorial_done = bool(raw.get("tutorial_done", false))
+	first_placed = bool(raw.get("first_placed", false))
+	museum = raw.get("museum", [])
+	job = raw.get("job", {})
+	if mode == "drive" or mode == "menu":
+		mode = "truck" if not job.is_empty() else "office"
+	payout = raw.get("payout", {})
+	buyer_offer = raw.get("buyer_offer", {})
+	pastry_day = int(raw.get("pastry_day", -1))
+	decor_serial = int(raw.get("decor_serial", 0))
+	emit_signal("money_changed", money)
+	emit_signal("emails_changed")
