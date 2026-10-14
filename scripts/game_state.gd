@@ -34,6 +34,14 @@ var payout: Dictionary = {}
 var buyer_offer: Dictionary = {}
 var pastry_day := -1
 var decor_serial := 0
+var orders: Array = []
+var wishlist: Array = []
+var prime := false
+var menu_markup := 1.0
+var shop_today := 0
+var shop_visitors_today := 0
+var freebie_day := -1
+var forest_serial := 0
 var rng := RandomNumberGenerator.new()
 
 
@@ -69,6 +77,14 @@ func new_game(who: String) -> void:
 	payout = {}
 	pastry_day = -1
 	decor_serial = 0
+	orders = []
+	wishlist = []
+	prime = false
+	menu_markup = 1.0
+	shop_today = 0
+	shop_visitors_today = 0
+	freebie_day = -1
+	forest_serial = 0
 	for entry in ItemDB.starter_layout():
 		var copy: Dictionary = entry.duplicate(true)
 		copy["state"] = "placed"
@@ -598,6 +614,10 @@ func _swing(base: float, current: float) -> float:
 
 
 func advance_day() -> void:
+	var earned := shop_today
+	var visitors := shop_visitors_today
+	var vibe := vibe_score()
+	var closed_day := day
 	day += 1
 	for good in ItemDB.trade_goods():
 		var id := str(good.get("id", ""))
@@ -611,6 +631,11 @@ func advance_day() -> void:
 			series.pop_front()
 		history[id] = series
 	_roll_buyer()
+	promote_deliveries()
+	if visitors > 0:
+		_shop_summary(closed_day, earned, visitors, vibe)
+	shop_today = 0
+	shop_visitors_today = 0
 
 
 func price_of(id: String) -> int:
@@ -696,10 +721,16 @@ func queue_pop_to_hand() -> Dictionary:
 	return decor_queue[0]
 
 
-func place_decor_from_queue(pos: Dictionary) -> void:
+func place_decor_from_queue(pos: Dictionary, prefer_uid := "") -> void:
 	if decor_queue.is_empty():
 		return
-	var entry: Dictionary = decor_queue.pop_front()
+	var index := 0
+	if prefer_uid != "":
+		for i in decor_queue.size():
+			if str(decor_queue[i].get("uid", "")) == prefer_uid:
+				index = i
+				break
+	var entry: Dictionary = decor_queue.pop_at(index)
 	entry["state"] = "placed"
 	entry["damage"] = 0
 	entry["x"] = pos.get("x", 0)
@@ -723,6 +754,334 @@ func loose_job_items() -> Array:
 		if str(item.get("state", "")) == "loose":
 			loose.append(item)
 	return loose
+
+
+func order_forest(sku_id: String, tier: String) -> String:
+	Catalog.ensure()
+	var entry := Catalog.sku(sku_id)
+	if entry.is_empty():
+		return "That listing grew legs and left."
+	if not Catalog.category_open(str(entry.get("category", "")), office_id):
+		return "That aisle unlocks with a bigger office."
+	var ship := Catalog.shipping(tier)
+	if ship.is_empty():
+		ship = Catalog.shipping("standard")
+		tier = "standard"
+	var price := Catalog.price_of(sku_id, day)
+	var fee := int(ship.get("fee", 0))
+	if prime and tier == "express":
+		fee = 0
+	if money < price + fee:
+		return "The jar is a little light for that."
+	add_money(-(price + fee), false)
+	forest_serial += 1
+	var days := int(ship.get("days", 1))
+	orders.append({
+		"uid": "ship_%d" % forest_serial,
+		"sku": sku_id,
+		"item": str(entry.get("item", "")),
+		"paid": price,
+		"fee": fee,
+		"arrive_day": day + days,
+		"status": "door" if days <= 0 else "shipping",
+		"bubbles_left": -1,
+		"mystery": bool(entry.get("mystery", false)),
+	})
+	_maybe_freebie()
+	if days <= 0:
+		emit_signal("toast_requested", "The courier is already on the block.")
+	else:
+		emit_signal("toast_requested", "Standard shipping. The bell rings tomorrow.")
+	return ""
+
+
+func _maybe_freebie() -> void:
+	var every := int(Catalog.forest.get("freebie_every", 4))
+	if every <= 0 or day % every != 0 or freebie_day == day:
+		return
+	var pool: Array = Catalog.forest.get("freebies", [])
+	if pool.is_empty():
+		return
+	freebie_day = day
+	forest_serial += 1
+	var item_id := str(pool[rng.randi() % pool.size()])
+	orders.append({
+		"uid": "gift_%d" % forest_serial,
+		"sku": "freebie",
+		"item": item_id,
+		"paid": 0,
+		"fee": 0,
+		"arrive_day": day,
+		"status": "door",
+		"bubbles_left": -1,
+		"mystery": false,
+		"gift": true,
+	})
+
+
+func promote_deliveries() -> void:
+	for order in orders:
+		if str(order.get("status", "")) == "shipping" and int(order.get("arrive_day", 99)) <= day:
+			order["status"] = "door"
+
+
+func door_orders() -> Array:
+	var waiting: Array = []
+	for order in orders:
+		var status := str(order.get("status", ""))
+		if status == "door" or status == "open":
+			waiting.append(order)
+	return waiting
+
+
+func delivery_by_uid(uid: String) -> Dictionary:
+	for order in orders:
+		if str(order.get("uid", "")) == uid:
+			return order
+	return {}
+
+
+func toggle_wishlist(sku_id: String) -> bool:
+	if sku_id in wishlist:
+		wishlist.erase(sku_id)
+		return false
+	wishlist.append(sku_id)
+	return true
+
+
+func buy_prime() -> String:
+	if prime:
+		return "Toucan Prime is already on the account."
+	var spec := Catalog.prime_def()
+	if total_earned < int(spec.get("earned", 400)):
+		return str(spec.get("blurb", "Not yet."))
+	var cost := int(spec.get("cost", 40))
+	if money < cost:
+		return "The jar needs a little more for Prime."
+	add_money(-cost, false)
+	prime = true
+	return ""
+
+
+func return_delivery(uid: String) -> String:
+	var order := delivery_by_uid(uid)
+	if order.is_empty():
+		return "That box already came open."
+	var status := str(order.get("status", ""))
+	var sealed := int(Catalog.forest.get("bubbles", 5))
+	if status == "open" and int(order.get("bubbles_left", sealed)) < sealed:
+		return "The wrap is already open. Place it, then send it back if you want."
+	if status != "door" and status != "open":
+		return "That box already came open."
+	var refund := int(round(float(order.get("paid", 0)) * float(Catalog.forest.get("return_sealed", 1.0))))
+	orders.erase(order)
+	if refund > 0:
+		add_money(refund, false)
+	emit_signal("toast_requested", "Returned in the box. $%d walked back to the jar." % refund)
+	return ""
+
+
+func start_unbox(uid: String) -> void:
+	var order := delivery_by_uid(uid)
+	if order.is_empty() or str(order.get("status", "")) != "door":
+		return
+	order["status"] = "open"
+	order["bubbles_left"] = int(Catalog.forest.get("bubbles", 5))
+
+
+func pop_bubble(uid: String) -> int:
+	var order := delivery_by_uid(uid)
+	if order.is_empty():
+		return 0
+	if str(order.get("status", "")) == "door":
+		start_unbox(uid)
+	var left := int(order.get("bubbles_left", 0)) - 1
+	order["bubbles_left"] = maxi(0, left)
+	return int(order.get("bubbles_left", 0))
+
+
+func finish_unbox(uid: String) -> Dictionary:
+	var order := delivery_by_uid(uid)
+	if order.is_empty():
+		return {}
+	if int(order.get("bubbles_left", 1)) > 0:
+		return {}
+	var item_id := str(order.get("item", ""))
+	if bool(order.get("mystery", false)):
+		var pool: Array = Catalog.sku(str(order.get("sku", ""))).get("pool", [])
+		if not pool.is_empty():
+			item_id = str(pool[rng.randi() % pool.size()])
+	decor_serial += 1
+	var placed := {
+		"uid": "forest_%d" % decor_serial,
+		"item": item_id,
+		"source": "forest",
+		"sku": str(order.get("sku", "")),
+		"paid": int(order.get("paid", 0)),
+		"gift": bool(order.get("gift", false)),
+	}
+	decor_queue.append(placed)
+	orders.erase(order)
+	return placed
+
+
+func return_office_item(uid: String) -> String:
+	var rec := find_office_item(uid)
+	if rec.is_empty() or str(rec.get("source", "")) != "forest":
+		return "TropicalForest only takes its own boxes back."
+	var refund := int(round(float(rec.get("paid", 0)) * float(Catalog.forest.get("return_placed", 0.8))))
+	office_items.erase(rec)
+	if refund > 0:
+		add_money(refund, false)
+	return ""
+
+
+func resell_office_item(uid: String) -> String:
+	var rec := find_office_item(uid)
+	if rec.is_empty() or str(rec.get("source", "")) != "forest":
+		return "The market wants something that came from the forest."
+	var gain := int(round(float(rec.get("paid", 0)) * float(Catalog.forest.get("resell_ratio", 0.6))))
+	office_items.erase(rec)
+	if gain > 0:
+		add_money(gain, true)
+	else:
+		add_money(1, true)
+	return ""
+
+
+func vibe_score() -> int:
+	Catalog.ensure()
+	var score := int(Catalog.shop_number("music_bonus", 6)) + int(Catalog.shop_number("clean_base", 12))
+	for rec in office_items:
+		if str(rec.get("state", "")) != "placed":
+			continue
+		var item_id := str(rec.get("item", ""))
+		for tag in Catalog.tags_for(item_id):
+			match str(tag):
+				"plant":
+					score += 8
+				"light":
+					score += 6
+				"decor", "counter":
+					score += 3
+				"music":
+					score += 4
+		if int(rec.get("damage", 0)) > 0:
+			score -= int(Catalog.shop_number("damage_penalty", 2))
+	if _barista_on():
+		score += int(Catalog.shop.get("barista", {}).get("vibe", 8))
+	var cap := int(Catalog.shop_number("cap", 100))
+	var floor_v := int(Catalog.shop_number("floor_vibe", 8))
+	return clampi(score, floor_v, cap)
+
+
+func shop_fixtures() -> Array:
+	var placed := {}
+	for rec in office_items:
+		if str(rec.get("state", "")) == "placed":
+			placed[str(rec.get("item", ""))] = true
+	var open: Array = []
+	for fix in Catalog.fixtures():
+		if placed.has(str(fix.get("item", ""))):
+			open.append(fix)
+	return open
+
+
+func shop_open() -> bool:
+	return not shop_fixtures().is_empty()
+
+
+func _barista_on() -> bool:
+	var spec: Dictionary = Catalog.shop.get("barista", {})
+	var job_id := str(spec.get("unlock_job", ""))
+	if job_id != "" and not jobs_cleared.has(job_id):
+		return false
+	var needs: Array = spec.get("needs", [])
+	if needs.is_empty():
+		return false
+	for rec in office_items:
+		if str(rec.get("state", "")) != "placed":
+			continue
+		if str(rec.get("item", "")) in needs:
+			return true
+	return false
+
+
+func serve_visitor() -> Dictionary:
+	var fixes := shop_fixtures()
+	if fixes.is_empty():
+		return {}
+	var dishes: Array = []
+	for fix in fixes:
+		for dish_id in fix.get("serves", []):
+			dishes.append(str(dish_id))
+	if dishes.is_empty():
+		return {}
+	var dish_id := str(dishes[rng.randi() % dishes.size()])
+	var dish := Catalog.menu_item(dish_id)
+	var vibe := vibe_score()
+	var base := int(round(float(dish.get("price", 3)) * menu_markup))
+	var tip := int(round(float(base) * float(vibe) * Catalog.shop_number("tip_per_vibe", 0.012)))
+	var pay := maxi(1, base + tip)
+	add_money(pay, true)
+	shop_today += pay
+	shop_visitors_today += 1
+	var cast := Catalog.visitors()
+	var who: Dictionary = {}
+	if not cast.is_empty():
+		who = cast[(day + shop_visitors_today) % cast.size()]
+	_visitor_request(who)
+	return {
+		"name": str(who.get("name", "A neighbor")),
+		"line": str(who.get("line", "Just looking, then not.")),
+		"dish": str(dish.get("name", dish_id)),
+		"pay": pay,
+		"vibe": vibe,
+	}
+
+
+func _visitor_request(who: Dictionary) -> void:
+	var sku_id := str(who.get("request", ""))
+	if sku_id == "":
+		return
+	var key := "request_%s" % str(who.get("id", sku_id))
+	if fired.has(key):
+		return
+	var entry := Catalog.sku(sku_id)
+	var item_id := str(entry.get("item", ""))
+	for rec in office_items:
+		if str(rec.get("state", "")) == "placed" and str(rec.get("item", "")) == item_id:
+			return
+	fired[key] = true
+	inbox.append({
+		"id": key,
+		"from": str(who.get("name", "A regular")),
+		"subject": "A small request",
+		"body": str(who.get("request_note", "If you see it on TropicalForest, the shop would like it.")),
+		"read": false,
+	})
+	emit_signal("emails_changed")
+
+
+func _shop_summary(closed_day: int, earned: int, visitors: int, vibe: int) -> void:
+	var spec: Dictionary = Catalog.shop.get("summary_email", {})
+	var body := str(spec.get("body", ""))
+	body = body.replace("{day}", str(closed_day))
+	body = body.replace("{earned}", str(earned))
+	body = body.replace("{visitors}", str(visitors))
+	body = body.replace("{vibe}", str(vibe))
+	inbox.append({
+		"id": "shop_day_%d" % closed_day,
+		"from": str(spec.get("from", "Marge Holloway")),
+		"subject": str(spec.get("subject", "The till")).replace("{day}", str(closed_day)),
+		"body": body,
+		"read": false,
+	})
+	emit_signal("emails_changed")
+
+
+func set_markup(value: float) -> void:
+	menu_markup = clampf(value, 0.5, 2.0)
 
 
 func to_dict() -> Dictionary:
@@ -753,6 +1112,14 @@ func to_dict() -> Dictionary:
 		"buyer_offer": buyer_offer.duplicate(true),
 		"pastry_day": pastry_day,
 		"decor_serial": decor_serial,
+		"orders": orders.duplicate(true),
+		"wishlist": wishlist.duplicate(),
+		"prime": prime,
+		"menu_markup": menu_markup,
+		"shop_today": shop_today,
+		"shop_visitors_today": shop_visitors_today,
+		"freebie_day": freebie_day,
+		"forest_serial": forest_serial,
 	}
 
 
@@ -791,5 +1158,13 @@ func from_dict(raw: Dictionary) -> void:
 	buyer_offer = raw.get("buyer_offer", {})
 	pastry_day = int(raw.get("pastry_day", -1))
 	decor_serial = int(raw.get("decor_serial", 0))
+	orders = raw.get("orders", [])
+	wishlist = raw.get("wishlist", [])
+	prime = bool(raw.get("prime", false))
+	menu_markup = float(raw.get("menu_markup", 1.0))
+	shop_today = int(raw.get("shop_today", 0))
+	shop_visitors_today = int(raw.get("shop_visitors_today", 0))
+	freebie_day = int(raw.get("freebie_day", -1))
+	forest_serial = int(raw.get("forest_serial", 0))
 	emit_signal("money_changed", money)
 	emit_signal("emails_changed")

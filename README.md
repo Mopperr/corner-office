@@ -31,19 +31,27 @@ godot --headless --path . res://tests/smoke.tscn
 
 1. New game, pick Dana, read the intro, unpack the garage.
 2. Place the twelve starter pieces (the mug and sticky notes sit on the desk).
-3. Open the computer and trade office goods. Prices move when you press Next day.
+3. Open the computer. Trade office goods, or open TropicalForest to order decor. Prices move when you press Next day.
 4. The clipboard offers the cafe job after the garage is unpacked.
 5. Pack, pad fragile items, load the truck (heavy boxes on the mustard floor slots), then drive.
 6. The truck's back door swings open and shut in Godot (`open` / `close`, about +105° on Y). The model itself has no animation.
 7. Unpack, repair a scuff or keep it, and read the pay lines. Base pay is always paid in full. Damage only comes out of the tip.
-8. Repeat jobs and trade until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings.
+8. Repeat jobs, trade, and let the shop earn until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings.
+
+## TropicalForest and the shop
+
+TropicalForest is a computer app: categories, search, silly reviews, a wishlist, and a daily deal that simply waits until the next in-game day. Standard shipping is free and arrives tomorrow. Express is same-day for a small fee. Toucan Prime, once the jar has earned enough, makes express free.
+
+A courier walks up to the door and rings. Click the box, pop the bubble wrap, and place the item with the usual snap. A sealed box can be returned. A placed Forest item can be returned for most of the price or resold to the market. The catalog is `data/forest.json`. It points at the decor models already in the game. Coffee & Kitchen and Seasonal open with the Bakery Loft. Mystery boxes and the occasional freebie are in that same file.
+
+The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only when a fixture from `data/shop.json` is placed: a coffee machine, kettle, bookshelf, filing cabinet, fern, or menu board. Visitors walk in, buy from the menu, and leave. Vibe, from plants, lights, and decor, only changes how many people come and how they tip. It never fails. Prices are Cozy, Fair, or Splurge. After the cat-cafe job, a cat bed or cushion puts Biscuit on the till. Marge emails a daily summary. Regulars sometimes ask for a TropicalForest item. Add visitors, dishes, or fixtures in `data/shop.json`.
 
 ## Project map
 
 - `scenes/main.tscn` boots `scripts/app.gd`.
 - Autoloads: `ItemDB`, `JobDB`, `GameState`, `SaveManager`, `AudioDirector`.
 - `data/tuning.json` holds the locked numbers (damage, snap, tips, office gates, audio gains).
-- `data/content.json` is characters, items, venues, and jobs. `data/drives.json` is the three routes.
+- `data/content.json` is characters, items, venues, and jobs. `data/drives.json` is the three routes. `data/forest.json` is the TropicalForest catalog. `data/shop.json` is fixtures, the menu, visitors, and Vibe.
 - `data/narrative/` is the intro, cast, emails, and item flavor.
 - `assets/models/` is the diorama kit. Props get a box collider at runtime because the glTF files have none.
 - `assets/ui/driving/mover_truck_topdown_sheet@1x.png` is the drive sprite (facing +X, 32 px per meter). The unsuffixed sheet is 2× and is scaled by 0.5 if the @1x file is missing. Hazard tests use the opaque truck, not the padded frame.

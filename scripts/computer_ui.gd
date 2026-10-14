@@ -80,6 +80,8 @@ func _build() -> void:
 	screen.add_child(icons)
 	_icon(icons, "Market", "res://assets/ui/icons/icon_market.png", "market")
 	_icon(icons, "Shop", "res://assets/ui/icons/icon_shop.png", "shop")
+	_icon(icons, "Forest", "res://assets/ui/icons/icon_listings.png", "forest")
+	_icon(icons, "Till", "res://assets/ui/icons/icon_shop.png", "manager")
 	_icon(icons, "Email", "res://assets/ui/icons/icon_email.png", "email")
 	_icon(icons, "Listings", "res://assets/ui/icons/icon_listings.png", "listings")
 	body = Panel.new()
@@ -115,6 +117,10 @@ func _show_page() -> void:
 			_email()
 		"listings":
 			_listings()
+		"forest":
+			body.add_child(preload("res://scripts/forest_page.gd").new())
+		"manager":
+			body.add_child(preload("res://scripts/shop_page.gd").new())
 
 
 func _market() -> void:

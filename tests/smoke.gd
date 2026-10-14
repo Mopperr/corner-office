@@ -92,6 +92,72 @@ func _ready() -> void:
 			player.seek(0.55, true)
 			if absf(door.rotation.y) > 0.05:
 				failures.append("truck door close")
+	if load("res://scripts/forest_page.gd") == null or load("res://scripts/shop_page.gd") == null:
+		failures.append("store pages")
+	if Catalog.category_open("coffee", "garage"):
+		failures.append("coffee aisle early")
+	if not Catalog.category_open("plants", "garage"):
+		failures.append("plants aisle")
+	var deals: Array = Catalog.deal_skus(GameState.day)
+	if deals.is_empty() or Catalog.price_of(str(deals[0]), GameState.day) >= Catalog.list_price(str(deals[0])):
+		failures.append("deal price")
+	if GameState.order_forest("tf_coffee", "standard") == "":
+		failures.append("locked aisle bought")
+	var jar := GameState.money
+	var fern := Catalog.price_of("tf_fern", GameState.day)
+	var express_fee := int(Catalog.shipping("express").get("fee", 0))
+	if GameState.order_forest("tf_fern", "express") != "":
+		failures.append("express order")
+	elif GameState.money != jar - fern - express_fee:
+		failures.append("express charge")
+	elif GameState.door_orders().is_empty():
+		failures.append("courier box")
+	else:
+		var ship_uid := str(GameState.door_orders()[0].get("uid", ""))
+		if GameState.return_delivery(ship_uid) != "":
+			failures.append("return sealed")
+		elif GameState.money != jar - express_fee:
+			failures.append("return refund")
+	if GameState.order_forest("tf_cactus", "standard") != "":
+		failures.append("standard order")
+	GameState.advance_day()
+	var cactus_uid := ""
+	for order in GameState.door_orders():
+		if str(order.get("sku", "")) == "tf_cactus":
+			cactus_uid = str(order.get("uid", ""))
+	if cactus_uid == "":
+		failures.append("standard arrived")
+	else:
+		GameState.start_unbox(cactus_uid)
+		var left := 1
+		while left > 0:
+			left = GameState.pop_bubble(cactus_uid)
+		var opened := GameState.finish_unbox(cactus_uid)
+		if str(opened.get("item", "")) != "plant_cactus" or str(opened.get("source", "")) != "forest":
+			failures.append("unbox")
+		else:
+			var before_vibe := GameState.vibe_score()
+			GameState.place_decor_from_queue({"x": 1.5, "y": 0, "z": 1.5, "rot": 0}, str(opened.get("uid", "")))
+			if GameState.vibe_score() <= before_vibe:
+				failures.append("vibe")
+	GameState.office_items.append({"uid": "shop_coffee", "item": "coffee_machine", "state": "placed", "x": 3, "y": 0, "z": 3, "rot": 0, "damage": 0})
+	var visit := GameState.serve_visitor()
+	if visit.is_empty() or int(visit.get("pay", 0)) <= 0:
+		failures.append("visitor")
+	else:
+		GameState.advance_day()
+		var mailed := false
+		for mail in GameState.inbox:
+			if "till" in str(mail.get("subject", "")).to_lower():
+				mailed = true
+		if not mailed:
+			failures.append("shop email")
+	if not GameState.toggle_wishlist("tf_fern"):
+		failures.append("wishlist")
+	SaveManager.save_game()
+	GameState.wishlist = []
+	if not SaveManager.load_game() or not ("tf_fern" in GameState.wishlist):
+		failures.append("wishlist save")
 	if failures.is_empty():
 		print("SMOKE_OK")
 		get_tree().quit(0)

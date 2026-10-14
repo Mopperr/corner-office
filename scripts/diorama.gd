@@ -31,6 +31,10 @@ var toast_time := 0.0
 var floor_slots := 4
 var slot_count := 8
 var carried: Dictionary = {}
+var delivery_root: Node3D
+var visitor_wait := 5.0
+var courier_seen: Dictionary = {}
+var unbox_uid := ""
 
 
 func _ready() -> void:
@@ -410,6 +414,8 @@ func _process(delta: float) -> void:
 			if not cat_player.animation_finished.is_connected(_on_cat_clip):
 				cat_player.animation_finished.connect(_on_cat_clip)
 	_update_ghost(delta)
+	_sync_deliveries()
+	_tick_visitors(delta)
 	if hint:
 		hint.text = _hint_text()
 
@@ -481,6 +487,9 @@ func _click() -> void:
 	if _over_ui():
 		return
 	var item_uid := _pick_uid()
+	if item_uid.begins_with("delivery:") and GameState.mode == "office" and GameState.office_phase == "live":
+		_delivery_click(item_uid.trim_prefix("delivery:"))
+		return
 	if item_uid == "pastry":
 		_pastry()
 		return
@@ -587,7 +596,7 @@ func _try_place_held() -> void:
 		_shake(ghost if ghost else self)
 		return
 	if held_source == "decor":
-		GameState.place_decor_from_queue(spot)
+		GameState.place_decor_from_queue(spot, held_uid)
 		AudioDirector.play_sfx("sfx_item_snap", true)
 		_squash_last()
 		held_uid = ""
@@ -1055,6 +1064,18 @@ func _refresh_hud_buttons() -> void:
 				held_rot = 0
 				AudioDirector.play_sfx("sfx_item_pick_up")
 			)
+		if held_source == "office":
+			var held := GameState.find_office_item(held_uid)
+			if str(held.get("source", "")) == "forest":
+				y += 58
+				_act_button(layer, "Return", Vector2(1100, y), _return_held)
+				y += 58
+				_act_button(layer, "Resell", Vector2(1100, y), _resell_held)
+		if not GameState.door_orders().is_empty():
+			y += 58
+			_act_button(layer, "Door boxes", Vector2(1100, y), func():
+				_toast("A TropicalForest box is by the door. Click it, pop the bubbles, then place what was inside.")
+			)
 	if GameState.mode == "job_pack":
 		_act_button(layer, "New box", Vector2(1060, 100), func():
 			selected_box = GameState.make_box()
@@ -1278,6 +1299,8 @@ func _hint_text() -> String:
 	var rep := "Rep %d" % GameState.rep_rank()
 	var head := "%s   %s   %s" % [venue.get("name", "Office"), money, rep]
 	if status:
+		if GameState.mode == "office" and GameState.office_phase == "live":
+			head += "   Vibe %d" % GameState.vibe_score()
 		status.text = head
 	match GameState.mode:
 		"office":
@@ -1285,7 +1308,12 @@ func _hint_text() -> String:
 				return "Pack the old office. Click each item. R is for later, when you place things. Shift+R turns 15°."
 			if GameState.office_phase == "place":
 				return "Click a box, then the floor. R rotates 90°. Hold Shift and press R for 15°. The whiteboard and shelves snap to the wall."
-			return "Click the computer, open Jobs, or pick something up to move it. Drawers click. The lamp keeps its glow."
+			var extra := ""
+			if not GameState.door_orders().is_empty():
+				extra = " A courier box is by the door."
+			if GameState.shop_open():
+				extra += " Vibe %d. Visitors wander in." % GameState.vibe_score()
+			return "Click the computer, open Jobs, or pick something up to move it. Drawers click. The lamp keeps its glow." + extra
 		"job_pack":
 			return "Click an item to drop it in the open box. Fragile things like padding. Heavy things ride alone, on the bottom."
 		"truck":
@@ -1301,6 +1329,217 @@ func _toast(message: String) -> void:
 	toast.text = message
 	toast.visible = true
 	toast_time = 3.4
+
+
+func _sync_deliveries() -> void:
+	if GameState.mode != "office" or GameState.office_phase != "live":
+		return
+	if delivery_root == null:
+		delivery_root = Node3D.new()
+		delivery_root.name = "Deliveries"
+		add_child(delivery_root)
+	var live := {}
+	var index := 0
+	for order in GameState.door_orders():
+		var uid := str(order.get("uid", ""))
+		live[uid] = true
+		if delivery_root.get_node_or_null(uid) == null:
+			var box := Props.make("box_closed")
+			box.name = uid
+			var at := Vector3(float(venue.get("x", 0)) + 1.15 + float(index) * 0.7, 0, float(venue.get("z", 0)) + 0.9)
+			box.position = at
+			box.set_meta("uid", "delivery:" + uid)
+			Props.add_picker(box, Vector3(0.5, 0.42, 0.45))
+			delivery_root.add_child(box)
+			_courier(at)
+		index += 1
+	for child in delivery_root.get_children():
+		if not live.has(str(child.name)):
+			child.queue_free()
+
+
+func _courier(at: Vector3) -> void:
+	var key := "%s" % at
+	if courier_seen.has(key):
+		return
+	courier_seen[key] = true
+	var person := Node3D.new()
+	person.position = Vector3(at.x, 0, at.z - 2.4)
+	var body := Props.mesh_cylinder(0.22, 0.9, UIKit.TERRA)
+	person.add_child(body)
+	var head := Props.mesh_box(Vector3(0.28, 0.28, 0.28), UIKit.CREAM)
+	head.position = Vector3(0, 1.05, 0)
+	person.add_child(head)
+	add_child(person)
+	AudioDirector.play_sfx("sfx_notification_soft")
+	var tw := create_tween()
+	tw.tween_property(person, "position", Vector3(at.x, 0, at.z - 0.7), 0.9)
+	tw.tween_interval(0.35)
+	tw.tween_property(person, "position", Vector3(at.x, 0, at.z - 2.8), 0.9)
+	tw.tween_callback(person.queue_free)
+	_toast("Courier at the door.")
+
+
+func _delivery_click(uid: String) -> void:
+	var order := GameState.delivery_by_uid(uid)
+	if order.is_empty():
+		return
+	if str(order.get("status", "")) == "door":
+		GameState.start_unbox(uid)
+		AudioDirector.play_sfx("sfx_tape_rip")
+		AudioDirector.play_sfx("sfx_paper_rustle")
+	unbox_uid = uid
+	_show_unbox()
+
+
+func _show_unbox() -> void:
+	var layer := _hud_layer()
+	if layer == null:
+		return
+	var old := layer.get_node_or_null("Unbox")
+	if old:
+		old.queue_free()
+	var order := GameState.delivery_by_uid(unbox_uid)
+	if order.is_empty():
+		return
+	var panel := Panel.new()
+	panel.name = "Unbox"
+	panel.position = Vector2(360, 160)
+	panel.size = Vector2(520, 280)
+	panel.add_theme_stylebox_override("panel", UIKit.style(UIKit.CARD, 18))
+	layer.add_child(panel)
+	var title := UIKit.label("TropicalForest box", 26, UIKit.DARK, "title")
+	title.position = Vector2(20, 12)
+	panel.add_child(title)
+	var left := int(order.get("bubbles_left", 0))
+	var blurb := UIKit.label("Pop the bubble wrap. Packing peanuts drift out. %d left." % left, 16, UIKit.DARK)
+	blurb.position = Vector2(20, 56)
+	blurb.size = Vector2(480, 48)
+	panel.add_child(blurb)
+	var pop := UIKit.button("Pop a bubble", UIKit.BLUE)
+	pop.position = Vector2(20, 120)
+	pop.size = Vector2(220, 48)
+	pop.pressed.connect(_pop_bubble)
+	panel.add_child(pop)
+	if str(order.get("status", "")) == "door" or left == int(Catalog.forest.get("bubbles", 5)):
+		var back := UIKit.button("Return sealed", UIKit.TERRA)
+		back.position = Vector2(260, 120)
+		back.size = Vector2(220, 48)
+		back.pressed.connect(_return_sealed)
+		panel.add_child(back)
+	var close := UIKit.button("Later", UIKit.DARK)
+	close.position = Vector2(20, 190)
+	close.size = Vector2(160, 44)
+	close.pressed.connect(func():
+		var node := layer.get_node_or_null("Unbox")
+		if node:
+			node.queue_free()
+	)
+	panel.add_child(close)
+
+
+func _pop_bubble() -> void:
+	var left := GameState.pop_bubble(unbox_uid)
+	AudioDirector.play_sfx("sfx_ui_click")
+	if left > 0:
+		_show_unbox()
+		return
+	AudioDirector.play_sfx("sfx_box_open")
+	var placed := GameState.finish_unbox(unbox_uid)
+	var layer := _hud_layer()
+	if layer:
+		var node := layer.get_node_or_null("Unbox")
+		if node:
+			node.queue_free()
+	unbox_uid = ""
+	if placed.is_empty():
+		return
+	held_uid = str(placed.get("uid", ""))
+	held_source = "decor"
+	held_rot = 0
+	_toast("It's out. Click the floor to snap it in.")
+	_refresh_items()
+	SaveManager.save_game()
+
+
+func _return_sealed() -> void:
+	var err := GameState.return_delivery(unbox_uid)
+	if err != "":
+		_toast(err)
+		return
+	AudioDirector.play_sfx("sfx_cash_gain")
+	unbox_uid = ""
+	var layer := _hud_layer()
+	if layer:
+		var node := layer.get_node_or_null("Unbox")
+		if node:
+			node.queue_free()
+	_sync_deliveries()
+	SaveManager.save_game()
+
+
+func _return_held() -> void:
+	var err := GameState.return_office_item(held_uid)
+	if err != "":
+		_toast(err)
+		return
+	held_uid = ""
+	held_source = ""
+	AudioDirector.play_sfx("sfx_cash_gain")
+	_toast("Sent back. Most of the money came home.")
+	_refresh_items()
+	SaveManager.save_game()
+
+
+func _resell_held() -> void:
+	var err := GameState.resell_office_item(held_uid)
+	if err != "":
+		_toast(err)
+		return
+	held_uid = ""
+	held_source = ""
+	AudioDirector.play_sfx("sfx_sell_click")
+	AudioDirector.play_sfx("sfx_cash_gain")
+	_toast("The market took it.")
+	_refresh_items()
+	SaveManager.save_game()
+
+
+func _tick_visitors(delta: float) -> void:
+	if GameState.mode != "office" or GameState.office_phase != "live" or not GameState.shop_open():
+		return
+	visitor_wait -= delta
+	if visitor_wait > 0.0:
+		return
+	var vibe := GameState.vibe_score()
+	var base := Catalog.shop_number("tick_seconds", 16)
+	var haste := Catalog.shop_number("vibe_haste", 0.08)
+	visitor_wait = maxf(6.0, base - float(vibe) * haste)
+	_spawn_visitor()
+
+
+func _spawn_visitor() -> void:
+	var person := Node3D.new()
+	var door := Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.5, 0, float(venue.get("z", 0)) + 0.4)
+	var counter := Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.55, 0, float(venue.get("z", 0)) + float(venue.get("d", 8)) * 0.45)
+	person.position = door
+	var body := Props.mesh_cylinder(0.18, 0.85, UIKit.BLUE if randf() > 0.5 else UIKit.SAGE)
+	person.add_child(body)
+	var head := Props.mesh_box(Vector3(0.24, 0.24, 0.24), UIKit.CREAM)
+	head.position = Vector3(0, 0.98, 0)
+	person.add_child(head)
+	add_child(person)
+	var tw := create_tween()
+	tw.tween_property(person, "position", counter, 1.3)
+	tw.tween_callback(func():
+		var visit := GameState.serve_visitor()
+		if not visit.is_empty():
+			_toast("%s bought a %s. +$%d" % [visit.get("name", "Someone"), visit.get("dish", "thing"), int(visit.get("pay", 0))])
+			AudioDirector.play_sfx("sfx_cash_gain")
+	)
+	tw.tween_interval(0.4)
+	tw.tween_property(person, "position", door + Vector3(0, 0, -1.5), 1.2)
+	tw.tween_callback(person.queue_free)
 
 
 func _pastry() -> void:
