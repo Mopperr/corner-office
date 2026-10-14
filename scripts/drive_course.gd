@@ -49,6 +49,7 @@ func _ready() -> void:
 	cam.position = pos
 	cam.zoom = Vector2(1.15, 1.15)
 	add_child(cam)
+	# The dedicated top-down truck sprite is still coming. This sheet is the placeholder.
 	truck = Sprite2D.new()
 	var sheet_path := "res://assets/ui/driving/mover_truck_topdown_sheet@1x.png"
 	var sheet_scale := 1.0
@@ -62,7 +63,9 @@ func _ready() -> void:
 	truck.scale = Vector2(sheet_scale, sheet_scale)
 	truck.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	truck.position = pos
+	truck.z_index = 8
 	add_child(truck)
+	_dress_road()
 	_hud()
 	UIKit.show_level_beat(self, GameState.present_current_slice_level())
 	var weather := str(course.get("weather", "clear"))
@@ -360,6 +363,8 @@ func _draw() -> void:
 	for hazard in course.get("hazards", []):
 		var at := Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
 		var kind := str(hazard.get("type", ""))
+		if _hazard_art(kind) != "":
+			continue
 		var color := UIKit.TERRA if kind == "cone" else UIKit.BLUE if kind == "puddle" or kind == "ducks" else UIKit.MUSTARD
 		draw_circle(at, 18 if kind != "ducks" else 28, color)
 	var finish := _rect(course.get("finish", [0, 0, 1, 1]))
@@ -369,6 +374,81 @@ func _draw() -> void:
 	if str(course.get("scenery", "")) == "pond":
 		draw_circle(Vector2(1600, 1200), 220, Color("7FA3B8"))
 		draw_circle(Vector2(1680, 1160), 16, UIKit.MUSTARD)
+
+
+func _hazard_art(kind: String) -> String:
+	match kind:
+		"cone":
+			return "cone"
+		"bump":
+			return "speed_bump"
+		"puddle":
+			return "puddle"
+		"ducks":
+			return "duck"
+	return ""
+
+
+func _dress_road() -> void:
+	for hazard in course.get("hazards", []):
+		var kind := str(hazard.get("type", ""))
+		var art := _hazard_art(kind)
+		if art == "":
+			continue
+		var at := Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
+		_road_sprite(art, at)
+		if kind == "ducks":
+			_road_sprite("duckling", at + Vector2(36, 22))
+	var scenery := "pond" if str(course.get("scenery", "")) == "pond" else "town"
+	for spot in _road_scenery(scenery):
+		_road_sprite(str(spot["name"]), spot["at"])
+
+
+func _road_scenery(kind: String) -> Array:
+	if kind == "pond":
+		return [
+			{"name": "fountain", "at": Vector2(1600, 1120)},
+			{"name": "willow", "at": Vector2(1180, 860)},
+			{"name": "willow", "at": Vector2(2050, 1480)},
+			{"name": "bench", "at": Vector2(980, 860)},
+			{"name": "bench", "at": Vector2(1860, 1680)},
+			{"name": "jogger", "at": Vector2(1500, 180)},
+			{"name": "bridge_closed", "at": Vector2(520, 160)},
+			{"name": "duckling", "at": Vector2(1720, 1240)},
+		]
+	return [
+		{"name": "shopfront", "at": Vector2(640, 250)},
+		{"name": "shopfront", "at": Vector2(1500, 760)},
+		{"name": "shopfront", "at": Vector2(3600, 3480)},
+		{"name": "parked_car", "at": Vector2(480, 700)},
+		{"name": "parked_car", "at": Vector2(2500, 980)},
+		{"name": "lamppost", "at": Vector2(360, 340)},
+		{"name": "lamppost", "at": Vector2(1680, 340)},
+		{"name": "lamppost", "at": Vector2(2140, 1800)},
+		{"name": "lamppost", "at": Vector2(2140, 3000)},
+		{"name": "umbrella", "at": Vector2(980, 720)},
+		{"name": "umbrella", "at": Vector2(1760, 720)},
+		{"name": "mailbox", "at": Vector2(1180, 720)},
+	]
+
+
+func _road_sprite(art_name: String, at: Vector2) -> void:
+	var path := "res://assets/ui/driving/%s@1x.png" % art_name
+	var sprite_scale := 1.0
+	if not ResourceLoader.exists(path):
+		path = "res://assets/ui/driving/%s.png" % art_name
+		sprite_scale = 0.5
+	if not ResourceLoader.exists(path):
+		return
+	var sprite := Sprite2D.new()
+	sprite.name = art_name
+	sprite.texture = load(path)
+	sprite.centered = true
+	sprite.position = at
+	sprite.scale = Vector2(sprite_scale, sprite_scale)
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.z_index = 2
+	add_child(sprite)
 
 
 func _building(at: Vector2, caption: String) -> void:

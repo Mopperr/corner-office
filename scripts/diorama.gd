@@ -98,6 +98,7 @@ func _venue_id() -> String:
 func _build_venue() -> void:
 	var id := _venue_id()
 	venue = ItemDB.venues().get(id, ItemDB.venues().get("garage", {})).duplicate(true)
+	venue["id"] = id
 	if GameState.mode == "truck":
 		_build_truck_stage()
 		return
@@ -130,7 +131,7 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 	while cz < z + d - 0.01:
 		var cx := x + 1.0
 		while cx < x + w - 0.01:
-			var tile := Props.model("floor_tile_2m")
+			var tile := Props.model(_piece("floor2"))
 			if tile:
 				tile.position = Vector3(cx, 0, cz)
 				add_child(tile)
@@ -144,7 +145,7 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 			while xx < x + w:
 				var covered := fmod(xx - x, 2.0) < 1.5 and fmod(zz - z, 2.0) < 1.5 and xx + 0.5 <= x + w - 0.2 and zz + 0.5 <= z + d - 0.2 and int(w) % 2 == 0 and int(d) % 2 == 0
 				if not covered:
-					var small := Props.model("floor_tile_1m")
+					var small := Props.model(_piece("floor1"))
 					if small and _needs_1m(x, z, w, d, xx, zz):
 						small.position = Vector3(xx, 0, zz)
 						add_child(small)
@@ -210,7 +211,7 @@ func _build_nook_walls(nook: Dictionary) -> void:
 
 
 func _corner(at: Vector3, rot: float, mirror_z: bool, cutaway := false) -> void:
-	var node := Props.model("wall_corner")
+	var node := Props.model(_piece("corner"))
 	if node == null:
 		return
 	node.position = at
@@ -231,7 +232,7 @@ func _fill_run(a: float, b: float, fixed: float, along_x: bool, hidden: bool, wi
 		var length := 2.0 if b - cursor >= 1.9 else 1.0
 		var center := cursor + length * 0.5
 		var use_window := windows and bool(venue.get("windows", false)) and length >= 2.0 and not window_used and not hidden
-		var scene_name := "wall_window_2m" if use_window else ("wall_straight_2m" if length >= 2.0 else "wall_straight_1m")
+		var scene_name := _piece("window") if use_window else (_piece("wall2") if length >= 2.0 else _piece("wall1"))
 		if use_window:
 			window_used = true
 		var node := Props.model(scene_name)
@@ -261,7 +262,7 @@ func _place_opening(center_x: float, z: float) -> void:
 				slats.append(slat)
 		_set_garage_y(0.0)
 	else:
-		var door := Props.model("wall_door_2m")
+		var door := Props.model(_piece("door"))
 		if door == null:
 			return
 		door.position = Vector3(center_x, 0, z)
@@ -281,33 +282,96 @@ func _set_garage_y(y: float) -> void:
 			slat.visible = garage_door.position.y + slat.position.y < hide_at
 
 
+func _piece(role: String) -> String:
+	if str(venue.get("kit", "")) == "bakery_loft":
+		match role:
+			"floor2":
+				return "bakery_loft_floor_2m"
+			"floor1":
+				return "bakery_loft_floor_1m"
+			"corner":
+				return "bakery_loft_wall_corner"
+			"wall2":
+				return "bakery_loft_wall_2m"
+			"wall1":
+				return "bakery_loft_wall_1m"
+			"window":
+				return "wall_window_2m"
+			"door":
+				return "wall_door_2m"
+	match role:
+		"floor2":
+			return "floor_tile_2m"
+		"floor1":
+			return "floor_tile_1m"
+		"corner":
+			return "wall_corner"
+		"wall2":
+			return "wall_straight_2m"
+		"wall1":
+			return "wall_straight_1m"
+		"window":
+			return "wall_window_2m"
+		"door":
+			return "wall_door_2m"
+	return "wall_straight_1m"
+
+
+func _place_model(model_name: String, at: Vector3, rot_deg := 0.0) -> Node3D:
+	var node := Props.model(model_name)
+	if node == null:
+		return null
+	node.position = at
+	node.rotation.y = deg_to_rad(rot_deg)
+	add_child(node)
+	return node
+
+
 func _dress() -> void:
+	var id := str(venue.get("id", ""))
+	if id == "garage":
+		_place_model("driveway_apron_2m", Vector3(2.5, 0, -1.02))
+		_place_model("driveway_apron_2m", Vector3(4.5, 0, -1.02))
+		_place_model("pegboard", Vector3(0.11, 1.15, 7.0), 90)
+		_place_model("bike_hooks", Vector3(0.11, 1.55, 1.5), 90)
+		_place_model("job_clipboard", Vector3(5.15, 0.85, 6.35))
 	if bool(venue.get("stain", false)):
 		for spot in [Vector3(2.4, 0.0, 1.3), Vector3(4.2, 0.0, 1.8)]:
-			var stain := Props.model("floor_oil_stain_1m")
-			if stain:
-				stain.position = spot
-				add_child(stain)
+			_place_model("floor_oil_stain_1m", spot)
+	if id == "cafe":
+		_place_model("cafe_counter", Vector3(3.2, 0, 4.7))
+		_place_model("mug_rack", Vector3(0.11, 1.35, 3.2), 90)
+		_place_model("hanging_plant", Vector3(2.0, 2.15, 2.2))
+		_place_model("hanging_plant", Vector3(4.6, 2.15, 3.4))
+		_place_model("padding_roll", Vector3(1.4, 0, 1.15))
 	if bool(venue.get("cat", false)):
-		cat_rig = Props.model("cat_biscuit")
+		cat_rig = _place_model("cat_biscuit", Vector3(4.3, 0, 1.6))
 		if cat_rig:
-			cat_rig.position = Vector3(4.3, 0, 1.6)
-			add_child(cat_rig)
 			Props.play_clip(cat_rig, "idle", true)
-			cat_player = cat_rig.find_child("AnimationPlayer", true, false)
-	if bool(venue.get("train", false)):
-		var board := Props.model("train_layout_board")
+			cat_player = cat_rig.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	if id == "train" or bool(venue.get("train", false)):
+		var board := _place_model("train_layout_board", Vector3(5.6, 0, 2.4))
 		if board:
-			board.position = Vector3(5.6, 0, 3.2)
-			add_child(board)
 			Props.play_clip(board, "loop", true)
+		_place_model("display_case", Vector3(1.6, 0, 5.15))
+		_place_model("parts_drawer_unit", Vector3(3.3, 0, 5.15))
+		_place_model("cuckoo_clock", Vector3(0.11, 1.55, 2.2), 90)
+	if id == "bakery":
+		_place_model("ceiling_beam", Vector3(2.0, 2.7, 3.2))
+		_place_model("ceiling_beam", Vector3(5.2, 2.7, 3.2))
+		_place_model("ceiling_beam", Vector3(2.0, 2.7, 7.2))
+		_place_model("ceiling_beam", Vector3(5.2, 2.7, 7.2))
+		_place_model("skylight_frame", Vector3(4.0, 2.88, 5.0))
+		_place_model("radiator", Vector3(0.55, 0, 6.4), 90)
+		_place_model("flour_sack_rug", Vector3(4.2, 0, 6.2))
+		for step in 3:
+			_place_model("stair_step", Vector3(-0.2 - float(step) * 0.3, float(step) * 0.22, 4.6), 90)
 	if bool(venue.get("pastry", false)):
-		var bun := Props.mesh_cylinder(0.08, 0.06, UIKit.MUSTARD)
-		bun.position = Vector3(1.4, 0, 1.15)
-		bun.name = "Pastry"
-		add_child(bun)
-		Props.add_picker(bun, Vector3(0.2, 0.1, 0.2))
-		bun.set_meta("pastry", true)
+		var bun := _place_model("pastry_basket", Vector3(1.5, 0, 1.3))
+		if bun:
+			bun.name = "Pastry"
+			Props.add_picker(bun, Vector3(0.44, 0.23, 0.44))
+			bun.set_meta("pastry", true)
 
 
 func _build_truck_stage() -> void:

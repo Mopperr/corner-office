@@ -167,8 +167,39 @@ func _ready() -> void:
 					duck_note = true
 			if not duck_note or GameState.inbox.size() <= before_mail:
 				failures.append("duck beat on drive")
+			var dressed := 0
+			for child in drive.get_children():
+				if child is Sprite2D and str(child.name) in ["fountain", "willow", "bridge_closed", "duck", "duckling"]:
+					dressed += 1
+			if dressed < 4:
+				failures.append("pond sprites %d" % dressed)
 			GameState.job = {}
 			GameState.set_mode("office")
+		if str(ItemDB.get_item("desk_main").get("model", "")) != "folding_table":
+			failures.append("folding table")
+		if str(ItemDB.venues().get("bakery", {}).get("kit", "")) != "bakery_loft":
+			failures.append("bakery kit")
+		for model_name in ["pegboard", "cafe_counter", "cat_biscuit", "display_case", "bakery_loft_wall_2m", "pastry_basket"]:
+			var dressed_prop := Props.model(model_name)
+			if dressed_prop == null:
+				failures.append("level prop %s" % model_name)
+			else:
+				dressed_prop.free()
+		var saved_office := GameState.office_id
+		GameState.office_id = "bakery"
+		GameState.set_mode("office")
+		var loft: Node = diorama_script.new()
+		add_child(loft)
+		loft.queue_free()
+		GameState.office_id = "garage"
+		GameState.set_mode("job_pack")
+		GameState.job = {"def": {"venue": "cafe", "cat": true}, "items": [], "boxes": []}
+		var cafe: Node = diorama_script.new()
+		add_child(cafe)
+		cafe.queue_free()
+		GameState.job = {}
+		GameState.office_id = saved_office
+		GameState.set_mode("office")
 	if load("res://scripts/forest_page.gd") == null or load("res://scripts/shop_page.gd") == null:
 		failures.append("store pages")
 	if Catalog.category_open("coffee", "garage"):

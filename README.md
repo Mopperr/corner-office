@@ -54,7 +54,8 @@ The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only
 - `data/content.json` is characters, items, venues, and jobs. `data/drives.json` is the three routes. `data/forest.json` is the TropicalForest catalog. `data/shop.json` is fixtures, the menu, visitors, and Vibe.
 - `data/narrative/` is the intro, cast, emails, item flavor, `player_characters.json`, and `character_arcs.json`. Dana (phase `slice`) is the only starter, through Garage Startup to the Bakery Loft. When one of her L1–L6 beats loads, Marge's email lands in the inbox and a short note shows the arrival and personal moment. Sol, Hank, Milo, and Bea arcs are in that file and stay hidden. There is no character select yet.
 - `assets/models/` is the diorama kit. Props get a box collider at runtime because the glTF files have none.
-- `assets/ui/driving/mover_truck_topdown_sheet@1x.png` is the drive sprite (facing +X, 32 px per meter). The unsuffixed sheet is 2× and is scaled by 0.5 if the @1x file is missing. Hazard tests use the opaque truck, not the padded frame.
+- `assets/ui/driving/mover_truck_topdown_sheet@1x.png` is still the truck placeholder (facing +X, 32 px per meter) until the dedicated top-down truck sprite arrives. The unsuffixed sheet is 2× and is scaled by 0.5 if the @1x file is missing. Hazard tests use the opaque truck, not the padded frame.
+- L3 and L5 use the `@1x` driving sprites in `assets/ui/driving/` at 32 px per meter (cones, puddles, ducks, shopfronts, the pond fountain, and the bridge-closed sign). `assets/level-art-manifest.md` maps the L1–L6 props. The Bakery Loft uses the `bakery_loft_*` walls and floors.
 - `assets/audio/music/` and the `*loop*` / `*ambience*` clips import with loop on. Drop extra beds in `assets/audio/ambience/` (`.ogg` or `.wav`); those import with loop enabled too.
 - `export_presets.cfg` has Linux, Windows, and macOS presets. Windows uses `res://icon.ico`.
 
