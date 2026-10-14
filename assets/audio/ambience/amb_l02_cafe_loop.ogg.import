@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://dc5tpg76pby5v"
+uid="uid://21nxncy0tlux"
 path="res://.godot/imported/amb_l02_cafe_loop.ogg-5616f82a07665d3d717635ec2feb82b7.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/amb_l02_cafe_loop.ogg-5616f82a07665d3d717635e
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

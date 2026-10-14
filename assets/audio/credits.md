@@ -102,3 +102,71 @@ Each file was converted to 44.1 kHz, 16-bit mono WAV, filtered, trimmed, faded, 
 
 ### All other new level SFX (src/gen_levels.py)
 All other `sfx_l01_*` to `sfx_l21_*` files, plus `sfx_truck_rev`, `sfx_truck_horn`, `sfx_box_rattle`, `sfx_reverse_beep`, `sfx_neon_buzz_loop` and `sfx_l21_city_hum_loop`, are original sounds made from scratch for Corner Office. They are owned by the project and cleared for commercial use.
+
+## Overnight robber event batch 4 (2026-10-14, post-slice)
+
+Soft cozy-crime: robbers take only 1–3 decor items. Generator: `src/gen_robber.py`.
+
+| File | Source | Author | URL | License |
+|---|---|---|---|---|
+| music/music_robber_sting.ogg | Original, made from scratch (34.3 s seamless loop, low pads/epiano) | project | n/a | Original work, owned by the project, commercial use OK |
+| ambience/amb_robber_night_office.ogg | "Paris by Night" #0680 (low-passed) + "Campaign at night #1" #0110 (distant road) + creaks from #1702 + synth room tone; 37.5 s crossfade loop | Joseph SARDIN | https://bigsoundbank.com/paris-by-night-s0680.html https://bigsoundbank.com/campaign-at-night-1-s0110.html https://bigsoundbank.com/apartment-door-opening-1-s1702.html | CC0 1.0 |
+| sfx/sfx_lock_jimmy.wav | "Interior door lock" #0037 + "Locking" #0047 | Joseph SARDIN | https://bigsoundbank.com/interior-door-lock-s0037.html https://bigsoundbank.com/locking-s0047.html | CC0 1.0 |
+| sfx/sfx_door_creak.wav | "Apartment door opening #2" #1703 (0–1.6 s), same source as sfx_l14_door_creak | Joseph SARDIN | https://bigsoundbank.com/apartment-door-opening-2-s1703.html | CC0 1.0 |
+| sfx/sfx_robber_footsteps.wav | "Man Footsteps on the Wooden Floor" #0165 (4 steps) | DavidGreck | https://bigsoundbank.com/man-footsteps-on-the-wooden-floor-s0165.html | CC0 1.0 |
+| sfx/sfx_box_scrape.wav | "Bin that slides" #0756 (2.0–3.4 s) | Joseph SARDIN | https://bigsoundbank.com/bin-that-slides-s0756.html | CC0 1.0 |
+| sfx/sfx_items_grab.wav | "Canvas bag on floor" #0576 (2 hits) | Joseph SARDIN | https://bigsoundbank.com/canvas-bag-on-floor-s0576.html | CC0 1.0 |
+| sfx/sfx_security_alarm.wav | Original synth (soft two-tone, low-passed) | project | n/a | Original work, commercial use OK |
+| sfx/sfx_empty_room_whoosh.wav | Original synth (filtered noise swell) | project | n/a | Original work, commercial use OK |
+
+## Forgotten-fire event + Steam trailer batch 5 (2026-10-14, post-slice)
+
+Fire comes from matches and a magnifier only (never smoking). Cozy "oops" mood. Generator: `src/gen_fire_trailer.py`.
+
+| File | Source | Author | URL | License |
+|---|---|---|---|---|
+| sfx/sfx_match_strike.wav | "Match #2" #1271 (successful strike window) | Joseph SARDIN | https://bigsoundbank.com/match-2-s1271.html | CC0 1.0 |
+| sfx/sfx_magnifier_sizzle.wav | Original soft focused-sun paper burn (synth crackle + hiss) | project | n/a | Original work, commercial use OK |
+| sfx/sfx_smoke_alarm.wav | Original soft three-chirp alarm (low-passed, not piercing) | project | n/a | Original work, commercial use OK |
+| ambience/amb_fire_crackle_loop.ogg | "Big Branching Fire #1" #0987 (same source as sfx_l20_fire_crackle_loop; longer stereo seamless loop) | Joseph SARDIN | https://bigsoundbank.com/big-branching-fire-1-s0987.html | CC0 1.0 |
+| ambience/amb_fire_morning_after.ogg | Quiet ghost of #0987 + synth room tone / ash ticks; seamless | Joseph SARDIN + project | https://bigsoundbank.com/big-branching-fire-1-s0987.html | CC0 1.0 + original |
+| music/music_steam_trailer.ogg | Original lo-fi trailer cue, ~74 s, non-looping (build → hook → clean end) | project | n/a | Original work, commercial use OK |
+
+## Truck backdoor / ramp + trading UI batch 6 (2026-10-14)
+
+Generator: `src/gen_truck_trade.py`. Trading UI is original synth (retro CRT). Truck doors/ramp use CC0 metal/shutter recordings.
+
+| File | Source | Author | URL | License |
+|---|---|---|---|---|
+| sfx/sfx_truck_backdoor_open.wav | "Manual roller shutter, opening out. #1" #2470 (loudest 2.4 s) | Joseph SARDIN | https://bigsoundbank.com/manual-roller-shutter-opening-out-1-s2470.html | CC0 1.0 |
+| sfx/sfx_truck_backdoor_close.wav | "Manual roller shutter, closing out. #2" #2475 (loudest 1.8 s) | Joseph SARDIN | https://bigsoundbank.com/manual-roller-shutter-closing-out-2-s2475.html | CC0 1.0 |
+| sfx/sfx_truck_ramp_out.wav | "Metal drawer #1" #0792 + "Grinding plastic wheel" #0858 + clunk from "Metal filing cabinet" #0773 | Joseph SARDIN | https://bigsoundbank.com/metal-drawers-1-s0792.html https://bigsoundbank.com/grinding-plastic-wheel-s0858.html https://bigsoundbank.com/metal-filing-cabinet-s0773.html | CC0 1.0 |
+| sfx/sfx_truck_ramp_in.wav | "Metal drawer #2" #0793 + #0858 + latch from #0773 | Joseph SARDIN | https://bigsoundbank.com/metal-drawers-2-s0793.html (+ above) | CC0 1.0 |
+| sfx/sfx_trade_buy.wav | Original (improved buy click for trading CRT) | project | n/a | Original work, commercial use OK |
+| sfx/sfx_trade_sell.wav | Original (improved sell click) | project | n/a | Original work, commercial use OK |
+| sfx/sfx_trade_profit_chime.wav | Original soft ascending two-tone | project | n/a | Original work, commercial use OK |
+| sfx/sfx_trade_loss_thud.wav | Original gentle muted low bonk (not punishing) | project | n/a | Original work, commercial use OK |
+| sfx/sfx_price_tick_up.wav | Original tiny retro blip (spam-safe) | project | n/a | Original work, commercial use OK |
+| sfx/sfx_price_tick_down.wav | Original tiny lower retro blip (spam-safe) | project | n/a | Original work, commercial use OK |
+
+Legacy `sfx_buy_click` / `sfx_sell_click` remain for generic UI; prefer the `sfx_trade_*` set on the trading computer.
+
+## Shop mini-game (coffee / lemonade stand) batch 7 (2026-10-14, post-slice)
+
+Unlock after Bakery Loft. Soft-fail cozy cafe. Generator: `src/gen_stand.py`.
+
+| File | Source | Author | URL | License |
+|---|---|---|---|---|
+| sfx/sfx_coffee_grinder.wav | "Coffee grinder #3" #2539 | Joseph SARDIN | https://bigsoundbank.com/coffee-grinder-3-s2539.html | CC0 1.0 |
+| sfx/sfx_espresso_pull.wav | "Senseo coffee maker: Water that boils" #0300 (shaped hiss) | Joseph SARDIN | https://bigsoundbank.com/senseo-coffee-maker-water-that-boils-s0300.html | CC0 1.0 |
+| sfx/sfx_milk_steam.wav | "Pressure cooker" #0805 (softened hiss) | Joseph SARDIN | https://bigsoundbank.com/pressure-cooker-s0805.html | CC0 1.0 |
+| sfx/sfx_cup_set_down.wav | "Cup on a table" #0627 | Joseph SARDIN | https://bigsoundbank.com/cup-on-a-table-s0627.html | CC0 1.0 |
+| sfx/sfx_ice_clink.wav | "Ice cubes in a glass #1" #2123 | Joseph SARDIN | https://bigsoundbank.com/ice-cubes-in-a-glass-1-s2123.html | CC0 1.0 |
+| sfx/sfx_lemon_squeeze.wav | "Plastic bottle crushed #1" #0775 (softened squish) | Joseph SARDIN | https://bigsoundbank.com/plastic-bottle-crushed-1-s0775.html | CC0 1.0 |
+| sfx/sfx_pour.wav | "Hot water in mug #1" #1155 | Joseph SARDIN | https://bigsoundbank.com/hot-water-in-mug-s1155.html | CC0 1.0 |
+| sfx/sfx_tip_jar_coin.wav | "Coin in cup #1" #0339 | Joseph SARDIN | https://bigsoundbank.com/coin-in-cup-1-s0339.html | CC0 1.0 |
+| sfx/sfx_customer_bell.wav | "Counter Bell #3" #2531 | Joseph SARDIN | https://bigsoundbank.com/counter-bell-3-s2531.html | CC0 1.0 |
+| sfx/sfx_customer_happy_chirp.wav | Original cute ascending non-verbal blips | project | n/a | Original work, commercial use OK |
+| sfx/sfx_customer_unhappy_chirp.wav | Original gentle descending chirp (soft fail) | project | n/a | Original work, commercial use OK |
+| music/music_shop_stand.ogg | Original cozy lo-fi (src/gen_stand.py → gen_music_lib), ~156 s seamless | project | n/a | Original work, commercial use OK |
+| ambience/amb_outdoor_stand_loop.ogg | "Awakening birds" #0222 + low-passed "Coffee shop at the Capucins" #2561 + air; ~42.5 s loop | Joseph SARDIN | https://bigsoundbank.com/awakening-birds-s0222.html https://bigsoundbank.com/coffee-shop-at-the-capucins-s2561.html | CC0 1.0 |

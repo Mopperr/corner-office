@@ -2,7 +2,7 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://pybcpg7r60sq"
+uid="uid://71rle653wjyi"
 path="res://.godot/imported/sfx_l12_vinyl_crackle_loop.wav-b3781b02f36861b4ad29f4c78075eda0.sample"
 
 [deps]
@@ -18,7 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop_mode=1
+edit/loop_mode=0
 edit/loop_begin=0
 edit/loop_end=-1
 compress/mode=2

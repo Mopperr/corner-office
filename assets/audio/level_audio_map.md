@@ -197,3 +197,68 @@ SFX are WAV 44.1 kHz 16-bit mono unless noted as a loop.
 - **L9 architect muttering / L19 snooty grunts** = VO stubs.
 - **L16 helper humming** = VO stub.
 - **L4 grandpa chuckle** = VO stub.
+
+---
+
+## Overnight robber event (post-slice, not Nov 15)
+Soft cozy-crime: if security spend is too low, robbers take 1–3 decor items overnight (money/Rep stay). Tone is "oh no," not horror.
+
+| Beat | File |
+|---|---|
+| Night bed (loop, duck under sting) | `ambience/amb_robber_night_office.ogg` |
+| Break-in / morning-after reveal (loop) | `music/music_robber_sting.ogg` (34.3 s, mastered at -6 dBFS peak) |
+| Break-in | `sfx_lock_jimmy` → `sfx_door_creak` → `sfx_robber_footsteps` |
+| Taking items (per item, 1–3×) | `sfx_items_grab`, `sfx_box_scrape` (vary pitch ±5%) |
+| Partial security fails | `sfx_security_alarm` (soft; loop or play 1–2×) |
+| Morning reveal | `sfx_empty_room_whoosh` + sting |
+
+All of these files are for this event only. Loop flag goes on the sting and the ambience.
+
+---
+
+## Forgotten-fire event (post-slice)
+Matches + magnifier only (never smoking). Cozy "oops," not scary.
+
+| Beat | File |
+|---|---|
+| Ignition | `sfx_match_strike` then `sfx_magnifier_sizzle` |
+| Fire bed (loop) | `ambience/amb_fire_crackle_loop.ogg` (26 s seamless; same CC0 family as lodge crackle) |
+| Smoke alarm (gentle) | `sfx_smoke_alarm` (play 1–3× or short loop; not piercing) |
+| Morning after (loop) | `ambience/amb_fire_morning_after.ogg` (27.5 s soft residual) |
+
+## Steam trailer (marketing, not in-game loop)
+| Role | File |
+|---|---|
+| Trailer cue | `music/music_steam_trailer.ogg` (~74 s, **do not** set Loop in Godot; linear build → warm hook → clean fade-out) |
+
+---
+
+## Truck loading (shared drive / job unload)
+| Role | File |
+|---|---|
+| Back door open / close | `sfx_truck_backdoor_open`, `sfx_truck_backdoor_close` (roll-up shutter CC0) |
+| Ramp out / in | `sfx_truck_ramp_out`, `sfx_truck_ramp_in` (metal slide CC0) |
+| Cab door (existing) | `sfx_truck_door` |
+
+## Trading computer UI
+| Role | File |
+|---|---|
+| Buy / sell confirm | `sfx_trade_buy`, `sfx_trade_sell` |
+| Profit / loss feedback | `sfx_trade_profit_chime`, `sfx_trade_loss_thud` (gentle) |
+| Live price ticks (spam) | `sfx_price_tick_up`, `sfx_price_tick_down` (~−18 dB peak) |
+| Chart bed | `music/music_computer_trading.ogg` |
+
+---
+
+## Shop mini-game — Coffee counter / Lemonade stand (post-slice, after L6)
+Soft-fail only. Loop music + outdoor amb for lemonade cart; indoor coffee may duck outdoor amb and keep music.
+
+| Role | File |
+|---|---|
+| Music (loop) | `music/music_shop_stand.ogg` (~156 s) |
+| Outdoor stand amb (loop) | `ambience/amb_outdoor_stand_loop.ogg` |
+| Coffee make | `sfx_coffee_grinder` → `sfx_espresso_pull` → `sfx_milk_steam` → `sfx_pour` → `sfx_cup_set_down` |
+| Lemonade make | `sfx_lemon_squeeze` → `sfx_ice_clink` → `sfx_pour` → `sfx_cup_set_down` |
+| Customer arrive | `sfx_customer_bell` |
+| Success / tip | `sfx_customer_happy_chirp`, `sfx_tip_jar_coin` |
+| Soft fail (wrong drink) | `sfx_customer_unhappy_chirp` (gentle; never mean) |

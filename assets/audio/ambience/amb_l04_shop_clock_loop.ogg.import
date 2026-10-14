@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://cf2i4cg7qp1lp"
+uid="uid://dkjytdga36whb"
 path="res://.godot/imported/amb_l04_shop_clock_loop.ogg-50638a7c31f6e4bdaf146ab97983a23b.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/amb_l04_shop_clock_loop.ogg-50638a7c31f6e4bda
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

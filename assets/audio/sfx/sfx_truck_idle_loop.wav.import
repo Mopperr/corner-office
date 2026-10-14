@@ -2,7 +2,7 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://by25821mxy3tg"
+uid="uid://bnlo4smkqnpld"
 path="res://.godot/imported/sfx_truck_idle_loop.wav-b890dfb57dd4618a9127641a2c01f32e.sample"
 
 [deps]
@@ -18,7 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop_mode=1
+edit/loop_mode=0
 edit/loop_begin=0
 edit/loop_end=-1
 compress/mode=2

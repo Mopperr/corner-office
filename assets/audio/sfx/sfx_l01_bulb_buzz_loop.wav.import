@@ -2,7 +2,7 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://nwjg2mwu0dtd"
+uid="uid://csp8ehkdy4n3t"
 path="res://.godot/imported/sfx_l01_bulb_buzz_loop.wav-4b55cdd074ebbd8a8a01f32be8f0d107.sample"
 
 [deps]
@@ -18,7 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop_mode=1
+edit/loop_mode=0
 edit/loop_begin=0
 edit/loop_end=-1
 compress/mode=2
