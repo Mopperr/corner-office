@@ -3,6 +3,7 @@ extends Node
 var music: AudioStreamPlayer
 var loops: Dictionary = {}
 var _streams: Dictionary = {}
+var bed_name := ""
 const MUSIC_BUS := "Music"
 const SFX_BUS := "SFX"
 
@@ -37,6 +38,33 @@ func apply_volumes() -> void:
 		AudioServer.set_bus_volume_db(mi, music_db)
 	if si >= 0:
 		AudioServer.set_bus_volume_db(si, sfx_db)
+
+
+func play_bed(track: String, ambience := "") -> void:
+	if track != "":
+		play_music(track)
+	if ambience == bed_name and (ambience == "" or loops.has(ambience)):
+		return
+	stop_bed()
+	if ambience == "":
+		return
+	start_loop(ambience)
+	if loops.has(ambience):
+		bed_name = ambience
+
+
+func stop_bed() -> void:
+	if bed_name == "":
+		return
+	var name := bed_name
+	bed_name = ""
+	stop_loop(name)
+
+
+func stop_level() -> void:
+	stop_bed()
+	for name in ["sfx_l01_fridge_hum_loop", "sfx_cat_purr_loop", "sfx_l05_fountain_loop", "sfx_rain_ambience_loop", "sfx_truck_idle_loop"]:
+		stop_loop(name)
 
 
 func play_music(track: String) -> void:
@@ -96,6 +124,7 @@ func stop_loop(sfx_name: String) -> void:
 
 
 func stop_all_loops() -> void:
+	bed_name = ""
 	for key in loops.keys():
 		stop_loop(key)
 

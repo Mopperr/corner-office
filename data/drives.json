@@ -3,7 +3,8 @@
     "id": "rainy_afternoon",
     "title": "Rainy Afternoon",
     "weather": "rain",
-    "music": "music_rainy_office",
+    "music": "music_driving_rain",
+    "ambience": "amb_l03_rain_loop",
     "start": [360, 520],
     "heading": 0,
     "roads": [
@@ -50,7 +51,8 @@
     "id": "duck_pond",
     "title": "Duck Pond",
     "weather": "park",
-    "music": "music_driving_rain",
+    "music": "music_driving",
+    "ambience": "amb_l05_park_birds_loop",
     "start": [420, 420],
     "heading": 0,
     "roads": [

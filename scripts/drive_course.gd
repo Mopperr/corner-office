@@ -32,6 +32,8 @@ var hint: Label
 var time_alive := 0.0
 var rain: CPUParticles2D
 var wiper := 0.0
+var rev_cd := 0.0
+var jogger_cd := 0.0
 var shake := 0.0
 var running := true
 
@@ -69,19 +71,17 @@ func _ready() -> void:
 	_hud()
 	UIKit.show_level_beat(self, GameState.present_current_slice_level())
 	var weather := str(course.get("weather", "clear"))
+	AudioDirector.play_bed(str(course.get("music", "music_driving")), str(course.get("ambience", "")))
 	if weather == "rain":
-		AudioDirector.play_music(str(course.get("music", "music_rainy_office")))
-		AudioDirector.start_loop("sfx_rain_ambience_loop")
 		_make_rain()
-	else:
-		AudioDirector.play_music(str(course.get("music", "music_driving")))
+	if str(course.get("id", "")) == "duck_pond":
+		AudioDirector.start_loop("sfx_l05_fountain_loop")
 	AudioDirector.start_loop("sfx_truck_idle_loop")
 	queue_redraw()
 
 
 func _exit_tree() -> void:
-	AudioDirector.stop_loop("sfx_rain_ambience_loop")
-	AudioDirector.stop_loop("sfx_truck_idle_loop")
+	AudioDirector.stop_level()
 
 
 func _make_rain() -> void:
@@ -141,6 +141,23 @@ func _process(delta: float) -> void:
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 4.0)) * PX
 	var turn := float(Tuning.get_value("drive.turn_rate", 1.7))
 	var throttle := _axis(KEY_S, KEY_DOWN, KEY_W, KEY_UP)
+	var weather := str(course.get("weather", "clear"))
+	if rev_cd > 0.0:
+		rev_cd -= delta
+	if throttle > 0.0 and speed < max_speed * 0.25 and rev_cd <= 0.0:
+		AudioDirector.play_sfx("sfx_truck_rev")
+		rev_cd = 1.6
+	if weather == "rain":
+		wiper += delta
+		if wiper >= 2.8:
+			wiper = 0.0
+			AudioDirector.play_sfx("sfx_l03_wiper")
+	if str(course.get("id", "")) == "duck_pond":
+		if jogger_cd > 0.0:
+			jogger_cd -= delta
+		if pos.distance_to(Vector2(1500, 180)) < 220.0 and jogger_cd <= 0.0:
+			AudioDirector.play_sfx("sfx_l05_jogger_steps")
+			jogger_cd = 0.55
 	if throttle > 0.0:
 		speed = minf(max_speed, speed + accel * delta * throttle)
 	elif throttle < 0.0:
@@ -177,7 +194,6 @@ func _process(delta: float) -> void:
 	meter.value = condition
 	var stamp := Tuning.tip_stamp(condition)
 	meter_label.text = "%d  %s" % [condition, stamp]
-	var weather := str(course.get("weather", "clear"))
 	hint.text = "WASD to drive. %s  Condition %d. No rush, you can't fail this run." % [
 		"Rain makes the stop a little longer." if weather == "rain" else "Clear road.",
 		condition,
@@ -191,10 +207,11 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_H:
-		AudioDirector.play_sfx("sfx_ui_click")
+		AudioDirector.play_sfx("sfx_truck_horn")
 		if _near_honk_ducks():
 			duck_hold = 1.6
 			AudioDirector.play_sfx("sfx_ducks_quack")
+			AudioDirector.play_sfx("sfx_l05_duckling_peep")
 
 
 func _physics_process(_delta: float) -> void:
@@ -212,9 +229,17 @@ func _hurt(kind: String, amount: int) -> void:
 	shake = 0.25
 	if kind == "cone":
 		AudioDirector.play_sfx("sfx_cone_hit")
-	elif kind == "bump" or kind == "wobble" or kind == "gravel":
+	elif kind == "gravel":
+		AudioDirector.play_sfx("sfx_l05_gravel_crunch")
+		AudioDirector.play_sfx("sfx_box_rattle")
+		AudioDirector.play_sfx("sfx_cardboard_bump")
+	elif kind == "puddle":
+		AudioDirector.play_sfx("sfx_l03_puddle_splash")
+		AudioDirector.play_sfx("sfx_box_rattle")
+	elif kind == "bump" or kind == "wobble":
 		AudioDirector.play_sfx("sfx_speed_bump")
 		AudioDirector.play_sfx("sfx_cardboard_bump")
+		AudioDirector.play_sfx("sfx_box_rattle")
 	else:
 		AudioDirector.play_sfx("sfx_cardboard_bump")
 
@@ -262,6 +287,15 @@ func _hazards() -> void:
 					if not hazard_cd.has("quack"):
 						hazard_cd["quack"] = Time.get_ticks_msec()
 						AudioDirector.play_sfx("sfx_ducks_quack")
+				elif str(course.get("id", "")) == "duck_pond":
+					if not hazard_cd.has("peep"):
+						hazard_cd["peep"] = Time.get_ticks_msec()
+						AudioDirector.play_sfx("sfx_ducks_quack")
+						AudioDirector.play_sfx("sfx_l05_duckling_peep")
+					if speed > 70.0:
+						near_miss = true
+						duck_friend = false
+						_hurt("ducks", int(Tuning.get_value("box_condition.bump_min", 3)))
 				elif speed > 70.0:
 					near_miss = true
 					duck_friend = false

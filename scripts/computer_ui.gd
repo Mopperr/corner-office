@@ -394,6 +394,7 @@ func _pop_text(text: String, color: Color) -> void:
 
 
 func _close() -> void:
-	AudioDirector.play_music(str(ItemDB.venues().get(GameState.office_id, {}).get("music", "music_office_build")))
+	var venue: Dictionary = ItemDB.venues().get(GameState.office_id, {})
+	AudioDirector.play_bed(str(venue.get("music", "music_office_build")), str(venue.get("ambience", "")))
 	emit_signal("closed")
 	queue_free()

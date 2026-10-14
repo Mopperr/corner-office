@@ -57,6 +57,7 @@ The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only
 - `assets/ui/driving/mover_truck_topdown_sheet@1x.png` is still the truck placeholder (facing +X, 32 px per meter) until the dedicated top-down truck sprite arrives. The unsuffixed sheet is 2× and is scaled by 0.5 if the @1x file is missing. Hazard tests use the opaque truck, not the padded frame.
 - L3 and L5 use the `@1x` driving sprites in `assets/ui/driving/` at 32 px per meter (cones, puddles, ducks, shopfronts, the pond fountain, and the bridge-closed sign). `assets/level-art-manifest.md` maps the L1–L6 props. The Bakery Loft uses the `bakery_loft_*` walls and floors.
 - `assets/audio/music/` and the `*loop*` / `*ambience*` clips import with loop on. Drop extra beds in `assets/audio/ambience/` (`.ogg` or `.wav`); those import with loop enabled too.
+- Act 1 (L1–L6) follows `assets/audio/level_audio_map.md`: each level plays its music and ambience loop, plus its own sound effects. Rain, skylight rain, the shop clock, and the cafe bed are about +8 dB. Voice lines are still stubs and stay silent.
 - `export_presets.cfg` has Linux, Windows, and macOS presets. Windows uses `res://icon.ico`.
 
 Saves go to `user://corner_office_save.json`. Volume sliders live in `user://settings.cfg`.

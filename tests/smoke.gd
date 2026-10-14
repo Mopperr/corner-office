@@ -98,6 +98,34 @@ func _ready() -> void:
 			var loops_on := imported.contains("loop=true") or imported.contains("edit/loop_mode=1")
 			if not loops_on:
 				failures.append("ambience file %s" % file_name)
+	var music_dir := DirAccess.open("res://assets/audio/music")
+	if music_dir == null:
+		failures.append("music folder")
+	else:
+		for file_name in music_dir.get_files():
+			if not file_name.ends_with(".ogg"):
+				continue
+			var imported := FileAccess.get_file_as_string("res://assets/audio/music/%s.import" % file_name)
+			if not imported.contains("loop=true"):
+				failures.append("music loop %s" % file_name)
+	if Tuning.audio_gain("amb_l02_cafe_loop") < 7.5 or Tuning.audio_gain("amb_l03_rain_loop") < 7.5:
+		failures.append("ambience boost")
+	if Tuning.audio_gain("amb_l04_shop_clock_loop") < 7.5 or Tuning.audio_gain("amb_l06_skylight_rain_loop") < 7.5:
+		failures.append("clock skylight boost")
+	if Tuning.audio_gain("sfx_box_fold") < 5.5 or Tuning.audio_gain("sfx_truck_idle_loop") > -9.0:
+		failures.append("other gains")
+	var garage_venue: Dictionary = ItemDB.venues().get("garage", {})
+	var bakery_venue: Dictionary = ItemDB.venues().get("bakery", {})
+	if str(garage_venue.get("music", "")) != "music_act1_home" or str(garage_venue.get("ambience", "")) != "amb_l01_garage_loop":
+		failures.append("garage bed")
+	if str(bakery_venue.get("music", "")) != "music_act2_morning" or not str(bakery_venue.get("ambience", "")).contains("amb_l06"):
+		failures.append("bakery bed")
+	var rainy: Dictionary = JobDB.get_drive("rainy_afternoon")
+	var pond: Dictionary = JobDB.get_drive("duck_pond")
+	if str(rainy.get("music", "")) != "music_driving_rain" or str(rainy.get("ambience", "")) != "amb_l03_rain_loop":
+		failures.append("rainy bed")
+	if str(pond.get("music", "")) != "music_driving" or str(pond.get("ambience", "")) != "amb_l05_park_birds_loop":
+		failures.append("pond bed")
 	var diorama_script: GDScript = load("res://scripts/diorama.gd")
 	if diorama_script == null:
 		failures.append("diorama script")

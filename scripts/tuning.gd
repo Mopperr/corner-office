@@ -95,4 +95,7 @@ static func audio_gain(sfx_name: String) -> float:
 		return float(get_value("audio.quiet_boost_db", 6))
 	if sfx_name == "sfx_truck_idle_loop":
 		return float(get_value("audio.truck_idle_db", -10))
+	var boosted: Array = get_value("audio.ambience_boost", [])
+	if sfx_name in boosted:
+		return float(get_value("audio.ambience_boost_db", 8))
 	return 0.0

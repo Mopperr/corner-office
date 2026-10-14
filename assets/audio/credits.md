@@ -51,3 +51,54 @@ Each file was converted to 44.1 kHz, 16-bit mono WAV, filtered, trimmed, faded, 
 | sfx/sfx_footstep_office.wav | "Man Footsteps on the Wooden Floor" #0165 (one step, 4.80-5.12 s) | DavidGreck | https://bigsoundbank.com/man-footsteps-on-the-wooden-floor-s0165.html | CC0 1.0 (public domain) | 2026-10-14 |
 | sfx/sfx_success_chime.wav | "Chimes Dream #2" #2080 | Joseph SARDIN | https://bigsoundbank.com/chimes-dream-2-s2080.html | CC0 1.0 (public domain) | 2026-10-14 |
 | sfx/sfx_notification_soft.wav | "Notification LaSoLisa #1" #2063 | Joseph SARDIN | https://bigsoundbank.com/notification-lasolisa-1-s2063.html | CC0 1.0 (public domain) | 2026-10-14 |
+
+## Level audio batch 3 (2026-10-14)
+
+### Music: original, made from scratch (src/gen_level_music.py)
+- music/music_act1_home.ogg: original work, owned by the project, commercial use OK
+- music/music_act2_morning.ogg: original work, owned by the project, commercial use OK
+- music/music_act3_loft.ogg: original work, owned by the project, commercial use OK
+- music/music_act4_downtown.ogg: original work, owned by the project, commercial use OK
+- music/music_finale.ogg: original work, owned by the project, commercial use OK
+- music/music_credits_reprise.ogg: original work, owned by the project, commercial use OK
+- music/music_record_store.ogg: original work, owned by the project, commercial use OK
+- music/music_curtain_call.ogg: original work, owned by the project, commercial use OK
+- music/music_parade_band.ogg: original work, owned by the project, commercial use OK
+
+### Ambience loops (src/gen_levels.py)
+
+| File | CC0 source(s) | Author | URL | License | Notes | Fetched |
+|---|---|---|---|---|---|---|
+| ambience/amb_l01_garage_loop.ogg | #0222 | Joseph SARDIN | https://bigsoundbank.com/awakening-birds-s0222.html | CC0 1.0 | birds bed + synth room tone/distant mower | 2026-10-14 |
+| ambience/amb_l02_cafe_loop.ogg | #2561 | Joseph SARDIN | https://bigsoundbank.com/coffee-shop-at-the-capucins-s2561.html | CC0 1.0 | 60 s crossfade loop | 2026-10-14 |
+| ambience/amb_l03_rain_loop.ogg | #1290 | Joseph SARDIN | https://bigsoundbank.com/rain-on-puddle-s1290.html | CC0 1.0 | 60 s crossfade loop | 2026-10-14 |
+| ambience/amb_l04_shop_clock_loop.ogg | #0007 | Joseph SARDIN | https://bigsoundbank.com/clock-s0007.html | CC0 1.0 | tiled exact clock ticks + synth room tone | 2026-10-14 |
+| ambience/amb_l05_park_birds_loop.ogg | #0222 | Joseph SARDIN | https://bigsoundbank.com/awakening-birds-s0222.html | CC0 1.0 | 60 s crossfade loop | 2026-10-14 |
+| ambience/amb_l06_skylight_rain_loop.ogg | #1290 | Joseph SARDIN | https://bigsoundbank.com/rain-on-puddle-s1290.html | CC0 1.0 | low-passed | 2026-10-14 |
+| ambience/amb_l07_clinic_hum_loop.ogg | none | project | n/a | Original | original synth | 2026-10-14 |
+| ambience/amb_l08_market_loop.ogg | #2728 | Joseph SARDIN | https://bigsoundbank.com/outdoor-market-1-s2728.html | CC0 1.0 | 60 s crossfade loop | 2026-10-14 |
+| ambience/amb_l09_studio_loop.ogg | #1081 | Joseph SARDIN | https://bigsoundbank.com/parisian-paved-square-fountain-s1081.html | CC0 1.0 | distant traffic, low-passed + synth room tone/pencil | 2026-10-14 |
+| ambience/amb_l10_library_loop.ogg | #0785 | Joseph SARDIN | https://bigsoundbank.com/paper-s0785.html | CC0 1.0 | sparse page touches + synth room tone | 2026-10-14 |
+| ambience/amb_l13_night_loop.ogg | #1020 | Joseph SARDIN | https://bigsoundbank.com/field-cricket-s1020.html | CC0 1.0 | crickets + synth pad | 2026-10-14 |
+| ambience/amb_l14_greenhouse_loop.ogg | #0222, #1000 | Joseph SARDIN, Joseph SARDIN | https://bigsoundbank.com/awakening-birds-s0222.html https://bigsoundbank.com/bumblebee-1-s1000.html | CC0 1.0 | birds + bee + synth air | 2026-10-14 |
+| ambience/amb_l15_coastal_loop.ogg | #0265, #2573 | DenisChardonnet, Joseph SARDIN | https://bigsoundbank.com/beach-small-waves-s0265.html https://bigsoundbank.com/gulls-on-the-harbor-s2573.html | CC0 1.0 | waves + gulls | 2026-10-14 |
+| ambience/amb_l19_office_loop.ogg | #2561 | Joseph SARDIN | https://bigsoundbank.com/coffee-shop-at-the-capucins-s2561.html | CC0 1.0 | low-passed chatter + synth HVAC/typing | 2026-10-14 |
+| ambience/amb_l20_lodge_loop.ogg | #0987 | Joseph SARDIN | https://bigsoundbank.com/big-branching-fire-1-s0987.html | CC0 1.0 | fire + synth wind | 2026-10-14 |
+
+### Level SFX made from CC0 recordings
+
+| File | Author | URL | License | Fetched |
+|---|---|---|---|---|
+| sfx/sfx_cat_purr_loop.wav | Kerzoven | https://opengameart.org/content/cat-purr-meow (cat_purrsleepy_loop.wav) | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l02_box_wiggle.wav | Joseph SARDIN | https://bigsoundbank.com/newspaper-ball-s0670.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l06_stair_creak.wav | Joseph SARDIN | https://bigsoundbank.com/apartment-door-opening-1-s1702.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l10_page_flip.wav | Joseph SARDIN | https://bigsoundbank.com/paper-s0785.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l14_bee_buzz.wav | Joseph SARDIN | https://bigsoundbank.com/bumblebee-1-s1000.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l14_door_creak.wav | Joseph SARDIN | https://bigsoundbank.com/apartment-door-opening-2-s1703.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l15_gull_call.wav | Joseph SARDIN | https://bigsoundbank.com/gulls-on-the-harbor-s2573.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_applause.wav | Joseph SARDIN | https://bigsoundbank.com/applause-1-s1765.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l18_crowd_cheer.wav | Joseph SARDIN | https://bigsoundbank.com/applause-150-people-s0019.html | CC0 1.0 | 2026-10-14 |
+| sfx/sfx_l20_fire_crackle_loop.wav | Joseph SARDIN | https://bigsoundbank.com/big-branching-fire-1-s0987.html | CC0 1.0 | 2026-10-14 |
+
+### All other new level SFX (src/gen_levels.py)
+All other `sfx_l01_*` to `sfx_l21_*` files, plus `sfx_truck_rev`, `sfx_truck_horn`, `sfx_box_rattle`, `sfx_reverse_beep`, `sfx_neon_buzz_loop` and `sfx_l21_city_hum_loop`, are original sounds made from scratch for Corner Office. They are owned by the project and cleared for commercial use.

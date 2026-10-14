@@ -91,10 +91,10 @@
     { "uid": "shelf_b", "item": "shelf", "x": 0.11, "y": 0.0, "z": 6.4, "rot": 90, "wall": "wall_floor" }
   ],
   "venues": {
-    "garage": { "name": "Garage Startup", "x": 0, "z": 0, "w": 6, "d": 8, "opening": "garage", "open_w": 3, "windows": true, "stain": true, "music": "music_office_build" },
-    "cafe": { "name": "Whisker & Bean", "x": 0, "z": 0, "w": 6, "d": 6, "opening": "door", "open_w": 2, "windows": true, "pink": true, "cat": true, "music": "music_office_build" },
-    "train": { "name": "Grandpa's Train Shop", "x": 0, "z": 0, "w": 8, "d": 6, "opening": "door", "open_w": 2, "windows": true, "train": true, "music": "music_office_build" },
-    "bakery": { "name": "Bakery Loft", "x": 0, "z": 0, "w": 8, "d": 10, "opening": "door", "open_w": 2, "windows": true, "kit": "bakery_loft", "nook": { "x": -3, "z": 3, "w": 3, "d": 4, "max_h": 1.5 }, "pastry": true, "music": "music_office_build" },
+    "garage": { "name": "Garage Startup", "x": 0, "z": 0, "w": 6, "d": 8, "opening": "garage", "open_w": 3, "windows": true, "stain": true, "music": "music_act1_home", "ambience": "amb_l01_garage_loop" },
+    "cafe": { "name": "Whisker & Bean", "x": 0, "z": 0, "w": 6, "d": 6, "opening": "door", "open_w": 2, "windows": true, "pink": true, "cat": true, "music": "music_office_build", "ambience": "amb_l02_cafe_loop" },
+    "train": { "name": "Grandpa's Train Shop", "x": 0, "z": 0, "w": 8, "d": 6, "opening": "door", "open_w": 2, "windows": true, "train": true, "music": "music_office_build", "ambience": "amb_l04_shop_clock_loop" },
+    "bakery": { "name": "Bakery Loft", "x": 0, "z": 0, "w": 8, "d": 10, "opening": "door", "open_w": 2, "windows": true, "kit": "bakery_loft", "nook": { "x": -3, "z": 3, "w": 3, "d": 4, "max_h": 1.5 }, "pastry": true, "music": "music_act2_morning", "ambience": "amb_l06_skylight_rain_loop" },
     "park": { "name": "Duck Pond Shed", "x": 0, "z": 0, "w": 6, "d": 6, "opening": "door", "open_w": 2, "windows": true, "music": "music_office_build" }
   },
   "jobs": [

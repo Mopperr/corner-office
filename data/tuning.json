@@ -76,6 +76,8 @@
     "truck_idle_db": -10,
     "quiet_boost_db": 6,
     "quiet_sfx": ["sfx_box_fold", "sfx_box_open", "sfx_paper_rustle"],
+    "ambience_boost_db": 8,
+    "ambience_boost": ["amb_l02_cafe_loop", "amb_l03_rain_loop", "amb_l04_shop_clock_loop", "amb_l06_skylight_rain_loop"],
     "pitch_rand": 0.08,
     "music_db_default": -4,
     "sfx_db_default": -2

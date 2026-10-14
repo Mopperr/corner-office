@@ -48,6 +48,7 @@ func _ready() -> void:
 	if garage_door:
 		var tw := create_tween()
 		tw.tween_method(_set_garage_y, 0.0, float(Tuning.get_value("garage_door_open_y", 2.1)), 1.15)
+		AudioDirector.play_sfx("sfx_l01_garage_door_roll")
 	_music()
 	if GameState.mode == "truck":
 		AudioDirector.start_loop("sfx_truck_idle_loop")
@@ -55,13 +56,33 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
-	AudioDirector.stop_loop("sfx_truck_idle_loop")
-	AudioDirector.stop_loop("sfx_rain_ambience_loop")
+	AudioDirector.stop_level()
 
 
 func _music() -> void:
 	var track := str(venue.get("music", "music_office_build"))
-	AudioDirector.play_music(track)
+	var bed := str(venue.get("ambience", ""))
+	AudioDirector.play_bed(track, bed)
+	_level_cues()
+
+
+func _level_cues() -> void:
+	var id := str(venue.get("id", ""))
+	if id == "garage" and GameState.mode != "truck":
+		AudioDirector.start_loop("sfx_l01_fridge_hum_loop")
+		AudioDirector.play_sfx("sfx_l01_marker_squeak")
+	elif id == "cafe":
+		AudioDirector.start_loop("sfx_cat_purr_loop")
+		AudioDirector.play_sfx("sfx_l02_door_wind_chime")
+		AudioDirector.play_sfx("sfx_l02_espresso_hiss")
+		AudioDirector.play_sfx("sfx_l02_cup_clink")
+	elif id == "train":
+		AudioDirector.play_sfx("sfx_l04_cuckoo")
+		AudioDirector.play_sfx("sfx_l04_track_click")
+	elif id == "bakery":
+		AudioDirector.play_sfx("sfx_l06_bakery_bell")
+		AudioDirector.play_sfx("sfx_l06_stair_creak")
+		AudioDirector.play_sfx("sfx_l06_pigeon_coo")
 
 
 func _world() -> void:
@@ -723,6 +744,11 @@ func _pack_click(uid: String) -> void:
 		return
 	AudioDirector.play_sfx("sfx_item_pick_up")
 	AudioDirector.play_sfx("sfx_box_fold", true)
+	var packed := str(item.get("item", ""))
+	if packed == "cafe_mug":
+		AudioDirector.play_sfx("sfx_l02_cup_clink")
+	elif packed == "mystery_part":
+		AudioDirector.play_sfx("sfx_l04_parts_rattle")
 	_refresh_items()
 	_refresh_hud_buttons()
 
@@ -1174,6 +1200,7 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 		_act_button(layer, "Sort mystery parts", Vector2(980, y), func():
 			GameState.sort_mystery()
 			AudioDirector.play_sfx("sfx_paper_rustle")
+			AudioDirector.play_sfx("sfx_l04_toy_whistle")
 			AudioDirector.play_sfx("sfx_success_chime")
 			_toast("The parts make a tiny train. It's yours.")
 			_refresh_hud_buttons()
@@ -1250,6 +1277,7 @@ func _seal_selected() -> void:
 			_open_cat(selected_box)
 			_refresh_hud_buttons()
 		)
+		AudioDirector.play_sfx("sfx_l02_box_wiggle")
 		_wiggle_toast()
 	selected_box = -1
 	_refresh_hud_buttons()
@@ -1612,6 +1640,7 @@ func _pastry() -> void:
 		_toast("The plate's already empty. Tomorrow, maybe.")
 		return
 	GameState.pastry_day = GameState.day
+	AudioDirector.play_sfx("sfx_l06_oven_beep_muffled")
 	AudioDirector.play_sfx("sfx_success_chime")
 	_toast("Still warm. A bakery morning, on the house.")
 
