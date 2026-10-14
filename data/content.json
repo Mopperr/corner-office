@@ -1,6 +1,6 @@
 {
   "characters": [
-    { "id": "dana", "name": "Dana", "perk": "Spreadsheet Brain", "blurb": "Keeps yesterday's prices in her head. Starts in the garage.", "playable": true },
+    { "id": "dana", "name": "Dana Reyes", "perk": "Spreadsheet Brain", "role": "Laid-off office worker", "blurb": "Laid-off office worker. Starts in the Garage Startup with $120.", "playable": true, "start_office": "garage", "start_money": 120 },
     { "id": "sol", "name": "Sol", "perk": "Cafe Regular", "blurb": "Knows every regular's mug. Coming later.", "playable": false },
     { "id": "hank", "name": "Hank", "perk": "Road Legs", "blurb": "Bumps sting a little less. Coming later.", "playable": false },
     { "id": "milo", "name": "Milo", "perk": "Campus Buzz", "blurb": "Turns a move into a small party. Coming later.", "playable": false },

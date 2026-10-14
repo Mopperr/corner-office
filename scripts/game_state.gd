@@ -195,6 +195,9 @@ func fire_trigger(trigger: String) -> void:
 
 
 func _read_emails() -> Array:
+	# TODO: When res://data/narrative/player_characters.json arrives with the next
+	# asset batch, replace tut_welcome with Dana Reyes's welcome email from Marge
+	# in that file. Until then, keep the current tut_welcome in emails.json.
 	if not FileAccess.file_exists("res://data/narrative/emails.json"):
 		return []
 	var file := FileAccess.open("res://data/narrative/emails.json", FileAccess.READ)

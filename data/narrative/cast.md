@@ -1,6 +1,9 @@
 # Corner Office: Cast
 Tone: warm sitcom office. Nobody's mean, nothing's urgent.
 
+## Player
+**Dana Reyes**, a laid-off office worker. She starts in the Garage Startup with $120. This slice plays as Dana only.
+
 ## Mentor
 **Marge "Mile Marker" Holloway** (CB handle: Mile Marker). She drove long-haul for 30 years, then started Corner Movers out of her garage. Now semi-retired, she mentors you through emails and job briefs. She keeps a hours-of-service logbook for everything, naps included, and she's very particular about load straps. She rates every truck-stop coffee she's ever had. Signs off with "10-4," "Keep the shiny side up," or "Mile Marker, over and out."
 

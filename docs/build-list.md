@@ -93,7 +93,7 @@ Full Act 1 loop + first unlock: **L1 → L2 → L3 → L4 → (L5 if time) → L
 | # | Feature / mechanic | Acceptance criteria |
 |---|---|---|
 | P0.1 | Autoloads: `GameState`, `SaveManager`, `ItemDB`, `JobDB` | Money, Rep, jobs_done, office_id, character persist to `user://` JSON; reload restores mid-office and post-job. |
-| P0.2 | MainMenu → CharacterSelect → Office | Dana selectable; Sol/Hank/Milo/Bea grayed or hidden. CRT boot SFX optional. |
+| P0.2 | MainMenu → Intro → Office | Slice plays as Dana Reyes only ($120, Garage Startup). No character select. CRT boot SFX optional. |
 | P0.3 | L1 Garage Startup (Dana) | 6×8 m, 12 start items, 0.25 m grid, wall snaps, rotate 90°/15°, ghost preview, soft thunk. Tutorial: pick / rotate / snap / wall-mount. Whiteboard milestone decals at $100 / $500 / $1,000 earned. |
 | P0.4 | Retro computer — Market v0 | Buy/sell ≥8 trade goods; line chart; green/terracotta pills; balance coin; profit pop. Spreadsheet Brain perk stub OK (yesterday price). |
 | P0.5 | Job board / clipboard | Offers L2 after L1 unpack tutorial; shows base pay + brief from JobDB. |

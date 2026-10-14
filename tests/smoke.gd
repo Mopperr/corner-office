@@ -40,8 +40,16 @@ func _ready() -> void:
 		failures.append("desk props")
 	elif abs(float(mug["y"]) - 0.76) > 0.01 or abs(float(notes["y"]) - 0.76) > 0.01:
 		failures.append("desk height")
-	if GameState.inbox.is_empty():
+	if GameState.inbox.is_empty() or str(GameState.inbox[0].get("id", "")) != "tut_welcome":
 		failures.append("welcome email")
+	if GameState.character != "dana" or GameState.office_id != "garage":
+		failures.append("dana start")
+	var dana_name := ""
+	for who in ItemDB.characters:
+		if str(who.get("id", "")) == "dana":
+			dana_name = str(who.get("name", ""))
+	if dana_name != "Dana Reyes":
+		failures.append("dana name %s" % dana_name)
 	SaveManager.save_game()
 	GameState.money = 5
 	if not SaveManager.load_game() or GameState.money != 120:

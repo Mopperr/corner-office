@@ -51,7 +51,7 @@ func _home() -> void:
 	add_child(column)
 	var play := UIKit.button("New game", UIKit.TERRA)
 	play.custom_minimum_size = Vector2(320, 54)
-	play.pressed.connect(_characters)
+	play.pressed.connect(func(): _intro("dana"))
 	column.add_child(play)
 	var cont := UIKit.button("Continue", UIKit.SAGE)
 	cont.custom_minimum_size = Vector2(320, 54)
@@ -74,41 +74,6 @@ func _home() -> void:
 	quit.custom_minimum_size = Vector2(320, 54)
 	quit.pressed.connect(func(): get_tree().quit())
 	column.add_child(quit)
-
-
-func _characters() -> void:
-	_clear()
-	_back_button()
-	var title := UIKit.label("Who's moving in?", 48, UIKit.DARK, "title")
-	title.position = Vector2(80, 80)
-	add_child(title)
-	var x := 80.0
-	for who in ItemDB.characters:
-		var card := Panel.new()
-		card.position = Vector2(x, 180)
-		card.size = Vector2(210, 280)
-		var playable := bool(who.get("playable", false))
-		card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD if playable else Color("E4D8C8"), 16))
-		add_child(card)
-		var name := UIKit.label(str(who.get("name", "")), 28, UIKit.DARK, "title")
-		name.position = Vector2(16, 16)
-		card.add_child(name)
-		var perk := UIKit.label(str(who.get("perk", "")), 16, UIKit.TERRA, "title")
-		perk.position = Vector2(16, 58)
-		perk.size = Vector2(180, 40)
-		card.add_child(perk)
-		var blurb := UIKit.label(str(who.get("blurb", "")), 15, UIKit.DARK)
-		blurb.position = Vector2(16, 110)
-		blurb.size = Vector2(180, 90)
-		card.add_child(blurb)
-		var btn := UIKit.button("Start" if playable else "Soon", UIKit.SAGE if playable else UIKit.BLUE)
-		btn.position = Vector2(16, 210)
-		btn.size = Vector2(176, 48)
-		btn.disabled = not playable
-		var id := str(who.get("id", "dana"))
-		btn.pressed.connect(func(): _intro(id))
-		card.add_child(btn)
-		x += 230
 
 
 func _intro(character: String) -> void:
