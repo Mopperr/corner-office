@@ -21,6 +21,8 @@ var duck_friend := false
 var near_miss := false
 var wobble_done := false
 var hazard_cd: Dictionary = {}
+var touching: Dictionary = {}
+var contact_ready: Dictionary = {}
 var duck_hold := 0.0
 var laps := 0
 var in_finish := false
@@ -108,7 +110,7 @@ func _hud() -> void:
 	card.size = Vector2(360, 92)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	layer.add_child(card)
-	var title := UIKit.label("Box condition", 22, UIKit.DARK, "title")
+	var title := UIKit.label("Box condition", 22, UIKit.DARK, "title", false)
 	title.position = Vector2(16, 8)
 	card.add_child(title)
 	meter = ProgressBar.new()
@@ -164,7 +166,7 @@ func _process(delta: float) -> void:
 		var before := speed
 		speed = maxf(0.0, speed + brake * delta * throttle)
 		if before > max_speed * 0.55 and speed < before - 40.0 * delta:
-			_hurt("brake", randi_range(int(Tuning.get_value("box_condition.hard_brake_min", 2)), int(Tuning.get_value("box_condition.hard_brake_max", 4))))
+			_apply_hit("brake", randi_range(int(Tuning.get_value("box_condition.hard_brake_min", 2)), int(Tuning.get_value("box_condition.hard_brake_max", 4))), 700)
 	else:
 		speed = maxf(0.0, speed - accel * 0.35 * delta)
 	var steer := _axis(KEY_A, KEY_LEFT, KEY_D, KEY_RIGHT)
@@ -175,10 +177,11 @@ func _process(delta: float) -> void:
 		speed = minf(speed, 18.0)
 	pos += Vector2.RIGHT.rotated(heading) * speed * delta
 	_check_alley()
-	if not _on_road(pos):
+	var off_road := not _on_road(pos)
+	if off_road:
 		pos = pos.move_toward(_closest_road(pos), 220.0 * delta)
-		if speed > 80.0:
-			_hurt("offroad", int(Tuning.get_value("box_condition.collision", 10)))
+	var edge := int(Tuning.get_value("box_condition.collision", 10))
+	_contact("offroad", off_road and speed > 80.0, edge)
 	_hazards()
 	_finish_check()
 	truck.position = pos
@@ -218,13 +221,32 @@ func _physics_process(_delta: float) -> void:
 	pass
 
 
-func _hurt(kind: String, amount: int) -> void:
+func _contact(kind: String, overlapping: bool, amount: int) -> void:
+	var was := bool(touching.get(kind, false))
+	if not overlapping:
+		if was:
+			touching[kind] = false
+			contact_ready[kind] = Time.get_ticks_msec() + 700
+		return
+	if was:
+		return
+	touching[kind] = true
+	if contact_ready.has(kind) and Time.get_ticks_msec() < int(contact_ready[kind]):
+		return
+	if amount > 0:
+		_apply_hit(kind, amount)
+	elif kind == "gravel":
+		AudioDirector.play_sfx("sfx_l05_gravel_crunch")
+
+
+func _apply_hit(kind: String, amount: int, cooldown := 0) -> void:
 	if amount <= 0:
 		return
 	var now := Time.get_ticks_msec()
-	if hazard_cd.has(kind) and now - int(hazard_cd[kind]) < 700:
+	if cooldown > 0 and hazard_cd.has(kind) and now - int(hazard_cd[kind]) < cooldown:
 		return
-	hazard_cd[kind] = now
+	if cooldown > 0:
+		hazard_cd[kind] = now
 	condition = maxi(0, condition - amount)
 	shake = 0.25
 	if kind == "cone":
@@ -271,13 +293,15 @@ func _closest_road(p: Vector2) -> Vector2:
 
 
 func _hazards() -> void:
+	var active: Dictionary = {}
+	var pond := str(course.get("id", "")) == "duck_pond"
 	for hazard in course.get("hazards", []):
 		var kind := str(hazard.get("type", ""))
 		var at := Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
 		if kind == "wobble":
 			if alley and not wobble_done and _hits_circle(at, 90.0):
 				wobble_done = true
-				_hurt("wobble", int(Tuning.get_value("box_condition.alley_wobble", 6)))
+				_apply_hit("wobble", int(Tuning.get_value("box_condition.alley_wobble", 6)))
 			continue
 		if kind == "ducks":
 			var zone := Rect2(at.x - float(hazard.get("w", 180)) * 0.5, at.y - float(hazard.get("h", 140)) * 0.5, float(hazard.get("w", 180)), float(hazard.get("h", 140)))
@@ -287,7 +311,7 @@ func _hazards() -> void:
 					if not hazard_cd.has("quack"):
 						hazard_cd["quack"] = Time.get_ticks_msec()
 						AudioDirector.play_sfx("sfx_ducks_quack")
-				elif str(course.get("id", "")) == "duck_pond":
+				elif pond:
 					if not hazard_cd.has("peep"):
 						hazard_cd["peep"] = Time.get_ticks_msec()
 						AudioDirector.play_sfx("sfx_ducks_quack")
@@ -295,11 +319,10 @@ func _hazards() -> void:
 					if speed > 70.0:
 						near_miss = true
 						duck_friend = false
-						_hurt("ducks", int(Tuning.get_value("box_condition.bump_min", 3)))
 				elif speed > 70.0:
 					near_miss = true
 					duck_friend = false
-					_hurt("ducks", int(Tuning.get_value("box_condition.bump_min", 3)))
+					active["ducks"] = int(Tuning.get_value("box_condition.bump_min", 3))
 			continue
 		var radius := float(hazard.get("r", 0))
 		var hit := false
@@ -311,13 +334,18 @@ func _hazards() -> void:
 		if not hit:
 			continue
 		if kind == "cone":
-			_hurt("cone", int(Tuning.get_value("box_condition.collision", 10)))
+			active["cone"] = int(Tuning.get_value("box_condition.collision", 10))
 		elif kind == "gravel":
-			_hurt("gravel", int(Tuning.get_value("box_condition.bump_min", 3)))
+			active["gravel"] = 0 if pond else int(Tuning.get_value("box_condition.bump_min", 3))
 		else:
 			var fast := speed > PX * 3.0
-			var loss := int(Tuning.get_value("box_condition.bump_max", 8)) if fast else int(Tuning.get_value("box_condition.bump_min", 3))
-			_hurt(kind, loss)
+			active[kind] = int(Tuning.get_value("box_condition.bump_max", 8)) if fast else int(Tuning.get_value("box_condition.bump_min", 3))
+	var kinds: Array = ["cone", "gravel", "bump", "puddle", "ducks"]
+	for kind in active.keys():
+		if not kinds.has(kind):
+			kinds.append(str(kind))
+	for kind in kinds:
+		_contact(str(kind), active.has(kind), int(active.get(kind, 0)))
 
 
 func _near_honk_ducks() -> bool:

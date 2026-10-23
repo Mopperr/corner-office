@@ -647,9 +647,9 @@ func _find_repair_target(uid: String) -> Dictionary:
 func compute_payout(base: int, condition: int, bonuses: int, scuffed: int, chipped: int, alley: bool, split_count: int) -> Dictionary:
 	var ratio := Tuning.tip_ratio(condition)
 	var box_tip := int(round(float(base) * ratio))
+	var shortcut := 0
 	if alley:
-		var alley_bonus := float(Tuning.get_value("pay.alley_tip_bonus", 0.10))
-		box_tip = int(round(float(box_tip) * (1.0 + alley_bonus)))
+		shortcut = int(round(float(base) * float(Tuning.get_value("pay.alley_tip_bonus", 0.10))))
 	var split_loss := split_count * int(Tuning.get_value("pay.split_set_tip_loss", 8))
 	var tips := maxi(0, box_tip + bonuses - split_loss)
 	var cut := Tuning.damage_cut(base, scuffed, chipped, tips)
@@ -657,11 +657,12 @@ func compute_payout(base: int, condition: int, bonuses: int, scuffed: int, chipp
 	return {
 		"base": base,
 		"box_tip": box_tip,
+		"shortcut": shortcut,
 		"bonuses": bonuses,
 		"split_loss": mini(split_loss, box_tip + bonuses),
 		"cut": cut,
 		"net_tips": net,
-		"total": base + net,
+		"total": base + net + shortcut,
 		"stamp": Tuning.tip_stamp(condition),
 		"condition": condition,
 		"scuffed": scuffed,

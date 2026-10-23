@@ -57,8 +57,9 @@ func _build() -> void:
 	bar.offset_bottom = 52
 	bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.BLUE, 8))
 	screen.add_child(bar)
-	var home := UIKit.label("HomeDesk", 28, UIKit.CREAM_CARD, "crt")
+	var home := UIKit.label("HomeDesk", 28, UIKit.CREAM_CARD, "crt", false)
 	home.position = Vector2(18, 8)
+	home.custom_minimum_size = Vector2(220, 36)
 	bar.add_child(home)
 	balance = UIKit.label(_money(), 28, UIKit.MUSTARD, "crt")
 	balance.set_anchors_preset(Control.PRESET_TOP_RIGHT)
@@ -152,7 +153,7 @@ func _market() -> void:
 	body.add_child(flavor)
 	chart = Control.new()
 	chart.position = Vector2(310, 96)
-	chart.size = Vector2(460, 160)
+	chart.size = Vector2(460, 100)
 	chart.draw.connect(_draw_chart)
 	body.add_child(chart)
 	var series: Array = GameState.history.get(selected, [])
@@ -160,10 +161,10 @@ func _market() -> void:
 	if series.size() >= 2:
 		yesterday = "Yesterday $%d" % int(round(float(series[series.size() - 2])))
 	var ylbl := UIKit.label("Dana's note: %s" % yesterday, 16, UIKit.BLUE)
-	ylbl.position = Vector2(310, 260)
+	ylbl.position = Vector2(310, 200)
 	body.add_child(ylbl)
 	var own := UIKit.label("You have %d    Buy $%d    Sell $%d" % [int(GameState.goods.get(selected, 0)), GameState.price_of(selected), GameState.sell_price_of(selected)], 18, UIKit.DARK)
-	own.position = Vector2(310, 286)
+	own.position = Vector2(310, 224)
 	own.size = Vector2(500, 28)
 	body.add_child(own)
 	var buy := UIKit.button("BUY", UIKit.GREEN)
@@ -190,12 +191,14 @@ func _market() -> void:
 	if not GameState.buyer_offer.is_empty():
 		var offer: Dictionary = GameState.buyer_offer
 		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 15, UIKit.DARK)
-		line.position = Vector2(310, 400)
-		line.size = Vector2(520, 48)
+		line.name = "Offer"
+		line.position = Vector2(310, 256)
+		line.size = Vector2(490, 48)
+		line.custom_minimum_size = Vector2(490, 40)
 		body.add_child(line)
 		var take := UIKit.button("Sell to them", UIKit.MUSTARD, UIKit.DARK)
-		take.position = Vector2(840, 396)
-		take.size = Vector2(180, 48)
+		take.position = Vector2(820, 256)
+		take.size = Vector2(180, 44)
 		take.pressed.connect(_sell_buyer)
 		body.add_child(take)
 

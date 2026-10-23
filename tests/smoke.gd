@@ -89,6 +89,8 @@ func _ready() -> void:
 	var mug_prop := Props.make("mug_worlds_okayest")
 	if mug_prop == null or mug_prop.get_node_or_null("PropCollision") == null:
 		failures.append("prop collision")
+	else:
+		_bury(mug_prop)
 	var rain_import := FileAccess.get_file_as_string("res://assets/audio/sfx/sfx_rain_ambience_loop.wav.import")
 	var idle_import := FileAccess.get_file_as_string("res://assets/audio/sfx/sfx_truck_idle_loop.wav.import")
 	var music_import := FileAccess.get_file_as_string("res://assets/audio/music/music_rainy_office.ogg.import")
@@ -138,7 +140,7 @@ func _ready() -> void:
 		GameState.set_mode("office")
 		var office: Node = diorama_script.new()
 		add_child(office)
-		office.queue_free()
+		_bury(office)
 		if GameState.loaded_arc_characters() != 5 or GameState.slice_beats().size() != 6:
 			failures.append("arc filter %d %d" % [GameState.loaded_arc_characters(), GameState.slice_beats().size()])
 		var saw_l1 := false
@@ -193,7 +195,6 @@ func _ready() -> void:
 			var before_mail := GameState.inbox.size()
 			var drive: Node = drive_script.new()
 			add_child(drive)
-			drive.queue_free()
 			var duck_note := false
 			for mail in GameState.inbox:
 				if str(mail.get("id", "")) == "arc_L5" and str(mail.get("subject", "")).contains("Detours"):
@@ -206,6 +207,7 @@ func _ready() -> void:
 					dressed += 1
 			if dressed < 4:
 				failures.append("pond sprites %d" % dressed)
+			_bury(drive)
 			GameState.job = {}
 			GameState.set_mode("office")
 		if str(ItemDB.get_item("desk_main").get("model", "")) != "folding_table":
@@ -221,15 +223,25 @@ func _ready() -> void:
 		var saved_office := GameState.office_id
 		GameState.office_id = "bakery"
 		GameState.set_mode("office")
+		var orphans_before := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 		var loft: Node = diorama_script.new()
 		add_child(loft)
-		loft.queue_free()
+		var scraps := 0
+		for child in loft.get_children():
+			if child.has_meta("floor_scrap"):
+				scraps += 1
+		if scraps != 6:
+			failures.append("nook floor scraps %d" % scraps)
+		var orphans_after := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
+		if orphans_after > orphans_before:
+			failures.append("nook floor orphans %d" % (orphans_after - orphans_before))
+		_bury(loft)
 		GameState.office_id = "garage"
 		GameState.set_mode("job_pack")
 		GameState.job = {"def": {"venue": "cafe", "cat": true}, "items": [], "boxes": []}
 		var cafe: Node = diorama_script.new()
 		add_child(cafe)
-		cafe.queue_free()
+		_bury(cafe)
 		GameState.job = {}
 		GameState.office_id = saved_office
 		GameState.set_mode("office")
@@ -303,6 +315,11 @@ func _ready() -> void:
 	failures.append_array(_stack_checks())
 	failures.append_array(_screen_copy_checks())
 	failures.append_array(await _settle_checks())
+	failures.append_array(await _qa_regressions())
+	AudioDirector.release_audio()
+	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
+	if leaked > 0:
+		failures.append("orphan nodes %d" % leaked)
 	if failures.is_empty():
 		print("SMOKE_OK")
 		get_tree().quit(0)
@@ -530,7 +547,215 @@ func _settle_checks() -> Array:
 		await get_tree().physics_frame
 	if crate.position.distance_to(crate_at) > 0.01 or mug.position.distance_to(mug_at) > 0.01:
 		found.append("settle drift")
-	desk.queue_free()
-	crate.queue_free()
-	mug.queue_free()
+	desk.free()
+	crate.free()
+	mug.free()
 	return found
+
+
+func _qa_regressions() -> Array:
+	var found: Array = []
+	var plain := GameState.compute_payout(120, 95, 20, 2, 0, false, 0)
+	if int(plain.get("shortcut", -1)) != 0 or int(plain.get("total", 0)) != 188:
+		found.append("shortcut absent %s" % plain)
+	var alley_pay := GameState.compute_payout(120, 95, 20, 2, 0, true, 0)
+	if int(alley_pay.get("shortcut", 0)) != 12 or int(alley_pay.get("box_tip", 0)) != 60 or int(alley_pay.get("total", 0)) != 200:
+		found.append("shortcut line %s" % alley_pay)
+	if RoomLib.mend_caption("Mug", 1) != "Mend Mug (1 tap)" or RoomLib.mend_caption("Mug", 3) != "Mend Mug (3 taps)":
+		found.append("tap plural")
+	var tint := RoomLib.ghost_color(Color.WHITE, false)
+	var soft := Color.WHITE.lerp(UIKit.SOFT_RED, 0.65)
+	soft.a = 0.5
+	var loss := Color.WHITE.lerp(UIKit.LOSS, 0.65)
+	loss.a = 0.5
+	if not tint.is_equal_approx(soft) or tint.is_equal_approx(loss) or UIKit.SOFT_RED == UIKit.LOSS:
+		found.append("ghost red %s" % tint)
+	if RoomLib.SQUASH_KEYS.size() != 3:
+		found.append("squash keys")
+	else:
+		var squash: Vector3 = RoomLib.SQUASH_KEYS[0]["scale"]
+		var stretch: Vector3 = RoomLib.SQUASH_KEYS[1]["scale"]
+		var settle: Vector3 = RoomLib.SQUASH_KEYS[2]["scale"]
+		if squash.y >= 0.95 or squash.x < 1.1 or stretch.x >= 1.0 or stretch.y <= 1.0 or settle != Vector3.ONE:
+			found.append("squash curve %s %s %s" % [squash, stretch, settle])
+		if int(RoomLib.SQUASH_KEYS[2]["trans"]) == Tween.TRANS_BACK or int(RoomLib.SQUASH_KEYS[0]["ease"]) != Tween.EASE_OUT:
+			found.append("squash ease")
+	var window := Props.model("wall_window_2m")
+	if window == null:
+		found.append("window model")
+	else:
+		Props.restyle_architecture(window)
+		var surfaces := 0
+		var nulls := 0
+		for mesh_node in window.find_children("*", "MeshInstance3D", true, false):
+			var mesh_instance := mesh_node as MeshInstance3D
+			if mesh_instance.mesh == null:
+				continue
+			for i in mesh_instance.mesh.get_surface_count():
+				surfaces += 1
+				if mesh_instance.mesh.surface_get_material(i) == null:
+					nulls += 1
+		if surfaces != 4 or nulls != 0:
+			found.append("null materials %d %d" % [surfaces, nulls])
+		_bury(window)
+	GameState.new_game("dana")
+	for item in GameState.office_items:
+		item["state"] = "boxed"
+	var room: Node = RoomLib.new()
+	add_child(room)
+	room.set("held_source", "office")
+	room.set("held_rot", 90.0)
+	var wall_points: Array = room.call("_wall_points")
+	if wall_points.is_empty():
+		found.append("no wall points")
+	for point in wall_points:
+		var hang := str(point.get("kind", "")) == "hang"
+		room.set("held_uid", "board" if hang else "shelf_a")
+		var normal: Vector3 = point["normal"]
+		var spot: Dictionary = room.call("_snap_point", Vector3(point["x"], point["y"], point["z"]) + normal * 0.2)
+		if not bool(spot.get("valid", false)):
+			found.append("wall snap %s" % point)
+			break
+		var mounted: Vector3 = spot["pos"]
+		if absf(mounted.distance_to(Vector3(point["x"], point["y"], point["z"])) - 0.12) > 0.001:
+			found.append("wall offset %s" % mounted)
+			break
+		if bool(room.call("_inside", mounted.x, mounted.z, 0.25)):
+			found.append("wall used room margin")
+			break
+	for item in GameState.office_items:
+		item["state"] = "placed"
+	room.call("_maybe_live")
+	if not GameState.tutorial_done or not GameState.job_available(JobDB.get_job("job_catcafe")):
+		found.append("jobs after tutorial")
+	_bury(room)
+	var show: Node = RoomLib.new()
+	show.set("backdrop", true)
+	add_child(show)
+	var show_worlds: Array = show.find_children("*", "WorldEnvironment", true, false)
+	if show_worlds.is_empty() or (show_worlds[0] as WorldEnvironment).environment.background_color != UIKit.CREAM:
+		found.append("menu background")
+	_bury(show)
+	var play: Node = RoomLib.new()
+	add_child(play)
+	var play_worlds: Array = play.find_children("*", "WorldEnvironment", true, false)
+	if play_worlds.is_empty() or (play_worlds[0] as WorldEnvironment).environment.background_color != Color("5C534A"):
+		found.append("office background")
+	_bury(play)
+	var menu: Control = load("res://scripts/menu_ui.gd").new()
+	add_child(menu)
+	var logo := _label_with(menu, "Corner Office")
+	if logo == null or logo.autowrap_mode != TextServer.AUTOWRAP_OFF or logo.custom_minimum_size.x < 600.0:
+		found.append("logo wrap")
+	_bury(menu)
+	GameState.payout = {
+		"base": 120, "box_tip": 60, "shortcut": 12, "bonuses": 0, "split_loss": 0,
+		"cut": 0, "net_tips": 60, "total": 192, "title": "Job done", "stars": 1, "stamp": "",
+	}
+	var results: Control = load("res://scripts/results_ui.gd").new()
+	add_child(results)
+	var card := results.get_node_or_null("Card") as Control
+	var vp := results.get_viewport_rect().size
+	if vp.x < 8.0 or vp.y < 8.0:
+		vp = Vector2(1280, 720)
+	if card == null or card.anchor_left != 0.5 or card.anchor_top != 0.5 or card.position.x < 0.0 or card.position.y < 0.0:
+		found.append("results anchors %s" % (card.position if card else "missing"))
+	elif card.get_global_rect().get_center().distance_to(vp * 0.5) > 24.0:
+		found.append("results center %s %s" % [card.get_global_rect().get_center(), vp])
+	var packed := PackedStringArray()
+	for row in results.get("lines"):
+		packed.append(str(row))
+	if not "\n".join(packed).contains("Shortcut  +$12"):
+		found.append("results shortcut %s" % results.get("lines"))
+	_bury(results)
+	GameState.buyer_offer = {"name": "Nia", "item": "plant_fern", "price": 22, "line": "I'll take the fern."}
+	var computer: Control = load("res://scripts/computer_ui.gd").new()
+	add_child(computer)
+	var home := _label_with(computer, "HomeDesk")
+	if home == null or home.autowrap_mode != TextServer.AUTOWRAP_OFF or home.custom_minimum_size.x < 160.0:
+		found.append("computer title")
+	var offer := computer.find_child("Offer", true, false) as Label
+	var hint_top := vp.y - 104.0
+	if offer == null or offer.position.y > 320.0 or offer.size.x < 400.0 or offer.global_position.y + offer.size.y >= hint_top:
+		found.append("offer overlap %s" % (offer.position if offer else "missing"))
+	_bury(computer)
+	GameState.job = {"def": {"drive": "sunny_main", "level": "L3"}, "boxes": [], "items": []}
+	GameState.set_mode("drive")
+	var drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(drive)
+	var meter := _label_with(drive, "Box condition")
+	if meter == null or meter.autowrap_mode != TextServer.AUTOWRAP_OFF or meter.custom_minimum_size.x < 160.0:
+		found.append("meter title")
+	drive.set("condition", 100)
+	(drive.get("touching") as Dictionary).clear()
+	(drive.get("contact_ready") as Dictionary).clear()
+	var collision := int(Tuning.get_value("box_condition.collision", 10))
+	drive.call("_contact", "offroad", true, collision)
+	drive.call("_contact", "offroad", true, collision)
+	drive.call("_contact", "offroad", true, collision)
+	if int(drive.get("condition")) != 90:
+		found.append("offroad drip %s" % drive.get("condition"))
+	drive.call("_contact", "offroad", false, collision)
+	drive.call("_contact", "offroad", true, collision)
+	if int(drive.get("condition")) != 90:
+		found.append("offroad cooldown %s" % drive.get("condition"))
+	drive.call("_contact", "offroad", false, collision)
+	(drive.get("contact_ready") as Dictionary)["offroad"] = 0
+	drive.call("_contact", "offroad", true, collision)
+	if int(drive.get("condition")) != 80:
+		found.append("offroad reentry %s" % drive.get("condition"))
+	drive.set("condition", 100)
+	(drive.get("touching") as Dictionary).clear()
+	(drive.get("contact_ready") as Dictionary).clear()
+	drive.call("_contact", "bump", true, int(Tuning.get_value("box_condition.bump_min", 3)))
+	drive.call("_contact", "bump", false, 0)
+	(drive.get("contact_ready") as Dictionary).erase("bump")
+	drive.call("_contact", "bump", true, int(Tuning.get_value("box_condition.bump_max", 8)))
+	drive.call("_contact", "cone", true, collision)
+	if int(drive.get("condition")) != 79:
+		found.append("meter amounts %s" % drive.get("condition"))
+	drive.set("course", JobDB.get_drive("duck_pond"))
+	drive.set("condition", 100)
+	drive.set("speed", 120.0)
+	drive.set("heading", 0.0)
+	(drive.get("touching") as Dictionary).clear()
+	(drive.get("contact_ready") as Dictionary).clear()
+	drive.set("pos", Vector2(1200, 410))
+	drive.call("_hazards")
+	drive.call("_hazards")
+	if int(drive.get("condition")) != 100:
+		found.append("l5 gravel %s" % drive.get("condition"))
+	drive.set("pos", Vector2(1500, 2050))
+	drive.call("_hazards")
+	drive.call("_hazards")
+	if int(drive.get("condition")) != 100:
+		found.append("l5 ducks %s" % drive.get("condition"))
+	(drive.get("touching") as Dictionary).clear()
+	(drive.get("contact_ready") as Dictionary).clear()
+	drive.set("speed", 10.0)
+	drive.set("pos", Vector2(830, 1400))
+	drive.call("_hazards")
+	if int(drive.get("condition")) != 97:
+		found.append("l5 bump %s" % drive.get("condition"))
+	_bury(drive)
+	return found
+
+
+func _bury(node: Node) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	var kids: Array = node.get_children()
+	for kid in kids:
+		if kid is Node:
+			_bury(kid)
+	node.free()
+
+
+func _label_with(root: Node, text: String) -> Label:
+	if root is Label and (root as Label).text == text:
+		return root
+	for child in root.find_children("*", "Label", true, false):
+		var label := child as Label
+		if label.text == text:
+			return label
+	return null

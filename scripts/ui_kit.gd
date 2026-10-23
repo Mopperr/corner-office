@@ -14,6 +14,8 @@ const NIGHT := Color("3E3A4F")
 const GREEN := Color("6DBF73")
 const LOSS := Color("E0675C")
 const PINK := Color("E8B4A8")
+# Invalid ghosts use this soft red. LOSS is the trading color only.
+const SOFT_RED := Color("E8B4A8")
 const SCREEN := Color("243832")
 
 
@@ -109,7 +111,7 @@ static func icon_button(icon_path: String, caption: String) -> Button:
 	return btn
 
 
-static func label(text: String, size := 18, color: Color = DARK, font_kind := "body") -> Label:
+static func label(text: String, size := 18, color: Color = DARK, font_kind := "body", wrap := true) -> Label:
 	var node := Label.new()
 	node.text = text
 	node.add_theme_font_size_override("font_size", int(float(size) * SaveManager.text_scale))
@@ -121,7 +123,11 @@ static func label(text: String, size := 18, color: Color = DARK, font_kind := "b
 			node.add_theme_font_override("font", crt_font())
 		_:
 			node.add_theme_font_override("font", body_font())
-	node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if wrap:
+		node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	else:
+		node.autowrap_mode = TextServer.AUTOWRAP_OFF
+		node.custom_minimum_size = Vector2(maxf(180.0, float(text.length()) * float(size) * 0.55), float(size) + 12.0)
 	return node
 
 

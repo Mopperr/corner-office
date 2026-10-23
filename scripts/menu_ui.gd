@@ -21,9 +21,10 @@ func _home() -> void:
 	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 22))
 	add_child(card)
-	var title := UIKit.label("Corner Office", 72, UIKit.DARK, "title")
+	var title := UIKit.label("Corner Office", 72, UIKit.DARK, "title", false)
 	title.position = Vector2(80, 70)
 	title.size = Vector2(700, 90)
+	title.custom_minimum_size = Vector2(700, 90)
 	add_child(title)
 	var sub := UIKit.label("Pack the old office. Make the new one yours.", 22, UIKit.DARK)
 	sub.position = Vector2(84, 160)

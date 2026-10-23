@@ -21,7 +21,10 @@ static func restyle_architecture(root: Node) -> void:
 		if mesh_instance == null or mesh_instance.mesh == null:
 			continue
 		for i in mesh_instance.mesh.get_surface_count():
-			var base := mesh_instance.get_active_material(i)
+			var base: Material = mesh_instance.mesh.surface_get_material(i)
+			if base == null:
+				keep_material(mesh_instance, i, mat(Color("8E8276")))
+				continue
 			if not (base is StandardMaterial3D):
 				continue
 			var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D
@@ -31,7 +34,7 @@ static func restyle_architecture(root: Node) -> void:
 			elif luma > 0.42:
 				std.albedo_color = Color("7A5C40")
 			std.roughness = maxf(std.roughness, 0.88)
-			mesh_instance.set_surface_override_material(i, std)
+			keep_material(mesh_instance, i, std)
 
 
 static func restyle_box(root: Node) -> void:
@@ -46,14 +49,17 @@ static func restyle_box(root: Node) -> void:
 		if mesh_instance == null or mesh_instance.mesh == null:
 			continue
 		for i in mesh_instance.mesh.get_surface_count():
-			var base := mesh_instance.get_active_material(i)
+			var base: Material = mesh_instance.mesh.surface_get_material(i)
+			if base == null:
+				keep_material(mesh_instance, i, mat(UIKit.CARD))
+				continue
 			if not (base is StandardMaterial3D):
 				continue
 			var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D
 			var color := std.albedo_color
 			std.albedo_color = Color.from_hsv(0.075, clampf(color.s * 1.25 + 0.18, 0.0, 0.82), clampf(color.v, 0.42, 0.62))
 			std.roughness = 0.84
-			mesh_instance.set_surface_override_material(i, std)
+			keep_material(mesh_instance, i, std)
 
 
 static func set_hover_outline(root: Node, on: bool) -> void:
@@ -77,6 +83,20 @@ static func set_hover_outline(root: Node, on: bool) -> void:
 		outline.grow_amount = 0.014
 		outline.cull_mode = BaseMaterial3D.CULL_FRONT
 		mesh_instance.material_overlay = outline
+
+
+static func keep_material(mesh_instance: MeshInstance3D, surface: int, material: Material) -> void:
+	if mesh_instance == null or material == null or mesh_instance.mesh == null:
+		return
+	if not bool(mesh_instance.get_meta("material_mesh", false)):
+		mesh_instance.mesh = mesh_instance.mesh.duplicate()
+		mesh_instance.set_meta("material_mesh", true)
+	mesh_instance.mesh.surface_set_material(surface, material)
+	var kept: Array = []
+	if mesh_instance.has_meta("kept_materials"):
+		kept = mesh_instance.get_meta("kept_materials")
+	kept.append(material)
+	mesh_instance.set_meta("kept_materials", kept)
 
 
 static func mat(color: Color) -> StandardMaterial3D:

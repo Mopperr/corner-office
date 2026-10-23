@@ -110,7 +110,7 @@ func _world() -> void:
 	var env := WorldEnvironment.new()
 	var world := Environment.new()
 	world.background_mode = Environment.BG_COLOR
-	world.background_color = Color("5C534A")
+	world.background_color = UIKit.CREAM if backdrop else Color("5C534A")
 	world.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	world.ambient_light_color = Color("C2B09A")
 	world.ambient_light_energy = 0.18
@@ -256,17 +256,17 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 				add_child(tile)
 			cx += 2.0
 		cz += 2.0
-	# 1 m scraps when a side is odd
+	# 1 m scraps along an odd edge. The 2 m tiles already cover the rest, so those cells are not instantiated.
 	if int(w) % 2 == 1 or int(d) % 2 == 1:
 		var zz := z + 0.5
 		while zz < z + d:
 			var xx := x + 0.5
 			while xx < x + w:
-				var covered := fmod(xx - x, 2.0) < 1.5 and fmod(zz - z, 2.0) < 1.5 and xx + 0.5 <= x + w - 0.2 and zz + 0.5 <= z + d - 0.2 and int(w) % 2 == 0 and int(d) % 2 == 0
-				if not covered:
+				if _needs_1m(x, z, w, d, xx, zz):
 					var small := Props.model(_piece("floor1"))
-					if small and _needs_1m(x, z, w, d, xx, zz):
+					if small:
 						small.position = Vector3(xx, 0, zz)
+						small.set_meta("floor_scrap", true)
 						Props.restyle_architecture(small)
 						Props.prepare(small)
 						add_child(small)
@@ -875,12 +875,8 @@ func _paint_ghost(valid: bool) -> void:
 			continue
 		for i in mesh.get_surface_count():
 			var base: Material = mesh.surface_get_material(i)
-			var dup: StandardMaterial3D = base.duplicate() if base is StandardMaterial3D else StandardMaterial3D.new()
-			dup.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-			if not valid:
-				dup.albedo_color = dup.albedo_color.lerp(UIKit.LOSS, 0.65)
-			dup.albedo_color.a = 0.5
-			mesh_instance.set_surface_override_material(i, dup)
+			var dup := ghost_material(base, valid)
+			Props.keep_material(mesh_instance, i, dup)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -1272,12 +1268,14 @@ func _snap_point(hit: Vector3) -> Dictionary:
 		if point.is_empty():
 			return {"valid": false, "pos": pos, "rot": rot, "wall": ""}
 		rot = float(point["rot"])
-		var offset := float(def.get("back_offset", -1.0))
-		if offset < 0.0:
-			offset = float(Tuning.get_value("wall_mount_offset_m", 0.12))
+		var offset := float(Tuning.get_value("wall_mount_offset_m", 0.12))
+		var authored := float(def.get("back_offset", -1.0))
+		if authored > offset:
+			offset = authored
 		var normal: Vector3 = point["normal"]
 		pos = Vector3(point["x"], point["y"], point["z"]) + normal * offset
-		var valid := _inside(pos.x, pos.z, -0.02) and not _blocked(pos, rot, def) and not _too_tall(pos, def)
+		# Floor placement uses the 0.25 m room margin. Wall mounts sit on that boundary, so the margin does not apply.
+		var valid := _inside(pos.x, pos.z, 0.0) and not _blocked(pos, rot, def) and not _too_tall(pos, def)
 		return {"valid": valid, "pos": pos, "rot": rot, "wall": mount}
 	var records: Array = GameState.office_items if held_source != "job" else GameState.job.get("items", [])
 	var others: Array = []
@@ -1684,7 +1682,7 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 			var level := int(item.get("damage", 0))
 			var taps := Tuning.repair_taps(level)
 			var cost := int(round(float(JobDB.base_pay(GameState.job.get("def", {}))) * (0.05 if level == 1 else 0.10)))
-			_act_button(layer, "Mend %s (%d taps)" % [item.get("name", "item"), taps], Vector2(860, y), func():
+			_act_button(layer, mend_caption(str(item.get("name", "item")), taps), Vector2(860, y), func():
 				var done := GameState.tap_repair(uid)
 				AudioDirector.play_sfx("sfx_repair")
 				if done:
@@ -2167,14 +2165,47 @@ func _squash_last() -> void:
 	_squash_uid(str(GameState.office_items.back().get("uid", "")))
 
 
+const SQUASH_KEYS: Array = [
+	{"scale": Vector3(1.15, 0.85, 1.15), "trans": Tween.TRANS_QUAD, "ease": Tween.EASE_OUT, "time": 0.08},
+	{"scale": Vector3(0.95, 1.06, 0.95), "trans": Tween.TRANS_QUAD, "ease": Tween.EASE_OUT, "time": 0.09},
+	{"scale": Vector3.ONE, "trans": Tween.TRANS_SINE, "ease": Tween.EASE_OUT, "time": 0.12},
+]
+
+
+static func mend_caption(item_name: String, taps: int) -> String:
+	var word := "tap" if taps == 1 else "taps"
+	return "Mend %s (%d %s)" % [item_name, taps, word]
+
+
+static func ghost_color(albedo: Color, valid: bool) -> Color:
+	var color := albedo
+	if not valid:
+		color = albedo.lerp(UIKit.SOFT_RED, 0.65)
+	color.a = 0.5
+	return color
+
+
+static func ghost_material(base: Material, valid: bool) -> StandardMaterial3D:
+	var dup := StandardMaterial3D.new()
+	if base is StandardMaterial3D:
+		dup = (base as StandardMaterial3D).duplicate() as StandardMaterial3D
+	dup.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	dup.albedo_color = ghost_color(dup.albedo_color, valid)
+	return dup
+
+
 func _squash(node: Node3D) -> void:
 	if node == null:
 		return
+	if node.has_meta("squash_tween"):
+		var old: Tween = node.get_meta("squash_tween")
+		if old != null and old.is_valid():
+			old.kill()
 	node.scale = Vector3.ONE
 	var tw := create_tween()
-	tw.tween_property(node, "scale", Vector3(1.15, 0.9, 1.15), 0.07)
-	tw.tween_property(node, "scale", Vector3(0.95, 1.06, 0.95), 0.08)
-	tw.tween_property(node, "scale", Vector3.ONE, 0.12).set_trans(Tween.TRANS_BACK)
+	node.set_meta("squash_tween", tw)
+	for key in SQUASH_KEYS:
+		tw.tween_property(node, "scale", key["scale"], float(key["time"])).set_trans(int(key["trans"])).set_ease(int(key["ease"]))
 
 
 func _wiggle_toast() -> void:

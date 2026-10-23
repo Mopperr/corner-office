@@ -8,12 +8,15 @@ var lines: Array = []
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	resized.connect(_center_card)
 	AudioDirector.play_music("music_office_build")
 	var pay: Dictionary = GameState.payout
 	lines = [
 		"Base pay  $%d" % int(pay.get("base", 0)),
 		"Box tip  $%d" % int(pay.get("box_tip", 0)),
 	]
+	if int(pay.get("shortcut", 0)) > 0:
+		lines.append("Shortcut  +$%d" % int(pay.get("shortcut", 0)))
 	if int(pay.get("bonuses", 0)) > 0:
 		var extra := "Bonuses  $%d" % int(pay.get("bonuses", 0))
 		if bool(pay.get("cat", false)):
@@ -45,7 +48,34 @@ func _ready() -> void:
 		lines.append("Stamps: " + ", ".join(packed))
 	lines.append("Rep stars +%d   (rank %d)" % [int(pay.get("stars", 1)), GameState.rep_rank()])
 	_build()
+	_center_card()
 	_reveal()
+
+
+func _center_card() -> void:
+	var card := get_node_or_null("Card") as Control
+	if card == null:
+		return
+	var vp := get_viewport().get_visible_rect().size
+	if vp.x < 8.0 or vp.y < 8.0:
+		vp = Vector2(1280, 720)
+	layout_mode = 0
+	position = Vector2.ZERO
+	size = vp
+	var card_size := Vector2(720, 560)
+	card.layout_mode = 1
+	card.anchor_left = 0.5
+	card.anchor_top = 0.5
+	card.anchor_right = 0.5
+	card.anchor_bottom = 0.5
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	card.offset_left = -card_size.x * 0.5
+	card.offset_top = -card_size.y * 0.5
+	card.offset_right = card_size.x * 0.5
+	card.offset_bottom = card_size.y * 0.5
+	card.position = (vp - card_size) * 0.5
+	card.size = card_size
 
 
 func _build() -> void:
@@ -54,11 +84,8 @@ func _build() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 	var card := Panel.new()
-	card.set_anchors_preset(Control.PRESET_CENTER)
-	card.offset_left = -360
-	card.offset_top = -280
-	card.offset_right = 360
-	card.offset_bottom = 280
+	card.name = "Card"
+	card.custom_minimum_size = Vector2(720, 560)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
 	add_child(card)
 	var title := UIKit.label(str(GameState.payout.get("title", "Job done")), 36, UIKit.DARK, "title")

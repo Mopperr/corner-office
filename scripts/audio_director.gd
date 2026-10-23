@@ -4,8 +4,14 @@ var music: AudioStreamPlayer
 var loops: Dictionary = {}
 var _streams: Dictionary = {}
 var bed_name := ""
+var _released := false
+var _silent := false
 const MUSIC_BUS := "Music"
 const SFX_BUS := "SFX"
+
+
+func _exit_tree() -> void:
+	release_audio()
 
 
 func _ready() -> void:
@@ -15,7 +21,10 @@ func _ready() -> void:
 	music.bus = MUSIC_BUS
 	add_child(music)
 	apply_volumes()
-	_preload_loops()
+	_silent = AudioServer.get_driver_name() == "Dummy"
+	if not _silent:
+		_preload_loops()
+	tree_exiting.connect(release_audio)
 
 
 func _ensure_bus(bus_name: String) -> void:
@@ -68,6 +77,8 @@ func stop_level() -> void:
 
 
 func play_music(track: String) -> void:
+	if _silent:
+		return
 	var path := "res://assets/audio/music/%s.ogg" % track
 	if music.stream != null and music.playing and str(music.stream.resource_path) == path:
 		return
@@ -80,6 +91,8 @@ func play_music(track: String) -> void:
 
 
 func play_sfx(sfx_name: String, pitch_rand := false) -> void:
+	if _silent:
+		return
 	var path := "res://assets/audio/sfx/%s.wav" % sfx_name
 	var stream := _load_stream(path)
 	if stream == null:
@@ -97,6 +110,8 @@ func play_sfx(sfx_name: String, pitch_rand := false) -> void:
 
 
 func start_loop(sfx_name: String) -> void:
+	if _silent:
+		return
 	if loops.has(sfx_name) and is_instance_valid(loops[sfx_name]):
 		return
 	var path := _loop_path(sfx_name)
@@ -119,7 +134,10 @@ func stop_loop(sfx_name: String) -> void:
 	var player: AudioStreamPlayer = loops[sfx_name]
 	if is_instance_valid(player):
 		player.stop()
-		player.queue_free()
+		if player.stream is AudioStreamOggVorbis:
+			(player.stream as AudioStreamOggVorbis).loop = false
+		player.stream = null
+		player.free()
 	loops.erase(sfx_name)
 
 
@@ -127,6 +145,27 @@ func stop_all_loops() -> void:
 	bed_name = ""
 	for key in loops.keys():
 		stop_loop(key)
+
+
+func release_audio() -> void:
+	if _released:
+		return
+	_released = true
+	stop_all_loops()
+	var players: Array = []
+	for child in get_children():
+		if child is AudioStreamPlayer:
+			players.append(child)
+	for player in players:
+		var stream_player := player as AudioStreamPlayer
+		if stream_player.stream is AudioStreamOggVorbis:
+			(stream_player.stream as AudioStreamOggVorbis).loop = false
+		stream_player.stop()
+		stream_player.stream = null
+		if stream_player == music:
+			music = null
+		stream_player.free()
+	_streams.clear()
 
 
 func _preload_loops() -> void:
