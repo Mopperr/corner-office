@@ -370,6 +370,12 @@ static func _proc(kind: String) -> Node3D:
 	return root
 
 
+static func content_aabb(node: Node3D) -> AABB:
+	if node == null:
+		return AABB()
+	return _merged_aabb(node, Transform3D.IDENTITY)
+
+
 static func ensure_box_collision(root: Node3D) -> void:
 	if root == null or root.get_node_or_null("PropCollision") != null:
 		return
@@ -432,8 +438,9 @@ static func _transform_aabb(xform: Transform3D, box: AABB) -> AABB:
 
 static func add_picker(root: Node3D, size: Vector3) -> void:
 	var body := StaticBody3D.new()
-	body.collision_layer = LAYER_BLOCKING
-	body.collision_mask = LAYER_BLOCKING
+	body.name = "Picker"
+	body.collision_layer = LAYER_PICKABLE
+	body.collision_mask = 0
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = Vector3(maxf(size.x, 0.2), maxf(size.y, 0.15), maxf(size.z, 0.2))

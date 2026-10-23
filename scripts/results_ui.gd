@@ -15,6 +15,9 @@ func _ready() -> void:
 		"Base pay  $%d" % int(pay.get("base", 0)),
 		"Box tip  $%d" % int(pay.get("box_tip", 0)),
 	]
+	var room_score := float(pay.get("room_score", -1.0))
+	if room_score >= 0.0:
+		lines.append("Room setup %d/100 +$%d" % [int(round(room_score)), int(pay.get("room_tip", 0))])
 	if int(pay.get("shortcut", 0)) > 0:
 		lines.append("Shortcut  +$%d" % int(pay.get("shortcut", 0)))
 	if int(pay.get("bonuses", 0)) > 0:
@@ -41,6 +44,8 @@ func _ready() -> void:
 		stamps.append("Cat")
 	if bool(pay.get("duck", false)):
 		stamps.append("Duck Friend")
+	if float(pay.get("room_score", -1.0)) >= float(Tuning.get_value("stacking.room_complete", 90.0)):
+		stamps.append("ROOM COMPLETE")
 	if not stamps.is_empty():
 		var packed := PackedStringArray()
 		for stamp in stamps:
@@ -93,6 +98,7 @@ func _build() -> void:
 	title.size = Vector2(640, 48)
 	card.add_child(title)
 	var y := 78.0
+	var step := 34.0 if lines.size() > 9 else 40.0
 	for i in lines.size():
 		var row := UIKit.label(lines[i], 22, UIKit.DARK)
 		row.position = Vector2(32, y)
@@ -100,7 +106,7 @@ func _build() -> void:
 		row.modulate.a = 0.0
 		row.name = "Line%d" % i
 		card.add_child(row)
-		y += 40
+		y += step
 	var btn := UIKit.button("Back to the office", UIKit.SAGE)
 	btn.position = Vector2(200, 500)
 	btn.size = Vector2(280, 52)

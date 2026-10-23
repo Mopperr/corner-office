@@ -2,6 +2,9 @@ extends Node
 
 const PlaceLib = preload("res://scripts/placement.gd")
 const RoomLib = preload("res://scripts/diorama.gd")
+const SupportMath = preload("res://scripts/stacking/support.gd")
+const StackItemLib = preload("res://scripts/stacking/stack_item.gd")
+const StackRoomLib = preload("res://scripts/stacking/stack_room.gd")
 
 func _ready() -> void:
 	var failures: Array = []
@@ -318,6 +321,7 @@ func _ready() -> void:
 	failures.append_array(await _qa_regressions())
 	failures.append_array(await _review_fixes())
 	failures.append_array(_engine_choices())
+	failures.append_array(await _stack_world())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -622,8 +626,15 @@ func _qa_regressions() -> Array:
 		if absf(mounted.distance_to(Vector3(point["x"], point["y"], point["z"])) - 0.12) > 0.001:
 			found.append("wall offset %s" % mounted)
 			break
-		if bool(room.call("_inside", mounted.x, mounted.z, 0.25)):
+		var venue_now: Dictionary = room.get("venue")
+		var local := Vector2(mounted.x, mounted.z) - Vector2(float(venue_now.get("x", 0.0)), float(venue_now.get("z", 0.0)))
+		var room_size := Vector2(float(venue_now.get("w", 6.0)), float(venue_now.get("d", 8.0)))
+		var inset := minf(minf(local.x, room_size.x - local.x), minf(local.y, room_size.y - local.y))
+		if inset >= 0.25:
 			found.append("wall used room margin")
+			break
+		if not SupportMath.in_room(local, room_size):
+			found.append("wall outside room")
 			break
 	for item in GameState.office_items:
 		item["state"] = "placed"
@@ -790,9 +801,15 @@ func _review_fixes() -> Array:
 	var spot_pos: Vector3 = spot.get("pos", Vector3.ZERO)
 	if not bool(spot.get("valid", false)) or absf(spot_pos.y - 0.76) > 0.05:
 		found.append("desk top %s" % spot)
-	elif bool(room.call("_blocked", spot_pos, float(spot.get("rot", 0.0)), ItemDB.get_item("starter_mug"))):
-		found.append("desk blocked support")
-	if not bool(room.call("_blocked", Vector3(2.5, 0.0, 4.5), 0.0, ItemDB.get_item("starter_mug"))):
+	else:
+		var mug_def := ItemDB.get_item("starter_mug")
+		var foot := SupportMath.footprint(Vector2(spot_pos.x, spot_pos.z), Vector2(float(mug_def.get("w", 0.16)), float(mug_def.get("d", 0.14))), float(spot.get("rot", 0.0)))
+		var desk_top := {"id": "desk", "rect": SupportMath.footprint(Vector2(2.5, 4.5), Vector2(1.2, 0.7), 0.0), "top": 0.76, "level": 0}
+		var held_up: Dictionary = SupportMath.check(Vector2(spot_pos.x, spot_pos.z), foot, spot_pos.y, [desk_top])
+		if not bool(held_up.get("supported", false)):
+			found.append("desk support %s" % held_up)
+	var buried: Dictionary = room.call("_snap_point", Vector3(2.5, 0.0, 4.5))
+	if bool(buried.get("valid", false)):
 		found.append("desk should block a floor overlap")
 	_bury(room)
 	mug_rec = GameState.find_office_item("mug")
@@ -993,3 +1010,324 @@ func _engine_choices() -> Array:
 	if not (look is Vector3) or absf(look.x - 4.0) > 0.001:
 		found.append("loft look")
 	return found
+
+
+func _stack_world() -> Array:
+	var found: Array = []
+	found.append_array(_stack_math())
+	found.append_array(_stack_bodies())
+	found.append_array(await _stack_physics())
+	return found
+
+
+func _stack_math() -> Array:
+	var found: Array = []
+	var wide: Rect2 = SupportMath.footprint(Vector2.ZERO, Vector2(2, 1), 0)
+	var turned: Rect2 = SupportMath.footprint(Vector2.ZERO, Vector2(2, 1), 90)
+	var almost: Rect2 = SupportMath.footprint(Vector2.ZERO, Vector2(2, 1), 46)
+	var edge: Rect2 = SupportMath.footprint(Vector2.ZERO, Vector2(2, 1), 45)
+	if absf(wide.size.x - 2.0) > 0.001 or absf(wide.size.y - 1.0) > 0.001 or absf(turned.size.x - 1.0) > 0.001 or absf(turned.size.y - 2.0) > 0.001:
+		found.append("footprint swap")
+	if absf(almost.size.x - 1.0) > 0.001 or absf(edge.size.x - 2.0) > 0.001:
+		found.append("footprint band")
+	var low := {"id": "a", "rect": Rect2(0, 0, 1, 1), "top": 0.5, "level": 0}
+	var high := {"id": "b", "rect": Rect2(1.2, 0, 1, 1), "top": 0.5, "level": 1}
+	var span := Rect2(0, 0, 2.2, 1)
+	var bridged: Dictionary = SupportMath.check(Vector2(1.1, 0.5), span, 0.5, [low, high])
+	if not bool(bridged.get("supported", false)) or not bool(bridged.get("bridged", false)) or int(bridged.get("stack_level", 0)) != 2:
+		found.append("bridge %s" % bridged)
+	var outside: Dictionary = SupportMath.check(Vector2(2.0, 0.5), Rect2(0, 0, 1, 1), 0.5, [low])
+	if bool(outside.get("supported", false)):
+		found.append("single hull")
+	var inside: Dictionary = SupportMath.check(Vector2(0.5, 0.5), Rect2(0, 0, 1, 1), 0.5, [low])
+	if not bool(inside.get("supported", false)) or bool(inside.get("bridged", false)) or int(inside.get("stack_level", 0)) != 1:
+		found.append("patch %s" % inside)
+	var gapped: Dictionary = SupportMath.check(Vector2(0.5, 0.5), Rect2(0, 0, 1, 1), 0.6, [low])
+	if bool(gapped.get("supported", false)):
+		found.append("support gap")
+	if not SupportMath.wall_mount_ok(0.6) or not SupportMath.wall_mount_ok(2.6) or SupportMath.wall_mount_ok(0.59) or SupportMath.wall_mount_ok(0.0) or SupportMath.wall_mount_ok(2.61):
+		found.append("wall band")
+	var room_size := Vector2(6, 8)
+	if not SupportMath.in_room(Vector2(0.05, 0.05), room_size) or SupportMath.in_room(Vector2(0.04, 1.0), room_size) or not SupportMath.in_room(Vector2(5.95, 7.95), room_size):
+		found.append("room margin")
+	if SupportMath.tipped(Vector3.UP) or SupportMath.tipped(Vector3.UP.rotated(Vector3.RIGHT, deg_to_rad(19.0))):
+		found.append("tilt under")
+	if not SupportMath.tipped(Vector3.UP.rotated(Vector3.RIGHT, deg_to_rad(21.0))):
+		found.append("tilt over")
+	if absf(SupportMath.room_score(2, 1, 1, 2) - 75.0) > 0.001 or SupportMath.room_score(1, 1, 1, 0) != 0.0:
+		found.append("room score math")
+	if not SupportMath.near_hint(Vector2.ZERO, [Vector2(0.75, 0)]) or SupportMath.near_hint(Vector2.ZERO, [Vector2(0.76, 0)]):
+		found.append("near hint")
+	if absf(float(Tuning.get_value("stacking.support_gap", 0.0)) - 0.04) > 0.001 or absf(float(Tuning.get_value("stacking.friction", 0.0)) - 0.9) > 0.001:
+		found.append("tuning stacking")
+	var rich: Dictionary = GameState.compute_payout(120, 95, 20, 2, 0, false, 0, 100)
+	if int(rich.get("room_tip", 0)) != 12 or int(rich.get("total", 0)) != 200:
+		found.append("room tip 100 %s" % rich)
+	var plain: Dictionary = GameState.compute_payout(120, 95, 20, 2, 0, false, 0, -1)
+	if int(plain.get("total", 0)) != 188 or int(plain.get("room_tip", 0)) != 0:
+		found.append("room tip absent %s" % plain)
+	var floor_score: Dictionary = GameState.compute_payout(120, 95, 20, 2, 0, false, 0, 50)
+	if int(floor_score.get("room_tip", -1)) != 0 or int(floor_score.get("total", 0)) != 188:
+		found.append("room tip floor %s" % floor_score)
+	found.append_array(_stack_results_card(100, "Room setup 100/100 +$12", true))
+	found.append_array(_stack_results_card(89, "Room setup 89/100 +$9", false))
+	var mug := GameState.find_office_item("mug")
+	if not mug.is_empty():
+		mug["state"] = "settling"
+		SaveManager.save_game()
+		if str(GameState.find_office_item("mug").get("state", "")) != "placed":
+			found.append("save settling")
+	GameState.job = {"items": [
+		{"uid": "loose", "state": "loose"},
+		{"uid": "boxed", "state": "boxed"},
+		{"uid": "mid", "state": "settling"},
+		{"uid": "held", "state": "hand"},
+	], "boxes": []}
+	SaveManager.save_game()
+	var states := {}
+	for item in GameState.job.get("items", []):
+		states[str(item.get("uid", ""))] = str(item.get("state", ""))
+	if states.get("loose", "") != "loose" or states.get("boxed", "") != "boxed" or states.get("mid", "") != "placed" or states.get("held", "") != "placed":
+		found.append("save states %s" % states)
+	return found
+
+
+func _stack_results_card(score: int, line: String, stamp: bool) -> Array:
+	var found: Array = []
+	GameState.payout = GameState.compute_payout(120, 95, 0, 0, 0, false, 0, float(score))
+	GameState.payout["title"] = "Room"
+	GameState.payout["stars"] = 1
+	GameState.payout["all_fine"] = false
+	var card = load("res://scripts/results_ui.gd").new()
+	add_child(card)
+	var saw_line := false
+	var saw_stamp := false
+	for label in card.find_children("*", "Label", true, false):
+		if str(label.text) == line:
+			saw_line = true
+		if "ROOM COMPLETE" in str(label.text):
+			saw_stamp = true
+	if not saw_line or saw_stamp != stamp:
+		found.append("results %s line=%s stamp=%s" % [score, saw_line, saw_stamp])
+	_bury(card)
+	GameState.payout = {}
+	return found
+
+
+func _stack_bodies() -> Array:
+	var found: Array = []
+	var holder := Node3D.new()
+	add_child(holder)
+	Props.add_picker(holder, Vector3(0.4, 0.3, 0.4))
+	var picker := holder.get_node_or_null("Picker") as StaticBody3D
+	if picker == null or picker.collision_layer != Props.LAYER_PICKABLE or picker.collision_mask != 0:
+		found.append("picker layer")
+	_bury(holder)
+	var sticky := Props.make("proc:sticky")
+	if sticky.get_node_or_null("PropCollision") == null:
+		found.append("prop collision kept")
+	var wrapped = StackItemLib.new()
+	wrapped.setup("box", Vector3(0.2, 0.2, 0.2), sticky)
+	if sticky.get_node_or_null("PropCollision") != null or wrapped.get_node_or_null("Collider") == null:
+		found.append("wrapped collision")
+	var visual := Node3D.new()
+	visual.name = "Visual"
+	wrapped.add_child(visual)
+	var squashed = RoomLib._squash_target(wrapped)
+	if squashed == wrapped or squashed == null or str(squashed.name) != "Visual":
+		found.append("squash mesh")
+	wrapped.free()
+	var mug = StackItemLib.new()
+	mug.setup("mug", Vector3(0.16, 0.11, 0.14))
+	if not (mug.get_node("Collider").shape is CylinderShape3D):
+		found.append("cylinder mug")
+	mug.free()
+	var lamp = StackItemLib.new()
+	lamp.setup("desk_lamp", Vector3(0.2, 0.4, 0.2))
+	if not (lamp.get_node("Collider").shape is BoxShape3D):
+		found.append("desk lamp box")
+	lamp.free()
+	var fern = StackItemLib.new()
+	fern.setup("pot", Vector3(0.2, 0.3, 0.2), null, PackedStringArray(["plant_fern"]))
+	if not (fern.get_node("Collider").shape is CylinderShape3D):
+		found.append("cylinder plant")
+	fern.free()
+	var room = StackRoomLib.new()
+	room.configure(Vector2.ZERO, Vector2(6, 8))
+	room.add_floor()
+	add_child(room)
+	var mounted := {"n": Vector3(2.0, 1.5, 0.12), "w": Vector3(0.12, 1.5, 2.0), "e": Vector3(5.88, 1.5, 2.0)}
+	var yaws := {"n": 0.0, "w": 90.0, "e": -90.0}
+	for side in ["n", "w", "e"]:
+		var frame = StackItemLib.new()
+		frame.setup("frame", Vector3(0.4, 0.3, 0.08))
+		if not room.mount("pic_%s" % side, 2.0, 1.5, side, frame):
+			found.append("mount %s" % side)
+			frame.free()
+			continue
+		var want: Vector3 = mounted[side]
+		if frame.global_position.distance_to(want) > 0.02:
+			found.append("mount pos %s %s" % [side, frame.global_position])
+		if absf(wrapf(rad_to_deg(frame.rotation.y) - float(yaws[side]), -180.0, 180.0)) > 0.2:
+			found.append("mount yaw %s %s" % [side, rad_to_deg(frame.rotation.y)])
+		if not frame.freeze:
+			found.append("mount freeze %s" % side)
+	var low = StackItemLib.new()
+	low.setup("frame", Vector3(0.2, 0.2, 0.05))
+	if room.mount("low", 2.0, 0.2, "n", low):
+		found.append("low mount")
+	else:
+		low.free()
+	if str(room.nearest_wall(Vector3(0.4, 1.2, 3.0))) != "w" or str(room.nearest_wall(Vector3(3.0, 1.2, 4.0))) != "":
+		found.append("nearest wall")
+	for i in 3:
+		var tier = StackItemLib.new()
+		tier.setup("crate", Vector3(0.4, 0.3, 0.4))
+		tier.item_id = "tier%d" % i
+		room.adopt(tier)
+		tier.spawn_frozen(Vector3(2, 0.3 * i, 3), 0)
+		room.results[tier.item_id] = {"supported": true}
+	var saved: Dictionary = room.items.duplicate()
+	room.items = {"tier0": saved["tier0"], "tier1": saved["tier1"], "tier2": saved["tier2"]}
+	if absf(float(room.score()) - 100.0) > 0.01:
+		found.append("scored stack %s" % room.score())
+	room.items = saved
+	room.wake("tier0")
+	for tier_id in ["tier0", "tier1", "tier2"]:
+		if bool(room.items[tier_id].freeze):
+			found.append("wake %s" % tier_id)
+	var floater = StackItemLib.new()
+	floater.setup("crate", Vector3(0.3, 0.3, 0.3))
+	floater.item_id = "float"
+	room.adopt(floater)
+	floater.spawn_frozen(Vector3(4, 1.5, 3), 0)
+	floater.note_safe(Vector3(4, 0, 3), 0)
+	room.resolve_settled(floater)
+	if floater.global_position.distance_to(Vector3(4, 0, 3)) > 0.05 or not bool(room.results["float"].get("reset", false)):
+		found.append("gentle reset %s" % floater.global_position)
+	var lean = StackItemLib.new()
+	lean.setup("crate", Vector3(0.3, 0.3, 0.3))
+	lean.item_id = "lean"
+	room.adopt(lean)
+	lean.spawn_frozen(Vector3(4, 0, 5), 0)
+	lean.rotation = Vector3(deg_to_rad(35), 0, 0)
+	lean.note_safe(Vector3(4, 0, 5), 0)
+	room.resolve_settled(lean)
+	if not bool(lean.live_drop):
+		found.append("retip")
+	lean.halt()
+	room.snap_assist = true
+	var snap = StackItemLib.new()
+	snap.setup("box", Vector3(0.2, 0.2, 0.2))
+	room.place("snap", Vector3(1.12, 0.4, 2.08), deg_to_rad(10.0), snap)
+	if absf(snap.global_position.x - snapped(1.12, 0.25)) > 0.001 or absf(snap.global_position.z - snapped(2.08, 0.25)) > 0.001:
+		found.append("snap grid %s" % snap.global_position)
+	if absf(rad_to_deg(snap.rotation.y) - snapped(10.0, 15.0)) > 0.05:
+		found.append("snap yaw %s" % rad_to_deg(snap.rotation.y))
+	snap.halt()
+	room.shutdown()
+	_bury(room)
+	return found
+
+
+func _stack_physics() -> Array:
+	var found: Array = []
+	var capped := Engine.max_fps
+	Engine.max_fps = 60
+	var room = StackRoomLib.new()
+	room.configure(Vector2.ZERO, Vector2(6, 8))
+	room.add_floor()
+	room.add_block(Vector3(2.0, 0.38, 3.0), Vector3(1.2, 0.76, 0.7))
+	room.add_furniture("desk", Vector2(2.0, 3.0), Vector2(1.2, 0.7), 0.76, 0.0, 0)
+	room.add_block(Vector3(4.2, 1.06, 5.5), Vector3(0.9, 0.08, 0.4))
+	room.add_furniture("shelf", Vector2(4.2, 5.5), Vector2(0.9, 0.4), 1.10, 0.0, 0)
+	room.add_block(Vector3(1.5, 0.125, 6.4), Vector3(1.0, 0.25, 0.6))
+	room.add_furniture("ledge", Vector2(1.5, 6.4), Vector2(1.0, 0.6), 0.25, 0.0, 0)
+	add_child(room)
+	var desk = StackItemLib.new()
+	desk.setup("crate", Vector3(0.28, 0.28, 0.28))
+	desk.item_id = "on_desk"
+	desk.note_safe(Vector3(2, 0, 3), 0)
+	room.adopt(desk)
+	desk.drop_at(Vector3(2, 0.77, 3), 0)
+	if not await _wait_eval(room, "on_desk", 32):
+		found.append("desk settle")
+	else:
+		var desk_result: Dictionary = room.results["on_desk"]
+		if not bool(desk_result.get("supported", false)) or int(desk_result.get("stack_level", 0)) != 1 or absf(desk.rest_bottom() - 0.76) > 0.06:
+			found.append("desk rest %s %s" % [desk.rest_bottom(), desk_result])
+	var upper = StackItemLib.new()
+	upper.setup("crate", Vector3(0.24, 0.24, 0.24))
+	upper.item_id = "on_box"
+	upper.note_safe(Vector3(2, 0, 3), 0)
+	room.adopt(upper)
+	upper.drop_at(Vector3(2, desk.rest_bottom() + desk.size.y + 0.01, 3), 0)
+	if not await _wait_eval(room, "on_box", 32):
+		found.append("stack settle")
+	else:
+		var pile: Dictionary = room.results["on_box"]
+		if not bool(pile.get("supported", false)) or int(pile.get("stack_level", 0)) != 2:
+			found.append("stack level %s" % pile)
+	var shelf_item = StackItemLib.new()
+	shelf_item.setup("crate", Vector3(0.22, 0.18, 0.22))
+	shelf_item.item_id = "on_shelf"
+	shelf_item.note_safe(Vector3(4.2, 0, 5.5), 0)
+	room.adopt(shelf_item)
+	shelf_item.drop_at(Vector3(4.2, 1.12, 5.5), 0)
+	if not await _wait_eval(room, "on_shelf", 32):
+		found.append("shelf settle")
+	else:
+		var shelf_result: Dictionary = room.results["on_shelf"]
+		if not bool(shelf_result.get("supported", false)) or str(shelf_result.get("support_id", "")) != "shelf" or absf(shelf_item.rest_bottom() - 1.10) > 0.06:
+			found.append("shelf rest %s %s" % [shelf_item.rest_bottom(), shelf_result])
+	var hang = StackItemLib.new()
+	hang.setup("crate", Vector3(0.4, 0.2, 0.3))
+	hang.item_id = "over"
+	var over_at := Vector2(2.16, 6.4)
+	var overhang: Dictionary = SupportMath.check(over_at, SupportMath.footprint(over_at, Vector2(0.4, 0.3), 0), 0.28, room.surfaces)
+	if bool(overhang.get("supported", false)):
+		found.append("overhang math %s" % overhang)
+	hang.note_safe(Vector3(3.4, 0.02, 6.4), 0)
+	room.adopt(hang)
+	# The pose above is unsupported. Release the body just past the ledge so it falls to the floor.
+	hang.drop_at(Vector3(2.4, 0.08, over_at.y), 0)
+	if not await _wait_eval(room, "over", 28):
+		found.append("overhang settle %s" % hang.global_position)
+	elif hang.global_position.y > 0.1 and hang.global_position.distance_to(Vector3(3.4, 0.02, 6.4)) > 0.3:
+		found.append("overhang stayed %s" % hang.global_position)
+	var lost = StackItemLib.new()
+	lost.setup("crate", Vector3(0.2, 0.2, 0.2))
+	lost.item_id = "lost"
+	lost.note_safe(Vector3(3.0, 0.05, 2.0), 0)
+	room.adopt(lost)
+	lost.drop_at(Vector3(-1.2, 0.4, 2.0), 0)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	if lost.global_position.x < 1.0:
+		found.append("out of room %s" % lost.global_position)
+	lost.halt()
+	await get_tree().process_frame
+	room.shutdown()
+	_bury(room)
+	Engine.max_fps = capped
+	return found
+
+
+func _wait_eval(room, id: String, limit: int) -> bool:
+	var hit := {"id": ""}
+	var cb := func(got_id: String, _result: Dictionary) -> void:
+		if got_id == id:
+			hit["id"] = got_id
+	room.item_evaluated.connect(cb)
+	var ok := false
+	for _i in limit:
+		await get_tree().physics_frame
+		if str(hit["id"]) == id:
+			ok = true
+			break
+	if not ok:
+		await get_tree().process_frame
+		ok = str(hit["id"]) == id
+	if room.item_evaluated.is_connected(cb):
+		room.item_evaluated.disconnect(cb)
+	return ok

@@ -126,16 +126,22 @@ func _credit_net(profit: int) -> void:
 
 
 func restore_held_items() -> void:
-	var changed := false
+	var hands := false
 	for rec in office_items:
-		if str(rec.get("state", "")) == "hand":
+		var state := str(rec.get("state", ""))
+		if state == "hand" or state == "settling":
+			if state == "hand":
+				hands = true
 			rec["state"] = "placed"
-			changed = true
 	for item in job.get("items", []):
-		if typeof(item) == TYPE_DICTIONARY and str(item.get("state", "")) == "hand":
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+		var state := str(item.get("state", ""))
+		if state == "hand" or state == "settling":
+			if state == "hand":
+				hands = true
 			item["state"] = "placed"
-			changed = true
-	if changed:
+	if hands:
 		emit_signal("held_cleared")
 
 
@@ -705,22 +711,30 @@ func _find_repair_target(uid: String) -> Dictionary:
 	return {}
 
 
-func compute_payout(base: int, condition: int, bonuses: int, scuffed: int, chipped: int, alley: bool, split_count: int) -> Dictionary:
+func compute_payout(base: int, condition: int, bonuses: int, scuffed: int, chipped: int, alley: bool, split_count: int, room_score: float = -1.0) -> Dictionary:
 	var ratio := Tuning.tip_ratio(condition)
 	var box_tip := int(round(float(base) * ratio))
 	var shortcut := 0
 	if alley:
 		shortcut = int(round(float(base) * float(Tuning.get_value("pay.alley_tip_bonus", 0.10))))
+	var room_tip := 0
+	if room_score >= 0.0:
+		var floor_score := float(Tuning.get_value("stacking.room_tip_score_floor", 50.0))
+		var tip_ratio := float(Tuning.get_value("stacking.room_tip_ratio", 0.10))
+		var span := clampf((room_score - floor_score) / 50.0, 0.0, 1.0)
+		room_tip = int(round(float(base) * tip_ratio * span))
 	var split_loss := split_count * int(Tuning.get_value("pay.split_set_tip_loss", 8))
-	var tips := maxi(0, box_tip + bonuses - split_loss)
+	var tips := maxi(0, box_tip + bonuses + room_tip - split_loss)
 	var cut := Tuning.damage_cut(base, scuffed, chipped, tips)
 	var net := tips - cut
 	return {
 		"base": base,
 		"box_tip": box_tip,
+		"room_tip": room_tip,
+		"room_score": room_score,
 		"shortcut": shortcut,
 		"bonuses": bonuses,
-		"split_loss": mini(split_loss, box_tip + bonuses),
+		"split_loss": mini(split_loss, box_tip + bonuses + room_tip),
 		"cut": cut,
 		"net_tips": net,
 		"total": base + net + shortcut,
@@ -751,7 +765,8 @@ func finish_job() -> Dictionary:
 			chipped += 1
 			all_fine = false
 	var splits: Array = split_sets()
-	payout = compute_payout(base, int(job.get("condition", 100)), bonuses, scuffed, chipped, bool(job.get("alley", false)), splits.size())
+	var room_score := float(job.get("room_score", -1.0))
+	payout = compute_payout(base, int(job.get("condition", 100)), bonuses, scuffed, chipped, bool(job.get("alley", false)), splits.size(), room_score)
 	payout["all_fine"] = all_fine
 	payout["cat"] = bool(job.get("cat_opened", false))
 	payout["duck"] = bool(job.get("duck_friend", false))

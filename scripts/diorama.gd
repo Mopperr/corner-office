@@ -2,6 +2,9 @@ extends Node3D
 
 const PlaceLib = preload("res://scripts/placement.gd")
 const MenuLayout = preload("res://scripts/menu_layout.gd")
+const SupportMath = preload("res://scripts/stacking/support.gd")
+const StackItemLib = preload("res://scripts/stacking/stack_item.gd")
+const StackRoomLib = preload("res://scripts/stacking/stack_room.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -55,6 +58,8 @@ var show_basis := Basis.IDENTITY
 var show_ready := false
 var drift_t := 0.0
 var settling := false
+var stack_room
+var _settle_uid := ""
 
 
 func _ready() -> void:
@@ -178,6 +183,7 @@ func _build_venue() -> void:
 		_build_truck_stage()
 		return
 	_build_shell()
+	_ensure_stack_room()
 	_frame_camera()
 	_dress()
 
@@ -956,6 +962,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _toggle_snap() -> void:
 	SaveManager.snap_to_grid = not SaveManager.snap_to_grid
+	if stack_room:
+		stack_room.snap_assist = SaveManager.snap_to_grid
 	SaveManager.save_settings()
 	_toast("Grid snap on." if SaveManager.snap_to_grid else "Free placement.")
 	_refresh_hud_buttons()
@@ -1085,12 +1093,7 @@ func _office_click(uid: String) -> void:
 			rec2["drawer_open"] = not bool(rec2.get("drawer_open", false))
 			AudioDirector.play_sfx("sfx_drawer_open" if rec2["drawer_open"] else "sfx_drawer_close")
 			return
-		held_uid = uid
-		held_source = "office"
-		held_rot = float(rec2.get("rot", 0))
-		rec2["state"] = "hand"
-		AudioDirector.play_sfx("sfx_item_pick_up")
-		_refresh_items()
+		_take_to_hand(rec2, "office")
 		return
 	_try_place_held()
 
@@ -1113,85 +1116,138 @@ func _try_place_held() -> void:
 		AudioDirector.play_sfx("sfx_invalid_placement")
 		_shake(ghost if ghost else self)
 		return
-	settling = true
 	var source := held_source
 	var uid := held_uid
 	var on_wall := str(spot.get("wall", "")) != ""
 	if source == "decor":
 		GameState.place_decor_from_queue(spot, uid)
+		var decor := GameState.find_office_item(uid)
+		if not decor.is_empty() and not on_wall:
+			decor["state"] = "settling"
 		AudioDirector.play_sfx("sfx_item_snap", true)
 		held_uid = ""
 		held_source = ""
-		if on_wall:
-			_refresh_items()
-			_squash_last()
-		else:
-			await _settle_uid(uid)
-			_squash_uid(uid)
-		settling = false
-		SaveManager.save_game()
+		_commit_place(uid, source, on_wall)
 		return
 	var rec := GameState.find_office_item(uid) if source == "office" else GameState.job_item(uid)
 	if rec.is_empty():
 		held_uid = ""
 		held_source = ""
-		settling = false
 		return
+	_remember_safe(rec)
 	rec["x"] = spot["pos"].x
 	rec["y"] = spot["pos"].y
 	rec["z"] = spot["pos"].z
 	rec["rot"] = spot["rot"]
 	rec["wall"] = spot.get("wall", "")
-	rec["state"] = "placed"
-	rec["settle"] = not on_wall
+	rec["state"] = "placed" if on_wall else "settling"
+	rec["settle"] = false
 	if source == "office":
 		GameState.note_first_place()
 	AudioDirector.play_sfx("sfx_item_snap", true)
 	AudioDirector.play_sfx("sfx_box_set_down", true)
 	held_uid = ""
 	held_source = ""
+	_commit_place(uid, source, on_wall)
+
+
+func _commit_place(uid: String, source: String, on_wall: bool) -> void:
+	if stack_room:
+		stack_room.snap_assist = SaveManager.snap_to_grid
 	if on_wall:
 		_refresh_items()
 		_squash_uid(uid)
-	else:
-		await _settle_uid(uid)
-		_squash_uid(uid)
-	if source == "office":
-		_maybe_live()
-	else:
-		_maybe_job_done()
-	settling = false
-	SaveManager.save_game()
-
-
-func _settle_uid(uid: String) -> void:
+		_after_place(source)
+		settling = false
+		SaveManager.save_game()
+		return
+	settling = true
+	_settle_uid = uid
 	_refresh_items()
-	var body := nodes_by_uid.get(uid, null) as RigidBody3D
-	if body == null:
+
+
+func _after_place(source: String) -> void:
+	if source == "office" or source == "decor":
+		_maybe_live()
+	elif source == "job":
+		_maybe_job_done()
+
+
+func _take_to_hand(rec: Dictionary, source: String) -> void:
+	var uid := str(rec.get("uid", ""))
+	_release_dependents(uid)
+	held_uid = uid
+	held_source = source
+	held_rot = float(rec.get("rot", 0))
+	rec["state"] = "hand"
+	AudioDirector.play_sfx("sfx_item_pick_up")
+	_refresh_items()
+
+
+func _release_dependents(uid: String) -> void:
+	if stack_room == null:
 		return
-	var calm := 0
-	for i in 90:
-		if not is_inside_tree():
-			return
-		await get_tree().physics_frame
-		if not is_instance_valid(body) or body.freeze:
-			return
-		var speed := body.linear_velocity.length()
-		if (body.sleeping or speed < 0.05) and i > 5:
-			calm += 1
-			if calm >= 3:
-				break
-		else:
-			calm = 0
-	if not is_instance_valid(body):
+	var deps: Array = stack_room.release(uid)
+	for dep_id in deps:
+		var dep := _record_for(str(dep_id))
+		if dep.is_empty():
+			continue
+		var node: Node = nodes_by_uid.get(str(dep_id))
+		if _is_stack_item(node):
+			var body := node as Node3D
+			dep["x"] = body.global_position.x
+			dep["y"] = body.global_position.y
+			dep["z"] = body.global_position.z
+			dep["rot"] = fposmod(rad_to_deg(body.rotation.y), 360.0)
+			if bool(node.get("safe_ready")):
+				var safe: Vector3 = node.get("safe_spot")
+				dep["safe_x"] = safe.x
+				dep["safe_y"] = safe.y
+				dep["safe_z"] = safe.z
+				dep["safe_rot"] = rad_to_deg(float(node.get("safe_yaw")))
+		dep["state"] = "settling"
+
+
+func _remember_safe(rec: Dictionary) -> void:
+	var px := float(rec.get("x", 0.0))
+	var pz := float(rec.get("z", 0.0))
+	if not _in_room_world(px, pz):
 		return
-	PlaceLib.finish_settle(body)
-	var rec := _record_for(uid)
-	if not rec.is_empty():
-		rec["x"] = body.position.x
-		rec["y"] = body.position.y
-		rec["z"] = body.position.z
+	rec["safe_x"] = px
+	rec["safe_y"] = float(rec.get("y", 0.0))
+	rec["safe_z"] = pz
+	rec["safe_rot"] = float(rec.get("rot", 0.0))
+
+
+func _on_item_evaluated(id: String, result: Dictionary) -> void:
+	var rec := _record_for(id)
+	var node: Node = nodes_by_uid.get(id)
+	if not rec.is_empty() and _is_stack_item(node) and is_instance_valid(node):
+		var body := node as Node3D
+		rec["x"] = body.global_position.x
+		rec["y"] = body.global_position.y
+		rec["z"] = body.global_position.z
+		rec["rot"] = fposmod(rad_to_deg(body.rotation.y), 360.0)
+		rec["state"] = "placed"
+		rec["stack_level"] = int(result.get("stack_level", 0))
 		rec["settle"] = false
+		if bool(node.get("safe_ready")):
+			var safe: Vector3 = node.get("safe_spot")
+			rec["safe_x"] = safe.x
+			rec["safe_y"] = safe.y
+			rec["safe_z"] = safe.z
+			rec["safe_rot"] = rad_to_deg(float(node.get("safe_yaw")))
+	_squash_uid(id)
+	if GameState.mode == "job_unpack":
+		if stack_room:
+			GameState.job["room_score"] = stack_room.score()
+		_maybe_job_done()
+	elif GameState.mode == "office":
+		_maybe_live()
+	if id == _settle_uid:
+		settling = false
+		_settle_uid = ""
+	SaveManager.save_game()
 
 
 func _record_for(uid: String) -> Dictionary:
@@ -1276,12 +1332,7 @@ func _unpack_click(uid: String) -> void:
 			_toast("Carry that box in from the truck first.")
 			return
 		if str(item.get("state", "")) == "placed":
-			held_uid = uid
-			held_source = "job"
-			held_rot = float(item.get("rot", 0))
-			item["state"] = "hand"
-			AudioDirector.play_sfx("sfx_item_pick_up")
-			_refresh_items()
+			_take_to_hand(item, "job")
 			return
 		if str(item.get("state", "")) == "boxed":
 			item["state"] = "loose"
@@ -1331,7 +1382,7 @@ func _snap_point(hit: Vector3) -> Dictionary:
 		var normal: Vector3 = point["normal"]
 		pos = Vector3(point["x"], point["y"], point["z"]) + normal * offset
 		# Floor placement uses the 0.25 m room margin. Wall mounts sit on that boundary, so the margin does not apply.
-		var valid := _inside(pos.x, pos.z, 0.0) and not _blocked(pos, rot, def) and not _too_tall(pos, def)
+		var valid := _in_room_world(pos.x, pos.z) and not _too_tall(pos, def)
 		return {"valid": valid, "pos": pos, "rot": rot, "wall": mount}
 	var records: Array = GameState.office_items if held_source != "job" else GameState.job.get("items", [])
 	var others: Array = []
@@ -1348,7 +1399,7 @@ func _snap_point(hit: Vector3) -> Dictionary:
 		extra.append(Rect2(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"])))
 	var spot := PlaceLib.resolve(hit.x, hit.z, hit.y, rot, def, others, room, SaveManager.snap_to_grid, extra)
 	var placed: Vector3 = spot["pos"]
-	spot["valid"] = bool(spot["valid"]) and _inside(placed.x, placed.z, 0.25) and not _too_tall(placed, def) and not _blocked(placed, float(spot.get("rot", rot)), def)
+	spot["valid"] = bool(spot["valid"]) and _in_room_world(placed.x, placed.z) and not _too_tall(placed, def)
 	return spot
 
 
@@ -1381,18 +1432,34 @@ func _wall_points() -> Array:
 	return points
 
 
-func _inside(px: float, pz: float, margin: float) -> bool:
-	var x := float(venue.get("x", 0))
-	var z := float(venue.get("z", 0))
-	var w := float(venue.get("w", 6))
-	var d := float(venue.get("d", 8))
-	if px >= x + margin and px <= x + w - margin and pz >= z + margin and pz <= z + d - margin:
+func _in_room_world(px: float, pz: float) -> bool:
+	var origin := Vector2(float(venue.get("x", 0)), float(venue.get("z", 0)))
+	var size := Vector2(float(venue.get("w", 6)), float(venue.get("d", 8)))
+	if SupportMath.in_room(Vector2(px, pz) - origin, size):
 		return true
 	if venue.has("nook"):
 		var nook: Dictionary = venue["nook"]
-		if px >= float(nook["x"]) + margin and px <= float(nook["x"]) + float(nook["w"]) - margin and pz >= float(nook["z"]) + margin and pz <= float(nook["z"]) + float(nook["d"]) - margin:
+		var nook_origin := Vector2(float(nook["x"]), float(nook["z"]))
+		var nook_size := Vector2(float(nook["w"]), float(nook["d"]))
+		if SupportMath.in_room(Vector2(px, pz) - nook_origin, nook_size):
 			return true
 	return false
+
+
+func _ensure_stack_room() -> void:
+	if backdrop or stack_room != null:
+		return
+	stack_room = StackRoomLib.new()
+	stack_room.name = "StackRoom"
+	add_child(stack_room)
+	var extras: Array = []
+	if venue.has("nook"):
+		var nook: Dictionary = venue["nook"]
+		extras.append(Rect2(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"])))
+	stack_room.configure(Vector2(float(venue.get("x", 0)), float(venue.get("z", 0))), Vector2(float(venue.get("w", 6)), float(venue.get("d", 8))), extras)
+	stack_room.snap_assist = SaveManager.snap_to_grid
+	if not stack_room.item_evaluated.is_connected(_on_item_evaluated):
+		stack_room.item_evaluated.connect(_on_item_evaluated)
 
 
 func _too_tall(pos: Vector3, def: Dictionary) -> bool:
@@ -1401,55 +1468,6 @@ func _too_tall(pos: Vector3, def: Dictionary) -> bool:
 	var nook: Dictionary = venue["nook"]
 	var inside := pos.x >= float(nook["x"]) and pos.x <= float(nook["x"]) + float(nook["w"]) and pos.z >= float(nook["z"]) and pos.z <= float(nook["z"]) + float(nook["d"])
 	return inside and float(def.get("h", 0)) > float(nook.get("max_h", 1.5))
-
-
-func _blocked(pos: Vector3, rot: float, def: Dictionary) -> bool:
-	var mine := _footprint(pos, rot, def)
-	var bottom := pos.y
-	var top := bottom + float(def.get("h", 0.3))
-	var records: Array = GameState.office_items if held_source != "job" else GameState.job.get("items", [])
-	for rec in records:
-		if str(rec.get("uid", "")) == held_uid:
-			continue
-		if str(rec.get("state", "")) != "placed":
-			continue
-		var other_def := ItemDB.get_item(str(rec.get("item", rec.get("item_id", ""))))
-		var other := _footprint(Vector3(float(rec.get("x", 0)), 0, float(rec.get("z", 0))), float(rec.get("rot", 0)), other_def)
-		if not mine.intersects(other, true):
-			continue
-		var other_y := float(rec.get("y", 0.0))
-		var surface := float(other_def.get("surface", 0.0))
-		var solid_h := float(other_def.get("h", 0.3))
-		if surface > 0.0:
-			solid_h = surface
-		var solid_top := other_y + solid_h
-		if surface > 0.0 and bottom >= solid_top - 0.05:
-			continue
-		var overlap := minf(top, solid_top) - maxf(bottom, other_y)
-		if overlap > 0.03:
-			return true
-	return false
-
-
-func _footprint(pos: Vector3, rot: float, def: Dictionary) -> Rect2:
-	var w := float(def.get("w", 0.4))
-	var d := float(def.get("d", 0.4))
-	var rad := deg_to_rad(rot)
-	var hw := w * 0.5
-	var hd := d * 0.5
-	var corners: Array[Vector2] = [
-		Vector2(-hw, -hd), Vector2(hw, -hd), Vector2(hw, hd), Vector2(-hw, hd)
-	]
-	var min_v := Vector2(9999, 9999)
-	var max_v := Vector2(-9999, -9999)
-	for corner in corners:
-		var turned := Vector2(corner.x * cos(rad) - corner.y * sin(rad), corner.x * sin(rad) + corner.y * cos(rad))
-		var world := Vector2(pos.x, pos.z) + turned
-		min_v.x = minf(min_v.x, world.x)
-		min_v.y = minf(min_v.y, world.y)
-		max_v.x = maxf(max_v.x, world.x)
-		max_v.y = maxf(max_v.y, world.y)
-	return Rect2(min_v, max_v - min_v)
 
 
 func _held_def() -> Dictionary:
@@ -1488,8 +1506,11 @@ func _restore_held_record() -> void:
 
 
 func _refresh_items() -> void:
-	for child in items_root.get_children():
-		child.queue_free()
+	if stack_room:
+		stack_room.prepare_refresh()
+	var old: Array = items_root.get_children()
+	for child in old:
+		child.free()
 	nodes_by_uid.clear()
 	if GameState.mode == "office":
 		_spawn_office()
@@ -1502,9 +1523,13 @@ func _refresh_items() -> void:
 		_spawn_truck_slots()
 	elif GameState.mode == "job_unpack":
 		for item in GameState.job.get("items", []):
-			if str(item.get("state", "")) == "loose" or str(item.get("state", "")) == "placed":
+			var job_state := str(item.get("state", ""))
+			if job_state == "loose" or job_state == "placed" or job_state == "settling":
 				_spawn_record(item, str(item.get("item_id", "")), int(item.get("damage", 0)) > 0)
 		_spawn_carry_boxes()
+	if stack_room:
+		stack_room.evaluate_frozen()
+		stack_room.flush_drops()
 
 
 func _layout_loose() -> void:
@@ -1523,7 +1548,8 @@ func _spawn_office() -> void:
 	for rec in GameState.office_items:
 		if str(rec.get("uid", "")) == held_uid:
 			continue
-		if str(rec.get("state", "")) == "placed":
+		var office_state := str(rec.get("state", ""))
+		if office_state == "placed" or office_state == "settling":
 			_spawn_record(rec, str(rec.get("item", "")), int(rec.get("damage", 0)) > 0)
 		elif str(rec.get("state", "")) == "boxed":
 			var box := Node3D.new()
@@ -1538,40 +1564,83 @@ func _spawn_office() -> void:
 
 func _spawn_record(rec: Dictionary, item_id: String, cracked: bool) -> void:
 	var def := ItemDB.get_item(item_id)
-	var mount := str(def.get("mount", "floor"))
-	var wall := str(rec.get("wall", ""))
-	var placed := str(rec.get("state", "")) == "placed"
-	var physical := not backdrop and placed and wall == "" and mount != "hang" and mount != "wall_floor"
+	var state := str(rec.get("state", ""))
+	var placed := state == "placed" or state == "settling"
+	var use_stack := not backdrop and placed and stack_room != null
 	var root: Node3D
-	if physical:
-		var size := Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4)))
-		var at := Vector3(float(rec.get("x", 0)), float(rec.get("y", 0)), float(rec.get("z", 0)))
-		root = PlaceLib.make_body(size, at, float(rec.get("rot", 0)), bool(rec.get("settle", false)))
+	if use_stack:
+		root = _spawn_stack_item(rec, item_id, def, state)
+		if cracked:
+			var crack := Props.mesh_box(Vector3(0.08, 0.08, 0.08), UIKit.LOSS)
+			crack.position = Vector3(0, float(def.get("h", 0.4)) + 0.08, 0)
+			root.add_child(crack)
 	else:
 		root = Node3D.new()
 		root.position = Vector3(float(rec.get("x", 0)), float(rec.get("y", 0)), float(rec.get("z", 0)))
 		root.rotation.y = deg_to_rad(float(rec.get("rot", 0)))
-	root.set_meta("uid", rec.get("uid", ""))
+		root.set_meta("uid", rec.get("uid", ""))
+		var loose_visual := Props.make(str(def.get("model", "box_closed")))
+		root.add_child(loose_visual)
+		if bool(def.get("light", false)):
+			Props.attach_lamp_light(loose_visual)
+		if str(def.get("animate", "")) != "":
+			Props.play_clip(loose_visual, str(def.get("animate", "")), true)
+		if str(item_id) == "train_reward" or str(def.get("model", "")) == "train_layout_board":
+			Props.play_clip(loose_visual, "loop", true)
+		Props.add_picker(root, Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4))))
+		if cracked:
+			var loose_crack := Props.mesh_box(Vector3(0.08, 0.08, 0.08), UIKit.LOSS)
+			loose_crack.position = Vector3(0, float(def.get("h", 0.4)) + 0.08, 0)
+			root.add_child(loose_crack)
+		items_root.add_child(root)
+	nodes_by_uid[str(rec.get("uid", ""))] = root
+
+
+func _is_stack_item(node: Node) -> bool:
+	return node != null and node.get_script() == StackItemLib
+
+
+func _spawn_stack_item(rec: Dictionary, item_id: String, def: Dictionary, state: String):
 	var visual := Props.make(str(def.get("model", "box_closed")))
-	if physical:
-		var collision := visual.get_node_or_null("PropCollision")
-		if collision:
-			collision.free()
-	root.add_child(visual)
+	var item = StackItemLib.new()
+	var aliases := PackedStringArray([item_id, str(def.get("model", "")), str(def.get("name", "")), str(rec.get("item", ""))])
+	item.item_id = str(rec.get("uid", ""))
+	item.furniture = _furniture_name(aliases)
+	item.setup(item_id, Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4))), visual, aliases)
+	item.set_meta("uid", rec.get("uid", ""))
 	if bool(def.get("light", false)):
 		Props.attach_lamp_light(visual)
 	if str(def.get("animate", "")) != "":
 		Props.play_clip(visual, str(def.get("animate", "")), true)
 	if str(item_id) == "train_reward" or str(def.get("model", "")) == "train_layout_board":
 		Props.play_clip(visual, "loop", true)
-	if not physical:
-		Props.add_picker(root, Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4))))
-	if cracked:
-		var crack := Props.mesh_box(Vector3(0.08, 0.08, 0.08), UIKit.LOSS)
-		crack.position = Vector3(0, float(def.get("h", 0.4)) + 0.08, 0)
-		root.add_child(crack)
-	items_root.add_child(root)
-	nodes_by_uid[str(rec.get("uid", ""))] = root
+	var pos := Vector3(float(rec.get("x", 0)), float(rec.get("y", 0)), float(rec.get("z", 0)))
+	var yaw := deg_to_rad(float(rec.get("rot", 0)))
+	if rec.has("safe_x"):
+		item.note_safe(Vector3(float(rec["safe_x"]), float(rec.get("safe_y", 0.0)), float(rec.get("safe_z", 0.0))), deg_to_rad(float(rec.get("safe_rot", 0.0))))
+	items_root.add_child(item)
+	stack_room.adopt(item)
+	var wall := str(rec.get("wall", ""))
+	if state == "settling" and wall == "":
+		stack_room.queue_drop(item, pos, yaw)
+	else:
+		if wall != "":
+			item.side = wall
+		item.spawn_frozen(pos, yaw)
+		if wall != "":
+			stack_room.results[item.item_id] = {"supported": true, "stack_level": 1, "in_room": true, "wall": wall, "mounted": true, "reset": false}
+		if item.furniture:
+			var top: float = item.rest_bottom() + item.size.y
+			stack_room.add_furniture(item.item_id, Vector2(pos.x, pos.z), Vector2(item.size.x, item.size.z), top, float(rec.get("rot", 0.0)), 0)
+	return item
+
+
+func _furniture_name(tokens: PackedStringArray) -> bool:
+	for token in tokens:
+		var text := str(token).to_lower()
+		if "desk" in text or "shelf" in text or "counter" in text:
+			return true
+	return false
 
 
 func _spawn_truck_slots() -> void:
@@ -2269,18 +2338,30 @@ static func ghost_material(base: Material, valid: bool) -> StandardMaterial3D:
 	return dup
 
 
-func _squash(node: Node3D) -> void:
+static func _squash_target(node: Node3D) -> Node3D:
 	if node == null:
+		return null
+	var visual := node.get_node_or_null("Visual")
+	if visual is Node3D:
+		return visual
+	return node
+
+
+func _squash(node: Node3D) -> void:
+	var target := _squash_target(node)
+	if target == null:
 		return
 	if node.has_meta("squash_tween"):
 		var old: Tween = node.get_meta("squash_tween")
 		if old != null and old.is_valid():
 			old.kill()
-	node.scale = Vector3.ONE
+	if target != node:
+		node.scale = Vector3.ONE
+	target.scale = Vector3.ONE
 	var tw := create_tween()
 	node.set_meta("squash_tween", tw)
 	for key in SQUASH_KEYS:
-		tw.tween_property(node, "scale", key["scale"], float(key["time"])).set_trans(int(key["trans"])).set_ease(int(key["ease"]))
+		tw.tween_property(target, "scale", key["scale"], float(key["time"])).set_trans(int(key["trans"])).set_ease(int(key["ease"]))
 
 
 func _wiggle_toast() -> void:
