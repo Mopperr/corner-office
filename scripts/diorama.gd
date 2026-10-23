@@ -5,6 +5,7 @@ const MenuLayout = preload("res://scripts/menu_layout.gd")
 const SupportMath = preload("res://scripts/stacking/support.gd")
 const StackItemLib = preload("res://scripts/stacking/stack_item.gd")
 const StackRoomLib = preload("res://scripts/stacking/stack_room.gd")
+const Graphics = preload("res://scripts/settings_manager.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -127,35 +128,33 @@ func _level_cues() -> void:
 
 func _world() -> void:
 	var env := WorldEnvironment.new()
-	var world := Environment.new()
-	world.background_mode = Environment.BG_COLOR
-	world.background_color = UIKit.CREAM if backdrop else Color("5C534A")
-	world.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	world.ambient_light_color = Color("C2B09A")
-	world.ambient_light_energy = 0.18
-	world.tonemap_mode = Environment.TONE_MAPPER_AGX
-	world.tonemap_exposure = 0.78
-	world.tonemap_white = 6.0
-	var renderer := RenderingServer.get_current_rendering_method()
-	if renderer == "gl_compatibility" or renderer == "forward_plus":
-		world.ssao_enabled = true
-		world.ssao_radius = 1.15
-		world.ssao_intensity = 1.8
-		world.ssao_power = 1.45
-		world.ssao_detail = 0.55
-		world.ssao_horizon = 0.12
-		world.ssao_sharpness = 0.45
-		world.ssao_light_affect = 0.35
+	env.name = "World"
+	var world := Graphics.load_environment(SaveManager.graphics_quality)
+	if backdrop:
+		world.background_color = UIKit.CREAM
 	env.environment = world
 	add_child(env)
 	var sun := DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-48, 28, 0)
-	sun.light_color = Color("FFE2C2")
-	sun.light_energy = 0.42
+	sun.name = "Sun"
+	sun.rotation_degrees = Vector3(-50, 35, 0)
+	sun.light_color = Color("FFE3C0")
+	sun.light_energy = 0.85
 	sun.shadow_enabled = true
-	sun.shadow_blur = 2.0
-	sun.directional_shadow_max_distance = 48.0
+	sun.light_angular_distance = 1.75
+	sun.shadow_blur = 1.5
+	sun.shadow_bias = 0.03
+	sun.shadow_normal_bias = 1.0
+	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+	sun.directional_shadow_max_distance = 25.0
 	add_child(sun)
+	var fill := DirectionalLight3D.new()
+	fill.name = "Fill"
+	fill.rotation_degrees = Vector3(-35, -145, 0)
+	fill.light_color = Color("A9C4D4")
+	fill.light_energy = 0.2
+	fill.light_specular = 0.0
+	fill.shadow_enabled = false
+	add_child(fill)
 	cam = Camera3D.new()
 	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
 	cam.keep_aspect = Camera3D.KEEP_HEIGHT
@@ -194,66 +193,14 @@ func _frame_camera() -> void:
 		return
 	if cam == null or venue.is_empty() or GameState.mode == "truck":
 		return
-	var points := _room_points()
-	if points.is_empty():
-		return
-	var center := Vector3.ZERO
-	for point in points:
-		center += point
-	center /= float(points.size())
-	var offset := Vector3(1.0, 1.08, 1.0).normalized() * 18.0
-	cam.position = center + offset
+	var origin := Vector3(float(venue.get("x", 0.0)), 0.0, float(venue.get("z", 0.0)))
+	var width := float(venue.get("w", 6.0))
+	var depth := float(venue.get("d", 8.0))
+	var center := origin + Vector3(width * 0.5, 0.9, depth * 0.5)
+	cam.attributes = null
+	cam.size = maxf(width, depth) * 1.3
+	cam.position = center + Vector3(8.2, 9.0, 8.0)
 	cam.look_at(center, Vector3.UP)
-	var xf := cam.global_transform
-	var min_x := 10000.0
-	var max_x := -10000.0
-	var min_y := 10000.0
-	var max_y := -10000.0
-	var inv := xf.affine_inverse()
-	for point in points:
-		var local: Vector3 = inv * point
-		min_x = minf(min_x, local.x)
-		max_x = maxf(max_x, local.x)
-		min_y = minf(min_y, local.y)
-		max_y = maxf(max_y, local.y)
-	var shift := Vector3((min_x + max_x) * 0.5, (min_y + max_y) * 0.5, 0.0)
-	cam.global_position += xf.basis * shift
-	var view := get_viewport().get_visible_rect().size
-	var aspect := 16.0 / 9.0
-	if view.y > 1.0:
-		aspect = view.x / view.y
-	var height := (max_y - min_y) * 1.16
-	var width_need := (max_x - min_x) * 1.16 / aspect
-	cam.size = maxf(height, width_need)
-
-
-func _room_points() -> Array:
-	var points: Array = []
-	var x := float(venue.get("x", 0))
-	var z := float(venue.get("z", 0))
-	var w := float(venue.get("w", 6))
-	var d := float(venue.get("d", 8))
-	for px in [x, x + w]:
-		for pz in [z, z + d]:
-			points.append(Vector3(px, 0.0, pz))
-	# Visible shell only: west wall and the opening wall. East and north stay cut away.
-	for pz in [z, z + d]:
-		points.append(Vector3(x, 2.7, pz))
-	for px in [x, x + w]:
-		points.append(Vector3(px, 2.4, z))
-	if str(venue.get("opening", "")) == "garage":
-		points.append(Vector3(x + 1.2, 0.0, z - 2.3))
-		points.append(Vector3(x + w - 1.2, 0.0, z - 2.3))
-		points.append(Vector3(x + w * 0.5, 2.3, z - 0.2))
-	if venue.has("nook"):
-		var nook: Dictionary = venue["nook"]
-		var nx := float(nook["x"])
-		var nz := float(nook["z"])
-		var nw := float(nook["w"])
-		var nd := float(nook["d"])
-		points.append(Vector3(nx, 1.5, nz))
-		points.append(Vector3(nx + nw, 0.0, nz + nd))
-	return points
 
 
 func _fill_floor(x: float, z: float, w: float, d: float) -> void:
@@ -337,9 +284,10 @@ func _build_rect(x: float, z: float, w: float, d: float, with_opening: bool) -> 
 	_fill_run(x + 1.0, x + w - 1.0, z + d, true, true, false)
 	_fill_run(z + 1.0, z + d - 1.0, x + w, false, true, false)
 	var glow := OmniLight3D.new()
+	glow.name = "DoorGlow"
 	glow.position = Vector3(opening_center, 1.6, z + 0.45)
 	glow.light_color = Color("FFC98A")
-	glow.light_energy = 0.32
+	glow.light_energy = 0.9
 	glow.omni_range = 6.0
 	glow.shadow_enabled = true
 	glow.shadow_blur = 2.0
@@ -769,6 +717,7 @@ func _frame_menu_camera() -> void:
 		return
 	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
 	cam.keep_aspect = Camera3D.KEEP_HEIGHT
+	cam.attributes = Graphics.menu_dof()
 	cam.size = MENU_ORTHO_SIZE
 	var look := menu_look
 	cam.position = look

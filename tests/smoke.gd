@@ -5,6 +5,7 @@ const RoomLib = preload("res://scripts/diorama.gd")
 const SupportMath = preload("res://scripts/stacking/support.gd")
 const StackItemLib = preload("res://scripts/stacking/stack_item.gd")
 const StackRoomLib = preload("res://scripts/stacking/stack_room.gd")
+const Graphics = preload("res://scripts/settings_manager.gd")
 
 func _ready() -> void:
 	var failures: Array = []
@@ -657,12 +658,61 @@ func _qa_regressions() -> Array:
 	var menu_cam: Camera3D = show.get("cam")
 	if menu_cam == null or absf(menu_cam.size - 7.2) > 0.001:
 		found.append("menu ortho %s" % (menu_cam.size if menu_cam else "missing"))
+	var menu_dof: CameraAttributesPractical = null
+	if menu_cam != null:
+		menu_dof = menu_cam.attributes as CameraAttributesPractical
+	if menu_dof == null or not menu_dof.dof_blur_far_enabled or absf(menu_dof.dof_blur_far_distance - 14.0) > 0.001 or absf(menu_dof.dof_blur_far_transition - 6.0) > 0.001 or absf(menu_dof.dof_blur_amount - 0.06) > 0.001:
+		found.append("menu dof")
 	_bury(show)
 	var play: Node = RoomLib.new()
 	add_child(play)
 	var play_worlds: Array = play.find_children("*", "WorldEnvironment", true, false)
-	if play_worlds.is_empty() or (play_worlds[0] as WorldEnvironment).environment.background_color != Color("5C534A"):
+	if play_worlds.is_empty():
 		found.append("office background")
+	else:
+		var office := (play_worlds[0] as WorldEnvironment).environment
+		if office.background_color != Color("3E3A4F"):
+			found.append("office background %s" % office.background_color)
+		if office.tonemap_mode != Environment.TONE_MAPPER_AGX or absf(office.tonemap_exposure - 0.85) > 0.001 or absf(office.tonemap_white - 4.0) > 0.001 or absf(office.tonemap_agx_white - 4.0) > 0.001:
+			found.append("tonemap")
+		if office.ambient_light_color != Color("F2E2CC") or absf(office.ambient_light_energy - 0.25) > 0.001:
+			found.append("ambient")
+		if not office.adjustment_enabled or absf(office.adjustment_contrast - 1.2) > 0.001 or absf(office.adjustment_saturation - 1.08) > 0.001:
+			found.append("grade")
+		if office.fog_enabled or office.sdfgi_enabled or not office.ssao_enabled or office.ssil_enabled or not office.glow_enabled:
+			found.append("features")
+		if absf(office.ssao_radius - 0.8) > 0.001 or absf(office.ssao_intensity - 1.5) > 0.001:
+			found.append("ssao")
+		if absf(office.glow_intensity - 0.4) > 0.001 or absf(office.glow_strength - 0.8) > 0.001 or office.glow_blend_mode != Environment.GLOW_BLEND_MODE_SOFTLIGHT:
+			found.append("glow")
+	var play_cam: Camera3D = play.get("cam")
+	var garage_center := Vector3(3.0, 0.9, 4.0)
+	if play_cam == null or play_cam.position.distance_to(Vector3(11.2, 9.9, 12.0)) > 0.02 or absf(play_cam.size - maxf(6.0, 8.0) * 1.3) > 0.001:
+		found.append("garage cam %s" % (play_cam.position if play_cam else "missing"))
+	elif (-play_cam.global_transform.basis.z).dot((garage_center - play_cam.global_position).normalized()) < 0.999:
+		found.append("garage look")
+	var sun := play.find_child("Sun", true, false) as DirectionalLight3D
+	if sun == null or sun.light_color != Color("FFE3C0") or absf(sun.light_energy - 0.85) > 0.001 or sun.rotation_degrees.distance_to(Vector3(-50, 35, 0)) > 0.1 or not sun.shadow_enabled or absf(sun.light_angular_distance - 1.75) > 0.001:
+		found.append("sun")
+	var fill := play.find_child("Fill", true, false) as DirectionalLight3D
+	if fill == null or fill.light_color != Color("A9C4D4") or absf(fill.light_energy - 0.2) > 0.001 or fill.shadow_enabled:
+		found.append("fill")
+	var door := play.find_child("DoorGlow", true, false) as OmniLight3D
+	if door == null or door.light_color != Color("FFC98A") or absf(door.light_energy - 0.9) > 0.001:
+		found.append("door glow")
+	var lamp_light := play.find_child("LampLight", true, false) as OmniLight3D
+	if lamp_light == null or lamp_light.light_color != Color("FFD9A0") or absf(lamp_light.light_energy - 0.8) > 0.001 or absf(lamp_light.omni_range - 2.5) > 0.001 or lamp_light.shadow_enabled:
+		found.append("lamp omni")
+	else:
+		var shade_mesh: MeshInstance3D = null
+		var shade_nodes: Array = lamp_light.get_parent().find_children("*", "MeshInstance3D", true, false)
+		if not shade_nodes.is_empty():
+			shade_mesh = shade_nodes[0] as MeshInstance3D
+		var shade: StandardMaterial3D = null
+		if shade_mesh != null:
+			shade = shade_mesh.material_override as StandardMaterial3D
+		if shade == null or not shade.emission_enabled or shade.emission != Color("FFD9A0") or absf(shade.emission_energy_multiplier - 1.2) > 0.001:
+			found.append("lamp shade")
 	_bury(play)
 	var menu: Control = load("res://scripts/menu_ui.gd").new()
 	add_child(menu)
@@ -988,6 +1038,14 @@ func _engine_choices() -> Array:
 		found.append("stretch %s" % ProjectSettings.get_setting("display/window/stretch/aspect"))
 	if int(ProjectSettings.get_setting("display/window/size/viewport_width")) != 1920 or int(ProjectSettings.get_setting("display/window/size/viewport_height")) != 1080:
 		found.append("base %s %s" % [ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height")])
+	var low := Graphics.load_environment("low")
+	var high := Graphics.load_environment("high")
+	if low.ssao_enabled or low.glow_enabled or low.ssil_enabled or low.sdfgi_enabled:
+		found.append("low tier")
+	if not high.ssao_enabled or not high.glow_enabled or not high.ssil_enabled or high.sdfgi_enabled or absf(high.ssil_radius - 3.0) > 0.001 or absf(high.ssil_intensity - 0.6) > 0.001:
+		found.append("high tier")
+	if get_viewport().msaa_3d != Viewport.MSAA_2X or int(ProjectSettings.get_setting("rendering/lights_and_shadows/directional_shadow/size")) != 2048:
+		found.append("medium quality")
 	var tiny := UIKit.label("Readable", 13)
 	if int(tiny.get_theme_font_size("font_size")) < 18:
 		found.append("font %s" % tiny.get_theme_font_size("font_size"))

@@ -8,10 +8,14 @@ var sfx_linear := 0.8
 var shake := true
 var text_scale := 1.0
 var snap_to_grid := false
+var graphics_quality := "medium"
+
+const Graphics = preload("res://scripts/settings_manager.gd")
 
 
 func _ready() -> void:
 	load_settings()
+	Graphics.apply_tier(get_tree(), graphics_quality)
 
 
 func has_save() -> bool:
@@ -54,6 +58,7 @@ func save_settings() -> void:
 	cfg.set_value("access", "shake", shake)
 	cfg.set_value("access", "text_scale", text_scale)
 	cfg.set_value("place", "snap_to_grid", snap_to_grid)
+	cfg.set_value("graphics", "quality", graphics_quality)
 	cfg.save(SETTINGS_PATH)
 
 
@@ -66,3 +71,4 @@ func load_settings() -> void:
 	shake = bool(cfg.get_value("access", "shake", shake))
 	text_scale = float(cfg.get_value("access", "text_scale", text_scale))
 	snap_to_grid = bool(cfg.get_value("place", "snap_to_grid", snap_to_grid))
+	graphics_quality = Graphics.normalize(str(cfg.get_value("graphics", "quality", graphics_quality)))

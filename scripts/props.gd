@@ -793,9 +793,26 @@ static func play_clip(root: Node, clip: String, looping: bool) -> void:
 
 static func attach_lamp_light(root: Node3D) -> void:
 	var light := OmniLight3D.new()
+	light.name = "LampLight"
 	light.position = Vector3(0, 0.42, 0)
-	light.light_color = Color("FFD7A1")
-	light.light_energy = 0.4
-	light.omni_range = 3.4
+	light.light_color = Color("FFD9A0")
+	light.light_energy = 0.8
+	light.omni_range = 2.5
 	light.shadow_enabled = false
 	root.add_child(light)
+	_glow_shade(root)
+
+
+static func _glow_shade(node: Node) -> void:
+	if node is MeshInstance3D:
+		var mesh_node := node as MeshInstance3D
+		var current: Material = mesh_node.get_active_material(0)
+		var shade := StandardMaterial3D.new()
+		if current is StandardMaterial3D:
+			shade = (current as StandardMaterial3D).duplicate() as StandardMaterial3D
+		shade.emission_enabled = true
+		shade.emission = Color("FFD9A0")
+		shade.emission_energy_multiplier = 1.2
+		mesh_node.material_override = shade
+	for child in node.get_children():
+		_glow_shade(child)

@@ -1,5 +1,7 @@
 extends Control
 
+const Graphics = preload("res://scripts/settings_manager.gd")
+
 signal new_game(character)
 signal continue_game
 
@@ -130,6 +132,26 @@ func _settings() -> void:
 		SaveManager.save_settings()
 	)
 	add_child(snap)
+	var quality_label := UIKit.label("Quality", 22, UIKit.DARK, "title")
+	quality_label.position = Vector2(80, 440)
+	add_child(quality_label)
+	var quality := OptionButton.new()
+	quality.position = Vector2(280, 432)
+	quality.size = Vector2(420, 44)
+	quality.add_theme_font_override("font", UIKit.body_font())
+	quality.add_theme_font_size_override("font_size", 22)
+	quality.add_item("Low")
+	quality.add_item("Medium")
+	quality.add_item("High")
+	var tiers := ["low", "medium", "high"]
+	var selected := tiers.find(SaveManager.graphics_quality)
+	quality.selected = selected if selected >= 0 else 1
+	quality.item_selected.connect(func(index: int):
+		SaveManager.graphics_quality = tiers[index]
+		SaveManager.save_settings()
+		Graphics.apply_tier(get_tree(), SaveManager.graphics_quality)
+	)
+	add_child(quality)
 
 
 func _slider(caption: String, value: float, y: float, on_change: Callable) -> void:
