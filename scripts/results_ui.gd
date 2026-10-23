@@ -1,5 +1,8 @@
 extends Control
 
+const Tuning = preload("res://scripts/tuning.gd")
+const UIKit = preload("res://scripts/ui_kit.gd")
+
 signal closed
 
 var shown := 0

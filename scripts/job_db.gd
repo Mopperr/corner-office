@@ -1,6 +1,7 @@
 extends Node
 
 const Routes = preload("res://scripts/drive_routes.gd")
+const Tuning = preload("res://scripts/tuning.gd")
 
 var briefs: Dictionary = {}
 var jobs: Array = []

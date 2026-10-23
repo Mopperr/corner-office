@@ -1,6 +1,8 @@
 class_name Props
 extends RefCounted
 
+const UIKit = preload("res://scripts/ui_kit.gd")
+
 const LAYER_BLOCKING := 1
 const LAYER_PICKABLE := 2
 const MASK_QUERY := 3

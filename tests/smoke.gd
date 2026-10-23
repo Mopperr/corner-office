@@ -6,6 +6,10 @@ const SupportMath = preload("res://scripts/stacking/support.gd")
 const StackItemLib = preload("res://scripts/stacking/stack_item.gd")
 const StackRoomLib = preload("res://scripts/stacking/stack_room.gd")
 const Graphics = preload("res://scripts/settings_manager.gd")
+const Tuning = preload("res://scripts/tuning.gd")
+const Catalog = preload("res://scripts/catalog.gd")
+const UIKit = preload("res://scripts/ui_kit.gd")
+const Props = preload("res://scripts/props.gd")
 
 func _ready() -> void:
 	var failures: Array = []
@@ -719,7 +723,63 @@ func _qa_regressions() -> Array:
 	var logo := _label_with(menu, "Corner Office")
 	if logo == null or logo.autowrap_mode != TextServer.AUTOWRAP_OFF or logo.custom_minimum_size.x < 600.0:
 		found.append("logo wrap")
+	menu.layout_mode = 0
+	menu.position = Vector2.ZERO
+	menu.size = Vector2(1280, 800)
+	menu.call("_intro", "dana")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var intro := menu.find_child("Intro", true, false) as Control
+	if intro == null:
+		found.append("intro missing")
+	else:
+		var intro_rect := intro.get_global_rect()
+		var intro_center := intro_rect.get_center()
+		if intro_rect.position.x < 0.0 or intro_rect.position.y < 0.0 or intro_rect.size.x < 800.0 or intro_center.distance_to(Vector2(640, 400)) > 8.0:
+			found.append("intro card %s" % intro_rect)
 	_bury(menu)
+	var host := Node.new()
+	add_child(host)
+	UIKit.show_level_beat(host, {"level_name": "Garage Startup", "arrival": "The roller door sticks.", "moment": "Dana sets the kettle on."})
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var beat := host.find_child("LevelBeat", true, false) as Control
+	var view: Vector2 = get_viewport().get_visible_rect().size
+	if view.y < 8.0:
+		view = Vector2(1280, 800)
+	if beat == null:
+		found.append("level beat missing")
+	else:
+		var beat_rect := beat.get_global_rect()
+		var hint_top: float = view.y - 104.0
+		if beat_rect.end.y > hint_top - 8.0 or absf(beat_rect.get_center().x - view.x * 0.5) > 8.0:
+			found.append("level beat %s hint %s" % [beat_rect, hint_top])
+	_bury(host)
+	var shell = load("res://scripts/app.gd").new()
+	add_child(shell)
+	shell.call("_pause")
+	get_tree().paused = false
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var column: Control = shell.find_child("PauseColumn", true, false) as Control
+	var pause_panel: Control = shell.find_child("Pause", true, false) as Control
+	var paused_title: Label = shell.find_child("Paused", true, false) as Label
+	if paused_title == null:
+		for node in shell.find_children("*", "Label", true, false):
+			if str(node.text) == "Paused":
+				paused_title = node as Label
+				break
+	if column == null or pause_panel == null or paused_title == null:
+		found.append("pause missing")
+	else:
+		var column_rect := column.get_global_rect()
+		var panel_rect := pause_panel.get_global_rect()
+		if column_rect.size.x < 400.0 or panel_rect.size.x < 50.0 or column_rect.get_center().distance_to(panel_rect.get_center()) > 8.0:
+			found.append("pause center %s %s" % [column_rect, panel_rect])
+		if paused_title.autowrap_mode != TextServer.AUTOWRAP_OFF or paused_title.get_line_count() > 1:
+			found.append("pause wrap %s" % paused_title.get_line_count())
+	get_tree().paused = false
+	_bury(shell)
 	GameState.payout = {
 		"base": 120, "box_tip": 60, "shortcut": 12, "bonuses": 0, "split_loss": 0,
 		"cut": 0, "net_tips": 60, "total": 192, "title": "Job done", "stars": 1, "stamp": "",

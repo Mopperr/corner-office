@@ -1,6 +1,9 @@
 class_name Placement
 extends RefCounted
 
+const Tuning = preload("res://scripts/tuning.gd")
+const Props = preload("res://scripts/props.gd")
+
 const SUPPORT_GAP := 0.04
 const MIN_SUPPORT := 0.55
 const PENETRATE := 0.03

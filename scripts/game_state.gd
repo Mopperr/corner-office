@@ -1,5 +1,8 @@
 extends Node
 
+const Tuning = preload("res://scripts/tuning.gd")
+const Catalog = preload("res://scripts/catalog.gd")
+
 signal money_changed(amount)
 signal rep_changed(rank, stars)
 signal job_completed(job_id, payout)

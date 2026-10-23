@@ -1,5 +1,7 @@
 extends Node
 
+const UIKit = preload("res://scripts/ui_kit.gd")
+
 var view_root: Node
 var overlay: Node
 
@@ -134,19 +136,30 @@ func _pause() -> void:
 	var panel := Panel.new()
 	panel.name = "Pause"
 	panel.process_mode = Node.PROCESS_MODE_ALWAYS
-	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
 	panel.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM, 0.96), 0))
 	overlay.add_child(panel)
+	panel.layout_mode = 1
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var center := CenterContainer.new()
+	center.name = "PauseCenter"
+	center.process_mode = Node.PROCESS_MODE_ALWAYS
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(center)
+	center.layout_mode = 1
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var box := VBoxContainer.new()
+	box.name = "PauseColumn"
 	box.process_mode = Node.PROCESS_MODE_ALWAYS
-	box.position = Vector2(460, 180)
 	box.add_theme_constant_override("separation", 12)
-	panel.add_child(box)
-	var title := UIKit.label("Paused", 42, UIKit.DARK, "title")
+	center.add_child(box)
+	var title := UIKit.label("Paused", 42, UIKit.DARK, "title", false)
 	title.process_mode = Node.PROCESS_MODE_ALWAYS
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.custom_minimum_size = Vector2(420, 64)
 	box.add_child(title)
 	var resume := UIKit.button("Resume", UIKit.SAGE)
 	resume.process_mode = Node.PROCESS_MODE_ALWAYS
+	resume.custom_minimum_size = Vector2(420, 54)
 	resume.pressed.connect(func():
 		get_tree().paused = false
 		panel.queue_free()
@@ -154,6 +167,7 @@ func _pause() -> void:
 	box.add_child(resume)
 	var save := UIKit.button("Save", UIKit.WOOD, UIKit.CREAM_CARD)
 	save.process_mode = Node.PROCESS_MODE_ALWAYS
+	save.custom_minimum_size = Vector2(420, 54)
 	save.pressed.connect(func():
 		SaveManager.save_game()
 		AudioDirector.play_sfx("sfx_success_chime")
@@ -161,6 +175,7 @@ func _pause() -> void:
 	box.add_child(save)
 	var menu := UIKit.button("Main menu", UIKit.TERRA)
 	menu.process_mode = Node.PROCESS_MODE_ALWAYS
+	menu.custom_minimum_size = Vector2(420, 54)
 	menu.pressed.connect(func():
 		SaveManager.save_game()
 		get_tree().paused = false

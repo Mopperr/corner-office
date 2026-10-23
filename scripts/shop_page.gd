@@ -1,5 +1,8 @@
 extends Control
 
+const Catalog = preload("res://scripts/catalog.gd")
+const UIKit = preload("res://scripts/ui_kit.gd")
+
 
 func _ready() -> void:
 	Catalog.ensure()

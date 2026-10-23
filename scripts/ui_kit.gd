@@ -154,14 +154,19 @@ static func show_level_beat(host: Node, beat: Dictionary) -> void:
 	layer.layer = 16
 	host.add_child(layer)
 	var panel := Panel.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	panel.offset_left = -490
-	panel.offset_top = -300
-	panel.offset_right = 490
-	panel.offset_bottom = -100
+	panel.name = "LevelBeat"
+	panel.custom_minimum_size = Vector2(980, 200)
+	panel.size = Vector2(980, 200)
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_theme_stylebox_override("panel", style(CREAM_CARD, 16))
 	layer.add_child(panel)
+	panel.layout_mode = 1
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM, Control.PRESET_MODE_KEEP_SIZE)
+	# Hint bar occupies the bottom 104px. Keep the beat, and its drop shadow, above that.
+	panel.offset_left = -490
+	panel.offset_right = 490
+	panel.offset_top = -328
+	panel.offset_bottom = -128
 	var title := label("%s" % beat.get("level_name", ""), 22, TERRA, "title")
 	title.position = Vector2(18, 12)
 	title.size = Vector2(940, 32)

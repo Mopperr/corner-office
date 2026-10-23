@@ -1,5 +1,8 @@
 extends Node2D
 
+const Tuning = preload("res://scripts/tuning.gd")
+const UIKit = preload("res://scripts/ui_kit.gd")
+
 signal finished(result: Dictionary)
 
 const PX := 32.0

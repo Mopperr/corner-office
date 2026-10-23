@@ -1,5 +1,8 @@
 extends Control
 
+const UIKit = preload("res://scripts/ui_kit.gd")
+const Tuning = preload("res://scripts/tuning.gd")
+
 signal closed
 
 var page := "market"

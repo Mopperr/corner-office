@@ -6,6 +6,10 @@ const SupportMath = preload("res://scripts/stacking/support.gd")
 const StackItemLib = preload("res://scripts/stacking/stack_item.gd")
 const StackRoomLib = preload("res://scripts/stacking/stack_room.gd")
 const Graphics = preload("res://scripts/settings_manager.gd")
+const Tuning = preload("res://scripts/tuning.gd")
+const Catalog = preload("res://scripts/catalog.gd")
+const UIKit = preload("res://scripts/ui_kit.gd")
+const Props = preload("res://scripts/props.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0

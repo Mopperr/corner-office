@@ -1,6 +1,7 @@
 extends Control
 
 const Graphics = preload("res://scripts/settings_manager.gd")
+const UIKit = preload("res://scripts/ui_kit.gd")
 
 signal new_game(character)
 signal continue_game
@@ -65,14 +66,17 @@ func _home() -> void:
 
 func _intro(character: String) -> void:
 	_clear()
+	var center := CenterContainer.new()
+	center.name = "IntroCenter"
+	add_child(center)
+	center.layout_mode = 1
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var card := Panel.new()
-	card.set_anchors_preset(Control.PRESET_CENTER)
-	card.offset_left = -420
-	card.offset_top = -260
-	card.offset_right = 420
-	card.offset_bottom = 260
+	card.name = "Intro"
+	card.custom_minimum_size = Vector2(840, 520)
+	card.size = Vector2(840, 520)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CARD, 20))
-	add_child(card)
+	center.add_child(card)
 	var text := _read_text("res://data/narrative/intro.md")
 	text = text.replace("# Intro", "").strip_edges()
 	var body := UIKit.label(text, 22, UIKit.DARK)

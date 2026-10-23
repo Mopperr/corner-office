@@ -1,5 +1,7 @@
 extends Node
 
+const Tuning = preload("res://scripts/tuning.gd")
+
 var music: AudioStreamPlayer
 var loops: Dictionary = {}
 var _streams: Dictionary = {}
