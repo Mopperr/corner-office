@@ -130,7 +130,7 @@ func _market() -> void:
 	list.position = Vector2(12, 12)
 	list.size = Vector2(280, 360)
 	list.add_theme_font_override("font", UIKit.body_font())
-	list.add_theme_font_size_override("font_size", 16)
+	list.add_theme_font_size_override("font_size", UIKit.font_px(18))
 	for good in goods:
 		var id := str(good.get("id", ""))
 		list.add_item("%s  $%d" % [good.get("name", id), GameState.price_of(id)])
@@ -147,7 +147,7 @@ func _market() -> void:
 	title.position = Vector2(310, 8)
 	title.size = Vector2(500, 36)
 	body.add_child(title)
-	var flavor := UIKit.label(str(item.get("flavor", "")), 16, UIKit.DARK)
+	var flavor := UIKit.label(str(item.get("flavor", "")), 18, UIKit.DARK)
 	flavor.position = Vector2(310, 44)
 	flavor.size = Vector2(480, 48)
 	body.add_child(flavor)
@@ -160,7 +160,7 @@ func _market() -> void:
 	var yesterday := ""
 	if series.size() >= 2:
 		yesterday = "Yesterday $%d" % int(round(float(series[series.size() - 2])))
-	var ylbl := UIKit.label("Dana's note: %s" % yesterday, 16, UIKit.BLUE)
+	var ylbl := UIKit.label("Dana's note: %s" % yesterday, 18, UIKit.BLUE)
 	ylbl.position = Vector2(310, 200)
 	body.add_child(ylbl)
 	var own := UIKit.label("You have %d    Buy $%d    Sell $%d" % [int(GameState.goods.get(selected, 0)), GameState.price_of(selected), GameState.sell_price_of(selected)], 18, UIKit.DARK)
@@ -190,7 +190,7 @@ func _market() -> void:
 	body.add_child(nxt)
 	if not GameState.buyer_offer.is_empty():
 		var offer: Dictionary = GameState.buyer_offer
-		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 15, UIKit.DARK)
+		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 18, UIKit.DARK)
 		line.name = "Offer"
 		line.position = Vector2(310, 256)
 		line.size = Vector2(490, 48)
@@ -284,7 +284,7 @@ func _shop() -> void:
 		name.position = Vector2(12, 8)
 		name.size = Vector2(200, 28)
 		card.add_child(name)
-		var flavor := UIKit.label(str(decor.get("flavor", "")), 14, UIKit.DARK)
+		var flavor := UIKit.label(str(decor.get("flavor", "")), 18, UIKit.DARK)
 		flavor.position = Vector2(12, 38)
 		flavor.size = Vector2(200, 48)
 		card.add_child(flavor)
@@ -314,7 +314,7 @@ func _email() -> void:
 		subject.position = Vector2(10, 6)
 		subject.size = Vector2(960, 24)
 		card.add_child(subject)
-		var text := UIKit.label(str(mail.get("body", "")), 14, UIKit.DARK)
+		var text := UIKit.label(str(mail.get("body", "")), 18, UIKit.DARK)
 		text.position = Vector2(10, 34)
 		text.size = Vector2(960, 104)
 		card.add_child(text)
@@ -339,7 +339,7 @@ func _listings() -> void:
 			GameState.rep_rank(),
 			int(office.get("rep", 0)),
 		]
-		var card := UIKit.label(text, 16, UIKit.DARK)
+		var card := UIKit.label(text, 18, UIKit.DARK)
 		card.position = Vector2(16, y)
 		card.size = Vector2(700, 70)
 		body.add_child(card)
@@ -351,7 +351,7 @@ func _listings() -> void:
 			btn.pressed.connect(_move_office.bind(id))
 			body.add_child(btn)
 		elif here:
-			var tag := UIKit.label("You are here", 16, UIKit.SAGE, "title")
+			var tag := UIKit.label("You are here", 18, UIKit.SAGE, "title")
 			tag.position = Vector2(780, y + 16)
 			body.add_child(tag)
 		y += 86

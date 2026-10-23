@@ -123,7 +123,7 @@ func _hud() -> void:
 	meter_label = UIKit.label("100", 18, UIKit.DARK)
 	meter_label.position = Vector2(250, 10)
 	card.add_child(meter_label)
-	hint = UIKit.label("", 16, UIKit.CREAM_CARD)
+	hint = UIKit.label("", 18, UIKit.CREAM_CARD)
 	hint.position = Vector2(16, 640)
 	hint.size = Vector2(1100, 70)
 	layer.add_child(hint)

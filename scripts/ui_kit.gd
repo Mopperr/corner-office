@@ -17,6 +17,8 @@ const PINK := Color("E8B4A8")
 # Invalid ghosts use this soft red. LOSS is the trading color only.
 const SOFT_RED := Color("E8B4A8")
 const SCREEN := Color("243832")
+# 18px in the 1920x1080 base stays readable once stretch scales it onto a 1280x800 Deck.
+const MIN_FONT := 18
 
 
 static func font(path: String) -> Font:
@@ -69,7 +71,7 @@ static func button(text: String, fill: Color = SAGE, fg: Color = CREAM_CARD) -> 
 	btn.text = text
 	btn.custom_minimum_size = Vector2(0, 48)
 	btn.add_theme_font_override("font", title_font())
-	btn.add_theme_font_size_override("font_size", 20)
+	btn.add_theme_font_size_override("font_size", font_px(20))
 	btn.add_theme_color_override("font_color", fg)
 	btn.add_theme_color_override("font_hover_color", Color.WHITE)
 	btn.add_theme_stylebox_override("normal", style(fill, 18))
@@ -91,7 +93,7 @@ static func icon_button(icon_path: String, caption: String) -> Button:
 	btn.text = caption
 	btn.custom_minimum_size = Vector2(92, 84)
 	btn.add_theme_font_override("font", crt_font())
-	btn.add_theme_font_size_override("font_size", 22)
+	btn.add_theme_font_size_override("font_size", font_px(22))
 	btn.add_theme_color_override("font_color", CREAM_CARD)
 	btn.add_theme_color_override("font_hover_color", MUSTARD)
 	if ResourceLoader.exists(icon_path):
@@ -111,10 +113,24 @@ static func icon_button(icon_path: String, caption: String) -> Button:
 	return btn
 
 
+static func font_px(size: int) -> int:
+	var scaled := int(round(float(maxi(size, MIN_FONT)) * SaveManager.text_scale))
+	return maxi(MIN_FONT, scaled)
+
+
+static func install_theme(node: Node) -> void:
+	if node == null:
+		return
+	var theme := Theme.new()
+	theme.default_font = body_font()
+	theme.default_font_size = MIN_FONT
+	node.theme = theme
+
+
 static func label(text: String, size := 18, color: Color = DARK, font_kind := "body", wrap := true) -> Label:
 	var node := Label.new()
 	node.text = text
-	node.add_theme_font_size_override("font_size", int(float(size) * SaveManager.text_scale))
+	node.add_theme_font_size_override("font_size", font_px(size))
 	node.add_theme_color_override("font_color", color)
 	match font_kind:
 		"title":
@@ -150,11 +166,11 @@ static func show_level_beat(host: Node, beat: Dictionary) -> void:
 	title.position = Vector2(18, 12)
 	title.size = Vector2(940, 32)
 	panel.add_child(title)
-	var arrival := label(str(beat.get("arrival", "")), 16, DARK)
+	var arrival := label(str(beat.get("arrival", "")), MIN_FONT, DARK)
 	arrival.position = Vector2(18, 48)
 	arrival.size = Vector2(940, 64)
 	panel.add_child(arrival)
-	var moment := label(str(beat.get("moment", "")), 16, DARK)
+	var moment := label(str(beat.get("moment", "")), MIN_FONT, DARK)
 	moment.position = Vector2(18, 114)
 	moment.size = Vector2(940, 70)
 	panel.add_child(moment)

@@ -317,6 +317,7 @@ func _ready() -> void:
 	failures.append_array(await _settle_checks())
 	failures.append_array(await _qa_regressions())
 	failures.append_array(await _review_fixes())
+	failures.append_array(_engine_choices())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -636,6 +637,15 @@ func _qa_regressions() -> Array:
 	var show_worlds: Array = show.find_children("*", "WorldEnvironment", true, false)
 	if show_worlds.is_empty() or (show_worlds[0] as WorldEnvironment).environment.background_color != UIKit.CREAM:
 		found.append("menu background")
+	var show_venue: Dictionary = show.get("venue")
+	var layout_script = preload("res://scripts/menu_layout.gd")
+	var loft: Dictionary = layout_script.load_layout()
+	var expect_id := "bakery" if not loft.is_empty() else "garage"
+	if str(show_venue.get("id", "")) != expect_id:
+		found.append("menu room %s" % show_venue.get("id", ""))
+	var menu_cam: Camera3D = show.get("cam")
+	if menu_cam == null or absf(menu_cam.size - 7.2) > 0.001:
+		found.append("menu ortho %s" % (menu_cam.size if menu_cam else "missing"))
 	_bury(show)
 	var play: Node = RoomLib.new()
 	add_child(play)
@@ -948,4 +958,38 @@ func _review_fixes() -> Array:
 		var alley_b: Array = alley.get("b", [])
 		if alley_a.size() < 2 or alley_b.size() < 2 or int(alley_a[0]) != 2000 or int(alley_b[0]) != 4100:
 			found.append("alley moved %s" % alley)
+	return found
+
+
+func _engine_choices() -> Array:
+	var found: Array = []
+	if str(ProjectSettings.get_setting("physics/3d/physics_engine")) != "Jolt Physics":
+		found.append("physics %s" % ProjectSettings.get_setting("physics/3d/physics_engine"))
+	if str(ProjectSettings.get_setting("rendering/renderer/rendering_method")) != "forward_plus":
+		found.append("renderer %s" % ProjectSettings.get_setting("rendering/renderer/rendering_method"))
+	if str(ProjectSettings.get_setting("display/window/stretch/aspect")) != "expand":
+		found.append("stretch %s" % ProjectSettings.get_setting("display/window/stretch/aspect"))
+	if int(ProjectSettings.get_setting("display/window/size/viewport_width")) != 1920 or int(ProjectSettings.get_setting("display/window/size/viewport_height")) != 1080:
+		found.append("base %s %s" % [ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height")])
+	var tiny := UIKit.label("Readable", 13)
+	if int(tiny.get_theme_font_size("font_size")) < 18:
+		found.append("font %s" % tiny.get_theme_font_size("font_size"))
+	tiny.free()
+	var shelf := Props.make("shelf")
+	if Props.material_count(shelf) > 2:
+		found.append("shelf materials %d" % Props.material_count(shelf))
+	_bury(shelf)
+	var notes := Props.make("proc:sticky")
+	if Props.material_count(notes) > 2:
+		found.append("sticky materials %d" % Props.material_count(notes))
+	_bury(notes)
+	var layout_script = preload("res://scripts/menu_layout.gd")
+	var sample: Array = layout_script.records({
+		"items": [{"item": "desk_main", "position": [1.5, 0.0, 4.0], "rot": 12}],
+	})
+	if sample.size() != 1 or str(sample[0].get("item", "")) != "desk_main" or absf(float(sample[0].get("x", 0.0)) - 1.5) > 0.001:
+		found.append("loft records %s" % sample)
+	var look = layout_script.look_target({"camera": {"look": [4.0, 0.9, 5.0]}})
+	if not (look is Vector3) or absf(look.x - 4.0) > 0.001:
+		found.append("loft look")
 	return found

@@ -1,6 +1,7 @@
 extends Node3D
 
 const PlaceLib = preload("res://scripts/placement.gd")
+const MenuLayout = preload("res://scripts/menu_layout.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -47,6 +48,7 @@ var courier_seen: Dictionary = {}
 var unbox_uid := ""
 var hover_root: Node3D
 var backdrop := false
+var menu_look := Vector3(3.15, 0.9, 2.85)
 var show_focus := Vector3.ZERO
 var show_cam := Vector3.ZERO
 var show_basis := Basis.IDENTITY
@@ -175,14 +177,7 @@ func _build_venue() -> void:
 	if GameState.mode == "truck":
 		_build_truck_stage()
 		return
-	_build_rect(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)), true)
-	if venue.has("nook"):
-		var nook: Dictionary = venue["nook"]
-		_fill_floor(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"]))
-		_build_nook_walls(nook)
-		var beam := Props.mesh_box(Vector3(float(nook["w"]), 0.08, 0.12), UIKit.WOOD)
-		beam.position = Vector3(float(nook["x"]) + float(nook["w"]) * 0.5, 1.5, float(nook["z"]) + 0.2)
-		add_child(beam)
+	_build_shell()
 	_frame_camera()
 	_dress()
 
@@ -481,6 +476,7 @@ func _place_model(model_name: String, at: Vector3, rot_deg := 0.0) -> Node3D:
 		return null
 	node.position = at
 	node.rotation.y = deg_to_rad(rot_deg)
+	Props.cap_prop_materials(node, 2)
 	Props.prepare(node)
 	add_child(node)
 	return node
@@ -655,10 +651,26 @@ func _on_cat_clip(anim_name: StringName) -> void:
 		Props.play_clip(cat_rig, "idle", true)
 
 
+func _build_shell() -> void:
+	_build_rect(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)), true)
+	if venue.has("nook"):
+		var nook: Dictionary = venue["nook"]
+		_fill_floor(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"]))
+		_build_nook_walls(nook)
+		var beam := Props.mesh_box(Vector3(float(nook["w"]), 0.08, 0.12), UIKit.WOOD)
+		beam.position = Vector3(float(nook["x"]) + float(nook["w"]) * 0.5, 1.5, float(nook["z"]) + 0.2)
+		add_child(beam)
+
+
 func _build_showroom() -> void:
+	var layout: Dictionary = MenuLayout.load_layout()
+	if not layout.is_empty():
+		_build_loft_showroom(layout)
+		return
 	venue = ItemDB.venues().get("garage", {}).duplicate(true)
 	venue["id"] = "garage"
-	_build_rect(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)), true)
+	menu_look = Vector3(3.15, 0.9, 2.85)
+	_build_shell()
 	_dress()
 	_set_garage_y(float(Tuning.get_value("garage_door_open_y", 2.1)))
 	_place_model("rug", Vector3(3.5, 0.0, 2.75))
@@ -674,6 +686,38 @@ func _build_showroom() -> void:
 	add_child(box_b)
 	_menu_lights()
 	_frame_camera()
+
+
+func _build_loft_showroom(layout: Dictionary) -> void:
+	venue = ItemDB.venues().get("bakery", {}).duplicate(true)
+	venue["id"] = "bakery"
+	if layout.has("w"):
+		venue["w"] = float(layout["w"])
+	if layout.has("d"):
+		venue["d"] = float(layout["d"])
+	_build_shell()
+	_dress()
+	for rec in MenuLayout.records(layout):
+		_place_layout_record(rec)
+	var look = MenuLayout.look_target(layout)
+	if look is Vector3:
+		menu_look = look
+	else:
+		menu_look = Vector3(float(venue.get("w", 8.0)) * 0.5, 0.9, float(venue.get("d", 10.0)) * 0.45)
+	_menu_lights()
+	_frame_camera()
+
+
+func _place_layout_record(rec: Dictionary) -> void:
+	var item_id := str(rec.get("item", ""))
+	var def := ItemDB.get_item(item_id) if item_id != "" else {}
+	if item_id != "" and (def.has("model") or def.has("w") or def.has("mount")):
+		_spawn_record(rec, item_id, false)
+		return
+	var model_name := str(rec.get("model", item_id))
+	if model_name == "":
+		return
+	_place_model(model_name, Vector3(float(rec.get("x", 0.0)), float(rec.get("y", 0.0)), float(rec.get("z", 0.0))), float(rec.get("rot", 0.0)))
 
 
 func _menu_props() -> Array:
@@ -720,7 +764,7 @@ func _frame_menu_camera() -> void:
 	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
 	cam.keep_aspect = Camera3D.KEEP_HEIGHT
 	cam.size = MENU_ORTHO_SIZE
-	var look := Vector3(3.15, 0.9, 2.85)
+	var look := menu_look
 	cam.position = look
 	cam.rotation = Vector3(deg_to_rad(MENU_PITCH_DEG), deg_to_rad(MENU_YAW_DEG), 0.0)
 	var dist := 18.0
@@ -1591,7 +1635,7 @@ func _build_hud() -> void:
 	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	layer.add_child(top)
-	status = UIKit.label("", 16, UIKit.DARK)
+	status = UIKit.label("", 18, UIKit.DARK)
 	status.set_anchors_preset(Control.PRESET_FULL_RECT)
 	status.offset_left = 12
 	status.offset_top = 8
@@ -1608,7 +1652,7 @@ func _build_hud() -> void:
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	layer.add_child(hint_bar)
-	hint = UIKit.label("", 16, UIKit.DARK)
+	hint = UIKit.label("", 18, UIKit.DARK)
 	hint.set_anchors_preset(Control.PRESET_FULL_RECT)
 	hint.offset_left = 14
 	hint.offset_top = 8
@@ -1855,7 +1899,7 @@ func _open_jobs() -> void:
 			pay,
 			decorated.get("brief", ""),
 			decorated.get("mentor_note", ""),
-		], 16, UIKit.DARK)
+		], 18, UIKit.DARK)
 		card.position = Vector2(20, y)
 		card.size = Vector2(520, 110)
 		panel.add_child(card)
@@ -2020,7 +2064,7 @@ func _show_unbox() -> void:
 	title.position = Vector2(20, 12)
 	panel.add_child(title)
 	var left := int(order.get("bubbles_left", 0))
-	var blurb := UIKit.label("Pop the bubble wrap. Packing peanuts drift out. %d left." % left, 16, UIKit.DARK)
+	var blurb := UIKit.label("Pop the bubble wrap. Packing peanuts drift out. %d left." % left, 18, UIKit.DARK)
 	blurb.position = Vector2(20, 56)
 	blurb.size = Vector2(480, 48)
 	panel.add_child(blurb)

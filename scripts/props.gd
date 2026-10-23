@@ -107,6 +107,146 @@ static func mat(color: Color) -> StandardMaterial3D:
 	return material
 
 
+static func material_count(root: Node) -> int:
+	var ids := {}
+	for mesh_instance in _mesh_instances(root):
+		if mesh_instance.material_override != null:
+			ids[mesh_instance.material_override.get_instance_id()] = true
+			continue
+		if mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var material := mesh_instance.mesh.surface_get_material(i)
+			if material != null:
+				ids[material.get_instance_id()] = true
+	return ids.size()
+
+
+static func cap_prop_materials(root: Node, limit := 2) -> void:
+	if root == null or limit < 1:
+		return
+	var uses: Array = []
+	for mesh_instance in _mesh_instances(root):
+		if mesh_instance.material_override != null:
+			uses.append({
+				"mesh": mesh_instance,
+				"surface": -1,
+				"material": mesh_instance.material_override,
+				"weight": _mesh_weight(mesh_instance),
+			})
+			continue
+		if mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			uses.append({
+				"mesh": mesh_instance,
+				"surface": i,
+				"material": mesh_instance.mesh.surface_get_material(i),
+				"weight": _surface_weight(mesh_instance.mesh, i),
+			})
+	if uses.is_empty():
+		return
+	var groups: Array = []
+	for use in uses:
+		var material: Material = use["material"]
+		var key := _material_key(material)
+		var slot := -1
+		for index in groups.size():
+			if str(groups[index]["key"]) == key:
+				slot = index
+				break
+		if slot >= 0:
+			groups[slot]["weight"] = float(groups[slot]["weight"]) + float(use["weight"])
+		else:
+			groups.append({
+				"key": key,
+				"weight": float(use["weight"]),
+				"material": material,
+				"color": _albedo_of(material),
+			})
+	groups.sort_custom(func(a, b): return float(a["weight"]) > float(b["weight"]))
+	var keep_n := mini(limit, groups.size())
+	var shared: Array = []
+	var kept_keys: Array = []
+	for index in keep_n:
+		var source: Material = groups[index]["material"]
+		var copy: Material = source.duplicate() if source != null else mat(UIKit.CARD)
+		shared.append(copy)
+		kept_keys.append(str(groups[index]["key"]))
+	for use in uses:
+		var material: Material = use["material"]
+		var key := _material_key(material)
+		var chosen: Material = shared[0]
+		var kept := kept_keys.find(key)
+		if kept >= 0:
+			chosen = shared[kept]
+		else:
+			var color := _albedo_of(material)
+			var best := 999.0
+			for index in keep_n:
+				var delta := _color_delta(color, groups[index]["color"])
+				if delta < best:
+					best = delta
+					chosen = shared[index]
+		var mesh_instance: MeshInstance3D = use["mesh"]
+		var surface := int(use["surface"])
+		if surface < 0:
+			mesh_instance.material_override = chosen
+		else:
+			keep_material(mesh_instance, surface, chosen)
+
+
+static func _mesh_instances(root: Node) -> Array[MeshInstance3D]:
+	var found: Array[MeshInstance3D] = []
+	if root is MeshInstance3D:
+		found.append(root)
+	for node in root.find_children("*", "MeshInstance3D", true, false):
+		found.append(node)
+	return found
+
+
+static func _mesh_weight(mesh_instance: MeshInstance3D) -> float:
+	if mesh_instance.mesh == null:
+		return 1.0
+	var weight := 0.0
+	for i in mesh_instance.mesh.get_surface_count():
+		weight += _surface_weight(mesh_instance.mesh, i)
+	return maxf(weight, 1.0)
+
+
+static func _surface_weight(mesh: Mesh, surface: int) -> float:
+	var arrays: Array = mesh.surface_get_arrays(surface)
+	if arrays.is_empty() or arrays[Mesh.ARRAY_VERTEX] == null:
+		return 1.0
+	return maxf(float((arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()), 1.0)
+
+
+static func _material_key(material: Material) -> String:
+	if material == null:
+		return "null"
+	if material is StandardMaterial3D:
+		var std := material as StandardMaterial3D
+		var tex := ""
+		if std.albedo_texture != null:
+			tex = str(std.albedo_texture.get_instance_id())
+		var color := std.albedo_color
+		return "%s|%d|%d|%d" % [tex, int(round(color.r * 32.0)), int(round(color.g * 32.0)), int(round(color.b * 32.0))]
+	return "other|%d" % material.get_instance_id()
+
+
+static func _albedo_of(material: Material) -> Color:
+	if material is StandardMaterial3D:
+		return (material as StandardMaterial3D).albedo_color
+	return UIKit.CARD
+
+
+static func _color_delta(a: Color, b: Color) -> float:
+	var dr := a.r - b.r
+	var dg := a.g - b.g
+	var db := a.b - b.b
+	return dr * dr + dg * dg + db * db
+
+
 static func mesh_box(size: Vector3, color: Color) -> MeshInstance3D:
 	var mesh_instance := MeshInstance3D.new()
 	var box := BoxMesh.new()
@@ -143,15 +283,18 @@ static func model(name: String) -> Node3D:
 
 
 static func make(spec: String) -> Node3D:
+	var node: Node3D
 	if spec.begins_with("proc:"):
-		return _proc(spec.trim_prefix("proc:"))
-	var node := model(spec)
-	if node == null:
-		node = Node3D.new()
-		node.add_child(mesh_box(Vector3(0.4, 0.3, 0.4), UIKit.CARD))
-	ensure_box_collision(node)
-	if "box" in spec:
-		restyle_box(node)
+		node = _proc(spec.trim_prefix("proc:"))
+	else:
+		node = model(spec)
+		if node == null:
+			node = Node3D.new()
+			node.add_child(mesh_box(Vector3(0.4, 0.3, 0.4), UIKit.CARD))
+		ensure_box_collision(node)
+		if "box" in spec:
+			restyle_box(node)
+	cap_prop_materials(node, 2)
 	return node
 
 

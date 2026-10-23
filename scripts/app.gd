@@ -5,6 +5,7 @@ var overlay: Node
 
 
 func _ready() -> void:
+	UIKit.install_theme(get_tree().root)
 	view_root = Node.new()
 	view_root.name = "View"
 	add_child(view_root)

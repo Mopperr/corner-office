@@ -179,7 +179,7 @@ func _sheet(title_text: String, body_text: String) -> void:
 	scroll.position = Vector2(80, 140)
 	scroll.size = Vector2(1080, 520)
 	add_child(scroll)
-	var body := UIKit.label(body_text, 16, UIKit.DARK)
+	var body := UIKit.label(body_text, 18, UIKit.DARK)
 	body.custom_minimum_size = Vector2(1040, 0)
 	scroll.add_child(body)
 

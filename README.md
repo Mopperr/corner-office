@@ -10,7 +10,7 @@ Install [Godot 4.7](https://godotengine.org/) or newer (the project was made wit
 godot --path . 
 ```
 
-The main menu looks into the garage through an orthographic camera (yaw 45°, pitch -30°, size 7.2). It drifts once every 24 seconds, and that drift stays off when the system asks for reduced motion. The main scene is `res://scenes/main.tscn`. Headless logic check (import the class cache first, or a fresh run sits there until Godot finishes that scan):
+The project uses the Forward+ renderer and Jolt Physics. The UI base is 1920×1080 with stretch aspect `expand`, and body text stays at least 18px so it remains readable on a 1280×800 Deck. The main menu looks into the garage through an orthographic camera (yaw 45°, pitch -30°, size 7.2). If `game/menu_room_loft.json` is present, that shot is the Bakery Loft instead. It drifts once every 24 seconds, and that drift stays off when the system asks for reduced motion. The main scene is `res://scenes/main.tscn`. Headless logic check (import the class cache first, or a fresh run sits there until Godot finishes that scan):
 
 ```bash
 godot --headless --path . --import --quit
@@ -57,7 +57,7 @@ The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only
 - `data/tuning.json` holds the locked numbers (damage, snap, tips, office gates, audio gains).
 - `data/content.json` is characters, items, venues, and jobs. `data/drives.json` is the three routes. `data/forest.json` is the TropicalForest catalog. `data/shop.json` is fixtures, the menu, visitors, and Vibe.
 - `data/narrative/` is the intro, cast, emails, item flavor, `player_characters.json`, `character_arcs.json`, `how_to_play.json`, and `credits.json`. Dana (phase `slice`) is the only starter, through Garage Startup to the Bakery Loft. When one of her L1–L6 beats loads, Marge's email lands in the inbox and a short note shows the arrival and personal moment. Sol, Hank, Milo, and Bea arcs are in that file and stay hidden. There is no character select yet.
-- `assets/models/` is the diorama kit. Props get a box collider at runtime because the glTF files have none. Structural walls are 0.24 m thick (the inner face is 0.12 m, including the garage, whose visual shell is 0.26 m). Rugs and floor tiles are pickable and do not block physics. `npc_*` models get a capsule.
+- `assets/models/` is the diorama kit. A placed prop keeps at most two materials. Props get a box collider at runtime because the glTF files have none. Structural walls are 0.24 m thick (the inner face is 0.12 m, including the garage, whose visual shell is 0.26 m). Rugs and floor tiles are pickable and do not block physics. `npc_*` models get a capsule.
 - `assets/ui/driving/mover_truck_topdown_sheet@1x.png` is still the truck placeholder (facing +X, 32 px per meter) until the dedicated top-down truck sprite arrives. The unsuffixed sheet is 2× and is scaled by 0.5 if the @1x file is missing. Hazard tests use the opaque truck, not the padded frame.
 - L3 and L5 use the `@1x` driving sprites in `assets/ui/driving/` at 32 px per meter (cones, puddles, ducks, shopfronts, the pond fountain, and the bridge-closed sign). `assets/level-art-manifest.md` maps the L1–L6 props. The Bakery Loft uses the `bakery_loft_*` walls and floors.
 - `assets/audio/music/` and the `*loop*` / `*ambience*` clips import with loop on. Drop extra beds in `assets/audio/ambience/` (`.ogg` or `.wav`); those import with loop enabled too.

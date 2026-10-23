@@ -21,7 +21,7 @@ func _build() -> void:
 	var title := UIKit.label("TropicalForest", 28, UIKit.DARK, "title")
 	title.position = Vector2(8, 4)
 	add_child(title)
-	var deal := UIKit.label(_deal_line(), 15, UIKit.TERRA)
+	var deal := UIKit.label(_deal_line(), 18, UIKit.TERRA)
 	deal.position = Vector2(280, 10)
 	deal.size = Vector2(740, 40)
 	add_child(deal)
@@ -31,6 +31,7 @@ func _build() -> void:
 	search.position = Vector2(250, 48)
 	search.size = Vector2(250, 36)
 	search.add_theme_font_override("font", UIKit.body_font())
+	search.add_theme_font_size_override("font_size", UIKit.font_px(18))
 	search.text_submitted.connect(func(value: String):
 		query = value
 		_build()
@@ -86,7 +87,7 @@ func _list() -> void:
 	var rows: Array = Catalog.search(category, query, GameState.office_id)
 	var y := 92.0
 	if rows.is_empty():
-		var empty := UIKit.label("Nothing in this aisle yet.", 16, UIKit.DARK)
+		var empty := UIKit.label("Nothing in this aisle yet.", 18, UIKit.DARK)
 		empty.position = Vector2(250, 100)
 		add_child(empty)
 		return
@@ -99,7 +100,7 @@ func _list() -> void:
 		btn.position = Vector2(250, y)
 		btn.size = Vector2(340, 36)
 		btn.add_theme_font_override("font", UIKit.body_font())
-		btn.add_theme_font_size_override("font_size", 14)
+		btn.add_theme_font_size_override("font_size", UIKit.font_px(18))
 		btn.add_theme_color_override("font_color", UIKit.DARK)
 		var fill := UIKit.MUSTARD if id == selected else Color("F7F1E4")
 		btn.add_theme_stylebox_override("normal", UIKit.style(fill, 8))
@@ -135,16 +136,16 @@ func _detail() -> void:
 	var price_text := "$%d" % price
 	if price < list:
 		price_text = "$%d  was $%d" % [price, list]
-	var meta := UIKit.label("%s   %s" % [price_text, _stars(float(entry.get("stars", 4)))], 16, UIKit.TERRA, "title")
+	var meta := UIKit.label("%s   %s" % [price_text, _stars(float(entry.get("stars", 4)))], 18, UIKit.TERRA, "title")
 	meta.position = Vector2(12, 40)
 	panel.add_child(meta)
-	var flavor := UIKit.label(ItemDB.flavor(str(entry.get("item", ""))), 14, UIKit.DARK)
+	var flavor := UIKit.label(ItemDB.flavor(str(entry.get("item", ""))), 18, UIKit.DARK)
 	flavor.position = Vector2(12, 68)
 	flavor.size = Vector2(360, 40)
 	panel.add_child(flavor)
 	var ry := 110.0
 	for review in entry.get("reviews", []):
-		var line := UIKit.label("%s  %s\n%s" % [_stars(float(review.get("stars", 5))), review.get("who", ""), review.get("text", "")], 13, UIKit.DARK)
+		var line := UIKit.label("%s  %s\n%s" % [_stars(float(review.get("stars", 5))), review.get("who", ""), review.get("text", "")], 18, UIKit.DARK)
 		line.position = Vector2(12, ry)
 		line.size = Vector2(360, 48)
 		panel.add_child(line)
@@ -153,7 +154,7 @@ func _detail() -> void:
 	for other in entry.get("also", []):
 		also_bits.append(Catalog.display_name(str(other)))
 	if also_bits.size() > 0:
-		var also := UIKit.label("Customers also bought  " + ", ".join(also_bits), 13, UIKit.BLUE)
+		var also := UIKit.label("Customers also bought  " + ", ".join(also_bits), 18, UIKit.BLUE)
 		also.position = Vector2(12, 250)
 		also.size = Vector2(360, 36)
 		panel.add_child(also)
@@ -214,6 +215,6 @@ func _prime() -> void:
 
 
 func _toast(text: String, color: Color) -> void:
-	var note := UIKit.label(text, 16, color, "title")
+	var note := UIKit.label(text, 18, color, "title")
 	note.position = Vector2(250, 8)
 	add_child(note)
