@@ -33,55 +33,61 @@ func _process(delta: float) -> void:
 
 
 func _build() -> void:
-	for child in get_children():
-		child.queue_free()
+	var previous: Array = get_children()
+	for child in previous:
+		if child is CanvasItem and (child as CanvasItem).draw.is_connected(_draw_chart):
+			(child as CanvasItem).draw.disconnect(_draw_chart)
+		remove_child(child)
+		child.free()
 	var dim := ColorRect.new()
 	dim.color = Color(UIKit.NIGHT, 0.35)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(dim)
+	UIKit.fill(dim, 0, 0, 0, 0)
 	var bezel := Panel.new()
-	bezel.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bezel.offset_left = 70
-	bezel.offset_top = 36
-	bezel.offset_right = -70
-	bezel.offset_bottom = -36
+	bezel.name = "Bezel"
 	bezel.add_theme_stylebox_override("panel", UIKit.style(Color("E4D3B4"), 28, 8, UIKit.DARK))
 	add_child(bezel)
+	UIKit.fill(bezel, 16, 16, 16, 16)
 	var screen := Panel.new()
-	screen.set_anchors_preset(Control.PRESET_FULL_RECT)
-	screen.offset_left = 28
-	screen.offset_top = 28
-	screen.offset_right = -28
-	screen.offset_bottom = -36
+	screen.name = "Screen"
+	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	screen.add_theme_stylebox_override("panel", UIKit.style(UIKit.SCREEN, 12, 0))
 	bezel.add_child(screen)
+	UIKit.fill(screen, 20, 20, 20, 20)
 	var bar := Panel.new()
-	bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	bar.offset_bottom = 52
-	bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.BLUE, 8))
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 8))
 	screen.add_child(bar)
+	bar.layout_mode = 1
+	bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	bar.offset_bottom = 64
 	var home := UIKit.label("HomeDesk", 28, UIKit.CREAM_CARD, "crt", false)
-	home.position = Vector2(18, 8)
-	home.custom_minimum_size = Vector2(220, 36)
+	home.position = Vector2(18, 12)
+	home.custom_minimum_size = Vector2(220, 40)
 	bar.add_child(home)
-	balance = UIKit.label(_money(), 28, UIKit.MUSTARD, "crt")
-	balance.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	balance.offset_left = -280
-	balance.offset_top = 8
-	balance.offset_right = -90
+	var market_name := UIKit.label("MARKET.EXE", 28, UIKit.MUSTARD, "crt", false)
+	market_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	screen.add_child(market_name)
+	UIKit.pin_center_top(market_name, -180, 28, 180, 76)
+	balance = UIKit.label(_money(), 28, UIKit.MUSTARD, "crt", false)
 	bar.add_child(balance)
+	UIKit.pin_top_right(balance, -360, 12, -88, 52)
 	var power := UIKit.button("x", UIKit.TERRA, UIKit.CREAM_CARD)
-	power.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	power.offset_left = -64
-	power.offset_top = 6
-	power.offset_right = -12
-	power.offset_bottom = 46
+	power.custom_minimum_size = Vector2(56, 56)
 	power.pressed.connect(_close)
 	bar.add_child(power)
+	UIKit.pin_top_right(power, -72, 4, -8, 60)
 	var icons := HBoxContainer.new()
-	icons.position = Vector2(16, 60)
+	icons.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icons.add_theme_constant_override("separation", 8)
 	screen.add_child(icons)
+	icons.layout_mode = 1
+	icons.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	icons.offset_left = 16
+	icons.offset_top = 76
+	icons.offset_right = -16
+	icons.offset_bottom = 176
 	_icon(icons, "Market", "res://assets/ui/icons/icon_market.png", "market")
 	_icon(icons, "Shop", "res://assets/ui/icons/icon_shop.png", "shop")
 	_icon(icons, "Forest", "res://assets/ui/icons/icon_listings.png", "forest")
@@ -89,14 +95,19 @@ func _build() -> void:
 	_icon(icons, "Email", "res://assets/ui/icons/icon_email.png", "email")
 	_icon(icons, "Listings", "res://assets/ui/icons/icon_listings.png", "listings")
 	body = Panel.new()
-	body.position = Vector2(20, 156)
-	body.size = Vector2(1040, 460)
+	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 12))
 	screen.add_child(body)
+	body.layout_mode = 1
+	body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	body.offset_left = 16
+	body.offset_top = 188
+	body.offset_right = -16
+	body.offset_bottom = -16
 	_show_page()
 
 
-func _icon(row: HBoxContainer, caption: String, path: String, id: String) -> void:
+func _icon(row: HBoxContainer, caption: String, path: String, id: String) -> Button:
 	var btn := UIKit.icon_button(path, caption)
 	if id == "email" and GameState.unread_count() > 0:
 		btn.text = "%s (%d)" % [caption, GameState.unread_count()]
@@ -107,6 +118,7 @@ func _icon(row: HBoxContainer, caption: String, path: String, id: String) -> voi
 		_show_page()
 	)
 	row.add_child(btn)
+	return btn
 
 
 func _show_page() -> void:
@@ -125,64 +137,97 @@ func _show_page() -> void:
 			body.add_child(preload("res://scripts/forest_page.gd").new())
 		"manager":
 			body.add_child(preload("res://scripts/shop_page.gd").new())
+	_wire_screen()
+
+
+func _wire_screen() -> void:
+	var icons: Array = []
+	var pages: Array = []
+	var power: Button = null
+	for node in find_children("*", "Button", true, false):
+		var btn := node as Button
+		if btn.get_parent() == body:
+			pages.append(btn)
+		elif btn.text == "x":
+			power = btn
+		elif btn.get_parent() is HBoxContainer:
+			icons.append(btn)
+	var rows: Array = []
+	if not icons.is_empty():
+		rows.append(icons)
+	if not pages.is_empty():
+		rows.append(pages)
+	if power != null:
+		rows.append([power])
+	if not rows.is_empty():
+		UIKit.link_grid(rows)
 
 
 func _market() -> void:
 	var goods := ItemDB.trade_goods()
 	var list := ItemList.new()
 	list.position = Vector2(12, 12)
-	list.size = Vector2(280, 360)
+	list.size = Vector2(280, 400)
+	list.custom_minimum_size = Vector2(280, 200)
+	list.focus_mode = Control.FOCUS_ALL
 	list.add_theme_font_override("font", UIKit.body_font())
-	list.add_theme_font_size_override("font_size", UIKit.font_px(18))
+	list.add_theme_font_size_override("font_size", UIKit.font_px(28))
+	list.add_theme_color_override("font_color", UIKit.DARK)
+	list.add_theme_color_override("font_hovered_color", UIKit.DARK)
+	list.add_theme_color_override("font_selected_color", UIKit.CREAM_CARD)
 	for good in goods:
 		var id := str(good.get("id", ""))
 		list.add_item("%s  $%d" % [good.get("name", id), GameState.price_of(id)])
 		list.set_item_metadata(list.item_count - 1, id)
 	list.item_selected.connect(func(idx):
 		selected = str(list.get_item_metadata(idx))
-		_market()
+		_show_page()
 	)
 	body.add_child(list)
 	if selected == "" and not goods.is_empty():
 		selected = str(goods[0].get("id", ""))
 	var item := ItemDB.get_item(selected)
-	var title := UIKit.label(str(item.get("name", "Market")), 28, UIKit.DARK, "title")
-	title.position = Vector2(310, 8)
-	title.size = Vector2(500, 36)
+	var title := UIKit.label(str(item.get("name", "Market")), 28, UIKit.DARK, "title", false)
+	title.position = Vector2(310, 4)
+	title.size = Vector2(480, 44)
+	title.custom_minimum_size = Vector2(minf(480.0, maxf(180.0, float(title.text.length()) * 16.0)), 44)
 	body.add_child(title)
-	var flavor := UIKit.label(str(item.get("flavor", "")), 18, UIKit.DARK)
-	flavor.position = Vector2(310, 44)
-	flavor.size = Vector2(480, 48)
+	var flavor := UIKit.label(str(item.get("flavor", "")), 36, UIKit.DARK)
+	flavor.position = Vector2(310, 50)
+	flavor.size = Vector2(480, 72)
+	flavor.custom_minimum_size = Vector2(480, 44)
 	body.add_child(flavor)
 	chart = Control.new()
-	chart.position = Vector2(310, 96)
-	chart.size = Vector2(460, 100)
+	chart.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chart.position = Vector2(310, 126)
+	chart.size = Vector2(460, 70)
 	chart.draw.connect(_draw_chart)
 	body.add_child(chart)
 	var series: Array = GameState.history.get(selected, [])
 	var yesterday := ""
 	if series.size() >= 2:
 		yesterday = "Yesterday $%d" % int(round(float(series[series.size() - 2])))
-	var ylbl := UIKit.label("Dana's note: %s" % yesterday, 18, UIKit.BLUE)
+	var ylbl := UIKit.label("Dana's note: %s    You have %d" % [yesterday, int(GameState.goods.get(selected, 0))], 36, UIKit.BLUE)
 	ylbl.position = Vector2(310, 200)
+	ylbl.size = Vector2(680, 48)
+	ylbl.custom_minimum_size = Vector2(480, 44)
 	body.add_child(ylbl)
-	var own := UIKit.label("You have %d    Buy $%d    Sell $%d" % [int(GameState.goods.get(selected, 0)), GameState.price_of(selected), GameState.sell_price_of(selected)], 18, UIKit.DARK)
-	own.position = Vector2(310, 224)
-	own.size = Vector2(500, 28)
-	body.add_child(own)
 	var buy := UIKit.button("BUY", UIKit.GREEN)
-	buy.position = Vector2(310, 330)
+	buy.position = Vector2(310, 340)
 	buy.size = Vector2(180, 56)
+	buy.custom_minimum_size = Vector2(180, 56)
 	buy.pressed.connect(_buy)
 	body.add_child(buy)
 	var sell := UIKit.button("SELL", UIKit.TERRA)
-	sell.position = Vector2(510, 330)
+	sell.position = Vector2(500, 340)
 	sell.size = Vector2(180, 56)
+	sell.custom_minimum_size = Vector2(180, 56)
 	sell.pressed.connect(_sell)
 	body.add_child(sell)
 	var nxt := UIKit.button("Next day", UIKit.BLUE)
-	nxt.position = Vector2(710, 330)
-	nxt.size = Vector2(160, 56)
+	nxt.position = Vector2(690, 340)
+	nxt.size = Vector2(180, 56)
+	nxt.custom_minimum_size = Vector2(180, 56)
 	nxt.pressed.connect(func():
 		GameState.advance_day()
 		AudioDirector.play_sfx("sfx_notification_soft")
@@ -193,21 +238,22 @@ func _market() -> void:
 	body.add_child(nxt)
 	if not GameState.buyer_offer.is_empty():
 		var offer: Dictionary = GameState.buyer_offer
-		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 18, UIKit.DARK)
+		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 36, UIKit.DARK)
 		line.name = "Offer"
 		line.position = Vector2(310, 256)
-		line.size = Vector2(490, 48)
-		line.custom_minimum_size = Vector2(490, 40)
+		line.size = Vector2(490, 72)
+		line.custom_minimum_size = Vector2(490, 44)
 		body.add_child(line)
 		var take := UIKit.button("Sell to them", UIKit.MUSTARD, UIKit.DARK)
 		take.position = Vector2(820, 256)
-		take.size = Vector2(180, 44)
+		take.size = Vector2(180, 56)
+		take.custom_minimum_size = Vector2(180, 56)
 		take.pressed.connect(_sell_buyer)
 		body.add_child(take)
 
 
 func _draw_chart() -> void:
-	if chart == null:
+	if chart == null or not is_instance_valid(chart) or not chart.is_inside_tree():
 		return
 	var series: Array = GameState.history.get(selected, [])
 	var rect := Rect2(Vector2.ZERO, chart.size)
@@ -294,7 +340,8 @@ func _shop() -> void:
 		var price := int(decor.get("price", 0))
 		var buy := UIKit.button("$%d" % price, UIKit.MUSTARD, UIKit.DARK)
 		buy.position = Vector2(210, 36)
-		buy.size = Vector2(96, 44)
+		buy.size = Vector2(120, 56)
+		buy.custom_minimum_size = Vector2(120, 56)
 		buy.pressed.connect(_buy_decor.bind(id))
 		card.add_child(buy)
 		grid.add_child(card)
@@ -349,7 +396,8 @@ func _listings() -> void:
 		if not here and bool(office.get("playable", false)):
 			var btn := UIKit.button("Move in" if met else "Locked", UIKit.SAGE if met else UIKit.BLUE)
 			btn.position = Vector2(760, y + 8)
-			btn.size = Vector2(200, 48)
+			btn.size = Vector2(220, 56)
+			btn.custom_minimum_size = Vector2(220, 56)
 			btn.disabled = not met
 			btn.pressed.connect(_move_office.bind(id))
 			body.add_child(btn)

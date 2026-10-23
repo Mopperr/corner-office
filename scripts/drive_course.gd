@@ -2,6 +2,7 @@ extends Node2D
 
 const Tuning = preload("res://scripts/tuning.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
+const Controls = preload("res://scripts/control_map.gd")
 
 signal finished(result: Dictionary)
 
@@ -41,9 +42,15 @@ var rev_cd := 0.0
 var jogger_cd := 0.0
 var shake := 0.0
 var running := true
+var preview := false
 
 
 func _ready() -> void:
+	if preview:
+		course = {"title": "Garage run", "weather": "clear"}
+		_hud()
+		running = false
+		return
 	var drive_id := str(GameState.job.get("def", {}).get("drive", "rainy_afternoon"))
 	course = JobDB.get_drive(drive_id)
 	if course.is_empty():
@@ -108,31 +115,53 @@ func _make_rain() -> void:
 func _hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
+	var root := Control.new()
+	root.name = "DriveHud"
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(root)
+	UIKit.fill(root, 0, 0, 0, 0)
 	var card := Panel.new()
-	card.position = Vector2(16, 16)
-	card.size = Vector2(360, 92)
+	card.name = "ConditionCard"
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
-	layer.add_child(card)
-	var title := UIKit.label("Box condition", 22, UIKit.DARK, "title", false)
-	title.position = Vector2(16, 8)
+	root.add_child(card)
+	UIKit.pin_top_left(card, 16, 16, 560, 176)
+	var title := UIKit.label("Box condition", 28, UIKit.DARK, "title", false)
+	title.position = Vector2(20, 12)
+	title.custom_minimum_size = Vector2(320, 44)
 	card.add_child(title)
 	meter = ProgressBar.new()
-	meter.position = Vector2(16, 48)
-	meter.size = Vector2(320, 22)
+	meter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	meter.position = Vector2(20, 72)
+	meter.size = Vector2(360, 36)
+	meter.custom_minimum_size = Vector2(360, 36)
 	meter.max_value = 100
 	meter.value = 100
 	meter.show_percentage = false
-	layer.add_child(meter)
-	meter_label = UIKit.label("100", 18, UIKit.DARK)
-	meter_label.position = Vector2(250, 10)
+	card.add_child(meter)
+	meter_label = UIKit.label("100", 36, UIKit.DARK, "body", false)
+	meter_label.position = Vector2(400, 16)
+	meter_label.custom_minimum_size = Vector2(120, 44)
 	card.add_child(meter_label)
-	hint = UIKit.label("", 18, UIKit.CREAM_CARD)
-	hint.position = Vector2(16, 640)
-	hint.size = Vector2(1100, 70)
-	layer.add_child(hint)
-	var name_label := UIKit.label(str(course.get("title", "Drive")), 28, UIKit.CREAM_CARD, "title")
-	name_label.position = Vector2(400, 18)
-	layer.add_child(name_label)
+	var hint_bar := Panel.new()
+	hint_bar.name = "DriveHint"
+	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
+	root.add_child(hint_bar)
+	UIKit.pin_bottom(hint_bar, 16, -156, -16, -16)
+	hint = UIKit.label("", 36, UIKit.DARK)
+	hint.max_lines_visible = 2
+	root.add_child(hint)
+	UIKit.pin_bottom(hint, 32, -140, -32, -28)
+	var name_bar := Panel.new()
+	name_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 14))
+	root.add_child(name_bar)
+	UIKit.pin_top_right(name_bar, -520, 16, -16, 84)
+	var name_label := UIKit.label(str(course.get("title", "Drive")), 28, UIKit.CREAM_CARD, "title", false)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_bar.add_child(name_label)
+	UIKit.fill(name_label, 12, 8, 12, 8)
 
 
 func _process(delta: float) -> void:
@@ -145,7 +174,7 @@ func _process(delta: float) -> void:
 		brake *= 1.0 - float(Tuning.get_value("drive.rain_brake_penalty", 0.15))
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 4.0)) * PX
 	var turn := float(Tuning.get_value("drive.turn_rate", 1.7))
-	var throttle := _axis(KEY_S, KEY_DOWN, KEY_W, KEY_UP)
+	var throttle := Controls.axis("drive_back", "drive_forward")
 	var weather := str(course.get("weather", "clear"))
 	if rev_cd > 0.0:
 		rev_cd -= delta
@@ -171,7 +200,7 @@ func _process(delta: float) -> void:
 		_maybe_hard_brake(weather, before, delta)
 	else:
 		speed = maxf(0.0, speed - accel * 0.35 * delta)
-	var steer := _axis(KEY_A, KEY_LEFT, KEY_D, KEY_RIGHT)
+	var steer := Controls.axis("steer_left", "steer_right")
 	if abs(speed) > 12.0:
 		heading += steer * turn * delta * clampf(speed / max_speed, 0.35, 1.0)
 	if duck_hold > 0.0:
@@ -211,7 +240,7 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_H:
+	if Controls.event_pressed(event, "horn"):
 		AudioDirector.play_sfx("sfx_truck_horn")
 		if _near_honk_ducks():
 			duck_hold = 1.6

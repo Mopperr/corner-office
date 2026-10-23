@@ -32,7 +32,9 @@ func _build() -> void:
 	search.placeholder_text = "Search the canopy"
 	search.text = query
 	search.position = Vector2(250, 48)
-	search.size = Vector2(250, 36)
+	search.size = Vector2(280, 48)
+	search.custom_minimum_size = Vector2(280, 48)
+	search.focus_mode = Control.FOCUS_ALL
 	search.add_theme_font_override("font", UIKit.body_font())
 	search.add_theme_font_size_override("font_size", UIKit.font_px(18))
 	search.text_submitted.connect(func(value: String):
@@ -42,7 +44,8 @@ func _build() -> void:
 	add_child(search)
 	var go := UIKit.button("Search", UIKit.BLUE)
 	go.position = Vector2(510, 48)
-	go.size = Vector2(110, 36)
+	go.size = Vector2(140, 56)
+	go.custom_minimum_size = Vector2(140, 56)
 	go.pressed.connect(func():
 		query = search.text
 		_build()
@@ -54,16 +57,18 @@ func _build() -> void:
 		var open := Catalog.category_open(id, GameState.office_id)
 		var btn := UIKit.button(str(cat.get("name", id)), UIKit.SAGE if id == category else UIKit.BLUE)
 		btn.position = Vector2(8, y)
-		btn.size = Vector2(220, 40)
+		btn.size = Vector2(240, 56)
+		btn.custom_minimum_size = Vector2(240, 56)
 		btn.disabled = not open
 		if not open:
 			btn.text = "%s  · later" % str(cat.get("name", id))
 		btn.pressed.connect(_pick_category.bind(id))
 		add_child(btn)
-		y += 46
+		y += 60
 	var prime := UIKit.button("Toucan Prime" if not GameState.prime else "Prime member", UIKit.MUSTARD, UIKit.DARK)
-	prime.position = Vector2(8, 400)
-	prime.size = Vector2(220, 44)
+	prime.position = Vector2(8, y)
+	prime.size = Vector2(240, 56)
+	prime.custom_minimum_size = Vector2(240, 56)
 	prime.disabled = GameState.prime
 	prime.pressed.connect(_prime)
 	add_child(prime)
@@ -101,15 +106,21 @@ func _list() -> void:
 		var btn := Button.new()
 		btn.text = "%s   $%d   %s" % [Catalog.display_name(id), Catalog.price_of(id, GameState.day), _stars(float(entry.get("stars", 4)))]
 		btn.position = Vector2(250, y)
-		btn.size = Vector2(340, 36)
+		btn.focus_mode = Control.FOCUS_ALL
+		btn.custom_minimum_size = Vector2(360, 56)
+		btn.size = Vector2(360, 56)
 		btn.add_theme_font_override("font", UIKit.body_font())
-		btn.add_theme_font_size_override("font_size", UIKit.font_px(18))
-		btn.add_theme_color_override("font_color", UIKit.DARK)
+		btn.add_theme_font_size_override("font_size", UIKit.font_px(28))
 		var fill := UIKit.MUSTARD if id == selected else Color("F7F1E4")
+		btn.add_theme_color_override("font_color", UIKit.DARK)
+		btn.add_theme_color_override("font_hover_color", UIKit.DARK)
+		btn.add_theme_color_override("font_focus_color", UIKit.DARK)
 		btn.add_theme_stylebox_override("normal", UIKit.style(fill, 8))
+		btn.add_theme_stylebox_override("hover", UIKit.style(fill.lightened(0.08), 8, 3, UIKit.CREAM_CARD))
+		btn.add_theme_stylebox_override("focus", UIKit.style(fill.lightened(0.08), 8, 4, UIKit.MUSTARD))
 		btn.pressed.connect(_pick_item.bind(id))
 		add_child(btn)
-		y += 40
+		y += 60
 		if y > 420:
 			break
 
@@ -164,12 +175,14 @@ func _detail() -> void:
 	var wished := selected in GameState.wishlist
 	var wish := UIKit.button("Wishlisted" if wished else "Wishlist", UIKit.BLUE)
 	wish.position = Vector2(12, 292)
-	wish.size = Vector2(160, 40)
+	wish.size = Vector2(180, 56)
+	wish.custom_minimum_size = Vector2(180, 56)
 	wish.pressed.connect(_wish)
 	panel.add_child(wish)
 	var standard := UIKit.button("Standard  free", UIKit.SAGE)
 	standard.position = Vector2(12, 342)
-	standard.size = Vector2(170, 44)
+	standard.size = Vector2(180, 56)
+	standard.custom_minimum_size = Vector2(180, 56)
 	standard.pressed.connect(_buy.bind("standard"))
 	panel.add_child(standard)
 	var fee := int(Catalog.shipping("express").get("fee", 4))
@@ -177,7 +190,8 @@ func _detail() -> void:
 		fee = 0
 	var express := UIKit.button("Express  $%d" % fee, UIKit.TERRA)
 	express.position = Vector2(196, 342)
-	express.size = Vector2(170, 44)
+	express.size = Vector2(180, 56)
+	express.custom_minimum_size = Vector2(180, 56)
 	express.pressed.connect(_buy.bind("express"))
 	panel.add_child(express)
 

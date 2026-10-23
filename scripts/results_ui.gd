@@ -70,7 +70,11 @@ func _center_card() -> void:
 	layout_mode = 0
 	position = Vector2.ZERO
 	size = vp
-	var card_size := Vector2(720, 560)
+	var card_size := Vector2(860, 680)
+	if vp.y < card_size.y + 16.0:
+		card_size.y = maxf(360.0, vp.y - 16.0)
+	if vp.x < card_size.x + 16.0:
+		card_size.x = maxf(480.0, vp.x - 16.0)
 	card.layout_mode = 1
 	card.anchor_left = 0.5
 	card.anchor_top = 0.5
@@ -89,30 +93,34 @@ func _center_card() -> void:
 func _build() -> void:
 	var dim := ColorRect.new()
 	dim.color = Color(UIKit.NIGHT, 0.45)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(dim)
+	UIKit.fill(dim, 0, 0, 0, 0)
 	var card := Panel.new()
 	card.name = "Card"
-	card.custom_minimum_size = Vector2(720, 560)
+	card.custom_minimum_size = Vector2(860, 680)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
 	add_child(card)
-	var title := UIKit.label(str(GameState.payout.get("title", "Job done")), 36, UIKit.DARK, "title")
-	title.position = Vector2(28, 18)
-	title.size = Vector2(640, 48)
+	var title := UIKit.label(str(GameState.payout.get("title", "Job done")), 40, UIKit.DARK, "title", false)
+	title.position = Vector2(36, 20)
+	title.size = Vector2(780, 56)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.add_child(title)
-	var y := 78.0
-	var step := 34.0 if lines.size() > 9 else 40.0
+	var y := 88.0
+	var step := 46.0
 	for i in lines.size():
-		var row := UIKit.label(lines[i], 22, UIKit.DARK)
-		row.position = Vector2(32, y)
-		row.size = Vector2(640, 36)
+		var row := UIKit.label(lines[i], 36, UIKit.DARK, "body", false)
+		row.position = Vector2(40, y)
+		row.size = Vector2(780, 44)
+		row.custom_minimum_size = Vector2(minf(760.0, maxf(180.0, float(str(lines[i]).length()) * 20.0)), 44)
 		row.modulate.a = 0.0
 		row.name = "Line%d" % i
 		card.add_child(row)
 		y += step
 	var btn := UIKit.button("Back to the office", UIKit.SAGE)
-	btn.position = Vector2(200, 500)
-	btn.size = Vector2(280, 52)
+	btn.position = Vector2(250, 604)
+	btn.size = Vector2(360, 56)
+	btn.custom_minimum_size = Vector2(360, 56)
 	btn.pressed.connect(func():
 		GameState.job = {}
 		GameState.payout = {}
@@ -121,6 +129,7 @@ func _build() -> void:
 		emit_signal("closed")
 	)
 	card.add_child(btn)
+	UIKit.link_focus([btn])
 
 
 func _reveal() -> void:

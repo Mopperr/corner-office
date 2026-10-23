@@ -11,6 +11,7 @@ var snap_to_grid := false
 var graphics_quality := "medium"
 
 const Graphics = preload("res://scripts/settings_manager.gd")
+const Controls = preload("res://scripts/control_map.gd")
 
 
 func _ready() -> void:
@@ -59,6 +60,7 @@ func save_settings() -> void:
 	cfg.set_value("access", "text_scale", text_scale)
 	cfg.set_value("place", "snap_to_grid", snap_to_grid)
 	cfg.set_value("graphics", "quality", graphics_quality)
+	cfg.set_value("controls", "bindings", Controls.export_json())
 	cfg.save(SETTINGS_PATH)
 
 
@@ -72,3 +74,4 @@ func load_settings() -> void:
 	text_scale = float(cfg.get_value("access", "text_scale", text_scale))
 	snap_to_grid = bool(cfg.get_value("place", "snap_to_grid", snap_to_grid))
 	graphics_quality = Graphics.normalize(str(cfg.get_value("graphics", "quality", graphics_quality)))
+	Controls.import_json(str(cfg.get_value("controls", "bindings", "")))

@@ -120,13 +120,12 @@ func _pause_button() -> void:
 	layer.layer = 20
 	view_root.add_child(layer)
 	var btn := UIKit.button("Pause", UIKit.DARK)
-	btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	btn.offset_left = -100
-	btn.offset_top = 16
-	btn.offset_right = -16
-	btn.offset_bottom = 56
+	btn.name = "PauseButton"
+	btn.custom_minimum_size = Vector2(140, 56)
 	btn.pressed.connect(_pause)
 	layer.add_child(btn)
+	UIKit.pin_top_right(btn, -156, 16, -16, 72)
+	UIKit.link_focus([btn])
 
 
 func _pause() -> void:
@@ -150,6 +149,7 @@ func _pause() -> void:
 	var box := VBoxContainer.new()
 	box.name = "PauseColumn"
 	box.process_mode = Node.PROCESS_MODE_ALWAYS
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_theme_constant_override("separation", 12)
 	center.add_child(box)
 	var title := UIKit.label("Paused", 42, UIKit.DARK, "title", false)
@@ -159,7 +159,7 @@ func _pause() -> void:
 	box.add_child(title)
 	var resume := UIKit.button("Resume", UIKit.SAGE)
 	resume.process_mode = Node.PROCESS_MODE_ALWAYS
-	resume.custom_minimum_size = Vector2(420, 54)
+	resume.custom_minimum_size = Vector2(420, 56)
 	resume.pressed.connect(func():
 		get_tree().paused = false
 		panel.queue_free()
@@ -167,7 +167,7 @@ func _pause() -> void:
 	box.add_child(resume)
 	var save := UIKit.button("Save", UIKit.WOOD, UIKit.CREAM_CARD)
 	save.process_mode = Node.PROCESS_MODE_ALWAYS
-	save.custom_minimum_size = Vector2(420, 54)
+	save.custom_minimum_size = Vector2(420, 56)
 	save.pressed.connect(func():
 		SaveManager.save_game()
 		AudioDirector.play_sfx("sfx_success_chime")
@@ -175,7 +175,7 @@ func _pause() -> void:
 	box.add_child(save)
 	var menu := UIKit.button("Main menu", UIKit.TERRA)
 	menu.process_mode = Node.PROCESS_MODE_ALWAYS
-	menu.custom_minimum_size = Vector2(420, 54)
+	menu.custom_minimum_size = Vector2(420, 56)
 	menu.pressed.connect(func():
 		SaveManager.save_game()
 		get_tree().paused = false
@@ -183,6 +183,7 @@ func _pause() -> void:
 		show_menu()
 	)
 	box.add_child(menu)
+	UIKit.link_focus([resume, save, menu])
 
 
 func _clear(node: Node) -> void:

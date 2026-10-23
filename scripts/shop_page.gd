@@ -66,7 +66,8 @@ func _build() -> void:
 		var label := "Cozy" if value < 0.9 else ("Fair" if value < 1.1 else "Splurge")
 		var btn := UIKit.button(label, UIKit.MUSTARD if absf(GameState.menu_markup - value) < 0.05 else UIKit.BLUE, UIKit.DARK if absf(GameState.menu_markup - value) < 0.05 else UIKit.CREAM_CARD)
 		btn.position = Vector2(mx, 360)
-		btn.size = Vector2(120, 44)
+		btn.size = Vector2(140, 56)
+		btn.custom_minimum_size = Vector2(140, 56)
 		btn.pressed.connect(_set_markup.bind(value))
 		add_child(btn)
 		mx += 128

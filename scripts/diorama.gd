@@ -10,6 +10,7 @@ const Tuning = preload("res://scripts/tuning.gd")
 const Catalog = preload("res://scripts/catalog.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
 const Props = preload("res://scripts/props.gd")
+const Controls = preload("res://scripts/control_map.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -25,7 +26,7 @@ signal request_results
 signal request_rebuild
 
 var cam: Camera3D
-var items_root := Node3D.new()
+var items_root: Node3D
 var venue: Dictionary = {}
 var nodes_by_uid: Dictionary = {}
 var held_uid := ""
@@ -65,9 +66,14 @@ var drift_t := 0.0
 var settling := false
 var stack_room
 var _settle_uid := ""
+var hud_only := false
 
 
 func _ready() -> void:
+	if hud_only:
+		_build_hud()
+		return
+	items_root = Node3D.new()
 	items_root.name = "Items"
 	add_child(items_root)
 	_world()
@@ -582,6 +588,8 @@ func _sync_cargo() -> void:
 
 
 func _process(delta: float) -> void:
+	if hud_only:
+		return
 	if backdrop:
 		_drift_camera(delta)
 		return
@@ -589,6 +597,8 @@ func _process(delta: float) -> void:
 		toast_time -= delta
 		if toast:
 			toast.visible = toast_time > 0.0
+			if toast.get_parent() is CanvasItem:
+				(toast.get_parent() as CanvasItem).visible = toast.visible
 	if cat_player and is_instance_valid(cat_player):
 		stretch_in -= delta
 		if stretch_in <= 0.0 and cat_player.current_animation != "stretch":
@@ -897,18 +907,20 @@ func _paint_ghost(valid: bool) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if backdrop:
 		return
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_G:
-			_toggle_snap()
-			return
-		if event.keycode == KEY_R:
-			if held_uid != "":
+	if Controls.event_pressed(event, "snap"):
+		_toggle_snap()
+		return
+	if Controls.event_pressed(event, "rotate"):
+		if held_uid != "":
+			var fine := false
+			if event is InputEventKey:
 				var key := event as InputEventKey
-				var fine := key.shift_pressed or Input.is_key_pressed(KEY_SHIFT)
-				held_rot = fmod(held_rot + Tuning.rotate_step(fine) + 360.0, 360.0)
-				AudioDirector.play_sfx("sfx_ui_click")
-		elif event.keycode == KEY_ESCAPE and held_uid != "":
-			_drop_hold()
+				fine = key.shift_pressed or Input.is_key_pressed(KEY_SHIFT)
+			held_rot = fmod(held_rot + Tuning.rotate_step(fine) + 360.0, 360.0)
+			AudioDirector.play_sfx("sfx_ui_click")
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE and held_uid != "":
+		_drop_hold()
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_click()
 
@@ -1649,48 +1661,39 @@ func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 	var top := Panel.new()
-	top.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	top.offset_left = 16
-	top.offset_top = 12
-	top.offset_right = 436
-	top.offset_bottom = 86
+	top.name = "StatusCard"
 	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	layer.add_child(top)
-	status = UIKit.label("", 18, UIKit.DARK)
-	status.set_anchors_preset(Control.PRESET_FULL_RECT)
-	status.offset_left = 12
-	status.offset_top = 8
-	status.offset_right = -12
-	status.offset_bottom = -8
+	UIKit.pin_top_left(top, 16, 12, 760, 112)
+	status = UIKit.label("", 36, UIKit.DARK)
 	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(status)
+	UIKit.fill(status, 16, 12, 16, 12)
 	var hint_bar := Panel.new()
-	hint_bar.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	hint_bar.offset_left = 16
-	hint_bar.offset_top = -104
-	hint_bar.offset_right = -16
-	hint_bar.offset_bottom = -12
+	hint_bar.name = "HintBar"
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	layer.add_child(hint_bar)
-	hint = UIKit.label("", 18, UIKit.DARK)
-	hint.set_anchors_preset(Control.PRESET_FULL_RECT)
-	hint.offset_left = 14
-	hint.offset_top = 8
-	hint.offset_right = -14
-	hint.offset_bottom = -8
+	UIKit.pin_bottom(hint_bar, 16, -168, -16, -12)
+	hint = UIKit.label("", 36, UIKit.DARK)
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hint.max_lines_visible = 3
 	hint_bar.add_child(hint)
-	toast = UIKit.label("", 20, UIKit.CREAM_CARD, "title")
-	toast.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	toast.offset_left = -430
-	toast.offset_top = 96
-	toast.offset_right = 430
-	toast.offset_bottom = 166
+	UIKit.fill(hint, 16, 12, 16, 12)
+	status.max_lines_visible = 2
+	var toast_bar := Panel.new()
+	toast_bar.name = "ToastBar"
+	toast_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	toast_bar.visible = false
+	toast_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 14))
+	layer.add_child(toast_bar)
+	UIKit.pin_center_top(toast_bar, -460, 124, 460, 196)
+	toast = UIKit.label("", 36, UIKit.CREAM_CARD)
 	toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	toast.visible = false
-	layer.add_child(toast)
+	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	toast_bar.add_child(toast)
+	UIKit.fill(toast, 16, 8, 16, 8)
 	_refresh_hud_buttons()
 	GameState.toast_requested.connect(_toast)
 
@@ -1892,19 +1895,16 @@ func _open_jobs() -> void:
 	var layer := _hud_layer()
 	var panel := Panel.new()
 	panel.name = "ActJobs"
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.offset_left = -390
-	panel.offset_top = -280
-	panel.offset_right = 390
-	panel.offset_bottom = 280
 	panel.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 18))
 	layer.add_child(panel)
-	var title := UIKit.label("Clipboard", 32, UIKit.DARK, "title")
-	title.position = Vector2(20, 12)
+	UIKit.pin_center(panel, Vector2(960, 640))
+	var title := UIKit.label("Clipboard", 40, UIKit.DARK, "title", false)
+	title.position = Vector2(24, 16)
 	panel.add_child(title)
 	var close := UIKit.button("Close", UIKit.DARK)
-	close.position = Vector2(620, 12)
-	close.size = Vector2(130, 44)
+	close.position = Vector2(760, 16)
+	close.size = Vector2(160, 56)
+	close.custom_minimum_size = Vector2(160, 56)
 	close.pressed.connect(panel.queue_free)
 	panel.add_child(close)
 	var y := 70.0
@@ -1927,16 +1927,25 @@ func _open_jobs() -> void:
 		panel.add_child(card)
 		var id := str(decorated.get("id", ""))
 		var go := UIKit.button("Take job", UIKit.TERRA)
-		go.position = Vector2(560, y + 20)
-		go.size = Vector2(180, 48)
+		go.position = Vector2(720, y + 16)
+		go.size = Vector2(200, 56)
+		go.custom_minimum_size = Vector2(200, 56)
 		go.pressed.connect(_start_listed_job.bind(id))
 		panel.add_child(go)
-		y += 120
+		y += 140
+		if y > 540:
+			break
 	if not any:
-		var empty := UIKit.label("Marge hasn't pinned a job yet. Finish unpacking the garage first.", 18, UIKit.DARK)
-		empty.position = Vector2(20, 80)
-		empty.size = Vector2(700, 80)
+		var empty := UIKit.label("Marge hasn't pinned a job yet. Finish unpacking the garage first.", 36, UIKit.DARK)
+		empty.position = Vector2(24, 96)
+		empty.size = Vector2(880, 96)
+		empty.custom_minimum_size = Vector2(700, 48)
 		panel.add_child(empty)
+	var focus_buttons: Array = []
+	for child in panel.get_children():
+		if child is Button:
+			focus_buttons.append(child)
+	UIKit.link_focus(focus_buttons)
 
 
 func _act_button(layer: CanvasLayer, text: String, at: Vector2, callback: Callable) -> void:
@@ -1944,18 +1953,30 @@ func _act_button(layer: CanvasLayer, text: String, at: Vector2, callback: Callab
 		return
 	var btn := UIKit.button(text, UIKit.TERRA if "Finish" in text or "Drive" in text else UIKit.SAGE)
 	btn.name = "ActButton"
-	if at.x < 400.0:
-		btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		btn.offset_left = 16
-		btn.offset_right = 276
-	else:
-		btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-		btn.offset_left = -256
-		btn.offset_right = -16
-	btn.offset_top = at.y
-	btn.offset_bottom = at.y + 48
+	btn.custom_minimum_size = Vector2(280, 56)
 	btn.pressed.connect(callback)
 	layer.add_child(btn)
+	var height := 56.0
+	var top := at.y
+	var vp_h := btn.get_viewport_rect().size.y
+	if vp_h < 8.0:
+		vp_h = 800.0
+	if top + height > vp_h - 180.0:
+		top = maxf(124.0, vp_h - 180.0 - height)
+	if at.x < 400.0:
+		UIKit.pin_top_left(btn, 16, top, 340, top + height)
+	else:
+		UIKit.pin_top_right(btn, -356, top, -16, top + height)
+	_wire_hud_focus(layer)
+
+
+func _wire_hud_focus(layer: CanvasLayer) -> void:
+	var buttons: Array = []
+	for child in layer.get_children():
+		if child is Button:
+			buttons.append(child)
+	if not buttons.is_empty():
+		UIKit.link_focus(buttons)
 
 
 func _hud_layer() -> CanvasLayer:
@@ -1999,6 +2020,8 @@ func _toast(message: String) -> void:
 		return
 	toast.text = message
 	toast.visible = true
+	if toast.get_parent() is CanvasItem:
+		(toast.get_parent() as CanvasItem).visible = true
 	toast_time = 3.4
 
 
@@ -2075,41 +2098,46 @@ func _show_unbox() -> void:
 		return
 	var panel := Panel.new()
 	panel.name = "Unbox"
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.offset_left = -260
-	panel.offset_top = -140
-	panel.offset_right = 260
-	panel.offset_bottom = 140
-	panel.add_theme_stylebox_override("panel", UIKit.style(UIKit.CARD, 18))
+	panel.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 18))
 	layer.add_child(panel)
-	var title := UIKit.label("TropicalForest box", 26, UIKit.DARK, "title")
-	title.position = Vector2(20, 12)
+	UIKit.pin_center(panel, Vector2(760, 420))
+	var title := UIKit.label("TropicalForest box", 36, UIKit.DARK, "title", false)
+	title.position = Vector2(24, 16)
 	panel.add_child(title)
 	var left := int(order.get("bubbles_left", 0))
-	var blurb := UIKit.label("Pop the bubble wrap. Packing peanuts drift out. %d left." % left, 18, UIKit.DARK)
-	blurb.position = Vector2(20, 56)
-	blurb.size = Vector2(480, 48)
+	var blurb := UIKit.label("Pop the bubble wrap. Packing peanuts drift out. %d left." % left, 36, UIKit.DARK)
+	blurb.position = Vector2(24, 72)
+	blurb.size = Vector2(700, 80)
+	blurb.custom_minimum_size = Vector2(700, 48)
 	panel.add_child(blurb)
+	var buttons: Array = []
 	var pop := UIKit.button("Pop a bubble", UIKit.BLUE)
-	pop.position = Vector2(20, 120)
-	pop.size = Vector2(220, 48)
+	pop.position = Vector2(24, 180)
+	pop.size = Vector2(240, 56)
+	pop.custom_minimum_size = Vector2(240, 56)
 	pop.pressed.connect(_pop_bubble)
 	panel.add_child(pop)
+	buttons.append(pop)
 	if str(order.get("status", "")) == "door" or left == int(Catalog.forest.get("bubbles", 5)):
 		var back := UIKit.button("Return sealed", UIKit.TERRA)
-		back.position = Vector2(260, 120)
-		back.size = Vector2(220, 48)
+		back.position = Vector2(280, 180)
+		back.size = Vector2(240, 56)
+		back.custom_minimum_size = Vector2(240, 56)
 		back.pressed.connect(_return_sealed)
 		panel.add_child(back)
+		buttons.append(back)
 	var close := UIKit.button("Later", UIKit.DARK)
-	close.position = Vector2(20, 190)
-	close.size = Vector2(160, 44)
+	close.position = Vector2(24, 260)
+	close.size = Vector2(200, 56)
+	close.custom_minimum_size = Vector2(200, 56)
 	close.pressed.connect(func():
 		var node := layer.get_node_or_null("Unbox")
 		if node:
 			node.queue_free()
 	)
 	panel.add_child(close)
+	buttons.append(close)
+	UIKit.link_focus(buttons)
 
 
 func _pop_bubble() -> void:

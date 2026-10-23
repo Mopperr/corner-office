@@ -327,6 +327,7 @@ func _ready() -> void:
 	failures.append_array(await _review_fixes())
 	failures.append_array(_engine_choices())
 	failures.append_array(await _stack_world())
+	failures.append_array(await _menu_audit())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -873,6 +874,246 @@ func _qa_regressions() -> Array:
 	return found
 
 
+func _menu_audit() -> Array:
+	var found: Array = []
+	var allow_quit := UIKit.quit_enabled
+	UIKit.quit_enabled = false
+	var saved_mode := str(GameState.mode)
+	# 1280x800 is the small window. 1920x1080 is the project base.
+	# Deck 1280x800 under canvas_items/expand grows the canvas to 1920x1200.
+	var sizes: Array = [
+		["1280x800", Vector2i(1280, 800)],
+		["1920x1080", Vector2i(1920, 1080)],
+		["deck", Vector2i(1920, 1200)],
+	]
+	var screens: Array = ["home", "settings", "remap", "intro", "pause", "level", "results", "market", "hud", "drive"]
+	for screen in screens:
+		for spec in sizes:
+			var view: Dictionary = _audit_open(str(screen), str(spec[0]), spec[1])
+			get_tree().paused = false
+			await get_tree().process_frame
+			await get_tree().process_frame
+			found.append_array(_audit_check(view))
+			_audit_click(view)
+			get_tree().paused = false
+			await get_tree().process_frame
+			var vp: Node = view.get("vp")
+			if is_instance_valid(vp):
+				_bury(vp)
+	get_tree().paused = false
+	UIKit.quit_enabled = allow_quit
+	GameState.set_mode(saved_mode)
+	return found
+
+
+func _audit_open(screen: String, tag: String, size: Vector2i) -> Dictionary:
+	var vp := SubViewport.new()
+	vp.name = "Audit%s%s" % [screen, tag.replace("x", "")]
+	vp.size = size
+	vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	vp.disable_3d = screen != "pause"
+	add_child(vp)
+	var view_size := Vector2(size)
+	var root: Node = null
+	var center_name := ""
+	var center_x_only := false
+	if screen == "home" or screen == "settings" or screen == "remap" or screen == "intro":
+		var menu: Control = load("res://scripts/menu_ui.gd").new()
+		vp.add_child(menu)
+		menu.layout_mode = 0
+		menu.position = Vector2.ZERO
+		menu.size = view_size
+		if screen == "home":
+			menu.call("_home")
+			center_name = "HomeCard"
+		elif screen == "settings":
+			menu.call("_settings")
+			center_name = "SettingsCard"
+		elif screen == "remap":
+			menu.call("_controls")
+			center_name = "RemapCard"
+		else:
+			menu.call("_intro", "dana")
+			center_name = "Intro"
+		root = menu
+	elif screen == "pause":
+		GameState.set_mode("menu")
+		var shell = load("res://scripts/app.gd").new()
+		vp.add_child(shell)
+		shell.call("_pause")
+		get_tree().paused = false
+		root = shell
+		center_name = "PauseColumn"
+	elif screen == "level":
+		var host := Node.new()
+		vp.add_child(host)
+		UIKit.show_level_beat(host, {"level_name": "Garage Startup", "arrival": "The roller door sticks.", "moment": "Dana sets the kettle on."})
+		root = host
+		center_name = "LevelBeat"
+		center_x_only = true
+	elif screen == "results":
+		GameState.payout = {
+			"base": 120, "box_tip": 60, "shortcut": 12, "bonuses": 0, "split_loss": 0,
+			"cut": 0, "net_tips": 60, "total": 192, "title": "Job done", "stars": 1, "stamp": "",
+		}
+		var results: Control = load("res://scripts/results_ui.gd").new()
+		vp.add_child(results)
+		results.call("_center_card")
+		root = results
+		center_name = "Card"
+	elif screen == "market":
+		GameState.buyer_offer = {"name": "Nia", "item": "plant_fern", "price": 22, "line": "I'll take the fern."}
+		var computer: Control = load("res://scripts/computer_ui.gd").new()
+		vp.add_child(computer)
+		computer.layout_mode = 0
+		computer.position = Vector2.ZERO
+		computer.size = view_size
+		computer.call("_build")
+		root = computer
+		center_name = "Bezel"
+	elif screen == "hud":
+		GameState.set_mode("office")
+		GameState.office_phase = "live"
+		var room = load("res://scripts/diorama.gd").new()
+		room.hud_only = true
+		vp.add_child(room)
+		root = room
+		center_name = "HintBar"
+		center_x_only = true
+	else:
+		var drive = load("res://scripts/drive_course.gd").new()
+		drive.preview = true
+		vp.add_child(drive)
+		root = drive
+		center_name = "DriveHint"
+		center_x_only = true
+	return {
+		"vp": vp,
+		"root": root,
+		"tag": "%s %s" % [screen, tag],
+		"center": center_name,
+		"center_x": center_x_only,
+		"size": view_size,
+	}
+
+
+func _audit_check(view: Dictionary) -> Array:
+	var found: Array = []
+	var root: Node = view.get("root")
+	var tag := str(view.get("tag", ""))
+	if root == null or not is_instance_valid(root):
+		found.append("%s missing" % tag)
+		return found
+	var vp := root.get_viewport()
+	var view_rect := vp.get_visible_rect()
+	if view_rect.size.x < 8.0:
+		view_rect = Rect2(Vector2.ZERO, view.get("size"))
+	var controls: Array = []
+	if root is Control:
+		controls.append(root)
+	controls.append_array(root.find_children("*", "Control", true, false))
+	for node in controls:
+		var control := node as Control
+		if control == null or not control.visible or control.is_queued_for_deletion():
+			continue
+		if control.get_global_rect().size.x < 1.0 and control.get_global_rect().size.y < 1.0:
+			continue
+		var rect := control.get_global_rect()
+		if rect.position.x < view_rect.position.x - 1.0 or rect.position.y < view_rect.position.y - 1.0 or rect.end.x > view_rect.end.x + 1.0 or rect.end.y > view_rect.end.y + 1.0:
+			found.append("%s off %s %s view %s" % [tag, control.name, rect, view_rect])
+		if control is Label:
+			var label := control as Label
+			if label.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+				found.append("%s label blocks %s" % [tag, label.text])
+			var px := int(label.get_theme_font_size("font_size"))
+			if px < 28:
+				found.append("%s tiny %s %d" % [tag, label.text, px])
+			if label.get_theme_font("font") == UIKit.body_font() and px < 36:
+				found.append("%s body %s %d" % [tag, label.text, px])
+			if label.autowrap_mode == TextServer.AUTOWRAP_OFF and label.get_line_count() > 1 and label.text != "":
+				found.append("%s wrapped title %s" % [tag, label.text])
+	var buttons: Array = root.find_children("*", "Button", true, false)
+	var enabled := false
+	for node in buttons:
+		var btn := node as Button
+		if not btn.visible or btn.is_queued_for_deletion():
+			continue
+		var rect := btn.get_global_rect()
+		if rect.size.x < 48.0 or rect.size.y < 48.0:
+			found.append("%s hit %s %s" % [tag, btn.text, rect.size])
+		if btn.focus_mode != Control.FOCUS_ALL:
+			found.append("%s focus mode %s" % [tag, btn.text])
+		if btn.get_theme_stylebox("hover") == null or btn.get_theme_stylebox("focus") == null:
+			found.append("%s focus style %s" % [tag, btn.text])
+		for neighbor_name in ["focus_neighbor_top", "focus_neighbor_bottom", "focus_neighbor_left", "focus_neighbor_right"]:
+			var path: NodePath = btn.get(neighbor_name)
+			if path.is_empty() or btn.get_node_or_null(path) == null:
+				found.append("%s neighbor %s %s path %s" % [tag, btn.text, neighbor_name, path])
+		var spot := _audit_hit(root, rect.get_center())
+		if spot != btn and not _audit_under(btn, spot) and (spot == null or spot is Label):
+			found.append("%s blocked %s by %s" % [tag, btn.text, spot.name if spot else "nothing"])
+		if not btn.disabled:
+			enabled = true
+	if enabled:
+		var owner := vp.gui_get_focus_owner()
+		if owner == null or not root.is_ancestor_of(owner):
+			found.append("%s unfocused" % tag)
+	var center := root.find_child(str(view.get("center", "")), true, false) as Control
+	if center == null:
+		var names: PackedStringArray = PackedStringArray()
+		for child in root.get_children():
+			names.append(str(child.name))
+		found.append("%s center missing %s [%s]" % [tag, view.get("center"), ", ".join(names)])
+	else:
+		var delta := center.get_global_rect().get_center() - view_rect.get_center()
+		var limit := 8.0 if bool(view.get("center_x")) else 12.0
+		if bool(view.get("center_x")):
+			if absf(delta.x) > limit:
+				found.append("%s center x %s" % [tag, delta])
+		elif delta.length() > limit:
+			found.append("%s center %s" % [tag, delta])
+	return found
+
+
+func _audit_hit(node: Node, point: Vector2) -> Control:
+	var kids: Array = node.get_children()
+	for i in range(kids.size() - 1, -1, -1):
+		var kid: Node = kids[i]
+		var found := _audit_hit(kid, point)
+		if found != null:
+			return found
+	if node is Control:
+		var control := node as Control
+		if control.visible and control.mouse_filter != Control.MOUSE_FILTER_IGNORE and control.get_global_rect().has_point(point):
+			return control
+	return null
+
+
+func _audit_under(button: Node, spot: Control) -> bool:
+	var node: Node = spot
+	while node != null:
+		if node == button:
+			return true
+		node = node.get_parent()
+	return false
+
+
+func _audit_click(view: Dictionary) -> void:
+	var root: Node = view.get("root")
+	if root == null or not is_instance_valid(root):
+		return
+	var buttons: Array = []
+	for node in root.find_children("*", "Button", true, false):
+		buttons.append(node)
+	for node in buttons:
+		if not is_instance_valid(node):
+			continue
+		var btn := node as Button
+		if btn.disabled or not btn.visible:
+			continue
+		btn.pressed.emit()
+
+
 func _bury(node: Node) -> void:
 	if node == null or not is_instance_valid(node):
 		return
@@ -1107,7 +1348,7 @@ func _engine_choices() -> Array:
 	if get_viewport().msaa_3d != Viewport.MSAA_2X or int(ProjectSettings.get_setting("rendering/lights_and_shadows/directional_shadow/size")) != 2048:
 		found.append("medium quality")
 	var tiny := UIKit.label("Readable", 13)
-	if int(tiny.get_theme_font_size("font_size")) < 18:
+	if int(tiny.get_theme_font_size("font_size")) < 36:
 		found.append("font %s" % tiny.get_theme_font_size("font_size"))
 	tiny.free()
 	var shelf := Props.make("shelf")
