@@ -2,6 +2,14 @@ extends Node3D
 
 const PlaceLib = preload("res://scripts/placement.gd")
 
+const MENU_YAW_DEG := 45.0
+const MENU_PITCH_DEG := -30.0
+const MENU_ORTHO_SIZE := 7.2
+const MENU_DRIFT_SEC := 24.0
+
+static var _motion_cached := false
+static var _motion_reduced := false
+
 signal open_computer
 signal request_drive
 signal request_results
@@ -168,6 +176,9 @@ func _build_venue() -> void:
 
 
 func _frame_camera() -> void:
+	if backdrop:
+		_frame_menu_camera()
+		return
 	if cam == null or venue.is_empty() or GameState.mode == "truck":
 		return
 	var points := _room_points()
@@ -201,14 +212,6 @@ func _frame_camera() -> void:
 	var height := (max_y - min_y) * 1.16
 	var width_need := (max_x - min_x) * 1.16 / aspect
 	cam.size = maxf(height, width_need)
-	if backdrop:
-		cam.size *= 0.78
-		var slide := cam.size * aspect * 0.2
-		cam.global_position -= cam.global_transform.basis.x * slide
-		show_focus = center + xf.basis * shift
-		show_cam = cam.global_position
-		show_basis = cam.global_transform.basis
-		show_ready = true
 
 
 func _room_points() -> Array:
@@ -646,28 +649,162 @@ func _build_showroom() -> void:
 	_build_rect(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)), true)
 	_dress()
 	_set_garage_y(float(Tuning.get_value("garage_door_open_y", 2.1)))
-	for rec in ItemDB.starter_layout():
-		var copy: Dictionary = rec.duplicate(true)
-		_spawn_record(copy, str(copy.get("item", "")), false)
-	var tall := _place_model("plant_tall", Vector3(5.2, 0, 2.2))
-	if tall:
-		tall.rotation.y = 0.4
-	_place_model("plant_small", Vector3(1.35, 0, 6.3))
+	_place_model("rug", Vector3(3.5, 0.0, 2.75))
+	for rec in _menu_props():
+		_spawn_record(rec, str(rec.get("item", "")), false)
 	var box_a := Props.make("box_closed")
-	box_a.position = Vector3(4.35, 0, 5.55)
+	box_a.position = Vector3(4.7, 0.0, 1.45)
+	box_a.rotation.y = 0.2
 	add_child(box_a)
 	var box_b := Props.make("box_closed")
-	box_b.position = Vector3(4.35, 0.36, 5.55)
-	box_b.rotation.y = 0.18
+	box_b.position = Vector3(4.72, 0.36, 1.48)
+	box_b.rotation.y = -0.15
 	add_child(box_b)
+	_menu_lights()
 	_frame_camera()
+
+
+func _menu_props() -> Array:
+	return [
+		{"uid": "menu_desk", "item": "desk_main", "x": 3.35, "y": 0.0, "z": 2.35, "rot": 12, "state": "placed"},
+		{"uid": "menu_mug", "item": "starter_mug", "x": 3.02, "y": 0.76, "z": 2.22, "rot": 18, "state": "placed"},
+		{"uid": "menu_notes", "item": "sticky_note_stack", "x": 3.18, "y": 0.76, "z": 2.52, "rot": -12, "state": "placed"},
+		{"uid": "menu_lamp", "item": "desk_lamp", "x": 3.78, "y": 0.76, "z": 2.52, "rot": 24, "state": "placed"},
+		{"uid": "menu_crt", "item": "place_crt", "x": 3.58, "y": 0.76, "z": 2.12, "rot": 8, "state": "placed"},
+		{"uid": "menu_keys", "item": "place_keyboard", "x": 3.32, "y": 0.76, "z": 2.02, "rot": 12, "state": "placed"},
+		{"uid": "menu_chair", "item": "office_chair", "x": 3.15, "y": 0.0, "z": 3.4, "rot": 168, "state": "placed"},
+		{"uid": "menu_bean", "item": "starter_beanbag", "x": 4.9, "y": 0.0, "z": 3.55, "rot": 28, "state": "placed"},
+		{"uid": "menu_fern", "item": "plant_fern", "x": 5.15, "y": 0.0, "z": 1.55, "rot": 20, "state": "placed"},
+		{"uid": "menu_cactus", "item": "plant_cactus", "x": 2.4, "y": 0.0, "z": 3.2, "rot": 0, "state": "placed"},
+		{"uid": "menu_fridge", "item": "mini_fridge", "x": 5.25, "y": 0.0, "z": 5.35, "rot": 180, "state": "placed"},
+		{"uid": "menu_board", "item": "whiteboard", "x": 0.12, "y": 1.15, "z": 3.3, "rot": 90, "wall": "hang", "state": "placed"},
+		{"uid": "menu_shelf", "item": "shelf", "x": 0.12, "y": 0.0, "z": 5.1, "rot": 90, "wall": "wall_floor", "state": "placed"},
+	]
+
+
+func _menu_lights() -> void:
+	var key := OmniLight3D.new()
+	key.name = "MenuKey"
+	key.position = Vector3(4.9, 2.55, 4.35)
+	key.light_color = Color("FFE2C2")
+	key.light_energy = 0.28
+	key.omni_range = 8.0
+	key.shadow_enabled = true
+	key.shadow_blur = 2.0
+	add_child(key)
+	var fill := OmniLight3D.new()
+	fill.name = "MenuFill"
+	fill.position = Vector3(1.6, 1.7, 1.35)
+	fill.light_color = Color("FFD0A8")
+	fill.light_energy = 0.14
+	fill.omni_range = 6.5
+	fill.shadow_enabled = false
+	add_child(fill)
+
+
+func _frame_menu_camera() -> void:
+	if cam == null:
+		return
+	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
+	cam.keep_aspect = Camera3D.KEEP_HEIGHT
+	cam.size = MENU_ORTHO_SIZE
+	var look := Vector3(3.15, 0.9, 2.85)
+	cam.position = look
+	cam.rotation = Vector3(deg_to_rad(MENU_PITCH_DEG), deg_to_rad(MENU_YAW_DEG), 0.0)
+	var dist := 18.0
+	cam.position = look + cam.global_transform.basis.z * dist
+	var slide := MENU_ORTHO_SIZE * _view_aspect() * 0.2
+	cam.position -= cam.global_transform.basis.x * slide
+	show_focus = look - cam.global_transform.basis.x * slide
+	show_cam = cam.global_position
+	show_basis = cam.global_transform.basis
+	show_ready = true
+
+
+func _view_aspect() -> float:
+	var view := get_viewport().get_visible_rect().size
+	if view.y > 1.0:
+		return view.x / view.y
+	return 16.0 / 9.0
+
+
+static func prefers_reduced_motion() -> bool:
+	var forced := OS.get_environment("CORNER_OFFICE_REDUCED_MOTION").strip_edges().to_lower()
+	if forced == "1" or forced == "true" or forced == "on":
+		return true
+	if forced == "0" or forced == "false" or forced == "off":
+		return false
+	if _motion_cached:
+		return _motion_reduced
+	_motion_reduced = _query_os_reduced_motion()
+	_motion_cached = true
+	return _motion_reduced
+
+
+static func _query_os_reduced_motion() -> bool:
+	match OS.get_name():
+		"Windows":
+			return _reg_animate_off(_run_quiet("reg", PackedStringArray(["query", "HKCU\\Control Panel\\Desktop\\WindowMetrics", "/v", "MinAnimate"])))
+		"macOS":
+			return _run_quiet("defaults", PackedStringArray(["read", "com.apple.universalaccess", "reduceMotion"])) == "1"
+		_:
+			if FileAccess.file_exists("/usr/bin/gsettings"):
+				var gnome := _run_quiet("/usr/bin/gsettings", PackedStringArray(["get", "org.gnome.desktop.interface", "enable-animations"]))
+				if gnome.to_lower().contains("false"):
+					return true
+			if _gtk_animations_off():
+				return true
+			for bin in ["/usr/bin/kreadconfig6", "/usr/bin/kreadconfig5"]:
+				if not FileAccess.file_exists(bin):
+					continue
+				var factor := _run_quiet(bin, PackedStringArray(["--file", "kdeglobals", "--group", "KDE", "--key", "AnimationDurationFactor"]))
+				if factor == "0" or factor == "0.0":
+					return true
+	return false
+
+
+static func _reg_animate_off(text: String) -> bool:
+	for line in text.split("\n"):
+		if not ("MinAnimate" in line):
+			continue
+		var bits := line.split(" ", false)
+		return bits.size() > 0 and bits[bits.size() - 1] == "0"
+	return false
+
+
+static func _gtk_animations_off() -> bool:
+	var home := OS.get_environment("HOME")
+	for path in ["%s/.config/gtk-3.0/settings.ini" % home, "%s/.config/gtk-4.0/settings.ini" % home]:
+		if not FileAccess.file_exists(path):
+			continue
+		var text := FileAccess.get_file_as_string(path).to_lower().replace(" ", "")
+		if "gtk-enable-animations=0" in text:
+			return true
+	return false
+
+
+static func _run_quiet(program: String, args: PackedStringArray) -> String:
+	if program.begins_with("/") and not FileAccess.file_exists(program):
+		return ""
+	var output: Array = []
+	if OS.execute(program, args, output, true) != 0:
+		return ""
+	var lines: PackedStringArray = []
+	for row in output:
+		lines.append(str(row))
+	return "\n".join(lines).strip_edges()
 
 
 func _drift_camera(delta: float) -> void:
 	if cam == null or not show_ready:
 		return
+	if prefers_reduced_motion():
+		drift_t = 0.0
+		cam.global_position = show_cam
+		cam.global_transform.basis = show_basis
+		return
 	drift_t += delta
-	var yaw := sin(drift_t * 0.18) * 0.07
+	var yaw := sin(drift_t * TAU / MENU_DRIFT_SEC) * deg_to_rad(3.0)
 	var spin := Basis(Vector3.UP, yaw)
 	cam.global_position = show_focus + spin * (show_cam - show_focus)
 	cam.global_transform.basis = spin * show_basis

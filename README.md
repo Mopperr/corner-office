@@ -10,7 +10,7 @@ Install [Godot 4.7](https://godotengine.org/) or newer (the project was made wit
 godot --path . 
 ```
 
-The main scene is `res://scenes/main.tscn`. Headless logic check:
+The main menu looks into the garage through an orthographic camera (yaw 45°, pitch -30°, size 7.2). It drifts once every 24 seconds, and that drift stays off when the system asks for reduced motion. The main scene is `res://scenes/main.tscn`. Headless logic check:
 
 ```bash
 godot --headless --path . res://tests/smoke.tscn

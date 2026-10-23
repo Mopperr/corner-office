@@ -1,6 +1,7 @@
 extends Node
 
 const PlaceLib = preload("res://scripts/placement.gd")
+const RoomLib = preload("res://scripts/diorama.gd")
 
 func _ready() -> void:
 	var failures: Array = []
@@ -444,6 +445,19 @@ func _screen_copy_checks() -> Array:
 	var expected_names := ["Andrew S", "Coding Master Boss", "Game Director", "Narrative Writer", "Audio Producer", "Art Specialist", "Design Specialist", "Level Platform Brainstormer", "Programmer Master", "QA Tester", "Marketing Bot"]
 	if credit_names != expected_names:
 		found.append("credits %s" % credit_names)
+	if credits is Dictionary and str(credits.get("headline", "")) != "Created by Andrew's Helpers (Grok Bots)":
+		found.append("credits headline")
+	if absf(RoomLib.MENU_YAW_DEG - 45.0) > 0.001 or absf(RoomLib.MENU_PITCH_DEG - (-30.0)) > 0.001:
+		found.append("menu angles")
+	if absf(RoomLib.MENU_ORTHO_SIZE - 7.2) > 0.001 or absf(RoomLib.MENU_DRIFT_SEC - 24.0) > 0.001:
+		found.append("menu camera")
+	OS.set_environment("CORNER_OFFICE_REDUCED_MOTION", "1")
+	if not RoomLib.prefers_reduced_motion():
+		found.append("reduced motion on")
+	OS.set_environment("CORNER_OFFICE_REDUCED_MOTION", "0")
+	if RoomLib.prefers_reduced_motion():
+		found.append("reduced motion off")
+	OS.set_environment("CORNER_OFFICE_REDUCED_MOTION", "")
 	return found
 
 

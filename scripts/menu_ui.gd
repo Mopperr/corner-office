@@ -149,6 +149,7 @@ func _slider(caption: String, value: float, y: float, on_change: Callable) -> vo
 func _credits() -> void:
 	var lines: PackedStringArray = []
 	var copy := _json_file("res://data/narrative/credits.json")
+	var headline := str(copy.get("headline", "Created by Andrew's Helpers (Grok Bots)"))
 	for person in copy.get("people", []):
 		var who := str(person.get("name", ""))
 		var role := str(person.get("role", ""))
@@ -163,7 +164,7 @@ func _credits() -> void:
 	body += "\n\nFonts: Fredoka, Nunito, and VT323, used under the SIL Open Font License. See assets/fonts/OFL.txt."
 	if audio != "":
 		body += "\n\n" + audio
-	_sheet("Credits", body)
+	_sheet(headline, body)
 
 
 func _sheet(title_text: String, body_text: String) -> void:
