@@ -59,8 +59,8 @@ static func make_body(size: Vector3, pos: Vector3, rot_deg: float, settle: bool)
 	body.linear_damp = 8.0
 	body.angular_damp = 8.0
 	body.continuous_cd = true
-	body.collision_layer = 1
-	body.collision_mask = 1
+	body.collision_layer = Props.LAYER_BLOCKING
+	body.collision_mask = Props.LAYER_BLOCKING
 	var shape_node := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = Vector3(maxf(size.x, 0.05), maxf(size.y, 0.05), maxf(size.z, 0.05))

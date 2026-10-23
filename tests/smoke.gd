@@ -298,7 +298,9 @@ func _ready() -> void:
 	GameState.wishlist = []
 	if not SaveManager.load_game() or not ("tf_fern" in GameState.wishlist):
 		failures.append("wishlist save")
+	failures.append_array(_collision_checks())
 	failures.append_array(_stack_checks())
+	failures.append_array(_screen_copy_checks())
 	failures.append_array(await _settle_checks())
 	if failures.is_empty():
 		print("SMOKE_OK")
@@ -308,6 +310,141 @@ func _ready() -> void:
 		for failure in failures:
 			print(" - ", failure)
 		get_tree().quit(1)
+
+
+func _collision_checks() -> Array:
+	var found: Array = []
+	for model_name in ["wall_garage_3m", "wall_door_2m", "wall_window_2m"]:
+		var node := Props.model(model_name)
+		if node == null:
+			found.append("missing %s" % model_name)
+			continue
+		Props.prepare(node)
+		var body := node.get_node_or_null("StructureCollision") as StaticBody3D
+		if body == null or body.collision_layer != Props.LAYER_BLOCKING or body.collision_mask != Props.LAYER_BLOCKING:
+			found.append("%s layer" % model_name)
+		else:
+			var face := _collision_face_z(body)
+			if absf(face - Props.WALL_BODY_HALF) > 0.004 or face > 0.125:
+				found.append("%s face %s" % [model_name, face])
+		if absf(float(node.get_meta("body_half", 0.0)) - 0.12) > 0.001:
+			found.append("%s body half" % model_name)
+		if model_name == "wall_garage_3m" and absf(float(node.get_meta("source_half_z", 0.0)) - 0.13) > 0.008:
+			found.append("garage aabb half %s" % node.get_meta("source_half_z", 0.0))
+		node.free()
+	if FileAccess.file_exists("res://assets/models/cafe_wall_window_2m.glb"):
+		var cafe := Props.model("cafe_wall_window_2m")
+		if cafe == null:
+			found.append("cafe window")
+		else:
+			Props.prepare(cafe)
+			var cafe_body := cafe.get_node_or_null("StructureCollision") as StaticBody3D
+			if cafe_body == null or absf(_collision_face_z(cafe_body) - 0.12) > 0.004:
+				found.append("cafe window face")
+			cafe.free()
+	var straight := Props.model("wall_straight_2m")
+	if straight == null:
+		found.append("missing straight")
+	else:
+		Props.prepare(straight)
+		var straight_body := straight.get_node_or_null("StructureCollision") as StaticBody3D
+		var straight_box: BoxShape3D = null
+		if straight_body != null and straight_body.get_child_count() > 0:
+			straight_box = (straight_body.get_child(0) as CollisionShape3D).shape as BoxShape3D
+		if straight_body == null or straight_body.collision_layer != Props.LAYER_BLOCKING or straight_box == null or absf(straight_box.size.z - Props.WALL_THICKNESS) > 0.001:
+			found.append("straight thickness")
+		straight.free()
+	var corner := Props.model("wall_corner")
+	if corner == null:
+		found.append("missing corner")
+	else:
+		Props.prepare(corner)
+		var corner_body := corner.get_node_or_null("StructureCollision") as StaticBody3D
+		var thick := 0
+		if corner_body == null:
+			found.append("corner body")
+		else:
+			for child in corner_body.get_children():
+				var box := (child as CollisionShape3D).shape as BoxShape3D
+				if box == null:
+					continue
+				if absf(box.size.x - 0.24) < 0.001 or absf(box.size.z - 0.24) < 0.001:
+					thick += 1
+				if absf(box.size.x - 0.22) < 0.001 or absf(box.size.z - 0.22) < 0.001:
+					found.append("corner used visual thickness")
+			if thick < 2:
+				found.append("corner thickness %d" % thick)
+		corner.free()
+	var tile := Props.model("floor_tile_2m")
+	if tile == null:
+		found.append("missing floor")
+	else:
+		Props.prepare(tile)
+		var tile_body := tile.get_node_or_null("StructureCollision") as StaticBody3D
+		if tile_body == null or tile_body.collision_layer != Props.LAYER_PICKABLE or tile_body.collision_mask != 0:
+			found.append("floor layer")
+		tile.free()
+	var rug := Props.model("rug")
+	if rug != null:
+		Props.prepare(rug)
+		var rug_body := rug.get_node_or_null("StructureCollision") as StaticBody3D
+		if rug_body == null or rug_body.collision_layer != Props.LAYER_PICKABLE or rug_body.collision_mask != 0:
+			found.append("rug layer")
+		rug.free()
+	var npc := Node3D.new()
+	npc.name = "npc_clerk"
+	Props.prepare(npc)
+	var npc_body := npc.get_node_or_null("StructureCollision") as StaticBody3D
+	var capsule: CapsuleShape3D = null
+	if npc_body != null and npc_body.get_child_count() > 0:
+		capsule = (npc_body.get_child(0) as CollisionShape3D).shape as CapsuleShape3D
+	if npc_body == null or npc_body.collision_layer != Props.LAYER_BLOCKING or capsule == null or not bool(npc.get_meta("npc_capsule", false)):
+		found.append("npc capsule")
+	npc.free()
+	return found
+
+
+func _collision_face_z(body: StaticBody3D) -> float:
+	var face := 0.0
+	for child in body.get_children():
+		var shape_node := child as CollisionShape3D
+		if shape_node == null or shape_node.shape == null:
+			continue
+		var concave := shape_node.shape as ConcavePolygonShape3D
+		if concave != null:
+			for point in concave.get_faces():
+				face = maxf(face, absf(point.z))
+			continue
+		var box := shape_node.shape as BoxShape3D
+		if box != null:
+			face = maxf(face, absf(shape_node.position.z) + box.size.z * 0.5)
+	return face
+
+
+func _screen_copy_checks() -> Array:
+	var found: Array = []
+	var how_path := "res://data/narrative/how_to_play.json"
+	var credits_path := "res://data/narrative/credits.json"
+	if not FileAccess.file_exists(how_path) or not FileAccess.file_exists(credits_path):
+		found.append("screen copy missing")
+		return found
+	var how: Variant = JSON.parse_string(FileAccess.get_file_as_string(how_path))
+	var credits: Variant = JSON.parse_string(FileAccess.get_file_as_string(credits_path))
+	var how_titles: Array = []
+	if how is Dictionary:
+		for tip in how.get("tips", []):
+			how_titles.append(str(tip.get("title", "")))
+	var expected_tips := ["Pack with Care", "Load the Truck", "A Gentle Drive", "Unpack & Place", "Pay & Tips", "Trade on the Computer", "Make It Yours", "No Rush, No Fail"]
+	if how_titles != expected_tips:
+		found.append("how to play %s" % how_titles)
+	var credit_names: Array = []
+	if credits is Dictionary:
+		for person in credits.get("people", []):
+			credit_names.append(str(person.get("name", "")))
+	var expected_names := ["Andrew S", "Coding Master Boss", "Game Director", "Narrative Writer", "Audio Producer", "Art Specialist", "Design Specialist", "Level Platform Brainstormer", "Programmer Master", "QA Tester", "Marketing Bot"]
+	if credit_names != expected_names:
+		found.append("credits %s" % credit_names)
+	return found
 
 
 func _stack_checks() -> Array:

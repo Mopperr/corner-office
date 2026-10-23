@@ -84,7 +84,17 @@ func _intro(character: String) -> void:
 
 
 func _how() -> void:
-	_sheet("How to play", "Click an item to pack it, then click a floor, desk, or box to place it.\nItems have to rest on something. A red ghost means it would float or overlap.\nR rotates 90 degrees. Hold Shift and press R for 15 degrees.\nG toggles the 0.25 m grid. Free placement is the default.\nWall pieces sit 0.12 m off the wall. A soft thunk means it landed.\n\nThe beige computer buys and sells office goods. Prices move each day.\nJobs live on the clipboard: pack, pad the fragile things, load the truck, drive, unpack.\n\nBumps nick the tip, never the base pay. Mend a scuff, or keep it.\nNothing is lost, and you cannot fail a drive.\n\nWASD drives the truck. H honks. Esc pauses.")
+	var lines: PackedStringArray = []
+	var copy := _json_file("res://data/narrative/how_to_play.json")
+	for tip in copy.get("tips", []):
+		var title := str(tip.get("title", ""))
+		var body := str(tip.get("body", ""))
+		if title == "":
+			continue
+		lines.append("%s\n%s" % [title, body])
+	if lines.is_empty():
+		lines.append("Click an item to pack it, then click a floor, desk, or box to place it.")
+	_sheet("How to play", "\n\n".join(lines))
 
 
 func _settings() -> void:
@@ -137,9 +147,23 @@ func _slider(caption: String, value: float, y: float, on_change: Callable) -> vo
 
 
 func _credits() -> void:
+	var lines: PackedStringArray = []
+	var copy := _json_file("res://data/narrative/credits.json")
+	for person in copy.get("people", []):
+		var who := str(person.get("name", ""))
+		var role := str(person.get("role", ""))
+		if who == "":
+			continue
+		if role == "":
+			lines.append(who)
+		else:
+			lines.append("%s (%s)" % [who, role])
 	var audio := _read_text("res://assets/audio/credits.md")
-	var cast := _read_text("res://data/narrative/cast.md")
-	_sheet("Credits", "Fonts: Fredoka, Nunito, and VT323, used under the SIL Open Font License. See assets/fonts/OFL.txt.\n\n" + cast + "\n\n" + audio)
+	var body := "\n".join(lines)
+	body += "\n\nFonts: Fredoka, Nunito, and VT323, used under the SIL Open Font License. See assets/fonts/OFL.txt."
+	if audio != "":
+		body += "\n\n" + audio
+	_sheet("Credits", body)
 
 
 func _sheet(title_text: String, body_text: String) -> void:
@@ -187,3 +211,13 @@ func _read_text(path: String) -> String:
 	if not FileAccess.file_exists(path):
 		return ""
 	return FileAccess.get_file_as_string(path)
+
+
+func _json_file(path: String) -> Dictionary:
+	var text := _read_text(path)
+	if text == "":
+		return {}
+	var parsed: Variant = JSON.parse_string(text)
+	if parsed is Dictionary:
+		return parsed
+	return {}

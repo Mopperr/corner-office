@@ -1,0 +1,37 @@
+{
+  "title": "How to play",
+  "tips": [
+    {
+      "title": "Pack with Care",
+      "body": "Click an item to pack it. Pad the fragile things before they go in a box. A scuff or a chip only nicks the tip, never the base pay."
+    },
+    {
+      "title": "Load the Truck",
+      "body": "Carry each box to the truck and set it on a mustard floor slot. Heavy boxes belong on the floor. The back door swings open when you are ready to roll."
+    },
+    {
+      "title": "A Gentle Drive",
+      "body": "WASD or the arrow keys drive. H honks. The rainy route is a short loop with ducks, puddles, and a closed bridge. You cannot fail a drive."
+    },
+    {
+      "title": "Unpack & Place",
+      "body": "Click a box to open it, then click the floor, a desk, or the top of another item. A red ghost means it would float or overlap. R rotates 90 degrees. Hold Shift and press R for 15 degrees. G toggles the 0.25 m grid. Free placement is the default. Wall pieces sit 0.12 m off the wall, then settle with a soft thunk."
+    },
+    {
+      "title": "Pay & Tips",
+      "body": "Base pay is always paid in full. Damage only comes out of the tip. Mend a scuff, or keep it. Nothing you packed is ever lost."
+    },
+    {
+      "title": "Trade on the Computer",
+      "body": "The beige computer opens HomeDesk. Buy and sell office goods on the market, read Marge's mail, and check listings. Prices move when the day advances."
+    },
+    {
+      "title": "Make It Yours",
+      "body": "Spend what you earn on decor and place it in the room. TropicalForest delivers to the door. Pop the bubble wrap, then find the item a spot."
+    },
+    {
+      "title": "No Rush, No Fail",
+      "body": "Esc pauses and saves. Take the day at your own pace. A bumpy drive, a scuffed box, or an empty shop never ends the game."
+    }
+  ]
+}

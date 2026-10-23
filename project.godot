@@ -32,6 +32,11 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=0
 
+[layer_names]
+
+3d_physics/layer_1="props_blocking"
+3d_physics/layer_2="pickable_nonblocking"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

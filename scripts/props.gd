@@ -1,6 +1,12 @@
 class_name Props
 extends RefCounted
 
+const LAYER_BLOCKING := 1
+const LAYER_PICKABLE := 2
+const MASK_QUERY := 3
+const WALL_THICKNESS := 0.24
+const WALL_BODY_HALF := 0.12
+
 static var _cache: Dictionary = {}
 
 static func restyle_architecture(root: Node) -> void:
@@ -209,8 +215,8 @@ static func ensure_box_collision(root: Node3D) -> void:
 		return
 	var body := StaticBody3D.new()
 	body.name = "PropCollision"
-	body.collision_layer = 1
-	body.collision_mask = 1
+	body.collision_layer = LAYER_BLOCKING
+	body.collision_mask = LAYER_BLOCKING
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = bounds.size
@@ -263,8 +269,8 @@ static func _transform_aabb(xform: Transform3D, box: AABB) -> AABB:
 
 static func add_picker(root: Node3D, size: Vector3) -> void:
 	var body := StaticBody3D.new()
-	body.collision_layer = 1
-	body.collision_mask = 1
+	body.collision_layer = LAYER_BLOCKING
+	body.collision_mask = LAYER_BLOCKING
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = Vector3(maxf(size.x, 0.2), maxf(size.y, 0.15), maxf(size.z, 0.2))
@@ -272,6 +278,338 @@ static func add_picker(root: Node3D, size: Vector3) -> void:
 	shape.position = Vector3(0, box.size.y * 0.5, 0)
 	body.add_child(shape)
 	root.add_child(body)
+
+
+static func prepare(root: Node3D) -> void:
+	if root == null or root.get_node_or_null("StructureCollision") != null:
+		return
+	var node_name := str(root.name)
+	if node_name.begins_with("npc_"):
+		_add_npc_capsule(root)
+		return
+	var kind := _structure_kind(node_name)
+	if kind == "":
+		return
+	if kind == "pickable":
+		if not _claim_colonly(root, LAYER_PICKABLE, 0, 0.0):
+			_add_pickable_box(root)
+		return
+	var scale_half := WALL_BODY_HALF
+	if _claim_colonly(root, LAYER_BLOCKING, LAYER_BLOCKING, scale_half):
+		_stamp_wall(root, scale_half)
+		return
+	match _wall_style(node_name):
+		"corner":
+			_add_corner_boxes(root)
+		"opening":
+			_add_opening_collision(root)
+		_:
+			_add_straight_wall(root)
+	_stamp_wall(root, scale_half)
+
+
+static func _stamp_wall(root: Node3D, body_half: float) -> void:
+	root.set_meta("body_half", body_half)
+	root.set_meta("wall_thickness", body_half * 2.0)
+
+
+static func _structure_kind(node_name: String) -> String:
+	var lowered := node_name.to_lower()
+	if lowered.begins_with("npc_"):
+		return "npc"
+	if "wall" in lowered or "corner" in lowered:
+		return "wall"
+	if "floor" in lowered or "tile" in lowered or "rug" in lowered or "stain" in lowered or "apron" in lowered:
+		return "pickable"
+	return ""
+
+
+static func _wall_style(node_name: String) -> String:
+	var lowered := node_name.to_lower()
+	if "corner" in lowered:
+		return "corner"
+	if "garage" in lowered or "door" in lowered or "window" in lowered:
+		return "opening"
+	return "straight"
+
+
+static func _is_colonly_name(node_name: String) -> bool:
+	var lowered := node_name.to_lower()
+	return lowered.ends_with("-colonly") or lowered.ends_with("_colonly") or lowered.contains("colonly")
+
+
+static func _is_moving_piece(node_name: String) -> bool:
+	return node_name == "GarageDoor" or node_name == "RollerHousing" or node_name == "DoorLeaf" or node_name.begins_with("Slat_")
+
+
+static func _is_collision_name(node_name: String) -> bool:
+	return node_name == "StructureCollision" or node_name == "DoorCollision" or node_name == "PropCollision"
+
+
+static func _claim_colonly(root: Node3D, layer: int, mask: int, scale_half: float) -> bool:
+	var meshes: Array[MeshInstance3D] = []
+	var imported: Array[CollisionObject3D] = []
+	_gather_colonly(root, root, meshes, imported)
+	if not imported.is_empty():
+		for body in imported:
+			body.collision_layer = layer
+			body.collision_mask = mask
+		for mesh_node in meshes:
+			mesh_node.visible = false
+		return true
+	if meshes.is_empty():
+		return false
+	var scale_z := 1.0
+	if scale_half > 0.0:
+		var half := 0.0
+		for mesh_node in meshes:
+			var bounds := _transform_aabb(_mesh_to_root(mesh_node, root), mesh_node.mesh.get_aabb())
+			half = maxf(half, _z_half(bounds))
+		root.set_meta("source_half_z", half)
+		if half > 0.001 and half < 0.5:
+			scale_z = scale_half / half
+	var faces := PackedVector3Array()
+	for mesh_node in meshes:
+		mesh_node.visible = false
+		_append_mesh_faces(mesh_node.mesh, _mesh_to_root(mesh_node, root), scale_z, faces)
+	if faces.size() < 3:
+		return false
+	var body := _body(root, layer, mask, "StructureCollision")
+	_add_trimesh(body, faces)
+	return true
+
+
+static func _gather_colonly(node: Node, root: Node3D, meshes: Array[MeshInstance3D], imported: Array[CollisionObject3D]) -> void:
+	if node != root and _is_colonly_name(str(node.name)):
+		if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+			meshes.append(node as MeshInstance3D)
+		elif node is CollisionObject3D:
+			imported.append(node as CollisionObject3D)
+	for child in node.get_children():
+		_gather_colonly(child, root, meshes, imported)
+
+
+static func _add_pickable_box(root: Node3D) -> void:
+	var bounds := _content_aabb(root)
+	if bounds.size.length() < 0.01:
+		return
+	var body := _body(root, LAYER_PICKABLE, 0, "StructureCollision")
+	_add_box(body, bounds.size, bounds.get_center())
+
+
+static func _add_straight_wall(root: Node3D) -> void:
+	var bounds := _content_aabb(root)
+	if bounds.size.length() < 0.01:
+		return
+	root.set_meta("source_half_z", _z_half(bounds))
+	var body := _body(root, LAYER_BLOCKING, LAYER_BLOCKING, "StructureCollision")
+	var center := bounds.get_center()
+	_add_box(body, Vector3(maxf(bounds.size.x, 0.05), maxf(bounds.size.y, 0.05), WALL_THICKNESS), Vector3(center.x, center.y, 0.0))
+
+
+static func _add_corner_boxes(root: Node3D) -> void:
+	var bounds := _content_aabb(root)
+	if bounds.size.length() < 0.01:
+		return
+	var x0 := bounds.position.x
+	var x1 := x0 + bounds.size.x
+	var z0 := bounds.position.z
+	var z1 := z0 + bounds.size.z
+	var y0 := bounds.position.y
+	var height := maxf(bounds.size.y, 0.05)
+	var mid_y := y0 + height * 0.5
+	root.set_meta("source_half_z", minf(minf(absf(x0), absf(x1)), minf(absf(z0), absf(z1))))
+	var body := _body(root, LAYER_BLOCKING, LAYER_BLOCKING, "StructureCollision")
+	if absf(x1) >= absf(x0):
+		_add_box(body, Vector3(maxf(x1, 0.05), height, WALL_THICKNESS), Vector3(x1 * 0.5, mid_y, 0.0))
+	else:
+		_add_box(body, Vector3(maxf(-x0, 0.05), height, WALL_THICKNESS), Vector3(x0 * 0.5, mid_y, 0.0))
+	if absf(z0) >= absf(z1):
+		_add_box(body, Vector3(WALL_THICKNESS, height, maxf(-z0, 0.05)), Vector3(0.0, mid_y, z0 * 0.5))
+	else:
+		_add_box(body, Vector3(WALL_THICKNESS, height, maxf(z1, 0.05)), Vector3(0.0, mid_y, z1 * 0.5))
+
+
+static func _add_opening_collision(root: Node3D) -> void:
+	var meshes := _structural_meshes(root)
+	var half := 0.0
+	for mesh_node in meshes:
+		var bounds := _transform_aabb(_mesh_to_root(mesh_node, root), mesh_node.mesh.get_aabb())
+		half = maxf(half, _z_half(bounds))
+	root.set_meta("source_half_z", half)
+	var scale_z := 1.0 if half <= 0.001 else WALL_BODY_HALF / half
+	var faces := PackedVector3Array()
+	for mesh_node in meshes:
+		_append_mesh_faces(mesh_node.mesh, _mesh_to_root(mesh_node, root), scale_z, faces)
+	if faces.size() >= 3:
+		var body := _body(root, LAYER_BLOCKING, LAYER_BLOCKING, "StructureCollision")
+		_add_trimesh(body, faces)
+	else:
+		_add_straight_wall(root)
+	_add_door_leaf(root)
+	_add_garage_curtain(root)
+
+
+static func _add_door_leaf(root: Node3D) -> void:
+	var leaf := root.find_child("DoorLeaf", true, false) as Node3D
+	if leaf == null or leaf.get_node_or_null("DoorCollision") != null:
+		return
+	var bounds := _subtree_aabb(leaf)
+	if bounds.size.length() < 0.01:
+		return
+	var body := _body(leaf, LAYER_BLOCKING, LAYER_BLOCKING, "DoorCollision")
+	_add_box(body, bounds.size, bounds.get_center())
+
+
+static func _add_garage_curtain(root: Node3D) -> void:
+	var door := root.find_child("GarageDoor", true, false) as Node3D
+	if door == null or door.get_node_or_null("DoorCollision") != null:
+		return
+	var bounds := _subtree_aabb(door)
+	if bounds.size.y < 0.05:
+		return
+	var center := bounds.get_center()
+	var body := _body(door, LAYER_BLOCKING, LAYER_BLOCKING, "DoorCollision")
+	_add_box(body, Vector3(maxf(bounds.size.x, 0.05), bounds.size.y, WALL_THICKNESS), Vector3(center.x, center.y, 0.0))
+
+
+static func _add_npc_capsule(root: Node3D) -> void:
+	var bounds := _content_aabb(root)
+	var height := bounds.size.y if bounds.size.y > 0.3 else 1.7
+	var radius := 0.28
+	if bounds.size.x > 0.05 and bounds.size.z > 0.05:
+		radius = clampf(minf(bounds.size.x, bounds.size.z) * 0.5, 0.12, 0.45)
+	if height < radius * 2.0 + 0.02:
+		height = radius * 2.0 + 0.02
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = radius
+	capsule.height = height
+	capsule.margin = 0.001
+	var body := _body(root, LAYER_BLOCKING, LAYER_BLOCKING, "StructureCollision")
+	var shape := CollisionShape3D.new()
+	shape.shape = capsule
+	if bounds.size.y > 0.3:
+		shape.position = bounds.get_center()
+	else:
+		shape.position = Vector3(0.0, height * 0.5, 0.0)
+	body.add_child(shape)
+	root.set_meta("npc_capsule", true)
+
+
+static func _structural_meshes(root: Node3D) -> Array[MeshInstance3D]:
+	var found: Array[MeshInstance3D] = []
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		var node_name := str(node.name)
+		if node != root and (_is_moving_piece(node_name) or _is_collision_name(node_name) or _is_colonly_name(node_name)):
+			continue
+		if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+			found.append(node as MeshInstance3D)
+		for child in node.get_children():
+			stack.append(child)
+	return found
+
+
+static func _content_aabb(root: Node3D) -> AABB:
+	return _collect_aabb(root, true)
+
+
+static func _subtree_aabb(root: Node3D) -> AABB:
+	return _collect_aabb(root, false)
+
+
+static func _collect_aabb(root: Node3D, skip_moving: bool) -> AABB:
+	var merged := AABB()
+	var has := false
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		var node_name := str(node.name)
+		if node != root and (_is_collision_name(node_name) or (skip_moving and _is_moving_piece(node_name)) or _is_colonly_name(node_name)):
+			continue
+		if node is MeshInstance3D:
+			var mesh_instance := node as MeshInstance3D
+			if mesh_instance.mesh != null:
+				var box := _transform_aabb(_mesh_to_root(mesh_instance, root), mesh_instance.mesh.get_aabb())
+				if not has:
+					merged = box
+					has = true
+				else:
+					merged = merged.merge(box)
+		for child in node.get_children():
+			stack.append(child)
+	return merged if has else AABB()
+
+
+static func _mesh_to_root(mesh_node: Node3D, root: Node3D) -> Transform3D:
+	if mesh_node == root:
+		return Transform3D.IDENTITY
+	var xform := Transform3D.IDENTITY
+	var current: Node = mesh_node
+	while current != null and current != root:
+		xform = (current as Node3D).transform * xform
+		current = current.get_parent()
+	return xform
+
+
+static func _append_mesh_faces(mesh: Mesh, xform: Transform3D, scale_z: float, into: PackedVector3Array) -> void:
+	for surface in mesh.get_surface_count():
+		var arrays: Array = mesh.surface_get_arrays(surface)
+		if arrays.is_empty() or arrays[Mesh.ARRAY_VERTEX] == null:
+			continue
+		var verts: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		if verts.is_empty():
+			continue
+		var index_data: Variant = arrays[Mesh.ARRAY_INDEX]
+		var indices := PackedInt32Array()
+		if index_data is PackedInt32Array:
+			indices = index_data
+		if indices.is_empty():
+			var count := verts.size() - verts.size() % 3
+			for i in count:
+				var bare: Vector3 = xform * verts[i]
+				bare.z *= scale_z
+				into.append(bare)
+		else:
+			for index in indices:
+				var point: Vector3 = xform * verts[index]
+				point.z *= scale_z
+				into.append(point)
+
+
+static func _body(parent: Node, layer: int, mask: int, body_name: String) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.name = body_name
+	body.collision_layer = layer
+	body.collision_mask = mask
+	parent.add_child(body)
+	return body
+
+
+static func _add_box(body: StaticBody3D, size: Vector3, center: Vector3) -> void:
+	var box := BoxShape3D.new()
+	box.size = Vector3(maxf(size.x, 0.01), maxf(size.y, 0.01), maxf(size.z, 0.01))
+	box.margin = 0.001
+	var shape := CollisionShape3D.new()
+	shape.shape = box
+	shape.position = center
+	body.add_child(shape)
+
+
+static func _add_trimesh(body: StaticBody3D, faces: PackedVector3Array) -> void:
+	var concave := ConcavePolygonShape3D.new()
+	concave.margin = 0.001
+	concave.set_faces(faces)
+	var shape := CollisionShape3D.new()
+	shape.shape = concave
+	body.add_child(shape)
+
+
+static func _z_half(bounds: AABB) -> float:
+	var z0 := bounds.position.z
+	var z1 := z0 + bounds.size.z
+	return maxf(absf(z0), absf(z1))
 
 
 static func play_clip(root: Node, clip: String, looping: bool) -> void:

@@ -249,6 +249,7 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 			if tile:
 				tile.position = Vector3(cx, 0, cz)
 				Props.restyle_architecture(tile)
+				Props.prepare(tile)
 				add_child(tile)
 			cx += 2.0
 		cz += 2.0
@@ -264,13 +265,14 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 					if small and _needs_1m(x, z, w, d, xx, zz):
 						small.position = Vector3(xx, 0, zz)
 						Props.restyle_architecture(small)
+						Props.prepare(small)
 						add_child(small)
 				xx += 1.0
 			zz += 1.0
 	var body := StaticBody3D.new()
 	body.name = "FloorBody"
-	body.collision_layer = 1
-	body.collision_mask = 1
+	body.collision_layer = Props.LAYER_BLOCKING
+	body.collision_mask = Props.LAYER_BLOCKING
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = Vector3(w, 0.08, d)
@@ -350,7 +352,9 @@ func _corner(at: Vector3, rot: float, mirror_z: bool, cutaway := false) -> void:
 		node.scale.z = -1
 	if cutaway:
 		node.visible = false
+		node.add_to_group("cutaway_shell")
 	Props.restyle_architecture(node)
+	Props.prepare(node)
 	add_child(node)
 
 
@@ -374,7 +378,10 @@ func _fill_run(a: float, b: float, fixed: float, along_x: bool, hidden: bool, wi
 				node.position = Vector3(fixed, 0, center)
 				node.rotation.y = deg_to_rad(90)
 			node.visible = not hidden
+			if hidden:
+				node.add_to_group("cutaway_shell")
 			Props.restyle_architecture(node)
+			Props.prepare(node)
 			add_child(node)
 		cursor += length
 
@@ -387,6 +394,7 @@ func _place_opening(center_x: float, z: float) -> void:
 			return
 		garage.position = Vector3(center_x, 0, z)
 		Props.restyle_architecture(garage)
+		Props.prepare(garage)
 		add_child(garage)
 		garage_door = garage.find_child("GarageDoor", true, false)
 		for i in 8:
@@ -400,6 +408,7 @@ func _place_opening(center_x: float, z: float) -> void:
 			return
 		door.position = Vector3(center_x, 0, z)
 		Props.restyle_architecture(door)
+		Props.prepare(door)
 		add_child(door)
 		var leaf := door.find_child("DoorLeaf", true, false)
 		if leaf:
@@ -457,6 +466,7 @@ func _place_model(model_name: String, at: Vector3, rot_deg := 0.0) -> Node3D:
 		return null
 	node.position = at
 	node.rotation.y = deg_to_rad(rot_deg)
+	Props.prepare(node)
 	add_child(node)
 	return node
 
@@ -793,7 +803,8 @@ func _pick_uid() -> String:
 	var from := cam.project_ray_origin(get_viewport().get_mouse_position())
 	var to := from + cam.project_ray_normal(get_viewport().get_mouse_position()) * 80.0
 	var query := PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 1
+	query.collision_mask = Props.MASK_QUERY
+	query.exclude = _cutaway_rids()
 	var hit := space.intersect_ray(query)
 	if hit.is_empty():
 		return ""
@@ -818,12 +829,23 @@ func _aim_point() -> Variant:
 	var from := cam.project_ray_origin(get_viewport().get_mouse_position())
 	var to := from + cam.project_ray_normal(get_viewport().get_mouse_position()) * 80.0
 	var query := PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 1
+	query.collision_mask = Props.MASK_QUERY
 	query.exclude = _ghost_rids()
+	query.exclude.append_array(_cutaway_rids())
 	var hit := space.intersect_ray(query)
 	if not hit.is_empty():
 		return hit.position
 	return _floor_point()
+
+
+func _cutaway_rids() -> Array[RID]:
+	var ids: Array[RID] = []
+	for node in get_tree().get_nodes_in_group("cutaway_shell"):
+		if node is CollisionObject3D:
+			ids.append((node as CollisionObject3D).get_rid())
+		for child in node.find_children("*", "CollisionObject3D", true, false):
+			ids.append((child as CollisionObject3D).get_rid())
+	return ids
 
 
 func _ghost_rids() -> Array[RID]:
