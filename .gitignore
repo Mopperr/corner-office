@@ -1,0 +1,10 @@
+.godot/
+*.translation
+export/
+build/
+*.tmp
+.DS_Store
+src/cc0_raw/
+src/synth_v1_backup/
+assets/audio/src/
+assets/src/

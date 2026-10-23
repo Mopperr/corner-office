@@ -1,0 +1,16 @@
+{
+  "headline": "Created by Andrew's Helpers (Grok Bots)",
+  "people": [
+    { "name": "Andrew S", "role": "Creator" },
+    { "name": "Coding Master Boss", "role": "Lead/Systems" },
+    { "name": "Game Director", "role": "" },
+    { "name": "Narrative Writer", "role": "" },
+    { "name": "Audio Producer", "role": "" },
+    { "name": "Art Specialist", "role": "" },
+    { "name": "Design Specialist", "role": "" },
+    { "name": "Level Platform Brainstormer", "role": "" },
+    { "name": "Programmer Master", "role": "" },
+    { "name": "QA Tester", "role": "" },
+    { "name": "Marketing Bot", "role": "" }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "goals": [
+    {
+      "id": "shopc_cushion_tower_cat",
+      "level": "shop",
+      "venue": "coffee_counter",
+      "item": "cushion",
+      "support": "cat_bed",
+      "latch": true,
+      "hint": "Stack the cushion on the cat bed. Biscuit may borrow it. The goal stays done.",
+      "marker": "ghost",
+      "marker_yaw": 12
+    },
+    {
+      "id": "shopc_mugs_on_shelf",
+      "level": "shop",
+      "venue": "coffee_counter",
+      "item": "mug_worlds_okayest",
+      "also": ["starter_mug", "cafe_mug"],
+      "support": "cafe_wall_shelf",
+      "support_also": ["shelf", "bookshelf_wood"],
+      "hint": "Set the light mug on the shelf.",
+      "marker": "ghost",
+      "show": "held",
+      "pip": 2.0
+    },
+    {
+      "id": "shopl_cushion_crate_seat",
+      "level": "shop",
+      "venue": "lemonade_stand",
+      "item": "cushion",
+      "support": "lemon_crate",
+      "support_also": ["bread_crate", "crate"],
+      "overhang": 0.3,
+      "hint": "Set the cushion on the crate. Turn the crate so its long side holds the cushion.",
+      "marker": "ghost",
+      "marker_yaw": 90
+    },
+    {
+      "id": "shopl_cups_on_counter",
+      "level": "shop",
+      "venue": "lemonade_stand",
+      "item": "paper_cup_stack",
+      "support": "stand",
+      "support_also": ["lemonade_stand_counter", "cafe_counter"],
+      "count": 3,
+      "hint": "Line up 3 cup stacks on the counter.",
+      "marker": "ghost"
+    },
+    {
+      "id": "shopl_tipjar_visible",
+      "level": "shop",
+      "venue": "lemonade_stand",
+      "item": "tip_jar",
+      "support": "stand",
+      "support_also": ["lemonade_stand_counter", "cafe_counter"],
+      "hint": "Leave the tip jar on the front edge of the counter, where the queue can see it.",
+      "marker": "ghost"
+    },
+    {
+      "id": "shopl_lemons_crate_tower",
+      "level": "shop",
+      "venue": "lemonade_stand",
+      "item": "lemon_crate",
+      "also": ["bread_crate"],
+      "same_tag": false,
+      "stack_on_self": true,
+      "hint": "Stack the lemon crates. The top one sits turned a little so the layers read.",
+      "marker": "ghost",
+      "marker_yaw": 12
+    }
+  ]
+}
