@@ -10,11 +10,14 @@ Install [Godot 4.7](https://godotengine.org/) or newer (the project was made wit
 godot --path . 
 ```
 
-The main menu looks into the garage through an orthographic camera (yaw 45°, pitch -30°, size 7.2). It drifts once every 24 seconds, and that drift stays off when the system asks for reduced motion. The main scene is `res://scenes/main.tscn`. Headless logic check:
+The main menu looks into the garage through an orthographic camera (yaw 45°, pitch -30°, size 7.2). It drifts once every 24 seconds, and that drift stays off when the system asks for reduced motion. The main scene is `res://scenes/main.tscn`. Headless logic check (import the class cache first, or a fresh run sits there until Godot finishes that scan):
 
 ```bash
-godot --headless --path . res://tests/smoke.tscn
+godot --headless --path . --import --quit
+godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 ```
+
+`tests/run_smoke.sh` runs those two steps. CI does the same.
 
 `SMOKE_OK` means the pay formula, starter desk, save roundtrip, truck-door clips, and loop-import settings passed.
 

@@ -130,7 +130,14 @@ static func _penetrates(x: float, z: float, bottom: float, rot: float, w: float,
 			continue
 		var size := _size_of(rec)
 		var other_y := float(size.y)
-		var other_top := other_y + float(size.h)
+		var surface := float(size.surface)
+		var solid_h := float(size.h)
+		if surface > 0.0:
+			solid_h = surface
+		var other_top := other_y + solid_h
+		# A desk, shelf, or box top is a place to sit, not a volume to avoid.
+		if surface > 0.0 and bottom >= other_top - SUPPORT_GAP:
+			continue
 		var overlap_y := minf(top, other_top) - maxf(bottom, other_y)
 		if overlap_y <= PENETRATE:
 			continue

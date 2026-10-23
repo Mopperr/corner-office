@@ -8,6 +8,7 @@ signal emails_changed
 signal mode_changed(mode)
 signal toast_requested(message)
 signal office_changed(office_id)
+signal held_cleared
 
 var character := "dana"
 var money := 120
@@ -22,6 +23,7 @@ var office_phase := "pack"
 var office_items: Array = []
 var decor_queue: Array = []
 var goods: Dictionary = {}
+var goods_cost: Dictionary = {}
 var prices: Dictionary = {}
 var history: Dictionary = {}
 var inbox: Array = []
@@ -69,6 +71,7 @@ func new_game(who: String) -> void:
 	office_items = []
 	decor_queue = []
 	goods = {}
+	goods_cost = {}
 	inbox = []
 	fired = {}
 	tutorial_done = false
@@ -107,11 +110,48 @@ func set_mode(next: String) -> void:
 func add_money(amount: int, earned: bool) -> void:
 	money += amount
 	if earned and amount > 0:
+		_credit_net(amount)
+	else:
+		emit_signal("money_changed", money)
+	_check_unlock_email()
+
+
+func _credit_net(profit: int) -> void:
+	if profit != 0:
 		var before := total_earned
-		total_earned += amount
+		total_earned = maxi(0, total_earned + profit)
 		_check_earn_triggers(before, total_earned)
 	emit_signal("money_changed", money)
 	_check_unlock_email()
+
+
+func restore_held_items() -> void:
+	var changed := false
+	for rec in office_items:
+		if str(rec.get("state", "")) == "hand":
+			rec["state"] = "placed"
+			changed = true
+	for item in job.get("items", []):
+		if typeof(item) == TYPE_DICTIONARY and str(item.get("state", "")) == "hand":
+			item["state"] = "placed"
+			changed = true
+	if changed:
+		emit_signal("held_cleared")
+
+
+func _push_cost(id: String, cost: int) -> void:
+	var stack: Array = goods_cost.get(id, [])
+	stack.append(cost)
+	goods_cost[id] = stack
+
+
+func _pop_cost(id: String) -> int:
+	var stack: Array = goods_cost.get(id, [])
+	var cost := ItemDB.base_price(id)
+	if not stack.is_empty():
+		cost = int(stack.pop_front())
+		goods_cost[id] = stack
+	return cost
 
 
 func _check_earn_triggers(before: int, after: int) -> void:
@@ -575,47 +615,68 @@ func apply_drive_result(result: Dictionary) -> void:
 
 
 func _assign_damage() -> void:
-	var condition := int(job.get("condition", 100))
-	var stress := float(100 - condition)
-	var fragile_unpadded := false
-	for box in job.get("boxes", []):
-		if box_needs_padding(int(box.get("id", -1))) and not bool(box.get("padded", false)):
-			fragile_unpadded = true
-	if not fragile_unpadded:
-		stress *= float(Tuning.get_value("box_condition.padding_multiplier", 0.5))
-	if heavy_respected():
-		stress *= float(Tuning.get_value("box_condition.heavy_bottom_multiplier", 0.75))
-	var scuffed := 0
-	var chipped := 0
-	for band in Tuning.get_value("damage.stress_bands", []):
-		if stress < float(band.get("below", 999)):
-			scuffed = int(band.get("scuffed", 0))
-			chipped = int(band.get("chipped", 0))
-			break
+	var base_stress := float(100 - int(job.get("condition", 100)))
+	var budget := _stress_budget(base_stress)
+	var scuffed := int(budget.x)
+	var chipped := int(budget.y)
 	var order: Array = []
 	for item in job.get("items", []):
-		var score := 0
-		if bool(item.get("fragile", false)):
-			score += 2
-			var box := job_box(int(item.get("box", -1)))
-			if not box.is_empty() and not bool(box.get("padded", false)):
-				score += 2
-		order.append({"uid": item["uid"], "score": score})
-	order.sort_custom(func(a, b): return int(a["score"]) > int(b["score"]))
-	var idx := 0
-	while chipped > 0 and idx < order.size():
-		var item := job_item(str(order[idx]["uid"]))
+		var stress := _item_stress(item, base_stress)
+		order.append({"uid": item["uid"], "stress": stress, "cap": _severity(stress)})
+	order.sort_custom(func(a, b): return float(a["stress"]) > float(b["stress"]))
+	for entry in order:
+		if chipped <= 0:
+			break
+		if int(entry["cap"]) < 2:
+			continue
+		var item := job_item(str(entry["uid"]))
 		item["damage"] = 2
 		emit_signal("box_damaged", item["uid"], 2)
 		chipped -= 1
-		idx += 1
-	while scuffed > 0 and idx < order.size():
-		var item2 := job_item(str(order[idx]["uid"]))
-		if int(item2.get("damage", 0)) == 0:
-			item2["damage"] = 1
-			emit_signal("box_damaged", item2["uid"], 1)
-			scuffed -= 1
-		idx += 1
+	for entry in order:
+		if scuffed <= 0:
+			break
+		if int(entry["cap"]) < 1:
+			continue
+		var item2 := job_item(str(entry["uid"]))
+		if int(item2.get("damage", 0)) != 0:
+			continue
+		item2["damage"] = 1
+		emit_signal("box_damaged", item2["uid"], 1)
+		scuffed -= 1
+
+
+func _item_stress(item: Dictionary, base_stress: float) -> float:
+	var stress := base_stress
+	var box := job_box(int(item.get("box", -1)))
+	if bool(item.get("fragile", false)) and not box.is_empty() and bool(box.get("padded", false)):
+		stress *= float(Tuning.get_value("box_condition.padding_multiplier", 0.5))
+	if bool(item.get("heavy", false)) and _box_on_bottom(box):
+		stress *= float(Tuning.get_value("box_condition.heavy_bottom_multiplier", 0.75))
+	return stress
+
+
+func _box_on_bottom(box: Dictionary) -> bool:
+	if box.is_empty():
+		return false
+	var slot := int(box.get("slot", -1))
+	return slot >= 0 and slot < 4
+
+
+func _stress_budget(stress: float) -> Vector2:
+	for band in Tuning.get_value("damage.stress_bands", []):
+		if stress < float(band.get("below", 999)):
+			return Vector2(float(band.get("scuffed", 0)), float(band.get("chipped", 0)))
+	return Vector2.ZERO
+
+
+func _severity(stress: float) -> int:
+	var budget := _stress_budget(stress)
+	if budget.y > 0.0:
+		return 2
+	if budget.x > 0.0:
+		return 1
+	return 0
 
 
 func tap_repair(uid: String) -> bool:
@@ -703,7 +764,8 @@ func finish_job() -> Dictionary:
 		stars += 1
 	stars = mini(3, stars)
 	payout["stars"] = stars
-	add_money(int(payout["total"]), true)
+	var net_pay := int(payout.get("base", 0)) + int(payout.get("net_tips", 0)) + int(payout.get("shortcut", 0))
+	add_money(net_pay, true)
 	rep_stars += stars
 	jobs_done += 1
 	jobs_cleared[str(job.get("id", ""))] = true
@@ -760,7 +822,9 @@ func _swing(base: float, current: float) -> float:
 	var sign := 1.0 if rng.randf() > 0.48 else -1.0
 	var mag := rng.randf_range(min_s, max_s)
 	var nxt := current * (1.0 + sign * mag)
-	return clampf(nxt, base * 0.55, base * 1.85)
+	var floor_pct := float(Tuning.get_value("pay.price_min", 0.50))
+	var ceil_pct := float(Tuning.get_value("pay.price_max", 2.50))
+	return clampf(nxt, base * floor_pct, base * ceil_pct)
 
 
 func advance_day() -> void:
@@ -793,7 +857,7 @@ func price_of(id: String) -> int:
 
 
 func sell_price_of(id: String) -> int:
-	var ratio := float(Tuning.get_value("pay.sell_ratio", 0.75))
+	var ratio := float(Tuning.get_value("pay.sell_ratio", 0.90))
 	return maxi(1, int(round(float(price_of(id)) * ratio)))
 
 
@@ -803,6 +867,7 @@ func buy_good(id: String) -> String:
 		return "Not quite enough in the jar."
 	add_money(-cost, false)
 	goods[id] = int(goods.get(id, 0)) + 1
+	_push_cost(id, cost)
 	return ""
 
 
@@ -810,10 +875,11 @@ func sell_good(id: String) -> Dictionary:
 	if int(goods.get(id, 0)) <= 0:
 		return {"error": "You don't have one to sell."}
 	var gain := sell_price_of(id)
+	var cost := _pop_cost(id)
 	goods[id] = int(goods[id]) - 1
-	var paid_guess := ItemDB.base_price(id)
-	add_money(gain, true)
-	var profit := gain - paid_guess
+	add_money(gain, false)
+	var profit := gain - cost
+	_credit_net(profit)
 	if profit > 0:
 		fire_trigger("first_profitable_sale")
 	return {"gain": gain, "profit": profit}
@@ -826,10 +892,14 @@ func sell_to_buyer() -> Dictionary:
 	if int(goods.get(id, 0)) <= 0:
 		return {"error": "You don't have that one yet."}
 	var gain := int(buyer_offer.get("price", 0))
+	var cost := _pop_cost(id)
 	goods[id] = int(goods[id]) - 1
-	add_money(gain, true)
-	fire_trigger("first_profitable_sale")
-	var result := {"gain": gain, "profit": gain - ItemDB.base_price(id), "buyer": buyer_offer.get("name", "")}
+	add_money(gain, false)
+	var profit := gain - cost
+	_credit_net(profit)
+	if profit > 0:
+		fire_trigger("first_profitable_sale")
+	var result := {"gain": gain, "profit": profit, "buyer": buyer_offer.get("name", "")}
 	_roll_buyer()
 	return result
 
@@ -1097,12 +1167,15 @@ func resell_office_item(uid: String) -> String:
 	var rec := find_office_item(uid)
 	if rec.is_empty() or str(rec.get("source", "")) != "forest":
 		return "The market wants something that came from the forest."
-	var gain := int(round(float(rec.get("paid", 0)) * float(Catalog.forest.get("resell_ratio", 0.6))))
+	var paid := int(rec.get("paid", 0))
+	var gain := int(round(float(paid) * float(Catalog.forest.get("resell_ratio", 0.6))))
 	office_items.erase(rec)
 	if gain > 0:
-		add_money(gain, true)
+		add_money(gain, false)
 	else:
-		add_money(1, true)
+		add_money(1, false)
+		gain = 1
+	_credit_net(gain - paid)
 	return ""
 
 
@@ -1257,6 +1330,7 @@ func to_dict() -> Dictionary:
 		"office_items": office_items.duplicate(true),
 		"decor_queue": decor_queue.duplicate(true),
 		"goods": goods.duplicate(true),
+		"goods_cost": goods_cost.duplicate(true),
 		"prices": prices.duplicate(true),
 		"history": history.duplicate(true),
 		"inbox": inbox.duplicate(true),
@@ -1301,6 +1375,7 @@ func from_dict(raw: Dictionary) -> void:
 	office_items = raw.get("office_items", [])
 	decor_queue = raw.get("decor_queue", [])
 	goods = raw.get("goods", {})
+	goods_cost = raw.get("goods_cost", {})
 	prices = raw.get("prices", {})
 	history = raw.get("history", {})
 	inbox = raw.get("inbox", [])

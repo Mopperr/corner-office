@@ -316,6 +316,7 @@ func _ready() -> void:
 	failures.append_array(_screen_copy_checks())
 	failures.append_array(await _settle_checks())
 	failures.append_array(await _qa_regressions())
+	failures.append_array(await _review_fixes())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -759,3 +760,192 @@ func _label_with(root: Node, text: String) -> Label:
 		if label.text == text:
 			return label
 	return null
+
+
+func _review_fixes() -> Array:
+	var found: Array = []
+	var routes = preload("res://scripts/drive_routes.gd")
+	GameState.new_game("dana")
+	for item in GameState.office_items:
+		if str(item.get("uid", "")) != "desk":
+			item["state"] = "boxed"
+	var mug_rec := GameState.find_office_item("mug")
+	mug_rec["state"] = "hand"
+	var room: Node = RoomLib.new()
+	add_child(room)
+	room.set("held_uid", "mug")
+	room.set("held_source", "office")
+	room.set("held_rot", 0.0)
+	var spot: Dictionary = room.call("_snap_point", Vector3(2.15, 0.76, 4.45))
+	var spot_pos: Vector3 = spot.get("pos", Vector3.ZERO)
+	if not bool(spot.get("valid", false)) or absf(spot_pos.y - 0.76) > 0.05:
+		found.append("desk top %s" % spot)
+	elif bool(room.call("_blocked", spot_pos, float(spot.get("rot", 0.0)), ItemDB.get_item("starter_mug"))):
+		found.append("desk blocked support")
+	if not bool(room.call("_blocked", Vector3(2.5, 0.0, 4.5), 0.0, ItemDB.get_item("starter_mug"))):
+		found.append("desk should block a floor overlap")
+	_bury(room)
+	mug_rec = GameState.find_office_item("mug")
+	mug_rec["state"] = "hand"
+	mug_rec["x"] = 2.05
+	SaveManager.save_game()
+	if str(GameState.find_office_item("mug").get("state", "")) != "placed":
+		found.append("save left mug in hand")
+	GameState.job = {"items": [{"uid": "j0", "state": "hand", "x": 1.2, "y": 0.0, "z": 1.4}], "boxes": []}
+	SaveManager.save_game()
+	var saved_job: Dictionary = GameState.job
+	var saved_items: Array = saved_job.get("items", [])
+	if saved_items.is_empty() or str(saved_items[0].get("state", "")) != "placed":
+		found.append("save left job item in hand")
+	GameState.money = 5000
+	GameState.total_earned = 2000
+	GameState.jobs_done = 3
+	GameState.rep_stars = 2
+	GameState.office_id = "garage"
+	GameState.set_mode("office")
+	var app: Node = load("res://scripts/app.gd").new()
+	add_child(app)
+	var move_err := GameState.try_buy_office("bakery")
+	if move_err != "":
+		found.append("buy bakery %s" % move_err)
+	await get_tree().process_frame
+	var saw_bakery := false
+	var view := app.get_node_or_null("View")
+	if view == null:
+		found.append("no play view")
+	else:
+		for child in view.get_children():
+			var venue = child.get("venue")
+			if typeof(venue) == TYPE_DICTIONARY and str(venue.get("id", "")) == "bakery":
+				saw_bakery = true
+	if not saw_bakery:
+		found.append("bakery room %s" % GameState.office_id)
+	_bury(app)
+	var good: Dictionary = ItemDB.trade_goods()[0]
+	var good_id := str(good.get("id", ""))
+	var base := float(ItemDB.base_price(good_id))
+	GameState.prices[good_id] = base
+	if GameState.sell_price_of(good_id) != int(round(base * 0.90)):
+		found.append("sell ratio %s" % GameState.sell_price_of(good_id))
+	var capped := float(GameState._swing(100.0, 10000.0))
+	var floored := float(GameState._swing(100.0, 0.0))
+	if absf(capped - 250.0) > 0.01 or absf(floored - 50.0) > 0.01:
+		found.append("price band %s %s" % [capped, floored])
+	GameState.money = 5000
+	GameState.total_earned = 0
+	GameState.goods_cost = {}
+	GameState.goods = {}
+	GameState.prices[good_id] = base
+	if GameState.buy_good(good_id) != "":
+		found.append("buy good")
+	GameState.prices[good_id] = base * 2.0
+	var before_earned := GameState.total_earned
+	var sold: Dictionary = GameState.sell_good(good_id)
+	var profit := int(sold.get("profit", 0))
+	var gain := int(sold.get("gain", 0))
+	if profit == gain or GameState.total_earned - before_earned != profit:
+		found.append("earned net %s %s %s" % [profit, gain, GameState.total_earned - before_earned])
+	GameState.total_earned = 0
+	GameState.job = {
+		"id": "job_catcafe",
+		"def": JobDB.get_job("job_catcafe"),
+		"condition": 95,
+		"alley": false,
+		"cat_opened": false,
+		"items": [
+			{"uid": "a", "damage": 1, "state": "placed"},
+			{"uid": "b", "damage": 1, "state": "placed"},
+		],
+		"boxes": [],
+	}
+	var expected: Dictionary = GameState.compute_payout(120, 95, 0, 2, 0, false, 0)
+	var earned_before := GameState.total_earned
+	GameState.finish_job()
+	var net_pay := int(expected.get("base", 0)) + int(expected.get("net_tips", 0)) + int(expected.get("shortcut", 0))
+	var gross_pay := int(expected.get("base", 0)) + int(expected.get("box_tip", 0)) + int(expected.get("bonuses", 0))
+	if GameState.total_earned - earned_before != net_pay or net_pay >= gross_pay:
+		found.append("job earned %s %s" % [GameState.total_earned - earned_before, expected])
+	GameState.job = {
+		"condition": 40,
+		"items": [
+			{"uid": "plain", "fragile": false, "heavy": false, "box": 0, "damage": 0},
+			{"uid": "padded", "fragile": true, "heavy": false, "box": 1, "damage": 0},
+		],
+		"boxes": [
+			{"id": 0, "padded": false, "slot": 0},
+			{"id": 1, "padded": true, "slot": 1},
+		],
+	}
+	GameState._assign_damage()
+	if int(GameState.job_item("plain").get("damage", 0)) != 2 or int(GameState.job_item("padded").get("damage", 0)) > 1:
+		found.append("padding per item %s %s" % [GameState.job_item("plain"), GameState.job_item("padded")])
+	GameState.job = {
+		"condition": 40,
+		"items": [
+			{"uid": "bottom", "fragile": false, "heavy": true, "box": 0, "damage": 0},
+			{"uid": "upper", "fragile": false, "heavy": true, "box": 1, "damage": 0},
+		],
+		"boxes": [
+			{"id": 0, "padded": false, "slot": 0},
+			{"id": 1, "padded": false, "slot": 5},
+		],
+	}
+	GameState._assign_damage()
+	if int(GameState.job_item("upper").get("damage", 0)) != 2 or int(GameState.job_item("bottom").get("damage", 0)) > 1:
+		found.append("heavy per item %s %s" % [GameState.job_item("upper"), GameState.job_item("bottom")])
+	var drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(drive)
+	if int(drive.call("bump_points", 0.0)) != 3 or int(drive.call("bump_points", 4.5 * 32.0)) != 8:
+		found.append("bump ends %s %s" % [drive.call("bump_points", 0.0), drive.call("bump_points", 4.5 * 32.0)])
+	var mid := int(drive.call("bump_points", 2.25 * 32.0))
+	if mid <= 3 or mid >= 8:
+		found.append("bump scale %s" % mid)
+	drive.set("condition", 100)
+	drive.set("speed", 10.0)
+	drive.call("_maybe_hard_brake", "clear", 200.0, 0.05)
+	if int(drive.get("condition")) != 100:
+		found.append("clear brake %s" % drive.get("condition"))
+	drive.call("_maybe_hard_brake", "rain", 200.0, 0.05)
+	if int(drive.get("condition")) >= 100 or int(drive.get("condition")) < 96:
+		found.append("rain brake %s" % drive.get("condition"))
+	_bury(drive)
+	var rainy: Dictionary = JobDB.get_drive("rainy_afternoon")
+	var lane_left := 0.0
+	var lane_right := 0.0
+	for rect in rainy.get("roads", []):
+		if float(rect[3]) > float(rect[2]):
+			lane_left = float(rect[0])
+			lane_right = lane_left + float(rect[2])
+	for hazard in rainy.get("hazards", []):
+		if str(hazard.get("type", "")) != "cone":
+			continue
+		var cone_x := float(hazard.get("x", 0))
+		if cone_x - lane_left < 110.0 or lane_right - cone_x < 110.0:
+			found.append("cone lane %s %s %s" % [lane_left, cone_x, lane_right])
+	var sample := {
+		"version": "v2",
+		"full_scale": true,
+		"id": "sample",
+		"roads": [[10, 20, 30, 40]],
+		"alley": {"a": [0, 0], "b": [1280, 0], "width": 110},
+	}
+	var adopted: Dictionary = routes.adopt(sample)
+	var adopted_roads: Array = adopted.get("roads", [])
+	var adopted_span: Array = adopted_roads[0] if not adopted_roads.is_empty() else []
+	if adopted_span.size() < 3 or int(adopted_span[2]) != 30:
+		found.append("route scale %s" % adopted)
+	if absf(float(routes.alley_seconds(adopted, 32.0, 4.0)) - 10.0) > 0.05:
+		found.append("alley sample %s" % routes.alley_seconds(adopted, 32.0, 4.0))
+	if not routes.adopt({"version": "v1", "full_scale": true}).is_empty():
+		found.append("v1 route adopted")
+	if routes.has_v2("rainy_afternoon"):
+		var live := float(routes.alley_seconds(rainy, 32.0, 4.0))
+		if live < 9.0 or live > 11.0:
+			found.append("v2 alley %s" % live)
+	else:
+		var alley: Dictionary = rainy.get("alley", {})
+		var alley_a: Array = alley.get("a", [])
+		var alley_b: Array = alley.get("b", [])
+		if alley_a.size() < 2 or alley_b.size() < 2 or int(alley_a[0]) != 2000 or int(alley_b[0]) != 4100:
+			found.append("alley moved %s" % alley)
+	return found

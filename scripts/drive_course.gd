@@ -165,8 +165,7 @@ func _process(delta: float) -> void:
 	elif throttle < 0.0:
 		var before := speed
 		speed = maxf(0.0, speed + brake * delta * throttle)
-		if before > max_speed * 0.55 and speed < before - 40.0 * delta:
-			_apply_hit("brake", randi_range(int(Tuning.get_value("box_condition.hard_brake_min", 2)), int(Tuning.get_value("box_condition.hard_brake_max", 4))), 700)
+		_maybe_hard_brake(weather, before, delta)
 	else:
 		speed = maxf(0.0, speed - accel * 0.35 * delta)
 	var steer := _axis(KEY_A, KEY_LEFT, KEY_D, KEY_RIGHT)
@@ -219,6 +218,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(_delta: float) -> void:
 	pass
+
+
+func bump_points(speed_px: float) -> int:
+	var slow := float(Tuning.get_value("box_condition.bump_min", 3))
+	var fast := float(Tuning.get_value("box_condition.bump_max", 8))
+	var meters := speed_px / PX
+	var span := clampf(meters / 4.5, 0.0, 1.0)
+	return int(round(lerpf(slow, fast, span)))
+
+
+func _maybe_hard_brake(weather: String, before: float, delta: float) -> void:
+	if weather != "rain":
+		return
+	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 4.0)) * PX
+	if before > max_speed * 0.55 and speed < before - 40.0 * delta:
+		_apply_hit("brake", randi_range(int(Tuning.get_value("box_condition.hard_brake_min", 2)), int(Tuning.get_value("box_condition.hard_brake_max", 4))), 700)
 
 
 func _contact(kind: String, overlapping: bool, amount: int) -> void:
@@ -337,6 +352,8 @@ func _hazards() -> void:
 			active["cone"] = int(Tuning.get_value("box_condition.collision", 10))
 		elif kind == "gravel":
 			active["gravel"] = 0 if pond else int(Tuning.get_value("box_condition.bump_min", 3))
+		elif kind == "bump":
+			active["bump"] = bump_points(speed)
 		else:
 			var fast := speed > PX * 3.0
 			active[kind] = int(Tuning.get_value("box_condition.bump_max", 8)) if fast else int(Tuning.get_value("box_condition.bump_min", 3))

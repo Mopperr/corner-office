@@ -74,6 +74,18 @@ func _ready() -> void:
 	if GameState.mode == "truck":
 		AudioDirector.start_loop("sfx_truck_idle_loop")
 		_open_truck_door(true)
+	if not GameState.held_cleared.is_connected(_on_held_cleared):
+		GameState.held_cleared.connect(_on_held_cleared)
+
+
+func _on_held_cleared() -> void:
+	held_uid = ""
+	held_source = ""
+	if ghost:
+		ghost.visible = false
+	_refresh_items()
+	_maybe_live()
+	_maybe_job_done()
 
 
 func _exit_tree() -> void:
@@ -1292,7 +1304,7 @@ func _snap_point(hit: Vector3) -> Dictionary:
 		extra.append(Rect2(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"])))
 	var spot := PlaceLib.resolve(hit.x, hit.z, hit.y, rot, def, others, room, SaveManager.snap_to_grid, extra)
 	var placed: Vector3 = spot["pos"]
-	spot["valid"] = bool(spot["valid"]) and _inside(placed.x, placed.z, 0.25) and not _too_tall(placed, def)
+	spot["valid"] = bool(spot["valid"]) and _inside(placed.x, placed.z, 0.25) and not _too_tall(placed, def) and not _blocked(placed, float(spot.get("rot", rot)), def)
 	return spot
 
 
@@ -1349,6 +1361,8 @@ func _too_tall(pos: Vector3, def: Dictionary) -> bool:
 
 func _blocked(pos: Vector3, rot: float, def: Dictionary) -> bool:
 	var mine := _footprint(pos, rot, def)
+	var bottom := pos.y
+	var top := bottom + float(def.get("h", 0.3))
 	var records: Array = GameState.office_items if held_source != "job" else GameState.job.get("items", [])
 	for rec in records:
 		if str(rec.get("uid", "")) == held_uid:
@@ -1357,7 +1371,18 @@ func _blocked(pos: Vector3, rot: float, def: Dictionary) -> bool:
 			continue
 		var other_def := ItemDB.get_item(str(rec.get("item", rec.get("item_id", ""))))
 		var other := _footprint(Vector3(float(rec.get("x", 0)), 0, float(rec.get("z", 0))), float(rec.get("rot", 0)), other_def)
-		if mine.intersects(other, true):
+		if not mine.intersects(other, true):
+			continue
+		var other_y := float(rec.get("y", 0.0))
+		var surface := float(other_def.get("surface", 0.0))
+		var solid_h := float(other_def.get("h", 0.3))
+		if surface > 0.0:
+			solid_h = surface
+		var solid_top := other_y + solid_h
+		if surface > 0.0 and bottom >= solid_top - 0.05:
+			continue
+		var overlap := minf(top, solid_top) - maxf(bottom, other_y)
+		if overlap > 0.03:
 			return true
 	return false
 
@@ -1397,19 +1422,25 @@ func _held_def() -> Dictionary:
 
 
 func _drop_hold() -> void:
-	if held_source == "office":
-		var rec := GameState.find_office_item(held_uid)
-		if not rec.is_empty() and str(rec.get("state", "")) == "hand":
-			rec["state"] = "boxed" if GameState.office_phase != "live" else "placed"
-	elif held_source == "job":
-		var item := GameState.job_item(held_uid)
-		if not item.is_empty():
-			item["state"] = "loose"
+	_restore_held_record()
 	held_uid = ""
 	held_source = ""
 	if ghost:
 		ghost.visible = false
 	_refresh_items()
+	_maybe_live()
+	_maybe_job_done()
+
+
+func _restore_held_record() -> void:
+	if held_source == "office":
+		var rec := GameState.find_office_item(held_uid)
+		if not rec.is_empty() and str(rec.get("state", "")) == "hand":
+			rec["state"] = "placed"
+	elif held_source == "job":
+		var item := GameState.job_item(held_uid)
+		if not item.is_empty() and str(item.get("state", "")) == "hand":
+			item["state"] = "placed"
 
 
 func _refresh_items() -> void:

@@ -19,6 +19,7 @@ func has_save() -> bool:
 
 
 func save_game() -> bool:
+	GameState.restore_held_items()
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("Could not write save")

@@ -375,6 +375,9 @@ func _move_office(id: String) -> void:
 		return
 	AudioDirector.play_sfx("sfx_success_chime")
 	SaveManager.save_game()
+	var host := get_tree().current_scene
+	if host != null and host.has_method("show_play"):
+		host.show_play()
 	_close()
 
 

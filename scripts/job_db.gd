@@ -1,5 +1,7 @@
 extends Node
 
+const Routes = preload("res://scripts/drive_routes.gd")
+
 var briefs: Dictionary = {}
 var jobs: Array = []
 var drives: Dictionary = {}
@@ -61,7 +63,7 @@ func base_pay(job: Dictionary) -> int:
 
 
 func get_drive(id: String) -> Dictionary:
-	return drives.get(id, {})
+	return Routes.course_for(id, drives.get(id, {}))
 
 
 func build_job_items(job: Dictionary) -> Array:

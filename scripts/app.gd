@@ -56,9 +56,9 @@ func _show_saved_mode() -> void:
 
 
 func _on_office_changed(_id: String) -> void:
-	if GameState.mode != "office" or view_root.get_child_count() == 0:
+	if view_root == null or GameState.mode == "menu":
 		return
-	call_deferred("show_play")
+	show_play()
 
 
 func show_play() -> void:
