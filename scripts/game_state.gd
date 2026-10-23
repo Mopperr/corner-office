@@ -48,6 +48,8 @@ var shop_today := 0
 var shop_visitors_today := 0
 var freebie_day := -1
 var forest_serial := 0
+var latched_goals: Dictionary = {}
+var goal_marked: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var _arcs: Variant = null
 
@@ -93,6 +95,8 @@ func new_game(who: String) -> void:
 	shop_visitors_today = 0
 	freebie_day = -1
 	forest_serial = 0
+	latched_goals = {}
+	goal_marked = {}
 	for entry in ItemDB.starter_layout():
 		var copy: Dictionary = entry.duplicate(true)
 		copy["state"] = "placed"
@@ -1369,6 +1373,7 @@ func to_dict() -> Dictionary:
 		"shop_visitors_today": shop_visitors_today,
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
+		"latched_goals": latched_goals.duplicate(true),
 	}
 
 
@@ -1416,5 +1421,7 @@ func from_dict(raw: Dictionary) -> void:
 	shop_visitors_today = int(raw.get("shop_visitors_today", 0))
 	freebie_day = int(raw.get("freebie_day", -1))
 	forest_serial = int(raw.get("forest_serial", 0))
+	latched_goals = raw.get("latched_goals", {})
+	goal_marked = {}
 	emit_signal("money_changed", money)
 	emit_signal("emails_changed")

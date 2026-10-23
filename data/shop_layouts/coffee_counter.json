@@ -1,0 +1,18 @@
+{
+  "id": "coffee_counter",
+  "props": [
+    {"uid": "pastry_case", "model": "pastry_case", "x": 0.85, "y": 0.0, "z": 2.5},
+    {"uid": "counter_M", "model": "cafe_counter", "x": 4.55, "y": 0.0, "z": 2.5},
+    {"uid": "counter_R", "model": "espresso_bar", "x": 6.7, "y": 0.0, "z": 2.5},
+    {"uid": "queue_pastry", "model": "queue_point", "x": 0.85, "y": 0.0, "z": 4.0},
+    {"uid": "queue_mid", "model": "queue_point", "x": 4.55, "y": 0.0, "z": 4.0},
+    {"uid": "queue_espresso", "model": "queue_point", "x": 6.7, "y": 0.0, "z": 4.0},
+    {"uid": "register", "model": "register", "x": 4.3, "y": 0.95, "z": 2.6},
+    {"uid": "tip_jar", "model": "tip_jar", "x": 3.85, "y": 0.95, "z": 2.55},
+    {"uid": "cushion_a", "model": "cafe_cushion", "x": 1.0, "y": 0.0, "z": 5.4},
+    {"uid": "cushion_b", "model": "cafe_cushion", "x": 2.45, "y": 0.0, "z": 4.5},
+    {"uid": "cat_tree", "model": "cat_tree", "x": 7.45, "y": 0.0, "z": 4.6},
+    {"uid": "cat_bed", "model": "cat_bed", "x": 6.6, "y": 0.0, "z": 5.2},
+    {"uid": "biscuit", "model": "cat_biscuit", "x": 6.6, "y": 0.16, "z": 5.2}
+  ]
+}

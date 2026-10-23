@@ -95,7 +95,9 @@
     "cafe": { "name": "Whisker & Bean", "x": 0, "z": 0, "w": 6, "d": 6, "opening": "door", "open_w": 2, "windows": true, "pink": true, "cat": true, "music": "music_office_build", "ambience": "amb_l02_cafe_loop" },
     "train": { "name": "Grandpa's Train Shop", "x": 0, "z": 0, "w": 8, "d": 6, "opening": "door", "open_w": 2, "windows": true, "train": true, "music": "music_office_build", "ambience": "amb_l04_shop_clock_loop" },
     "bakery": { "name": "Bakery Loft", "x": 0, "z": 0, "w": 8, "d": 10, "opening": "door", "open_w": 2, "windows": true, "kit": "bakery_loft", "nook": { "x": -3, "z": 3, "w": 3, "d": 4, "max_h": 1.5 }, "pastry": true, "music": "music_act2_morning", "ambience": "amb_l06_skylight_rain_loop" },
-    "park": { "name": "Duck Pond Shed", "x": 0, "z": 0, "w": 6, "d": 6, "opening": "door", "open_w": 2, "windows": true, "music": "music_office_build" }
+    "park": { "name": "Duck Pond Shed", "x": 0, "z": 0, "w": 6, "d": 6, "opening": "door", "open_w": 2, "windows": true, "music": "music_office_build" },
+    "coffee_counter": { "name": "Coffee Counter", "x": 0, "z": 0, "w": 9, "d": 7, "opening": "door", "open_w": 2, "windows": true, "shop_layout": "coffee_counter", "music": "music_office_build", "ambience": "amb_l02_cafe_loop" },
+    "lemonade_stand": { "name": "Lemonade Stand", "x": 0, "z": 0, "w": 8, "d": 6, "opening": "door", "open_w": 2, "windows": true, "shop_layout": "lemonade_stand", "music": "music_office_build", "ambience": "amb_l02_cafe_loop" }
   },
   "jobs": [
     {

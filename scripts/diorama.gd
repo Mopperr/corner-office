@@ -11,6 +11,8 @@ const Catalog = preload("res://scripts/catalog.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
 const Props = preload("res://scripts/props.gd")
 const Controls = preload("res://scripts/control_map.gd")
+const StackGoals = preload("res://scripts/stack_goals.gd")
+const ShopLayout = preload("res://scripts/shop_layout.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -67,6 +69,8 @@ var settling := false
 var stack_room
 var _settle_uid := ""
 var hud_only := false
+var _goal_pip := 0.0
+var _markers_key := ""
 
 
 func _ready() -> void:
@@ -447,6 +451,10 @@ func _place_model(model_name: String, at: Vector3, rot_deg := 0.0) -> Node3D:
 
 
 func _dress() -> void:
+	var layout_name := str(venue.get("shop_layout", ""))
+	if layout_name != "":
+		ShopLayout.place(self, layout_name)
+		return
 	var id := str(venue.get("id", ""))
 	if id == "garage":
 		_place_model("driveway_apron_2m", Vector3(2.5, 0, -1.02))
@@ -458,8 +466,8 @@ func _dress() -> void:
 		for spot in [Vector3(2.4, 0.0, 1.3), Vector3(4.2, 0.0, 1.8)]:
 			_place_model("floor_oil_stain_1m", spot)
 	if id == "cafe":
-		_place_model("cafe_counter", Vector3(3.2, 0, 4.7))
-		_place_model("mug_rack", Vector3(0.12, 1.35, 3.2), 90)
+		_mark_goal(_place_model("cafe_counter", Vector3(3.2, 0, 4.7)), "cafe_counter", 0.95, 2.05, 0.75)
+		_mark_goal(_place_model("mug_rack", Vector3(0.12, 1.35, 3.2), 90), "mug_rack", 0.6, 0.7, 0.185)
 		_place_model("hanging_plant", Vector3(2.0, 2.15, 2.2))
 		_place_model("hanging_plant", Vector3(4.6, 2.15, 3.4))
 		_place_model("padding_roll", Vector3(1.4, 0, 1.15))
@@ -476,21 +484,109 @@ func _dress() -> void:
 		_place_model("parts_drawer_unit", Vector3(3.3, 0, 5.15))
 		_place_model("cuckoo_clock", Vector3(0.12, 1.55, 2.2), 90)
 	if id == "bakery":
-		_place_model("ceiling_beam", Vector3(2.0, 2.7, 3.2))
-		_place_model("ceiling_beam", Vector3(5.2, 2.7, 3.2))
-		_place_model("ceiling_beam", Vector3(2.0, 2.7, 7.2))
-		_place_model("ceiling_beam", Vector3(5.2, 2.7, 7.2))
-		_place_model("skylight_frame", Vector3(4.0, 2.88, 5.0))
-		_place_model("radiator", Vector3(0.55, 0, 6.4), 90)
+		_tag_beam(_place_model("ceiling_beam", Vector3(2.0, 2.7, 3.2)))
+		_tag_beam(_place_model("ceiling_beam", Vector3(5.2, 2.7, 3.2)))
+		_tag_beam(_place_model("ceiling_beam", Vector3(2.0, 2.7, 7.2)))
+		_tag_beam(_place_model("ceiling_beam", Vector3(5.2, 2.7, 7.2)))
+		var frame := _place_model("skylight_frame", Vector3(4.0, 2.88, 5.0))
+		if frame:
+			frame.name = "SkylightFrame"
+		var radiator := _place_model("radiator", Vector3(0.55, 0, 6.4), 90)
+		if radiator:
+			radiator.name = "Radiator"
+			radiator.set_meta("goal_item", "radiator")
+			radiator.set_meta("goal_h", 0.5)
+		_dress_beam_nook()
 		_place_model("flour_sack_rug", Vector3(4.2, 0, 6.2))
 		for step in 3:
-			_place_model("stair_step", Vector3(-0.2 - float(step) * 0.3, float(step) * 0.22, 4.6), 90)
+			var stair := _place_model("stair_step", Vector3(-0.2 - float(step) * 0.3, float(step) * 0.22, 4.6), 90)
+			_mark_goal(stair, "stair_step", 0.22, 1.0, 0.3)
+			if stair:
+				stair.name = "StairStep%d" % step
 	if bool(venue.get("pastry", false)):
 		var bun := _place_model("pastry_basket", Vector3(1.5, 0, 1.3))
 		if bun:
 			bun.name = "Pastry"
 			Props.add_picker(bun, Vector3(0.44, 0.23, 0.44))
 			bun.set_meta("pastry", true)
+			bun.set_meta("goal_item", "pastry_basket")
+			bun.set_meta("goal_h", 0.23)
+
+
+func _mark_goal(node: Node3D, item_id: String, height: float, width := 0.4, depth := 0.4) -> void:
+	if node == null:
+		return
+	node.set_meta("goal_item", item_id)
+	node.set_meta("goal_model", item_id)
+	node.set_meta("goal_h", height)
+	node.set_meta("goal_w", width)
+	node.set_meta("goal_d", depth)
+
+
+func _tag_beam(node: Node3D) -> void:
+	if node == null:
+		return
+	node.add_to_group("cutaway_beam")
+	node.set_meta("goal_item", "beam")
+	node.set_meta("goal_model", "ceiling_beam")
+	node.set_meta("goal_h", 0.29)
+
+
+func _dress_beam_nook() -> void:
+	var nook: Dictionary = venue.get("nook", {})
+	if nook.is_empty():
+		return
+	var shelf_at := Vector3(float(nook["x"]) + float(nook["w"]) * 0.62, 0.0, float(nook["z"]) + 2.1)
+	var shelf := _place_model("shelf", shelf_at, 0.0)
+	if shelf:
+		shelf.name = "GoalShelf"
+		shelf.set_meta("goal_item", "shelf")
+		shelf.set_meta("goal_h", 1.6)
+	var fern := _place_model("plant_tall", shelf_at + Vector3(0.0, 1.6, 0.2), 15.0)
+	if fern:
+		fern.name = "GoalFern"
+		fern.set_meta("goal_item", "plant_fern")
+		fern.set_meta("goal_model", "plant_tall")
+		fern.set_meta("goal_h", 1.14)
+	_fade_beams_in_front(fern)
+
+
+func _fade_beams_in_front(fern: Node3D) -> void:
+	if fern == null:
+		return
+	var dir := Vector2(1, 1).normalized()
+	var fern_xz := Vector2(fern.position.x, fern.position.z)
+	for node in get_tree().get_nodes_in_group("cutaway_beam"):
+		if not (node is Node3D) or not is_instance_valid(node):
+			continue
+		var beam := node as Node3D
+		var beam_xz := Vector2(beam.position.x, beam.position.z)
+		if beam_xz.dot(dir) <= fern_xz.dot(dir) + 0.15:
+			continue
+		var span := fern_xz - beam_xz
+		if absf(span.x) > 1.6 or absf(span.y) > 1.6:
+			continue
+		_fade_beam(beam, 0.3)
+
+
+func _fade_beam(node: Node, alpha: float) -> void:
+	var meshes: Array = []
+	if node is MeshInstance3D:
+		meshes.append(node)
+	meshes.append_array(node.find_children("*", "MeshInstance3D", true, false))
+	for mesh in meshes:
+		var mesh_instance := mesh as MeshInstance3D
+		if mesh_instance == null:
+			continue
+		var source: Material = mesh_instance.material_override
+		if source == null and mesh_instance.mesh != null and mesh_instance.mesh.get_surface_count() > 0:
+			source = mesh_instance.mesh.surface_get_material(0)
+		var faded := StandardMaterial3D.new()
+		if source is StandardMaterial3D:
+			faded = (source as StandardMaterial3D).duplicate() as StandardMaterial3D
+		faded.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		faded.albedo_color.a = alpha
+		mesh_instance.material_override = faded
 
 
 func _build_truck_stage() -> void:
@@ -610,6 +706,11 @@ func _process(delta: float) -> void:
 	_update_hover()
 	_sync_deliveries()
 	_tick_visitors(delta)
+	if _goal_pip > 0.0:
+		_goal_pip = maxf(0.0, _goal_pip - delta)
+		if _goal_pip <= 0.0:
+			_markers_key = ""
+	_sync_goal_markers()
 	if hint:
 		hint.text = _hint_text()
 
@@ -625,8 +726,15 @@ func _build_shell() -> void:
 		var nook: Dictionary = venue["nook"]
 		_fill_floor(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"]))
 		_build_nook_walls(nook)
-		var beam := Props.mesh_box(Vector3(float(nook["w"]), 0.08, 0.12), UIKit.WOOD)
-		beam.position = Vector3(float(nook["x"]) + float(nook["w"]) * 0.5, 1.5, float(nook["z"]) + 0.2)
+		var beam := Props.mesh_box(Vector3(float(nook["w"]) * 0.55, 0.1, 0.14), UIKit.WOOD)
+		beam.name = "NookBeam"
+		# Back of the nook, above the shelf line. The camera looks from +x +z, so this
+		# beam sits behind the fern instead of across its face.
+		beam.position = Vector3(float(nook["x"]) + float(nook["w"]) * 0.28, 2.35, float(nook["z"]) + 0.35)
+		beam.add_to_group("cutaway_beam")
+		beam.set_meta("goal_item", "beam")
+		beam.set_meta("goal_model", "ceiling_beam")
+		beam.set_meta("goal_h", 0.1)
 		add_child(beam)
 
 
@@ -644,14 +752,7 @@ func _build_showroom() -> void:
 	_place_model("rug", Vector3(3.5, 0.0, 2.75))
 	for rec in _menu_props():
 		_spawn_record(rec, str(rec.get("item", "")), false)
-	var box_a := Props.make("box_closed")
-	box_a.position = Vector3(4.7, 0.0, 1.45)
-	box_a.rotation.y = 0.2
-	add_child(box_a)
-	var box_b := Props.make("box_closed")
-	box_b.position = Vector3(4.72, 0.36, 1.48)
-	box_b.rotation.y = -0.15
-	add_child(box_b)
+	_menu_box_stack()
 	_menu_lights()
 	_frame_camera()
 
@@ -667,6 +768,8 @@ func _build_loft_showroom(layout: Dictionary) -> void:
 	_dress()
 	for rec in MenuLayout.records(layout):
 		_place_layout_record(rec)
+	_pin_menu_skylight()
+	_menu_box_stack()
 	var look = MenuLayout.look_target(layout)
 	if look is Vector3:
 		menu_look = look
@@ -691,7 +794,6 @@ func _place_layout_record(rec: Dictionary) -> void:
 func _menu_props() -> Array:
 	return [
 		{"uid": "menu_desk", "item": "desk_main", "x": 3.35, "y": 0.0, "z": 2.35, "rot": 12, "state": "placed"},
-		{"uid": "menu_mug", "item": "starter_mug", "x": 3.02, "y": 0.76, "z": 2.22, "rot": 18, "state": "placed"},
 		{"uid": "menu_notes", "item": "sticky_note_stack", "x": 3.18, "y": 0.76, "z": 2.52, "rot": -12, "state": "placed"},
 		{"uid": "menu_lamp", "item": "desk_lamp", "x": 3.78, "y": 0.76, "z": 2.52, "rot": 24, "state": "placed"},
 		{"uid": "menu_crt", "item": "place_crt", "x": 3.58, "y": 0.76, "z": 2.12, "rot": 8, "state": "placed"},
@@ -706,7 +808,41 @@ func _menu_props() -> Array:
 	]
 
 
+func _pin_menu_skylight() -> void:
+	for node in find_children("*", "Node3D", true, false):
+		var named := str(node.name).to_lower()
+		if "skylight" in named and node is Node3D and node.name != "Skylight":
+			(node as Node3D).position.y = 2.55
+
+
+func _menu_box_stack() -> void:
+	var box := Props.make("box_closed")
+	box.name = "BoxClosed"
+	box.position = Vector3(4.7, 0.0, 1.45)
+	add_child(box)
+	var mug := Props.make("mug_worlds_okayest")
+	mug.name = "BoxMug"
+	mug.position = Vector3(4.7, 0.36, 1.45)
+	mug.rotation.y = deg_to_rad(18.0)
+	add_child(mug)
+	var founder := Props.make("box_closed")
+	founder.name = "FounderBox"
+	founder.position = Vector3(5.32, 0.0, 1.45)
+	founder.rotation.y = 0.35
+	add_child(founder)
+
+
 func _menu_lights() -> void:
+	var sky := SpotLight3D.new()
+	sky.name = "Skylight"
+	sky.position = Vector3(3.35, 2.55, 3.7)
+	sky.light_color = Color("FFE3B0")
+	sky.light_energy = 1.2
+	sky.spot_range = 7.0
+	sky.spot_angle = 38.0
+	sky.shadow_enabled = true
+	add_child(sky)
+	sky.look_at(Vector3(3.35, 0.76, 2.35))
 	var key := OmniLight3D.new()
 	key.name = "MenuKey"
 	key.position = Vector3(4.9, 2.55, 4.35)
@@ -851,6 +987,9 @@ func _update_ghost(delta: float) -> void:
 	ghost.global_position = ghost.global_position.lerp(target, clampf(delta * 14.0, 0.0, 1.0))
 	ghost.rotation.y = deg_to_rad(float(spot["rot"]))
 	_paint_ghost(bool(spot["valid"]))
+	var held_name := str(_held_def().get("model", "")) + str(_held_def().get("name", ""))
+	if "stapler" in held_name.to_lower():
+		Props.set_hover_outline(ghost, true)
 
 
 func _make_ghost() -> void:
@@ -1212,6 +1351,7 @@ func _on_item_evaluated(id: String, result: Dictionary) -> void:
 	if id == _settle_uid:
 		settling = false
 		_settle_uid = ""
+	_check_goals()
 	SaveManager.save_game()
 
 
@@ -1987,6 +2127,21 @@ func _hud_layer() -> CanvasLayer:
 
 
 func _hint_text() -> String:
+	var line := _mode_hint()
+	var goal := _goal_hint()
+	if goal == "":
+		return line
+	return "%s\n%s" % [goal, line]
+
+
+func _goal_hint() -> String:
+	if backdrop or venue.is_empty():
+		return ""
+	var goal: Dictionary = StackGoals.active(str(venue.get("id", "")), GameState.character, _goal_items(), GameState.latched_goals)
+	return str(goal.get("hint", ""))
+
+
+func _mode_hint() -> String:
 	var money := "$%d" % GameState.money
 	var rep := "Rep %d" % GameState.rep_rank()
 	var head := "%s   %s   %s" % [venue.get("name", "Office"), money, rep]
@@ -2013,6 +2168,184 @@ func _hint_text() -> String:
 		"job_unpack":
 			return "Carry each box through the door, open it, and stack what's inside on a solid surface. Mend a scuff or keep it. Base pay still shows up."
 	return ""
+
+
+func _goal_items() -> Array:
+	var items: Array = []
+	for rec in GameState.office_items:
+		var office_state := str(rec.get("state", ""))
+		if office_state == "placed" or office_state == "settling":
+			items.append(_goal_from_record(rec, str(rec.get("item", ""))))
+	for rec in GameState.job.get("items", []):
+		var job_state := str(rec.get("state", ""))
+		if job_state == "placed" or job_state == "settling" or job_state == "loose":
+			items.append(_goal_from_record(rec, str(rec.get("item_id", rec.get("item", "")))))
+	_collect_goal_nodes(self, items)
+	return items
+
+
+func _goal_from_record(rec: Dictionary, item_id: String) -> Dictionary:
+	var def := ItemDB.get_item(item_id)
+	return {
+		"uid": str(rec.get("uid", "")),
+		"item": item_id,
+		"model": str(def.get("model", rec.get("model", ""))),
+		"x": float(rec.get("x", 0.0)),
+		"y": float(rec.get("y", 0.0)),
+		"z": float(rec.get("z", 0.0)),
+		"rot": float(rec.get("rot", 0.0)),
+		"w": float(def.get("w", rec.get("w", 0.3))),
+		"d": float(def.get("d", rec.get("d", 0.3))),
+		"h": float(def.get("h", rec.get("h", 0.3))),
+		"tag": str(rec.get("set", rec.get("tag", ""))),
+		"turned": bool(rec.get("goal_turned", false)),
+	}
+
+
+func _collect_goal_nodes(node: Node, items: Array) -> void:
+	if node != self and node.has_meta("goal_item") and str(node.name) != "GoalFern":
+		var item_id := str(node.get_meta("goal_item"))
+		var def := ItemDB.get_item(item_id)
+		var pos := Vector3.ZERO
+		var rot := 0.0
+		if node is Node3D:
+			pos = (node as Node3D).global_position
+			rot = rad_to_deg((node as Node3D).rotation.y)
+		items.append({
+			"uid": "dress_%s" % node.name,
+			"item": item_id,
+			"model": str(node.get_meta("goal_model", def.get("model", item_id))),
+			"x": pos.x,
+			"y": pos.y,
+			"z": pos.z,
+			"rot": rot,
+			"w": float(node.get_meta("goal_w", def.get("w", 0.4))),
+			"d": float(node.get_meta("goal_d", def.get("d", 0.4))),
+			"h": float(node.get_meta("goal_h", def.get("h", 0.4))),
+			"tag": "",
+			"turned": false,
+		})
+	for child in node.get_children():
+		_collect_goal_nodes(child, items)
+
+
+func _check_goals() -> void:
+	if backdrop or venue.is_empty():
+		return
+	var items := _goal_items()
+	for goal in StackGoals.all_goals():
+		if str(goal.get("venue", "")) != str(venue.get("id", "")):
+			continue
+		var goal_id := str(goal.get("id", ""))
+		var result: Dictionary = StackGoals.evaluate(goal, items, GameState.latched_goals)
+		var met := bool(result.get("met", false))
+		if met and not bool(GameState.goal_marked.get(goal_id, false)):
+			GameState.goal_marked[goal_id] = true
+			if bool(result.get("latch", false)):
+				GameState.latched_goals[goal_id] = true
+				_toast(str(goal.get("hint", "")))
+			var yaw_uid := str(result.get("yaw_uid", ""))
+			if yaw_uid != "" and float(result.get("yaw_add", 0.0)) != 0.0:
+				_turn_goal_item(yaw_uid, float(result.get("yaw_add", 0.0)))
+			if float(result.get("pip", 0.0)) > 0.0:
+				_goal_pip = float(result.get("pip", 0.0))
+			_markers_key = ""
+		elif not met and not bool(goal.get("latch", false)):
+			GameState.goal_marked.erase(goal_id)
+
+
+func _turn_goal_item(uid: String, add: float) -> void:
+	var rec := _record_for(uid)
+	if rec.is_empty() or bool(rec.get("goal_turned", false)):
+		return
+	rec["rot"] = fposmod(float(rec.get("rot", 0.0)) + add, 360.0)
+	rec["goal_turned"] = true
+	var node: Node = nodes_by_uid.get(uid)
+	if node is Node3D:
+		(node as Node3D).rotation.y = deg_to_rad(float(rec.get("rot", 0.0)))
+
+
+func _sync_goal_markers() -> void:
+	if backdrop or venue.is_empty():
+		return
+	var items := _goal_items()
+	var goal: Dictionary = StackGoals.active(str(venue.get("id", "")), GameState.character, items, GameState.latched_goals)
+	var key := "%s|%s|%s" % [goal.get("id", ""), held_uid, str(_goal_pip > 0.0)]
+	if key == _markers_key:
+		return
+	_markers_key = key
+	var old := get_node_or_null("GoalMarkers")
+	if old:
+		old.free()
+	if goal.is_empty():
+		return
+	if StackGoals.shows_when_held(goal) and not _holding_goal(goal) and _goal_pip <= 0.0:
+		return
+	var pose: Dictionary = StackGoals.marker_pose(goal, items)
+	if pose.is_empty():
+		return
+	var root := Node3D.new()
+	root.name = "GoalMarkers"
+	add_child(root)
+	if str(pose.get("kind", "")) == "ring":
+		_add_goal_ring(root, pose)
+		return
+	var model_name := str(pose.get("model", ""))
+	if model_name == "":
+		return
+	var ghost := Props.make(model_name)
+	var collision := ghost.get_node_or_null("PropCollision")
+	if collision:
+		collision.free()
+	ghost.position = Vector3(float(pose.get("x", 0.0)), float(pose.get("y", 0.0)), float(pose.get("z", 0.0)))
+	ghost.rotation.y = deg_to_rad(float(pose.get("rot", 0.0)))
+	for mesh in ghost.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := mesh as MeshInstance3D
+		var source: Material = mesh_instance.material_override
+		if source == null and mesh_instance.mesh != null and mesh_instance.mesh.get_surface_count() > 0:
+			source = mesh_instance.mesh.surface_get_material(0)
+		mesh_instance.material_override = ghost_material(source, true)
+	root.add_child(ghost)
+
+
+func _holding_goal(goal: Dictionary) -> bool:
+	if held_uid == "":
+		return false
+	var def := _held_def()
+	var model := str(def.get("model", ""))
+	var wanted := ItemDB.get_item(str(goal.get("item", "")))
+	if model != "" and model == str(wanted.get("model", "")):
+		return true
+	for extra in goal.get("also", []):
+		var alt := ItemDB.get_item(str(extra))
+		if model != "" and model == str(alt.get("model", extra)):
+			return true
+	return "mug" in model and "mug" in str(goal.get("item", ""))
+
+
+func _add_goal_ring(root: Node3D, pose: Dictionary) -> void:
+	var radius := float(pose.get("radius", 1.0))
+	var mesh := ImmediateMesh.new()
+	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+	var steps := 40
+	var inner := radius * 0.86
+	for i in steps + 1:
+		var angle := TAU * float(i) / float(steps)
+		var c := cos(angle)
+		var s := sin(angle)
+		mesh.surface_add_vertex(Vector3(c * inner, 0.0, s * inner))
+		mesh.surface_add_vertex(Vector3(c * radius, 0.0, s * radius))
+	mesh.surface_end()
+	var ring := MeshInstance3D.new()
+	ring.mesh = mesh
+	var material := StandardMaterial3D.new()
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = Color(UIKit.MUSTARD, 0.55)
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	ring.material_override = material
+	ring.position = Vector3(float(pose.get("x", 0.0)), float(pose.get("y", 0.03)), float(pose.get("z", 0.0)))
+	root.add_child(ring)
 
 
 func _toast(message: String) -> void:

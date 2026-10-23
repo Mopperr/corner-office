@@ -243,6 +243,16 @@ func _ready() -> void:
 		var orphans_after := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 		if orphans_after > orphans_before:
 			failures.append("nook floor orphans %d" % (orphans_after - orphans_before))
+		var goal_fern := loft.find_child("GoalFern", true, false) as Node3D
+		var nook_beam := loft.find_child("NookBeam", true, false) as Node3D
+		if goal_fern == null or nook_beam == null:
+			failures.append("beam nook missing")
+		else:
+			var view_dir := Vector2(1, 1).normalized()
+			var fern_depth := Vector2(goal_fern.position.x, goal_fern.position.z).dot(view_dir)
+			var beam_depth := Vector2(nook_beam.position.x, nook_beam.position.z).dot(view_dir)
+			if fern_depth <= beam_depth + 0.2:
+				failures.append("beam hides fern %s %s" % [fern_depth, beam_depth])
 		_bury(loft)
 		GameState.office_id = "garage"
 		GameState.set_mode("job_pack")
@@ -326,6 +336,7 @@ func _ready() -> void:
 	failures.append_array(await _qa_regressions())
 	failures.append_array(await _review_fixes())
 	failures.append_array(_engine_choices())
+	failures.append_array(_readability_goals())
 	failures.append_array(await _stack_world())
 	failures.append_array(await _menu_audit())
 	AudioDirector.release_audio()
@@ -340,6 +351,198 @@ func _ready() -> void:
 		for failure in failures:
 			print(" - ", failure)
 		get_tree().quit(1)
+
+
+func _readability_goals() -> Array:
+	var found: Array = []
+	var goals = preload("res://scripts/stack_goals.gd")
+	var layouts = preload("res://scripts/shop_layout.gd")
+	var notes := goals.by_id("stack_l1_notes_on_whiteboard_ledge")
+	if str(notes.get("hint", "")) != "Park the sticky notes on top of the whiteboard frame.":
+		found.append("notes hint %s" % notes.get("hint", ""))
+	var board := {"uid": "board", "item": "whiteboard", "model": "whiteboard", "x": 0.12, "y": 1.05, "z": 4.0, "rot": 0.0, "w": 1.2, "d": 0.1, "h": 0.8, "tag": ""}
+	var on_top := {"uid": "notes", "item": "sticky_note_stack", "model": "sticky_note_stack", "x": 0.12, "y": 1.85, "z": 4.0, "rot": 0.0, "w": 0.25, "d": 0.23, "h": 0.14, "tag": ""}
+	var on_ledge := on_top.duplicate(true)
+	on_ledge["y"] = 1.45
+	if not bool(goals.evaluate(notes, [board, on_top]).get("met", false)):
+		found.append("notes top")
+	if bool(goals.evaluate(notes, [board, on_ledge]).get("met", false)):
+		found.append("notes ledge")
+	var plant := goals.by_id("stack_l2_plant_on_counter")
+	if "espresso" not in str(plant.get("hint", "")).to_lower() or "hanging" in str(plant.get("hint", "")).to_lower():
+		found.append("plant hint")
+	var counter := {"uid": "counter", "item": "cafe_counter", "model": "cafe_counter", "x": 3.2, "y": 0.0, "z": 4.7, "w": 2.05, "d": 0.75, "h": 0.95, "rot": 0.0, "tag": ""}
+	var espresso := {"uid": "espresso", "item": "espresso", "model": "espresso_machine_pro", "x": 3.5, "y": 0.95, "z": 4.7, "w": 0.55, "d": 0.44, "h": 0.73, "rot": 0.0, "tag": ""}
+	var small := {"uid": "plant", "item": "cafe_plant", "model": "plant_small", "x": 3.2, "y": 0.95, "z": 4.7, "w": 0.28, "d": 0.28, "h": 0.4, "rot": 0.0, "tag": ""}
+	var hanging := small.duplicate(true)
+	hanging["item"] = "hanging_plant"
+	hanging["model"] = "hanging_plant"
+	var on_machine := small.duplicate(true)
+	on_machine["y"] = 1.68
+	on_machine["x"] = 3.5
+	if not bool(goals.evaluate(plant, [counter, small]).get("met", false)):
+		found.append("plant counter")
+	if bool(goals.evaluate(plant, [counter, hanging]).get("met", false)) or bool(goals.evaluate(plant, [counter, espresso, on_machine]).get("met", false)):
+		found.append("plant espresso")
+	var mug_goal := goals.by_id("stack_l2_mug_on_rack_shelf")
+	if str(mug_goal.get("hint", "")) != "Mug on top of the rack.":
+		found.append("mug hint")
+	var rack := {"uid": "rack", "item": "mug_rack", "model": "mug_rack", "x": 0.12, "y": 1.35, "z": 3.2, "w": 0.7, "d": 0.185, "h": 0.6, "rot": 90.0, "tag": ""}
+	var mug := {"uid": "mug", "item": "cafe_mug", "model": "mug_worlds_okayest", "x": 0.12, "y": 1.95, "z": 3.2, "w": 0.16, "d": 0.14, "h": 0.12, "rot": 0.0, "tag": ""}
+	var peg := mug.duplicate(true)
+	peg["y"] = 1.7
+	if not bool(goals.evaluate(mug_goal, [rack, mug]).get("met", false)) or bool(goals.evaluate(mug_goal, [rack, peg]).get("met", false)):
+		found.append("mug top")
+	var pose := goals.marker_pose(mug_goal, [rack, mug])
+	if str(pose.get("kind", "")) != "ghost" or str(pose.get("show", "")) != "held":
+		found.append("mug ghost %s" % pose)
+	var chalk := goals.by_id("stack_l2_menu_chalk_cushion")
+	if int(chalk.get("stack_count", 0)) != 2 or absf(float(chalk.get("overhang", 0.0)) - 0.25) > 0.001:
+		found.append("chalk rule")
+	if "2 cushions" not in str(chalk.get("hint", "")):
+		found.append("chalk hint")
+	var base := {"uid": "c0", "item": "cushion", "model": "cafe_cushion", "x": 2.0, "y": 0.0, "z": 2.0, "w": 0.5, "d": 0.5, "h": 0.16, "rot": 0.0, "tag": ""}
+	var mid := base.duplicate(true)
+	mid["uid"] = "c1"
+	mid["y"] = 0.16
+	var extra := base.duplicate(true)
+	extra["uid"] = "c2"
+	extra["y"] = 0.32
+	var board_item := {"uid": "board_item", "item": "menu_board", "model": "chalk_menu_board", "x": 2.0, "y": 0.32, "z": 2.0, "w": 0.9, "d": 0.05, "h": 1.2, "rot": 0.0, "tag": ""}
+	if not bool(goals.evaluate(chalk, [base, mid, board_item]).get("met", false)):
+		found.append("chalk two")
+	if bool(goals.evaluate(chalk, [base, board_item]).get("met", false)) or bool(goals.evaluate(chalk, [base, mid, extra, board_item]).get("met", false)):
+		found.append("chalk count")
+	var fern_goal := goals.by_id("stack_l6_plant_on_beam_nook")
+	if "clears" not in str(fern_goal.get("hint", "")):
+		found.append("fern hint")
+	var shelf := {"uid": "shelf", "item": "shelf", "model": "shelf", "x": -1.1, "y": 0.0, "z": 5.1, "w": 0.9, "d": 0.36, "h": 1.6, "rot": 0.0, "tag": ""}
+	var fern := {"uid": "fern", "item": "plant_fern", "model": "plant_tall", "x": -1.1, "y": 1.6, "z": 5.1, "w": 0.55, "d": 0.5, "h": 1.14, "rot": 0.0, "tag": ""}
+	var behind := {"uid": "beam_back", "item": "beam", "model": "ceiling_beam", "x": -2.2, "y": 2.35, "z": 3.3, "w": 1.6, "d": 0.29, "h": 0.29, "rot": 0.0, "tag": ""}
+	var ahead := {"uid": "beam_front", "item": "beam", "model": "ceiling_beam", "x": -1.1, "y": 2.35, "z": 6.2, "w": 1.6, "d": 0.29, "h": 0.29, "rot": 0.0, "tag": ""}
+	if not bool(goals.evaluate(fern_goal, [shelf, fern, behind]).get("met", false)):
+		found.append("fern clear")
+	if bool(goals.evaluate(fern_goal, [shelf, fern, ahead]).get("met", false)):
+		found.append("fern blocked")
+	var pastry_goal := goals.by_id("stack_l6_pastry_on_radiator_shelf")
+	if absf(float(pastry_goal.get("near_m", 0.0)) - 1.0) > 0.001 or str(pastry_goal.get("marker", "")) != "ring":
+		found.append("radiator rule")
+	var radiator := {"uid": "rad", "item": "radiator", "model": "radiator", "x": 0.55, "y": 0.0, "z": 6.4, "w": 0.9, "d": 0.5, "h": 0.5, "rot": 0.0, "tag": ""}
+	var near_shelf := shelf.duplicate(true)
+	near_shelf["x"] = 0.7
+	near_shelf["z"] = 6.2
+	var far_shelf := near_shelf.duplicate(true)
+	far_shelf["x"] = 2.2
+	var bun := {"uid": "bun", "item": "pastry_basket", "model": "pastry_basket", "x": 0.7, "y": 1.6, "z": 6.2, "w": 0.4, "d": 0.4, "h": 0.23, "rot": 0.0, "tag": ""}
+	var far_bun := bun.duplicate(true)
+	far_bun["x"] = 2.2
+	if not bool(goals.evaluate(pastry_goal, [radiator, near_shelf, bun]).get("met", false)):
+		found.append("radiator near")
+	if bool(goals.evaluate(pastry_goal, [radiator, far_shelf, far_bun]).get("met", false)):
+		found.append("radiator far")
+	var ring := goals.marker_pose(pastry_goal, [radiator])
+	if str(ring.get("kind", "")) != "ring" or absf(float(ring.get("radius", 0.0)) - 1.0) > 0.001:
+		found.append("radiator ring")
+	var lamp_goal := goals.by_id("stack_l6_lamp_on_stair_nook")
+	if "stair step" not in str(lamp_goal.get("hint", "")).to_lower():
+		found.append("stair hint")
+	var step := {"uid": "step", "item": "stair_step", "model": "stair_step", "x": 1.0, "y": 0.0, "z": 4.6, "w": 1.0, "d": 0.3, "h": 0.22, "rot": 0.0, "tag": ""}
+	var tread := {"uid": "tread", "item": "stair_tread", "model": "stair_tread", "x": 1.0, "y": 0.0, "z": 4.6, "w": 1.0, "d": 0.3, "h": 0.22, "rot": 0.0, "tag": ""}
+	var lamp := {"uid": "lamp", "item": "desk_lamp", "model": "lamp", "x": 1.0, "y": 0.22, "z": 4.6, "w": 0.36, "d": 0.36, "h": 0.58, "rot": 0.0, "tag": ""}
+	if not bool(goals.evaluate(lamp_goal, [step, lamp]).get("met", false)) or bool(goals.evaluate(lamp_goal, [tread, lamp]).get("met", false)):
+		found.append("stair only")
+	var boxes := goals.by_id("stack_l4_box_on_box_sorted")
+	if float(boxes.get("complete_yaw", 0.0)) != 15.0 or "keep-together" not in str(boxes.get("hint", "")):
+		found.append("box hint")
+	var lower := {"uid": "b0", "item": "box_closed", "model": "box_closed", "x": 1.0, "y": 0.0, "z": 1.0, "w": 0.5, "d": 0.4, "h": 0.36, "rot": 0.0, "tag": "clocks", "turned": false}
+	var upper := lower.duplicate(true)
+	upper["uid"] = "b1"
+	upper["y"] = 0.36
+	var other := upper.duplicate(true)
+	other["tag"] = "tools"
+	var stacked: Dictionary = goals.evaluate(boxes, [lower, upper])
+	if not bool(stacked.get("met", false)) or absf(float(stacked.get("yaw_add", 0.0)) - 15.0) > 0.001:
+		found.append("box tag %s" % stacked)
+	if bool(goals.evaluate(boxes, [lower, other]).get("met", false)):
+		found.append("box mismatch")
+	var ghost := goals.marker_pose(boxes, [lower])
+	if absf(float(ghost.get("rot", 0.0)) - 15.0) > 0.001:
+		found.append("box ghost")
+	var cat_goal := goals.by_id("stack_l1sol_cushion_on_catbed")
+	if not bool(cat_goal.get("latch", false)) or "stays done" not in str(cat_goal.get("hint", "")):
+		found.append("cat latch hint")
+	var bed := {"uid": "bed", "item": "cat_bed", "model": "cat_bed", "x": 1.0, "y": 0.0, "z": 1.0, "w": 0.5, "d": 0.4, "h": 0.16, "rot": 0.0, "tag": ""}
+	var seat := base.duplicate(true)
+	seat["x"] = 1.0
+	seat["z"] = 1.0
+	seat["y"] = 0.16
+	var latched := {str(cat_goal.get("id", "")): true}
+	if not bool(goals.evaluate(cat_goal, [bed, seat]).get("met", false)):
+		found.append("cat seat")
+	if not bool(goals.evaluate(cat_goal, [], latched).get("met", false)):
+		found.append("cat stays")
+	var crate_goal := goals.by_id("shopl_cushion_crate_seat")
+	if absf(float(crate_goal.get("overhang", 0.0)) - 0.3) > 0.001 or absf(float(crate_goal.get("marker_yaw", 0.0)) - 90.0) > 0.001:
+		found.append("crate rule")
+	var crate := {"uid": "crate", "item": "lemon_crate", "model": "box_closed", "x": 4.2, "y": 0.0, "z": 3.35, "w": 0.52, "d": 0.38, "h": 0.36, "rot": 0.0, "tag": ""}
+	var pad := {"uid": "pad", "item": "cushion", "model": "cafe_cushion", "x": 4.2, "y": 0.36, "z": 3.35, "w": 0.5, "d": 0.5, "h": 0.16, "rot": 0.0, "tag": ""}
+	var nudged := pad.duplicate(true)
+	nudged["z"] = 3.42
+	if not bool(goals.evaluate(crate_goal, [crate, pad]).get("met", false)) or not bool(goals.evaluate(crate_goal, [crate, nudged]).get("met", false)):
+		found.append("crate nudge")
+	var cups := goals.by_id("shopl_cups_on_counter")
+	if int(cups.get("count", 0)) != 3:
+		found.append("cups count")
+	var stand := {"uid": "stand", "item": "stand", "model": "lemonade_stand_counter", "x": 2.9, "y": 0.0, "z": 2.9, "w": 1.6, "d": 0.6, "h": 0.95, "rot": 0.0, "tag": ""}
+	var cup_items: Array = [stand]
+	for i in 2:
+		cup_items.append({"uid": "cup%d" % i, "item": "paper_cup_stack", "model": "paper_cup_stack", "x": 2.7 + float(i) * 0.12, "y": 0.95, "z": 2.9, "w": 0.1, "d": 0.1, "h": 0.14, "rot": 0.0, "tag": ""})
+	if bool(goals.evaluate(cups, cup_items).get("met", false)):
+		found.append("cups two")
+	cup_items.append({"uid": "cup2", "item": "paper_cup_stack", "model": "paper_cup_stack", "x": 2.94, "y": 0.95, "z": 2.9, "w": 0.1, "d": 0.1, "h": 0.14, "rot": 0.0, "tag": ""})
+	if not bool(goals.evaluate(cups, cup_items).get("met", false)):
+		found.append("cups three")
+	var shop_mug := goals.by_id("shopc_mugs_on_shelf")
+	if str(shop_mug.get("item", "")) != "mug_worlds_okayest":
+		found.append("shop mug")
+	var coffee := layouts.load_named("coffee_counter")
+	var placed := {}
+	for rec in layouts.records(coffee):
+		placed[str(rec.get("uid", ""))] = rec
+	if absf(float(placed["pastry_case"]["x"]) - 0.85) > 0.001 or absf(float(placed["counter_M"]["x"]) - 4.55) > 0.001 or absf(float(placed["counter_R"]["x"]) - 6.7) > 0.001:
+		found.append("coffee counters")
+	if absf(float(placed["register"]["y"]) - 0.95) > 0.001 or absf(float(placed["tip_jar"]["x"]) - 3.85) > 0.001 or absf(float(placed["tip_jar"]["z"]) - 2.55) > 0.001:
+		found.append("coffee top")
+	if absf(float(placed["cushion_a"]["z"]) - 5.4) > 0.001 or absf(float(placed["cat_tree"]["x"]) - 7.45) > 0.001 or absf(float(placed["biscuit"]["x"]) - 6.6) > 0.001:
+		found.append("coffee floor")
+	var stand_layout := layouts.load_named("lemonade_stand")
+	var lemonade := {}
+	for rec in layouts.records(stand_layout):
+		lemonade[str(rec.get("uid", ""))] = rec
+	if absf(float(lemonade["cups"]["x"]) - 2.45) > 0.001 or absf(float(lemonade["cups"]["z"]) - 2.72) > 0.001:
+		found.append("cups spot")
+	if absf(float(lemonade["price_sign"]["y"])) > 0.001 or absf(float(lemonade["price_sign"]["x"]) - 1.3) > 0.001 or absf(float(lemonade["price_sign"]["z"]) - 1.8) > 0.001:
+		found.append("price sign")
+	if absf(float(lemonade["lemon_crate"]["x"]) - 4.2) > 0.001 or absf(float(lemonade["fern"]["x"]) - 5.7) > 0.001 or absf(float(lemonade["awning"]["y"])) > 0.001:
+		found.append("lemonade floor")
+	var room = preload("res://scripts/diorama.gd").new()
+	room.backdrop = true
+	add_child(room)
+	var closed := room.find_child("BoxClosed", true, false) as Node3D
+	var box_mug := room.find_child("BoxMug", true, false) as Node3D
+	var founder := room.find_child("FounderBox", true, false) as Node3D
+	var sky := room.find_child("Skylight", true, false) as SpotLight3D
+	if closed == null or box_mug == null or founder == null or sky == null:
+		found.append("menu stack missing")
+	else:
+		if absf(box_mug.position.y - 0.36) > 0.02 or absf(box_mug.position.x - closed.position.x) > 0.02:
+			found.append("mug stack %s" % box_mug.position)
+		if founder.position.y > 0.02 or absf(founder.position.x - closed.position.x) < 0.4:
+			found.append("founder box %s" % founder.position)
+		if absf(sky.position.y - 2.55) > 0.001 or sky.light_energy < 1.1:
+			found.append("skylight %s %s" % [sky.position, sky.light_energy])
+	_bury(room)
+	return found
 
 
 func _collision_checks() -> Array:
