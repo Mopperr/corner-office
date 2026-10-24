@@ -165,9 +165,10 @@ func _wire_screen() -> void:
 
 func _market() -> void:
 	var goods := ItemDB.trade_goods()
+	# MARKET_LAYOUT_V2: the details column leaves room for two lines of copy at each step.
 	var list := ItemList.new()
 	list.position = Vector2(12, 12)
-	list.size = Vector2(280, 400)
+	list.size = Vector2(280, 560)
 	list.custom_minimum_size = Vector2(280, 200)
 	list.focus_mode = Control.FOCUS_ALL
 	list.add_theme_font_override("font", UIKit.body_font())
@@ -192,40 +193,41 @@ func _market() -> void:
 	title.size = Vector2(480, 44)
 	title.custom_minimum_size = Vector2(minf(480.0, maxf(180.0, float(title.text.length()) * 16.0)), 44)
 	body.add_child(title)
-	var flavor := UIKit.label(str(item.get("flavor", "")), 36, UIKit.DARK)
+	var flavor := UIKit.label(str(item.get("flavor", "")), 28, UIKit.DARK)
 	flavor.position = Vector2(310, 50)
-	flavor.size = Vector2(480, 72)
+	flavor.size = Vector2(860, 96)
 	flavor.custom_minimum_size = Vector2(480, 44)
+	flavor.max_lines_visible = 2
 	body.add_child(flavor)
 	chart = Control.new()
 	chart.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chart.position = Vector2(310, 126)
-	chart.size = Vector2(460, 70)
+	chart.position = Vector2(310, 156)
+	chart.size = Vector2(560, 80)
 	chart.draw.connect(_draw_chart)
 	body.add_child(chart)
 	var series: Array = GameState.history.get(selected, [])
 	var yesterday := ""
 	if series.size() >= 2:
 		yesterday = "Yesterday $%d" % int(round(float(series[series.size() - 2])))
-	var ylbl := UIKit.label("Dana's note: %s    You have %d" % [yesterday, int(GameState.goods.get(selected, 0))], 36, UIKit.BLUE)
-	ylbl.position = Vector2(310, 200)
-	ylbl.size = Vector2(680, 48)
+	var ylbl := UIKit.label("Dana's note: %s    You have %d" % [yesterday, int(GameState.goods.get(selected, 0))], 28, UIKit.BLUE)
+	ylbl.position = Vector2(310, 246)
+	ylbl.size = Vector2(860, 44)
 	ylbl.custom_minimum_size = Vector2(480, 44)
 	body.add_child(ylbl)
 	var buy := UIKit.button("BUY", UIKit.GREEN)
-	buy.position = Vector2(310, 340)
+	buy.position = Vector2(310, 420)
 	buy.size = Vector2(180, 56)
 	buy.custom_minimum_size = Vector2(180, 56)
 	buy.pressed.connect(_buy)
 	body.add_child(buy)
 	var sell := UIKit.button("SELL", UIKit.TERRA)
-	sell.position = Vector2(500, 340)
+	sell.position = Vector2(500, 420)
 	sell.size = Vector2(180, 56)
 	sell.custom_minimum_size = Vector2(180, 56)
 	sell.pressed.connect(_sell)
 	body.add_child(sell)
 	var nxt := UIKit.button("Next day", UIKit.BLUE)
-	nxt.position = Vector2(690, 340)
+	nxt.position = Vector2(690, 420)
 	nxt.size = Vector2(180, 56)
 	nxt.custom_minimum_size = Vector2(180, 56)
 	nxt.pressed.connect(func():
@@ -238,14 +240,15 @@ func _market() -> void:
 	body.add_child(nxt)
 	if not GameState.buyer_offer.is_empty():
 		var offer: Dictionary = GameState.buyer_offer
-		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 36, UIKit.DARK)
+		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 24, UIKit.DARK)
 		line.name = "Offer"
-		line.position = Vector2(310, 256)
-		line.size = Vector2(490, 72)
+		line.position = Vector2(310, 300)
+		line.size = Vector2(660, 96)
 		line.custom_minimum_size = Vector2(490, 44)
+		line.max_lines_visible = 2
 		body.add_child(line)
 		var take := UIKit.button("Sell to them", UIKit.MUSTARD, UIKit.DARK)
-		take.position = Vector2(820, 256)
+		take.position = Vector2(990, 310)
 		take.size = Vector2(180, 56)
 		take.custom_minimum_size = Vector2(180, 56)
 		take.pressed.connect(_sell_buyer)

@@ -57,9 +57,10 @@ func _build() -> void:
 	title.position = Vector2(30, 18)
 	title.size = Vector2(500, 56)
 	card.add_child(title)
-	var sub := UIKit.label("Click a pin. Green is where you are, terracotta has a job ready.", 18, UIKit.DARK)
-	sub.position = Vector2(300, 30)
-	sub.size = Vector2(900, 40)
+	var sub := UIKit.label("Click a pin. Green: you are here. Terracotta: job ready. Mustard: for sale.", 18, UIKit.DARK)
+	sub.position = Vector2(280, 30)
+	sub.size = Vector2(card_size.x - 500.0, 40)
+	sub.max_lines_visible = 1
 	card.add_child(sub)
 	var close := UIKit.button("Close", UIKit.DARK)
 	close.position = Vector2(card_size.x - 190, 18)
