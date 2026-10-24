@@ -57,6 +57,9 @@ var slot_count := 8
 var carried: Dictionary = {}
 var delivery_root: Node3D
 var visitor_wait := 5.0
+var customers: Array = []
+var customer_serial := 0
+var shop_sign: Node3D
 var courier_seen: Dictionary = {}
 var unbox_uid := ""
 var hover_root: Node3D
@@ -1247,6 +1250,9 @@ func _click() -> void:
 	var item_uid := _pick_uid()
 	if item_uid.begins_with("delivery:") and GameState.mode == "office" and GameState.office_phase == "live":
 		_delivery_click(item_uid.trim_prefix("delivery:"))
+		return
+	if item_uid.begins_with("visitor:") and GameState.mode == "office":
+		_serve_customer(item_uid.trim_prefix("visitor:"), true)
 		return
 	if item_uid == "pastry":
 		_pastry()
@@ -2902,7 +2908,10 @@ func _resell_held() -> void:
 
 
 func _tick_visitors(delta: float) -> void:
-	if GameState.mode != "office" or GameState.office_phase != "live" or not GameState.shop_open():
+	_sync_shop_sign()
+	for entry in customers:
+		_tick_customer(entry, delta)
+	if GameState.mode != "office" or GameState.office_phase != "live" or not GameState.shop_accepting():
 		return
 	visitor_wait -= delta
 	if visitor_wait > 0.0:
@@ -2911,31 +2920,213 @@ func _tick_visitors(delta: float) -> void:
 	var base := Catalog.shop_number("tick_seconds", 16)
 	var haste := Catalog.shop_number("vibe_haste", 0.08)
 	visitor_wait = maxf(6.0, base - float(vibe) * haste)
-	_spawn_visitor()
+	var waiting := 0
+	for entry in customers:
+		if str(entry.get("stage", "")) != "leaving":
+			waiting += 1
+	if waiting < int(Catalog.shop_number("queue_max", 3)):
+		_spawn_customer()
 
 
-func _spawn_visitor() -> void:
+func _door_world() -> Vector3:
+	var x := float(venue.get("x", 0))
+	var w := float(venue.get("w", 6))
+	var open_w := float(venue.get("open_w", 2))
+	var door_x := x + 3.5 if (absf(open_w - 3.0) < 0.1 and w >= 6.0) else x + w * 0.5
+	return Vector3(door_x, 0.0, float(venue.get("z", 0)))
+
+
+func _counter_node() -> Node3D:
+	# The fixture a customer walks up to: the first placed counter piece.
+	for fix in GameState.shop_fixtures():
+		var item_id := str(fix.get("item", ""))
+		for rec in GameState.office_items:
+			if str(rec.get("state", "")) == "placed" and str(rec.get("item", "")) == item_id:
+				var node: Node = nodes_by_uid.get(str(rec.get("uid", "")))
+				if node is Node3D:
+					return node
+	return null
+
+
+func _queue_spot(index: int) -> Vector3:
+	var counter := _counter_node()
+	var door := _door_world()
+	if counter == null:
+		return door + Vector3(0, 0, 1.5 + index * 0.7)
+	var at := counter.global_position
+	var toward := door - at
+	toward.y = 0.0
+	if toward.length() < 0.1:
+		toward = Vector3(0, 0, -1)
+	toward = toward.normalized()
+	var spot := at + toward * (1.1 + index * 0.75)
+	spot.y = 0.0
+	return spot
+
+
+func _order_prop(dish_id: String) -> Node3D:
+	var kind := "mug"
+	if dish_id in ["lemonade", "iced_tea"]:
+		kind = "glass"
+	elif dish_id == "bun":
+		kind = "bun"
+	elif dish_id in ["used_book", "pencil", "cutting"]:
+		kind = "part"
+	var prop := Props.make("proc:" + kind)
+	var collision := prop.get_node_or_null("PropCollision")
+	if collision:
+		collision.free()
+	return prop
+
+
+func _spawn_customer() -> void:
+	var order: Dictionary = GameState.pick_order()
+	if order.is_empty():
+		return
+	customer_serial += 1
+	var uid := "c%d" % customer_serial
 	var person := Node3D.new()
-	var door := Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.5, 0, float(venue.get("z", 0)) + 0.4)
-	var counter := Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.55, 0, float(venue.get("z", 0)) + float(venue.get("d", 8)) * 0.45)
-	person.position = door
-	var body := Props.mesh_cylinder(0.18, 0.85, UIKit.BLUE if randf() > 0.5 else UIKit.SAGE)
+	person.name = "Customer_" + uid
+	var palette := [UIKit.BLUE, UIKit.SAGE, UIKit.TERRA, UIKit.MUSTARD, UIKit.WOOD]
+	var color: Color = palette[customer_serial % palette.size()]
+	var legs := Props.mesh_cylinder(0.14, 0.5, Color("3E3A4F"))
+	person.add_child(legs)
+	var body := Props.mesh_cylinder(0.2, 0.5, color)
+	body.position.y = 0.5
 	person.add_child(body)
-	var head := Props.mesh_box(Vector3(0.24, 0.24, 0.24), UIKit.CREAM)
-	head.position = Vector3(0, 0.98, 0)
+	var head := MeshInstance3D.new()
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.15
+	sphere.height = 0.3
+	head.mesh = sphere
+	head.material_override = Props.mat(Color("E7C9A8"))
+	head.position.y = 1.18
 	person.add_child(head)
+	# The order floats over their head until it is in their hand.
+	var bubble := Node3D.new()
+	bubble.name = "Order"
+	bubble.position = Vector3(0, 1.55, 0)
+	person.add_child(bubble)
+	var ring := Props.mesh_cylinder(0.17, 0.02, UIKit.CREAM_CARD)
+	ring.rotation.x = PI * 0.5
+	ring.position = Vector3(0, 0.08, 0.0)
+	bubble.add_child(ring)
+	var icon := _order_prop(str(order.get("dish", "")))
+	icon.position = Vector3(0, 0.0, 0.03)
+	icon.scale = Vector3(0.9, 0.9, 0.9)
+	bubble.add_child(icon)
+	person.set_meta("uid", "visitor:" + uid)
+	Props.add_picker(person, Vector3(0.6, 1.4, 0.6))
+	var start := _door_world() + Vector3(0, 0, -3.5)
+	person.position = start
 	add_child(person)
+	var index := 0
+	for entry in customers:
+		if str(entry.get("stage", "")) != "leaving":
+			index += 1
+	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0}
+	customers.append(entry)
+	var who: Dictionary = order.get("who", {})
 	var tw := create_tween()
-	tw.tween_property(person, "position", counter, 1.3)
+	tw.tween_property(person, "position", _door_world() + Vector3(0, 0, 0.3), 1.2)
+	tw.tween_property(person, "position", _queue_spot(index), 1.0)
 	tw.tween_callback(func():
-		var visit := GameState.serve_visitor()
-		if not visit.is_empty():
-			_toast("%s bought a %s. +$%d" % [visit.get("name", "Someone"), visit.get("dish", "thing"), int(visit.get("pay", 0))])
-			AudioDirector.play_sfx("sfx_cash_gain")
+		if is_instance_valid(person):
+			entry["stage"] = "waiting"
+			entry["wait"] = Catalog.shop_number("serve_seconds", 9)
+			if index == 0:
+				_toast(str(who.get("line", "Hello!")), str(who.get("name", "A neighbour")))
 	)
-	tw.tween_interval(0.4)
-	tw.tween_property(person, "position", door + Vector3(0, 0, -1.5), 1.2)
-	tw.tween_callback(person.queue_free)
+	AudioDirector.play_sfx("sfx_l02_door_wind_chime")
+
+
+func _tick_customer(entry: Dictionary, delta: float) -> void:
+	var node: Node3D = entry.get("node")
+	if node == null or not is_instance_valid(node):
+		return
+	entry["hover"] = float(entry.get("hover", 0.0)) + delta
+	var bubble := node.get_node_or_null("Order") as Node3D
+	if bubble:
+		bubble.position.y = 1.55 + sin(float(entry["hover"]) * 3.0) * 0.04
+		bubble.rotation.y += delta * 0.8
+	if str(entry.get("stage", "")) == "waiting":
+		# They never leave unserved; after the wait the till just rings them up without the big tip.
+		entry["wait"] = float(entry["wait"]) - delta
+		if float(entry["wait"]) <= 0.0:
+			_serve_customer(str(entry["uid"]), false)
+
+
+func _serve_customer(uid: String, by_hand: bool) -> void:
+	for entry in customers:
+		if str(entry.get("uid", "")) != uid or str(entry.get("stage", "")) != "waiting":
+			continue
+		var node: Node3D = entry.get("node")
+		var sale: Dictionary = GameState.serve_visitor(by_hand, entry.get("order", {}))
+		if sale.is_empty():
+			return
+		entry["stage"] = "leaving"
+		var dish_id := str(sale.get("dish_id", ""))
+		if dish_id in ["lemonade", "iced_tea"]:
+			AudioDirector.play_sfx("sfx_l01_refill_pour")
+		elif dish_id == "bun":
+			AudioDirector.play_sfx("sfx_paper_rustle")
+		else:
+			AudioDirector.play_sfx("sfx_l02_espresso_hiss")
+			AudioDirector.play_sfx("sfx_l02_cup_clink")
+		AudioDirector.play_sfx("sfx_cash_gain")
+		if by_hand:
+			_toast("%s: %s, served by you. +$%d (tip $%d)" % [sale.get("name", "Someone"), sale.get("dish", ""), int(sale.get("pay", 0)), int(sale.get("tip", 0))], "Till")
+			_dust(node.global_position + Vector3(0, 0.6, 0))
+		else:
+			_toast("%s rang up their own %s. +$%d" % [sale.get("name", "Someone"), sale.get("dish", ""), int(sale.get("pay", 0))], "Till")
+		# The order drops from the bubble into their hand, then they stroll out.
+		var bubble := node.get_node_or_null("Order") as Node3D
+		var tw := create_tween()
+		if bubble:
+			tw.tween_property(bubble, "position", Vector3(0.28, 0.75, 0.1), 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			tw.parallel().tween_property(bubble, "scale", Vector3(0.7, 0.7, 0.7), 0.35)
+		tw.tween_interval(0.5)
+		tw.tween_property(node, "position", _door_world() + Vector3(0, 0, 0.3), 1.1)
+		tw.tween_property(node, "position", _door_world() + Vector3(0, 0, -4.0), 1.3)
+		tw.tween_callback(func():
+			customers.erase(entry)
+			if is_instance_valid(node):
+				node.queue_free()
+			_reflow_queue()
+		)
+		_refresh_hud_buttons()
+		return
+
+
+func _reflow_queue() -> void:
+	var index := 0
+	for entry in customers:
+		if str(entry.get("stage", "")) == "leaving":
+			continue
+		entry["index"] = index
+		var node: Node3D = entry.get("node")
+		if node and is_instance_valid(node) and str(entry.get("stage", "")) == "waiting":
+			var tw := create_tween()
+			tw.tween_property(node, "position", _queue_spot(index), 0.6)
+		index += 1
+
+
+func _sync_shop_sign() -> void:
+	# An A-board by the door while the shop takes customers.
+	if backdrop or venue.is_empty() or GameState.mode != "office":
+		return
+	var want := GameState.office_phase == "live" and GameState.shop_accepting()
+	if want and (shop_sign == null or not is_instance_valid(shop_sign)):
+		shop_sign = Props.make("proc:aframe")
+		var collision := shop_sign.get_node_or_null("PropCollision")
+		if collision:
+			collision.free()
+		shop_sign.name = "ShopSign"
+		shop_sign.position = _door_world() + Vector3(1.6, 0.0, -0.9)
+		add_child(shop_sign)
+	elif not want and shop_sign != null and is_instance_valid(shop_sign):
+		shop_sign.queue_free()
+		shop_sign = null
 
 
 func _pastry() -> void:

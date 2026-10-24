@@ -108,6 +108,7 @@ func _run() -> void:
 	await _check_computer()
 	await _check_map()
 	await _check_view()
+	await _check_shop()
 	await _save_roundtrip("after garage")
 
 	var job_ids := ["job_catcafe", "job_train", "job_ducks"]
@@ -335,6 +336,63 @@ func _check_view() -> void:
 	room.zoom_view(0.2)
 	var goals: Node = room.goals_panel
 	_check(goals != null and goals.visible, "goals checklist is on screen")
+
+
+func _check_shop() -> void:
+	# Buy a coffee machine, set it on the desk, and serve the first customer by hand.
+	var room := _room()
+	if room == null:
+		return
+	var err: String = GameState.buy_decor("coffee_machine")
+	_check(err == "", "shop: coffee machine bought (%s)" % err)
+	if err != "":
+		return
+	room._refresh_hud_buttons()
+	await wait(0.2)
+	_check(press("Place decor"), "shop: Place decor button")
+	await wait(0.2)
+	_check(room.held_uid != "", "shop: decor in hand")
+	var desk := _node_for(room, "desk")
+	var target = null
+	if desk != null:
+		var top := float(ItemDB.get_item("desk_main").get("h", 0.76))
+		var base: Vector3 = desk.global_position + Vector3(0, top + 0.02, 0)
+		for ix in range(-5, 6):
+			for iz in range(-2, 3):
+				var off := Vector3(ix * 0.12, 0, iz * 0.14)
+				await hover_world(room, base + off)
+				var aim = room._aim_point()
+				if aim != null and bool(room._snap_point(aim)["valid"]):
+					target = base + off
+					break
+			if target != null:
+				break
+	if target == null:
+		target = await _find_floor_spot(room)
+	if target == null:
+		_fail("shop: nowhere to put the coffee machine")
+		room._drop_hold()
+		return
+	await click_world(room, target)
+	var placed := await wait_until(func(): return GameState.shop_open() and not room.settling, 10.0)
+	_check(placed, "shop: coffee machine placed, shop open")
+	if not placed:
+		return
+	await shot("shop_open")
+	var money_before: int = GameState.money
+	var came := await wait_until(func(): return not room.customers.is_empty() and str(room.customers[0].get("stage", "")) == "waiting", 40.0)
+	_check(came, "shop: a customer walked in and is waiting")
+	if not came:
+		return
+	await shot("shop_customer")
+	var entry: Dictionary = room.customers[0]
+	var node: Node3D = entry.get("node")
+	await click_node(room, "visitor:" + str(entry.get("uid", "")), node)
+	await wait(0.3)
+	_check(GameState.money > money_before, "shop: serving by hand paid (%d -> %d)" % [money_before, GameState.money])
+	_check(not GameState.shop_ledger.is_empty() and bool(GameState.shop_ledger[0].get("hand", false)), "shop: ledger says served by hand")
+	await shot("shop_served")
+	await wait(3.0)
 
 
 func _check_map() -> void:

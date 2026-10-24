@@ -361,6 +361,48 @@ static func _proc(kind: String) -> Node3D:
 			var roof := mesh_box(Vector3(0.26, 0.08, 0.22), UIKit.TERRA)
 			roof.position.y = 0.16
 			root.add_child(roof)
+		"pitcher":
+			var jug := mesh_cylinder(0.1, 0.26, Color("F2E27A"))
+			root.add_child(jug)
+			var rim := mesh_cylinder(0.105, 0.03, Color("DCE9EE"))
+			rim.position.y = 0.26
+			root.add_child(rim)
+			var handle := mesh_box(Vector3(0.03, 0.14, 0.06), Color("DCE9EE"))
+			handle.position = Vector3(0.12, 0.14, 0)
+			root.add_child(handle)
+			var lemon := mesh_cylinder(0.035, 0.012, Color("F7D040"))
+			lemon.position = Vector3(0.0, 0.29, 0.06)
+			root.add_child(lemon)
+		"cup":
+			for i in 3:
+				var cup := mesh_cylinder(0.045 + i * 0.004, 0.08, UIKit.CREAM_CARD if i % 2 == 0 else Color("D9765F"))
+				cup.position.y = i * 0.06
+				root.add_child(cup)
+		"glass":
+			root.add_child(mesh_cylinder(0.04, 0.12, Color("F2E27A")))
+			var straw := mesh_box(Vector3(0.012, 0.16, 0.012), Color("D9765F"))
+			straw.position = Vector3(0.02, 0.06, 0)
+			root.add_child(straw)
+		"mug":
+			root.add_child(mesh_cylinder(0.05, 0.1, UIKit.CREAM_CARD))
+			var grip := mesh_box(Vector3(0.02, 0.06, 0.04), UIKit.CREAM_CARD)
+			grip.position = Vector3(0.06, 0.05, 0)
+			root.add_child(grip)
+			var brew := mesh_cylinder(0.042, 0.01, Color("5A3B2A"))
+			brew.position.y = 0.1
+			root.add_child(brew)
+		"bun":
+			root.add_child(mesh_box(Vector3(0.12, 0.07, 0.1), Color("D9A866")))
+		"aframe":
+			for side in [-1.0, 1.0]:
+				var board := mesh_box(Vector3(0.6, 0.9, 0.03), UIKit.CREAM_CARD)
+				board.position = Vector3(0, 0, side * 0.16)
+				board.rotation.x = side * 0.32
+				root.add_child(board)
+				var panel := mesh_box(Vector3(0.5, 0.5, 0.012), Color("3E3A4F"))
+				panel.position = Vector3(0, 0.28, side * 0.33)
+				panel.rotation.x = side * 0.32
+				root.add_child(panel)
 		"part":
 			root.add_child(mesh_box(Vector3(0.22, 0.06, 0.1), UIKit.DARK))
 			var stripe := mesh_box(Vector3(0.08, 0.04, 0.12), UIKit.MUSTARD)

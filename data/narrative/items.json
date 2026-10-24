@@ -190,5 +190,17 @@
     "name": "Yarn Basket",
     "type": "decor",
     "flavor": "Every color. One mystery knot."
+  },
+  {
+    "id": "lemonade_pitcher",
+    "name": "Lemonade Pitcher",
+    "type": "decor",
+    "flavor": "Glass, lemons, a lot of ice. Sits on any counter and turns it into a stand."
+  },
+  {
+    "id": "cup_stack",
+    "name": "Paper Cup Stack",
+    "type": "decor",
+    "flavor": "Forty cups, striped. Lemonade goes in them."
   }
 ]

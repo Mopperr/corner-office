@@ -46,6 +46,9 @@ var prime := false
 var menu_markup := 1.0
 var shop_today := 0
 var shop_visitors_today := 0
+var shop_ledger: Array = []
+var shop_closed := false
+var shop_hand_served := 0
 var freebie_day := -1
 var forest_serial := 0
 var latched_goals: Dictionary = {}
@@ -93,6 +96,9 @@ func new_game(who: String) -> void:
 	menu_markup = 1.0
 	shop_today = 0
 	shop_visitors_today = 0
+	shop_ledger = []
+	shop_closed = false
+	shop_hand_served = 0
 	freebie_day = -1
 	forest_serial = 0
 	latched_goals = {}
@@ -1243,6 +1249,32 @@ func shop_open() -> bool:
 	return not shop_fixtures().is_empty()
 
 
+func shop_accepting() -> bool:
+	return shop_open() and not shop_closed
+
+
+func shop_dishes() -> Array:
+	var dishes: Array = []
+	for fix in shop_fixtures():
+		for dish_id in fix.get("serves", []):
+			if not dishes.has(str(dish_id)):
+				dishes.append(str(dish_id))
+	return dishes
+
+
+func pick_order() -> Dictionary:
+	# What the next customer wants, and who they are.
+	var dishes := shop_dishes()
+	if dishes.is_empty():
+		return {}
+	var dish_id := str(dishes[rng.randi() % dishes.size()])
+	var cast := Catalog.visitors()
+	var who: Dictionary = {}
+	if not cast.is_empty():
+		who = cast[(day + shop_visitors_today + shop_ledger.size()) % cast.size()]
+	return {"dish": dish_id, "who": who}
+
+
 func _barista_on() -> bool:
 	var spec: Dictionary = Catalog.shop.get("barista", {})
 	var job_id := str(spec.get("unlock_job", ""))
@@ -1259,37 +1291,41 @@ func _barista_on() -> bool:
 	return false
 
 
-func serve_visitor() -> Dictionary:
-	var fixes := shop_fixtures()
-	if fixes.is_empty():
+func serve_visitor(by_hand := false, order: Dictionary = {}) -> Dictionary:
+	# Serving by hand earns the whole tip; a customer who waits it out still pays, tip halved.
+	if order.is_empty():
+		order = pick_order()
+	if order.is_empty():
 		return {}
-	var dishes: Array = []
-	for fix in fixes:
-		for dish_id in fix.get("serves", []):
-			dishes.append(str(dish_id))
-	if dishes.is_empty():
-		return {}
-	var dish_id := str(dishes[rng.randi() % dishes.size()])
+	var dish_id := str(order.get("dish", ""))
+	var who: Dictionary = order.get("who", {})
 	var dish := Catalog.menu_item(dish_id)
 	var vibe := vibe_score()
 	var base := int(round(float(dish.get("price", 3)) * menu_markup))
-	var tip := int(round(float(base) * float(vibe) * Catalog.shop_number("tip_per_vibe", 0.012)))
-	var pay := maxi(1, base + tip)
+	var tip := float(base) * float(vibe) * Catalog.shop_number("tip_per_vibe", 0.012)
+	tip *= Catalog.shop_number("hand_tip_bonus", 1.6) if by_hand else 0.5
+	var pay := maxi(1, base + int(round(tip)))
 	add_money(pay, true)
 	shop_today += pay
 	shop_visitors_today += 1
-	var cast := Catalog.visitors()
-	var who: Dictionary = {}
-	if not cast.is_empty():
-		who = cast[(day + shop_visitors_today) % cast.size()]
+	if by_hand:
+		shop_hand_served += 1
 	_visitor_request(who)
-	return {
+	var sale := {
 		"name": str(who.get("name", "A neighbor")),
 		"line": str(who.get("line", "Just looking, then not.")),
 		"dish": str(dish.get("name", dish_id)),
+		"dish_id": dish_id,
 		"pay": pay,
+		"tip": int(round(tip)),
 		"vibe": vibe,
+		"hand": by_hand,
+		"day": day,
 	}
+	shop_ledger.push_front(sale)
+	if shop_ledger.size() > 8:
+		shop_ledger.resize(8)
+	return sale
 
 
 func _visitor_request(who: Dictionary) -> void:
@@ -1371,6 +1407,9 @@ func to_dict() -> Dictionary:
 		"menu_markup": menu_markup,
 		"shop_today": shop_today,
 		"shop_visitors_today": shop_visitors_today,
+		"shop_ledger": shop_ledger.duplicate(true),
+		"shop_closed": shop_closed,
+		"shop_hand_served": shop_hand_served,
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
 		"latched_goals": latched_goals.duplicate(true),
@@ -1419,6 +1458,9 @@ func from_dict(raw: Dictionary) -> void:
 	menu_markup = float(raw.get("menu_markup", 1.0))
 	shop_today = int(raw.get("shop_today", 0))
 	shop_visitors_today = int(raw.get("shop_visitors_today", 0))
+	shop_ledger = raw.get("shop_ledger", []).duplicate(true) if raw.has("shop_ledger") else []
+	shop_closed = bool(raw.get("shop_closed", false))
+	shop_hand_served = int(raw.get("shop_hand_served", 0))
 	freebie_day = int(raw.get("freebie_day", -1))
 	forest_serial = int(raw.get("forest_serial", 0))
 	latched_goals = raw.get("latched_goals", {})
