@@ -120,6 +120,10 @@ func _run() -> void:
 	print("money after 3 jobs: $%d, earned $%d, rep %d" % [GameState.money, GameState.total_earned, GameState.rep_rank()])
 
 	await _check_goals()
+	# Pin the board so every run plays the same generated job.
+	GameState.seed = int(OS.get_environment("CO_SEED")) if OS.get_environment("CO_SEED") != "" else 20261024
+	GameState.refresh_board()
+	print("board seed %d: %s" % [GameState.seed, GameState.generated_jobs[0].get("title", "") if not GameState.generated_jobs.is_empty() else "none"])
 	if limit > 0 and not GameState.generated_jobs.is_empty():
 		await _do_job(str(GameState.generated_jobs[0].get("id", "")))
 		if not fails.is_empty():
@@ -800,7 +804,25 @@ func _unpack() -> void:
 					target = Vector3(point["x"], 1.0 if mount == "hang" else 0.0, point["z"]) + (point["normal"] as Vector3) * 0.2
 					break
 		else:
-			target = await _find_floor_spot(room)
+			# A crowded room: a spot can look free on hover and still be refused
+			# on the click (the ray lands on a loose piece). Try the next one.
+			var tries := 0
+			for hit in _floor_candidates(room):
+				await hover_world(room, hit)
+				var aim = room._aim_point()
+				if aim == null or not bool(room._snap_point(aim)["valid"]):
+					continue
+				tries += 1
+				await click_world(room, hit)
+				if await wait_until(func(): return str(item.get("state", "")) == "placed" and not room.settling, 3.0):
+					target = hit
+					break
+				if tries >= 12:
+					break
+			if target == null:
+				_fail("unpack: %s never settled after %d spots (state %s)" % [picked, tries, item.get("state", "")])
+				return
+			continue
 		if target == null:
 			_fail("unpack: no valid spot for %s (mount %s)" % [picked, mount])
 			return

@@ -25,11 +25,16 @@ const TWISTS: Array = ["cat", "sets", "mystery", "ducks", "fragile", "plain"]
 const POOL: Dictionary = {
 	"cafe_mug": 6, "cushion": 4, "menu_board": 1, "espresso": 1, "cafe_plant": 3, "cafe_fern": 2, "bowl": 3,
 	"clock_small": 6, "tool_box": 4, "village_kit": 2, "station_clock": 1, "picnic_basket": 2, "bread_crate": 3,
-	"plant_fern": 2, "plant_cactus": 3, "rug_round": 1, "poster_motivational": 2, "beanbag_mustard": 1,
+	"plant_fern": 2, "plant_cactus": 3, "poster_motivational": 2, "beanbag_mustard": 1,
 	"beanbag_sage": 1, "clock_wall": 1, "bookshelf_wood": 1, "kettle": 1, "string_lights": 1, "picture_abstract": 2,
 	"picture_stripes": 2, "coffee_machine": 1, "filing_cabinet": 1, "lamp_banker": 1, "lamp_moody": 1,
 	"keyboard_typewriter": 1, "rotary_phone": 1, "cat_tree": 1, "lemonade_pitcher": 1, "cup_stack": 2,
 }
+
+# Wall pieces are capped per job: a small room only has a few hooks.
+const HANG: Array = ["menu_board", "station_clock", "poster_motivational", "clock_wall", "string_lights", "picture_abstract", "picture_stripes"]
+const WALL_FLOOR: Array = ["bookshelf_wood"]
+const MAX_HANG := 2
 
 const DRIVE_ENDS: Array = [
 	["cafe", "cafe_new"], ["train", "train_new"], ["park_shed", "boathouse"], ["garage", "bakery"],
@@ -97,6 +102,8 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 	var guard := 0
 	var set_names := ["clocks", "books", "tools", "frames"]
 	var set_index := 0
+	var hung := 0
+	var wall_floor := 0
 	while total < size and guard < 60:
 		guard += 1
 		var item := str(ids[rng.randi_range(0, ids.size() - 1)])
@@ -106,8 +113,18 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 				already = true
 		if already:
 			continue
+		if WALL_FLOOR.has(item):
+			if wall_floor >= 1:
+				continue
+			wall_floor += 1
 		var cap := int(POOL.get(item, 1))
+		if HANG.has(item):
+			cap = mini(cap, MAX_HANG - hung)
+			if cap <= 0:
+				continue
 		var count := clampi(rng.randi_range(1, cap), 1, size - total)
+		if HANG.has(item):
+			hung += count
 		var group := {"item": item, "count": count}
 		if twist == "sets" and count >= 2 and set_index < set_names.size():
 			group["set"] = set_names[set_index]
