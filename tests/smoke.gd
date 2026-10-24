@@ -1053,30 +1053,46 @@ func _qa_regressions() -> Array:
 	drive.call("_contact", "cone", true, collision)
 	if int(drive.get("condition")) != 79:
 		found.append("meter amounts %s" % drive.get("condition"))
-	drive.set("course", JobDB.get_drive("duck_pond"))
-	drive.set("condition", 100)
-	drive.set("speed", 120.0)
-	drive.set("heading", 0.0)
-	(drive.get("touching") as Dictionary).clear()
-	(drive.get("contact_ready") as Dictionary).clear()
-	drive.set("pos", Vector2(1200, 410))
-	drive.call("_hazards")
-	drive.call("_hazards")
-	if int(drive.get("condition")) != 100:
-		found.append("l5 gravel %s" % drive.get("condition"))
-	drive.set("pos", Vector2(1500, 2050))
-	drive.call("_hazards")
-	drive.call("_hazards")
-	if int(drive.get("condition")) != 100:
-		found.append("l5 ducks %s" % drive.get("condition"))
-	(drive.get("touching") as Dictionary).clear()
-	(drive.get("contact_ready") as Dictionary).clear()
-	drive.set("speed", 10.0)
-	drive.set("pos", Vector2(830, 1400))
-	drive.call("_hazards")
-	if int(drive.get("condition")) != 97:
-		found.append("l5 bump %s" % drive.get("condition"))
 	_bury(drive)
+	# The pond: hazards sit along the computed route, so read their spots from the drive.
+	GameState.job = {"def": {"drive": "duck_pond", "level": "L5"}, "boxes": [], "items": []}
+	var pond_drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(pond_drive)
+	var spots := {}
+	for hazard in pond_drive.get("hazards"):
+		var kind := str(hazard.get("type", ""))
+		if not spots.has(kind):
+			spots[kind] = Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
+	if not spots.has("gravel") or not spots.has("ducks") or not spots.has("bump"):
+		found.append("l5 hazards %s" % spots.keys())
+	for kind in spots.keys():
+		if not bool(pond_drive.call("_on_road", spots[kind])):
+			found.append("l5 %s off the road at %s" % [kind, spots[kind]])
+	pond_drive.set("state", "drive")
+	pond_drive.set("condition", 100)
+	pond_drive.set("speed", 120.0)
+	pond_drive.set("heading", 0.0)
+	(pond_drive.get("touching") as Dictionary).clear()
+	(pond_drive.get("contact_ready") as Dictionary).clear()
+	pond_drive.set("pos", spots.get("gravel", Vector2.ZERO))
+	pond_drive.call("_hazards")
+	pond_drive.call("_hazards")
+	if int(pond_drive.get("condition")) != 100:
+		found.append("l5 gravel %s" % pond_drive.get("condition"))
+	pond_drive.set("pos", spots.get("ducks", Vector2.ZERO))
+	pond_drive.call("_hazards")
+	pond_drive.call("_hazards")
+	if int(pond_drive.get("condition")) != 100:
+		found.append("l5 ducks %s" % pond_drive.get("condition"))
+	(pond_drive.get("touching") as Dictionary).clear()
+	(pond_drive.get("contact_ready") as Dictionary).clear()
+	pond_drive.set("speed", 10.0)
+	pond_drive.set("pos", spots.get("bump", Vector2.ZERO))
+	pond_drive.call("_hazards")
+	if int(pond_drive.get("condition")) != 97:
+		found.append("l5 bump %s" % pond_drive.get("condition"))
+	_bury(pond_drive)
+	GameState.job = {}
 	return found
 
 
@@ -1352,7 +1368,6 @@ func _label_with(root: Node, text: String) -> Label:
 
 func _review_fixes() -> Array:
 	var found: Array = []
-	var routes = preload("res://scripts/drive_routes.gd")
 	GameState.new_game("dana")
 	for item in GameState.office_items:
 		if str(item.get("uid", "")) != "desk":
@@ -1505,45 +1520,33 @@ func _review_fixes() -> Array:
 	if int(drive.get("condition")) >= 100 or int(drive.get("condition")) < 96:
 		found.append("rain brake %s" % drive.get("condition"))
 	_bury(drive)
-	var rainy: Dictionary = JobDB.get_drive("rainy_afternoon")
-	var lane_left := 0.0
-	var lane_right := 0.0
-	for rect in rainy.get("roads", []):
-		if float(rect[3]) > float(rect[2]):
-			lane_left = float(rect[0])
-			lane_right = lane_left + float(rect[2])
-	for hazard in rainy.get("hazards", []):
-		if str(hazard.get("type", "")) != "cone":
+	# Every rainy hazard lands on the road, the route reaches the bay, and the alley exists.
+	GameState.job = {"def": {"drive": "rainy_afternoon", "level": "L3"}, "boxes": [{"id": 0}, {"id": 1}], "items": []}
+	var rainy_drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(rainy_drive)
+	for hazard in rainy_drive.get("hazards"):
+		var at := Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
+		if str(hazard.get("type", "")) == "wobble":
 			continue
-		var cone_x := float(hazard.get("x", 0))
-		if cone_x - lane_left < 110.0 or lane_right - cone_x < 110.0:
-			found.append("cone lane %s %s %s" % [lane_left, cone_x, lane_right])
-	var sample := {
-		"version": "v2",
-		"full_scale": true,
-		"id": "sample",
-		"roads": [[10, 20, 30, 40]],
-		"alley": {"a": [0, 0], "b": [1280, 0], "width": 110},
-	}
-	var adopted: Dictionary = routes.adopt(sample)
-	var adopted_roads: Array = adopted.get("roads", [])
-	var adopted_span: Array = adopted_roads[0] if not adopted_roads.is_empty() else []
-	if adopted_span.size() < 3 or int(adopted_span[2]) != 30:
-		found.append("route scale %s" % adopted)
-	if absf(float(routes.alley_seconds(adopted, 32.0, 4.0)) - 10.0) > 0.05:
-		found.append("alley sample %s" % routes.alley_seconds(adopted, 32.0, 4.0))
-	if not routes.adopt({"version": "v1", "full_scale": true}).is_empty():
-		found.append("v1 route adopted")
-	if routes.has_v2("rainy_afternoon"):
-		var live := float(routes.alley_seconds(rainy, 32.0, 4.0))
-		if live < 9.0 or live > 11.0:
-			found.append("v2 alley %s" % live)
-	else:
-		var alley: Dictionary = rainy.get("alley", {})
-		var alley_a: Array = alley.get("a", [])
-		var alley_b: Array = alley.get("b", [])
-		if alley_a.size() < 2 or alley_b.size() < 2 or int(alley_a[0]) != 2000 or int(alley_b[0]) != 4100:
-			found.append("alley moved %s" % alley)
+		if not bool(rainy_drive.call("_on_road", at)):
+			found.append("rainy %s off the road at %s" % [hazard.get("type", ""), at])
+	var route: PackedVector2Array = rainy_drive.get("route")
+	var drop_bay: Rect2 = (rainy_drive.get("dropoff") as Dictionary).get("bay", Rect2())
+	if route.size() < 3 or not drop_bay.grow(4).has_point(route[route.size() - 1]):
+		found.append("rainy route %s" % route.size())
+	for i in range(1, route.size() - 1):
+		if not bool(rainy_drive.call("_on_road", route[i])):
+			found.append("route leaves the road at %s" % route[i])
+	var town = rainy_drive.get("city")
+	if town == null or (town.alley as Rect2).size == Vector2.ZERO:
+		found.append("alley missing")
+	if str(rainy_drive.get("state")) != "load":
+		found.append("drive should start parked for loading")
+	rainy_drive.call("_interact")
+	if str(rainy_drive.get("state")) != "load" or (rainy_drive.get("box_anim") as Array).is_empty():
+		found.append("load up did not start")
+	_bury(rainy_drive)
+	GameState.job = {}
 	return found
 
 

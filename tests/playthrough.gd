@@ -107,6 +107,7 @@ func _run() -> void:
 
 	await _check_computer()
 	await _check_map()
+	await _check_view()
 	await _save_roundtrip("after garage")
 
 	var job_ids := ["job_catcafe", "job_train", "job_ducks"]
@@ -293,6 +294,41 @@ func _check_computer() -> void:
 	_check(press("x", computer), "computer closes (x button)")
 	await wait(0.3)
 	_check(app.overlay.get_child_count() == 0, "computer overlay removed")
+
+
+func _check_view() -> void:
+	# Swing the room round once per side, and make sure an item can still be placed
+	# from a rotated view, then come back to the front.
+	var room := _room()
+	if room == null:
+		return
+	_check(press("Rotate view"), "HUD: Rotate view button")
+	await wait(0.5)
+	_check(int(room.view_quadrant) == 1, "view rotated to quadrant 1 (got %s)" % room.view_quadrant)
+	await shot("garage_rotated")
+	var mug: Dictionary = GameState.find_office_item("mug")
+	if not mug.is_empty():
+		var node := _node_for(room, "mug")
+		if node != null:
+			await click_node(room, "mug", node)
+			await wait(0.1)
+			if room.held_uid == "mug":
+				var target = await _find_floor_spot(room)
+				if target != null:
+					await click_world(room, target)
+					var ok := await wait_until(func(): return str(mug.get("state", "")) == "placed" and not room.settling, 8.0)
+					_check(ok, "mug placed again from the rotated view")
+				else:
+					room._drop_hold()
+	for i in 3:
+		room.rotate_view(1)
+		await wait(0.4)
+	_check(int(room.view_quadrant) == 0, "view back to the front (got %s)" % room.view_quadrant)
+	room.zoom_view(-0.2)
+	_check(absf(float(room.view_zoom) - 0.8) < 0.001, "zoom applies (got %s)" % room.view_zoom)
+	room.zoom_view(0.2)
+	var goals: Node = room.goals_panel
+	_check(goals != null and goals.visible, "goals checklist is on screen")
 
 
 func _check_map() -> void:
@@ -499,70 +535,77 @@ func _drive() -> void:
 		_fail("drive: no drive course on screen")
 		return
 	var done := [false]
-	_wp_index = 0
+	_wp_index = 1
 	drive.finished.connect(func(_r): done[0] = true)
+	await wait(0.3)
+	_check(str(drive.state) == "load", "drive: starts parked at the pickup bay (state %s)" % drive.state)
+	await shot("drive_parked")
+	_check(press("Load up"), "drive: Load up button")
+	var loaded := await wait_until(func(): return str(drive.state) == "drive", 12.0)
+	_check(loaded, "drive: boxes loaded, truck released (state %s)" % drive.state)
+	await shot("drive_loaded")
 	var t := 0.0
 	var limit := 8.0 if fast_drive else 240.0
+	var shot_taken := false
 	while not done[0] and t < limit:
-		_steer(drive)
+		if str(drive.state) == "drive":
+			if bool(drive.at_dropoff):
+				_release_keys()
+				press("Unload")
+			else:
+				_steer(drive)
+		elif str(drive.state) == "unload":
+			_release_keys()
 		await wait(0.1)
 		t += 0.1
+		if t > 6.0 and not shot_taken:
+			shot_taken = true
+			await shot("drive_moving")
 	_release_keys()
 	if not done[0]:
 		if fast_drive:
 			drive._complete()
 			await wait(0.1)
 		else:
-			_fail("drive: course never finished in %ds (pos %s)" % [int(limit), drive.pos])
+			_fail("drive: course never finished in %ds (state %s, pos %s, at_dropoff %s)" % [int(limit), drive.state, drive.pos, drive.at_dropoff])
 			return
 	await wait(0.5)
-	print("drive result: condition %d alley %s time %.1fs" % [GameState.job.get("condition", -1), GameState.job.get("alley", false), GameState.job.get("drive_time", 0.0)])
+	print("drive result: condition %d alley %s time %.1fs" % [GameState.job.get("condition", -1), GameState.job.get("alley", false), t])
 
 
-var _wp_index := 0
-
-
-func _waypoints(drive: Node) -> Array:
-	# Roads are rectangles. Drive through the middle of each overlap, then the finish.
-	var rects: Array = []
-	for r in drive.course.get("roads", []):
-		rects.append(drive._rect(r))
-	var out: Array = []
-	var loop := bool(drive.course.get("loop", false))
-	var n := rects.size()
-	for i in n:
-		if i + 1 < n or loop:
-			var a: Rect2 = rects[i]
-			var b: Rect2 = rects[(i + 1) % n]
-			var cross := a.intersection(b)
-			if cross.size != Vector2.ZERO:
-				out.append(cross.get_center())
-	if loop:
-		var once := out.duplicate()
-		for _lap in int(drive.course.get("laps", 2)):
-			out.append_array(once)
-	else:
-		out.append(drive._rect(drive.course.get("finish", [0, 0, 10, 10])).get_center())
-	return out
+var _wp_index := 1
 
 
 func _steer(drive: Node) -> void:
-	var points := _waypoints(drive)
-	if points.is_empty():
+	# Follow the game's own route. Slow down for corners and for the bay at the end.
+	var points: PackedVector2Array = drive.route
+	if points.size() < 2:
 		_key(KEY_W, true)
 		return
-	_wp_index = mini(_wp_index, points.size() - 1)
+	_wp_index = clampi(_wp_index, 1, points.size() - 1)
+	var pos: Vector2 = drive.pos
 	var goal: Vector2 = points[_wp_index]
-	if (drive.pos as Vector2).distance_to(goal) < 90.0 and _wp_index + 1 < points.size():
+	var last := _wp_index == points.size() - 1
+	if not last and pos.distance_to(goal) < 90.0:
 		_wp_index += 1
 		goal = points[_wp_index]
-	var pos: Vector2 = drive.pos
+		last = _wp_index == points.size() - 1
 	var want := (goal - pos).angle()
 	var diff := wrapf(want - float(drive.heading), -PI, PI)
-	_key(KEY_W, abs(diff) < 1.2)
-	_key(KEY_S, false)
+	var dist := pos.distance_to(goal)
+	var speed := float(drive.speed)
+	var slow_zone := (last and dist < 260.0) or (absf(diff) > 0.5 and dist < 220.0)
+	var target_speed := 60.0 if slow_zone else 400.0
+	if last and dist < 40.0:
+		target_speed = 0.0
+	# Creep forward while turning: the truck cannot turn on the spot.
+	_key(KEY_W, speed < target_speed and (absf(diff) < 1.3 or absf(speed) < 40.0))
+	_key(KEY_S, speed > target_speed + 30.0)
 	_key(KEY_A, diff < -0.06)
 	_key(KEY_D, diff > 0.06)
+	if last and dist < 40.0 and speed < 14.0:
+		_release_keys()
+	drive.route_index = _wp_index
 
 
 func _v2(value) -> Vector2:

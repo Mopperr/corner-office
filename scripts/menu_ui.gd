@@ -265,17 +265,35 @@ func _controls() -> void:
 	hint.custom_minimum_size = Vector2(760, 48)
 	column.add_child(hint)
 	var focus_row: Button = null
+	# Two columns, so ten bindings still fit a 1280x800 window.
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 6)
+	column.add_child(grid)
+	var rows: Array = []
+	var pair: Array = []
 	for spec in Controls.specs():
 		var id := str(spec.get("id", ""))
 		var caption := str(spec.get("label", id))
 		var shown := "Press a key or button" if _listen == id else "%s    %s" % [caption, Controls.describe(id)]
-		var row := _menu_button(column, shown, UIKit.SAGE if _listen != id else UIKit.MUSTARD, _arm_remap.bind(id), UIKit.CREAM_CARD if _listen != id else UIKit.DARK)
-		row.custom_minimum_size = Vector2(760, 48)
+		var row := UIKit.button(shown, UIKit.SAGE if _listen != id else UIKit.MUSTARD, UIKit.CREAM_CARD if _listen != id else UIKit.DARK)
+		row.custom_minimum_size = Vector2(376, 48)
+		row.pressed.connect(_arm_remap.bind(id))
 		row.set_meta("action", id)
-		buttons.append(row)
+		grid.add_child(row)
+		pair.append(row)
+		if pair.size() == 2:
+			rows.append(pair)
+			pair = []
 		if _listen == id:
 			focus_row = row
-	UIKit.link_focus(buttons)
+	if not pair.is_empty():
+		rows.append(pair)
+	var grid_rows: Array = [[back]]
+	grid_rows.append_array(rows)
+	UIKit.link_grid(grid_rows)
 	if focus_row != null:
 		focus_row.grab_focus()
 

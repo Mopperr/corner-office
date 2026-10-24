@@ -5,24 +5,17 @@
     "weather": "rain",
     "music": "music_driving_rain",
     "ambience": "amb_l03_rain_loop",
-    "start": [360, 520],
-    "heading": 0,
-    "roads": [
-      [180, 450, 2020, 150],
-      [1800, 450, 400, 3400],
-      [1800, 3700, 3120, 150]
-    ],
-    "alley": { "a": [2000, 520], "b": [4100, 3770], "width": 110 },
-    "finish": [4500, 3660, 480, 230],
+    "pickup": "cafe",
+    "dropoff": "cafe_new",
+    "alley": true,
     "hazards": [
-      { "type": "puddle", "x": 800, "y": 520, "r": 64 },
-      { "type": "puddle", "x": 1400, "y": 530, "r": 56 },
-      { "type": "bump", "x": 2000, "y": 1500, "w": 170, "h": 36 },
-      { "type": "cone", "x": 1960, "y": 1900 },
-      { "type": "cone", "x": 2060, "y": 2300 },
-      { "type": "cone", "x": 1960, "y": 2700 },
-      { "type": "ducks", "x": 3300, "y": 3770, "w": 220, "h": 160, "auto_stop": true },
-      { "type": "wobble", "x": 3000, "y": 2000, "on": "alley" }
+      { "type": "puddle", "along": 0.12, "lane": 0, "r": 64 },
+      { "type": "puddle", "along": 0.3, "lane": 1, "r": 56 },
+      { "type": "bump", "along": 0.42, "w": 170, "h": 36 },
+      { "type": "cone", "along": 0.52, "lane": -1 },
+      { "type": "cone", "along": 0.6, "lane": 1 },
+      { "type": "cone", "along": 0.68, "lane": -1 },
+      { "type": "ducks", "along": 0.86, "w": 220, "h": 160, "auto_stop": true }
     ],
     "scenery": "town"
   },
@@ -31,19 +24,14 @@
     "title": "Sunny Main Street",
     "weather": "clear",
     "music": "music_driving",
-    "start": [360, 520],
-    "heading": 0,
-    "roads": [
-      [180, 450, 2020, 150],
-      [1800, 450, 400, 3400],
-      [1800, 3700, 3120, 150]
-    ],
-    "alley": { "a": [2000, 520], "b": [4100, 3770], "width": 110 },
-    "finish": [4500, 3660, 480, 230],
+    "pickup": "train",
+    "dropoff": "train_new",
+    "alley": true,
     "hazards": [
-      { "type": "bump", "x": 2000, "y": 1600, "w": 170, "h": 36 },
-      { "type": "cone", "x": 2060, "y": 2200 },
-      { "type": "ducks", "x": 3300, "y": 3770, "w": 220, "h": 160, "auto_stop": true }
+      { "type": "bump", "along": 0.35, "w": 170, "h": 36 },
+      { "type": "cone", "along": 0.55, "lane": 1 },
+      { "type": "puddle", "along": 0.7, "lane": -1, "r": 48 },
+      { "type": "ducks", "along": 0.85, "w": 220, "h": 160, "auto_stop": true }
     ],
     "scenery": "town"
   },
@@ -53,23 +41,14 @@
     "weather": "park",
     "music": "music_driving",
     "ambience": "amb_l05_park_birds_loop",
-    "start": [420, 420],
-    "heading": 0,
-    "roads": [
-      [280, 340, 2200, 150],
-      [2320, 340, 150, 1800],
-      [900, 1980, 1570, 150],
-      [760, 340, 150, 1790]
-    ],
-    "alley": null,
-    "finish": [760, 560, 180, 220],
-    "loop": true,
-    "laps": 2,
+    "pickup": "park_shed",
+    "dropoff": "boathouse",
+    "alley": false,
     "hazards": [
-      { "type": "gravel", "x": 1200, "y": 410, "w": 280, "h": 80 },
-      { "type": "gravel", "x": 1800, "y": 2050, "w": 300, "h": 80 },
-      { "type": "ducks", "x": 1500, "y": 2050, "w": 240, "h": 160, "auto_stop": false, "honk": true },
-      { "type": "bump", "x": 830, "y": 1400, "w": 40, "h": 120 }
+      { "type": "gravel", "along": 0.2, "w": 280, "h": 80 },
+      { "type": "ducks", "along": 0.5, "w": 240, "h": 160, "auto_stop": false, "honk": true },
+      { "type": "gravel", "along": 0.72, "w": 300, "h": 80 },
+      { "type": "bump", "along": 0.88, "w": 40, "h": 120 }
     ],
     "scenery": "pond"
   }

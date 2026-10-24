@@ -72,6 +72,12 @@ var stack_room
 var _settle_uid := ""
 var hud_only := false
 var _goal_pip := 0.0
+var view_quadrant := 0
+var view_zoom := 1.0
+var footprint: MeshInstance3D
+var goals_panel: Panel
+var goals_column: VBoxContainer
+var _goals_key := ""
 var _markers_key := ""
 
 
@@ -217,9 +223,75 @@ func _frame_camera() -> void:
 	var depth := float(venue.get("d", 8.0))
 	var center := origin + Vector3(width * 0.5, 0.9, depth * 0.5)
 	cam.attributes = null
-	cam.size = maxf(width, depth) * 1.3
-	cam.position = center + Vector3(8.2, 9.0, 8.0)
+	cam.size = maxf(width, depth) * 1.3 * view_zoom
+	cam.position = center + Vector3(8.2, 9.0, 8.0).rotated(Vector3.UP, view_quadrant * PI * 0.5)
 	cam.look_at(center, Vector3.UP)
+
+
+func _side_of(along_x: bool, fixed: float) -> String:
+	var x := float(venue.get("x", 0))
+	var z := float(venue.get("z", 0))
+	if along_x:
+		return "N" if absf(fixed - z) < 0.01 else "S"
+	return "W" if absf(fixed - x) < 0.01 else "E"
+
+
+func _hidden_sides() -> Array:
+	# The two walls nearest the camera are cut away so you can see in.
+	match posmod(view_quadrant, 4):
+		1:
+			return ["S", "W"]
+		2:
+			return ["N", "W"]
+		3:
+			return ["N", "E"]
+	return ["S", "E"]
+
+
+func rotate_view(steps: int) -> void:
+	if backdrop or venue.is_empty() or GameState.mode == "truck":
+		return
+	view_quadrant = posmod(view_quadrant + steps, 4)
+	var hidden := _hidden_sides()
+	var x := float(venue.get("x", 0))
+	var z := float(venue.get("z", 0))
+	var w := float(venue.get("w", 6))
+	var d := float(venue.get("d", 8))
+	for node in get_children():
+		if not (node is Node3D):
+			continue
+		var hide := false
+		if node.has_meta("shell_side"):
+			hide = str(node.get_meta("shell_side")) in hidden
+		elif node.has_meta("shell_corner"):
+			var at: Vector2 = node.get_meta("corner_at")
+			var sides: Array = ["N" if absf(at.y - z) < 0.01 else "S", "W" if absf(at.x - x) < 0.01 else "E"]
+			hide = sides[0] in hidden and sides[1] in hidden
+		else:
+			continue
+		(node as Node3D).visible = not hide
+		if hide:
+			node.add_to_group("cutaway_shell")
+		elif node.is_in_group("cutaway_shell"):
+			node.remove_from_group("cutaway_shell")
+	var origin := Vector3(x, 0.0, z)
+	var center := origin + Vector3(w * 0.5, 0.9, d * 0.5)
+	var goal := center + Vector3(8.2, 9.0, 8.0).rotated(Vector3.UP, view_quadrant * PI * 0.5)
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_method(func(t: float):
+		cam.position = cam.position.lerp(goal, t)
+		cam.look_at(center, Vector3.UP)
+	, 0.0, 1.0, 0.35)
+	AudioDirector.play_sfx("sfx_ui_click")
+	_markers_key = ""
+
+
+func zoom_view(delta_zoom: float) -> void:
+	if backdrop or venue.is_empty() or GameState.mode == "truck":
+		return
+	view_zoom = clampf(view_zoom + delta_zoom, 0.6, 1.4)
+	_frame_camera()
 
 
 func _fill_floor(x: float, z: float, w: float, d: float) -> void:
@@ -336,6 +408,8 @@ func _corner(at: Vector3, rot: float, mirror_z: bool, cutaway := false) -> void:
 	if cutaway:
 		node.visible = false
 		node.add_to_group("cutaway_shell")
+	node.set_meta("shell_corner", true)
+	node.set_meta("corner_at", Vector2(at.x, at.z))
 	Props.restyle_architecture(node)
 	Props.prepare(node)
 	add_child(node)
@@ -363,6 +437,7 @@ func _fill_run(a: float, b: float, fixed: float, along_x: bool, hidden: bool, wi
 			node.visible = not hidden
 			if hidden:
 				node.add_to_group("cutaway_shell")
+			node.set_meta("shell_side", _side_of(along_x, fixed))
 			Props.restyle_architecture(node)
 			Props.prepare(node)
 			add_child(node)
@@ -715,8 +790,44 @@ func _process(delta: float) -> void:
 		if _goal_pip <= 0.0:
 			_markers_key = ""
 	_sync_goal_markers()
+	_sync_goals_panel()
 	if hint:
 		hint.text = _hint_text()
+
+
+func _sync_goals_panel() -> void:
+	# The checklist for this room: every goal, ticked as it is met.
+	if goals_panel == null or backdrop or venue.is_empty():
+		return
+	var show := (GameState.mode == "office" and GameState.office_phase != "pack") or GameState.mode == "job_unpack"
+	if not show:
+		goals_panel.visible = false
+		return
+	var items := _goal_items()
+	var lines: Array = []
+	for goal in StackGoals.all_goals():
+		if str(goal.get("venue", "")) != str(venue.get("id", "")):
+			continue
+		var met := bool(StackGoals.evaluate(goal, items, GameState.latched_goals).get("met", false))
+		lines.append("%s  %s" % ["✓" if met else "○", goal.get("hint", "")])
+	var setup: float = stack_room.score() if stack_room else -1.0
+	var key := "%s|%d" % ["\n".join(PackedStringArray(lines)), int(setup)]
+	if key == _goals_key:
+		return
+	_goals_key = key
+	for child in goals_column.get_children():
+		child.queue_free()
+	var head := UIKit.label("Room setup  %d/100" % int(round(setup)) if setup >= 0.0 else "Room setup", 24, UIKit.TERRA, "title", false)
+	goals_column.add_child(head)
+	for line in lines:
+		var row := UIKit.label(str(line), 18, UIKit.DARK)
+		row.custom_minimum_size = Vector2(520, 0)
+		goals_column.add_child(row)
+	if lines.is_empty():
+		var row := UIKit.label("Stacks that stand, things that touch, and a tidy floor all count.", 18, UIKit.DARK)
+		row.custom_minimum_size = Vector2(520, 0)
+		goals_column.add_child(row)
+	goals_panel.visible = true
 
 
 func _on_cat_clip(anim_name: StringName) -> void:
@@ -980,6 +1091,7 @@ func _update_ghost(delta: float) -> void:
 	if held_uid == "":
 		if ghost:
 			ghost.visible = false
+		_hide_footprint()
 		return
 	var hit: Variant = _aim_point()
 	if hit == null:
@@ -992,9 +1104,39 @@ func _update_ghost(delta: float) -> void:
 	ghost.global_position = ghost.global_position.lerp(target, clampf(delta * 14.0, 0.0, 1.0))
 	ghost.rotation.y = deg_to_rad(float(spot["rot"]))
 	_paint_ghost(bool(spot["valid"]))
+	_update_footprint(spot)
 	var held_name := str(_held_def().get("model", "")) + str(_held_def().get("name", ""))
 	if "stapler" in held_name.to_lower():
 		Props.set_hover_outline(ghost, true)
+
+
+func _update_footprint(spot: Dictionary) -> void:
+	var def := _held_def()
+	if footprint == null or not is_instance_valid(footprint):
+		footprint = MeshInstance3D.new()
+		footprint.name = "Footprint"
+		footprint.mesh = BoxMesh.new()
+		var material := StandardMaterial3D.new()
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.no_depth_test = true
+		footprint.material_override = material
+		add_child(footprint)
+	var w := float(def.get("w", 0.4))
+	var d := float(def.get("d", 0.4))
+	var on_wall := str(spot.get("wall", "")) != ""
+	(footprint.mesh as BoxMesh).size = Vector3(w + 0.06, 0.012, (0.06 if on_wall else d) + 0.06)
+	var target: Vector3 = spot["pos"]
+	footprint.visible = held_uid != ""
+	footprint.global_position = Vector3(target.x, target.y + 0.008, target.z)
+	footprint.rotation.y = deg_to_rad(float(spot["rot"]))
+	var valid := bool(spot.get("valid", false))
+	(footprint.material_override as StandardMaterial3D).albedo_color = Color(UIKit.SAGE, 0.45) if valid else Color(UIKit.SOFT_RED, 0.5)
+
+
+func _hide_footprint() -> void:
+	if footprint != null and is_instance_valid(footprint):
+		footprint.visible = false
 
 
 func _make_ghost() -> void:
@@ -1067,6 +1209,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		_drop_hold()
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M and GameState.mode == "office" and held_uid == "":
 		emit_signal("open_map")
+		return
+	if event is InputEventKey and event.pressed and not event.echo and (event.keycode == KEY_Q or event.keycode == KEY_E):
+		rotate_view(-1 if event.keycode == KEY_Q else 1)
+		return
+	if event is InputEventMouseButton and event.pressed and (event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN):
+		var up: bool = event.button_index == MOUSE_BUTTON_WHEEL_UP
+		if held_uid != "":
+			held_rot = fmod(held_rot + (Tuning.rotate_step(true) if up else -Tuning.rotate_step(true)) + 360.0, 360.0)
+			AudioDirector.play_sfx("sfx_ui_click")
+		else:
+			zoom_view(-0.1 if up else 0.1)
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_click()
@@ -1889,6 +2042,18 @@ func _build_hud() -> void:
 	hint_bar.add_child(hint)
 	UIKit.fill(hint, 16, 12, 16, 12)
 	status.max_lines_visible = 2
+	goals_panel = Panel.new()
+	goals_panel.name = "GoalsCard"
+	goals_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	goals_panel.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 14))
+	layer.add_child(goals_panel)
+	UIKit.pin_top_left(goals_panel, 16, 168, 560, 300)
+	goals_column = VBoxContainer.new()
+	goals_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	goals_column.add_theme_constant_override("separation", 2)
+	goals_panel.add_child(goals_column)
+	UIKit.fill(goals_column, 14, 8, 14, 8)
+	goals_panel.visible = false
 	var toast_bar := Panel.new()
 	toast_bar.name = "ToastBar"
 	toast_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1919,6 +2084,7 @@ func _refresh_hud_buttons() -> void:
 	if GameState.mode == "office" or GameState.mode == "job_unpack":
 		var snap_label := "Grid snap on" if SaveManager.snap_to_grid else "Free place"
 		_act_button(layer, snap_label, Vector2(16, y), _toggle_snap)
+		_act_button(layer, "Rotate view", Vector2(1100, 870), func(): rotate_view(1))
 	if GameState.mode == "office" and GameState.office_phase == "live":
 		_act_button(layer, "Jobs", Vector2(1100, y), func(): _open_jobs())
 		y += 58
@@ -2695,6 +2861,33 @@ func _shake(node: Node3D) -> void:
 func _squash_uid(uid: String) -> void:
 	var node: Node3D = nodes_by_uid.get(uid)
 	_squash(node)
+	if node != null and is_instance_valid(node):
+		_dust(node.global_position)
+
+
+func _dust(at: Vector3) -> void:
+	var puff := CPUParticles3D.new()
+	puff.position = at + Vector3(0, 0.03, 0)
+	puff.one_shot = true
+	puff.explosiveness = 1.0
+	puff.amount = 14
+	puff.lifetime = 0.55
+	puff.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
+	puff.emission_sphere_radius = 0.18
+	puff.direction = Vector3(0, 1, 0)
+	puff.spread = 70.0
+	puff.initial_velocity_min = 0.4
+	puff.initial_velocity_max = 0.9
+	puff.gravity = Vector3(0, -1.5, 0)
+	puff.scale_amount_min = 0.05
+	puff.scale_amount_max = 0.1
+	puff.mesh = SphereMesh.new()
+	(puff.mesh as SphereMesh).radius = 0.5
+	(puff.mesh as SphereMesh).height = 1.0
+	puff.material_override = Props.mat(Color("E7DCC6"))
+	add_child(puff)
+	puff.emitting = true
+	get_tree().create_timer(1.2).timeout.connect(puff.queue_free)
 
 
 func _squash_last() -> void:

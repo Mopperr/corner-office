@@ -24,13 +24,16 @@ godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 ## Controls
 
 - **Click** an item to pick it up. **Click** the floor, a desk, or the top of another item to place it. A red ghost means it would float or overlap.
-- **R** rotates 90°. **Shift+R** rotates 15°. **G** toggles the 0.25 m grid. Free placement is the default, and the choice is saved with the volume sliders.
+- **R** rotates 90°. **Shift+R** or the **mouse wheel** rotates 15° while you hold something. **G** toggles the 0.25 m grid. Free placement is the default, and the choice is saved with the volume sliders.
+- **Q** / **E** (or the Rotate view button) swing the camera round the room a quarter turn at a time; the two walls nearest the camera cut away so you can always see in. The **mouse wheel** zooms when your hands are empty.
+- A footprint shadow follows the ghost and shows exactly where the item will land: sage when it will sit, soft red when it would float or overlap. Landing puffs a little dust.
+- The card under the status bar is the room checklist: every goal for the room, ticked as you meet it, with the live Room setup score that feeds the tip.
 - Items rest on the floor or on whatever is under them, then settle and freeze so a stack stays put.
 - Wall pieces sit 0.12 m off the wall. A soft thunk means the placement landed.
 - Click the beige computer to open HomeDesk: Market, Shop, Email, Listings.
 - **Map** (or **M**) opens the town map: where you are, which clients have a job pinned, and which offices are for sale. You can take a job or move in from there.
 - **Esc** or **Pause** saves and can return to the menu.
-- On a drive, **WASD** or the arrow keys drive. **H** honks. You cannot fail a drive.
+- On a drive, **WASD** or the arrow keys drive, **Space** is the handbrake, **H** honks, and **E** loads or unloads at a bay (the HUD has buttons for both). You cannot fail a drive.
 
 ## How the slice plays
 
@@ -39,9 +42,10 @@ godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 3. Open the computer. Trade office goods, or open TropicalForest to order decor. Prices move when you press Next day.
 4. The clipboard offers the cafe job after the garage is unpacked.
 5. Pack, pad fragile items, load the truck (heavy boxes on the mustard floor slots), then drive. The truck takes eight boxes, so that is the box limit; tap a loaded pad with nothing selected to take that box back off.
-6. The truck's back door swings open and shut in Godot (`open` / `close`, about +105° on Y). The model itself has no animation.
-7. Unpack: carry each box in from the truck, click it to tip it out, then place what was inside. Repair a scuff or keep it, and read the pay lines. Base pay is always paid in full. Damage only comes out of the tip.
-8. Repeat jobs, trade, and let the shop earn until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings.
+6. The drive is a top-down town (`data/city.json`): blocks, two-lane roads with traffic, a park with the pond, and an alley you can cut through. The truck starts parked in the client's loading bay. Load up, follow the arrow and the minimap to the bay at the other end, park inside it, and unload. Walls, cars, cones, puddles, bumps, gravel and a hard brake in the rain all cost box condition; traffic brakes for you and leans on the horn.
+7. The truck's back door swings open and shut in Godot (`open` / `close`, about +105° on Y). The model itself has no animation.
+8. Unpack: carry each box in from the truck, click it to tip it out, then place what was inside. Repair a scuff or keep it, and read the pay lines. Base pay is always paid in full. Damage only comes out of the tip.
+9. Repeat jobs, trade, and let the shop earn until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings.
 
 ## TropicalForest and the shop
 
@@ -57,7 +61,7 @@ The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only
 - `scripts/outdoors.gd` builds the yard around every room (ground, driveway, road, trees, fence or lamp posts, neighbours) from plain meshes with no collision. `scripts/map_ui.gd` is the town map, with its pins in `data/map.json`.
 - Autoloads: `ItemDB`, `JobDB`, `GameState`, `SaveManager`, `AudioDirector`.
 - `data/tuning.json` holds the locked numbers (damage, snap, tips, office gates, audio gains).
-- `data/content.json` is characters, items, venues, and jobs. `data/drives.json` is the three routes. `data/forest.json` is the TropicalForest catalog. `data/shop.json` is fixtures, the menu, visitors, and Vibe.
+- `data/content.json` is characters, items, venues, and jobs. `data/drives.json` names each drive's pickup and drop-off bay, weather, and hazards (placed by fraction `along` the computed route); `data/city.json` is the town itself and `scripts/city.gd` builds it, routes through it, and runs the traffic loops. `data/forest.json` is the TropicalForest catalog. `data/shop.json` is fixtures, the menu, visitors, and Vibe.
 - `data/narrative/` is the intro, cast, emails, item flavor, `player_characters.json`, `character_arcs.json`, `how_to_play.json`, and `credits.json`. Dana (phase `slice`) is the only starter, through Garage Startup to the Bakery Loft. When one of her L1–L6 beats loads, Marge's email lands in the inbox and a short note shows the arrival and personal moment. Sol, Hank, Milo, and Bea arcs are in that file and stay hidden. There is no character select yet.
 - `assets/models/` is the diorama kit. A placed prop keeps at most two materials. Props get a box collider at runtime because the glTF files have none. Structural walls are 0.24 m thick (the inner face is 0.12 m, including the garage, whose visual shell is 0.26 m). Rugs and floor tiles are pickable and do not block physics. `npc_*` models get a capsule.
 - `assets/ui/driving/mover_truck_topdown_sheet@1x.png` is still the truck placeholder (facing +X, 32 px per meter) until the dedicated top-down truck sprite arrives. The unsuffixed sheet is 2× and is scaled by 0.5 if the @1x file is missing. Hazard tests use the opaque truck, not the padded frame.

@@ -9,6 +9,8 @@ const SPECS: Array = [
 	{"id": "steer_left", "label": "Steer left", "key": KEY_A, "joy": JOY_BUTTON_DPAD_LEFT},
 	{"id": "steer_right", "label": "Steer right", "key": KEY_D, "joy": JOY_BUTTON_DPAD_RIGHT},
 	{"id": "horn", "label": "Horn", "key": KEY_H, "joy": JOY_BUTTON_RIGHT_SHOULDER},
+	{"id": "handbrake", "label": "Handbrake", "key": KEY_SPACE, "joy": JOY_BUTTON_B},
+	{"id": "interact", "label": "Load / unload", "key": KEY_E, "joy": JOY_BUTTON_A},
 	{"id": "rotate", "label": "Rotate", "key": KEY_R, "joy": JOY_BUTTON_X},
 	{"id": "snap", "label": "Grid snap", "key": KEY_G, "joy": JOY_BUTTON_Y},
 	{"id": "pause", "label": "Pause", "key": KEY_ESCAPE, "joy": JOY_BUTTON_START},
@@ -94,6 +96,11 @@ static func axis(neg_id: String, pos_id: String) -> float:
 			if absf(y) > 0.25:
 				value -= clampf(y, -1.0, 1.0)
 	return clampf(value, -1.0, 1.0)
+
+
+static func describe_key(id: String) -> String:
+	var name := OS.get_keycode_string(int(binding(id).get("key", 0)))
+	return name if name != "" else "Unbound"
 
 
 static func event_pressed(event: InputEvent, id: String) -> bool:
