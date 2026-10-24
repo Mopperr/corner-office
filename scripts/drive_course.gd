@@ -754,9 +754,9 @@ func _hint_text() -> String:
 			if at_dropoff:
 				line = "Stopped in the bay. Hand the boxes over."
 			else:
-				line = "Follow the arrow and the dots on the road."
+				line = "Follow the arrow and the dots."
 				if bool(course.get("alley", false)):
-					line += " The alley is shorter and bumpier."
+					line += " The alley is shorter, but bumpy."
 				elif str(course.get("id", "")) == "duck_pond":
 					line += " Honk and the ducks hurry."
 		"unload":
@@ -774,7 +774,7 @@ func _hint_text() -> String:
 			_:
 				objective.text = "Delivered"
 	_sync_chips()
-	if weather == "rain":
+	if weather == "rain" and state == "load":
 		line += " Rain makes the stop longer."
 	return line
 
@@ -834,7 +834,7 @@ func _process(delta: float) -> void:
 	hint.text = _hint_text()
 	if distance_label:
 		var left := _route_left()
-		distance_label.text = "%d m to %s" % [int(round(left / PX)), dropoff.get("name", "the bay")] if state == "drive" else str(dropoff.get("name", ""))
+		distance_label.text = "%d m to go" % int(round(left / PX)) if state == "drive" else "Boxes on the curb"
 	if minimap:
 		minimap.queue_redraw()
 
