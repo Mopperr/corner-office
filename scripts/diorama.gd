@@ -824,14 +824,14 @@ func _sync_goals_panel() -> void:
 	_goals_key = key
 	for child in goals_column.get_children():
 		child.queue_free()
-	var head := UIKit.label("Room setup  %d/100" % int(round(setup)) if setup >= 0.0 else "Room setup", 24, UIKit.TERRA, "title", false)
+	var head := UIKit.label("Room setup  %d/100" % int(round(setup)) if setup >= 0.0 else "Room setup", 28, UIKit.TERRA, "title", false)
 	goals_column.add_child(head)
 	for line in lines:
-		var row := UIKit.label(str(line), 17, UIKit.DARK)
+		var row := UIKit.label(str(line), 27, UIKit.DARK, "small")
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	if lines.is_empty():
-		var row := UIKit.label("Stacks that stand, things that touch, and a tidy floor all count.", 17, UIKit.DARK)
+		var row := UIKit.label("Stacks that stand, things that touch, and a tidy floor all count.", 27, UIKit.DARK, "small")
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	goals_panel.visible = true
