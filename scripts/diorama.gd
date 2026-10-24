@@ -3132,7 +3132,7 @@ func _sync_shop_sign() -> void:
 		if collision:
 			collision.free()
 		shop_sign.name = "ShopSign"
-		shop_sign.position = _door_world() + Vector3(1.6, 0.0, -0.9)
+		shop_sign.position = _door_world() + Vector3(2.0, 0.0, -2.8)
 		add_child(shop_sign)
 	elif not want and shop_sign != null and is_instance_valid(shop_sign):
 		shop_sign.queue_free()
