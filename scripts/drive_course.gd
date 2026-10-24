@@ -132,7 +132,7 @@ func _ready() -> void:
 	_build_route_marks()
 	cam = Camera3D.new()
 	cam.name = "ChaseCamera"
-	cam.fov = 62.0
+	cam.fov = 68.0
 	cam.near = 0.2
 	cam.far = 260.0
 	add_child(cam)
@@ -412,8 +412,8 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 	var inward := _inward3(side)
 	var along := Vector3(-inward.z, 0, inward.x)
 	# An awning over the door and the name above it.
-	var awning := Props.mesh_box(Vector3(5.0, 0.3, 1.6), color)
-	awning.position = door + inward * 0.1 - Vector3(0, 0, 0) + Vector3(0, 2.6, 0) - inward * 0.6
+	var awning := Props.mesh_box(Vector3(3.0, 0.22, 1.0), color)
+	awning.position = door + Vector3(0, 2.6, 0) - inward * 0.4
 	awning.rotation.y = atan2(-along.z, along.x)
 	world.add_child(awning)
 	var frame := Props.mesh_box(Vector3(1.4, 2.2, 0.12), color.darkened(0.35))
@@ -422,9 +422,7 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 	world.add_child(frame)
 	var text := str(place.get("name", ""))
 	if text != "":
-		var label := _sign_text(text, door - inward * 0.9 + Vector3(0, 3.3, 0), Color("3E3A4F"))
-		label.rotation.y = atan2(-along.z, along.x) + (PI if side == "N" or side == "E" else 0.0)
-		label.rotation.y = atan2(inward.x, inward.z)
+		var label := _sign_text(text, door - inward * 0.6 + Vector3(0, 3.4, 0), Color("3E3A4F"))
 		label.font_size = 72
 
 
@@ -437,7 +435,8 @@ func _sign_text(text: String, at: Vector3, color: Color) -> Label3D:
 	label.modulate = color
 	label.outline_modulate = Color(1, 1, 1, 0.9)
 	label.outline_size = 10
-	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	# Signs always face the camera, so they never read backwards from the far side.
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
 	label.position = at
 	world.add_child(label)
@@ -471,8 +470,7 @@ func _build_bay(place: Dictionary, caption: String) -> void:
 	var frame := Props.mesh_box(Vector3(bay.size.x / PX + 0.2, 0.05, bay.size.y / PX + 0.2), UIKit.MUSTARD)
 	frame.position = rect_center(bay, 0.0) - Vector3(0, 0.03, 0)
 	root.add_child(frame)
-	var label := _sign_text(caption, rect_center(bay, 0.06), Color("3E3A4F"))
-	label.rotation.x = -PI * 0.5
+	var label := _sign_text(caption, rect_center(bay, 1.6), Color("3E3A4F"))
 	label.font_size = 96
 	label.reparent(root)
 	bay_nodes[caption] = root
@@ -780,9 +778,9 @@ func _update_camera(delta: float) -> void:
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
 	var forward := _forward()
 	var truck_at := to_world(pos)
-	var back := 10.0 + 3.0 * clampf(absf(speed) / max_speed, 0.0, 1.0)
-	var goal := truck_at - forward * back + Vector3(0, 5.2, 0)
-	var look := truck_at + forward * (4.0 + 6.0 * clampf(speed / max_speed, -0.3, 1.0)) + Vector3(0, 1.2, 0)
+	var back := 11.5 + 3.0 * clampf(absf(speed) / max_speed, 0.0, 1.0)
+	var goal := truck_at - forward * back + Vector3(0, 6.4, 0)
+	var look := truck_at + forward * (5.0 + 7.0 * clampf(speed / max_speed, -0.3, 1.0)) + Vector3(0, 1.0, 0)
 	var k := clampf(delta * 4.5, 0.0, 1.0)
 	cam.position = cam.position.lerp(goal, k)
 	cam_look = cam_look.lerp(look, clampf(delta * 6.0, 0.0, 1.0))
@@ -792,8 +790,8 @@ func _update_camera(delta: float) -> void:
 func _snap_camera() -> void:
 	var forward := _forward()
 	var truck_at := to_world(pos)
-	cam.position = truck_at - forward * 10.0 + Vector3(0, 5.2, 0)
-	cam_look = truck_at + forward * 4.0 + Vector3(0, 1.2, 0)
+	cam.position = truck_at - forward * 11.5 + Vector3(0, 6.4, 0)
+	cam_look = truck_at + forward * 5.0 + Vector3(0, 1.0, 0)
 	cam.look_at(cam_look, Vector3.UP)
 
 
@@ -809,11 +807,10 @@ func _update_marks() -> void:
 			route_index += 1
 			goal = route[route_index]
 		var dir := (goal - pos).normalized()
-		arrow.position = to_world(pos, 3.6 + sin(pulse * 3.0) * 0.15) + Vector3(dir.x, 0, dir.y) * 1.5
-		arrow.rotation = Vector3(PI * 0.5, 0, 0)
-		arrow.rotation.y = -dir.angle()
-		arrow.rotation = Basis(Vector3.UP, -dir.angle()).get_euler()
-		arrow.rotate_object_local(Vector3(0, 0, 1), -PI * 0.5)
+		arrow.position = to_world(pos, 3.8 + sin(pulse * 3.0) * 0.15) + Vector3(dir.x, 0, dir.y) * 1.5
+		# The cone's axis is +Y; look_at points -Z at the target, then +Y is swung onto -Z.
+		arrow.look_at(arrow.position + Vector3(dir.x, 0, dir.y), Vector3.UP)
+		arrow.rotate_object_local(Vector3.RIGHT, -PI * 0.5)
 	for dot in route_dots:
 		if is_instance_valid(dot):
 			dot.visible = state == "drive" and int(dot.get_meta("leg", 0)) >= route_index
