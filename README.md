@@ -17,7 +17,7 @@ godot --headless --path . --import --quit
 godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 ```
 
-`tests/run_smoke.sh` runs those two steps and checks for `SMOKE_OK`. `tests/run_playthrough.sh` then plays the whole slice the way a player would (menu, garage, computer, map, the three jobs through pack, truck, drive, unpack and results, the Bakery Loft move, and a save roundtrip after each step) and checks for `PLAYTHROUGH_OK`. It takes about seven minutes because the drives are real. CI runs both.
+`tests/run_smoke.sh` runs those two steps and checks for `SMOKE_OK` (it also checks that the job board is deterministic, playable, and saved, and that goals pay out). `tests/run_playthrough.sh` then plays the whole slice the way a player would (menu, garage, computer, map, the three jobs through pack, truck, drive, unpack and results, the Goals tab, one generated job from the board, the Bakery Loft move, and a save roundtrip after each step) and checks for `PLAYTHROUGH_OK`. It takes about seven minutes because the drives are real. CI runs both.
 
 `SMOKE_OK` means the pay formula, starter desk, save roundtrip, truck-door clips, and loop-import settings passed. With a display, `CO_SHOTS=/some/dir godot --path . res://tests/playthrough.tscn` also saves a screenshot after each step.
 
@@ -40,12 +40,14 @@ godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 1. New game starts as Dana Reyes, a laid-off office worker in the Garage Startup with $120. Read the intro, then unpack the garage. There is no character select.
 2. Place the twelve starter pieces (the mug and sticky notes sit on the desk).
 3. Open the computer. Trade office goods, or open TropicalForest to order decor. Prices move when you press Next day.
-4. The clipboard offers the cafe job after the garage is unpacked.
+4. The clipboard offers the cafe job after the garage is unpacked. Beside Marge's three story jobs, **Today's board** lists two to four generated moves (`scripts/job_gen.gd`): a client with their own line, a venue, eight to twenty-two pieces drawn from the catalogue, a twist (cat, sets, mystery bag, ducks, fragile, or plain), and a drive between two real places in town with its own weather and hazards. The board is seeded from the save and the day, so it survives a reload and changes every morning (press Next day on the computer). The map lists the same board. The clipboard's **Goals** tab holds the contracts in `data/contracts.json`: finish jobs, serve customers by hand, buy decor, take the alley. Each one pays cash and Rep when it ticks over, and Marge mails about it.
 5. Pack, pad fragile items, load the truck (heavy boxes on the mustard floor slots), then drive. The truck takes eight boxes, so that is the box limit; tap a loaded pad with nothing selected to take that box back off.
 6. The drive is a 3D town seen from a chase camera behind the truck (`data/city.json` lays it out; `drive_course.gd` builds it from meshes): blocks of buildings with window bands and awnings, two-lane roads with traffic, a park with the pond, and an alley you can cut through. The truck starts parked in the client's loading bay. Load up (the boxes hop in off the curb), follow the floating arrow, the dots on the road and the minimap to the bay at the other end, park inside it, and unload. Walls, cars, cones, puddles, bumps, gravel and a hard brake in the rain all cost box condition; traffic brakes for you and leans on the horn. The simulation itself is 2D (drive pixels, 32 to the metre), so the condition rules and tests are unchanged.
 7. The truck's back door swings open and shut in Godot (`open` / `close`, about +105° on Y). The model itself has no animation.
 8. Unpack: carry each box in from the truck, click it to tip it out, then place what was inside. Repair a scuff or keep it, and read the pay lines. Base pay is always paid in full. Damage only comes out of the tip.
-9. Repeat jobs, trade, and let the shop earn until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings.
+9. Repeat jobs, trade, and let the shop earn until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings. The board keeps generating after that, so there is always a job to take.
+
+The garage itself is dressed by `scripts/garage_dressing.gd`: a workbench with paint tins, a toolbox and the radio (you can set things on it), a pegboard of tools, a cork board, rafters with string lights and a pendant over the bench, a bike, archive boxes, a broom, a bin, a door mat, planters on the drive, and warm light through the window. All of it is scenery; only the bench blocks.
 
 ## TropicalForest and the shop
 

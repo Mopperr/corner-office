@@ -198,6 +198,7 @@ func _show_info(id: String) -> void:
 		var hint := UIKit.label("Dana's corner of town. Roads lead from the office to every client.", 18, UIKit.DARK)
 		hint.custom_minimum_size = Vector2(info_w - 20.0, 0)
 		info.add_child(hint)
+		_board_rows()
 		return
 	var name_row := UIKit.label(str(place.get("name", "")), 28, UIKit.TERRA, "title", false)
 	info.add_child(name_row)
@@ -254,6 +255,39 @@ func _show_info(id: String) -> void:
 			_close()
 		)
 		info.add_child(buy)
+
+
+func _board_rows() -> void:
+	# Today's generated moves, so the map is a way to pick a job too.
+	if GameState.mode != "office" or GameState.office_phase != "live":
+		return
+	var shown := 0
+	for job in GameState.generated_jobs:
+		var decorated := JobDB.get_job(str(job.get("id", "")))
+		if decorated.is_empty() or not GameState.job_available(decorated):
+			continue
+		if shown == 0:
+			info.add_child(UIKit.label("Today's board", 24, UIKit.TERRA, "title", false))
+		shown += 1
+		if shown > 3:
+			break
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		var text := UIKit.label("%s  $%d" % [decorated.get("title", ""), JobDB.base_pay(decorated)], 24, UIKit.DARK, "small", false)
+		text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text.custom_minimum_size = Vector2(info_w - 180.0, 0)
+		text.clip_text = true
+		row.add_child(text)
+		var go := UIKit.button("Take", UIKit.TERRA)
+		go.custom_minimum_size = Vector2(120, 48)
+		var id := str(decorated.get("id", ""))
+		go.pressed.connect(func():
+			emit_signal("job_requested", id)
+			_close()
+		)
+		row.add_child(go)
+		info.add_child(row)
 
 
 func _place(id: String) -> Dictionary:

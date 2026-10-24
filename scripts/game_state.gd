@@ -49,6 +49,12 @@ var shop_visitors_today := 0
 var shop_ledger: Array = []
 var shop_closed := false
 var shop_hand_served := 0
+var seed := 0
+var generated_jobs: Array = []
+var generated_drives: Dictionary = {}
+var stats: Dictionary = {}
+var contracts_done: Dictionary = {}
+const JobGen = preload("res://scripts/job_gen.gd")
 var freebie_day := -1
 var forest_serial := 0
 var latched_goals: Dictionary = {}
@@ -99,6 +105,10 @@ func new_game(who: String) -> void:
 	shop_ledger = []
 	shop_closed = false
 	shop_hand_served = 0
+	seed = int(rng.randi())
+	stats = {}
+	contracts_done = {}
+	refresh_board()
 	freebie_day = -1
 	forest_serial = 0
 	latched_goals = {}
@@ -422,11 +432,78 @@ func unread_count() -> int:
 
 func job_available(job: Dictionary) -> bool:
 	var rule := str(job.get("unlock", ""))
+	if bool(job.get("generated", false)) and jobs_cleared.has(str(job.get("id", ""))):
+		return false
 	if rule == "tutorial_done":
 		return tutorial_done
 	if rule.begins_with("job:"):
 		return jobs_cleared.has(rule.trim_prefix("job:"))
+	if rule.begins_with("rep:"):
+		return rep_rank() >= int(rule.trim_prefix("rep:"))
 	return false
+
+
+func refresh_board() -> void:
+	# A fresh board every day: three generated moves beside the story jobs.
+	var count := 2 + mini(jobs_done / 2, 2)
+	var made: Dictionary = JobGen.board(seed, day, rep_rank(), jobs_done, count)
+	generated_jobs = made.get("jobs", [])
+	# Keep the drives of jobs still in progress or on the old board for a day.
+	var keep: Dictionary = {}
+	for key in generated_drives.keys():
+		if str(key) == str(job.get("def", {}).get("drive", "")):
+			keep[key] = generated_drives[key]
+	for key in made.get("drives", {}).keys():
+		keep[key] = made["drives"][key]
+	generated_drives = keep
+
+
+func bump_stat(key: String, amount := 1) -> void:
+	stats[key] = int(stats.get(key, 0)) + amount
+	check_contracts()
+
+
+func contracts() -> Array:
+	var file := FileAccess.open("res://data/contracts.json", FileAccess.READ)
+	if file == null:
+		return []
+	var parsed = JSON.parse_string(file.get_as_text())
+	return parsed if typeof(parsed) == TYPE_ARRAY else []
+
+
+func contract_progress(contract: Dictionary) -> int:
+	var key := str(contract.get("stat", ""))
+	if key == "jobs_done":
+		return jobs_done
+	if key == "hand_served":
+		return shop_hand_served
+	return int(stats.get(key, 0))
+
+
+func check_contracts() -> void:
+	for contract in contracts():
+		var id := str(contract.get("id", ""))
+		if contracts_done.has(id):
+			continue
+		if contract_progress(contract) < int(contract.get("need", 1)):
+			continue
+		contracts_done[id] = day
+		var money_reward := int(contract.get("money", 0))
+		var rep_reward := int(contract.get("rep", 0))
+		if money_reward > 0:
+			add_money(money_reward, false)
+		if rep_reward > 0:
+			rep_stars += rep_reward
+			emit_signal("rep_changed", rep_rank(), rep_stars)
+		emit_signal("toast_requested", "Goal done: %s. +$%d%s" % [contract.get("title", id), money_reward, (", +%d Rep star" % rep_reward) if rep_reward > 0 else ""])
+		inbox.append({
+			"id": "contract_" + id,
+			"from": "Marge Holloway",
+			"subject": "That's one for the wall: %s" % contract.get("title", id),
+			"body": "%s\n\nYou did it. $%d in the jar%s. I'm pinning the next one up.\n\n— Marge" % [contract.get("blurb", ""), money_reward, (" and a Rep star" if rep_reward > 0 else "")],
+			"read": false,
+		})
+		emit_signal("emails_changed")
 
 
 func start_job(id: String) -> void:
@@ -797,6 +874,15 @@ func finish_job() -> Dictionary:
 	rep_stars += stars
 	jobs_done += 1
 	jobs_cleared[str(job.get("id", ""))] = true
+	if int(job.get("condition", 0)) >= 90:
+		stats["smooth_rides"] = int(stats.get("smooth_rides", 0)) + 1
+	if bool(job.get("cat_opened", false)):
+		stats["cats_found"] = int(stats.get("cats_found", 0)) + 1
+	if bool(job.get("alley", false)):
+		stats["alley_runs"] = int(stats.get("alley_runs", 0)) + 1
+	if bool(def.get("generated", false)):
+		stats["board_jobs"] = int(stats.get("board_jobs", 0)) + 1
+	check_contracts()
 	emit_signal("rep_changed", rep_rank(), rep_stars)
 	emit_signal("job_completed", job.get("id", ""), payout)
 	fire_trigger(str(job.get("id", "")) + "_complete")
@@ -878,6 +964,7 @@ func advance_day() -> void:
 		_shop_summary(closed_day, earned, visitors, vibe)
 	shop_today = 0
 	shop_visitors_today = 0
+	refresh_board()
 
 
 func price_of(id: String) -> int:
@@ -910,6 +997,7 @@ func sell_good(id: String) -> Dictionary:
 	_credit_net(profit)
 	if profit > 0:
 		fire_trigger("first_profitable_sale")
+	bump_stat("goods_sold")
 	return {"gain": gain, "profit": profit}
 
 
@@ -960,6 +1048,7 @@ func buy_decor(id: String) -> String:
 	add_money(-cost, false)
 	decor_serial += 1
 	decor_queue.append({"uid": "decor_%s_%d" % [id, decor_serial], "item": id})
+	bump_stat("decor_bought")
 	return ""
 
 
@@ -1310,6 +1399,7 @@ func serve_visitor(by_hand := false, order: Dictionary = {}) -> Dictionary:
 	shop_visitors_today += 1
 	if by_hand:
 		shop_hand_served += 1
+		check_contracts()
 	_visitor_request(who)
 	var sale := {
 		"name": str(who.get("name", "A neighbor")),
@@ -1410,6 +1500,11 @@ func to_dict() -> Dictionary:
 		"shop_ledger": shop_ledger.duplicate(true),
 		"shop_closed": shop_closed,
 		"shop_hand_served": shop_hand_served,
+		"seed": seed,
+		"generated_jobs": generated_jobs.duplicate(true),
+		"generated_drives": generated_drives.duplicate(true),
+		"stats": stats.duplicate(true),
+		"contracts_done": contracts_done.duplicate(true),
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
 		"latched_goals": latched_goals.duplicate(true),
@@ -1461,6 +1556,13 @@ func from_dict(raw: Dictionary) -> void:
 	shop_ledger = raw.get("shop_ledger", []).duplicate(true) if raw.has("shop_ledger") else []
 	shop_closed = bool(raw.get("shop_closed", false))
 	shop_hand_served = int(raw.get("shop_hand_served", 0))
+	seed = int(raw.get("seed", 0))
+	generated_jobs = raw.get("generated_jobs", []).duplicate(true) if raw.has("generated_jobs") else []
+	generated_drives = raw.get("generated_drives", {}).duplicate(true) if raw.has("generated_drives") else {}
+	stats = raw.get("stats", {}).duplicate(true) if raw.has("stats") else {}
+	contracts_done = raw.get("contracts_done", {}).duplicate(true) if raw.has("contracts_done") else {}
+	if generated_jobs.is_empty():
+		refresh_board()
 	freebie_day = int(raw.get("freebie_day", -1))
 	forest_serial = int(raw.get("forest_serial", 0))
 	latched_goals = raw.get("latched_goals", {})

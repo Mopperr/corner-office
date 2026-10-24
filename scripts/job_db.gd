@@ -28,11 +28,13 @@ func _read(path: String):
 
 
 func all_jobs() -> Array:
-	return jobs
+	var out: Array = jobs.duplicate()
+	out.append_array(GameState.generated_jobs)
+	return out
 
 
 func get_job(id: String) -> Dictionary:
-	for job in jobs:
+	for job in all_jobs():
 		if str(job.get("id", "")) == id:
 			return _decorate(job)
 	return {}
@@ -63,6 +65,8 @@ func base_pay(job: Dictionary) -> int:
 
 
 func get_drive(id: String) -> Dictionary:
+	if GameState.generated_drives.has(id):
+		return (GameState.generated_drives[id] as Dictionary).duplicate(true)
 	var course: Dictionary = drives.get(id, {})
 	return course.duplicate(true)
 

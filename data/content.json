@@ -728,10 +728,10 @@
     {
       "uid": "shelf_b",
       "item": "shelf",
-      "x": 0.12,
+      "x": 1.5,
       "y": 0.0,
-      "z": 6.4,
-      "rot": 90,
+      "z": 0.12,
+      "rot": 0,
       "wall": "wall_floor"
     }
   ],

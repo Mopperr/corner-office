@@ -337,6 +337,7 @@ func _ready() -> void:
 	failures.append_array(await _review_fixes())
 	failures.append_array(_engine_choices())
 	failures.append_array(_readability_goals())
+	failures.append_array(_content_engine())
 	failures.append_array(await _stack_world())
 	failures.append_array(await _menu_audit())
 	AudioDirector.release_audio()
@@ -351,6 +352,102 @@ func _ready() -> void:
 		for failure in failures:
 			print(" - ", failure)
 		get_tree().quit(1)
+
+
+func _content_engine() -> Array:
+	# The daily board: same seed and day give the same jobs, every job is
+	# playable (known items, a drive between real places), and goals pay out.
+	var found: Array = []
+	var gen = load("res://scripts/job_gen.gd")
+	var a: Dictionary = gen.board(1234, 3, 1, 2, 3)
+	var b: Dictionary = gen.board(1234, 3, 1, 2, 3)
+	if JSON.stringify(a) != JSON.stringify(b):
+		found.append("board not deterministic")
+	var c: Dictionary = gen.board(1234, 4, 1, 2, 3)
+	if JSON.stringify(a) == JSON.stringify(c):
+		found.append("board same on a new day")
+	var city = load("res://scripts/city.gd").load_default()
+	var jobs: Array = a.get("jobs", [])
+	if jobs.size() != 3:
+		found.append("board size %d" % jobs.size())
+	for job in jobs:
+		var pieces := 0
+		for group in job.get("recipe", []):
+			var item_id := str(group.get("item", ""))
+			if ItemDB.get_item(item_id).is_empty():
+				found.append("board item %s" % item_id)
+			pieces += int(group.get("count", 0))
+		if pieces < 8:
+			found.append("board job %s has %d pieces" % [job.get("id", ""), pieces])
+		if not ItemDB.venues().has(str(job.get("venue", ""))):
+			found.append("board venue %s" % job.get("venue", ""))
+		var drive: Dictionary = a.get("drives", {}).get(str(job.get("drive", "")), {})
+		if drive.is_empty():
+			found.append("board drive missing for %s" % job.get("id", ""))
+			continue
+		var from: Dictionary = city.place(str(drive.get("pickup", "")))
+		var to: Dictionary = city.place(str(drive.get("dropoff", "")))
+		if from.is_empty() or to.is_empty():
+			found.append("board drive places %s -> %s" % [drive.get("pickup", ""), drive.get("dropoff", "")])
+		elif city.route((from.get("bay", Rect2()) as Rect2).get_center(), (to.get("bay", Rect2()) as Rect2).get_center()).size() < 2:
+			found.append("board drive has no route %s" % drive.get("id", ""))
+		if str(job.get("twist", "")) == "cat" and not bool(job.get("cat", false)):
+			found.append("cat twist without cat flag")
+	# Jobs land in JobDB beside the story jobs and leave the story jobs alone.
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	if GameState.generated_jobs.is_empty():
+		found.append("new game has no board")
+	var first: Dictionary = GameState.generated_jobs[0] if not GameState.generated_jobs.is_empty() else {}
+	var listed := JobDB.get_job(str(first.get("id", "")))
+	if listed.is_empty() or not GameState.job_available(listed):
+		found.append("board job not offered")
+	if JobDB.get_drive(str(first.get("drive", ""))).is_empty():
+		found.append("board drive not served by JobDB")
+	if JobDB.base_pay(listed) < 100:
+		found.append("board pay %d" % JobDB.base_pay(listed))
+	if JobDB.get_job("job_catcafe").is_empty():
+		found.append("story job lost")
+	var before_board := JSON.stringify(GameState.generated_jobs)
+	GameState.start_job(str(first.get("id", "")))
+	if GameState.mode != "job_pack" or GameState.job.get("items", []).is_empty():
+		found.append("board job did not start (%s)" % GameState.mode)
+	GameState.jobs_cleared[str(first.get("id", ""))] = true
+	if GameState.job_available(listed):
+		found.append("finished board job still offered")
+	GameState.advance_day()
+	if JSON.stringify(GameState.generated_jobs) == before_board:
+		found.append("board did not refresh on a new day")
+	if not GameState.generated_drives.has(str(first.get("drive", ""))):
+		found.append("drive of the job in progress dropped on refresh")
+	# Goals: progress, reward, mail, and a save round trip.
+	GameState.new_game("dana")
+	var money_before := GameState.money
+	var inbox_before := GameState.inbox.size()
+	GameState.stats["cats_found"] = 2
+	GameState.check_contracts()
+	if not GameState.contracts_done.has("cat_two"):
+		found.append("contract not awarded")
+	if GameState.money - money_before != 30:
+		found.append("contract money %d" % (GameState.money - money_before))
+	if GameState.inbox.size() != inbox_before + 1:
+		found.append("contract mail")
+	if GameState.contracts_done.has("first_job"):
+		found.append("contract awarded early")
+	GameState.bump_stat("alley_runs", 3)
+	if not GameState.contracts_done.has("alley_three"):
+		found.append("bump_stat does not award")
+	SaveManager.save_game()
+	GameState.contracts_done = {}
+	GameState.stats = {}
+	GameState.generated_jobs = []
+	if not SaveManager.load_game():
+		found.append("contract save load")
+	if not GameState.contracts_done.has("alley_three") or int(GameState.stats.get("alley_runs", 0)) != 3:
+		found.append("contracts not saved")
+	if GameState.generated_jobs.is_empty():
+		found.append("board not saved")
+	return found
 
 
 func _readability_goals() -> Array:

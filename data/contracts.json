@@ -1,0 +1,12 @@
+[
+  { "id": "first_job", "title": "First job done", "blurb": "Finish any job.", "stat": "jobs_done", "need": 1, "money": 40, "rep": 1 },
+  { "id": "smooth_two", "title": "Smooth operator", "blurb": "Arrive with box condition 90 or better, twice.", "stat": "smooth_rides", "need": 2, "money": 60, "rep": 1 },
+  { "id": "hand_ten", "title": "Regulars", "blurb": "Serve ten customers by hand.", "stat": "hand_served", "need": 10, "money": 50, "rep": 1 },
+  { "id": "board_three", "title": "Word of mouth", "blurb": "Finish three jobs from the daily board.", "stat": "board_jobs", "need": 3, "money": 90, "rep": 1 },
+  { "id": "cat_two", "title": "Cat person", "blurb": "Find Biscuit in a box twice.", "stat": "cats_found", "need": 2, "money": 30, "rep": 1 },
+  { "id": "alley_three", "title": "Shortcut local", "blurb": "Take the alley three times.", "stat": "alley_runs", "need": 3, "money": 45, "rep": 0 },
+  { "id": "decor_five", "title": "Make it yours", "blurb": "Buy five pieces of decor.", "stat": "decor_bought", "need": 5, "money": 40, "rep": 1 },
+  { "id": "trader", "title": "Spreadsheet brain", "blurb": "Sell twenty trade goods.", "stat": "goods_sold", "need": 20, "money": 80, "rep": 1 },
+  { "id": "jobs_ten", "title": "Corner Movers", "blurb": "Finish ten jobs.", "stat": "jobs_done", "need": 10, "money": 200, "rep": 2 },
+  { "id": "hand_fifty", "title": "Neighbourhood fixture", "blurb": "Serve fifty customers by hand.", "stat": "hand_served", "need": 50, "money": 150, "rep": 2 }
+]

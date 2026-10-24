@@ -119,7 +119,30 @@ func _run() -> void:
 			return
 	print("money after 3 jobs: $%d, earned $%d, rep %d" % [GameState.money, GameState.total_earned, GameState.rep_rank()])
 
+	await _check_goals()
+	if limit > 0 and not GameState.generated_jobs.is_empty():
+		await _do_job(str(GameState.generated_jobs[0].get("id", "")))
+		if not fails.is_empty():
+			return
+		_check(int(GameState.stats.get("board_jobs", 0)) >= 1, "board job counted (%s)" % GameState.stats)
+
 	await _buy_loft()
+
+
+func _check_goals() -> void:
+	_check(press("Jobs"), "HUD: Jobs button for goals")
+	await wait(0.3)
+	var room := _room()
+	_check(press("Goals", room), "clipboard Goals tab")
+	await wait(0.3)
+	await shot("goals")
+	var bars := 0
+	if room != null:
+		for node in room.find_children("*", "ProgressBar", true, false):
+			bars += 1
+	_check(bars >= 5, "goals list shows progress (%d)" % bars)
+	_check(press("Close", room), "clipboard closes")
+	await wait(0.3)
 
 
 # ---------------------------------------------------------------- garage

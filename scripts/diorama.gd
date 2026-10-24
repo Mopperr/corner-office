@@ -14,6 +14,7 @@ const Controls = preload("res://scripts/control_map.gd")
 const StackGoals = preload("res://scripts/stack_goals.gd")
 const ShopLayout = preload("res://scripts/shop_layout.gd")
 const Outdoors = preload("res://scripts/outdoors.gd")
+const GarageDressing = preload("res://scripts/garage_dressing.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -550,9 +551,10 @@ func _dress() -> void:
 	if id == "garage":
 		_place_model("driveway_apron_2m", Vector3(2.5, 0, -1.02))
 		_place_model("driveway_apron_2m", Vector3(4.5, 0, -1.02))
-		_place_model("pegboard", Vector3(0.12, 1.15, 7.0), 90)
-		_place_model("bike_hooks", Vector3(0.12, 1.55, 1.5), 90)
-		_place_model("job_clipboard", Vector3(5.15, 0.85, 6.35))
+		_place_model("job_clipboard", Vector3(0.55, 0.94, 5.7), 80)
+		GarageDressing.build(self, venue)
+		if not backdrop:
+			_place_model("rug", Vector3(3.0, 0.0, 4.1))
 	if bool(venue.get("stain", false)):
 		for spot in [Vector3(2.4, 0.0, 1.3), Vector3(4.2, 0.0, 1.8)]:
 			_place_model("floor_oil_stain_1m", spot)
@@ -2343,61 +2345,202 @@ func _truck_list(layer: CanvasLayer) -> void:
 		y += 52
 
 
-func _open_jobs() -> void:
+func _open_jobs(tab := "jobs") -> void:
 	var layer := _hud_layer()
+	var old := layer.get_node_or_null("ActJobs")
+	if old != null:
+		old.queue_free()
 	var panel := Panel.new()
 	panel.name = "ActJobs"
 	panel.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 18))
 	layer.add_child(panel)
-	UIKit.pin_center(panel, Vector2(960, 640))
+	var card_size := Vector2(1100, 720)
+	UIKit.pin_center(panel, card_size)
 	var title := UIKit.label("Clipboard", 40, UIKit.DARK, "title", false)
 	title.position = Vector2(24, 16)
 	panel.add_child(title)
+	var day_tag := UIKit.label("Day %d  ·  Rep %d  ·  %d jobs done" % [GameState.day, GameState.rep_rank(), GameState.jobs_done], 24, UIKit.WOOD, "small", false)
+	day_tag.position = Vector2(300, 30)
+	panel.add_child(day_tag)
 	var close := UIKit.button("Close", UIKit.DARK)
-	close.position = Vector2(760, 16)
+	close.position = Vector2(card_size.x - 184, 16)
 	close.size = Vector2(160, 56)
 	close.custom_minimum_size = Vector2(160, 56)
 	close.pressed.connect(panel.queue_free)
 	panel.add_child(close)
-	var y := 70.0
+	var jobs_tab := UIKit.button("Jobs", UIKit.TERRA if tab == "jobs" else UIKit.WOOD)
+	jobs_tab.position = Vector2(24, 80)
+	jobs_tab.size = Vector2(170, 52)
+	jobs_tab.custom_minimum_size = Vector2(170, 52)
+	jobs_tab.pressed.connect(_open_jobs.bind("jobs"))
+	panel.add_child(jobs_tab)
+	var goals_tab := UIKit.button("Goals", UIKit.TERRA if tab == "goals" else UIKit.WOOD)
+	goals_tab.position = Vector2(204, 80)
+	goals_tab.size = Vector2(170, 52)
+	goals_tab.custom_minimum_size = Vector2(170, 52)
+	goals_tab.pressed.connect(_open_jobs.bind("goals"))
+	panel.add_child(goals_tab)
+	var scroll := ScrollContainer.new()
+	scroll.name = "Rows"
+	scroll.position = Vector2(24, 144)
+	scroll.size = Vector2(card_size.x - 48, card_size.y - 168)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel.add_child(scroll)
+	var rows := VBoxContainer.new()
+	rows.add_theme_constant_override("separation", 14)
+	rows.custom_minimum_size = Vector2(card_size.x - 72, 0)
+	scroll.add_child(rows)
+	if tab == "goals":
+		_fill_goals(rows, card_size.x - 72)
+	else:
+		_fill_jobs(rows, card_size.x - 72)
+	var focus_buttons: Array = [close, jobs_tab, goals_tab]
+	for child in rows.get_children():
+		for kid in child.get_children():
+			if kid is Button:
+				focus_buttons.append(kid)
+	UIKit.link_focus(focus_buttons)
+
+
+func _fill_jobs(rows: VBoxContainer, width: float) -> void:
 	var any := false
+	var story: Array = []
+	var board: Array = []
 	for job in JobDB.all_jobs():
 		var decorated := JobDB.get_job(str(job.get("id", "")))
 		if not GameState.job_available(decorated):
 			continue
 		any = true
-		var pay := JobDB.base_pay(decorated)
-		var card := UIKit.label("%s  ·  %s\nBase $%d. %s\nMarge: %s" % [
-			decorated.get("title", ""),
-			decorated.get("client", ""),
-			pay,
-			decorated.get("brief", ""),
-			decorated.get("mentor_note", ""),
-		], 18, UIKit.DARK)
-		card.position = Vector2(20, y)
-		card.size = Vector2(520, 110)
-		panel.add_child(card)
-		var id := str(decorated.get("id", ""))
-		var go := UIKit.button("Take job", UIKit.TERRA)
-		go.position = Vector2(720, y + 16)
-		go.size = Vector2(200, 56)
-		go.custom_minimum_size = Vector2(200, 56)
-		go.pressed.connect(_start_listed_job.bind(id))
-		panel.add_child(go)
-		y += 140
-		if y > 540:
-			break
+		if bool(decorated.get("generated", false)):
+			board.append(decorated)
+		else:
+			story.append(decorated)
 	if not any:
 		var empty := UIKit.label("Marge hasn't pinned a job yet. Finish unpacking the garage first.", 36, UIKit.DARK)
-		empty.position = Vector2(24, 96)
-		empty.size = Vector2(880, 96)
-		empty.custom_minimum_size = Vector2(700, 48)
-		panel.add_child(empty)
-	var focus_buttons: Array = []
-	for child in panel.get_children():
-		if child is Button:
-			focus_buttons.append(child)
-	UIKit.link_focus(focus_buttons)
+		empty.custom_minimum_size = Vector2(width - 20.0, 0)
+		rows.add_child(empty)
+		return
+	if not story.is_empty():
+		rows.add_child(UIKit.label("Marge's jobs", 28, UIKit.TERRA, "title", false))
+		for decorated in story:
+			rows.add_child(_job_card(decorated, width, false))
+	if not board.is_empty():
+		rows.add_child(UIKit.label("Today's board  ·  new every morning", 28, UIKit.TERRA, "title", false))
+		for decorated in board:
+			rows.add_child(_job_card(decorated, width, true))
+
+
+func _job_card(decorated: Dictionary, width: float, from_board: bool) -> PanelContainer:
+	var card := PanelContainer.new()
+	var box := UIKit.style(Color("F6EEDC"), 14)
+	box.shadow_size = 0
+	box.content_margin_left = 18
+	box.content_margin_right = 18
+	box.content_margin_top = 12
+	box.content_margin_bottom = 12
+	card.add_theme_stylebox_override("panel", box)
+	card.custom_minimum_size = Vector2(width, 0)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+	card.add_child(row)
+	var text := VBoxContainer.new()
+	text.add_theme_constant_override("separation", 4)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(text)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	text.add_child(head)
+	var name_label := UIKit.label(str(decorated.get("title", "")), 28, UIKit.DARK, "title", false)
+	head.add_child(name_label)
+	var pay := JobDB.base_pay(decorated)
+	var pay_label := UIKit.label("$%d base" % pay, 24, UIKit.SAGE, "small", false)
+	pay_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(pay_label)
+	var twist := str(decorated.get("twist", ""))
+	if from_board and twist != "" and twist != "plain":
+		var tag := UIKit.label(twist.capitalize(), 24, UIKit.TERRA, "small", false)
+		tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		head.add_child(tag)
+	var client := UIKit.label(str(decorated.get("client", "")), 24, UIKit.WOOD, "small", false)
+	text.add_child(client)
+	var brief := UIKit.label(str(decorated.get("brief", "")), 24, UIKit.DARK, "small")
+	brief.custom_minimum_size = Vector2(width - 300.0, 0)
+	text.add_child(brief)
+	var note := UIKit.label("Marge: %s" % decorated.get("mentor_note", ""), 24, UIKit.BLUE, "small")
+	note.custom_minimum_size = Vector2(width - 300.0, 0)
+	text.add_child(note)
+	var go := UIKit.button("Take job", UIKit.TERRA)
+	go.size = Vector2(200, 56)
+	go.custom_minimum_size = Vector2(200, 56)
+	go.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	go.pressed.connect(_start_listed_job.bind(str(decorated.get("id", ""))))
+	row.add_child(go)
+	return card
+
+
+func _fill_goals(rows: VBoxContainer, width: float) -> void:
+	var open_rows: Array = []
+	var done_rows: Array = []
+	for contract in GameState.contracts():
+		if GameState.contracts_done.has(str(contract.get("id", ""))):
+			done_rows.append(contract)
+		else:
+			open_rows.append(contract)
+	var intro := UIKit.label("Marge pins a goal, you tick it off, the jar fills. Rewards land in the mail.", 24, UIKit.DARK, "small")
+	intro.custom_minimum_size = Vector2(width - 20.0, 0)
+	rows.add_child(intro)
+	for contract in open_rows:
+		rows.add_child(_goal_card(contract, width, false))
+	if not done_rows.is_empty():
+		rows.add_child(UIKit.label("On the wall", 28, UIKit.TERRA, "title", false))
+		for contract in done_rows:
+			rows.add_child(_goal_card(contract, width, true))
+
+
+func _goal_card(contract: Dictionary, width: float, done: bool) -> PanelContainer:
+	var card := PanelContainer.new()
+	var box := UIKit.style(Color("E4EBD6") if done else Color("F6EEDC"), 14)
+	box.shadow_size = 0
+	box.content_margin_left = 18
+	box.content_margin_right = 18
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	card.add_theme_stylebox_override("panel", box)
+	card.custom_minimum_size = Vector2(width, 0)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+	card.add_child(row)
+	var text := VBoxContainer.new()
+	text.add_theme_constant_override("separation", 4)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(text)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	text.add_child(head)
+	head.add_child(UIKit.label(("✓ " if done else "") + str(contract.get("title", "")), 28, UIKit.DARK, "title", false))
+	var reward := "$%d" % int(contract.get("money", 0))
+	if int(contract.get("rep", 0)) > 0:
+		reward += "  +%d Rep" % int(contract.get("rep", 0))
+	var reward_label := UIKit.label(reward, 24, UIKit.SAGE, "small", false)
+	reward_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(reward_label)
+	var have := mini(GameState.contract_progress(contract), int(contract.get("need", 1)))
+	var blurb := UIKit.label("%s  ·  %d / %d" % [contract.get("blurb", ""), have, int(contract.get("need", 1))], 24, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(width - 260.0, 0)
+	text.add_child(blurb)
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size = Vector2(width - 60.0, 14)
+	bar.show_percentage = false
+	bar.max_value = float(maxi(1, int(contract.get("need", 1))))
+	bar.value = float(have)
+	var back := UIKit.style(Color("D8C9A8"), 7)
+	back.shadow_size = 0
+	var front := UIKit.style(UIKit.SAGE, 7)
+	front.shadow_size = 0
+	bar.add_theme_stylebox_override("background", back)
+	bar.add_theme_stylebox_override("fill", front)
+	text.add_child(bar)
+	return card
 
 
 func _act_button(layer: CanvasLayer, text: String, at: Vector2, callback: Callable) -> void:
