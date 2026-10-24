@@ -24,14 +24,28 @@ func has_save() -> bool:
 
 
 func save_game() -> bool:
-	GameState.restore_held_items()
+	# The file never holds an item in hand or mid-drop: those are written as
+	# placed. The live game keeps holding it, so an autosave mid-pickup cannot
+	# snatch the item back.
+	var data := GameState.to_dict()
+	_settle_states(data.get("office_items", []))
+	_settle_states(data.get("job", {}).get("items", []))
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("Could not write save")
 		return false
-	file.store_string(JSON.stringify(GameState.to_dict(), "\t"))
+	file.store_string(JSON.stringify(data, "\t"))
 	save_settings()
 	return true
+
+
+func _settle_states(items: Array) -> void:
+	for rec in items:
+		if typeof(rec) != TYPE_DICTIONARY:
+			continue
+		var state := str(rec.get("state", ""))
+		if state == "hand" or state == "settling":
+			rec["state"] = "placed"
 
 
 func load_game() -> bool:

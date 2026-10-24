@@ -18,3 +18,5 @@ jobs:
           echo "GODOT=/tmp/godot-bin/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Import class cache, then smoke
         run: bash tests/run_smoke.sh
+      - name: Play the slice end to end
+        run: bash tests/run_playthrough.sh

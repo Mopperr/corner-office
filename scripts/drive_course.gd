@@ -81,7 +81,7 @@ func _ready() -> void:
 	add_child(truck)
 	_dress_road()
 	_hud()
-	UIKit.show_level_beat(self, GameState.present_current_slice_level())
+	UIKit.show_level_beat(self, GameState.present_current_slice_level(), true)
 	var weather := str(course.get("weather", "clear"))
 	AudioDirector.play_bed(str(course.get("music", "music_driving")), str(course.get("ambience", "")))
 	if weather == "rain":

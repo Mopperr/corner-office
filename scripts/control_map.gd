@@ -97,7 +97,10 @@ static func axis(neg_id: String, pos_id: String) -> float:
 
 
 static func event_pressed(event: InputEvent, id: String) -> bool:
-	if event == null or not event.pressed or event.is_echo():
+	# Only keys and pad buttons carry `pressed`; mouse motion would throw here.
+	if not (event is InputEventKey or event is InputEventJoypadButton):
+		return false
+	if not event.pressed or event.is_echo():
 		return false
 	var row := binding(id)
 	if event is InputEventKey and (event as InputEventKey).keycode == int(row.get("key", 0)):

@@ -302,42 +302,58 @@ static func link_grid(rows: Array) -> void:
 		first.grab_focus()
 
 
-static func show_level_beat(host: Node, beat: Dictionary) -> void:
+static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> void:
 	if host == null or beat.is_empty():
 		return
 	var layer := CanvasLayer.new()
 	layer.layer = 16
 	host.add_child(layer)
-	var panel := Panel.new()
+	var panel := PanelContainer.new()
 	panel.name = "LevelBeat"
-	panel.custom_minimum_size = Vector2(1100, 250)
-	panel.size = Vector2(1100, 250)
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_theme_stylebox_override("panel", style(CREAM_CARD, 16))
 	layer.add_child(panel)
 	panel.layout_mode = 1
-	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM, Control.PRESET_MODE_KEEP_SIZE)
-	# Hint bar occupies the bottom of the screen. Keep the beat and its shadow above that.
+	# Sits just above the hint bar. The container grows with the text, so paragraphs never overlap.
+	# Anchors first: setting a preset afterwards would rewrite the offsets.
+	if at_top:
+		# The drive keeps the truck in the middle of the screen, so the card goes up top.
+		panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
+		panel.grow_vertical = Control.GROW_DIRECTION_END
+	else:
+		panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+		panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	panel.offset_left = -550
 	panel.offset_right = 550
-	panel.offset_top = -446
-	panel.offset_bottom = -196
+	if at_top:
+		panel.offset_top = 130
+		panel.offset_bottom = 130
+	else:
+		panel.offset_bottom = -196
+		panel.offset_top = -196
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side in ["left", "right"]:
+		margin.add_theme_constant_override("margin_" + side, 28)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_bottom", 20)
+	panel.add_child(margin)
+	var column := VBoxContainer.new()
+	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_theme_constant_override("separation", 8)
+	margin.add_child(column)
 	var title := label("%s" % beat.get("level_name", ""), 40, TERRA, "title", false)
 	title.name = "LevelTitle"
-	title.position = Vector2(28, 16)
-	title.size = Vector2(1040, 56)
 	title.custom_minimum_size = Vector2(520, 56)
-	panel.add_child(title)
-	var arrival := label(str(beat.get("arrival", "")), BODY_FONT, DARK)
-	arrival.position = Vector2(28, 80)
-	arrival.size = Vector2(1040, 72)
-	arrival.custom_minimum_size = Vector2(1040, 48)
-	panel.add_child(arrival)
-	var moment := label(str(beat.get("moment", "")), BODY_FONT, DARK)
-	moment.position = Vector2(28, 156)
-	moment.size = Vector2(1040, 72)
-	moment.custom_minimum_size = Vector2(1040, 48)
-	panel.add_child(moment)
+	column.add_child(title)
+	for key in ["arrival", "moment"]:
+		var text := str(beat.get(key, "")).strip_edges()
+		if text == "":
+			continue
+		var row := label(text, BODY_FONT, DARK)
+		row.custom_minimum_size = Vector2(1040, 0)
+		column.add_child(row)
 	var tw := host.create_tween()
 	tw.tween_interval(8.5)
 	tw.tween_property(panel, "modulate:a", 0.0, 0.45)

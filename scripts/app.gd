@@ -68,6 +68,7 @@ func show_play() -> void:
 	_clear(view_root)
 	var room := preload("res://scripts/diorama.gd").new()
 	room.open_computer.connect(_open_computer)
+	room.open_map.connect(_open_map)
 	room.request_drive.connect(_start_drive)
 	room.request_results.connect(show_results)
 	room.request_rebuild.connect(show_play)
@@ -82,6 +83,7 @@ func _start_drive() -> void:
 	var drive := preload("res://scripts/drive_course.gd").new()
 	drive.finished.connect(_on_drive_finished)
 	view_root.add_child(drive)
+	_pause_button()
 
 
 func _on_drive_finished(result: Dictionary) -> void:
@@ -113,6 +115,25 @@ func _open_computer() -> void:
 				room._refresh_hud_buttons()
 	)
 	overlay.add_child(computer)
+
+
+func _open_map() -> void:
+	if overlay.get_child_count() > 0:
+		return
+	var map := preload("res://scripts/map_ui.gd").new()
+	map.job_requested.connect(func(job_id: String):
+		if is_instance_valid(view_root) and view_root.get_child_count() > 0:
+			var room = view_root.get_child(0)
+			if room.has_method("_start_listed_job"):
+				room._start_listed_job(job_id)
+	)
+	map.closed.connect(func():
+		if is_instance_valid(view_root) and view_root.get_child_count() > 0:
+			var room = view_root.get_child(0)
+			if room.has_method("_refresh_hud_buttons"):
+				room._refresh_hud_buttons()
+	)
+	overlay.add_child(map)
 
 
 func _pause_button() -> void:

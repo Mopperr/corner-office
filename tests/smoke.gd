@@ -357,17 +357,20 @@ func _readability_goals() -> Array:
 	var found: Array = []
 	var goals = preload("res://scripts/stack_goals.gd")
 	var layouts = preload("res://scripts/shop_layout.gd")
-	var notes := goals.by_id("stack_l1_notes_on_whiteboard_ledge")
-	if str(notes.get("hint", "")) != "Park the sticky notes on top of the whiteboard frame.":
+	# The whiteboard is 0.10 m deep, so nothing can rest on it. The L1 notes goal is the desk.
+	var notes := goals.by_id("stack_l1_notes_on_desk")
+	if "desk" not in str(notes.get("hint", "")).to_lower():
 		found.append("notes hint %s" % notes.get("hint", ""))
-	var board := {"uid": "board", "item": "whiteboard", "model": "whiteboard", "x": 0.12, "y": 1.05, "z": 4.0, "rot": 0.0, "w": 1.2, "d": 0.1, "h": 0.8, "tag": ""}
-	var on_top := {"uid": "notes", "item": "sticky_note_stack", "model": "sticky_note_stack", "x": 0.12, "y": 1.85, "z": 4.0, "rot": 0.0, "w": 0.25, "d": 0.23, "h": 0.14, "tag": ""}
-	var on_ledge := on_top.duplicate(true)
-	on_ledge["y"] = 1.45
-	if not bool(goals.evaluate(notes, [board, on_top]).get("met", false)):
-		found.append("notes top")
-	if bool(goals.evaluate(notes, [board, on_ledge]).get("met", false)):
-		found.append("notes ledge")
+	var desk := {"uid": "desk", "item": "desk_main", "model": "desk_main", "x": 2.5, "y": 0.0, "z": 4.5, "rot": 0.0, "w": 1.4, "d": 0.7, "h": 0.76, "tag": ""}
+	var on_desk := {"uid": "notes", "item": "sticky_note_stack", "model": "sticky_note_stack", "x": 2.05, "y": 0.76, "z": 4.6, "rot": 0.0, "w": 0.25, "d": 0.23, "h": 0.14, "tag": ""}
+	var on_floor := on_desk.duplicate(true)
+	on_floor["y"] = 0.0
+	on_floor["x"] = 0.9
+	on_floor["z"] = 1.0
+	if not bool(goals.evaluate(notes, [desk, on_desk]).get("met", false)):
+		found.append("notes desk")
+	if bool(goals.evaluate(notes, [desk, on_floor]).get("met", false)):
+		found.append("notes floor")
 	var plant := goals.by_id("stack_l2_plant_on_counter")
 	if "espresso" not in str(plant.get("hint", "")).to_lower() or "hanging" in str(plant.get("hint", "")).to_lower():
 		found.append("plant hint")
@@ -1089,7 +1092,7 @@ func _menu_audit() -> Array:
 		["1920x1080", Vector2i(1920, 1080)],
 		["deck", Vector2i(1920, 1200)],
 	]
-	var screens: Array = ["home", "settings", "remap", "intro", "pause", "level", "results", "market", "hud", "drive"]
+	var screens: Array = ["home", "settings", "remap", "intro", "pause", "level", "results", "market", "map", "hud", "drive"]
 	for screen in screens:
 		for spec in sizes:
 			var view: Dictionary = _audit_open(str(screen), str(spec[0]), spec[1])
@@ -1174,6 +1177,16 @@ func _audit_open(screen: String, tag: String, size: Vector2i) -> Dictionary:
 		computer.call("_build")
 		root = computer
 		center_name = "Bezel"
+	elif screen == "map":
+		GameState.set_mode("office")
+		GameState.office_phase = "live"
+		var map: Control = load("res://scripts/map_ui.gd").new()
+		vp.add_child(map)
+		map.layout_mode = 0
+		map.position = Vector2.ZERO
+		map.size = view_size
+		root = map
+		center_name = "MapCard"
 	elif screen == "hud":
 		GameState.set_mode("office")
 		GameState.office_phase = "live"
@@ -1367,15 +1380,17 @@ func _review_fixes() -> Array:
 		found.append("desk should block a floor overlap")
 	_bury(room)
 	mug_rec = GameState.find_office_item("mug")
+	# The save file never holds an item in hand, and the live game keeps holding it.
 	mug_rec["state"] = "hand"
 	mug_rec["x"] = 2.05
 	SaveManager.save_game()
-	if str(GameState.find_office_item("mug").get("state", "")) != "placed":
+	if str(GameState.find_office_item("mug").get("state", "")) != "hand":
+		found.append("save snatched the mug out of hand")
+	if str(_saved_office_item("mug").get("state", "")) != "placed":
 		found.append("save left mug in hand")
 	GameState.job = {"items": [{"uid": "j0", "state": "hand", "x": 1.2, "y": 0.0, "z": 1.4}], "boxes": []}
 	SaveManager.save_game()
-	var saved_job: Dictionary = GameState.job
-	var saved_items: Array = saved_job.get("items", [])
+	var saved_items: Array = _saved_file().get("job", {}).get("items", [])
 	if saved_items.is_empty() or str(saved_items[0].get("state", "")) != "placed":
 		found.append("save left job item in hand")
 	GameState.money = 5000
@@ -1637,7 +1652,7 @@ func _stack_math() -> Array:
 	if not mug.is_empty():
 		mug["state"] = "settling"
 		SaveManager.save_game()
-		if str(GameState.find_office_item("mug").get("state", "")) != "placed":
+		if str(_saved_office_item("mug").get("state", "")) != "placed":
 			found.append("save settling")
 	GameState.job = {"items": [
 		{"uid": "loose", "state": "loose"},
@@ -1647,11 +1662,26 @@ func _stack_math() -> Array:
 	], "boxes": []}
 	SaveManager.save_game()
 	var states := {}
-	for item in GameState.job.get("items", []):
+	for item in _saved_file().get("job", {}).get("items", []):
 		states[str(item.get("uid", ""))] = str(item.get("state", ""))
 	if states.get("loose", "") != "loose" or states.get("boxed", "") != "boxed" or states.get("mid", "") != "placed" or states.get("held", "") != "placed":
 		found.append("save states %s" % states)
 	return found
+
+
+func _saved_file() -> Dictionary:
+	var file := FileAccess.open(SaveManager.SAVE_PATH, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed = JSON.parse_string(file.get_as_text())
+	return parsed if typeof(parsed) == TYPE_DICTIONARY else {}
+
+
+func _saved_office_item(uid: String) -> Dictionary:
+	for rec in _saved_file().get("office_items", []):
+		if str(rec.get("uid", "")) == uid:
+			return rec
+	return {}
 
 
 func _stack_results_card(score: int, line: String, stamp: bool) -> Array:

@@ -1,24 +1,36 @@
 {
   "goals": [
     {
-      "id": "stack_l1_notes_on_whiteboard_ledge",
+      "id": "stack_l1_notes_on_desk",
       "level": "L1",
       "venue": "garage",
       "item": "sticky_note_stack",
-      "support": "whiteboard",
+      "support": "desk",
       "surface": "top",
-      "hint": "Park the sticky notes on top of the whiteboard frame.",
-      "marker": "ghost"
+      "hint": "Park the sticky notes on the desk, next to the mug.",
+      "marker": "ghost",
+      "support_also": [
+        "desk_main"
+      ]
     },
     {
       "id": "stack_l2_plant_on_counter",
       "level": "L2",
       "venue": "cafe",
       "item": "cafe_plant",
-      "also": ["plant_fern", "cafe_fern", "plant_small"],
-      "reject": ["hanging_plant", "espresso"],
+      "also": [
+        "plant_fern",
+        "cafe_fern",
+        "plant_small"
+      ],
+      "reject": [
+        "hanging_plant",
+        "espresso"
+      ],
       "support": "cafe_counter",
-      "support_also": ["counter"],
+      "support_also": [
+        "counter"
+      ],
       "hint": "Set the small plant on the counter. Keep it off the espresso.",
       "marker": "ghost"
     },
@@ -27,7 +39,10 @@
       "level": "L2",
       "venue": "cafe",
       "item": "cafe_mug",
-      "also": ["starter_mug", "mug_worlds_okayest"],
+      "also": [
+        "starter_mug",
+        "mug_worlds_okayest"
+      ],
       "support": "mug_rack",
       "surface": "top",
       "hint": "Mug on top of the rack.",
@@ -51,9 +66,13 @@
       "level": "L6",
       "venue": "bakery",
       "item": "plant_fern",
-      "also": ["cafe_fern"],
+      "also": [
+        "cafe_fern"
+      ],
       "support": "shelf",
-      "support_also": ["bookshelf_wood"],
+      "support_also": [
+        "bookshelf_wood"
+      ],
       "camera_side": true,
       "hint": "Fern on the shelf under the beam (it clears!).",
       "marker": "ghost"
@@ -74,7 +93,10 @@
       "level": "L6",
       "venue": "bakery",
       "item": "desk_lamp",
-      "also": ["lamp_moody", "lamp_banker"],
+      "also": [
+        "lamp_moody",
+        "lamp_banker"
+      ],
       "support": "stair_step",
       "hint": "Set the lamp on the stair step.",
       "marker": "ghost"
@@ -107,7 +129,10 @@
       "level": "L1",
       "venue": "garage",
       "item": "starter_mug",
-      "also": ["mug_worlds_okayest", "cafe_mug"],
+      "also": [
+        "mug_worlds_okayest",
+        "cafe_mug"
+      ],
       "support": "desk_main",
       "hint": "The mug sits on the desk. A ghost marks the spot while you hold it.",
       "marker": "ghost",
@@ -119,7 +144,10 @@
       "level": "L6",
       "venue": "bakery",
       "item": "starter_mug",
-      "also": ["mug_worlds_okayest", "cafe_mug"],
+      "also": [
+        "mug_worlds_okayest",
+        "cafe_mug"
+      ],
       "support": "desk_main",
       "hint": "Set the mug on the table. The ghost stays up for a moment after you place it.",
       "marker": "ghost",

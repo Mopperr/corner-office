@@ -13,6 +13,7 @@ const Props = preload("res://scripts/props.gd")
 const Controls = preload("res://scripts/control_map.gd")
 const StackGoals = preload("res://scripts/stack_goals.gd")
 const ShopLayout = preload("res://scripts/shop_layout.gd")
+const Outdoors = preload("res://scripts/outdoors.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -23,6 +24,7 @@ static var _motion_cached := false
 static var _motion_reduced := false
 
 signal open_computer
+signal open_map
 signal request_drive
 signal request_results
 signal request_rebuild
@@ -85,6 +87,8 @@ func _ready() -> void:
 		_build_showroom()
 		return
 	_build_venue()
+	for box_id in GameState.job.get("carried", []):
+		carried[int(box_id)] = true
 	_refresh_items()
 	_build_hud()
 	UIKit.show_level_beat(self, GameState.present_current_slice_level())
@@ -199,6 +203,7 @@ func _build_venue() -> void:
 	_ensure_stack_room()
 	_frame_camera()
 	_dress()
+	Outdoors.build(self, venue)
 
 
 func _frame_camera() -> void:
@@ -590,14 +595,12 @@ func _fade_beam(node: Node, alpha: float) -> void:
 
 
 func _build_truck_stage() -> void:
-	venue = {"name": "Corner Movers", "x": -2, "z": -2, "w": 8, "d": 6, "music": "music_office_build"}
-	var ground := MeshInstance3D.new()
-	var plane := BoxMesh.new()
-	plane.size = Vector3(14, 0.1, 10)
-	ground.mesh = plane
-	ground.material_override = Props.mat(Color("7A5C40"))
-	ground.position = Vector3(0, -0.05, 0)
-	add_child(ground)
+	venue = {"id": "street", "name": "Corner Movers", "x": -2, "z": -2, "w": 8, "d": 6, "open_w": 2, "music": "music_office_build"}
+	var yard := Outdoors.build(self, venue)
+	# The truck parks on the driveway apron.
+	var apron := Props.mesh_box(Vector3(8, 0.03, 6), Outdoors.PAVEMENT)
+	apron.position = Vector3(2, -0.03, 1)
+	yard.add_child(apron)
 	truck_root = Props.model("mover_truck")
 	if truck_root:
 		add_child(truck_root)
@@ -611,9 +614,10 @@ func _build_truck_stage() -> void:
 				decal.position.z += dir * float(Tuning.get_value("logo_decal_nudge_m", 0.012))
 		_sync_cargo()
 	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
-	cam.size = 7.5
-	cam.position = Vector3(-6.2, 3.4, 4.4)
-	cam.look_at(Vector3(-0.6, 1.1, 0), Vector3.UP)
+	cam.size = 6.2
+	# From behind and above, so the open door shows every pad in the bed.
+	cam.position = Vector3(-7.4, 4.6, 3.0)
+	cam.look_at(Vector3(-0.9, 1.0, 0.1), Vector3.UP)
 	var sun := OmniLight3D.new()
 	sun.position = Vector3(-2, 3, 2)
 	sun.light_energy = 0.4
@@ -754,6 +758,7 @@ func _build_showroom() -> void:
 		_spawn_record(rec, str(rec.get("item", "")), false)
 	_menu_box_stack()
 	_menu_lights()
+	Outdoors.build(self, venue)
 	_frame_camera()
 
 
@@ -1060,6 +1065,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE and held_uid != "":
 		_drop_hold()
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M and GameState.mode == "office" and held_uid == "":
+		emit_signal("open_map")
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_click()
 
@@ -1131,8 +1139,10 @@ func _aim_point() -> Variant:
 	var to := from + cam.project_ray_normal(get_viewport().get_mouse_position()) * 80.0
 	var query := PhysicsRayQueryParameters3D.create(from, to)
 	query.collision_mask = Props.MASK_QUERY
-	query.exclude = _ghost_rids()
-	query.exclude.append_array(_cutaway_rids())
+	# `query.exclude` hands back a copy, so build the list first and assign it once.
+	var skip: Array[RID] = _ghost_rids()
+	skip.append_array(_cutaway_rids())
+	query.exclude = skip
 	var hit := space.intersect_ray(query)
 	if not hit.is_empty():
 		return hit.position
@@ -1392,7 +1402,7 @@ func _pack_click(uid: String) -> void:
 		return
 	AudioDirector.play_sfx("sfx_item_pick_up")
 	AudioDirector.play_sfx("sfx_box_fold", true)
-	var packed := str(item.get("item", ""))
+	var packed := str(item.get("item_id", ""))
 	if packed == "cafe_mug":
 		AudioDirector.play_sfx("sfx_l02_cup_clink")
 	elif packed == "mystery_part":
@@ -1404,10 +1414,22 @@ func _pack_click(uid: String) -> void:
 func _truck_click(uid: String) -> void:
 	if not uid.begins_with("slot:"):
 		return
+	var slot := int(uid.trim_prefix("slot:"))
 	if selected_box < 0:
+		if GameState.slot_taken(slot):
+			# Take it back off the truck and hold it.
+			for box in GameState.job.get("boxes", []):
+				if int(box.get("slot", -1)) == slot:
+					box["slot"] = -1
+					selected_box = int(box.get("id", -1))
+			AudioDirector.play_sfx("sfx_item_pick_up")
+			_toast("Box %d is back in your hands. Tap another pad." % (selected_box + 1))
+			_refresh_items()
+			_sync_cargo()
+			_refresh_hud_buttons()
+			return
 		_toast("Pick a sealed box first.")
 		return
-	var slot := int(uid.trim_prefix("slot:"))
 	var err := GameState.load_box_into(selected_box, slot, floor_slots)
 	if err != "":
 		_toast(err)
@@ -1424,10 +1446,18 @@ func _unpack_click(uid: String) -> void:
 	if uid.begins_with("boxcarry:"):
 		var box_id := int(uid.trim_prefix("boxcarry:"))
 		carried[box_id] = true
+		var saved: Array = GameState.job.get("carried", [])
+		if not saved.has(box_id):
+			saved.append(box_id)
+		GameState.job["carried"] = saved
+		SaveManager.save_game()
 		AudioDirector.play_sfx("sfx_footstep_office")
 		AudioDirector.play_sfx("sfx_box_set_down", true)
 		_refresh_items()
 		_refresh_hud_buttons()
+		return
+	if uid.begins_with("boxopen:"):
+		_open_carried_box(int(uid.trim_prefix("boxopen:")))
 		return
 	if held_uid == "":
 		var item := GameState.job_item(uid)
@@ -1436,19 +1466,48 @@ func _unpack_click(uid: String) -> void:
 		if not bool(carried.get(int(item.get("box", -1)), false)):
 			_toast("Carry that box in from the truck first.")
 			return
-		if str(item.get("state", "")) == "placed":
+		var job_state := str(item.get("state", ""))
+		if job_state == "placed" or job_state == "loose":
 			_take_to_hand(item, "job")
-			return
-		if str(item.get("state", "")) == "boxed":
-			item["state"] = "loose"
-			AudioDirector.play_sfx("sfx_box_open")
-			AudioDirector.play_sfx("sfx_paper_rustle")
-			var box := GameState.job_box(int(item.get("box", -1)))
-			if not box.is_empty() and bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
-				_open_cat(int(box.get("id", -1)))
-			_refresh_items()
 		return
 	_try_place_held()
+
+
+func _open_carried_box(box_id: int) -> void:
+	# Tip the box out: its items turn loose on the floor around where it sat.
+	var spot := _open_box_spot(box_id)
+	var n := 0
+	for item in GameState.job.get("items", []):
+		if int(item.get("box", -1)) != box_id or str(item.get("state", "")) != "boxed":
+			continue
+		item["state"] = "loose"
+		item["x"] = spot.x + 0.55 + float(n % 3) * 0.6
+		item["z"] = spot.z - 0.3 + float(int(n / 3)) * 0.6
+		item["y"] = 0.0
+		n += 1
+	AudioDirector.play_sfx("sfx_box_open")
+	AudioDirector.play_sfx("sfx_paper_rustle")
+	var box := GameState.job_box(box_id)
+	if not box.is_empty() and bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
+		_open_cat(box_id)
+	_refresh_items()
+	_refresh_hud_buttons()
+
+
+func _open_box_spot(box_id: int) -> Vector3:
+	var index := 0
+	for box in GameState.job.get("boxes", []):
+		if int(box.get("id", -1)) == box_id:
+			break
+		index += 1
+	return Vector3(float(venue.get("x", 0)) + 0.6, 0.0, float(venue.get("z", 0)) + 0.9 + float(index) * 0.7)
+
+
+func _box_still_packed(box_id: int) -> bool:
+	for item in GameState.job.get("items", []):
+		if int(item.get("box", -1)) == box_id and str(item.get("state", "")) == "boxed":
+			return true
+	return false
 
 
 func _open_cat(box_id: int) -> void:
@@ -1773,7 +1832,15 @@ func _spawn_truck_slots() -> void:
 func _spawn_carry_boxes() -> void:
 	var index := 0
 	for box in GameState.job.get("boxes", []):
-		if bool(carried.get(int(box.get("id", -1)), false)):
+		var box_id := int(box.get("id", -1))
+		if bool(carried.get(box_id, false)):
+			if _box_still_packed(box_id):
+				var opened := Node3D.new()
+				opened.position = _open_box_spot(box_id)
+				opened.set_meta("uid", "boxopen:%d" % box_id)
+				opened.add_child(Props.make("box_closed"))
+				Props.add_picker(opened, Vector3(0.5, 0.45, 0.45))
+				items_root.add_child(opened)
 			continue
 		if not bool(box.get("sealed", false)):
 			continue
@@ -1828,8 +1895,11 @@ func _build_hud() -> void:
 	toast_bar.visible = false
 	toast_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 14))
 	layer.add_child(toast_bar)
-	UIKit.pin_center_top(toast_bar, -460, 124, 460, 196)
-	toast = UIKit.label("", 36, UIKit.CREAM_CARD)
+	UIKit.pin_center_top(toast_bar, -560, 124, 560, 216)
+	toast = UIKit.label("", 32, UIKit.CREAM_CARD)
+	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	toast.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	toast.max_lines_visible = 2
 	toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	toast_bar.add_child(toast)
@@ -1851,6 +1921,8 @@ func _refresh_hud_buttons() -> void:
 		_act_button(layer, snap_label, Vector2(16, y), _toggle_snap)
 	if GameState.mode == "office" and GameState.office_phase == "live":
 		_act_button(layer, "Jobs", Vector2(1100, y), func(): _open_jobs())
+		y += 58
+		_act_button(layer, "Map", Vector2(1100, y), func(): emit_signal("open_map"))
 		y += 58
 		_act_button(layer, "Computer", Vector2(1100, y), func():
 			AudioDirector.play_sfx("sfx_crt_power_on")
@@ -1879,6 +1951,10 @@ func _refresh_hud_buttons() -> void:
 			)
 	if GameState.mode == "job_pack":
 		_act_button(layer, "New box", Vector2(1060, 100), func():
+			if GameState.job.get("boxes", []).size() >= slot_count:
+				_toast("The truck only takes %d boxes. Fill the ones you have." % slot_count)
+				AudioDirector.play_sfx("sfx_invalid_placement")
+				return
 			selected_box = GameState.make_box()
 			AudioDirector.play_sfx("sfx_box_fold", true)
 			_refresh_hud_buttons()
@@ -1932,7 +2008,7 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 				_refresh_hud_buttons()
 			)
 			y += 52
-			_act_button(layer, "Keep %s (−$%d from tips)" % [item.get("name", "item"), cost], Vector2(860, y), func():
+			_act_button(layer, "Keep it (−$%d tip)" % cost, Vector2(860, y), func():
 				_toast("We'll leave the scar. The base pay is safe.")
 			)
 			y += 52
@@ -1943,6 +2019,8 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 	if ready and all_in:
 		_act_button(layer, "Finish job", Vector2(1060, 620), func():
 			GameState.finish_job()
+			GameState.set_mode("results")
+			SaveManager.save_game()
 			AudioDirector.play_sfx("sfx_job_complete")
 			emit_signal("request_results")
 		)
@@ -1979,18 +2057,20 @@ func _seal_selected() -> void:
 		return
 	AudioDirector.play_sfx("sfx_tape_rip")
 	AudioDirector.play_sfx("sfx_box_fold", true)
-	var box := GameState.job_box(selected_box)
-	if not box.is_empty() and bool(box.get("has_cat", false)):
+	var sealed_id := selected_box
+	var box := GameState.job_box(sealed_id)
+	selected_box = -1
+	_refresh_hud_buttons()
+	if not box.is_empty() and bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
 		AudioDirector.play_sfx("sfx_cat_meow")
 		_toast("That box just meowed. Open it?")
+		# Added after the refresh, or the refresh would sweep it away with the rest.
 		_act_button(_hud_layer(), "Open the meowing box", Vector2(860, 520), func():
-			_open_cat(selected_box)
+			_open_cat(sealed_id)
 			_refresh_hud_buttons()
 		)
 		AudioDirector.play_sfx("sfx_l02_box_wiggle")
 		_wiggle_toast()
-	selected_box = -1
-	_refresh_hud_buttons()
 
 
 func _box_list(layer: CanvasLayer) -> void:

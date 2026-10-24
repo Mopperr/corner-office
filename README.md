@@ -17,9 +17,9 @@ godot --headless --path . --import --quit
 godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 ```
 
-`tests/run_smoke.sh` runs those two steps. CI does the same.
+`tests/run_smoke.sh` runs those two steps and checks for `SMOKE_OK`. `tests/run_playthrough.sh` then plays the whole slice the way a player would (menu, garage, computer, map, the three jobs through pack, truck, drive, unpack and results, the Bakery Loft move, and a save roundtrip after each step) and checks for `PLAYTHROUGH_OK`. It takes about seven minutes because the drives are real. CI runs both.
 
-`SMOKE_OK` means the pay formula, starter desk, save roundtrip, truck-door clips, and loop-import settings passed.
+`SMOKE_OK` means the pay formula, starter desk, save roundtrip, truck-door clips, and loop-import settings passed. With a display, `CO_SHOTS=/some/dir godot --path . res://tests/playthrough.tscn` also saves a screenshot after each step.
 
 ## Controls
 
@@ -28,6 +28,7 @@ godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 - Items rest on the floor or on whatever is under them, then settle and freeze so a stack stays put.
 - Wall pieces sit 0.12 m off the wall. A soft thunk means the placement landed.
 - Click the beige computer to open HomeDesk: Market, Shop, Email, Listings.
+- **Map** (or **M**) opens the town map: where you are, which clients have a job pinned, and which offices are for sale. You can take a job or move in from there.
 - **Esc** or **Pause** saves and can return to the menu.
 - On a drive, **WASD** or the arrow keys drive. **H** honks. You cannot fail a drive.
 
@@ -37,9 +38,9 @@ godot --headless --path . --quit-after 240 res://tests/smoke.tscn
 2. Place the twelve starter pieces (the mug and sticky notes sit on the desk).
 3. Open the computer. Trade office goods, or open TropicalForest to order decor. Prices move when you press Next day.
 4. The clipboard offers the cafe job after the garage is unpacked.
-5. Pack, pad fragile items, load the truck (heavy boxes on the mustard floor slots), then drive.
+5. Pack, pad fragile items, load the truck (heavy boxes on the mustard floor slots), then drive. The truck takes eight boxes, so that is the box limit; tap a loaded pad with nothing selected to take that box back off.
 6. The truck's back door swings open and shut in Godot (`open` / `close`, about +105° on Y). The model itself has no animation.
-7. Unpack, repair a scuff or keep it, and read the pay lines. Base pay is always paid in full. Damage only comes out of the tip.
+7. Unpack: carry each box in from the truck, click it to tip it out, then place what was inside. Repair a scuff or keep it, and read the pay lines. Base pay is always paid in full. Damage only comes out of the tip.
 8. Repeat jobs, trade, and let the shop earn until the Bakery Loft gates are met ($1,500 earned, 3 jobs, Rep 1), then move in from Listings.
 
 ## TropicalForest and the shop
@@ -53,6 +54,7 @@ The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only
 ## Project map
 
 - `scenes/main.tscn` boots `scripts/app.gd`.
+- `scripts/outdoors.gd` builds the yard around every room (ground, driveway, road, trees, fence or lamp posts, neighbours) from plain meshes with no collision. `scripts/map_ui.gd` is the town map, with its pins in `data/map.json`.
 - Autoloads: `ItemDB`, `JobDB`, `GameState`, `SaveManager`, `AudioDirector`.
 - `data/tuning.json` holds the locked numbers (damage, snap, tips, office gates, audio gains).
 - `data/content.json` is characters, items, venues, and jobs. `data/drives.json` is the three routes. `data/forest.json` is the TropicalForest catalog. `data/shop.json` is fixtures, the menu, visitors, and Vibe.
