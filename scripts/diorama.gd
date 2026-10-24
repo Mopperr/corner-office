@@ -2940,7 +2940,8 @@ func _door_world() -> Vector3:
 func _counter_node() -> Node3D:
 	# The fixture a customer walks up to: a counter piece first (the coffee
 	# machine, the pitcher), and only then a shelf or the menu board.
-	var fixtures: Array = GameState.shop_fixtures()
+	# Straight from the catalogue, so a fixture that is still settling counts too.
+	var fixtures: Array = Catalog.fixtures()
 	for want_counter in [true, false]:
 		for fix in fixtures:
 			if (str(fix.get("role", "")) == "counter") != want_counter:
