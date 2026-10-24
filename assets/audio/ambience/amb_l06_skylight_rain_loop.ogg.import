@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://cks7aopdigj21"
+uid="uid://bf08wfamhssb6"
 path="res://.godot/imported/amb_l06_skylight_rain_loop.ogg-a863c43358405aec91ef439b44bb7b0a.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/amb_l06_skylight_rain_loop.ogg-a863c43358405a
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

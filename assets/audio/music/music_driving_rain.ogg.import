@@ -2,7 +2,7 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://b3gqu45ierdjx"
+uid="uid://phq6duar2nld"
 path="res://.godot/imported/music_driving_rain.ogg-15e891cdd6d0838ab28df6a97999e7f2.oggvorbisstr"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/music_driving_rain.ogg-15e891cdd6d0838ab28df6
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

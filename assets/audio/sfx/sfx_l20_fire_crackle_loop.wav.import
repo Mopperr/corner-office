@@ -2,7 +2,7 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://di0gbp5bjbghh"
+uid="uid://bjjdvs3dh6d1u"
 path="res://.godot/imported/sfx_l20_fire_crackle_loop.wav-f8482b0d0ff93074126e8174b6687b17.sample"
 
 [deps]
@@ -18,7 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop_mode=1
+edit/loop_mode=0
 edit/loop_begin=0
 edit/loop_end=-1
 compress/mode=2
