@@ -305,6 +305,12 @@ func _check_view() -> void:
 	_check(press("Rotate view"), "HUD: Rotate view button")
 	await wait(0.5)
 	_check(int(room.view_quadrant) == 1, "view rotated to quadrant 1 (got %s)" % room.view_quadrant)
+	var visible_sides := {}
+	for node in room.get_children():
+		if node is Node3D and node.has_meta("shell_side") and (node as Node3D).visible:
+			visible_sides[str(node.get_meta("shell_side"))] = int(visible_sides.get(str(node.get_meta("shell_side")), 0)) + 1
+	print("walls visible after one turn: %s" % JSON.stringify(visible_sides))
+	_check(not visible_sides.has("N") and not visible_sides.has("E"), "near walls (N, E) cut away after one turn")
 	await shot("garage_rotated")
 	var mug: Dictionary = GameState.find_office_item("mug")
 	if not mug.is_empty():

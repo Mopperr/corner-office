@@ -452,6 +452,7 @@ func _place_opening(center_x: float, z: float) -> void:
 		if garage == null:
 			return
 		garage.position = Vector3(center_x, 0, z)
+		garage.set_meta("shell_side", "N")
 		Props.restyle_architecture(garage)
 		Props.prepare(garage)
 		add_child(garage)
@@ -466,6 +467,7 @@ func _place_opening(center_x: float, z: float) -> void:
 		if door == null:
 			return
 		door.position = Vector3(center_x, 0, z)
+		door.set_meta("shell_side", "N")
 		Props.restyle_architecture(door)
 		Props.prepare(door)
 		add_child(door)
