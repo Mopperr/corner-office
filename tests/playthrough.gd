@@ -733,6 +733,9 @@ func _unpack() -> void:
 # ---------------------------------------------------------------- loft
 
 func _buy_loft() -> void:
+	if GameState.jobs_done < 3:
+		print("note: only %d job(s) played, the loft needs 3; skipping the move" % GameState.jobs_done)
+		return
 	# Three jobs do not reach the $1,500 gate on their own; top up and say so.
 	if not GameState.office_gate_met("bakery"):
 		print("note: topping up money to test the loft purchase (earned $%d, jobs %d, rep %d)" % [GameState.total_earned, GameState.jobs_done, GameState.rep_rank()])

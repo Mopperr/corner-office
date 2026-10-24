@@ -75,7 +75,7 @@ var _goal_pip := 0.0
 var view_quadrant := 0
 var view_zoom := 1.0
 var footprint: MeshInstance3D
-var goals_panel: Panel
+var goals_panel: Control
 var goals_column: VBoxContainer
 var _goals_key := ""
 var _markers_key := ""
@@ -238,13 +238,14 @@ func _side_of(along_x: bool, fixed: float) -> String:
 
 func _hidden_sides() -> Array:
 	# The two walls nearest the camera are cut away so you can see in.
+	# The camera offset (8.2, 9, 8) turns +90 deg about Y each step: (+x,+z) -> (+x,-z) -> (-x,-z) -> (-x,+z).
 	match posmod(view_quadrant, 4):
 		1:
-			return ["S", "W"]
+			return ["N", "E"]
 		2:
 			return ["N", "W"]
 		3:
-			return ["N", "E"]
+			return ["S", "W"]
 	return ["S", "E"]
 
 
@@ -820,11 +821,11 @@ func _sync_goals_panel() -> void:
 	var head := UIKit.label("Room setup  %d/100" % int(round(setup)) if setup >= 0.0 else "Room setup", 24, UIKit.TERRA, "title", false)
 	goals_column.add_child(head)
 	for line in lines:
-		var row := UIKit.label(str(line), 18, UIKit.DARK)
+		var row := UIKit.label(str(line), 17, UIKit.DARK)
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	if lines.is_empty():
-		var row := UIKit.label("Stacks that stand, things that touch, and a tidy floor all count.", 18, UIKit.DARK)
+		var row := UIKit.label("Stacks that stand, things that touch, and a tidy floor all count.", 17, UIKit.DARK)
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	goals_panel.visible = true
@@ -2042,17 +2043,28 @@ func _build_hud() -> void:
 	hint_bar.add_child(hint)
 	UIKit.fill(hint, 16, 12, 16, 12)
 	status.max_lines_visible = 2
-	goals_panel = Panel.new()
-	goals_panel.name = "GoalsCard"
-	goals_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	goals_panel.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 14))
-	layer.add_child(goals_panel)
-	UIKit.pin_top_left(goals_panel, 16, 168, 560, 300)
+	# The checklist grows with its text, so nothing spills out of the card.
+	var goals_box := PanelContainer.new()
+	goals_box.name = "GoalsCard"
+	goals_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	goals_box.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 14))
+	layer.add_child(goals_box)
+	goals_box.layout_mode = 1
+	goals_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	goals_box.position = Vector2(16, 168)
+	goals_box.custom_minimum_size = Vector2(560, 0)
+	var goals_margin := MarginContainer.new()
+	goals_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side in ["left", "right"]:
+		goals_margin.add_theme_constant_override("margin_" + side, 14)
+	goals_margin.add_theme_constant_override("margin_top", 8)
+	goals_margin.add_theme_constant_override("margin_bottom", 10)
+	goals_box.add_child(goals_margin)
 	goals_column = VBoxContainer.new()
 	goals_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	goals_column.add_theme_constant_override("separation", 2)
-	goals_panel.add_child(goals_column)
-	UIKit.fill(goals_column, 14, 8, 14, 8)
+	goals_margin.add_child(goals_column)
+	goals_panel = goals_box
 	goals_panel.visible = false
 	var toast_bar := Panel.new()
 	toast_bar.name = "ToastBar"

@@ -11,9 +11,14 @@ func _ready() -> void:
 	view_root = Node.new()
 	view_root.name = "View"
 	add_child(view_root)
+	# A layer above the room HUD, so the computer, the map, and the pause card sit on top.
+	var overlay_layer := CanvasLayer.new()
+	overlay_layer.name = "OverlayLayer"
+	overlay_layer.layer = 30
+	add_child(overlay_layer)
 	overlay = Node.new()
 	overlay.name = "Overlay"
-	add_child(overlay)
+	overlay_layer.add_child(overlay)
 	if GameState.mode == "menu" or (GameState.office_items.is_empty() and GameState.job.is_empty() and GameState.mode != "results"):
 		show_menu()
 	else:
