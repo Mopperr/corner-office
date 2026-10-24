@@ -1258,9 +1258,11 @@ func _audit_check(view: Dictionary) -> Array:
 			if label.mouse_filter != Control.MOUSE_FILTER_IGNORE:
 				found.append("%s label blocks %s" % [tag, label.text])
 			var px := int(label.get_theme_font_size("font_size"))
-			if px < 28:
+			# Secondary text (key chips, chat lines, card footers) may sit at the Deck floor of 27px.
+			var small := bool(label.get_meta("small_text", false))
+			if px < (UIKit.SMALL_FONT if small else 28):
 				found.append("%s tiny %s %d" % [tag, label.text, px])
-			if label.get_theme_font("font") == UIKit.body_font() and px < 36:
+			if label.get_theme_font("font") == UIKit.body_font() and px < 36 and not small:
 				found.append("%s body %s %d" % [tag, label.text, px])
 			if label.autowrap_mode == TextServer.AUTOWRAP_OFF and label.get_line_count() > 1 and label.text != "":
 				found.append("%s wrapped title %s" % [tag, label.text])

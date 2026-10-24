@@ -78,6 +78,10 @@ var footprint: MeshInstance3D
 var goals_panel: Control
 var goals_column: VBoxContainer
 var _goals_key := ""
+var objective: Label
+var chips_slot: Control
+var _chips_key := ""
+var toast_name: Label
 var _markers_key := ""
 
 
@@ -2038,12 +2042,32 @@ func _build_hud() -> void:
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	layer.add_child(hint_bar)
-	UIKit.pin_bottom(hint_bar, 16, -168, -16, -12)
-	hint = UIKit.label("", 36, UIKit.DARK)
+	UIKit.pin_bottom(hint_bar, 16, -150, -16, -12)
+	# Left: what to do now, and one line of how. Right: the keys that matter in this mode.
+	var bar_row := HBoxContainer.new()
+	bar_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar_row.add_theme_constant_override("separation", 24)
+	hint_bar.add_child(bar_row)
+	UIKit.fill(bar_row, 20, 12, 20, 12)
+	var bar_text := VBoxContainer.new()
+	bar_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar_text.add_theme_constant_override("separation", 2)
+	bar_row.add_child(bar_text)
+	objective = UIKit.label("", 30, UIKit.TERRA, "title", false)
+	objective.name = "Objective"
+	objective.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar_text.add_child(objective)
+	hint = UIKit.label("", 28, UIKit.DARK, "small")
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hint.max_lines_visible = 3
-	hint_bar.add_child(hint)
-	UIKit.fill(hint, 16, 12, 16, 12)
+	hint.max_lines_visible = 2
+	hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bar_text.add_child(hint)
+	chips_slot = VBoxContainer.new()
+	chips_slot.name = "ChipsSlot"
+	chips_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chips_slot.alignment = BoxContainer.ALIGNMENT_CENTER
+	bar_row.add_child(chips_slot)
 	status.max_lines_visible = 2
 	# The checklist grows with its text, so nothing spills out of the card.
 	var goals_box := PanelContainer.new()
@@ -2068,23 +2092,44 @@ func _build_hud() -> void:
 	goals_margin.add_child(goals_column)
 	goals_panel = goals_box
 	goals_panel.visible = false
-	var toast_bar := Panel.new()
+	# Toasts read as a chat bubble: who said it, then what.
+	var toast_bar := PanelContainer.new()
 	toast_bar.name = "ToastBar"
 	toast_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	toast_bar.visible = false
-	toast_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 14))
+	toast_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 18, 2, Color(UIKit.DARK, 0.25)))
 	layer.add_child(toast_bar)
-	UIKit.pin_center_top(toast_bar, -560, 124, 560, 216)
-	toast = UIKit.label("", 32, UIKit.CREAM_CARD)
-	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	toast.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	toast_bar.layout_mode = 1
+	toast_bar.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	toast_bar.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	toast_bar.grow_vertical = Control.GROW_DIRECTION_END
+	toast_bar.offset_left = -480
+	toast_bar.offset_right = 480
+	toast_bar.offset_top = 124
+	toast_bar.offset_bottom = 124
+	var bubble := HBoxContainer.new()
+	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bubble.add_theme_constant_override("separation", 14)
+	toast_bar.add_child(bubble)
+	var face := UIKit.avatar("M", UIKit.TERRA, 48)
+	face.name = "ToastFace"
+	face.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	bubble.add_child(face)
+	var words := VBoxContainer.new()
+	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	words.add_theme_constant_override("separation", 0)
+	bubble.add_child(words)
+	toast_name = UIKit.label("Marge", 24, UIKit.TERRA, "title", false)
+	toast_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	words.add_child(toast_name)
+	toast = UIKit.label("", 28, UIKit.DARK, "small")
 	toast.max_lines_visible = 2
 	toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	toast_bar.add_child(toast)
-	UIKit.fill(toast, 16, 8, 16, 8)
+	toast.custom_minimum_size = Vector2(860, 0)
+	words.add_child(toast)
 	_refresh_hud_buttons()
-	GameState.toast_requested.connect(_toast)
+	GameState.toast_requested.connect(func(message: String): _toast(message, "Marge"))
 
 
 func _refresh_hud_buttons() -> void:
@@ -2389,9 +2434,57 @@ func _hud_layer() -> CanvasLayer:
 func _hint_text() -> String:
 	var line := _mode_hint()
 	var goal := _goal_hint()
-	if goal == "":
-		return line
-	return "%s\n%s" % [goal, line]
+	if objective:
+		objective.text = goal if goal != "" else _mode_objective()
+	_sync_chips()
+	return line
+
+
+func _mode_objective() -> String:
+	match GameState.mode:
+		"office":
+			if GameState.office_phase == "pack":
+				return "Pack up the old office"
+			if GameState.office_phase == "place":
+				return "Set up %s" % venue.get("name", "the room")
+			return "Make it yours"
+		"job_pack":
+			return "Pack %d pieces" % GameState.job.get("items", []).size()
+		"truck":
+			return "Load the truck"
+		"job_unpack":
+			return "Unpack and place"
+	return ""
+
+
+func _mode_chips() -> Array:
+	match GameState.mode:
+		"office":
+			if GameState.office_phase == "pack":
+				return [["Click", "box it"]]
+			if GameState.office_phase == "place":
+				return [["Click", "place"], ["R", "rotate"], ["G", "grid"], ["Q E", "turn view"]]
+			return [["R", "rotate"], ["G", "grid"], ["Q E", "turn view"], ["M", "map"]]
+		"job_pack":
+			return [["Click", "box it"], ["Esc", "pause"]]
+		"truck":
+			return [["Click", "pad"], ["Click", "take back"]]
+		"job_unpack":
+			return [["Click", "carry, open"], ["R", "rotate"], ["Q E", "turn view"]]
+	return []
+
+
+func _sync_chips() -> void:
+	if chips_slot == null:
+		return
+	var items := _mode_chips()
+	var key := JSON.stringify(items)
+	if key == _chips_key:
+		return
+	_chips_key = key
+	for child in chips_slot.get_children():
+		child.queue_free()
+	chips_slot.add_child(UIKit.chips(items))
 
 
 func _goal_hint() -> String:
@@ -2412,21 +2505,21 @@ func _mode_hint() -> String:
 	match GameState.mode:
 		"office":
 			if GameState.office_phase == "pack":
-				return "Pack the old office. Click each item. R is for later, when you place things. Shift+R turns 15°."
+				return "Click each piece and it goes in a box."
 			if GameState.office_phase == "place":
-				return "Click a box, then a floor, desk, or stack. R rotates 90°. Shift+R turns 15°. G toggles the grid. Wall pieces sit 0.12 m off the wall."
+				return "Click a box, then the floor, a desk, or a stack. Shift+R turns 15°. Wall pieces snap to the wall."
 			var extra := ""
 			if not GameState.door_orders().is_empty():
 				extra = " A courier box is by the door."
 			if GameState.shop_open():
-				extra += " Vibe %d. Visitors wander in." % GameState.vibe_score()
-			return "Pick something up and set it on the floor or another item. G toggles grid snap. Drawers click. The lamp keeps its glow." + extra
+				extra += " Visitors wander in."
+			return "Pick things up and set them on the floor or on each other. The wheel zooms, or turns what you hold." + extra
 		"job_pack":
-			return "Click an item to drop it in the open box. Fragile things like padding. Heavy things ride alone, on the bottom."
+			return "Fragile likes padding. Heavy rides alone, on the bottom. New box when one is full."
 		"truck":
-			return "Choose a box, then a pad in the bed. Mustard pads are the floor. The espresso machine stays down there."
+			return "Pick a box, then a pad in the bed. Mustard pads are the floor, and heavy goes there."
 		"job_unpack":
-			return "Carry each box through the door, open it, and stack what's inside on a solid surface. Mend a scuff or keep it. Base pay still shows up."
+			return "Carry each box in, click it to open, then stack what's inside on something solid. Mend a scuff or keep it."
 	return ""
 
 
@@ -2608,9 +2701,17 @@ func _add_goal_ring(root: Node3D, pose: Dictionary) -> void:
 	root.add_child(ring)
 
 
-func _toast(message: String) -> void:
+func _toast(message: String, who := "Dana") -> void:
 	if toast == null:
 		return
+	if toast_name:
+		toast_name.text = who
+		var face := toast_name.get_parent().get_parent().get_node_or_null("ToastFace")
+		if face:
+			var letter := face.get_child(0) as Label
+			if letter:
+				letter.text = who.left(1)
+			face.add_theme_stylebox_override("panel", UIKit.style(UIKit.TERRA if who == "Marge" else UIKit.SAGE, 24))
 	toast.text = message
 	toast.visible = true
 	if toast.get_parent() is CanvasItem:

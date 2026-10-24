@@ -20,6 +20,9 @@ const SCREEN := Color("243832")
 # Nothing on a menu is smaller than 28px. Paragraphs and row copy use 36px.
 const MIN_FONT := 28
 const BODY_FONT := 36
+# Secondary copy (key captions, chat lines, card footers) may go down to 27px:
+# that is 18px on a 1280x800 Deck, the floor the README promises.
+const SMALL_FONT := 27
 
 static var quit_enabled := true
 
@@ -139,6 +142,11 @@ static func body_px(size: int) -> int:
 	return font_px(maxi(size, BODY_FONT))
 
 
+static func small_px(size: int) -> int:
+	var scaled := int(round(float(maxi(size, SMALL_FONT)) * SaveManager.text_scale))
+	return maxi(SMALL_FONT, scaled)
+
+
 static func install_theme(node: Node) -> void:
 	if node == null:
 		return
@@ -162,6 +170,10 @@ static func label(text: String, size := 36, color: Color = DARK, font_kind := "b
 		"crt":
 			node.add_theme_font_override("font", crt_font())
 			px = font_px(size)
+		"small":
+			node.add_theme_font_override("font", body_font())
+			px = small_px(size)
+			node.set_meta("small_text", true)
 		_:
 			node.add_theme_font_override("font", body_font())
 			px = body_px(size)
@@ -302,6 +314,67 @@ static func link_grid(rows: Array) -> void:
 		first.grab_focus()
 
 
+static func chip(key: String, caption: String) -> HBoxContainer:
+	# A key cap and what it does: [R] rotate.
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 6)
+	var cap := Label.new()
+	cap.text = key
+	cap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cap.add_theme_font_override("font", title_font())
+	cap.add_theme_font_size_override("font_size", small_px(24))
+	cap.set_meta("small_text", true)
+	cap.add_theme_color_override("font_color", CREAM_CARD)
+	cap.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cap.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var box := style(DARK, 8)
+	box.shadow_size = 0
+	box.content_margin_left = 10
+	box.content_margin_right = 10
+	box.content_margin_top = 2
+	box.content_margin_bottom = 2
+	cap.add_theme_stylebox_override("normal", box)
+	cap.custom_minimum_size = Vector2(44, 36)
+	row.add_child(cap)
+	var text := label(caption, 24, DARK, "small", false)
+	text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(text)
+	return row
+
+
+static func chips(items: Array) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.name = "Chips"
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 18)
+	for item in items:
+		if item is Array and (item as Array).size() >= 2:
+			row.add_child(chip(str(item[0]), str(item[1])))
+	return row
+
+
+static func avatar(initial: String, color: Color, size := 44) -> Panel:
+	var disc := Panel.new()
+	disc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	disc.custom_minimum_size = Vector2(size, size)
+	var box := style(color, int(size / 2))
+	box.shadow_size = 0
+	disc.add_theme_stylebox_override("panel", box)
+	var letter := Label.new()
+	letter.text = initial
+	letter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	letter.add_theme_font_override("font", title_font())
+	letter.add_theme_font_size_override("font_size", small_px(24))
+	letter.set_meta("small_text", true)
+	letter.add_theme_color_override("font_color", CREAM_CARD)
+	letter.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	letter.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	disc.add_child(letter)
+	letter.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	return disc
+
+
 static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> void:
 	if host == null or beat.is_empty():
 		return
@@ -324,8 +397,8 @@ static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> vo
 		panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 		panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	panel.offset_left = -550
-	panel.offset_right = 550
+	panel.offset_left = -520
+	panel.offset_right = 520
 	if at_top:
 		panel.offset_top = 130
 		panel.offset_bottom = 130
@@ -335,25 +408,48 @@ static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> vo
 	var margin := MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for side in ["left", "right"]:
-		margin.add_theme_constant_override("margin_" + side, 28)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_bottom", 20)
+		margin.add_theme_constant_override("margin_" + side, 22)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_bottom", 16)
 	panel.add_child(margin)
+	var strip := HBoxContainer.new()
+	strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	strip.add_theme_constant_override("separation", 18)
+	margin.add_child(strip)
+	var accent := ColorRect.new()
+	accent.color = TERRA
+	accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	accent.custom_minimum_size = Vector2(8, 0)
+	accent.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	strip.add_child(accent)
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	column.add_theme_constant_override("separation", 8)
-	margin.add_child(column)
-	var title := label("%s" % beat.get("level_name", ""), 40, TERRA, "title", false)
+	column.add_theme_constant_override("separation", 6)
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	strip.add_child(column)
+	var head := HBoxContainer.new()
+	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	head.add_theme_constant_override("separation", 12)
+	column.add_child(head)
+	head.add_child(avatar("D", TERRA, 40))
+	var title := label("%s" % beat.get("level_name", ""), 32, TERRA, "title", false)
 	title.name = "LevelTitle"
-	title.custom_minimum_size = Vector2(520, 56)
-	column.add_child(title)
-	for key in ["arrival", "moment"]:
-		var text := str(beat.get(key, "")).strip_edges()
-		if text == "":
-			continue
-		var row := label(text, BODY_FONT, DARK)
-		row.custom_minimum_size = Vector2(1040, 0)
+	title.custom_minimum_size = Vector2(420, 44)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(title)
+	var tag := label(str(beat.get("level_id", beat.get("level", ""))), 24, BLUE, "small", false)
+	tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(tag)
+	var arrival := str(beat.get("arrival", "")).strip_edges()
+	if arrival != "":
+		var row := label(arrival, 28, DARK, "small")
+		row.custom_minimum_size = Vector2(960, 0)
 		column.add_child(row)
+	var moment := str(beat.get("moment", "")).strip_edges()
+	if moment != "":
+		var row2 := label(moment, 28, BLUE, "small")
+		row2.custom_minimum_size = Vector2(960, 0)
+		column.add_child(row2)
 	var tw := host.create_tween()
 	tw.tween_interval(8.5)
 	tw.tween_property(panel, "modulate:a", 0.0, 0.45)

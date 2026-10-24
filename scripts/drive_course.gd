@@ -92,6 +92,11 @@ var route_dots: Array = []
 var box_nodes: Array = []
 var bay_nodes: Dictionary = {}
 var cam_look := Vector3.ZERO
+var objective: Label
+var chips_slot: Control
+var _chips_key := ""
+var distance_label: Label
+var meter_fill: StyleBoxFlat
 
 
 func _ready() -> void:
@@ -646,6 +651,12 @@ func _hud() -> void:
 	meter.max_value = 100
 	meter.value = 100
 	meter.show_percentage = false
+	var track := UIKit.style(Color(UIKit.DARK, 0.12), 18)
+	track.shadow_size = 0
+	meter.add_theme_stylebox_override("background", track)
+	meter_fill = UIKit.style(UIKit.SAGE, 18)
+	meter_fill.shadow_size = 0
+	meter.add_theme_stylebox_override("fill", meter_fill)
 	card.add_child(meter)
 	meter_label = UIKit.label("100", 36, UIKit.DARK, "body", false)
 	meter_label.position = Vector2(400, 16)
@@ -656,11 +667,28 @@ func _hud() -> void:
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	hud_root.add_child(hint_bar)
-	UIKit.pin_bottom(hint_bar, 16, -156, -16, -16)
-	hint = UIKit.label("", 30, UIKit.DARK)
+	UIKit.pin_bottom(hint_bar, 16, -150, -16, -12)
+	var bar_row := HBoxContainer.new()
+	bar_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar_row.add_theme_constant_override("separation", 24)
+	hint_bar.add_child(bar_row)
+	UIKit.fill(bar_row, 20, 12, 440, 12)
+	var bar_text := VBoxContainer.new()
+	bar_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar_text.add_theme_constant_override("separation", 2)
+	bar_row.add_child(bar_text)
+	objective = UIKit.label("", 30, UIKit.TERRA, "title", false)
+	objective.name = "Objective"
+	bar_text.add_child(objective)
+	hint = UIKit.label("", 28, UIKit.DARK, "small")
 	hint.max_lines_visible = 2
-	hud_root.add_child(hint)
-	UIKit.pin_bottom(hint, 32, -144, -420, -24)
+	bar_text.add_child(hint)
+	chips_slot = VBoxContainer.new()
+	chips_slot.name = "ChipsSlot"
+	chips_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chips_slot.alignment = BoxContainer.ALIGNMENT_CENTER
+	bar_row.add_child(chips_slot)
 	var name_bar := Panel.new()
 	name_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 14))
@@ -674,14 +702,23 @@ func _hud() -> void:
 	var map_card := Panel.new()
 	map_card.name = "Minimap"
 	map_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	map_card.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.92), 14))
+	map_card.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 16))
 	hud_root.add_child(map_card)
-	UIKit.pin_top_right(map_card, -356, 96, -16, 330)
+	UIKit.pin_top_right(map_card, -376, 96, -16, 376)
 	minimap = Control.new()
 	minimap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	map_card.add_child(minimap)
-	UIKit.fill(minimap, 12, 12, 12, 12)
+	UIKit.fill(minimap, 12, 12, 12, 52)
 	minimap.draw.connect(_draw_minimap)
+	distance_label = UIKit.label("", 24, UIKit.DARK, "small", false)
+	distance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	map_card.add_child(distance_label)
+	distance_label.layout_mode = 1
+	distance_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	distance_label.offset_top = -44
+	distance_label.offset_bottom = -8
+	distance_label.offset_left = 12
+	distance_label.offset_right = -12
 
 
 func _set_action(text: String) -> void:
@@ -712,12 +749,12 @@ func _hint_text() -> String:
 	var line := ""
 	match state:
 		"load":
-			line = "Parked at %s. Press %s or Load up to pull the boxes in." % [pickup.get("name", "the curb"), Controls.describe_key("interact")]
+			line = "The boxes are on the curb. Pull them into the bed."
 		"drive":
 			if at_dropoff:
-				line = "This is the bay. Press %s or Unload." % Controls.describe_key("interact")
+				line = "Stopped in the bay. Hand the boxes over."
 			else:
-				line = "Deliver to %s. Follow the arrow." % dest
+				line = "Follow the arrow and the dots on the road."
 				if bool(course.get("alley", false)):
 					line += " The alley is shorter and bumpier."
 				elif str(course.get("id", "")) == "duck_pond":
@@ -726,10 +763,39 @@ func _hint_text() -> String:
 			line = "Unloading at %s." % dest
 		_:
 			line = "Done."
-	var second := "WASD drives, %s brakes hard, %s honks. Condition %d." % [Controls.describe_key("handbrake"), Controls.describe_key("horn"), condition]
+	if objective:
+		match state:
+			"load":
+				objective.text = "Load up at %s" % pickup.get("name", "the curb")
+			"drive":
+				objective.text = "Park in the bay" if at_dropoff else "Deliver to %s" % dest
+			"unload":
+				objective.text = "Unloading"
+			_:
+				objective.text = "Delivered"
+	_sync_chips()
 	if weather == "rain":
-		second += " Rain makes the stop longer."
-	return line + "\n" + second
+		line += " Rain makes the stop longer."
+	return line
+
+
+func _sync_chips() -> void:
+	if chips_slot == null:
+		return
+	var items: Array = []
+	if state == "load":
+		items = [[Controls.describe_key("interact"), "load up"]]
+	elif state == "drive" and at_dropoff:
+		items = [[Controls.describe_key("interact"), "unload"]]
+	elif state == "drive":
+		items = [["W A S D", "drive"], [Controls.describe_key("handbrake"), "handbrake"], [Controls.describe_key("horn"), "honk"]]
+	var key := JSON.stringify(items)
+	if key == _chips_key:
+		return
+	_chips_key = key
+	for child in chips_slot.get_children():
+		child.queue_free()
+	chips_slot.add_child(UIKit.chips(items))
 
 
 # ---------------------------------------------------------------- loop
@@ -761,11 +827,26 @@ func _process(delta: float) -> void:
 	if rain:
 		rain.global_position = truck.global_position + Vector3(0, 12, 0)
 	meter.value = condition
+	if meter_fill:
+		meter_fill.bg_color = UIKit.SAGE if condition >= 70 else (UIKit.MUSTARD if condition >= 50 else UIKit.TERRA)
 	var stamp := Tuning.tip_stamp(condition)
 	meter_label.text = "%d  %s" % [condition, stamp]
 	hint.text = _hint_text()
+	if distance_label:
+		var left := _route_left()
+		distance_label.text = "%d m to %s" % [int(round(left / PX)), dropoff.get("name", "the bay")] if state == "drive" else str(dropoff.get("name", ""))
 	if minimap:
 		minimap.queue_redraw()
+
+
+func _route_left() -> float:
+	if route.size() < 2:
+		return 0.0
+	var idx := clampi(route_index, 1, route.size() - 1)
+	var total := pos.distance_to(route[idx])
+	for i in range(idx + 1, route.size()):
+		total += route[i - 1].distance_to(route[i])
+	return total
 
 
 func _place_truck(delta: float) -> void:
@@ -1247,28 +1328,52 @@ func _draw_minimap() -> void:
 	var bounds: Rect2 = city.bounds
 	var k := minf(size.x / bounds.size.x, size.y / bounds.size.y)
 	var offset := (size - bounds.size * k) * 0.5
-	minimap.draw_rect(Rect2(offset, bounds.size * k), Color("CFC7B8"))
+	# Paper, with the roads as the gaps between soft blocks.
+	minimap.draw_rect(Rect2(offset, bounds.size * k), Color("E9E1CF"))
 	for c in city.cols:
 		for r in city.rows:
 			var rect: Rect2 = city.block_rect(c, r)
-			var color := Color("8FAF7E") if Vector2i(c, r) == city.park_block else Color("B9A58C")
-			minimap.draw_rect(Rect2(offset + rect.position * k, rect.size * k), color)
-	if route.size() > 1:
+			var color := Color("B9D4A4") if Vector2i(c, r) == city.park_block else Color("CFC3AE")
+			var box := Rect2(offset + rect.position * k + Vector2(1, 1), rect.size * k - Vector2(2, 2))
+			minimap.draw_rect(box, color)
+			minimap.draw_rect(box, Color(UIKit.DARK, 0.12), false, 1.0)
+	var water: Dictionary = city.pond()
+	minimap.draw_circle(offset + (water.get("center", Vector2.ZERO) as Vector2) * k, float(water.get("radius", 100)) * k, Color("9FC4D6"))
+	if city.alley.size != Vector2.ZERO:
+		minimap.draw_rect(Rect2(offset + city.alley.position * k, city.alley.size * k), Color("8E6E5A"))
+	# The route: a cream underlay, then terracotta, from where the truck is.
+	if route.size() > 1 and state == "drive":
 		var points := PackedVector2Array()
-		for p in route:
-			points.append(offset + p * k)
-		minimap.draw_polyline(points, Color(UIKit.TERRA, 0.9), 2.0)
+		points.append(offset + pos * k)
+		for i in range(clampi(route_index, 1, route.size() - 1), route.size()):
+			points.append(offset + route[i] * k)
+		minimap.draw_polyline(points, Color("F6EEDC"), 7.0, true)
+		minimap.draw_polyline(points, UIKit.TERRA, 3.5, true)
+	for car in cars:
+		minimap.draw_circle(offset + (car["pos"] as Vector2) * k, 2.0, Color(UIKit.DARK, 0.35))
+	# Pins: a blue dot where the boxes came from, a green flag where they go.
 	var pick: Rect2 = pickup.get("bay", Rect2())
 	var drop: Rect2 = dropoff.get("bay", Rect2())
-	minimap.draw_circle(offset + pick.get_center() * k, 4.0, UIKit.BLUE)
-	minimap.draw_circle(offset + drop.get_center() * k, 5.0, UIKit.GREEN)
-	for car in cars:
-		minimap.draw_circle(offset + (car["pos"] as Vector2) * k, 1.5, Color(UIKit.DARK, 0.5))
-	# The truck as a little wedge pointing where it faces.
+	var pick_at := offset + pick.get_center() * k
+	minimap.draw_circle(pick_at, 6.0, Color("F6EEDC"))
+	minimap.draw_circle(pick_at, 4.5, UIKit.BLUE)
+	var drop_at := offset + drop.get_center() * k
+	minimap.draw_circle(drop_at, 7.0, Color("F6EEDC"))
+	minimap.draw_circle(drop_at, 5.5, UIKit.GREEN)
+	minimap.draw_line(drop_at, drop_at + Vector2(0, -16), UIKit.DARK, 2.0)
+	minimap.draw_colored_polygon(PackedVector2Array([drop_at + Vector2(0, -16), drop_at + Vector2(12, -12), drop_at + Vector2(0, -8)]), UIKit.GREEN)
+	# The truck as a wedge pointing where it faces, with a soft shadow.
 	var at := offset + pos * k
 	var fwd := Vector2.RIGHT.rotated(heading)
 	var side := Vector2(-fwd.y, fwd.x)
-	minimap.draw_colored_polygon(PackedVector2Array([at + fwd * 7.0, at - fwd * 4.0 + side * 4.5, at - fwd * 4.0 - side * 4.5]), UIKit.TERRA)
+	var wedge := PackedVector2Array([at + fwd * 9.0, at - fwd * 5.0 + side * 5.5, at - fwd * 5.0 - side * 5.5])
+	minimap.draw_colored_polygon(PackedVector2Array([wedge[0] + Vector2(1, 2), wedge[1] + Vector2(1, 2), wedge[2] + Vector2(1, 2)]), Color(UIKit.DARK, 0.25))
+	minimap.draw_colored_polygon(wedge, UIKit.TERRA)
+	minimap.draw_polyline(PackedVector2Array([wedge[0], wedge[1], wedge[2], wedge[0]]), UIKit.DARK, 1.5, true)
+	# A compass rose in the corner.
+	var corner := offset + Vector2(bounds.size.x * k - 14.0, 14.0)
+	minimap.draw_circle(corner, 10.0, Color("F6EEDC"))
+	minimap.draw_colored_polygon(PackedVector2Array([corner + Vector2(0, -8), corner + Vector2(4, 2), corner + Vector2(-4, 2)]), UIKit.DARK)
 
 
 func _hazard_art(kind: String) -> String:
