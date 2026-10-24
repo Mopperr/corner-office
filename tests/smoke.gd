@@ -210,11 +210,11 @@ func _ready() -> void:
 			if not duck_note or GameState.inbox.size() <= before_mail:
 				failures.append("duck beat on drive")
 			var dressed := 0
-			for child in drive.get_children():
-				if child is Sprite2D and str(child.name) in ["fountain", "willow", "bridge_closed", "duck", "duckling"]:
+			for child in drive.find_children("*", "Node3D", true, false):
+				if str(child.name) in ["fountain", "willow", "bridge_closed", "duck", "duckling"]:
 					dressed += 1
 			if dressed < 4:
-				failures.append("pond sprites %d" % dressed)
+				failures.append("pond props %d" % dressed)
 			_bury(drive)
 			GameState.job = {}
 			GameState.set_mode("office")

@@ -1,18 +1,28 @@
-extends Node2D
-# The drive. A top-down town built by city.gd, a truck with weight to it,
-# traffic that keeps to its lane, and a loading bay at both ends: load the
-# boxes at the client's curb, follow the arrow, park in the bay at the other
-# end, and unload. Box condition is the only score. You cannot fail a drive.
+extends Node3D
+# The drive, seen from behind the truck. The town comes from city.gd (laid out
+# in drive pixels, 32 to the metre) and is built here out of plain meshes:
+# blocks of buildings, two-lane roads, a park with the pond, an alley, shop
+# signs, and a loading bay at the curb of every place. The truck is the real
+# mover_truck model; the chase camera hangs behind it and leans into the
+# turns. Load the boxes at the client's curb, follow the arrow and the
+# minimap, park in the bay at the other end, and unload. Box condition is the
+# only score. You cannot fail a drive.
+#
+# The simulation stays in 2D pixels (pos, heading, vel) so the hazard and
+# condition rules, and the tests that poke them, are unchanged.
 
 const Tuning = preload("res://scripts/tuning.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
 const Controls = preload("res://scripts/control_map.gd")
 const City = preload("res://scripts/city.gd")
+const Props = preload("res://scripts/props.gd")
+const Outdoors = preload("res://scripts/outdoors.gd")
+const Graphics = preload("res://scripts/settings_manager.gd")
 
 signal finished(result: Dictionary)
 
 const PX := 32.0
-# @1x frame is 148x72. Opaque art sits inside a clear margin; hit tests use that art, not the canvas.
+# The truck's footprint in drive pixels: the model body is 4.5 m long and 2.1 m wide.
 const FRAME_W := 148.0
 const FRAME_H := 72.0
 const ART_X := 2.0
@@ -21,6 +31,12 @@ const ART_W := 145.0
 const ART_H := 71.0
 const TRUCK_RADIUS := 38.0
 const CAR_RADIUS := 34.0
+
+const ASPHALT := Color("4F4B4E")
+const LANE_LINE := Color("E8DFC8")
+const KERB := Color("C9C2B5")
+const PAVEMENT := Color("BDB5A8")
+const GRASS := Color("8FB573")
 
 var course: Dictionary = {}
 var city = null
@@ -39,13 +55,13 @@ var contact_ready: Dictionary = {}
 var duck_hold := 0.0
 var laps := 0
 var in_finish := false
-var truck: Sprite2D
-var cam: Camera2D
+var truck: Node3D
+var cam: Camera3D
 var meter: ProgressBar
 var meter_label: Label
 var hint: Label
 var time_alive := 0.0
-var rain: CPUParticles2D
+var rain: CPUParticles3D
 var wiper := 0.0
 var rev_cd := 0.0
 var jogger_cd := 0.0
@@ -70,6 +86,12 @@ var act_button: Button
 var minimap: Control
 var pulse := 0.0
 var skid := 0.0
+var world: Node3D
+var arrow: Node3D
+var route_dots: Array = []
+var box_nodes: Array = []
+var bay_nodes: Dictionary = {}
+var cam_look := Vector3.ZERO
 
 
 func _ready() -> void:
@@ -100,31 +122,22 @@ func _ready() -> void:
 		heading = round(first / (PI * 0.5)) * PI * 0.5
 	box_count = maxi(1, GameState.job.get("boxes", []).size())
 	_resolve_hazards()
-	cam = Camera2D.new()
-	cam.position = pos
-	cam.zoom = Vector2(1.05, 1.05)
-	cam.position_smoothing_enabled = true
-	cam.position_smoothing_speed = 7.0
-	add_child(cam)
-	# The dedicated top-down truck sprite is still coming. This sheet is the placeholder.
-	truck = Sprite2D.new()
-	var sheet_path := "res://assets/ui/driving/mover_truck_topdown_sheet@1x.png"
-	var sheet_scale := 1.0
-	if not ResourceLoader.exists(sheet_path):
-		sheet_path = "res://assets/ui/driving/mover_truck_topdown_sheet.png"
-		sheet_scale = 0.5
-	if ResourceLoader.exists(sheet_path):
-		truck.texture = load(sheet_path)
-		truck.hframes = 4
-	truck.centered = true
-	truck.scale = Vector2(sheet_scale, sheet_scale)
-	truck.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	truck.position = pos
-	truck.rotation = heading
-	truck.z_index = 8
-	add_child(truck)
-	_dress_town()
+	_lights()
+	world = Node3D.new()
+	world.name = "Town"
+	add_child(world)
+	_build_town()
+	_build_truck()
 	_spawn_traffic()
+	_build_route_marks()
+	cam = Camera3D.new()
+	cam.name = "ChaseCamera"
+	cam.fov = 62.0
+	cam.near = 0.2
+	cam.far = 260.0
+	add_child(cam)
+	cam.current = true
+	_snap_camera()
 	_hud()
 	UIKit.show_level_beat(self, GameState.present_current_slice_level(), true)
 	var weather := str(course.get("weather", "clear"))
@@ -135,11 +148,24 @@ func _ready() -> void:
 		AudioDirector.start_loop("sfx_l05_fountain_loop")
 	AudioDirector.start_loop("sfx_truck_idle_loop")
 	_set_action("Load up")
-	queue_redraw()
 
 
 func _exit_tree() -> void:
 	AudioDirector.stop_level()
+
+
+# ---------------------------------------------------------------- scale
+
+static func to_world(p: Vector2, y := 0.0) -> Vector3:
+	return Vector3(p.x / PX, y, p.y / PX)
+
+
+static func rect_center(rect: Rect2, y := 0.0) -> Vector3:
+	return to_world(rect.get_center(), y)
+
+
+func _forward() -> Vector3:
+	return Vector3(cos(heading), 0.0, sin(heading))
 
 
 # ---------------------------------------------------------------- setup
@@ -167,130 +193,423 @@ func _resolve_hazards() -> void:
 		hazards.append({"type": "wobble", "x": middle.x, "y": middle.y, "on": "alley"})
 
 
+func _lights() -> void:
+	var weather := str(course.get("weather", "clear"))
+	var env := WorldEnvironment.new()
+	env.name = "World"
+	var environment := Graphics.load_environment(SaveManager.graphics_quality)
+	environment.background_mode = Environment.BG_SKY
+	var sky := Sky.new()
+	var sky_material := ProceduralSkyMaterial.new()
+	if weather == "rain":
+		sky_material.sky_top_color = Color("6C7384")
+		sky_material.sky_horizon_color = Color("A5A7B0")
+		sky_material.ground_bottom_color = Color("4F4B4E")
+		sky_material.ground_horizon_color = Color("8E8A8C")
+	else:
+		sky_material.sky_top_color = Color("8FBDE0")
+		sky_material.sky_horizon_color = Color("E6EEF2")
+		sky_material.ground_bottom_color = Color("8FB573")
+		sky_material.ground_horizon_color = Color("C9C2B5")
+	sky.sky_material = sky_material
+	environment.sky = sky
+	environment.fog_enabled = true
+	environment.fog_light_color = Color("C9D3DA") if weather != "rain" else Color("8E919B")
+	environment.fog_density = 0.004 if weather != "rain" else 0.011
+	env.environment = environment
+	add_child(env)
+	var sun := DirectionalLight3D.new()
+	sun.name = "Sun"
+	sun.rotation_degrees = Vector3(-55, 40, 0)
+	sun.light_color = Color("FFE3C0") if weather != "rain" else Color("C9CCD6")
+	sun.light_energy = 0.95 if weather != "rain" else 0.6
+	sun.shadow_enabled = true
+	sun.directional_shadow_max_distance = 90.0
+	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+	add_child(sun)
+	var fill := DirectionalLight3D.new()
+	fill.rotation_degrees = Vector3(-30, -140, 0)
+	fill.light_color = Color("A9C4D4")
+	fill.light_energy = 0.25
+	fill.shadow_enabled = false
+	add_child(fill)
+
+
+func _slab(size: Vector3, at: Vector3, color: Color, parent: Node3D = null) -> MeshInstance3D:
+	# `at.y` is the bottom of the slab.
+	var slab := Props.mesh_box(size, color)
+	slab.position = at + Vector3(0, size.y * 0.5, 0)
+	(parent if parent else world).add_child(slab)
+	return slab
+
+
+func _build_town() -> void:
+	var bounds: Rect2 = city.bounds
+	var size := to_world(bounds.size)
+	# Ground, then sidewalks, roads and lane paint on top.
+	_slab(Vector3(size.x + 80, 0.1, size.z + 80), Vector3(size.x * 0.5, -0.1, size.z * 0.5), GRASS)
+	_slab(Vector3(size.x, 0.02, size.z), Vector3(size.x * 0.5, -0.02, size.z * 0.5), PAVEMENT)
+	for rect in city.roads:
+		var r: Rect2 = rect
+		_slab(Vector3(r.size.x / PX, 0.02, r.size.y / PX), rect_center(r, -0.01), ASPHALT)
+	for rect in city.roads:
+		var r: Rect2 = rect
+		if r.size.x > r.size.y:
+			var z := (r.position.y + r.size.y * 0.5) / PX
+			var x := (r.position.x + 40.0) / PX
+			while x < (r.end.x - 40.0) / PX:
+				_slab(Vector3(1.5, 0.01, 0.12), Vector3(x + 0.75, 0.0, z), LANE_LINE)
+				x += 3.0
+		else:
+			var x2 := (r.position.x + r.size.x * 0.5) / PX
+			var z2 := (r.position.y + 40.0) / PX
+			while z2 < (r.end.y - 40.0) / PX:
+				_slab(Vector3(0.12, 0.01, 1.5), Vector3(x2, 0.0, z2 + 0.75), LANE_LINE)
+				z2 += 3.0
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(str(course.get("id", "")) + "town")
+	for c in city.cols:
+		for r in city.rows:
+			var rect: Rect2 = city.block_rect(c, r)
+			if Vector2i(c, r) == city.park_block:
+				_build_park(rect)
+				continue
+			# Raised kerb around the block.
+			_slab(Vector3(rect.size.x / PX, 0.12, rect.size.y / PX), rect_center(rect, 0.0), KERB)
+	for entry in city.buildings:
+		_build_building(entry, rng)
+	if city.alley.size != Vector2.ZERO:
+		_slab(Vector3(city.alley.size.x / PX, 0.03, city.alley.size.y / PX), rect_center(city.alley, 0.0), Color("6B4A3A"))
+		var alley_sign := _sign_text("Alley", rect_center(Rect2(city.alley.position, Vector2(city.alley.size.x, 40)), 3.2), Color("F4E9D8"))
+		alley_sign.font_size = 90
+	for shop in city.shops:
+		_build_sign(shop, Color("C68B59"))
+	for id in city.places.keys():
+		var place: Dictionary = city.places[id]
+		_build_sign(place, place.get("color", Color("C68B59")))
+	_build_bay(pickup, "LOAD")
+	_build_bay(dropoff, "UNLOAD")
+	for spot in city.curb_spots(rng):
+		var kind := str(spot.get("kind", ""))
+		var at: Vector3 = to_world(spot.get("at", Vector2.ZERO), 0.12)
+		match kind:
+			"lamppost":
+				var post := Props.mesh_cylinder(0.08, 4.0, Color("4E4A48"))
+				post.position = at
+				world.add_child(post)
+				var head := Props.mesh_box(Vector3(0.5, 0.25, 0.5), Color("FFE3A8"))
+				head.position = at + Vector3(0, 4.0, 0)
+				world.add_child(head)
+			"mailbox":
+				var box := Props.mesh_box(Vector3(0.4, 1.1, 0.4), Color("D86F5B"))
+				box.position = at
+				world.add_child(box)
+			"umbrella":
+				var pole := Props.mesh_cylinder(0.04, 2.2, Color("4E4A48"))
+				pole.position = at
+				world.add_child(pole)
+				var top := Outdoors._cone(1.2, 0.5, Color("D9765F"))
+				top.position = at + Vector3(0, 2.2, 0)
+				world.add_child(top)
+			"parked_car":
+				var parked := _make_car(Color("C9D2C0"))
+				parked.position = to_world(spot.get("at", Vector2.ZERO), 0.0)
+				world.add_child(parked)
+	for hazard in hazards:
+		_build_hazard(hazard)
+
+
+func _build_building(entry: Dictionary, rng: RandomNumberGenerator) -> void:
+	var rect: Rect2 = entry.get("rect", Rect2())
+	var color: Color = entry.get("color", Color("B9A58C"))
+	var floors := rng.randi_range(2, 4)
+	var height := floors * 3.2
+	var body := _slab(Vector3(rect.size.x / PX, height, rect.size.y / PX), rect_center(rect, 0.12), color)
+	body.name = "Building"
+	# A darker base, a roof lip, and window bands per floor.
+	_slab(Vector3(rect.size.x / PX + 0.2, 0.9, rect.size.y / PX + 0.2), rect_center(rect, 0.12), color.darkened(0.22))
+	_slab(Vector3(rect.size.x / PX + 0.3, 0.3, rect.size.y / PX + 0.3), rect_center(rect, 0.12 + height), color.darkened(0.3))
+	for f in floors:
+		var y := 0.12 + f * 3.2 + 1.5
+		var band := Color("F6E7B2") if rng.randf() < 0.7 else Color("8FA3B8")
+		_slab(Vector3(rect.size.x / PX + 0.06, 1.0, rect.size.y / PX + 0.06), rect_center(rect, y), band.darkened(0.1))
+		_slab(Vector3(rect.size.x / PX + 0.08, 0.25, rect.size.y / PX + 0.08), rect_center(rect, y + 0.65), color)
+		_slab(Vector3(rect.size.x / PX + 0.08, 0.25, rect.size.y / PX + 0.08), rect_center(rect, y - 0.65), color)
+	# Roof clutter.
+	for i in rng.randi_range(1, 3):
+		var at := Vector2(rect.position.x + rect.size.x * rng.randf_range(0.2, 0.8), rect.position.y + rect.size.y * rng.randf_range(0.2, 0.8))
+		_slab(Vector3(1.2, 0.8, 1.0), to_world(at, 0.12 + height), color.darkened(0.15))
+
+
+func _build_park(rect: Rect2) -> void:
+	_slab(Vector3(rect.size.x / PX, 0.08, rect.size.y / PX), rect_center(rect, 0.0), GRASS)
+	var water: Dictionary = city.pond()
+	var center: Vector3 = to_world(water.get("center", rect.get_center()), 0.08)
+	var radius := float(water.get("radius", 100)) / PX
+	var rim := Outdoors._disc(radius + 0.5, Color("B9A98C"))
+	rim.position = center + Vector3(0, 0.02, 0)
+	world.add_child(rim)
+	var pond := Outdoors._disc(radius, Color("7FA3B8"))
+	pond.name = "pond"
+	pond.position = center + Vector3(0, 0.04, 0)
+	world.add_child(pond)
+	var fountain := Props.mesh_cylinder(0.6, 1.6, Color("D9D2C4"))
+	fountain.name = "fountain"
+	fountain.position = center
+	world.add_child(fountain)
+	var spray := Outdoors._cone(0.5, 1.2, Color("CFE3EE"))
+	spray.position = center + Vector3(0, 1.6, 0)
+	world.add_child(spray)
+	var park_rng := RandomNumberGenerator.new()
+	park_rng.seed = 7
+	var names := ["willow", "willow", "willow", "willow"]
+	for i in 4:
+		var angle := i * PI * 0.5 + 0.6
+		var at := center + Vector3(cos(angle), 0, sin(angle)) * (radius + 3.0)
+		var tree := Node3D.new()
+		tree.name = names[i]
+		tree.position = Vector3(at.x, 0.08, at.z)
+		world.add_child(tree)
+		Outdoors._tree(tree, Vector3.ZERO, park_rng.randf_range(1.6, 2.2))
+	for i in 6:
+		var at := Vector3(rect.position.x / PX + park_rng.randf_range(1.0, rect.size.x / PX - 1.0), 0.08, rect.position.y / PX + park_rng.randf_range(1.0, rect.size.y / PX - 1.0))
+		if at.distance_to(center) < radius + 2.5:
+			continue
+		Outdoors._tree(world, at, park_rng.randf_range(0.9, 1.4))
+	for spot in [Vector3(rect.position.x / PX + 2.5, 0.08, rect.end.y / PX - 2.2), Vector3(rect.end.x / PX - 2.5, 0.08, rect.position.y / PX + 2.8)]:
+		Outdoors._bench(world, spot.x, spot.z)
+	var sign := _slab(Vector3(1.6, 1.0, 0.1), center + Vector3(0, 0.6, -radius - 1.4), Color("D86F5B"))
+	sign.name = "bridge_closed"
+	var label := _sign_text("Bridge closed", center + Vector3(0, 1.4, -radius - 1.45), Color("F4E9D8"))
+	label.font_size = 60
+	var ducklings := Node3D.new()
+	ducklings.name = "duckling"
+	ducklings.position = center + Vector3(radius * 0.6, 0.1, 1.0)
+	world.add_child(ducklings)
+	for i in 3:
+		var d := _duck(ducklings, Vector3(i * 0.45, 0, (i % 2) * 0.3), 0.55)
+		d.name = "duckling_%d" % i
+
+
+func _duck(parent: Node3D, at: Vector3, scale := 1.0) -> Node3D:
+	var duck := Node3D.new()
+	duck.position = at
+	parent.add_child(duck)
+	var body := Props.mesh_box(Vector3(0.5, 0.3, 0.32) * scale, Color("F2E5B8"))
+	duck.add_child(body)
+	var head := Props.mesh_box(Vector3(0.2, 0.22, 0.2) * scale, Color("5E8F4A"))
+	head.position = Vector3(0.25 * scale, 0.3 * scale, 0)
+	duck.add_child(head)
+	var bill := Props.mesh_box(Vector3(0.14, 0.06, 0.1) * scale, Color("E6B655"))
+	bill.position = Vector3(0.4 * scale, 0.36 * scale, 0)
+	duck.add_child(bill)
+	return duck
+
+
+func _build_sign(place: Dictionary, color: Color) -> void:
+	var door: Vector3 = to_world(place.get("door", Vector2.ZERO), 0.12)
+	var side := str(place.get("side", "N"))
+	var inward := _inward3(side)
+	var along := Vector3(-inward.z, 0, inward.x)
+	# An awning over the door and the name above it.
+	var awning := Props.mesh_box(Vector3(5.0, 0.3, 1.6), color)
+	awning.position = door + inward * 0.1 - Vector3(0, 0, 0) + Vector3(0, 2.6, 0) - inward * 0.6
+	awning.rotation.y = atan2(-along.z, along.x)
+	world.add_child(awning)
+	var frame := Props.mesh_box(Vector3(1.4, 2.2, 0.12), color.darkened(0.35))
+	frame.position = door + inward * 0.12
+	frame.rotation.y = atan2(-along.z, along.x)
+	world.add_child(frame)
+	var text := str(place.get("name", ""))
+	if text != "":
+		var label := _sign_text(text, door - inward * 0.9 + Vector3(0, 3.3, 0), Color("3E3A4F"))
+		label.rotation.y = atan2(-along.z, along.x) + (PI if side == "N" or side == "E" else 0.0)
+		label.rotation.y = atan2(inward.x, inward.z)
+		label.font_size = 72
+
+
+func _sign_text(text: String, at: Vector3, color: Color) -> Label3D:
+	var label := Label3D.new()
+	label.text = text
+	label.font = UIKit.title_font()
+	label.font_size = 64
+	label.pixel_size = 0.012
+	label.modulate = color
+	label.outline_modulate = Color(1, 1, 1, 0.9)
+	label.outline_size = 10
+	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	label.no_depth_test = false
+	label.position = at
+	world.add_child(label)
+	return label
+
+
+func _inward3(side: String) -> Vector3:
+	match side:
+		"N":
+			return Vector3(0, 0, 1)
+		"S":
+			return Vector3(0, 0, -1)
+		"W":
+			return Vector3(1, 0, 0)
+	return Vector3(-1, 0, 0)
+
+
+func _build_bay(place: Dictionary, caption: String) -> void:
+	var bay: Rect2 = place.get("bay", Rect2())
+	if bay.size == Vector2.ZERO:
+		return
+	var root := Node3D.new()
+	root.name = "Bay_" + caption
+	world.add_child(root)
+	var pad := Props.mesh_box(Vector3(bay.size.x / PX, 0.02, bay.size.y / PX), UIKit.MUSTARD)
+	pad.position = rect_center(bay, 0.0)
+	var material := pad.material_override as StandardMaterial3D
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.albedo_color = Color(UIKit.MUSTARD, 0.45)
+	root.add_child(pad)
+	var frame := Props.mesh_box(Vector3(bay.size.x / PX + 0.2, 0.05, bay.size.y / PX + 0.2), UIKit.MUSTARD)
+	frame.position = rect_center(bay, 0.0) - Vector3(0, 0.03, 0)
+	root.add_child(frame)
+	var label := _sign_text(caption, rect_center(bay, 0.06), Color("3E3A4F"))
+	label.rotation.x = -PI * 0.5
+	label.font_size = 96
+	label.reparent(root)
+	bay_nodes[caption] = root
+
+
+func _build_hazard(hazard: Dictionary) -> void:
+	var kind := str(hazard.get("type", ""))
+	var at := to_world(Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0))), 0.0)
+	match kind:
+		"cone":
+			var cone := Outdoors._cone(0.28, 0.75, Color("E8743B"))
+			cone.name = "cone"
+			cone.position = at
+			world.add_child(cone)
+			var stripe := Props.mesh_box(Vector3(0.36, 0.08, 0.36), Color("F4E9D8"))
+			stripe.position = at + Vector3(0, 0.38, 0)
+			world.add_child(stripe)
+		"puddle":
+			var puddle := Outdoors._disc(float(hazard.get("r", 56)) / PX, Color("7FA3B8"))
+			puddle.name = "puddle"
+			puddle.position = at + Vector3(0, 0.012, 0)
+			world.add_child(puddle)
+		"bump":
+			var bump := Props.mesh_box(Vector3(float(hazard.get("w", 170)) / PX, 0.14, float(hazard.get("h", 36)) / PX), Color("E6B655"))
+			bump.name = "speed_bump"
+			bump.position = at
+			world.add_child(bump)
+		"gravel":
+			var gravel := Props.mesh_box(Vector3(float(hazard.get("w", 280)) / PX, 0.05, float(hazard.get("h", 80)) / PX), Color("9C8469"))
+			gravel.name = "gravel"
+			gravel.position = at
+			world.add_child(gravel)
+		"ducks":
+			var ducks := Node3D.new()
+			ducks.name = "duck"
+			ducks.position = at
+			world.add_child(ducks)
+			for i in 4:
+				_duck(ducks, Vector3(-1.2 + i * 0.8, 0.0, (i % 2) * 0.6 - 0.3), 1.0)
+
+
+func _build_truck() -> void:
+	truck = Props.model("mover_truck")
+	if truck == null:
+		truck = Props.mesh_box(Vector3(4.5, 2.6, 2.1), Color("F4E9D8"))
+	truck.name = "Truck"
+	add_child(truck)
+	truck.position = to_world(pos)
+	truck.rotation.y = -heading
+	arrow = Outdoors._cone(0.45, 0.9, UIKit.TERRA)
+	arrow.name = "RouteArrow"
+	arrow.rotation.x = PI * 0.5
+	add_child(arrow)
+
+
+func _make_car(color: Color) -> Node3D:
+	var car := Node3D.new()
+	var body := Props.mesh_box(Vector3(4.0, 0.9, 1.8), color)
+	body.position.y = 0.4
+	car.add_child(body)
+	var cabin := Props.mesh_box(Vector3(2.0, 0.7, 1.6), color.darkened(0.15))
+	cabin.position = Vector3(-0.2, 1.3, 0)
+	car.add_child(cabin)
+	var glass := Props.mesh_box(Vector3(0.1, 0.5, 1.4), Color("9FC4D6"))
+	glass.position = Vector3(0.85, 1.35, 0)
+	car.add_child(glass)
+	for dx in [-1.3, 1.3]:
+		for dz in [-0.95, 0.95]:
+			var wheel := Props.mesh_cylinder(0.36, 0.3, Color("2E2A2C"))
+			wheel.rotation.x = PI * 0.5
+			wheel.position = Vector3(dx, 0.36, dz)
+			car.add_child(wheel)
+	return car
+
+
 func _spawn_traffic() -> void:
 	var loops: Array = city.traffic_loops()
 	var count := int(Tuning.get_value("drive.traffic_cars", 10))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(str(course.get("id", "drive")))
 	var mps := float(Tuning.get_value("drive.traffic_mps", 2.4)) * PX
+	var palette := [Color("F2E5B8"), Color("9FC4D6"), Color("D9765F"), Color("C9D2C0"), Color("E6B655"), Color("7A5C40")]
 	for i in count:
 		var loop: PackedVector2Array = loops[rng.randi_range(0, loops.size() - 1)]
 		var seg := rng.randi_range(0, loop.size() - 1)
-		var sprite := _make_sprite("parked_car")
-		if sprite == null:
-			continue
-		sprite.modulate = [Color("F2E5B8"), Color("9FC4D6"), Color("D9765F"), Color("C9D2C0"), Color("E6B655")][i % 5]
-		sprite.z_index = 6
 		var start: Vector2 = loop[seg].lerp(loop[(seg + 1) % loop.size()], rng.randf())
-		# Keep the first few seconds clear around the truck.
 		if start.distance_to(pos) < 420.0:
 			start = loop[(seg + 2) % loop.size()]
 			seg = (seg + 2) % loop.size()
-		cars.append({"loop": loop, "seg": seg, "pos": start, "speed": mps * rng.randf_range(0.8, 1.1), "cruise": mps, "sprite": sprite, "heading": 0.0, "horn": 0.0})
-		sprite.position = start
+		var node := _make_car(palette[i % palette.size()])
+		node.name = "Car"
+		node.position = to_world(start)
+		world.add_child(node)
+		cars.append({"loop": loop, "seg": seg, "pos": start, "speed": mps * rng.randf_range(0.8, 1.1), "cruise": mps, "node": node, "heading": 0.0, "horn": 0.0})
 
 
-func _dress_town() -> void:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = hash(str(course.get("id", "")) + "dress")
-	for spot in city.curb_spots(rng):
-		var sprite := _make_sprite(str(spot.get("kind", "")))
-		if sprite:
-			sprite.position = spot.get("at", Vector2.ZERO)
-			sprite.z_index = 3
-	for shop in city.shops:
-		var sprite := _make_sprite("shopfront")
-		if sprite:
-			sprite.position = (shop.get("door", Vector2.ZERO) as Vector2) + _inward(str(shop.get("side", "N"))) * 60.0
-			sprite.z_index = 3
-	for id in city.places.keys():
-		var place: Dictionary = city.places[id]
-		if id == "forest" or id == "garage":
-			continue
-		var sprite := _make_sprite("shopfront")
-		if sprite:
-			sprite.position = (place.get("door", Vector2.ZERO) as Vector2) + _inward(str(place.get("side", "N"))) * 60.0
-			sprite.z_index = 3
-	# The park: a fountain in the pond, willows, benches, a closed bridge, a jogger, ducklings.
-	var park: Rect2 = city.park_rect()
-	var water: Dictionary = city.pond()
-	var center: Vector2 = water.get("center", park.get_center())
-	for spot in [
-		{"name": "fountain", "at": center},
-		{"name": "willow", "at": park.position + Vector2(90, 110)},
-		{"name": "willow", "at": park.end - Vector2(120, 90)},
-		{"name": "bench", "at": Vector2(park.position.x + 80, park.end.y - 70)},
-		{"name": "bench", "at": Vector2(park.end.x - 80, park.position.y + 90)},
-		{"name": "bridge_closed", "at": center + Vector2(0, -float(water.get("radius", 100)) - 40)},
-		{"name": "jogger", "at": park.position + Vector2(park.size.x * 0.5, 40)},
-		{"name": "duckling", "at": center + Vector2(float(water.get("radius", 100)) * 0.6, 30)},
-	]:
-		var sprite := _make_sprite(str(spot["name"]))
-		if sprite:
-			sprite.position = spot["at"]
-			sprite.z_index = 3
-	for hazard in hazards:
-		var kind := str(hazard.get("type", ""))
-		var art := _hazard_art(kind)
-		if art == "":
-			continue
-		var at := Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
-		var sprite := _make_sprite(art)
-		if sprite:
-			sprite.position = at
-			sprite.z_index = 4
-			if kind == "bump" and float(hazard.get("h", 0)) > float(hazard.get("w", 0)):
-				sprite.rotation = PI * 0.5
-		if kind == "ducks":
-			var little := _make_sprite("duckling")
-			if little:
-				little.position = at + Vector2(36, 22)
-				little.z_index = 4
-
-
-func _inward(side: String) -> Vector2:
-	match side:
-		"N":
-			return Vector2(0, 1)
-		"S":
-			return Vector2(0, -1)
-		"W":
-			return Vector2(1, 0)
-	return Vector2(-1, 0)
-
-
-func _make_sprite(art_name: String) -> Sprite2D:
-	var path := "res://assets/ui/driving/%s@1x.png" % art_name
-	var sprite_scale := 1.0
-	if not ResourceLoader.exists(path):
-		path = "res://assets/ui/driving/%s.png" % art_name
-		sprite_scale = 0.5
-	if not ResourceLoader.exists(path):
-		return null
-	var sprite := Sprite2D.new()
-	sprite.name = art_name
-	sprite.texture = load(path)
-	sprite.centered = true
-	sprite.scale = Vector2(sprite_scale, sprite_scale)
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	add_child(sprite)
-	return sprite
+func _build_route_marks() -> void:
+	for dot in route_dots:
+		if is_instance_valid(dot):
+			dot.queue_free()
+	route_dots.clear()
+	if route.size() < 2:
+		return
+	var marks := Node3D.new()
+	marks.name = "RouteDots"
+	world.add_child(marks)
+	for i in range(1, route.size()):
+		var a := route[i - 1]
+		var b := route[i]
+		var steps := int(a.distance_to(b) / 64.0)
+		for k in range(1, steps):
+			var dot := Outdoors._disc(0.22, Color(UIKit.TERRA, 0.9))
+			dot.position = to_world(a.lerp(b, float(k) / float(steps)), 0.03)
+			dot.set_meta("leg", i)
+			marks.add_child(dot)
+			route_dots.append(dot)
 
 
 func _make_rain() -> void:
-	rain = CPUParticles2D.new()
-	rain.amount = 80
-	rain.lifetime = 1.1
+	rain = CPUParticles3D.new()
+	rain.amount = 500
+	rain.lifetime = 1.4
 	rain.preprocess = 1.0
-	rain.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	rain.emission_rect_extents = Vector2(760, 460)
-	rain.direction = Vector2(0.2, 1)
-	rain.spread = 12
-	rain.gravity = Vector2.ZERO
-	rain.initial_velocity_min = 280
-	rain.initial_velocity_max = 420
-	rain.color = Color(0.75, 0.82, 0.9, 0.35)
-	cam.add_child(rain)
+	rain.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	rain.emission_box_extents = Vector3(18, 1, 18)
+	rain.direction = Vector3(0.1, -1, 0)
+	rain.spread = 4
+	rain.gravity = Vector3(0, -2, 0)
+	rain.initial_velocity_min = 9.0
+	rain.initial_velocity_max = 12.0
+	rain.scale_amount_min = 0.03
+	rain.scale_amount_max = 0.05
+	rain.mesh = BoxMesh.new()
+	(rain.mesh as BoxMesh).size = Vector3(0.6, 6.0, 0.6)
+	rain.material_override = Props.mat(Color(0.8, 0.86, 0.95, 0.5))
+	(rain.material_override as StandardMaterial3D).transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	add_child(rain)
 
 
 # ---------------------------------------------------------------- hud
@@ -430,27 +749,78 @@ func _process(delta: float) -> void:
 		_hazards()
 		_check_alley()
 		_check_dropoff()
-	truck.position = pos
-	truck.rotation = heading
-	if absf(speed) > 20.0:
-		truck.frame = int(time_alive * (2.0 + absf(speed) / 80.0)) % 4
-	else:
-		truck.frame = 0
-	if shake > 0.0 and SaveManager.shake:
-		shake -= delta
-		truck.position += Vector2(randf_range(-3, 3), randf_range(-2, 2))
-	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
-	var look := Vector2.RIGHT.rotated(heading) * clampf(speed / max_speed, -1.0, 1.0) * 110.0
-	cam.position = pos + look
-	var z := lerpf(1.05, 0.82, clampf(absf(speed) / max_speed, 0.0, 1.0))
-	cam.zoom = cam.zoom.lerp(Vector2(z, z), delta * 2.0)
+	_place_truck(delta)
+	_update_camera(delta)
+	_update_marks()
+	if rain:
+		rain.global_position = truck.global_position + Vector3(0, 12, 0)
 	meter.value = condition
 	var stamp := Tuning.tip_stamp(condition)
 	meter_label.text = "%d  %s" % [condition, stamp]
 	hint.text = _hint_text()
 	if minimap:
 		minimap.queue_redraw()
-	queue_redraw()
+
+
+func _place_truck(delta: float) -> void:
+	truck.position = to_world(pos)
+	truck.rotation.y = -heading
+	# Lean into corners and rock on a hit.
+	var lean := clampf(-skid / 160.0, -0.08, 0.08)
+	truck.rotation.x = lerpf(truck.rotation.x, lean, delta * 6.0)
+	if shake > 0.0 and SaveManager.shake:
+		shake -= delta
+		truck.position += Vector3(randf_range(-0.05, 0.05), 0.0, randf_range(-0.05, 0.05))
+		truck.rotation.z = randf_range(-0.03, 0.03)
+	else:
+		truck.rotation.z = lerpf(truck.rotation.z, 0.0, delta * 8.0)
+
+
+func _update_camera(delta: float) -> void:
+	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+	var forward := _forward()
+	var truck_at := to_world(pos)
+	var back := 10.0 + 3.0 * clampf(absf(speed) / max_speed, 0.0, 1.0)
+	var goal := truck_at - forward * back + Vector3(0, 5.2, 0)
+	var look := truck_at + forward * (4.0 + 6.0 * clampf(speed / max_speed, -0.3, 1.0)) + Vector3(0, 1.2, 0)
+	var k := clampf(delta * 4.5, 0.0, 1.0)
+	cam.position = cam.position.lerp(goal, k)
+	cam_look = cam_look.lerp(look, clampf(delta * 6.0, 0.0, 1.0))
+	cam.look_at(cam_look, Vector3.UP)
+
+
+func _snap_camera() -> void:
+	var forward := _forward()
+	var truck_at := to_world(pos)
+	cam.position = truck_at - forward * 10.0 + Vector3(0, 5.2, 0)
+	cam_look = truck_at + forward * 4.0 + Vector3(0, 1.2, 0)
+	cam.look_at(cam_look, Vector3.UP)
+
+
+func _update_marks() -> void:
+	if arrow == null:
+		return
+	if state != "drive" or route.size() < 2:
+		arrow.visible = false
+	else:
+		arrow.visible = true
+		var goal := route[mini(route_index, route.size() - 1)]
+		if route_index < route.size() - 1 and pos.distance_to(goal) < 90.0:
+			route_index += 1
+			goal = route[route_index]
+		var dir := (goal - pos).normalized()
+		arrow.position = to_world(pos, 3.6 + sin(pulse * 3.0) * 0.15) + Vector3(dir.x, 0, dir.y) * 1.5
+		arrow.rotation = Vector3(PI * 0.5, 0, 0)
+		arrow.rotation.y = -dir.angle()
+		arrow.rotation = Basis(Vector3.UP, -dir.angle()).get_euler()
+		arrow.rotate_object_local(Vector3(0, 0, 1), -PI * 0.5)
+	for dot in route_dots:
+		if is_instance_valid(dot):
+			dot.visible = state == "drive" and int(dot.get_meta("leg", 0)) >= route_index
+	for caption in bay_nodes.keys():
+		var node: Node3D = bay_nodes[caption]
+		var active: bool = (caption == "LOAD" and state == "load") or (caption == "UNLOAD" and state == "drive")
+		node.position.y = (0.05 + 0.05 * sin(pulse * 4.0)) if active else 0.0
 
 
 func _drive(delta: float, weather: String) -> void:
@@ -464,10 +834,10 @@ func _drive(delta: float, weather: String) -> void:
 	var grip := float(Tuning.get_value("drive.grip", 8.0))
 	if weather == "rain":
 		grip = float(Tuning.get_value("drive.grip_rain", 4.5))
-	var handbrake := Controls.held("handbrake")
+	var handbrake: bool = Controls.held("handbrake")
 	if handbrake:
 		grip = float(Tuning.get_value("drive.grip_handbrake", 1.5))
-	var throttle := Controls.axis("drive_back", "drive_forward")
+	var throttle: float = Controls.axis("drive_back", "drive_forward")
 	var forward := Vector2.RIGHT.rotated(heading)
 	speed = vel.dot(forward)
 	if throttle > 0.0 and speed < max_speed * 0.25 and rev_cd <= 0.0:
@@ -499,11 +869,11 @@ func _drive(delta: float, weather: String) -> void:
 	# Tyres: bleed off the sideways part of the motion. Less in rain, hardly at all on the handbrake.
 	var lateral := vel - forward * vel.dot(forward)
 	vel -= lateral * clampf(grip * delta, 0.0, 1.0)
-	skid = lateral.length()
+	skid = lateral.length() * (1.0 if lateral.cross(forward) > 0.0 else -1.0)
 	if vel.length() > cap:
 		vel = vel.normalized() * cap
 	speed = vel.dot(forward)
-	var steer := Controls.axis("steer_left", "steer_right")
+	var steer: float = Controls.axis("steer_left", "steer_right")
 	if absf(speed) > 10.0:
 		var sign := 1.0 if speed >= 0.0 else -1.0
 		heading += steer * turn * delta * clampf(absf(speed) / max_speed, 0.35, 1.0) * sign
@@ -554,7 +924,6 @@ func _bounce(normal: Vector2, depth: float, kind: String) -> void:
 
 func _traffic(delta: float) -> void:
 	var truck_center := _art_center()
-	var forward := Vector2.RIGHT.rotated(heading)
 	for car in cars:
 		var loop: PackedVector2Array = car["loop"]
 		var seg: int = car["seg"]
@@ -576,17 +945,15 @@ func _traffic(delta: float) -> void:
 		if at.distance_to(target) < 6.0:
 			car["seg"] = (seg + 1) % loop.size()
 		car["pos"] = at
-		var sprite: Sprite2D = car["sprite"]
-		sprite.position = at
-		sprite.rotation = float(car["heading"])
+		var node: Node3D = car["node"]
+		node.position = to_world(at)
+		node.rotation.y = -float(car["heading"])
 		# A fender bender: push the truck off the car and spend some condition.
 		if at.distance_to(truck_center) < TRUCK_RADIUS + CAR_RADIUS - 8.0:
 			var normal := (truck_center - at).normalized()
 			pos += normal * 6.0
 			vel = vel * 0.4 + normal * 40.0
 			_apply_hit("car", int(Tuning.get_value("box_condition.collision", 10)), 1200)
-	if forward == Vector2.ZERO:
-		return
 
 
 func _check_alley() -> void:
@@ -650,14 +1017,27 @@ func _begin_unload() -> void:
 
 func _start_box_anim(loading: bool) -> void:
 	box_anim.clear()
+	for node in box_nodes:
+		if is_instance_valid(node):
+			node.queue_free()
+	box_nodes.clear()
 	anim_t = 0.0
 	var place: Dictionary = pickup if loading else dropoff
 	var door: Vector2 = place.get("door", pos)
-	var curb := door + _inward(str(place.get("side", "N"))) * -40.0
+	var side := str(place.get("side", "N"))
+	var inward := _inward3(side)
+	var curb := to_world(door, 0.0) - inward * 1.2
+	var along := Vector3(-inward.z, 0, inward.x)
+	var forward := _forward()
+	var right := Vector3(-forward.z, 0, forward.x)
 	for i in box_count:
-		var stack := curb + Vector2(-float(box_count) * 11.0 + i * 22.0, 0).rotated(float(place.get("heading", 0.0)))
-		var bed := pos + Vector2(-30.0 + float(i % 4) * 16.0, -10.0 + float(int(i / 4)) * 16.0).rotated(heading)
+		var stack := curb + along * (-float(box_count) * 0.35 + i * 0.7) + Vector3(0, 0.25, 0)
+		var bed := to_world(pos, 1.0) - forward * (1.2 - float(i % 4) * 0.6) + right * (-0.5 + float(int(i / 4)) * 1.0)
 		box_anim.append({"from": stack if loading else bed, "to": bed if loading else stack, "delay": i * 0.28, "done": false})
+		var box := Props.mesh_box(Vector3(0.5, 0.5, 0.5), Color("C68B59"))
+		box.position = stack if loading else bed
+		add_child(box)
+		box_nodes.append(box)
 	box_anim.append({"loading": loading})
 
 
@@ -665,11 +1045,16 @@ func _animate_boxes(delta: float) -> void:
 	anim_t += delta
 	var all_done := true
 	var loading := true
+	var index := 0
 	for entry in box_anim:
 		if entry.has("loading"):
 			loading = bool(entry["loading"])
 			continue
 		var t := clampf((anim_t - float(entry["delay"])) / 0.5, 0.0, 1.0)
+		if index < box_nodes.size() and is_instance_valid(box_nodes[index]):
+			var lift := sin(t * PI) * 0.8
+			box_nodes[index].position = (entry["from"] as Vector3).lerp(entry["to"], t) + Vector3(0, lift, 0)
+		index += 1
 		if t >= 1.0 and not bool(entry["done"]):
 			entry["done"] = true
 			AudioDirector.play_sfx("sfx_box_set_down", true)
@@ -681,6 +1066,11 @@ func _animate_boxes(delta: float) -> void:
 		return
 	box_anim.clear()
 	if loading:
+		# The boxes ride inside; the model's own cargo stays hidden behind the door.
+		for node in box_nodes:
+			if is_instance_valid(node):
+				node.queue_free()
+		box_nodes.clear()
 		state = "drive"
 		AudioDirector.play_sfx("sfx_truck_rev")
 		AudioDirector.play_sfx("sfx_success_chime")
@@ -843,129 +1233,7 @@ func _complete() -> void:
 	emit_signal("finished", result)
 
 
-# ---------------------------------------------------------------- drawing
-
-func _draw() -> void:
-	if city == null:
-		return
-	var weather := str(course.get("weather", ""))
-	var bounds: Rect2 = city.bounds
-	var ground := Color("C4B89A")
-	draw_rect(bounds.grow(600), ground)
-	# Roads.
-	for rect in city.roads:
-		draw_rect(rect, Color("5E5A5C"))
-	for rect in city.roads:
-		var r: Rect2 = rect
-		if r.size.x > r.size.y:
-			var y := r.position.y + r.size.y * 0.5
-			var x := r.position.x + 40.0
-			while x < r.end.x - 40.0:
-				draw_line(Vector2(x, y), Vector2(x + 48.0, y), Color("E8DFC8"), 4.0)
-				x += 96.0
-		else:
-			var x2 := r.position.x + r.size.x * 0.5
-			var y2 := r.position.y + 40.0
-			while y2 < r.end.y - 40.0:
-				draw_line(Vector2(x2, y2), Vector2(x2, y2 + 48.0), Color("E8DFC8"), 4.0)
-				y2 += 96.0
-	# Blocks: sidewalk, then the roofs.
-	for c in city.cols:
-		for r in city.rows:
-			var rect: Rect2 = city.block_rect(c, r)
-			if Vector2i(c, r) == city.park_block:
-				draw_rect(rect, Color("8FAF7E"))
-				draw_rect(rect.grow(-city.sidewalk * 0.5), Color("7FA06C"), false, 6.0)
-				var water: Dictionary = city.pond()
-				draw_circle(water.get("center", rect.get_center()), float(water.get("radius", 100)) + 10.0, Color("B9A98C"))
-				draw_circle(water.get("center", rect.get_center()), float(water.get("radius", 100)), Color("7FA3B8"))
-				continue
-			draw_rect(rect, Color("D9D2C4"))
-	for entry in city.buildings:
-		var rect: Rect2 = entry.get("rect", Rect2())
-		var color: Color = entry.get("color", Color("B9A58C"))
-		draw_rect(rect.grow(4), color.darkened(0.25))
-		draw_rect(rect, color)
-		var inset := rect.grow(-18)
-		draw_rect(inset, color.lightened(0.06))
-		# A few roof boxes and vents.
-		var vx := inset.position.x + 30
-		while vx < inset.end.x - 40:
-			draw_rect(Rect2(vx, inset.position.y + 24, 22, 22), color.darkened(0.18))
-			vx += 110
-	if city.alley.size != Vector2.ZERO:
-		draw_rect(city.alley, Color("6B4A3A"))
-		draw_string(UIKit.title_font(), city.alley.position + Vector2(-20, -12), "Alley", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, UIKit.CREAM_CARD)
-	# Shop signs and the two bays.
-	for shop in city.shops:
-		_sign(shop, Color("C68B59"))
-	for id in city.places.keys():
-		var place: Dictionary = city.places[id]
-		_sign(place, place.get("color", Color("C68B59")))
-	_bay(pickup, "LOAD", state == "load")
-	_bay(dropoff, "UNLOAD", state == "drive")
-	# The route, dotted on the road from where the truck is.
-	if state == "drive" and route.size() > 1:
-		var start := route_index
-		var previous := pos
-		for i in range(start, route.size()):
-			var seg := route[i] - previous
-			var steps := int(seg.length() / 44.0)
-			for k in range(1, steps):
-				draw_circle(previous + seg * (float(k) / float(steps)), 5.0, Color(UIKit.TERRA, 0.55))
-			previous = route[i]
-		var goal := route[mini(route_index, route.size() - 1)]
-		var dir := (goal - pos).normalized()
-		var tip := pos + dir * 120.0
-		var side := Vector2(-dir.y, dir.x)
-		draw_colored_polygon(PackedVector2Array([tip, tip - dir * 34.0 + side * 18.0, tip - dir * 34.0 - side * 18.0]), Color(UIKit.TERRA, 0.9))
-	# Boxes being loaded or unloaded.
-	for entry in box_anim:
-		if entry.has("loading"):
-			continue
-		var t := clampf((anim_t - float(entry["delay"])) / 0.5, 0.0, 1.0)
-		var at: Vector2 = (entry["from"] as Vector2).lerp(entry["to"], t)
-		var lift := sin(t * PI) * 10.0
-		draw_rect(Rect2(at + Vector2(-9, -9 - lift), Vector2(18, 18)), Color("C68B59"))
-		draw_rect(Rect2(at + Vector2(-9, -9 - lift), Vector2(18, 18)), Color("7A4F2A"), false, 2.0)
-	if weather == "rain":
-		draw_rect(bounds.grow(600), Color("3E3A4F", 0.18))
-	if skid > 60.0:
-		draw_circle(pos, 6.0, Color(0, 0, 0, 0.12))
-
-
-func _sign(place: Dictionary, color: Color) -> void:
-	var door: Vector2 = place.get("door", Vector2.ZERO)
-	var side := str(place.get("side", "N"))
-	var inward := _inward(side)
-	var along := Vector2(-inward.y, inward.x)
-	var width := 150.0
-	var strip := Rect2(door + inward * 2.0 - along * width * 0.5, Vector2.ZERO)
-	strip = Rect2(strip.position, along * width + inward * 26.0)
-	strip = strip.abs()
-	draw_rect(strip, color)
-	draw_rect(strip, color.darkened(0.3), false, 2.0)
-	var text := str(place.get("name", ""))
-	if text != "":
-		draw_string(UIKit.body_font(), door + inward * 48.0 - Vector2(text.length() * 5.0, -6.0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, UIKit.DARK)
-
-
-func _bay(place: Dictionary, caption: String, active: bool) -> void:
-	var bay: Rect2 = place.get("bay", Rect2())
-	if bay.size == Vector2.ZERO:
-		return
-	var glow := 0.55 + 0.35 * sin(pulse * 4.0) if active else 0.4
-	draw_rect(bay, Color(UIKit.MUSTARD, glow * 0.5))
-	draw_rect(bay, Color(UIKit.MUSTARD, glow), false, 5.0)
-	var step := 24.0
-	var x := bay.position.x - bay.size.y
-	while x < bay.end.x:
-		var a := Vector2(clampf(x, bay.position.x, bay.end.x), bay.position.y + clampf(bay.position.x - x, 0.0, bay.size.y))
-		var b := Vector2(clampf(x + bay.size.y, bay.position.x, bay.end.x), bay.end.y - clampf(x + bay.size.y - bay.end.x, 0.0, bay.size.y))
-		draw_line(a, b, Color(UIKit.MUSTARD, glow * 0.6), 3.0)
-		x += step
-	draw_string(UIKit.title_font(), bay.position + Vector2(8, bay.size.y * 0.5 + 8), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, UIKit.DARK)
-
+# ---------------------------------------------------------------- minimap
 
 func _draw_minimap() -> void:
 	if city == null or minimap == null:
@@ -991,8 +1259,11 @@ func _draw_minimap() -> void:
 	minimap.draw_circle(offset + drop.get_center() * k, 5.0, UIKit.GREEN)
 	for car in cars:
 		minimap.draw_circle(offset + (car["pos"] as Vector2) * k, 1.5, Color(UIKit.DARK, 0.5))
-	minimap.draw_circle(offset + pos * k, 4.5, UIKit.TERRA)
-	minimap.draw_circle(offset + pos * k, 4.5, UIKit.DARK, false, 1.0)
+	# The truck as a little wedge pointing where it faces.
+	var at := offset + pos * k
+	var fwd := Vector2.RIGHT.rotated(heading)
+	var side := Vector2(-fwd.y, fwd.x)
+	minimap.draw_colored_polygon(PackedVector2Array([at + fwd * 7.0, at - fwd * 4.0 + side * 4.5, at - fwd * 4.0 - side * 4.5]), UIKit.TERRA)
 
 
 func _hazard_art(kind: String) -> String:
