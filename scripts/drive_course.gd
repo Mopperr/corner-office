@@ -412,8 +412,8 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 	var inward := _inward3(side)
 	var along := Vector3(-inward.z, 0, inward.x)
 	# An awning over the door and the name above it.
-	var awning := Props.mesh_box(Vector3(3.0, 0.22, 1.0), color)
-	awning.position = door + Vector3(0, 2.6, 0) - inward * 0.4
+	var awning := Props.mesh_box(Vector3(2.4, 0.16, 0.8), color)
+	awning.position = door + Vector3(0, 2.5, 0) + inward * 0.3
 	awning.rotation.y = atan2(-along.z, along.x)
 	world.add_child(awning)
 	var frame := Props.mesh_box(Vector3(1.4, 2.2, 0.12), color.darkened(0.35))
@@ -422,7 +422,7 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 	world.add_child(frame)
 	var text := str(place.get("name", ""))
 	if text != "":
-		var label := _sign_text(text, door - inward * 0.6 + Vector3(0, 3.4, 0), Color("3E3A4F"))
+		var label := _sign_text(text, door + inward * 0.3 + Vector3(0, 3.3, 0), Color("3E3A4F"))
 		label.font_size = 72
 
 
@@ -431,10 +431,16 @@ func _sign_text(text: String, at: Vector3, color: Color) -> Label3D:
 	label.text = text
 	label.font = UIKit.title_font()
 	label.font_size = 64
-	label.pixel_size = 0.012
+	label.pixel_size = 0.006
 	label.modulate = color
 	label.outline_modulate = Color(1, 1, 1, 0.9)
 	label.outline_size = 10
+	# Readable from the street, gone before it fills the windscreen, gone again before it piles up on the skyline.
+	label.visibility_range_begin = 5.0
+	label.visibility_range_begin_margin = 2.0
+	label.visibility_range_end = 55.0
+	label.visibility_range_end_margin = 8.0
+	label.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
 	# Signs always face the camera, so they never read backwards from the far side.
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
@@ -472,6 +478,8 @@ func _build_bay(place: Dictionary, caption: String) -> void:
 	root.add_child(frame)
 	var label := _sign_text(caption, rect_center(bay, 1.6), Color("3E3A4F"))
 	label.font_size = 96
+	label.visibility_range_begin = 0.0
+	label.visibility_range_begin_margin = 0.0
 	label.reparent(root)
 	bay_nodes[caption] = root
 
