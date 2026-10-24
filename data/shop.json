@@ -94,14 +94,6 @@
       "label": "Pastry board"
     },
     {
-      "item": "whiteboard",
-      "role": "pastry",
-      "serves": [
-        "bun"
-      ],
-      "label": "Menu whiteboard"
-    },
-    {
       "item": "lemonade_pitcher",
       "role": "counter",
       "serves": [
