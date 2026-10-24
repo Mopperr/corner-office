@@ -233,6 +233,7 @@
     "grip_rain": 4.5,
     "grip_handbrake": 1.5,
     "traffic_cars": 10,
-    "traffic_mps": 2.4
+    "traffic_mps": 2.4,
+    "walkers": 16
   }
 }

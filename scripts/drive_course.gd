@@ -77,6 +77,8 @@ var route := PackedVector2Array()
 var route_index := 1
 var hazards: Array = []
 var cars: Array = []
+var walkers: Array = []
+var wave_t := 0.0
 var at_dropoff := false
 var box_count := 4
 var box_anim: Array = []
@@ -322,28 +324,312 @@ func _build_town() -> void:
 				world.add_child(parked)
 	for hazard in hazards:
 		_build_hazard(hazard)
+	_dress_sidewalks(rng)
+	_spawn_walkers(rng)
+
+
+func _dress_sidewalks(rng: RandomNumberGenerator) -> void:
+	# Trees every few metres along the kerb, planters by the doors, a bus stop on a few corners, a van or two.
+	var doors: Array = []
+	for id in city.places.keys():
+		doors.append(to_world((city.places[id] as Dictionary).get("door", Vector2.ZERO)))
+	for shop in city.shops:
+		doors.append(to_world((shop as Dictionary).get("door", Vector2.ZERO)))
+	var bays: Array = [pickup.get("bay", Rect2()), dropoff.get("bay", Rect2())]
+	for c in city.cols:
+		for r in city.rows:
+			if Vector2i(c, r) == city.park_block:
+				continue
+			var rect: Rect2 = city.block_rect(c, r)
+			var edge: float = city.sidewalk * 0.5
+			var ring: Array = [
+				[Vector2(rect.position.x + edge, rect.position.y + edge), Vector2(rect.end.x - edge, rect.position.y + edge)],
+				[Vector2(rect.end.x - edge, rect.position.y + edge), Vector2(rect.end.x - edge, rect.end.y - edge)],
+				[Vector2(rect.end.x - edge, rect.end.y - edge), Vector2(rect.position.x + edge, rect.end.y - edge)],
+				[Vector2(rect.position.x + edge, rect.end.y - edge), Vector2(rect.position.x + edge, rect.position.y + edge)],
+			]
+			for seg in ring:
+				var a: Vector2 = seg[0]
+				var b: Vector2 = seg[1]
+				var length := a.distance_to(b)
+				var step := 9.0 * PX
+				var d := step * 0.5 + rng.randf_range(-40.0, 40.0)
+				while d < length - step * 0.4:
+					var at := a.lerp(b, d / length)
+					var near_door := false
+					for door in doors:
+						if (door as Vector3).distance_to(to_world(at)) < 3.2:
+							near_door = true
+					for bay in bays:
+						if (bay as Rect2).grow(70).has_point(at):
+							near_door = true
+					if not near_door:
+						if rng.randf() < 0.75:
+							Outdoors._tree(world, to_world(at, 0.12), rng.randf_range(0.7, 0.95))
+						else:
+							var planter := Props.mesh_box(Vector3(0.9, 0.5, 0.9), Color("A9774C"))
+							planter.position = to_world(at, 0.12)
+							world.add_child(planter)
+							Outdoors._bush(world, to_world(at, 0.5), 0.45)
+					d += step
+			# A bus stop on the south-west corner of every other block.
+			if (c + r) % 2 == 0:
+				var corner := Vector2(rect.position.x + edge * 2.5, rect.end.y - edge)
+				var pole := Props.mesh_cylinder(0.05, 2.6, Color("4E4A48"))
+				pole.position = to_world(corner, 0.12)
+				world.add_child(pole)
+				var plate := Props.mesh_box(Vector3(0.7, 0.45, 0.06), UIKit.BLUE)
+				plate.position = to_world(corner, 2.3) + Vector3(0, 0.2, 0)
+				world.add_child(plate)
+				var roof := Props.mesh_box(Vector3(3.0, 0.12, 1.4), Color("D9D2C4"))
+				roof.position = to_world(corner, 2.4) + Vector3(2.0, 0.06, 0)
+				world.add_child(roof)
+				for dx in [0.6, 3.4]:
+					var post := Props.mesh_cylinder(0.05, 2.4, Color("4E4A48"))
+					post.position = to_world(corner, 0.12) + Vector3(dx, 0, 0)
+					world.add_child(post)
+				Outdoors._bench(world, to_world(corner).x + 2.0, to_world(corner).z + 0.1)
+			# A parked van on one long side.
+			if rng.randf() < 0.4:
+				var van := _make_car(Color("D9D2C4"))
+				var body := van.get_child(0) as MeshInstance3D
+				if body:
+					(body.mesh as BoxMesh).size = Vector3(4.6, 1.6, 1.9)
+					body.position.y = 0.9
+				van.position = to_world(Vector2(rect.position.x + rect.size.x * rng.randf_range(0.2, 0.5), rect.position.y - city.road * 0.25))
+				world.add_child(van)
+
+
+func _make_walker(color: Color) -> Node3D:
+	var person := Node3D.new()
+	var legs := Props.mesh_cylinder(0.16, 0.8, Color("3E3A4F"))
+	person.add_child(legs)
+	var body := Props.mesh_cylinder(0.24, 0.7, color)
+	body.position.y = 0.8
+	person.add_child(body)
+	var head := MeshInstance3D.new()
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.19
+	sphere.height = 0.38
+	head.mesh = sphere
+	head.material_override = Props.mat(Color("E7C9A8"))
+	head.position.y = 1.72
+	person.add_child(head)
+	var arm := Props.mesh_cylinder(0.06, 0.6, color.darkened(0.1))
+	arm.name = "Arm"
+	arm.position = Vector3(0, 1.1, 0.3)
+	person.add_child(arm)
+	return person
+
+
+func _spawn_walkers(rng: RandomNumberGenerator) -> void:
+	var count := int(Tuning.get_value("drive.walkers", 16))
+	var palette := [Color("D9765F"), Color("8FAF7E"), Color("7FA3B8"), Color("E6B655"), Color("C68B59"), Color("D4C1D8")]
+	for i in count:
+		var c := rng.randi_range(0, city.cols - 1)
+		var r := rng.randi_range(0, city.rows - 1)
+		if Vector2i(c, r) == city.park_block:
+			continue
+		var rect: Rect2 = city.block_rect(c, r).grow(-city.sidewalk * 0.5)
+		var loop := PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
+		var seg := rng.randi_range(0, 3)
+		var at: Vector2 = loop[seg].lerp(loop[(seg + 1) % 4], rng.randf())
+		var node := _make_walker(palette[i % palette.size()])
+		node.name = "Walker"
+		node.position = to_world(at, 0.12)
+		world.add_child(node)
+		walkers.append({"loop": loop, "seg": seg, "pos": at, "speed": rng.randf_range(0.9, 1.4) * PX, "node": node, "wait": 0.0, "wave": 0.0, "phase": rng.randf() * TAU, "dir": 1 if rng.randf() < 0.5 else -1})
+
+
+func _walkers(delta: float) -> void:
+	var truck_center := _art_center()
+	for w in walkers:
+		var loop: PackedVector2Array = w["loop"]
+		var seg: int = w["seg"]
+		var next := (seg + int(w["dir"]) + 4) % 4
+		var target: Vector2 = loop[next]
+		var at: Vector2 = w["pos"]
+		var dir := (target - at).normalized()
+		var node: Node3D = w["node"]
+		var near := at.distance_to(truck_center) < 150.0
+		# Step back from the kerb and wait while the truck passes.
+		if near:
+			w["wait"] = 0.6
+		if float(w["wait"]) > 0.0:
+			w["wait"] = float(w["wait"]) - delta
+		else:
+			at += dir * float(w["speed"]) * delta
+			if at.distance_to(target) < 4.0:
+				w["seg"] = next
+		w["pos"] = at
+		node.position = to_world(at, 0.12)
+		var moving := float(w["wait"]) <= 0.0
+		node.position.y += absf(sin(time_alive * 9.0 + float(w["phase"]))) * (0.06 if moving else 0.0)
+		node.rotation.y = -dir.angle() + PI * 0.5
+		var arm := node.get_node_or_null("Arm") as Node3D
+		if arm:
+			if float(w["wave"]) > 0.0:
+				w["wave"] = float(w["wave"]) - delta
+				arm.rotation.x = -PI * 0.75 + sin(time_alive * 14.0) * 0.4
+			else:
+				arm.rotation.x = lerpf(arm.rotation.x, 0.0, delta * 6.0)
+
+
+func _wave_nearby() -> void:
+	var truck_center := _art_center()
+	for w in walkers:
+		if (w["pos"] as Vector2).distance_to(truck_center) < 320.0:
+			w["wave"] = 1.4
+
+
+const FACADES: Array = ["C9A27E", "B5705A", "E3D9C6", "9C8F85", "A8B5BE", "D6B894", "8E6E5A", "D8B4A0"]
 
 
 func _build_building(entry: Dictionary, rng: RandomNumberGenerator) -> void:
+	# A block is a row of separate buildings, not one slab: different widths,
+	# heights, colours and roofs, with real windows, shop glazing, a plinth and a cornice.
 	var rect: Rect2 = entry.get("rect", Rect2())
-	var color: Color = entry.get("color", Color("B9A58C"))
-	var floors := rng.randi_range(2, 4)
-	var height := floors * 3.2
-	var body := _slab(Vector3(rect.size.x / PX, height, rect.size.y / PX), rect_center(rect, 0.12), color)
+	var along_x := rect.size.x >= rect.size.y
+	var length := (rect.size.x if along_x else rect.size.y) / PX
+	var depth := (rect.size.y if along_x else rect.size.x) / PX
+	var cursor := 0.0
+	var index := 0
+	while length - cursor > 4.0:
+		var want := rng.randf_range(5.0, 9.0)
+		if length - cursor - want < 4.0:
+			want = length - cursor
+		var first := index == 0
+		var last := absf(cursor + want - length) < 0.01
+		var origin := Vector3(rect.position.x / PX, 0.12, rect.position.y / PX)
+		var parcel_pos := origin + (Vector3(cursor, 0, 0) if along_x else Vector3(0, 0, cursor))
+		var parcel_size := Vector3(want, 0, depth) if along_x else Vector3(depth, 0, want)
+		_build_parcel(parcel_pos, parcel_size, rng, along_x, first, last)
+		cursor += want
+		index += 1
+
+
+func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, along_x: bool, first: bool, last: bool) -> void:
+	var floors := rng.randi_range(2, 5)
+	var floor_h := 3.2
+	var height := floors * floor_h
+	var color := Color(str(FACADES[rng.randi_range(0, FACADES.size() - 1)]))
+	var trim := color.lightened(0.28)
+	var center := at + Vector3(footprint.x * 0.5, 0, footprint.z * 0.5)
+	var body := _slab(Vector3(footprint.x, height, footprint.z), at + Vector3(footprint.x * 0.5, 0, footprint.z * 0.5), color)
 	body.name = "Building"
-	# A darker base, a roof lip, and window bands per floor.
-	_slab(Vector3(rect.size.x / PX + 0.2, 0.9, rect.size.y / PX + 0.2), rect_center(rect, 0.12), color.darkened(0.22))
-	_slab(Vector3(rect.size.x / PX + 0.3, 0.3, rect.size.y / PX + 0.3), rect_center(rect, 0.12 + height), color.darkened(0.3))
-	for f in floors:
-		var y := 0.12 + f * 3.2 + 1.5
-		var band := Color("F6E7B2") if rng.randf() < 0.7 else Color("8FA3B8")
-		_slab(Vector3(rect.size.x / PX + 0.06, 1.0, rect.size.y / PX + 0.06), rect_center(rect, y), band.darkened(0.1))
-		_slab(Vector3(rect.size.x / PX + 0.08, 0.25, rect.size.y / PX + 0.08), rect_center(rect, y + 0.65), color)
-		_slab(Vector3(rect.size.x / PX + 0.08, 0.25, rect.size.y / PX + 0.08), rect_center(rect, y - 0.65), color)
-	# Roof clutter.
-	for i in rng.randi_range(1, 3):
-		var at := Vector2(rect.position.x + rect.size.x * rng.randf_range(0.2, 0.8), rect.position.y + rect.size.y * rng.randf_range(0.2, 0.8))
-		_slab(Vector3(1.2, 0.8, 1.0), to_world(at, 0.12 + height), color.darkened(0.15))
+	# Plinth, string courses between floors, and a cornice under the roof.
+	_slab(Vector3(footprint.x + 0.12, 0.7, footprint.z + 0.12), center, color.darkened(0.3))
+	for f in range(1, floors):
+		_slab(Vector3(footprint.x + 0.08, 0.14, footprint.z + 0.08), center + Vector3(0, f * floor_h - 0.07, 0), trim)
+	_slab(Vector3(footprint.x + 0.36, 0.32, footprint.z + 0.36), center + Vector3(0, height - 0.32, 0), trim)
+	# Windows: one multimesh of frames and one of glass per building.
+	var faces: Array = []
+	if along_x:
+		faces.append({"origin": at, "dir": Vector3(1, 0, 0), "normal": Vector3(0, 0, -1), "len": footprint.x, "street": true})
+		faces.append({"origin": at + Vector3(footprint.x, 0, footprint.z), "dir": Vector3(-1, 0, 0), "normal": Vector3(0, 0, 1), "len": footprint.x, "street": true})
+		if first:
+			faces.append({"origin": at + Vector3(0, 0, footprint.z), "dir": Vector3(0, 0, -1), "normal": Vector3(-1, 0, 0), "len": footprint.z, "street": true})
+		if last:
+			faces.append({"origin": at + Vector3(footprint.x, 0, 0), "dir": Vector3(0, 0, 1), "normal": Vector3(1, 0, 0), "len": footprint.z, "street": true})
+	else:
+		faces.append({"origin": at + Vector3(0, 0, footprint.z), "dir": Vector3(0, 0, -1), "normal": Vector3(-1, 0, 0), "len": footprint.z, "street": true})
+		faces.append({"origin": at + Vector3(footprint.x, 0, 0), "dir": Vector3(0, 0, 1), "normal": Vector3(1, 0, 0), "len": footprint.z, "street": true})
+		if first:
+			faces.append({"origin": at, "dir": Vector3(1, 0, 0), "normal": Vector3(0, 0, -1), "len": footprint.x, "street": true})
+		if last:
+			faces.append({"origin": at + Vector3(footprint.x, 0, footprint.z), "dir": Vector3(-1, 0, 0), "normal": Vector3(0, 0, 1), "len": footprint.x, "street": true})
+	var frames: Array = []
+	var panes: Array = []
+	var glass_color := Color("4A5F6E") if rng.randf() < 0.6 else Color("5C6B5A")
+	for face in faces:
+		var origin: Vector3 = face["origin"]
+		var dir: Vector3 = face["dir"]
+		var normal: Vector3 = face["normal"]
+		var face_len := float(face["len"])
+		var cols := maxi(1, int(floor((face_len - 0.8) / 2.3)))
+		var gap := face_len / float(cols)
+		for f in floors:
+			if f == 0:
+				# Shop glazing along the street, with a door bay left clear.
+				var band := Props.mesh_box(Vector3(maxf(face_len - 1.2, 1.0), 2.1, 0.08), glass_color)
+				band.position = origin + dir * (face_len * 0.5) + normal * 0.05 + Vector3(0, 1.25, 0)
+				band.rotation.y = atan2(dir.x, -dir.z) if absf(dir.x) > 0.5 else atan2(dir.x, -dir.z)
+				band.rotation.y = -atan2(dir.z, dir.x)
+				world.add_child(band)
+				var mullion_count := maxi(1, int(face_len / 1.6))
+				for m in range(1, mullion_count):
+					var mullion := Props.mesh_box(Vector3(0.08, 2.1, 0.12), trim)
+					mullion.position = origin + dir * (0.6 + (face_len - 1.2) * float(m) / float(mullion_count)) + normal * 0.06 + Vector3(0, 0.0, 0)
+					mullion.rotation.y = -atan2(dir.z, dir.x)
+					world.add_child(mullion)
+				continue
+			for ccol in cols:
+				var along := gap * (float(ccol) + 0.5)
+				var y := f * floor_h + 1.0
+				var pos := origin + dir * along + normal * 0.04 + Vector3(0, y, 0)
+				var basis := Basis(Vector3.UP, -atan2(dir.z, dir.x))
+				frames.append(Transform3D(basis, pos))
+				panes.append(Transform3D(basis, pos + normal * 0.03))
+			# A balcony on one upper floor, now and then.
+			if f >= 1 and rng.randf() < 0.25:
+				var rail := Props.mesh_box(Vector3(minf(face_len * 0.6, 4.0), 0.9, 0.08), trim)
+				rail.position = origin + dir * (face_len * 0.5) + normal * 0.95 + Vector3(0, f * floor_h + 0.45, 0)
+				rail.rotation.y = -atan2(dir.z, dir.x)
+				world.add_child(rail)
+				var deck := Props.mesh_box(Vector3(minf(face_len * 0.6, 4.0), 0.12, 1.0), color.darkened(0.2))
+				deck.position = origin + dir * (face_len * 0.5) + normal * 0.5 + Vector3(0, f * floor_h - 0.06, 0)
+				deck.rotation.y = -atan2(dir.z, dir.x)
+				world.add_child(deck)
+	_multimesh(Vector3(1.3, 1.6, 0.08), trim, frames)
+	_multimesh(Vector3(1.05, 1.35, 0.08), glass_color, panes)
+	# Roof: a parapet with clutter, or a gable.
+	if rng.randf() < 0.35:
+		var roof := MeshInstance3D.new()
+		var prism := PrismMesh.new()
+		var ridge_along_x := footprint.x >= footprint.z
+		var span := footprint.z if ridge_along_x else footprint.x
+		prism.size = Vector3((footprint.x if ridge_along_x else footprint.z) + 0.5, span * 0.42, span + 0.5)
+		prism.left_to_right = 0.5
+		roof.mesh = prism
+		roof.material_override = Props.mat(Color("7A4F2A") if rng.randf() < 0.5 else Color("6E6A66"))
+		roof.position = center + Vector3(0, height + prism.size.y * 0.5 - 0.1, 0)
+		if not ridge_along_x:
+			roof.rotation.y = PI * 0.5
+		world.add_child(roof)
+	else:
+		_slab(Vector3(footprint.x, 0.6, 0.25), center + Vector3(0, height, -footprint.z * 0.5 + 0.12), color.darkened(0.12))
+		_slab(Vector3(footprint.x, 0.6, 0.25), center + Vector3(0, height, footprint.z * 0.5 - 0.12), color.darkened(0.12))
+		_slab(Vector3(0.25, 0.6, footprint.z), center + Vector3(0, height, 0) + Vector3(-footprint.x * 0.5 + 0.12, 0, 0), color.darkened(0.12))
+		_slab(Vector3(0.25, 0.6, footprint.z), center + Vector3(0, height, 0) + Vector3(footprint.x * 0.5 - 0.12, 0, 0), color.darkened(0.12))
+		for i in rng.randi_range(1, 3):
+			var spot := at + Vector3(rng.randf_range(1.0, footprint.x - 1.0), height, rng.randf_range(1.0, footprint.z - 1.0))
+			if rng.randf() < 0.5:
+				_slab(Vector3(1.2, 0.8, 1.0), spot, Color("9C9A94"))
+			else:
+				var tank := Props.mesh_cylinder(0.6, 1.3, Color("7A5C40"))
+				tank.position = spot + Vector3(0, 0.3, 0)
+				world.add_child(tank)
+				for leg in [Vector3(0.4, 0, 0.4), Vector3(-0.4, 0, -0.4), Vector3(0.4, 0, -0.4), Vector3(-0.4, 0, 0.4)]:
+					var post := Props.mesh_cylinder(0.05, 0.3, Color("4E4A48"))
+					post.position = spot + leg
+					world.add_child(post)
+
+
+func _multimesh(size: Vector3, color: Color, transforms: Array) -> void:
+	if transforms.is_empty():
+		return
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	var box := BoxMesh.new()
+	box.size = size
+	mm.mesh = box
+	mm.instance_count = transforms.size()
+	for i in transforms.size():
+		mm.set_instance_transform(i, transforms[i])
+	var node := MultiMeshInstance3D.new()
+	node.multimesh = mm
+	node.material_override = Props.mat(color)
+	world.add_child(node)
 
 
 func _build_park(rect: Rect2) -> void:
@@ -821,6 +1107,7 @@ func _process(delta: float) -> void:
 		_hazards()
 		_check_alley()
 		_check_dropoff()
+	_walkers(delta)
 	_place_truck(delta)
 	_update_camera(delta)
 	_update_marks()
@@ -1067,6 +1354,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if Controls.event_pressed(event, "horn"):
 		AudioDirector.play_sfx("sfx_truck_horn")
+		_wave_nearby()
 		if _near_honk_ducks():
 			duck_hold = 1.6
 			AudioDirector.play_sfx("sfx_ducks_quack")
