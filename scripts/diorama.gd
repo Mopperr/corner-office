@@ -85,6 +85,7 @@ var objective: Label
 var chips_slot: Control
 var _chips_key := ""
 var toast_name: Label
+var toast_bar: Control
 var _markers_key := ""
 
 
@@ -782,8 +783,8 @@ func _process(delta: float) -> void:
 		toast_time -= delta
 		if toast:
 			toast.visible = toast_time > 0.0
-			if toast.get_parent() is CanvasItem:
-				(toast.get_parent() as CanvasItem).visible = toast.visible
+			if toast_bar:
+				toast_bar.visible = toast.visible
 	if cat_player and is_instance_valid(cat_player):
 		stretch_in -= delta
 		if stretch_in <= 0.0 and cat_player.current_animation != "stretch":
@@ -2099,7 +2100,7 @@ func _build_hud() -> void:
 	goals_panel = goals_box
 	goals_panel.visible = false
 	# Toasts read as a chat bubble: who said it, then what.
-	var toast_bar := PanelContainer.new()
+	toast_bar = PanelContainer.new()
 	toast_bar.name = "ToastBar"
 	toast_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	toast_bar.visible = false
@@ -2720,8 +2721,8 @@ func _toast(message: String, who := "Dana") -> void:
 			face.add_theme_stylebox_override("panel", UIKit.style(UIKit.TERRA if who == "Marge" else UIKit.SAGE, 24))
 	toast.text = message
 	toast.visible = true
-	if toast.get_parent() is CanvasItem:
-		(toast.get_parent() as CanvasItem).visible = true
+	if toast_bar:
+		toast_bar.visible = true
 	toast_time = 3.4
 
 
@@ -2937,14 +2938,20 @@ func _door_world() -> Vector3:
 
 
 func _counter_node() -> Node3D:
-	# The fixture a customer walks up to: the first placed counter piece.
-	for fix in GameState.shop_fixtures():
-		var item_id := str(fix.get("item", ""))
-		for rec in GameState.office_items:
-			if str(rec.get("state", "")) == "placed" and str(rec.get("item", "")) == item_id:
-				var node: Node = nodes_by_uid.get(str(rec.get("uid", "")))
-				if node is Node3D:
-					return node
+	# The fixture a customer walks up to: a counter piece first (the coffee
+	# machine, the pitcher), and only then a shelf or the menu board.
+	var fixtures: Array = GameState.shop_fixtures()
+	for want_counter in [true, false]:
+		for fix in fixtures:
+			if (str(fix.get("role", "")) == "counter") != want_counter:
+				continue
+			var item_id := str(fix.get("item", ""))
+			for rec in GameState.office_items:
+				var state := str(rec.get("state", ""))
+				if (state == "placed" or state == "settling") and str(rec.get("item", "")) == item_id:
+					var node: Node = nodes_by_uid.get(str(rec.get("uid", "")))
+					if node is Node3D:
+						return node
 	return null
 
 
@@ -3027,6 +3034,8 @@ func _spawn_customer() -> void:
 	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0}
 	customers.append(entry)
 	var who: Dictionary = order.get("who", {})
+	if OS.get_environment("CO_DEBUG") != "":
+		print("  spawn customer %s start=%s door=%s spot=%s counter=%s" % [uid, start, _door_world(), _queue_spot(index), _counter_node()])
 	var tw := create_tween()
 	tw.tween_property(person, "position", _door_world() + Vector3(0, 0, 0.3), 1.2)
 	tw.tween_property(person, "position", _queue_spot(index), 1.0)

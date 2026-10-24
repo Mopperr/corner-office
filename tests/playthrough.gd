@@ -380,12 +380,24 @@ func _check_shop() -> void:
 		return
 	await shot("shop_open")
 	var money_before: int = GameState.money
-	var came := await wait_until(func(): return not room.customers.is_empty() and str(room.customers[0].get("stage", "")) == "waiting", 40.0)
+	var came := false
+	for i in 80:
+		await wait(0.5)
+		if not room.customers.is_empty():
+			var c: Dictionary = room.customers[0]
+			if OS.get_environment("CO_DEBUG") != "":
+				print("  customer %s stage=%s pos=%s" % [c.get("uid", ""), c.get("stage", ""), (c.get("node") as Node3D).position])
+			if str(c.get("stage", "")) == "waiting":
+				came = true
+				break
 	_check(came, "shop: a customer walked in and is waiting")
 	if not came:
 		return
 	await shot("shop_customer")
 	var entry: Dictionary = room.customers[0]
+	var counter_node: Node3D = room._counter_node()
+	print("  shop debug: counter=%s at %s, queue spot %s, customer at %s" % [counter_node.name if counter_node else "none", counter_node.global_position if counter_node else Vector3.ZERO, room._queue_spot(0), (entry.get("node") as Node3D).global_position])
+	_check(room.toast_bar != null and room.toast_bar.visible, "shop: the customer's line shows as a toast")
 	var node: Node3D = entry.get("node")
 	await click_node(room, "visitor:" + str(entry.get("uid", "")), node)
 	await wait(0.3)
