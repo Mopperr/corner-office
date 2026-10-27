@@ -491,5 +491,91 @@
         "creme_brulee"
       ]
     }
+  ],
+  "asks": [
+    {
+      "text": "Extra ice in that, if it's no trouble?",
+      "yes": "Of course",
+      "no": "We're out of ice",
+      "yes_line": "Extra ice. A person of taste.",
+      "no_line": "No ice. I'll live. Barely."
+    },
+    {
+      "text": "Could you warm the bun a little?",
+      "yes": "Warm it up",
+      "no": "Cold's how it comes",
+      "yes_line": "Warm bun. Day made.",
+      "no_line": "Cold bun. Character building."
+    },
+    {
+      "text": "Is the cat in today?",
+      "yes": "Biscuit's on the till",
+      "no": "Napping, sorry",
+      "yes_line": "I'll say hello to Biscuit then.",
+      "no_line": "Give the cat my regards."
+    },
+    {
+      "text": "Oat milk, if you've got it?",
+      "yes": "Always",
+      "no": "Only the cow kind",
+      "yes_line": "Oat milk. I'm a regular now.",
+      "no_line": "Cow it is. Don't tell my sister."
+    },
+    {
+      "text": "Can I get the receipt emailed?",
+      "yes": "Done",
+      "no": "Paper only here",
+      "yes_line": "Look at this. Modern.",
+      "no_line": "Paper. Vintage. Fine."
+    },
+    {
+      "text": "Any chance of a loyalty stamp?",
+      "yes": "Here's a card",
+      "no": "Not yet",
+      "yes_line": "One stamp down. Nine to go.",
+      "no_line": "I'll loyal anyway."
+    },
+    {
+      "text": "Could you cut it in half? Sharing.",
+      "yes": "Halved",
+      "no": "Comes whole",
+      "yes_line": "Two halves. One friendship saved.",
+      "no_line": "Whole. The friendship will cope."
+    },
+    {
+      "text": "Mind if I take a chair outside?",
+      "yes": "Take two",
+      "no": "Chairs stay",
+      "yes_line": "Sun on my face. Thank you.",
+      "no_line": "Standing it is. Good for the calves."
+    },
+    {
+      "text": "Is this the one Ravi recommends?",
+      "yes": "It's the one",
+      "no": "Ravi says a lot",
+      "yes_line": "Ravi was right. Annoying.",
+      "no_line": "Ravi was wrong. Delightful."
+    },
+    {
+      "text": "Can you make it less sweet?",
+      "yes": "Half sugar",
+      "no": "It's set",
+      "yes_line": "Half sugar. My teeth thank you.",
+      "no_line": "Sweet it is. Dentist's gain."
+    },
+    {
+      "text": "Got a cup for the dog?",
+      "yes": "Water bowl's out",
+      "no": "Dogs drink later",
+      "yes_line": "The dog says thanks. Loudly.",
+      "no_line": "The dog will remember this."
+    },
+    {
+      "text": "Could I pay next time? Left my card.",
+      "yes": "Pay me Thursday",
+      "no": "Card or cash",
+      "yes_line": "Thursday. On my honour.",
+      "no_line": "Found a coin. Found three. Fine."
+    }
   ]
 }

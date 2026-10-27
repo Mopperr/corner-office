@@ -143,6 +143,11 @@ static func fixtures() -> Array:
 	return shop.get("fixtures", [])
 
 
+static func asks() -> Array:
+	ensure()
+	return shop.get("asks", [])
+
+
 static func tiers() -> Array:
 	ensure()
 	return shop.get("tiers", [])

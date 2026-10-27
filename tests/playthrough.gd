@@ -106,6 +106,12 @@ func _run() -> void:
 	_check(GameState.office_phase == "live", "garage tutorial finished (phase %s)" % GameState.office_phase)
 	if GameState.office_phase != "live":
 		return
+	# Going live opens the clipboard with the first job on it.
+	await wait(0.3)
+	var room_live := _room()
+	_check(room_live != null and _any_button(room_live, "Take job"), "clipboard opens itself with the first job")
+	press("Close", room_live)
+	await wait(0.2)
 
 	await _check_computer()
 	await _check_map()
@@ -207,6 +213,13 @@ func _check_backroom() -> void:
 	await shot("backroom_fenced")
 	_check(press("Close", room), "clipboard closes after the back room")
 	await wait(0.3)
+
+
+func _any_button(room: Node, text_or_name: String) -> bool:
+	for btn in _buttons(room):
+		if btn.text == text_or_name or str(btn.name) == text_or_name:
+			return true
+	return false
 
 
 func _box_modal(room: Node) -> Node:
@@ -521,6 +534,14 @@ func _check_shop() -> void:
 	var node: Node3D = entry.get("node")
 	await click_node(room, "visitor:" + str(entry.get("uid", "")), node)
 	await wait(0.3)
+	# Some customers ask for something first: answer, and the serve follows.
+	if _any_button(room, "AskYes"):
+		await shot("customer_ask")
+		for btn in _buttons(room):
+			if str(btn.name) == "AskYes":
+				btn.pressed.emit()
+				break
+		await wait(0.3)
 	_check(GameState.money > money_before, "shop: serving by hand paid (%d -> %d)" % [money_before, GameState.money])
 	_check(not GameState.shop_ledger.is_empty() and bool(GameState.shop_ledger[0].get("hand", false)), "shop: ledger says served by hand")
 	await shot("shop_served")

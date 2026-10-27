@@ -1317,7 +1317,9 @@ func _click() -> void:
 		_delivery_click(item_uid.trim_prefix("delivery:"))
 		return
 	if item_uid.begins_with("visitor:") and GameState.mode == "office":
-		_serve_customer(item_uid.trim_prefix("visitor:"), true)
+		var visitor_uid := item_uid.trim_prefix("visitor:")
+		if not _open_ask(visitor_uid):
+			_serve_customer(visitor_uid, true)
 		return
 	if item_uid == "pastry":
 		_pastry()
@@ -1614,9 +1616,11 @@ func _maybe_live() -> void:
 			return
 	GameState.office_phase = "live"
 	GameState.mark_tutorial_live()
-	_toast("That's the corner. Trade, decorate, or borrow the truck.")
+	_toast("Clipboard's pinned by the bench. Your first job is on it. Go on.", "Marge")
 	_refresh_hud_buttons()
 	SaveManager.save_game()
+	# The first job is in the player's hand within minutes: open the board.
+	call_deferred("_open_jobs")
 
 
 func _pack_click(uid: String) -> void:
@@ -1930,7 +1934,38 @@ func _auto_unpack_box(box_id: int) -> void:
 	_maybe_job_done()
 
 
-func _auto_place_item(item: Dictionary) -> bool:
+func _place_office_all() -> void:
+	# Tired of the tutorial: the starter pieces find their own spots.
+	var pending: Array = []
+	for rec in GameState.office_items:
+		if str(rec.get("state", "")) != "placed":
+			pending.append(rec)
+	# Furniture first, then wall pieces, then the desk-top bits, so small things have a desk to land on.
+	pending.sort_custom(func(a, b):
+		var order := {"floor": 0, "wall_floor": 1, "hang": 2, "small": 3}
+		var ma := str(ItemDB.get_item(str(a.get("item", ""))).get("mount", "floor"))
+		var mb := str(ItemDB.get_item(str(b.get("item", ""))).get("mount", "floor"))
+		return int(order.get(ma, 0)) < int(order.get(mb, 0))
+	)
+	var missed := 0
+	for rec in pending:
+		rec["state"] = "loose"
+		if not rec.has("x"):
+			rec["x"] = float(venue.get("x", 0)) + 2.0
+			rec["z"] = float(venue.get("z", 0)) + 2.0
+		if not _auto_place_item(rec, "office"):
+			missed += 1
+		_refresh_items()
+	GameState.note_first_place()
+	AudioDirector.play_sfx("sfx_item_snap", true)
+	_refresh_items()
+	_refresh_hud_buttons()
+	if missed > 0:
+		_toast("%d piece%s wouldn't fit anywhere tidy. Set those by hand." % [missed, "" if missed == 1 else "s"])
+	_maybe_live()
+
+
+func _auto_place_item(item: Dictionary, source := "job") -> bool:
 	# Try spots spiralling out from where the piece lies, using the same
 	# snap rules a click would, so nothing lands inside a wall or another piece.
 	var uid := str(item.get("uid", ""))
@@ -1938,7 +1973,7 @@ func _auto_place_item(item: Dictionary) -> bool:
 	var was_source := held_source
 	var was_rot := held_rot
 	held_uid = uid
-	held_source = "job"
+	held_source = source
 	held_rot = float(item.get("rot", 0.0))
 	item["state"] = "hand"
 	var mount := str(item.get("mount", "floor"))
@@ -2575,6 +2610,8 @@ func _refresh_hud_buttons() -> void:
 		# Left column, under the snap toggle: the right-hand corner is where the
 		# boxed pieces of a bigger room end up, and a button there eats clicks.
 		_act_button(layer, "Rotate view", Vector2(16, y + 58), func(): rotate_view(1))
+	if GameState.mode == "office" and GameState.office_phase == "place":
+		_act_button(layer, "Place it all for me", Vector2(1100, y), _place_office_all)
 	if GameState.mode == "office" and GameState.office_phase == "pack":
 		_act_button(layer, "Box it all for me", Vector2(1100, y), func():
 			for item in GameState.office_items:
@@ -3293,7 +3330,9 @@ func _goal_hint() -> String:
 func _mode_hint() -> String:
 	var money := "$%d" % GameState.money
 	var rep := "Rep %d" % GameState.rep_rank()
-	var head := "%s   %s   %s" % [venue.get("name", "Office"), money, rep]
+	var today := GameState.money - int(GameState.day_log.get("money_start", GameState.money))
+	var ledger := "today %s$%d" % ["+" if today >= 0 else "−", absi(today)]
+	var head := "%s   %s   %s   %s" % [venue.get("name", "Office"), money, ledger, rep]
 	if status:
 		if GameState.mode == "office" and GameState.office_phase == "live":
 			head += "   Vibe %d" % GameState.vibe_score()
@@ -4223,6 +4262,9 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 		if str(entry.get("stage", "")) != "leaving":
 			index += 1
 	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0, "car": from_car}
+	var asks: Array = Catalog.asks()
+	if not asks.is_empty() and randf() < 0.45:
+		entry["ask"] = asks[randi() % asks.size()]
 	customers.append(entry)
 	_bubble(person, _chat("arriving"))
 	var who: Dictionary = order.get("who", {})
@@ -4316,6 +4358,87 @@ func _tick_customer(entry: Dictionary, delta: float) -> void:
 		entry["wait"] = float(entry["wait"]) - delta
 		if float(entry["wait"]) <= 0.0:
 			_serve_customer(str(entry["uid"]), false)
+
+
+func _open_ask(uid: String) -> bool:
+	# A customer with a small ask: two replies, and the tip follows the answer.
+	for entry in customers:
+		if str(entry.get("uid", "")) != uid or str(entry.get("stage", "")) != "waiting":
+			continue
+		var ask: Dictionary = entry.get("ask", {})
+		if ask.is_empty() or bool(entry.get("asked", false)):
+			return false
+		entry["asked"] = true
+		var layer := _hud_layer()
+		var old := layer.get_node_or_null("AskCard")
+		if old != null:
+			layer.remove_child(old)
+			old.queue_free()
+		var card := PanelContainer.new()
+		card.name = "AskCard"
+		card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 3, UIKit.TERRA))
+		layer.add_child(card)
+		card.layout_mode = 1
+		card.set_anchors_preset(Control.PRESET_CENTER)
+		card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		card.grow_vertical = Control.GROW_DIRECTION_BOTH
+		card.offset_left = -360
+		card.offset_right = 360
+		card.offset_top = -80
+		card.offset_bottom = 80
+		var margin := MarginContainer.new()
+		for side in ["left", "right", "top", "bottom"]:
+			margin.add_theme_constant_override("margin_" + side, 18)
+		card.add_child(margin)
+		var column := VBoxContainer.new()
+		column.add_theme_constant_override("separation", 10)
+		margin.add_child(column)
+		var who: Dictionary = (entry.get("order", {}) as Dictionary).get("who", {})
+		var head := HBoxContainer.new()
+		head.add_theme_constant_override("separation", 12)
+		column.add_child(head)
+		head.add_child(UIKit.avatar(str(who.get("name", "?")).left(1), UIKit.BLUE, 40))
+		var text := UIKit.label("%s: \"%s\"" % [who.get("name", "A customer"), ask.get("text", "")], 28, UIKit.DARK, "title", false)
+		text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		text.custom_minimum_size = Vector2(620, 40)
+		text.clip_text = true
+		head.add_child(text)
+		var buttons := HBoxContainer.new()
+		buttons.add_theme_constant_override("separation", 12)
+		column.add_child(buttons)
+		var yes := UIKit.button(str(ask.get("yes", "Sure")), UIKit.SAGE)
+		yes.name = "AskYes"
+		yes.custom_minimum_size = Vector2(260, 56)
+		yes.pressed.connect(func(): _answer_ask(uid, true, card))
+		buttons.add_child(yes)
+		var no := UIKit.button(str(ask.get("no", "Sorry")), UIKit.WOOD)
+		no.name = "AskNo"
+		no.custom_minimum_size = Vector2(260, 56)
+		no.pressed.connect(func(): _answer_ask(uid, false, card))
+		buttons.add_child(no)
+		UIKit.link_focus([yes, no])
+		AudioDirector.play_sfx("sfx_notification_soft")
+		return true
+	return false
+
+
+func _answer_ask(uid: String, said_yes: bool, card: Node) -> void:
+	if card != null and is_instance_valid(card):
+		card.queue_free()
+	for entry in customers:
+		if str(entry.get("uid", "")) != uid:
+			continue
+		var ask: Dictionary = entry.get("ask", {})
+		var order: Dictionary = entry.get("order", {})
+		order["tip_mult"] = 1.35 if said_yes else 0.9
+		entry["order"] = order
+		var node: Node3D = entry.get("node")
+		if node and is_instance_valid(node):
+			_bubble(node, str(ask.get("yes_line" if said_yes else "no_line", "")), 5.0)
+		if said_yes:
+			GameState.bump_stat("asks_granted")
+		_serve_customer(uid, true)
+		return
 
 
 func _serve_customer(uid: String, by_hand: bool) -> void:

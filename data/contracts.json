@@ -223,5 +223,23 @@
     "need": 6,
     "money": 250,
     "rep": 2
+  },
+  {
+    "id": "asks_five",
+    "title": "Yes, of course",
+    "blurb": "Say yes to five customer asks.",
+    "stat": "asks_granted",
+    "need": 5,
+    "money": 40,
+    "rep": 1
+  },
+  {
+    "id": "honks",
+    "title": "Friendly honker",
+    "blurb": "Honk at ten people on the pavement.",
+    "stat": "honks",
+    "need": 10,
+    "money": 30,
+    "rep": 0
   }
 ]

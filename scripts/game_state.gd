@@ -726,6 +726,7 @@ func apply_drive_result(result: Dictionary) -> void:
 	job["alley"] = bool(result.get("alley", false))
 	job["duck_friend"] = bool(result.get("duck_friend", false))
 	job["near_miss"] = bool(result.get("near_miss", false))
+	job["honks"] = int(result.get("honks", 0))
 	_assign_damage()
 
 
@@ -862,6 +863,10 @@ func finish_job() -> Dictionary:
 		bonuses += int(Tuning.get_value("pay.cat_bonus", 20))
 	if bool(job.get("duck_friend", false)):
 		bonuses += int(Tuning.get_value("pay.duck_friend_bonus", 15))
+	var honk_pay := int(job.get("honks", 0)) * int(Tuning.get_value("pay.honk_tip", 2))
+	bonuses += honk_pay
+	if int(job.get("honks", 0)) > 0:
+		stats["honks"] = int(stats.get("honks", 0)) + int(job.get("honks", 0))
 	var scuffed := 0
 	var chipped := 0
 	var all_fine := true
@@ -878,6 +883,8 @@ func finish_job() -> Dictionary:
 	payout = compute_payout(base, int(job.get("condition", 100)), bonuses, scuffed, chipped, bool(job.get("alley", false)), splits.size(), room_score)
 	payout["all_fine"] = all_fine
 	payout["cat"] = bool(job.get("cat_opened", false))
+	payout["honks"] = int(job.get("honks", 0))
+	payout["honk_pay"] = honk_pay
 	payout["duck"] = bool(job.get("duck_friend", false))
 	payout["job_id"] = job.get("id", "")
 	payout["title"] = def.get("title", "Job")
@@ -1521,6 +1528,7 @@ func serve_visitor(by_hand := false, order: Dictionary = {}) -> Dictionary:
 	var base := int(round(float(dish.get("price", 3)) * menu_markup))
 	var tip := float(base) * float(vibe) * Catalog.shop_number("tip_per_vibe", 0.012)
 	tip *= Catalog.shop_number("hand_tip_bonus", 1.6) if by_hand else 0.5
+	tip *= float(order.get("tip_mult", 1.0))
 	var pay := maxi(1, base + int(round(tip)))
 	add_money(pay, true)
 	shop_today += pay

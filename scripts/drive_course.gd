@@ -46,6 +46,8 @@ var vel := Vector2.ZERO
 var speed := 0.0
 var condition := 100
 var alley := false
+var honks := 0
+var honk_cool := 0.0
 var duck_friend := false
 var near_miss := false
 var wobble_done := false
@@ -195,9 +197,10 @@ func _resolve_hazards() -> void:
 				hazard["w"] = h
 				hazard["h"] = w
 		hazards.append(hazard)
-	if bool(course.get("alley", false)) and city.alley.size != Vector2.ZERO:
-		var middle: Vector2 = city.alley.get_center()
-		hazards.append({"type": "wobble", "x": middle.x, "y": middle.y, "on": "alley"})
+	if bool(course.get("alley", false)):
+		for cut in city.alleys:
+			var middle: Vector2 = (cut as Rect2).get_center()
+			hazards.append({"type": "wobble", "x": middle.x, "y": middle.y, "on": "alley"})
 
 
 func _lights() -> void:
@@ -285,9 +288,10 @@ func _build_town() -> void:
 			_slab(Vector3(rect.size.x / PX, 0.12, rect.size.y / PX), rect_center(rect, 0.0), KERB)
 	for entry in city.buildings:
 		_build_building(entry, rng)
-	if city.alley.size != Vector2.ZERO:
-		_slab(Vector3(city.alley.size.x / PX, 0.03, city.alley.size.y / PX), rect_center(city.alley, 0.0), Color("6B4A3A"))
-		var alley_sign := _sign_text("Alley", rect_center(Rect2(city.alley.position, Vector2(city.alley.size.x, 40)), 3.2), Color("F4E9D8"))
+	for cut in city.alleys:
+		var cut_rect: Rect2 = cut
+		_slab(Vector3(cut_rect.size.x / PX, 0.03, cut_rect.size.y / PX), rect_center(cut_rect, 0.0), Color("6B4A3A"))
+		var alley_sign := _sign_text("Alley", rect_center(Rect2(cut_rect.position, Vector2(minf(cut_rect.size.x, 72.0), 40)), 3.2), Color("F4E9D8"))
 		alley_sign.font_size = 90
 	for shop in city.shops:
 		_build_sign(shop, Color("C68B59"))
@@ -1103,6 +1107,7 @@ func _process(delta: float) -> void:
 		_animate_boxes(delta)
 	else:
 		_drive(delta, weather)
+		honk_cool = maxf(0.0, honk_cool - delta)
 		_traffic(delta)
 		_hazards()
 		_check_alley()
@@ -1330,11 +1335,13 @@ func _traffic(delta: float) -> void:
 
 
 func _check_alley() -> void:
-	if not bool(course.get("alley", false)) or city.alley.size == Vector2.ZERO:
+	if not bool(course.get("alley", false)) or alley:
 		return
-	if not alley and (city.alley as Rect2).grow(-10).has_point(pos):
-		alley = true
-		AudioDirector.play_sfx("sfx_notification_soft")
+	for cut in city.alleys:
+		if (cut as Rect2).grow(-10).has_point(pos):
+			alley = true
+			AudioDirector.play_sfx("sfx_notification_soft")
+			return
 
 
 func _check_dropoff() -> void:
@@ -1353,6 +1360,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not running:
 		return
 	if Controls.event_pressed(event, "horn"):
+		_count_honk()
 		AudioDirector.play_sfx("sfx_truck_horn")
 		_wave_nearby()
 		if _near_honk_ducks():
@@ -1579,6 +1587,18 @@ func _hazards() -> void:
 		_contact(str(kind), active.has(kind), int(active.get(kind, 0)))
 
 
+func _count_honk() -> void:
+	# A friendly honk near someone on the pavement is worth a little at the end.
+	if honk_cool > 0.0 or honks >= 5:
+		return
+	var truck_center := _art_center()
+	for w in walkers:
+		if (w["pos"] as Vector2).distance_to(truck_center) < 320.0:
+			honks += 1
+			honk_cool = 2.0
+			return
+
+
 func _near_honk_ducks() -> bool:
 	for hazard in hazards:
 		if str(hazard.get("type", "")) != "ducks" or not bool(hazard.get("honk", false)):
@@ -1599,6 +1619,7 @@ func _complete() -> void:
 	var result := {
 		"condition": condition,
 		"alley": alley,
+		"honks": honks,
 		"duck_friend": duck_friend and not near_miss and bool(GameState.job.get("def", {}).get("duck_friend", false)),
 		"near_miss": near_miss,
 		"time": time_alive,
@@ -1627,8 +1648,8 @@ func _draw_minimap() -> void:
 			minimap.draw_rect(box, Color(UIKit.DARK, 0.12), false, 1.0)
 	var water: Dictionary = city.pond()
 	minimap.draw_circle(offset + (water.get("center", Vector2.ZERO) as Vector2) * k, float(water.get("radius", 100)) * k, Color("9FC4D6"))
-	if city.alley.size != Vector2.ZERO:
-		minimap.draw_rect(Rect2(offset + city.alley.position * k, city.alley.size * k), Color("8E6E5A"))
+	for cut in city.alleys:
+		minimap.draw_rect(Rect2(offset + (cut as Rect2).position * k, (cut as Rect2).size * k), Color("8E6E5A"))
 	# The route: a cream underlay, then terracotta, from where the truck is.
 	if route.size() > 1 and state == "drive":
 		var points := PackedVector2Array()

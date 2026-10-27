@@ -11,6 +11,8 @@ var sidewalk := 48.0
 var park_block := Vector2i(4, 0)
 var alley := Rect2()
 var alley_block := Vector2i(-1, -1)
+var alleys: Array = []
+var alley_blocks: Array = []
 var buildings: Array = []
 var roads: Array = []
 var places: Dictionary = {}
@@ -42,16 +44,26 @@ func setup(data: Dictionary) -> void:
 	park_block = Vector2i(int(park[0]), int(park[1]))
 	roof_colors = data.get("roof_colors", ["B9A58C"])
 	bounds = Rect2(0, 0, road + cols * (block.x + road), road + rows * (block.y + road))
-	var alley_def: Dictionary = data.get("alley", {})
-	if not alley_def.is_empty():
+	alleys.clear()
+	alley_blocks.clear()
+	var defs: Array = data.get("alleys", [])
+	if defs.is_empty() and not (data.get("alley", {}) as Dictionary).is_empty():
+		defs = [data.get("alley", {})]
+	for alley_def in defs:
 		var at: Array = alley_def.get("block", [2, 1])
-		alley_block = Vector2i(int(at[0]), int(at[1]))
-		var rect := block_rect(alley_block.x, alley_block.y)
+		var block_at := Vector2i(int(at[0]), int(at[1]))
+		var rect := block_rect(block_at.x, block_at.y)
 		var width := float(alley_def.get("width", 72))
+		var cut := Rect2()
 		if str(alley_def.get("axis", "y")) == "y":
-			alley = Rect2(rect.position.x + rect.size.x * 0.5 - width * 0.5, rect.position.y - road * 0.5, width, rect.size.y + road)
+			cut = Rect2(rect.position.x + rect.size.x * 0.5 - width * 0.5, rect.position.y - road * 0.5, width, rect.size.y + road)
 		else:
-			alley = Rect2(rect.position.x - road * 0.5, rect.position.y + rect.size.y * 0.5 - width * 0.5, rect.size.x + road, width)
+			cut = Rect2(rect.position.x - road * 0.5, rect.position.y + rect.size.y * 0.5 - width * 0.5, rect.size.x + road, width)
+		alleys.append(cut)
+		alley_blocks.append(block_at)
+	if not alleys.is_empty():
+		alley = alleys[0]
+		alley_block = alley_blocks[0]
 	roads.clear()
 	for i in cols + 1:
 		roads.append(Rect2(i * (block.x + road), 0, road, bounds.size.y))
@@ -64,16 +76,18 @@ func setup(data: Dictionary) -> void:
 				continue
 			var footprint := block_rect(c, r).grow(-sidewalk)
 			var color := Color(str(roof_colors[(c * 3 + r * 5) % roof_colors.size()]))
-			if Vector2i(c, r) == alley_block and alley.size != Vector2.ZERO:
-				# The alley splits this block in two.
-				if alley.size.y > alley.size.x:
-					var left := Rect2(footprint.position, Vector2(alley.position.x - footprint.position.x, footprint.size.y))
-					var right := Rect2(Vector2(alley.end.x, footprint.position.y), Vector2(footprint.end.x - alley.end.x, footprint.size.y))
+			var cut_index := alley_blocks.find(Vector2i(c, r))
+			if cut_index >= 0:
+				# An alley splits this block in two.
+				var cut: Rect2 = alleys[cut_index]
+				if cut.size.y > cut.size.x:
+					var left := Rect2(footprint.position, Vector2(cut.position.x - footprint.position.x, footprint.size.y))
+					var right := Rect2(Vector2(cut.end.x, footprint.position.y), Vector2(footprint.end.x - cut.end.x, footprint.size.y))
 					buildings.append({"rect": left, "color": color, "block": Vector2i(c, r)})
 					buildings.append({"rect": right, "color": color.darkened(0.08), "block": Vector2i(c, r)})
 				else:
-					var top := Rect2(footprint.position, Vector2(footprint.size.x, alley.position.y - footprint.position.y))
-					var bottom := Rect2(Vector2(footprint.position.x, alley.end.y), Vector2(footprint.size.x, footprint.end.y - alley.end.y))
+					var top := Rect2(footprint.position, Vector2(footprint.size.x, cut.position.y - footprint.position.y))
+					var bottom := Rect2(Vector2(footprint.position.x, cut.end.y), Vector2(footprint.size.x, footprint.end.y - cut.end.y))
 					buildings.append({"rect": top, "color": color, "block": Vector2i(c, r)})
 					buildings.append({"rect": bottom, "color": color.darkened(0.08), "block": Vector2i(c, r)})
 			else:
@@ -149,8 +163,9 @@ func on_road(p: Vector2) -> bool:
 	for rect in roads:
 		if (rect as Rect2).grow(10).has_point(p):
 			return true
-	if alley.size != Vector2.ZERO and alley.grow(6).has_point(p):
-		return true
+	for cut in alleys:
+		if (cut as Rect2).grow(6).has_point(p):
+			return true
 	return false
 
 

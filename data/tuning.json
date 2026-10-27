@@ -100,7 +100,8 @@
     "buyer_premium": 1.35,
     "swing_min": 0.1,
     "swing_max": 0.25,
-    "history_days": 7
+    "history_days": 7,
+    "honk_tip": 2
   },
   "rep_star_gates": [
     0,

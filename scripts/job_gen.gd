@@ -51,6 +51,7 @@ const MAX_HANG := 2
 const DRIVE_ENDS: Array = [
 	["cafe", "cafe_new"], ["train", "train_new"], ["park_shed", "boathouse"], ["garage", "bakery"],
 	["forest", "corner"], ["warehouse", "glass"], ["cafe_new", "train"], ["bakery", "park_shed"], ["corner", "garage"],
+	["forest", "glass"], ["garage", "corner"], ["warehouse", "park_shed"], ["bakery", "train_new"], ["glass", "forest"],
 ]
 
 const STREETS: Array = ["Larch Street", "Mill Lane", "Harbour Road", "Elm Row", "Station Hill", "Copper Lane", "Quay Street"]

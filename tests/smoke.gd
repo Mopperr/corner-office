@@ -1174,6 +1174,37 @@ func _qa_regressions() -> Array:
 	if not (play.call("_browse_targets") as Array).is_empty():
 		if not play.call("_spawn_browser") or (play.get("browser") as Dictionary).is_empty():
 			found.append("browser did not spawn")
+	# Place it all for me: a boxed starter piece lands somewhere valid.
+	GameState.office_phase = "place"
+	var lazy_rec: Dictionary = {}
+	for rec in GameState.office_items:
+		if str(rec.get("uid", "")) == "chair":
+			lazy_rec = rec
+	if not lazy_rec.is_empty():
+		lazy_rec["state"] = "boxed"
+		play.call("_refresh_items")
+		play.call("_place_office_all")
+		if str(lazy_rec.get("state", "")) != "placed":
+			found.append("place it all for me left the chair %s" % lazy_rec.get("state", ""))
+	GameState.office_phase = "live"
+	# Customer asks: a dozen in the data, and a yes pays more than a no.
+	if Catalog.asks().size() < 10:
+		found.append("asks %d" % Catalog.asks().size())
+	GameState.office_items.append({"uid": "smoke_counter2", "item": "coffee_machine", "state": "placed", "x": 2, "y": 0.76, "z": 4, "rot": 0})
+	GameState.money = 100
+	var yes_sale: Dictionary = GameState.serve_visitor(true, {"dish": "drip", "who": {"name": "Nia"}, "tip_mult": 2.0})
+	var no_sale: Dictionary = GameState.serve_visitor(true, {"dish": "drip", "who": {"name": "Nia"}, "tip_mult": 0.5})
+	if int(yes_sale.get("tip", 0)) <= int(no_sale.get("tip", 0)):
+		found.append("ask tip %d vs %d" % [int(yes_sale.get("tip", 0)), int(no_sale.get("tip", 0))])
+	# Two alleys in town, and a honk bonus on the pay.
+	var town = load("res://scripts/city.gd").load_default()
+	if (town.alleys as Array).size() < 2 or not town.on_road((town.alleys[1] as Rect2).get_center()):
+		found.append("second alley")
+	GameState.job = {"def": {"id": "x", "venue": "cafe"}, "items": [], "boxes": []}
+	GameState.apply_drive_result({"condition": 95, "alley": false, "honks": 3})
+	if int(GameState.job.get("honks", 0)) != 3:
+		found.append("honks not kept")
+	GameState.job = {}
 	# A parking lot with three bays, a car that takes one, and a pool of things to think.
 	if play.call("_parking_lot") == null or (play.call("_parking_lot").get_meta("slots", []) as Array).size() != 3:
 		found.append("parking lot")

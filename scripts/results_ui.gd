@@ -30,6 +30,8 @@ func _ready() -> void:
 		if bool(pay.get("duck", false)):
 			extra += "   Duck Friend"
 		lines.append(extra)
+	if int(pay.get("honks", 0)) > 0:
+		lines.append("Friendly honks  +$%d" % int(pay.get("honk_pay", 0)))
 	if int(pay.get("split_loss", 0)) > 0:
 		lines.append("Split sets  −$%d" % int(pay.get("split_loss", 0)))
 	if int(pay.get("cut", 0)) > 0:
