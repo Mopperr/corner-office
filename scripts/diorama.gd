@@ -2213,7 +2213,7 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 	var d := float(venue.get("d", 8))
 	var taken: Array = []
 	for item in GameState.job.get("items", []):
-		if str(item.get("state", "")) == "loose":
+		if str(item.get("state", "")) in ["loose", "placed", "settling"]:
 			taken.append(Vector2(float(item.get("x", 0.0)), float(item.get("z", 0.0))))
 	for box in GameState.job.get("boxes", []):
 		var b := _open_box_spot(int(box.get("id", 0)))
@@ -2249,8 +2249,9 @@ func _spot_blocked(at: Vector3) -> bool:
 	var space := world.direct_space_state
 	if space == null:
 		return false
+	# Both layers: modelled pieces often carry only a pick body, no blocking one.
 	var query := PhysicsRayQueryParameters3D.create(Vector3(at.x, 2.4, at.z), Vector3(at.x, 0.06, at.z))
-	query.collision_mask = Props.LAYER_BLOCKING
+	query.collision_mask = Props.MASK_QUERY
 	query.exclude = _cutaway_rids()
 	return not space.intersect_ray(query).is_empty()
 
