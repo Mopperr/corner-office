@@ -221,7 +221,8 @@
       "d": 0.5,
       "h": 1.14,
       "mount": "floor",
-      "price": 22
+      "price": 22,
+      "flavor": "Thrives on neglect and north light."
     },
     "plant_cactus": {
       "name": "Tiny Cactus",
@@ -230,7 +231,8 @@
       "d": 0.24,
       "h": 0.35,
       "mount": "small",
-      "price": 12
+      "price": 12,
+      "flavor": "Asks for nothing. Gives a little."
     },
     "rug_round": {
       "name": "Round Woven Rug",
@@ -239,7 +241,8 @@
       "d": 1.4,
       "h": 0.03,
       "mount": "floor",
-      "price": 40
+      "price": 40,
+      "flavor": "Ties the room together, famously."
     },
     "poster_motivational": {
       "name": "Hang In There Poster",
@@ -248,7 +251,8 @@
       "d": 0.1,
       "h": 0.45,
       "mount": "hang",
-      "price": 18
+      "price": 18,
+      "flavor": "HANG IN THERE. The cat on it has."
     },
     "beanbag_mustard": {
       "name": "Mustard Beanbag",
@@ -257,7 +261,8 @@
       "d": 0.94,
       "h": 0.74,
       "mount": "floor",
-      "price": 48
+      "price": 48,
+      "flavor": "Swallows whoever sits down."
     },
     "beanbag_sage": {
       "name": "Sage Beanbag",
@@ -266,7 +271,8 @@
       "d": 0.94,
       "h": 0.74,
       "mount": "floor",
-      "price": 48
+      "price": 48,
+      "flavor": "The quieter beanbag."
     },
     "clock_wall": {
       "name": "Wall Clock",
@@ -275,7 +281,8 @@
       "d": 0.08,
       "h": 0.36,
       "mount": "hang",
-      "price": 28
+      "price": 28,
+      "flavor": "Runs four minutes fast, on purpose."
     },
     "bookshelf_wood": {
       "name": "Wooden Bookshelf",
@@ -285,7 +292,8 @@
       "h": 1.6,
       "mount": "wall_floor",
       "back_offset": 0.12,
-      "price": 60
+      "price": 60,
+      "flavor": "Holds books, and the things in front of books."
     },
     "kettle": {
       "name": "Electric Kettle",
@@ -294,7 +302,8 @@
       "d": 0.22,
       "h": 0.28,
       "mount": "small",
-      "price": 20
+      "price": 20,
+      "flavor": "Clicks off a second before you look."
     },
     "string_lights": {
       "name": "String Lights",
@@ -303,7 +312,8 @@
       "d": 0.12,
       "h": 0.2,
       "mount": "hang",
-      "price": 26
+      "price": 26,
+      "flavor": "Every third bulb is the warm one."
     },
     "cat_bed": {
       "name": "Cushioned Cat Bed",
@@ -312,7 +322,8 @@
       "d": 0.4,
       "h": 0.16,
       "mount": "floor",
-      "price": 24
+      "price": 24,
+      "flavor": "Officially the cat's. Unofficially the cat prefers the box."
     },
     "picture_abstract": {
       "name": "Abstract Picture",
@@ -321,7 +332,8 @@
       "d": 0.08,
       "h": 0.5,
       "mount": "hang",
-      "price": 16
+      "price": 16,
+      "flavor": "Could be a harbour. Could be a Tuesday."
     },
     "picture_stripes": {
       "name": "Striped Picture",
@@ -330,7 +342,8 @@
       "d": 0.06,
       "h": 0.36,
       "mount": "hang",
-      "price": 14
+      "price": 14,
+      "flavor": "Stripes. Confident ones."
     },
     "coffee_machine": {
       "name": "Coffee Machine",
@@ -339,7 +352,8 @@
       "d": 0.4,
       "h": 0.58,
       "mount": "small",
-      "price": 55
+      "price": 55,
+      "flavor": "Hisses like it has opinions."
     },
     "filing_cabinet": {
       "name": "Filing Cabinet",
@@ -349,7 +363,8 @@
       "h": 1.3,
       "mount": "floor",
       "drawer": true,
-      "price": 80
+      "price": 80,
+      "flavor": "Two drawers of paper, one of snacks."
     },
     "museum_photo": {
       "name": "Biscuit's Photo",
@@ -395,7 +410,8 @@
       "d": 0.22,
       "h": 0.42,
       "mount": "small",
-      "light": true
+      "light": true,
+      "flavor": "Green shade, serious light."
     },
     "lamp_moody": {
       "price": 32,
@@ -405,7 +421,8 @@
       "d": 0.36,
       "h": 0.58,
       "mount": "small",
-      "light": true
+      "light": true,
+      "flavor": "Moody by name."
     },
     "keyboard_retro": {
       "price": 48,
@@ -423,7 +440,8 @@
       "w": 0.42,
       "d": 0.38,
       "h": 0.22,
-      "mount": "small"
+      "mount": "small",
+      "flavor": "Clacks loud enough to count."
     },
     "rotary_phone": {
       "price": 26,
@@ -432,7 +450,8 @@
       "w": 0.22,
       "d": 0.2,
       "h": 0.16,
-      "mount": "small"
+      "mount": "small",
+      "flavor": "Still works. Nobody calls."
     },
     "rolodex": {
       "price": 11,
@@ -526,7 +545,8 @@
       "d": 0.28,
       "h": 0.4,
       "mount": "small",
-      "fragile": true
+      "fragile": true,
+      "flavor": "Leans toward the window."
     },
     "cafe_fern": {
       "name": "Cafe Fern",
@@ -535,7 +555,8 @@
       "d": 0.5,
       "h": 1.14,
       "mount": "floor",
-      "fragile": true
+      "fragile": true,
+      "flavor": "Drips a little after watering."
     },
     "bowl": {
       "name": "Food Bowl",
@@ -554,7 +575,8 @@
       "d": 0.16,
       "h": 0.28,
       "mount": "small",
-      "fragile": true
+      "fragile": true,
+      "flavor": "Ticks. Reassuring or not."
     },
     "tool_box": {
       "name": "Tool Tin",
@@ -562,7 +584,8 @@
       "w": 0.34,
       "d": 0.22,
       "h": 0.16,
-      "mount": "small"
+      "mount": "small",
+      "flavor": "Rattles with the good screws."
     },
     "village_kit": {
       "name": "Village House",
@@ -571,7 +594,8 @@
       "d": 0.24,
       "h": 0.28,
       "mount": "small",
-      "fragile": true
+      "fragile": true,
+      "flavor": "A whole village, in parts."
     },
     "mystery_part": {
       "name": "Mystery Train Part",
@@ -580,7 +604,8 @@
       "d": 0.16,
       "h": 0.1,
       "mount": "small",
-      "mystery": true
+      "mystery": true,
+      "flavor": "Nobody knows. Everybody has a theory."
     },
     "station_clock": {
       "name": "Station Clock",
@@ -589,7 +614,8 @@
       "d": 0.08,
       "h": 0.36,
       "mount": "hang",
-      "fragile": true
+      "fragile": true,
+      "flavor": "Big hands, bigger tick."
     },
     "picnic_basket": {
       "name": "Picnic Basket",
@@ -597,7 +623,8 @@
       "w": 0.4,
       "d": 0.28,
       "h": 0.22,
-      "mount": "small"
+      "mount": "small",
+      "flavor": "Smells faintly of last summer."
     },
     "bread_crate": {
       "name": "Bread Crate",
@@ -632,6 +659,119 @@
       "h": 0.22,
       "mount": "small",
       "price": 6
+    },
+    "globe": {
+      "name": "Desk Globe",
+      "model": "proc:globe",
+      "w": 0.3,
+      "d": 0.3,
+      "h": 0.42,
+      "mount": "small",
+      "flavor": "Spins. Lands on the sea every time."
+    },
+    "trophy": {
+      "name": "Bowling Trophy",
+      "model": "proc:trophy",
+      "w": 0.18,
+      "d": 0.18,
+      "h": 0.36,
+      "mount": "small",
+      "flavor": "Second place, 1994. Still counts."
+    },
+    "record_player": {
+      "name": "Record Player",
+      "model": "proc:record_player",
+      "w": 0.44,
+      "d": 0.36,
+      "h": 0.16,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Needle's fine. The hum is part of it."
+    },
+    "radio": {
+      "name": "Kitchen Radio",
+      "model": "proc:radio",
+      "w": 0.32,
+      "d": 0.14,
+      "h": 0.2,
+      "mount": "small",
+      "flavor": "Only gets the one station. It's a good station."
+    },
+    "teapot": {
+      "name": "Brown Teapot",
+      "model": "proc:teapot",
+      "w": 0.24,
+      "d": 0.18,
+      "h": 0.2,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Pours true. Never been washed inside, on principle."
+    },
+    "vase": {
+      "name": "Tall Vase",
+      "model": "proc:vase",
+      "w": 0.16,
+      "d": 0.16,
+      "h": 0.42,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Blue glaze. Holds one dramatic branch."
+    },
+    "lantern": {
+      "name": "Camping Lantern",
+      "model": "proc:lantern",
+      "w": 0.18,
+      "d": 0.18,
+      "h": 0.3,
+      "mount": "small",
+      "flavor": "Warm light, moth magnet."
+    },
+    "cash_register": {
+      "name": "Brass Till",
+      "model": "proc:register",
+      "w": 0.42,
+      "d": 0.4,
+      "h": 0.36,
+      "mount": "small",
+      "heavy": true,
+      "flavor": "Rings like it means it. Drawer sticks on Tuesdays."
+    },
+    "kitchen_scale": {
+      "name": "Kitchen Scale",
+      "model": "proc:scale",
+      "w": 0.22,
+      "d": 0.22,
+      "h": 0.24,
+      "mount": "small",
+      "flavor": "Weighs flour, letters, and the cat."
+    },
+    "birdcage": {
+      "name": "Empty Birdcage",
+      "model": "proc:birdcage",
+      "w": 0.3,
+      "d": 0.3,
+      "h": 0.5,
+      "mount": "small",
+      "flavor": "No bird. Great for a trailing plant."
+    },
+    "easel": {
+      "name": "Painter's Easel",
+      "model": "proc:easel",
+      "w": 0.6,
+      "d": 0.6,
+      "h": 1.6,
+      "mount": "floor",
+      "bulky": true,
+      "flavor": "Folds, in theory."
+    },
+    "skateboard": {
+      "name": "Skateboard",
+      "model": "proc:skateboard",
+      "w": 0.8,
+      "d": 0.22,
+      "h": 0.1,
+      "mount": "floor",
+      "flavor": "One wheel squeaks. It's the personality wheel."
     }
   },
   "starter": [

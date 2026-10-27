@@ -41,6 +41,8 @@ const POOL: Dictionary = {
 	"beanbag_sage": 1, "clock_wall": 1, "bookshelf_wood": 1, "kettle": 1, "string_lights": 1, "picture_abstract": 2,
 	"picture_stripes": 2, "coffee_machine": 1, "filing_cabinet": 1, "lamp_banker": 1, "lamp_moody": 1,
 	"keyboard_typewriter": 1, "rotary_phone": 1, "cat_tree": 1, "lemonade_pitcher": 1, "cup_stack": 2,
+	"globe": 1, "trophy": 2, "record_player": 1, "radio": 1, "teapot": 2, "vase": 2, "lantern": 2,
+	"cash_register": 1, "kitchen_scale": 1, "birdcage": 1, "easel": 1, "skateboard": 1,
 }
 
 # Wall pieces are capped per job: a small room only has a few hooks.

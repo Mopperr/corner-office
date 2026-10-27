@@ -120,10 +120,18 @@ static func _round_table(root: Node3D, at: Vector3, top_color: Color, seat_color
 	_block(root, at, Vector3(1.5, 0.78, 1.5))
 
 
+const CEILING_Y := 3.0
+
+
 static func _pendant(root: Node3D, at: Vector3, shade: Color, energy := 0.6) -> void:
-	var cord := Props.mesh_box(Vector3(0.012, 0.6, 0.012), BOARD)
-	cord.position = at - Vector3(0, 0.6, 0)
+	# The cord runs all the way up to the ceiling line, with a rose where it meets it.
+	var bottom := at.y - 0.6
+	var cord := Props.mesh_box(Vector3(0.012, CEILING_Y - bottom, 0.012), BOARD)
+	cord.position = Vector3(at.x, (CEILING_Y + bottom) * 0.5, at.z)
 	root.add_child(cord)
+	var rose := Props.mesh_cylinder(0.07, 0.03, BOARD)
+	rose.position = Vector3(at.x, CEILING_Y - 0.015, at.z)
+	root.add_child(rose)
 	var cone := MeshInstance3D.new()
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = 0.05

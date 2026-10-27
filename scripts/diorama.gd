@@ -858,27 +858,49 @@ func _sync_goals_panel() -> void:
 		goals_panel.visible = false
 		return
 	var items := _goal_items()
+	# The card only matters while there is placing to do; a live shop keeps the corner clear.
+	var placing := (GameState.mode == "office" and GameState.office_phase == "place") or GameState.mode == "job_unpack"
+	if not placing:
+		if goals_panel.visible:
+			goals_panel.visible = false
+			_goals_key = ""
+		return
 	var lines: Array = []
+	var met_count := 0
 	for goal in StackGoals.all_goals():
 		if str(goal.get("venue", "")) != str(venue.get("id", "")):
 			continue
 		var met := bool(StackGoals.evaluate(goal, items, GameState.latched_goals).get("met", false))
-		lines.append("%s  %s" % ["✓" if met else "○", goal.get("hint", "")])
+		if met:
+			met_count += 1
+		lines.append([met, str(goal.get("hint", ""))])
 	var setup: float = stack_room.score() if stack_room else -1.0
-	var key := "%s|%d" % ["\n".join(PackedStringArray(lines)), int(setup)]
+	var key := "%s|%d" % [str(lines), int(setup)]
 	if key == _goals_key:
 		return
 	_goals_key = key
 	for child in goals_column.get_children():
+		goals_column.remove_child(child)
 		child.queue_free()
-	var head := UIKit.label("Room setup  %d/100" % int(round(setup)) if setup >= 0.0 else "Room setup", 28, UIKit.TERRA, "title", false)
-	goals_column.add_child(head)
-	for line in lines:
-		var row := UIKit.label(str(line), 27, UIKit.DARK, "small")
-		row.custom_minimum_size = Vector2(520, 0)
-		goals_column.add_child(row)
-	if lines.is_empty():
-		var row := UIKit.label("Stacks that stand, things that touch, and a tidy floor all count.", 27, UIKit.DARK, "small")
+	var head_row := HBoxContainer.new()
+	head_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	head_row.add_theme_constant_override("separation", 12)
+	goals_column.add_child(head_row)
+	var head := UIKit.label("Room score", 28, UIKit.TERRA, "title", false)
+	head.custom_minimum_size = Vector2(200, 40)
+	head_row.add_child(head)
+	var score_tag := UIKit.label("%d / 100" % int(round(maxf(setup, 0.0))), 28, UIKit.DARK, "title", false)
+	score_tag.custom_minimum_size = Vector2(150, 40)
+	head_row.add_child(score_tag)
+	var why := UIKit.label("Tidy placing pays: a higher score means a bigger tip when you finish.", 27, UIKit.WOOD, "small")
+	why.custom_minimum_size = Vector2(520, 0)
+	goals_column.add_child(why)
+	if not lines.is_empty():
+		var sub := UIKit.label("Bonus goals  %d of %d done" % [met_count, lines.size()], 27, UIKit.BLUE, "small", false)
+		goals_column.add_child(sub)
+	for pair in lines:
+		var done: bool = pair[0]
+		var row := UIKit.label("%s  %s" % ["✓" if done else "○", pair[1]], 27, UIKit.SAGE.darkened(0.3) if done else UIKit.DARK, "small")
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	goals_panel.visible = true
@@ -1701,7 +1723,14 @@ func _unpack_click(uid: String) -> void:
 		_refresh_hud_buttons()
 		return
 	if uid.begins_with("boxopen:"):
-		_open_box_modal(int(uid.trim_prefix("boxopen:")))
+		var open_id := int(uid.trim_prefix("boxopen:"))
+		var open_box := GameState.job_box(open_id)
+		if int(open_box.get("tower", -1)) >= 0:
+			var top_id := _tower_top(int(open_box.get("tower", 0)))
+			if top_id != open_id and top_id >= 0:
+				_toast("Top box first. That's box %d." % (top_id + 1))
+				open_id = top_id
+		_open_box_modal(open_id)
 		return
 	if held_uid == "":
 		var item := GameState.job_item(uid)
@@ -1771,6 +1800,9 @@ func _open_box_modal(box_id: int) -> void:
 	title.position = Vector2(24, 16)
 	panel.add_child(title)
 	var tags: Array = []
+	if int(box.get("tower", -1)) >= 0:
+		var below := int(box.get("level", 0))
+		tags.append("top of a stack of %d" % (below + 1) if below > 0 else "bottom of a stack")
 	if bool(box.get("padded", false)):
 		tags.append("padded")
 	if bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
@@ -1857,6 +1889,12 @@ func _box_row(item: Dictionary, box_id: int, width: float) -> PanelContainer:
 	if int(item.get("damage", 0)) > 0:
 		bits.append("scuffed")
 	text.add_child(UIKit.label(", ".join(bits), 24, UIKit.WOOD, "small", false))
+	var flavor := str(ItemDB.get_item(str(item.get("item_id", ""))).get("flavor", ""))
+	if flavor != "":
+		var note := UIKit.label(flavor, 24, UIKit.BLUE, "small", false)
+		note.custom_minimum_size = Vector2(480, 0)
+		note.clip_text = true
+		text.add_child(note)
 	var uid := str(item.get("uid", ""))
 	var take := UIKit.button("Take", UIKit.TERRA)
 	take.custom_minimum_size = Vector2(130, 52)
@@ -2074,10 +2112,74 @@ func _pack_rest() -> void:
 		_toast("The truck only takes %d boxes. Some pieces will have to wait." % slot_count)
 
 
+func _stack_boxes() -> void:
+	# Pile the carried, still-packed boxes into towers of three, in id order,
+	# so the floor behind them is clear for the pieces that come out.
+	var packed: Array = []
+	for box in GameState.job.get("boxes", []):
+		var id := int(box.get("id", -1))
+		if bool(carried.get(id, false)) and _box_still_packed(id):
+			packed.append(box)
+	var n := 0
+	for box in packed:
+		box["tower"] = int(n / 3)
+		box["level"] = n % 3
+		n += 1
+	AudioDirector.play_sfx("sfx_box_set_down", true)
+	_refresh_items()
+	_refresh_hud_buttons()
+	SaveManager.save_game()
+
+
+func _normalize_towers() -> void:
+	# A box that has been emptied leaves its tower; the boxes above settle down.
+	var towers := {}
+	for box in GameState.job.get("boxes", []):
+		var tower := int(box.get("tower", -1))
+		if tower < 0:
+			continue
+		var id := int(box.get("id", -1))
+		if not (bool(carried.get(id, false)) and _box_still_packed(id)):
+			box.erase("tower")
+			box.erase("level")
+			continue
+		if not towers.has(tower):
+			towers[tower] = []
+		towers[tower].append(box)
+	for tower in towers.keys():
+		var column: Array = towers[tower]
+		column.sort_custom(func(a, b): return int(a.get("level", 0)) < int(b.get("level", 0)))
+		for level in column.size():
+			column[level]["level"] = level
+
+
+func _tower_top(tower: int) -> int:
+	var top_id := -1
+	var top_level := -1
+	for box in GameState.job.get("boxes", []):
+		if int(box.get("tower", -1)) == tower and int(box.get("level", 0)) > top_level:
+			top_level = int(box.get("level", 0))
+			top_id = int(box.get("id", -1))
+	return top_id
+
+
+func _stackable_count() -> int:
+	var count := 0
+	for box in GameState.job.get("boxes", []):
+		var id := int(box.get("id", -1))
+		if bool(carried.get(id, false)) and _box_still_packed(id) and int(box.get("tower", -1)) < 0:
+			count += 1
+	return count
+
+
 func _open_box_spot(box_id: int) -> Vector3:
 	var index := 0
+	var level := 0
 	for box in GameState.job.get("boxes", []):
 		if int(box.get("id", -1)) == box_id:
+			if int(box.get("tower", -1)) >= 0:
+				index = int(box.get("tower", 0))
+				level = int(box.get("level", 0))
 			break
 		index += 1
 	# Carried boxes line up across the screen (the diagonal the camera sees as
@@ -2085,7 +2187,7 @@ func _open_box_spot(box_id: int) -> Vector3:
 	# out of them lands behind the row, never in front of the next box.
 	# A venue with tall furniture along its near wall sets box_row deeper.
 	var depth := float(venue.get("box_row", 1.6))
-	return Vector3(float(venue.get("x", 0)) + 1.7 + float(index) * 0.45, 0.0, float(venue.get("z", 0)) + float(venue.get("d", 8)) - depth - float(index) * 0.45)
+	return Vector3(float(venue.get("x", 0)) + 1.7 + float(index) * 0.45, float(level) * 0.44, float(venue.get("z", 0)) + float(venue.get("d", 8)) - depth - float(index) * 0.45)
 
 
 func _spill_spot(box_id: int, n: int) -> Vector3:
@@ -2093,6 +2195,7 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 	# A spot outside the room or on top of something already lying there is
 	# skipped, so no two pieces share a square.
 	var spot := _open_box_spot(box_id)
+	spot.y = 0.0
 	var x0 := float(venue.get("x", 0))
 	var z0 := float(venue.get("z", 0))
 	var w := float(venue.get("w", 6))
@@ -2460,6 +2563,7 @@ func _spawn_truck_slots() -> void:
 
 
 func _spawn_carry_boxes() -> void:
+	_normalize_towers()
 	var index := 0
 	for box in GameState.job.get("boxes", []):
 		var box_id := int(box.get("id", -1))
@@ -2609,6 +2713,7 @@ func _refresh_hud_buttons() -> void:
 		return
 	for child in layer.get_children():
 		if str(child.name).begins_with("Act"):
+			layer.remove_child(child)
 			child.queue_free()
 	var y := 100.0
 	if GameState.mode == "office" or GameState.mode == "job_unpack":
@@ -2732,6 +2837,9 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 			ready = false
 		if str(item.get("state", "")) in ["boxed", "loose"] and bool(carried.get(int(item.get("box", -1)), false)):
 			waiting += 1
+	if _stackable_count() >= 2:
+		_act_button(layer, "Stack the boxes", Vector2(860, y), _stack_boxes)
+		y += 52
 	if waiting > 0:
 		_act_button(layer, "Unpack it all for me", Vector2(860, y), func():
 			for box in GameState.job.get("boxes", []):
@@ -3250,10 +3358,14 @@ func _act_button(layer: CanvasLayer, text: String, at: Vector2, callback: Callab
 		vp_h = 800.0
 	if top + height > vp_h - 180.0:
 		top = maxf(124.0, vp_h - 180.0 - height)
+	btn.clip_text = true
+	btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if at.x < 400.0:
 		UIKit.pin_top_left(btn, 16, top, 340, top + height)
+		btn.grow_horizontal = Control.GROW_DIRECTION_END
 	else:
 		UIKit.pin_top_right(btn, -356, top, -16, top + height)
+		btn.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	_wire_hud_focus(layer)
 
 
@@ -3363,7 +3475,7 @@ func _mode_hint() -> String:
 		"truck":
 			return "Pick a box, then a pad in the bed. Mustard pads are the floor, and heavy goes there."
 		"job_unpack":
-			return "Carry each box in, click it to open, then stack what's inside on something solid. Mend a scuff or keep it."
+			return "Click a box in the truck to carry it in. Click it again to see what's inside, then set each piece on the floor, a desk or a shelf. Stack the boxes to clear the floor."
 	return ""
 
 
@@ -4748,8 +4860,9 @@ const SQUASH_KEYS: Array = [
 
 
 static func mend_caption(item_name: String, taps: int) -> String:
-	var word := "tap" if taps == 1 else "taps"
-	return "Mend %s (%d %s)" % [item_name, taps, word]
+	if taps <= 1:
+		return "Mend %s" % item_name
+	return "Mend %s ×%d" % [item_name, taps]
 
 
 static func ghost_color(albedo: Color, valid: bool) -> Color:

@@ -596,6 +596,165 @@ static func _proc(kind: String) -> Node3D:
 				panel.position = Vector3(0, 0.28, side * 0.33)
 				panel.rotation.x = side * 0.32
 				root.add_child(panel)
+		"globe":
+			root.add_child(mesh_cylinder(0.09, 0.03, UIKit.DARK))
+			var stem := mesh_cylinder(0.015, 0.1, UIKit.DARK)
+			stem.position.y = 0.03
+			root.add_child(stem)
+			var ball := MeshInstance3D.new()
+			var sphere := SphereMesh.new()
+			sphere.radius = 0.14
+			sphere.height = 0.28
+			ball.mesh = sphere
+			ball.material_override = mat(UIKit.BLUE)
+			ball.position.y = 0.27
+			root.add_child(ball)
+			var land := mesh_box(Vector3(0.1, 0.06, 0.05), UIKit.SAGE)
+			land.position = Vector3(0.03, 0.3, 0.12)
+			root.add_child(land)
+		"trophy":
+			root.add_child(mesh_box(Vector3(0.16, 0.05, 0.16), UIKit.DARK))
+			var stem := mesh_cylinder(0.02, 0.12, UIKit.MUSTARD)
+			stem.position.y = 0.05
+			root.add_child(stem)
+			var cup := mesh_cylinder(0.07, 0.14, UIKit.MUSTARD)
+			cup.position.y = 0.17
+			root.add_child(cup)
+			for side in [-1.0, 1.0]:
+				var handle := mesh_box(Vector3(0.03, 0.08, 0.02), UIKit.MUSTARD)
+				handle.position = Vector3(side * 0.09, 0.24, 0)
+				root.add_child(handle)
+		"record_player":
+			root.add_child(mesh_box(Vector3(0.44, 0.08, 0.36), UIKit.WOOD))
+			var disc := mesh_cylinder(0.14, 0.012, UIKit.DARK)
+			disc.position = Vector3(-0.04, 0.08, 0)
+			root.add_child(disc)
+			var label := mesh_cylinder(0.04, 0.014, UIKit.TERRA)
+			label.position = Vector3(-0.04, 0.08, 0)
+			root.add_child(label)
+			var arm := mesh_box(Vector3(0.02, 0.02, 0.16), Color("C9CED3"))
+			arm.position = Vector3(0.14, 0.1, -0.06)
+			arm.rotation.y = 0.5
+			root.add_child(arm)
+		"radio":
+			root.add_child(mesh_box(Vector3(0.32, 0.2, 0.14), UIKit.TERRA))
+			var grille := mesh_box(Vector3(0.14, 0.12, 0.01), UIKit.CREAM_CARD)
+			grille.position = Vector3(-0.06, 0.1, 0.075)
+			root.add_child(grille)
+			var dial := mesh_cylinder(0.03, 0.012, UIKit.CREAM_CARD)
+			dial.rotation.x = PI * 0.5
+			dial.position = Vector3(0.1, 0.1, 0.075)
+			root.add_child(dial)
+			var aerial := mesh_box(Vector3(0.008, 0.22, 0.008), Color("C9CED3"))
+			aerial.position = Vector3(0.13, 0.3, -0.04)
+			aerial.rotation.z = -0.3
+			root.add_child(aerial)
+		"teapot":
+			root.add_child(mesh_cylinder(0.1, 0.14, UIKit.DARK))
+			var lid := mesh_cylinder(0.06, 0.03, UIKit.DARK)
+			lid.position.y = 0.14
+			root.add_child(lid)
+			var knob := mesh_cylinder(0.015, 0.03, UIKit.MUSTARD)
+			knob.position.y = 0.17
+			root.add_child(knob)
+			var spout := mesh_box(Vector3(0.1, 0.03, 0.03), UIKit.DARK)
+			spout.position = Vector3(0.12, 0.1, 0)
+			spout.rotation.z = 0.6
+			root.add_child(spout)
+			var handle := mesh_box(Vector3(0.03, 0.1, 0.02), UIKit.DARK)
+			handle.position = Vector3(-0.12, 0.08, 0)
+			root.add_child(handle)
+		"vase":
+			root.add_child(mesh_cylinder(0.07, 0.3, UIKit.BLUE))
+			var neck := mesh_cylinder(0.045, 0.12, UIKit.BLUE.lightened(0.1))
+			neck.position.y = 0.3
+			root.add_child(neck)
+			var branch := mesh_box(Vector3(0.01, 0.3, 0.01), UIKit.WOOD)
+			branch.position = Vector3(0.02, 0.5, 0)
+			branch.rotation.z = -0.25
+			root.add_child(branch)
+		"lantern":
+			root.add_child(mesh_cylinder(0.08, 0.04, UIKit.SAGE.darkened(0.3)))
+			var glass := mesh_cylinder(0.06, 0.16, Color("FFF1C9"))
+			var glow := mat(Color("FFF1C9"))
+			glow.emission_enabled = true
+			glow.emission = Color("FFE1A0")
+			glow.emission_energy_multiplier = 0.9
+			glass.material_override = glow
+			glass.position.y = 0.04
+			root.add_child(glass)
+			var cap := mesh_cylinder(0.075, 0.03, UIKit.SAGE.darkened(0.3))
+			cap.position.y = 0.2
+			root.add_child(cap)
+			var bail := mesh_box(Vector3(0.14, 0.012, 0.012), UIKit.DARK)
+			bail.position.y = 0.29
+			root.add_child(bail)
+		"register":
+			root.add_child(mesh_box(Vector3(0.42, 0.2, 0.4), UIKit.MUSTARD.darkened(0.2)))
+			var top := mesh_box(Vector3(0.36, 0.14, 0.2), UIKit.MUSTARD.darkened(0.2))
+			top.position = Vector3(0, 0.2, -0.08)
+			root.add_child(top)
+			var flag := mesh_box(Vector3(0.2, 0.08, 0.02), UIKit.CREAM_CARD)
+			flag.position = Vector3(0, 0.32, -0.12)
+			root.add_child(flag)
+			for i in 6:
+				var key := mesh_cylinder(0.02, 0.02, UIKit.CREAM_CARD)
+				key.position = Vector3(-0.12 + (i % 3) * 0.1, 0.2, 0.06 + int(i / 3) * 0.08)
+				root.add_child(key)
+		"scale":
+			root.add_child(mesh_box(Vector3(0.22, 0.1, 0.18), UIKit.TERRA))
+			var dial := mesh_cylinder(0.05, 0.012, UIKit.CREAM_CARD)
+			dial.rotation.x = PI * 0.5
+			dial.position = Vector3(0, 0.06, 0.095)
+			root.add_child(dial)
+			var pan := mesh_cylinder(0.11, 0.015, Color("C9CED3"))
+			pan.position.y = 0.2
+			root.add_child(pan)
+			var post := mesh_cylinder(0.015, 0.1, Color("C9CED3"))
+			post.position.y = 0.1
+			root.add_child(post)
+		"birdcage":
+			root.add_child(mesh_cylinder(0.15, 0.02, UIKit.DARK))
+			for i in 8:
+				var bar := mesh_box(Vector3(0.008, 0.4, 0.008), UIKit.DARK)
+				var a := float(i) * TAU / 8.0
+				bar.position = Vector3(cos(a) * 0.13, 0.22, sin(a) * 0.13)
+				root.add_child(bar)
+			var dome := mesh_cylinder(0.15, 0.03, UIKit.DARK)
+			dome.position.y = 0.42
+			root.add_child(dome)
+			var hook := mesh_box(Vector3(0.012, 0.06, 0.012), UIKit.DARK)
+			hook.position.y = 0.47
+			root.add_child(hook)
+		"easel":
+			for side in [-1.0, 1.0]:
+				var leg := mesh_box(Vector3(0.04, 1.6, 0.04), UIKit.WOOD)
+				leg.position = Vector3(side * 0.22, 0.8, 0.0)
+				leg.rotation.z = -side * 0.12
+				root.add_child(leg)
+			var back := mesh_box(Vector3(0.04, 1.5, 0.04), UIKit.WOOD)
+			back.position = Vector3(0, 0.75, -0.25)
+			back.rotation.x = 0.3
+			root.add_child(back)
+			var ledge := mesh_box(Vector3(0.6, 0.04, 0.08), UIKit.WOOD)
+			ledge.position.y = 0.6
+			root.add_child(ledge)
+			var canvas := mesh_box(Vector3(0.5, 0.6, 0.03), UIKit.CREAM_CARD)
+			canvas.position = Vector3(0, 0.92, 0.02)
+			root.add_child(canvas)
+			var daub := mesh_box(Vector3(0.22, 0.18, 0.01), UIKit.TERRA)
+			daub.position = Vector3(-0.05, 0.95, 0.04)
+			root.add_child(daub)
+		"skateboard":
+			var deck := mesh_box(Vector3(0.8, 0.02, 0.2), UIKit.SAGE)
+			deck.position.y = 0.08
+			root.add_child(deck)
+			for wx in [-0.28, 0.28]:
+				for wz in [-0.08, 0.08]:
+					var wheel := mesh_cylinder(0.03, 0.03, UIKit.MUSTARD)
+					wheel.rotation.x = PI * 0.5
+					wheel.position = Vector3(wx, 0.03, wz)
+					root.add_child(wheel)
 		"part":
 			root.add_child(mesh_box(Vector3(0.22, 0.06, 0.1), UIKit.DARK))
 			var stripe := mesh_box(Vector3(0.08, 0.04, 0.12), UIKit.MUSTARD)

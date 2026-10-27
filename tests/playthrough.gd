@@ -905,6 +905,26 @@ func _unpack() -> void:
 		room = _room()
 	await shot("unpack_carried")
 	var generated := bool(GameState.job.get("def", {}).get("generated", false))
+	if generated and press("Stack the boxes"):
+		await wait(0.3)
+		var stacked := 0
+		for box in GameState.job.get("boxes", []):
+			if int(box.get("level", 0)) > 0:
+				stacked += 1
+		_check(stacked > 0, "unpack: boxes stacked into towers (%d raised)" % stacked)
+		await shot("boxes_stacked")
+		# The top box of the first tower opens; a lower one redirects to the top.
+		var top_id: int = room._tower_top(0)
+		if top_id >= 0:
+			var top_node := _node_for(room, "boxopen:%d" % top_id)
+			if top_node != null:
+				await click_node(room, "boxopen:%d" % top_id, top_node)
+				await wait(0.2)
+				var modal := _box_modal(room)
+				_check(modal != null, "unpack: the top box of a tower opens its card")
+				if modal != null:
+					press("Close", modal)
+					await wait(0.2)
 	if generated:
 		# The lazy route: Dana's helpers put every box away.
 		_check(press("Unpack it all for me"), "unpack: Unpack it all for me button")

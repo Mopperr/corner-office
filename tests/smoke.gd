@@ -1049,7 +1049,7 @@ func _qa_regressions() -> Array:
 	var alley_pay := GameState.compute_payout(120, 95, 20, 2, 0, true, 0)
 	if int(alley_pay.get("shortcut", 0)) != 12 or int(alley_pay.get("box_tip", 0)) != 60 or int(alley_pay.get("total", 0)) != 200:
 		found.append("shortcut line %s" % alley_pay)
-	if RoomLib.mend_caption("Mug", 1) != "Mend Mug (1 tap)" or RoomLib.mend_caption("Mug", 3) != "Mend Mug (3 taps)":
+	if RoomLib.mend_caption("Mug", 1) != "Mend Mug" or RoomLib.mend_caption("Mug", 3) != "Mend Mug ×3":
 		found.append("tap plural")
 	var tint := RoomLib.ghost_color(Color.WHITE, false)
 	var soft := Color.WHITE.lerp(UIKit.SOFT_RED, 0.65)
@@ -1227,6 +1227,47 @@ func _qa_regressions() -> Array:
 					missing_sfx.append(sfx)
 	if not missing_sfx.is_empty():
 		found.append("missing sfx %s" % str(missing_sfx))
+	# Every pool item builds a prop and carries a line about itself.
+	for pool_id in load("res://scripts/job_gen.gd").POOL.keys():
+		var pool_def := ItemDB.get_item(str(pool_id))
+		if pool_def.is_empty():
+			found.append("pool item %s missing" % pool_id)
+			continue
+		var pool_prop := Props.make(str(pool_def.get("model", "")))
+		if pool_prop == null or pool_prop.get_child_count() == 0:
+			found.append("no prop for %s" % pool_id)
+		else:
+			pool_prop.free()
+	if ItemDB.get_item("globe").get("flavor", "") == "" or ItemDB.get_item("easel").get("flavor", "") == "":
+		found.append("new items without a line")
+	# Box towers: carried boxes pile in threes, the top one opens, emptied ones leave the tower.
+	GameState.job = {"def": {"id": "stack_test", "venue": "cafe"}, "items": [], "boxes": [], "carried": [0, 1, 2, 3]}
+	for b in 4:
+		GameState.job["boxes"].append({"id": b, "sealed": true})
+		GameState.job["items"].append({"uid": "s%d" % b, "item_id": "cafe_mug", "name": "Mug %d" % b, "state": "boxed", "box": b, "damage": 0, "x": 0, "y": 0, "z": 0})
+	play.carried = {0: true, 1: true, 2: true, 3: true}
+	play.call("_stack_boxes")
+	var tower_box3: Dictionary = GameState.job_box(3)
+	var tower_box2: Dictionary = GameState.job_box(2)
+	if int(tower_box2.get("tower", -1)) != 0 or int(tower_box2.get("level", -1)) != 2 or int(tower_box3.get("tower", -1)) != 1 or int(tower_box3.get("level", -1)) != 0:
+		found.append("towers %s %s" % [str(tower_box2), str(tower_box3)])
+	if int(play.call("_tower_top", 0)) != 2 or (play.call("_open_box_spot", 2) as Vector3).y < 0.8:
+		found.append("tower top %d spot %s" % [int(play.call("_tower_top", 0)), str(play.call("_open_box_spot", 2))])
+	GameState.job["items"][0]["state"] = "placed"
+	play.call("_normalize_towers")
+	if GameState.job_box(0).has("tower") or int(GameState.job_box(1).get("level", -1)) != 0 or int(GameState.job_box(2).get("level", -1)) != 1:
+		found.append("towers after emptying %s" % str(GameState.job["boxes"]))
+	GameState.job = {}
+	play.carried = {}
+	# No two pieces of a generated job share a name, over a handful of boards.
+	for seed_n in range(1, 7):
+		for job_def in load("res://scripts/job_gen.gd").board(seed_n * 101, 2, 1, 3, 4).get("jobs", []):
+			var seen := {}
+			for piece in JobDB.build_job_items(job_def):
+				var piece_name := str(piece.get("name", ""))
+				if seen.has(piece_name):
+					found.append("duplicate piece name %s in %s" % [piece_name, job_def.get("id", "")])
+				seen[piece_name] = true
 	# Every dish has a recipe of known ingredients, and the make card scores it.
 	for dish in Catalog.menu():
 		var recipe: Array = dish.get("recipe", [])

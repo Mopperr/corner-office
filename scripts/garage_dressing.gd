@@ -348,9 +348,14 @@ static func _string_lights(root: Node3D, from: Vector3, to: Vector3) -> void:
 
 
 static func _pendant(root: Node3D, at: Vector3) -> void:
-	var cord := Props.mesh_box(Vector3(0.012, 0.7, 0.012), WIRE)
-	cord.position = at - Vector3(0.0, 0.7, 0.0)
+	var ceiling := 3.0
+	var bottom := at.y - 0.7
+	var cord := Props.mesh_box(Vector3(0.012, ceiling - bottom, 0.012), WIRE)
+	cord.position = Vector3(at.x, (ceiling + bottom) * 0.5, at.z)
 	root.add_child(cord)
+	var rose := Props.mesh_cylinder(0.07, 0.03, WIRE)
+	rose.position = Vector3(at.x, ceiling - 0.015, at.z)
+	root.add_child(rose)
 	var shade := MeshInstance3D.new()
 	var cone := CylinderMesh.new()
 	cone.top_radius = 0.05

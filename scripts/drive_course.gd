@@ -1223,6 +1223,15 @@ func _drive(delta: float, weather: String) -> void:
 		rev_cd = 1.6
 	var off_road: bool = not city.on_road(pos) and not _in_bay(pos)
 	var cap := max_speed * (0.45 if off_road else 1.0)
+	# Traffic ahead in our lane sets the pace: ease off and sit behind it.
+	var lead := _lead_car(forward)
+	if not lead.is_empty():
+		var gap := float(lead.get("gap", 999.0))
+		var lead_speed := maxf(0.0, float(lead.get("speed", 0.0)))
+		var follow_cap := lead_speed + maxf(0.0, gap - FOLLOW_GAP) * 2.5
+		cap = minf(cap, follow_cap)
+		if speed > cap:
+			vel = vel.move_toward(forward * cap, brake * 1.5 * delta)
 	if duck_hold > 0.0:
 		duck_hold -= delta
 		cap = minf(cap, 18.0)
@@ -1300,6 +1309,27 @@ func _bounce(normal: Vector2, depth: float, kind: String) -> void:
 				AudioDirector.play_sfx("sfx_l03_puddle_splash")
 
 
+const FOLLOW_GAP := 92.0
+
+
+func _lead_car(forward: Vector2) -> Dictionary:
+	# The nearest car in front of the truck, in its lane, going its way.
+	var truck_center := _art_center()
+	var best: Dictionary = {}
+	for car in cars:
+		var rel: Vector2 = (car["pos"] as Vector2) - truck_center
+		var along := rel.dot(forward)
+		var side := absf(rel.cross(forward))
+		if along <= 0.0 or along > 190.0 or side > 48.0:
+			continue
+		var car_dir := Vector2.RIGHT.rotated(float(car["heading"]))
+		if car_dir.dot(forward) < 0.3:
+			continue
+		if best.is_empty() or along < float(best["gap"]):
+			best = {"gap": along, "speed": float(car["speed"]), "car": car}
+	return best
+
+
 func _traffic(delta: float) -> void:
 	var truck_center := _art_center()
 	for car in cars:
@@ -1313,6 +1343,14 @@ func _traffic(delta: float) -> void:
 		var to_truck := truck_center - at
 		var ahead := to_truck.dot(dir) > 0.0 and to_truck.length() < 170.0 and absf(to_truck.cross(dir)) < 70.0
 		var wanted: float = 0.0 if ahead else car["cruise"]
+		# Keep a car's length behind the car in front, so traffic moves as a line.
+		for other in cars:
+			if other == car:
+				continue
+			var rel: Vector2 = (other["pos"] as Vector2) - at
+			var along := rel.dot(dir)
+			if along > 0.0 and along < 110.0 and absf(rel.cross(dir)) < 40.0:
+				wanted = minf(wanted, maxf(0.0, float(other["speed"]) + (along - 70.0) * 2.0))
 		car["speed"] = move_toward(float(car["speed"]), wanted, 160.0 * delta)
 		if ahead:
 			car["horn"] = float(car["horn"]) - delta
@@ -1326,12 +1364,21 @@ func _traffic(delta: float) -> void:
 		var node: Node3D = car["node"]
 		node.position = to_world(at)
 		node.rotation.y = -float(car["heading"])
-		# A fender bender: push the truck off the car and spend some condition.
-		if at.distance_to(truck_center) < TRUCK_RADIUS + CAR_RADIUS - 8.0:
-			var normal := (truck_center - at).normalized()
-			pos += normal * 6.0
-			vel = vel * 0.4 + normal * 40.0
-			_apply_hit("car", int(Tuning.get_value("box_condition.collision", 10)), 1200)
+		# Cars are solid: the truck is pushed clear of the overlap and cannot
+		# drive into one. Only a real closing speed counts as a fender bender.
+		var min_dist := TRUCK_RADIUS + CAR_RADIUS - 8.0
+		var dist := at.distance_to(truck_center)
+		if dist < min_dist:
+			var normal := (truck_center - at).normalized() if dist > 0.001 else -dir
+			pos += normal * (min_dist - dist + 1.0)
+			var closing := -vel.dot(normal)
+			var car_vel := dir * float(car["speed"])
+			var relative := (vel - car_vel).dot(normal)
+			if relative < 0.0:
+				vel -= normal * relative
+			if closing > 1.0 * PX:
+				vel *= 0.5
+				_apply_hit("car", int(Tuning.get_value("box_condition.collision", 10)), 1200)
 
 
 func _check_alley() -> void:
