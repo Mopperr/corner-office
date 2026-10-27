@@ -55,6 +55,16 @@ func _ready() -> void:
 			packed.append(str(stamp))
 		lines.append("Stamps: " + ", ".join(packed))
 	lines.append("Rep stars +%d   (rank %d)" % [int(pay.get("stars", 1)), GameState.rep_rank()])
+	var condition := int(pay.get("condition", 100))
+	var def: Dictionary = GameState.job.get("def", {})
+	var client := str(def.get("client", "the client"))
+	if condition >= 90:
+		lines.append("%s walks the room twice and says nothing, which is the good kind of nothing." % client)
+	elif condition >= 70:
+		lines.append("%s finds the scuff, shrugs, and puts the kettle on." % client)
+	else:
+		lines.append("%s says 'well' in a way that means several things." % client)
+	lines.append("Jobs done: %d.  Jar: $%d." % [GameState.jobs_done, GameState.money])
 	_build()
 	_center_card()
 	_reveal()
@@ -106,17 +116,28 @@ func _build() -> void:
 	title.size = Vector2(780, 56)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.add_child(title)
-	var y := 88.0
-	var step := 46.0
+	var stars := int(GameState.payout.get("stars", 1))
+	var star_row := UIKit.label("★".repeat(clampi(stars, 0, 3)) + "☆".repeat(3 - clampi(stars, 0, 3)), 44, UIKit.MUSTARD, "title", false)
+	star_row.position = Vector2(36, 76)
+	star_row.size = Vector2(780, 56)
+	star_row.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	card.add_child(star_row)
+	var y := 136.0
+	var step := 40.0
 	for i in lines.size():
-		var row := UIKit.label(lines[i], 36, UIKit.DARK, "body", false)
+		var is_story := i >= lines.size() - 2
+		var row := UIKit.label(lines[i], 24 if is_story else 30, UIKit.BLUE if is_story else UIKit.DARK, "small" if is_story else "body", is_story)
 		row.position = Vector2(40, y)
-		row.size = Vector2(780, 44)
-		row.custom_minimum_size = Vector2(minf(760.0, maxf(180.0, float(str(lines[i]).length()) * 20.0)), 44)
+		row.size = Vector2(780, 44 if not is_story else 80)
+		if not is_story:
+			row.custom_minimum_size = Vector2(minf(760.0, maxf(180.0, float(str(lines[i]).length()) * 17.0)), 40)
+		else:
+			row.custom_minimum_size = Vector2(760, 0)
+			row.max_lines_visible = 2
 		row.modulate.a = 0.0
 		row.name = "Line%d" % i
 		card.add_child(row)
-		y += step
+		y += step if not is_story else 64
 	var btn := UIKit.button("Back to the office", UIKit.SAGE)
 	btn.position = Vector2(250, 604)
 	btn.size = Vector2(360, 56)

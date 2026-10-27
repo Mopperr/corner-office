@@ -56,6 +56,11 @@ var generated_drives: Dictionary = {}
 var stats: Dictionary = {}
 var contracts_done: Dictionary = {}
 var day_log: Dictionary = {}
+var shop_tier := "stand"
+var workshop: Dictionary = {}
+var crime: Dictionary = {}
+const Workshop = preload("res://scripts/workshop.gd")
+const Crime = preload("res://scripts/crime.gd")
 const JobGen = preload("res://scripts/job_gen.gd")
 var freebie_day := -1
 var forest_serial := 0
@@ -111,6 +116,9 @@ func new_game(who: String) -> void:
 	stats = {}
 	contracts_done = {}
 	day_log = _fresh_day_log()
+	shop_tier = "stand"
+	workshop = Workshop.fresh()
+	crime = Crime.fresh()
 	refresh_board()
 	freebie_day = -1
 	forest_serial = 0
@@ -480,6 +488,12 @@ func contract_progress(contract: Dictionary) -> int:
 		return jobs_done
 	if key == "hand_served":
 		return shop_hand_served
+	if key == "venues_seen":
+		var seen := 0
+		for venue_id in ["cafe", "train", "park", "bakery", "studio", "flat"]:
+			if int(stats.get("venue_" + venue_id, 0)) > 0:
+				seen += 1
+		return seen
 	return int(stats.get(key, 0))
 
 
@@ -885,8 +899,11 @@ func finish_job() -> Dictionary:
 		stats["cats_found"] = int(stats.get("cats_found", 0)) + 1
 	if bool(job.get("alley", false)):
 		stats["alley_runs"] = int(stats.get("alley_runs", 0)) + 1
-	if bool(def.get("generated", false)):
+	if bool(def.get("generated", false)) and not bool(def.get("shady", false)):
 		stats["board_jobs"] = int(stats.get("board_jobs", 0)) + 1
+	var venue_key := "venue_%s" % str(def.get("venue", ""))
+	stats[venue_key] = int(stats.get(venue_key, 0)) + 1
+	Crime.on_job_finished(def)
 	if day_log.is_empty():
 		day_log = _fresh_day_log()
 	day_log["jobs"] = int(day_log.get("jobs", 0)) + 1
@@ -1000,6 +1017,8 @@ func advance_day() -> void:
 	shop_today = 0
 	shop_visitors_today = 0
 	refresh_board()
+	Crime.new_day()
+	Crime.maybe_nudge(summary)
 	if not generated_jobs.is_empty():
 		summary["next_job"] = str(generated_jobs[0].get("title", ""))
 	day_log = _fresh_day_log()
@@ -1046,6 +1065,11 @@ func sell_to_buyer() -> Dictionary:
 	if buyer_offer.is_empty():
 		return {"error": "Nobody's asking today."}
 	var id := str(buyer_offer.get("item", ""))
+	var grade := str(buyer_offer.get("grade", "worn"))
+	if grade != "worn":
+		if Workshop.graded(id, grade) <= 0:
+			return {"error": "They want a %s one. Fix one up on the workbench first." % grade}
+		return Workshop.sell_graded(id, grade)
 	if int(goods.get(id, 0)) <= 0:
 		return {"error": "You don't have that one yet."}
 	var gain := int(buyer_offer.get("price", 0))
@@ -1071,10 +1095,20 @@ func _roll_buyer() -> void:
 		return
 	var item_id := str(wants[rng.randi() % wants.size()])
 	var premium := float(Tuning.get_value("pay.buyer_premium", 1.35))
+	# Some buyers want it fixed up first; the workbench can take a worn one up a grade.
+	var grade := "worn"
+	var roll := rng.randf()
+	if roll < 0.25:
+		grade = "restored"
+		premium *= 1.6
+	elif roll < 0.35:
+		grade = "mint"
+		premium *= 2.4
 	buyer_offer = {
 		"name": buyer.get("name", "A buyer"),
-		"line": buyer.get("line", ""),
+		"line": buyer.get("line", "") if grade == "worn" else "%s Only if it's %s, mind." % [buyer.get("line", ""), grade],
 		"item": item_id,
+		"grade": grade,
 		"price": maxi(1, int(round(float(price_of(item_id)) * premium))),
 	}
 
@@ -1378,11 +1412,11 @@ func shop_fixtures() -> Array:
 
 
 func shop_open() -> bool:
-	return not shop_fixtures().is_empty()
+	return not shop_fixtures().is_empty() or shop_tier_rank() >= 1
 
 
 func shop_accepting() -> bool:
-	return shop_open() and not shop_closed
+	return shop_open() and not shop_closed and not Crime.raided_today()
 
 
 func shop_dishes() -> Array:
@@ -1391,7 +1425,58 @@ func shop_dishes() -> Array:
 		for dish_id in fix.get("serves", []):
 			if not dishes.has(str(dish_id)):
 				dishes.append(str(dish_id))
+	# The tier's own menu comes with the counter: once a fixture is in, the
+	# kitchen behind it can serve the lot.
+	if not dishes.is_empty() or shop_tier_rank() >= 1:
+		for tier in Catalog.tiers():
+			for dish_id in tier.get("dishes", []):
+				if not dishes.has(str(dish_id)):
+					dishes.append(str(dish_id))
+			if str(tier.get("id", "")) == shop_tier:
+				break
 	return dishes
+
+
+func shop_tier_rank() -> int:
+	var rank := 0
+	for tier in Catalog.tiers():
+		if str(tier.get("id", "")) == shop_tier:
+			return rank
+		rank += 1
+	return 0
+
+
+func next_shop_tier() -> Dictionary:
+	var tiers := Catalog.tiers()
+	var rank := shop_tier_rank()
+	if rank + 1 < tiers.size():
+		return tiers[rank + 1]
+	return {}
+
+
+func upgrade_shop() -> String:
+	var tier := next_shop_tier()
+	if tier.is_empty():
+		return "That is the top of the ladder."
+	if rep_rank() < int(tier.get("rep", 0)):
+		return "Needs Rep %d. You have %d." % [int(tier.get("rep", 0)), rep_rank()]
+	var cost := int(tier.get("cost", 0))
+	if money < cost:
+		return "Needs $%d. You have $%d." % [cost, money]
+	add_money(-cost, false)
+	shop_tier = str(tier.get("id", "stand"))
+	stats["shop_tier_rank"] = shop_tier_rank()
+	emit_signal("toast_requested", "The sign says %s now." % tier.get("name", ""))
+	inbox.append({
+		"id": "tier_" + shop_tier,
+		"from": "Marge Holloway",
+		"subject": "%s. Look at you." % tier.get("name", ""),
+		"body": "%s\n\nNew menu, same jar. Serve them by hand when you can.\n\n— Marge" % tier.get("blurb", ""),
+		"read": false,
+	})
+	emit_signal("emails_changed")
+	check_contracts()
+	return ""
 
 
 func pick_order() -> Dictionary:
@@ -1551,6 +1636,9 @@ func to_dict() -> Dictionary:
 		"stats": stats.duplicate(true),
 		"contracts_done": contracts_done.duplicate(true),
 		"day_log": day_log.duplicate(true),
+		"shop_tier": shop_tier,
+		"workshop": workshop.duplicate(true),
+		"crime": crime.duplicate(true),
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
 		"latched_goals": latched_goals.duplicate(true),
@@ -1610,6 +1698,13 @@ func from_dict(raw: Dictionary) -> void:
 	day_log = raw.get("day_log", {}).duplicate(true) if raw.has("day_log") else _fresh_day_log()
 	if day_log.is_empty():
 		day_log = _fresh_day_log()
+	shop_tier = str(raw.get("shop_tier", "stand"))
+	workshop = raw.get("workshop", {}).duplicate(true) if raw.has("workshop") else Workshop.fresh()
+	if workshop.is_empty():
+		workshop = Workshop.fresh()
+	crime = raw.get("crime", {}).duplicate(true) if raw.has("crime") else Crime.fresh()
+	if crime.is_empty():
+		crime = Crime.fresh()
 	if generated_jobs.is_empty():
 		refresh_board()
 	freebie_day = int(raw.get("freebie_day", -1))

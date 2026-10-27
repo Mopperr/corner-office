@@ -33,13 +33,16 @@ static func build(parent: Node3D, venue: Dictionary) -> Node3D:
 	var z := float(venue.get("z", 0))
 	var w := float(venue.get("w", 6))
 	var d := float(venue.get("d", 8))
+	_floor_finish(root, x, z, w, d)
 	_floor_lines(root, x, z, w, d)
+	_rug(root, Vector3(x + 3.0, 0.0, z + 4.1))
 	_skirting(root, x, z, w, d)
 	_workbench(root, Vector3(x + 0.42, 0.0, z + 6.0))
 	_pegboard(root, Vector3(x + 0.1, 1.45, z + 6.0))
 	_cork_board(root, Vector3(x + 1.5, 2.0, z + 0.1))
-	_beams(root, x, z, w, d)
-	_string_lights(root, Vector3(x + 1.6, 2.56, z + 2.2), Vector3(x + 4.4, 2.56, z + 6.0))
+	# No rafters: the lights swag from the back corner, wall top to wall top.
+	_string_lights(root, Vector3(x + 0.2, 2.5, z + 0.9), Vector3(x + 1.95, 2.5, z + 0.2))
+	_string_lights(root, Vector3(x + 0.2, 2.55, z + 3.4), Vector3(x + 0.2, 2.55, z + 7.6))
 	_pendant(root, Vector3(x + 1.0, 2.75, z + 6.0))
 	_window_light(root, Vector3(x - 0.2, 2.3, z + 2.0), Vector3(x + 1.7, 0.0, z + 2.6))
 	_sun_patch(root, Vector3(x + 1.35, 0.004, z + 2.5))
@@ -61,18 +64,56 @@ static func _add(root: Node3D, mesh_instance: MeshInstance3D, at: Vector3, rot_y
 	return mesh_instance
 
 
+static func _floor_finish(root: Node3D, x: float, z: float, w: float, d: float) -> void:
+	# Sealed concrete with a soft sheen, a darker painted zone by the bench,
+	# and a pale walkway from the door to the desk.
+	var slab := Props.mesh_box(Vector3(w - 0.08, 0.012, d - 0.08), Color("CFC3B2"))
+	var sheen := Props.mat(Color("CFC3B2"))
+	sheen.roughness = 0.45
+	sheen.specular_mode = BaseMaterial3D.SPECULAR_SCHLICK_GGX
+	sheen.metallic_specular = 0.35
+	slab.material_override = sheen
+	slab.position = Vector3(x + w * 0.5, 0.0, z + d * 0.5)
+	root.add_child(slab)
+	var zone := Props.mesh_box(Vector3(1.9, 0.004, 3.0), Color("B9AE9C"))
+	zone.position = Vector3(x + 1.0, 0.012, z + 6.0)
+	root.add_child(zone)
+	var walk := Props.mesh_box(Vector3(1.6, 0.004, 3.4), Color("D9CFBF"))
+	walk.position = Vector3(x + 3.5, 0.012, z + 1.9)
+	root.add_child(walk)
+
+
+static func _rug(root: Node3D, at: Vector3) -> void:
+	# A woven rug: border, field, and three stripes.
+	var border := Props.mesh_box(Vector3(2.6, 0.014, 1.9), Color("A8563F"))
+	border.position = at + Vector3(0, 0.012, 0)
+	root.add_child(border)
+	var field := Props.mesh_box(Vector3(2.3, 0.006, 1.6), Color("D9A866"))
+	field.position = at + Vector3(0, 0.026, 0)
+	root.add_child(field)
+	for i in 3:
+		var stripe := Props.mesh_box(Vector3(2.3, 0.004, 0.12), [Color("A8563F"), Color("E8B4A8"), Color("8FAF7E")][i])
+		stripe.position = at + Vector3(0, 0.032, -0.5 + i * 0.5)
+		root.add_child(stripe)
+	for side in [-1.0, 1.0]:
+		for k in 9:
+			var tassel := Props.mesh_box(Vector3(0.05, 0.008, 0.1), Color("E9DCC4"))
+			tassel.position = at + Vector3(side * 1.34, 0.012, -0.8 + k * 0.2)
+			root.add_child(tassel)
+
+
 static func _floor_lines(root: Node3D, x: float, z: float, w: float, d: float) -> void:
 	# Expansion joints in the slab. Thin, no collision, just enough to break up the floor.
 	var xx := x + 2.0
 	while xx < x + w - 0.5:
-		_add(root, Props.mesh_box(Vector3(0.025, 0.004, d - 0.3), CONCRETE_LINE), Vector3(xx, 0.0, z + d * 0.5))
+		_add(root, Props.mesh_box(Vector3(0.02, 0.004, d - 0.3), CONCRETE_LINE), Vector3(xx, 0.014, z + d * 0.5))
 		xx += 2.0
 	var zz := z + 2.0
 	while zz < z + d - 0.5:
-		_add(root, Props.mesh_box(Vector3(w - 0.3, 0.004, 0.025), CONCRETE_LINE), Vector3(x + w * 0.5, 0.0, zz))
+		_add(root, Props.mesh_box(Vector3(w - 0.3, 0.004, 0.02), CONCRETE_LINE), Vector3(x + w * 0.5, 0.014, zz))
 		zz += 2.0
 	# A rubber mat in front of the bench.
-	_add(root, Props.mesh_box(Vector3(1.0, 0.012, 2.0), RUBBER), Vector3(x + 1.25, 0.0, z + 6.0))
+	_add(root, Props.mesh_box(Vector3(1.0, 0.012, 2.0), RUBBER), Vector3(x + 1.25, 0.014, z + 6.0))
 
 
 static func _skirting(root: Node3D, x: float, z: float, w: float, d: float) -> void:
@@ -85,6 +126,7 @@ static func _workbench(root: Node3D, at: Vector3) -> void:
 	var bench := Node3D.new()
 	bench.name = "Workbench"
 	bench.position = at
+	bench.set_meta("uid", "workbench")
 	root.add_child(bench)
 	var top := Props.mesh_box(Vector3(0.64, 0.06, 1.8), BENCH_TOP)
 	top.position.y = 0.88
@@ -259,18 +301,6 @@ static func _cork_board(root: Node3D, at: Vector3) -> void:
 	var photo := Props.mesh_box(Vector3(0.14, 0.11, 0.006), UIKit.BLUE)
 	photo.position = Vector3(0.28, -0.52, 0.02)
 	board.add_child(photo)
-
-
-static func _beams(root: Node3D, x: float, z: float, w: float, d: float) -> void:
-	for bx in [x + 1.6, x + 4.4]:
-		for bz in [z + 2.2, z + 6.0]:
-			var beam := Props.model("ceiling_beam")
-			if beam == null:
-				continue
-			beam.position = Vector3(bx, 2.7, bz)
-			beam.add_to_group("cutaway_beam")
-			Props.cap_prop_materials(beam, 2)
-			root.add_child(beam)
 
 
 static func _string_lights(root: Node3D, from: Vector3, to: Vector3) -> void:

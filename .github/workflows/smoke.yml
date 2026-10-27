@@ -20,3 +20,5 @@ jobs:
         run: bash tests/run_smoke.sh
       - name: Play the slice end to end
         run: bash tests/run_playthrough.sh
+      - name: Venue gallery
+        run: bash tests/run_venues.sh

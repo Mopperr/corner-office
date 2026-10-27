@@ -1,0 +1,77 @@
+{
+  "materials": [
+    { "id": "wood", "name": "Reclaimed wood", "price": 6, "blurb": "Pallets, mostly. Good grain under the grey." },
+    { "id": "metal", "name": "Scrap metal", "price": 8, "blurb": "Brackets, rods, one bicycle rim." },
+    { "id": "cloth", "name": "Offcut cloth", "price": 5, "blurb": "Ends of rolls from the tailor." },
+    { "id": "glass", "name": "Window glass", "price": 9, "blurb": "Cut to size, handled with respect." },
+    { "id": "clay", "name": "Clay", "price": 4, "blurb": "Cool, heavy, patient." },
+    { "id": "wire", "name": "Copper wire", "price": 7, "blurb": "For anything that should light up or ring." }
+  ],
+  "recipes": [
+    { "id": "mug_glazed", "name": "Glazed mug", "item": "cafe_mug", "tag": "ceramic", "level": 1, "materials": { "clay": 2 }, "sell": 14, "decor": false },
+    { "id": "turned_bowl", "name": "Turned bowl", "item": "bowl", "tag": "wood", "level": 2, "materials": { "wood": 2 }, "sell": 16, "decor": false },
+    { "id": "picture_frame", "name": "Picture frame", "item": "picture_stripes", "tag": "wood", "level": 4, "materials": { "wood": 2, "glass": 1 }, "sell": 26, "decor": true },
+    { "id": "patch_cushion", "name": "Patchwork cushion", "item": "cushion", "tag": "textile", "level": 6, "materials": { "cloth": 3 }, "sell": 24, "decor": true },
+    { "id": "cactus_pot", "name": "Pot with a cactus", "item": "plant_cactus", "tag": "ceramic", "level": 8, "materials": { "clay": 3 }, "sell": 20, "decor": true },
+    { "id": "wall_clock", "name": "Wall clock", "item": "clock_wall", "tag": "machine", "level": 10, "materials": { "wood": 2, "metal": 1, "wire": 1 }, "sell": 44, "decor": true },
+    { "id": "string_lights", "name": "String lights", "item": "string_lights", "tag": "light", "level": 13, "materials": { "wire": 3, "glass": 2 }, "sell": 40, "decor": true },
+    { "id": "banker_lamp", "name": "Banker's lamp", "item": "lamp_banker", "tag": "light", "level": 16, "materials": { "metal": 3, "glass": 1, "wire": 1 }, "sell": 70, "decor": true },
+    { "id": "rotary_phone", "name": "Restored rotary phone", "item": "rotary_phone", "tag": "machine", "level": 20, "materials": { "metal": 2, "wire": 2 }, "sell": 90, "decor": true },
+    { "id": "typewriter", "name": "Restored typewriter", "item": "keyboard_typewriter", "tag": "machine", "level": 24, "materials": { "metal": 4, "wire": 1 }, "sell": 130, "decor": true },
+    { "id": "bookshelf", "name": "Wooden bookshelf", "item": "bookshelf_wood", "tag": "wood", "level": 28, "materials": { "wood": 6, "metal": 1 }, "sell": 150, "decor": true },
+    { "id": "cat_tree", "name": "Cat tree", "item": "cat_tree", "tag": "textile", "level": 32, "materials": { "wood": 4, "cloth": 3 }, "sell": 160, "decor": true }
+  ],
+  "grades": { "worn": 1.0, "restored": 1.6, "mint": 2.4 },
+  "fix_steps": [
+    { "to": "restored", "level": 5, "materials": { "cloth": 1, "metal": 1 } },
+    { "to": "mint", "level": 15, "materials": { "metal": 1, "wire": 1, "glass": 1 } }
+  ],
+  "craft_buyers": [
+    { "name": "Nadia from the florist", "tags": ["ceramic", "wood"], "line": "Something for the counter that isn't plastic." },
+    { "name": "The Hendersons", "tags": ["textile", "light"], "line": "The spare room needs to feel like a room." },
+    { "name": "Mr. Finch", "tags": ["machine"], "line": "I like things that tick, click, or ring." },
+    { "name": "Grandpa Ellis", "tags": ["wood", "machine"], "line": "Made by hand, or not at all." },
+    { "name": "June's bookshop", "tags": ["wood", "light"], "line": "For the reading corner. Warm, please." },
+    { "name": "Tomas at the depot", "tags": ["ceramic", "textile"], "line": "A gift. Don't make it look like one." }
+  ],
+  "stories": {
+    "ceramic": [
+      "{buyer} drinks from the {item} every morning and calls it 'artisan' to anyone who asks.",
+      "The {item} went to the office kitchen. It is the one nobody else is allowed to use.",
+      "{buyer} dropped the {item} once. It bounced. There is a photo."
+    ],
+    "wood": [
+      "The {item} sits by {buyer}'s window. The cat has claimed it, obviously.",
+      "{buyer} shows the grain of the {item} to guests before they have taken their coats off.",
+      "The {item} was a wedding gift. The couple sends a card every year."
+    ],
+    "textile": [
+      "The {item} lives on the good chair at {buyer}'s. Guests get the good chair.",
+      "{buyer} says the {item} is 'the only soft thing in the flat', and means it kindly.",
+      "A toddler named the {item}. The name stuck. The name is Pudding."
+    ],
+    "light": [
+      "The {item} is on every evening at {buyer}'s. The neighbours set their clocks by it.",
+      "{buyer} reads under the {item}. Two chapters a night, three on Sundays.",
+      "The {item} made it into a magazine photo. Nobody told you. The magazine was small."
+    ],
+    "machine": [
+      "The {item} rings on {buyer}'s desk and startles everyone, every time, forever.",
+      "{buyer} typed a letter to their mother on the {item}. She wrote back by hand.",
+      "The {item} keeps time in a hallway where nothing else works. People trust it."
+    ],
+    "fix": [
+      "{buyer} put the {item} on a shelf at eye level. It is not for using. It is for looking at.",
+      "{buyer} says the {item} 'has character now', which is what you were going for.",
+      "The {item} went straight into a glass case. You did not expect that. Neither did it."
+    ]
+  },
+  "cons": [
+    { "name": "red", "from": 5, "fail": 0.45, "skill_up": 1.0 },
+    { "name": "orange", "from": 2, "fail": 0.25, "skill_up": 0.8 },
+    { "name": "yellow", "from": -1, "fail": 0.1, "skill_up": 0.55 },
+    { "name": "blue", "from": -5, "fail": 0.03, "skill_up": 0.25 },
+    { "name": "green", "from": -10, "fail": 0.0, "skill_up": 0.08 },
+    { "name": "grey", "from": -999, "fail": 0.0, "skill_up": 0.0 }
+  ]
+}

@@ -15,6 +15,10 @@ const StackGoals = preload("res://scripts/stack_goals.gd")
 const ShopLayout = preload("res://scripts/shop_layout.gd")
 const Outdoors = preload("res://scripts/outdoors.gd")
 const GarageDressing = preload("res://scripts/garage_dressing.gd")
+const Workshop = preload("res://scripts/workshop.gd")
+const Crime = preload("res://scripts/crime.gd")
+const YardShop = preload("res://scripts/yard_shop.gd")
+const VenueDressing = preload("res://scripts/venue_dressing.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -64,6 +68,15 @@ var visitor_wait := 5.0
 var customers: Array = []
 var customer_serial := 0
 var shop_sign: Node3D
+var yard_shop: Node3D
+var street: Array = []
+var browser: Dictionary = {}
+var browser_wait := 18.0
+var ambient_time := 0.0
+var cars: Array = []
+var car_wait := 12.0
+var chatter: Dictionary = {}
+var parking_used: Dictionary = {}
 var courier_seen: Dictionary = {}
 var unbox_uid := ""
 var hover_root: Node3D
@@ -222,6 +235,8 @@ func _build_venue() -> void:
 	_frame_camera()
 	_dress()
 	Outdoors.build(self, venue)
+	_sync_yard_shop()
+	_spawn_street()
 
 
 func _frame_camera() -> void:
@@ -233,9 +248,11 @@ func _frame_camera() -> void:
 	var origin := Vector3(float(venue.get("x", 0.0)), 0.0, float(venue.get("z", 0.0)))
 	var width := float(venue.get("w", 6.0))
 	var depth := float(venue.get("d", 8.0))
-	var center := origin + Vector3(width * 0.5, 0.9, depth * 0.5)
+	# The look-at leans a little toward the camera, so the near edge of the
+	# floor clears the hint bar at the bottom of the screen.
+	var center := origin + Vector3(width * 0.5 + 0.4, 0.9, depth * 0.5 + 0.4)
 	cam.attributes = null
-	cam.size = maxf(width, depth) * 1.3 * view_zoom
+	cam.size = maxf(width, depth) * 1.12 * view_zoom
 	cam.position = center + Vector3(8.2, 9.0, 8.0).rotated(Vector3.UP, view_quadrant * PI * 0.5)
 	cam.look_at(center, Vector3.UP)
 
@@ -288,7 +305,7 @@ func rotate_view(steps: int) -> void:
 		elif node.is_in_group("cutaway_shell"):
 			node.remove_from_group("cutaway_shell")
 	var origin := Vector3(x, 0.0, z)
-	var center := origin + Vector3(w * 0.5, 0.9, d * 0.5)
+	var center := origin + Vector3(w * 0.5 + 0.4, 0.9, d * 0.5 + 0.4)
 	var goal := center + Vector3(8.2, 9.0, 8.0).rotated(Vector3.UP, view_quadrant * PI * 0.5)
 	var tw := create_tween()
 	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -556,8 +573,6 @@ func _dress() -> void:
 		_place_model("driveway_apron_2m", Vector3(4.5, 0, -1.02))
 		_place_model("job_clipboard", Vector3(0.55, 0.94, 5.7), 80)
 		GarageDressing.build(self, venue)
-		if not backdrop:
-			_place_model("rug", Vector3(3.0, 0.0, 4.1))
 	if bool(venue.get("stain", false)):
 		for spot in [Vector3(2.4, 0.0, 1.3), Vector3(4.2, 0.0, 1.8)]:
 			_place_model("floor_oil_stain_1m", spot)
@@ -609,6 +624,8 @@ func _dress() -> void:
 		if heater:
 			heater.name = "FlatRadiator"
 		_place_model("wall_clock", Vector3(0.12, 1.7, 5.4), 90)
+	if id != "garage" and layout_name == "":
+		VenueDressing.build(self, venue)
 	if bool(venue.get("pastry", false)):
 		var bun := _place_model("pastry_basket", Vector3(1.5, 0, 1.3))
 		if bun:
@@ -813,6 +830,10 @@ func _process(delta: float) -> void:
 	_update_hover()
 	_sync_deliveries()
 	_tick_visitors(delta)
+	_tick_street(delta)
+	_tick_browser(delta)
+	_tick_cars(delta)
+	_tick_bubbles(delta)
 	if _goal_pip > 0.0:
 		_goal_pip = maxf(0.0, _goal_pip - delta)
 		if _goal_pip <= 0.0:
@@ -1288,6 +1309,8 @@ func _toggle_snap() -> void:
 
 func _click() -> void:
 	if settling or _over_ui():
+		if OS.get_environment("CO_DEBUG") != "":
+			print("  click swallowed: settling=%s over_ui=%s hovered=%s" % [settling, _over_ui(), get_viewport().gui_get_hovered_control()])
 		return
 	var item_uid := _pick_uid()
 	if item_uid.begins_with("delivery:") and GameState.mode == "office" and GameState.office_phase == "live":
@@ -1402,6 +1425,9 @@ func _office_click(uid: String) -> void:
 		return
 	if held_uid == "":
 		if uid == "":
+			return
+		if uid == "workbench" and GameState.office_phase == "live":
+			_open_workshop()
 			return
 		var rec2 := GameState.find_office_item(uid)
 		if rec2.is_empty():
@@ -1665,7 +1691,7 @@ func _unpack_click(uid: String) -> void:
 		_refresh_hud_buttons()
 		return
 	if uid.begins_with("boxopen:"):
-		_open_carried_box(int(uid.trim_prefix("boxopen:")))
+		_open_box_modal(int(uid.trim_prefix("boxopen:")))
 		return
 	if held_uid == "":
 		var item := GameState.job_item(uid)
@@ -1682,15 +1708,15 @@ func _unpack_click(uid: String) -> void:
 
 
 func _open_carried_box(box_id: int) -> void:
-	# Tip the box out: its items turn loose on the floor around where it sat.
-	var spot := _open_box_spot(box_id)
+	# Tip the box out: its items turn loose on the floor behind where it sat.
 	var n := 0
 	for item in GameState.job.get("items", []):
 		if int(item.get("box", -1)) != box_id or str(item.get("state", "")) != "boxed":
 			continue
 		item["state"] = "loose"
-		item["x"] = spot.x + 0.55 + float(n % 3) * 0.6
-		item["z"] = spot.z - 0.3 + float(int(n / 3)) * 0.6
+		var at := _spill_spot(box_id, n)
+		item["x"] = at.x
+		item["z"] = at.z
 		item["y"] = 0.0
 		n += 1
 	AudioDirector.play_sfx("sfx_box_open")
@@ -1702,13 +1728,368 @@ func _open_carried_box(box_id: int) -> void:
 	_refresh_hud_buttons()
 
 
+func _box_contents(box_id: int) -> Array:
+	var out: Array = []
+	for item in GameState.job.get("items", []):
+		if int(item.get("box", -1)) == box_id and str(item.get("state", "")) == "boxed":
+			out.append(item)
+	return out
+
+
+func _open_box_modal(box_id: int) -> void:
+	# What's in the box, and three ways to get it out: take one in hand, set
+	# one down right here, or tip the lot out and sort it on the floor.
+	var contents := _box_contents(box_id)
+	if OS.get_environment("CO_DEBUG") != "":
+		print("  open box modal %d: %d inside, settling=%s held=%s" % [box_id, contents.size(), settling, held_uid])
+	if contents.is_empty():
+		_open_carried_box(box_id)
+		return
+	var layer := _hud_layer()
+	var old := layer.get_node_or_null("BoxModal")
+	if old != null:
+		layer.remove_child(old)
+		old.queue_free()
+	var panel := Panel.new()
+	panel.name = "BoxModal"
+	panel.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 18))
+	layer.add_child(panel)
+	var card_size := Vector2(900, 620)
+	UIKit.pin_center(panel, card_size)
+	var box := GameState.job_box(box_id)
+	var title := UIKit.label("Box %d" % (box_id + 1), 40, UIKit.DARK, "title", false)
+	title.position = Vector2(24, 16)
+	panel.add_child(title)
+	var tags: Array = []
+	if bool(box.get("padded", false)):
+		tags.append("padded")
+	if bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
+		tags.append("something is purring")
+	var sub := UIKit.label("%d piece%s inside%s" % [contents.size(), "" if contents.size() == 1 else "s", ("  ·  " + ", ".join(tags)) if not tags.is_empty() else ""], 24, UIKit.WOOD, "small", false)
+	sub.position = Vector2(200, 30)
+	panel.add_child(sub)
+	var close := UIKit.button("Close", UIKit.DARK)
+	close.position = Vector2(card_size.x - 184, 16)
+	close.size = Vector2(160, 56)
+	close.custom_minimum_size = Vector2(160, 56)
+	close.pressed.connect(panel.queue_free)
+	panel.add_child(close)
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(24, 84)
+	scroll.size = Vector2(card_size.x - 48, card_size.y - 170)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel.add_child(scroll)
+	var rows := VBoxContainer.new()
+	rows.add_theme_constant_override("separation", 10)
+	rows.custom_minimum_size = Vector2(card_size.x - 72, 0)
+	scroll.add_child(rows)
+	for item in contents:
+		rows.add_child(_box_row(item, box_id, card_size.x - 72))
+	var foot := HBoxContainer.new()
+	foot.position = Vector2(24, card_size.y - 76)
+	foot.add_theme_constant_override("separation", 12)
+	panel.add_child(foot)
+	var tip := UIKit.button("Tip it out", UIKit.TERRA)
+	tip.custom_minimum_size = Vector2(200, 56)
+	tip.pressed.connect(func():
+		panel.queue_free()
+		_open_carried_box(box_id)
+	)
+	foot.add_child(tip)
+	var auto := UIKit.button("Put it all away for me", UIKit.SAGE)
+	auto.custom_minimum_size = Vector2(320, 56)
+	auto.pressed.connect(func():
+		panel.queue_free()
+		_auto_unpack_box(box_id)
+	)
+	foot.add_child(auto)
+	var hint := UIKit.label("Take: carry it to a spot. Set here: next to the box.", 24, UIKit.WOOD, "small", false)
+	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	foot.add_child(hint)
+	var focus_buttons: Array = [close]
+	for child in rows.get_children():
+		for kid in child.get_children():
+			if kid is Button:
+				focus_buttons.append(kid)
+	focus_buttons.append(tip)
+	focus_buttons.append(auto)
+	UIKit.link_focus(focus_buttons)
+	AudioDirector.play_sfx("sfx_paper_rustle")
+
+
+func _box_row(item: Dictionary, box_id: int, width: float) -> PanelContainer:
+	var card := PanelContainer.new()
+	var box := UIKit.style(Color("F6EEDC"), 12)
+	box.shadow_size = 0
+	box.content_margin_left = 16
+	box.content_margin_right = 16
+	box.content_margin_top = 8
+	box.content_margin_bottom = 8
+	card.add_theme_stylebox_override("panel", box)
+	card.custom_minimum_size = Vector2(width, 0)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	card.add_child(row)
+	var text := VBoxContainer.new()
+	text.add_theme_constant_override("separation", 2)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(text)
+	var name := UIKit.label(str(item.get("name", "")), 28, UIKit.DARK, "title", false)
+	name.custom_minimum_size = Vector2(320, 36)
+	name.clip_text = true
+	text.add_child(name)
+	var bits: Array = []
+	for flag in ["fragile", "heavy", "bulky"]:
+		if bool(item.get(flag, false)):
+			bits.append(flag)
+	var mount := str(item.get("mount", "floor"))
+	bits.append({"hang": "goes on a wall", "wall_floor": "stands by a wall", "small": "sits on things"}.get(mount, "stands on the floor"))
+	if int(item.get("damage", 0)) > 0:
+		bits.append("scuffed")
+	text.add_child(UIKit.label(", ".join(bits), 24, UIKit.WOOD, "small", false))
+	var uid := str(item.get("uid", ""))
+	var take := UIKit.button("Take", UIKit.TERRA)
+	take.custom_minimum_size = Vector2(130, 52)
+	take.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	take.pressed.connect(func():
+		var modal := _hud_layer().get_node_or_null("BoxModal")
+		if modal:
+			modal.queue_free()
+		_take_from_box(uid, box_id)
+	)
+	row.add_child(take)
+	var here := UIKit.button("Set here", UIKit.SAGE)
+	here.custom_minimum_size = Vector2(150, 52)
+	here.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	here.pressed.connect(func():
+		_set_from_box(uid, box_id)
+		_open_box_modal(box_id)
+	)
+	row.add_child(here)
+	return card
+
+
+func _loosen(item: Dictionary, box_id: int, index: int) -> void:
+	item["state"] = "loose"
+	var at := _spill_spot(box_id, index)
+	item["x"] = at.x
+	item["z"] = at.z
+	item["y"] = 0.0
+	var box := GameState.job_box(box_id)
+	if not box.is_empty() and bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
+		_open_cat(box_id)
+
+
+func _take_from_box(uid: String, box_id: int) -> void:
+	var item := GameState.job_item(uid)
+	if item.is_empty():
+		return
+	_loosen(item, box_id, 0)
+	AudioDirector.play_sfx("sfx_box_open")
+	_refresh_items()
+	_take_to_hand(item, "job")
+	_refresh_hud_buttons()
+	_toast("Click where it should live. R turns it.")
+
+
+func _set_from_box(uid: String, box_id: int) -> void:
+	var item := GameState.job_item(uid)
+	if item.is_empty():
+		return
+	_loosen(item, box_id, 0)
+	_refresh_items()
+	if not _auto_place_item(item):
+		_toast("No room next to the box for that. Take it instead.")
+	else:
+		AudioDirector.play_sfx("sfx_item_snap", true)
+	_refresh_items()
+	_refresh_hud_buttons()
+	_maybe_job_done()
+
+
+func _auto_unpack_box(box_id: int) -> void:
+	# Dana's helpers put the lot away: nearest free spot for each piece.
+	var contents := _box_contents(box_id)
+	var n := 0
+	var missed := 0
+	for item in contents:
+		_loosen(item, box_id, n)
+		n += 1
+	_refresh_items()
+	for item in contents:
+		if not _auto_place_item(item):
+			missed += 1
+	AudioDirector.play_sfx("sfx_box_open")
+	AudioDirector.play_sfx("sfx_item_snap", true)
+	_refresh_items()
+	_refresh_hud_buttons()
+	if missed > 0:
+		_toast("%d piece%s wouldn't fit anywhere tidy. They're on the floor." % [missed, "" if missed == 1 else "s"])
+	else:
+		_toast("All put away. Nudge anything you'd rather have elsewhere.")
+	_maybe_job_done()
+
+
+func _auto_place_item(item: Dictionary) -> bool:
+	# Try spots spiralling out from where the piece lies, using the same
+	# snap rules a click would, so nothing lands inside a wall or another piece.
+	var uid := str(item.get("uid", ""))
+	var was_held := held_uid
+	var was_source := held_source
+	var was_rot := held_rot
+	held_uid = uid
+	held_source = "job"
+	held_rot = float(item.get("rot", 0.0))
+	item["state"] = "hand"
+	var mount := str(item.get("mount", "floor"))
+	var candidates: Array = []
+	if mount == "hang" or mount == "wall_floor":
+		for point in _wall_points():
+			if str(point["kind"]) != mount:
+				continue
+			candidates.append(Vector3(float(point["x"]), float(point["y"]), float(point["z"])) + (point["normal"] as Vector3) * 0.3)
+	else:
+		var origin := Vector3(float(item.get("x", 1.0)), 0.0, float(item.get("z", 1.0)))
+		var x0 := float(venue.get("x", 0))
+		var z0 := float(venue.get("z", 0))
+		var w := float(venue.get("w", 6))
+		var d := float(venue.get("d", 8))
+		var ring := 0.0
+		while ring < maxf(w, d):
+			var step := 0.5
+			# Only spots no nearer the camera than where the piece lies (x + z no
+			# larger), so nothing ends up between the carried boxes and the camera.
+			var limit := origin.x + origin.z + 0.01
+			var ax := origin.x - ring
+			while ax <= origin.x + ring + 0.01:
+				for az in [origin.z - ring, origin.z + ring]:
+					if ax + float(az) <= limit and ax > x0 + 0.5 and ax < x0 + w - 0.5 and float(az) > z0 + 0.5 and float(az) < z0 + d - 0.5:
+						candidates.append(Vector3(ax, 0.0, float(az)))
+				ax += step
+			var az2 := origin.z - ring + step
+			while az2 < origin.z + ring - 0.01:
+				for ax2 in [origin.x - ring, origin.x + ring]:
+					if float(ax2) + az2 <= limit and float(ax2) > x0 + 0.5 and float(ax2) < x0 + w - 0.5 and az2 > z0 + 0.5 and az2 < z0 + d - 0.5:
+						candidates.append(Vector3(float(ax2), 0.0, az2))
+				az2 += step
+			ring += step
+	var placed := false
+	for hit in candidates:
+		var spot: Dictionary = _snap_point(hit)
+		if not bool(spot["valid"]):
+			continue
+		var on_wall := str(spot.get("wall", "")) != ""
+		item["x"] = spot["pos"].x
+		item["y"] = spot["pos"].y
+		item["z"] = spot["pos"].z
+		item["rot"] = spot["rot"]
+		item["wall"] = spot.get("wall", "")
+		item["state"] = "placed"
+		item["settle"] = false
+		placed = true
+		break
+	if not placed:
+		item["state"] = "loose"
+	held_uid = was_held
+	held_source = was_source
+	held_rot = was_rot
+	return placed
+
+
+func _pack_rest() -> void:
+	# Tired of packing: box everything that is still loose, pad the fragile
+	# boxes, seal the lot, and head for the truck.
+	var items: Array = GameState.job.get("items", [])
+	var packed := 0
+	for item in items:
+		if str(item.get("state", "")) != "loose":
+			continue
+		var box_id := GameState.ensure_open_box()
+		if GameState.job.get("boxes", []).size() > slot_count:
+			break
+		var err := GameState.pack_into(str(item.get("uid", "")), box_id)
+		if err != "":
+			GameState.seal_box(box_id)
+			box_id = GameState.make_box()
+			err = GameState.pack_into(str(item.get("uid", "")), box_id)
+		if err == "":
+			packed += 1
+		if GameState.box_item_count(box_id) >= 5:
+			GameState.seal_box(box_id)
+	for box in GameState.job.get("boxes", []):
+		var id := int(box.get("id", 0))
+		if GameState.box_needs_padding(id):
+			box["padded"] = true
+		if not bool(box.get("sealed", false)) and GameState.box_item_count(id) > 0:
+			GameState.seal_box(id)
+	selected_box = -1
+	AudioDirector.play_sfx("sfx_tape_rip")
+	AudioDirector.play_sfx("sfx_box_fold", true)
+	_refresh_items()
+	_refresh_hud_buttons()
+	if GameState.all_sealed():
+		_toast("Boxed, padded, taped. Load the truck when you're ready.")
+	else:
+		_toast("The truck only takes %d boxes. Some pieces will have to wait." % slot_count)
+
+
 func _open_box_spot(box_id: int) -> Vector3:
 	var index := 0
 	for box in GameState.job.get("boxes", []):
 		if int(box.get("id", -1)) == box_id:
 			break
 		index += 1
-	return Vector3(float(venue.get("x", 0)) + 0.6, 0.0, float(venue.get("z", 0)) + 0.9 + float(index) * 0.7)
+	# Carried boxes line up across the screen (the diagonal the camera sees as
+	# level), so every box sits at the same height on screen and what comes
+	# out of them lands behind the row, never in front of the next box.
+	# A venue with tall furniture along its near wall sets box_row deeper.
+	var depth := float(venue.get("box_row", 1.6))
+	return Vector3(float(venue.get("x", 0)) + 1.7 + float(index) * 0.45, 0.0, float(venue.get("z", 0)) + float(venue.get("d", 8)) - depth - float(index) * 0.45)
+
+
+func _spill_spot(box_id: int, n: int) -> Vector3:
+	# Behind the box (away from the camera), fanned out level with the row.
+	# A spot outside the room or on top of something already lying there is
+	# skipped, so no two pieces share a square.
+	var spot := _open_box_spot(box_id)
+	var x0 := float(venue.get("x", 0))
+	var z0 := float(venue.get("z", 0))
+	var w := float(venue.get("w", 6))
+	var d := float(venue.get("d", 8))
+	var taken: Array = []
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) == "loose":
+			taken.append(Vector2(float(item.get("x", 0.0)), float(item.get("z", 0.0))))
+	for box in GameState.job.get("boxes", []):
+		var b := _open_box_spot(int(box.get("id", 0)))
+		taken.append(Vector2(b.x, b.z))
+	for k in range(n, n + 30):
+		var col := float(k % 3)
+		var row := float(int(k / 3))
+		var at := spot + Vector3(-1.1 + col * 0.5 - row * 0.55, 0.0, -1.1 - col * 0.5 - row * 0.55)
+		if at.x < x0 + 0.5 or at.x > x0 + w - 0.5 or at.z < z0 + 0.5 or at.z > z0 + d - 0.5:
+			continue
+		if _spot_free(at, taken):
+			return at
+	# The pattern ran out of room: take the first free square, far corner first,
+	# so nothing lands between the boxes and the camera.
+	var cz := z0 + 0.6
+	while cz < z0 + d - 0.5:
+		var cx := x0 + 0.6
+		while cx < x0 + w - 0.5:
+			var at2 := Vector3(cx, 0.0, cz)
+			if at2.x + at2.z < spot.x + spot.z - 0.3 and _spot_free(at2, taken):
+				return at2
+			cx += 0.6
+		cz += 0.6
+	return Vector3(x0 + w * 0.5, 0.0, z0 + d * 0.5)
+
+
+func _spot_free(at: Vector3, taken: Array) -> bool:
+	for p in taken:
+		if (p as Vector2).distance_to(Vector2(at.x, at.z)) < 0.45:
+			return false
+	return true
 
 
 func _box_still_packed(box_id: int) -> bool:
@@ -2125,7 +2506,7 @@ func _build_hud() -> void:
 	layer.add_child(goals_box)
 	goals_box.layout_mode = 1
 	goals_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	goals_box.position = Vector2(16, 168)
+	goals_box.position = Vector2(16, 226)
 	goals_box.custom_minimum_size = Vector2(560, 0)
 	var goals_margin := MarginContainer.new()
 	goals_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2191,9 +2572,22 @@ func _refresh_hud_buttons() -> void:
 	if GameState.mode == "office" or GameState.mode == "job_unpack":
 		var snap_label := "Grid snap on" if SaveManager.snap_to_grid else "Free place"
 		_act_button(layer, snap_label, Vector2(16, y), _toggle_snap)
-		_act_button(layer, "Rotate view", Vector2(1100, 870), func(): rotate_view(1))
+		# Left column, under the snap toggle: the right-hand corner is where the
+		# boxed pieces of a bigger room end up, and a button there eats clicks.
+		_act_button(layer, "Rotate view", Vector2(16, y + 58), func(): rotate_view(1))
+	if GameState.mode == "office" and GameState.office_phase == "pack":
+		_act_button(layer, "Box it all for me", Vector2(1100, y), func():
+			for item in GameState.office_items:
+				if str(item.get("state", "")) == "placed":
+					item["state"] = "boxed"
+			AudioDirector.play_sfx("sfx_box_fold", true)
+			_refresh_items()
+			_check_pack_done()
+		)
 	if GameState.mode == "office" and GameState.office_phase == "live":
 		_act_button(layer, "Jobs", Vector2(1100, y), func(): _open_jobs())
+		y += 58
+		_act_button(layer, "Workbench", Vector2(1100, y), _open_workshop)
 		y += 58
 		_act_button(layer, "Map", Vector2(1100, y), func(): emit_signal("open_map"))
 		y += 58
@@ -2234,6 +2628,8 @@ func _refresh_hud_buttons() -> void:
 		)
 		_act_button(layer, "Add padding", Vector2(1060, 158), func(): _pad_selected())
 		_act_button(layer, "Seal box", Vector2(1060, 216), func(): _seal_selected())
+		if not GameState.all_sealed():
+			_act_button(layer, "Pack the rest for me", Vector2(1060, 290), _pack_rest)
 		if GameState.all_sealed():
 			_act_button(layer, "Load the truck", Vector2(1060, 290), func():
 				GameState.set_mode("truck")
@@ -2286,9 +2682,28 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 			)
 			y += 52
 	var ready := true
+	var waiting := 0
 	for item in GameState.job.get("items", []):
 		if str(item.get("state", "")) != "placed":
 			ready = false
+		if str(item.get("state", "")) in ["boxed", "loose"] and bool(carried.get(int(item.get("box", -1)), false)):
+			waiting += 1
+	if waiting > 0:
+		_act_button(layer, "Unpack it all for me", Vector2(1060, 36), func():
+			for box in GameState.job.get("boxes", []):
+				var id := int(box.get("id", 0))
+				if bool(carried.get(id, false)):
+					_auto_unpack_box(id)
+			var loose_left: Array = []
+			for item in GameState.job.get("items", []):
+				if str(item.get("state", "")) == "loose":
+					loose_left.append(item)
+			for item in loose_left:
+				_auto_place_item(item)
+			_refresh_items()
+			_refresh_hud_buttons()
+			_maybe_job_done()
+		)
 	if ready and all_in:
 		_act_button(layer, "Finish job", Vector2(1060, 620), func():
 			GameState.finish_job()
@@ -2419,6 +2834,12 @@ func _open_jobs(tab := "jobs") -> void:
 	goals_tab.custom_minimum_size = Vector2(170, 52)
 	goals_tab.pressed.connect(_open_jobs.bind("goals"))
 	panel.add_child(goals_tab)
+	var back_tab := UIKit.button("Back room", UIKit.TERRA if tab == "backroom" else UIKit.NIGHT)
+	back_tab.position = Vector2(384, 80)
+	back_tab.size = Vector2(190, 52)
+	back_tab.custom_minimum_size = Vector2(190, 52)
+	back_tab.pressed.connect(_open_jobs.bind("backroom"))
+	panel.add_child(back_tab)
 	var scroll := ScrollContainer.new()
 	scroll.name = "Rows"
 	scroll.position = Vector2(24, 144)
@@ -2431,14 +2852,28 @@ func _open_jobs(tab := "jobs") -> void:
 	scroll.add_child(rows)
 	if tab == "goals":
 		_fill_goals(rows, card_size.x - 72)
+	elif tab == "backroom":
+		_fill_backroom(rows, card_size.x - 72)
 	else:
 		_fill_jobs(rows, card_size.x - 72)
-	var focus_buttons: Array = [close, jobs_tab, goals_tab]
+	var focus_buttons: Array = [close, jobs_tab, goals_tab, back_tab]
 	for child in rows.get_children():
 		for kid in child.get_children():
 			if kid is Button:
 				focus_buttons.append(kid)
 	UIKit.link_focus(focus_buttons)
+
+
+func _open_workshop() -> void:
+	var layer := _hud_layer()
+	if layer == null:
+		return
+	var old := layer.get_node_or_null("WorkshopCard")
+	if old != null:
+		old.queue_free()
+	var card: Panel = preload("res://scripts/workshop_ui.gd").new()
+	layer.add_child(card)
+	AudioDirector.play_sfx("sfx_paper_rustle")
 
 
 func _fill_jobs(rows: VBoxContainer, width: float) -> void:
@@ -2514,6 +2949,178 @@ func _job_card(decorated: Dictionary, width: float, from_board: bool) -> PanelCo
 	go.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	go.pressed.connect(_start_listed_job.bind(str(decorated.get("id", ""))))
 	row.add_child(go)
+	return card
+
+
+func _fill_backroom(rows: VBoxContainer, width: float) -> void:
+	# Sal's lock-up: three short trees of off-the-books work, bought with cred.
+	var contact: Dictionary = Crime.data.get("contact", {}) if not Crime.data.is_empty() else {}
+	Crime.ensure()
+	contact = Crime.data.get("contact", {})
+	var intro := _goal_card_shell(width, Color("E7E0D4"))
+	var col := intro.get_child(0) as VBoxContainer
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	col.add_child(head)
+	head.add_child(UIKit.avatar("S", UIKit.NIGHT, 40))
+	var title := UIKit.label("%s  ·  cred %d  ·  heat %d / %d" % [contact.get("name", "Sal"), Crime.cred(), Crime.heat(), int(Crime.data.get("heat_visit", 10))], 28, UIKit.DARK, "title", false)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(title)
+	var blurb := UIKit.label("%s %s" % [contact.get("intro", ""), contact.get("line_high", "") if Crime.heat() >= int(Crime.data.get("heat_visit", 10)) * 0.7 else contact.get("line_low", "")], 24, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(width - 40, 0)
+	col.add_child(blurb)
+	rows.add_child(intro)
+	for branch in Crime.branches():
+		var branch_id := str(branch.get("id", ""))
+		rows.add_child(UIKit.label("%s  ·  %s" % [branch.get("name", ""), branch.get("blurb", "")], 24, UIKit.TERRA, "small", false))
+		for row in Crime.nodes():
+			if str(row.get("branch", "")) != branch_id:
+				continue
+			rows.add_child(_crime_card(row, width))
+	var log: Array = Crime.state().get("log", [])
+	if not log.is_empty():
+		rows.add_child(UIKit.label("Lately", 28, UIKit.TERRA, "title", false))
+		var shown := 0
+		for entry in log:
+			if shown >= 5:
+				break
+			shown += 1
+			var card := _goal_card_shell(width, Color("F6EEDC"))
+			var line := UIKit.label("Day %d  ·  %s" % [int(entry.get("day", 0)), entry.get("line", "")], 24, UIKit.DARK, "small")
+			line.custom_minimum_size = Vector2(width - 40, 0)
+			(card.get_child(0) as VBoxContainer).add_child(line)
+			rows.add_child(card)
+
+
+func _goal_card_shell(width: float, tint: Color) -> PanelContainer:
+	var card := PanelContainer.new()
+	var box := UIKit.style(tint, 14)
+	box.shadow_size = 0
+	box.content_margin_left = 18
+	box.content_margin_right = 18
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	card.add_theme_stylebox_override("panel", box)
+	card.custom_minimum_size = Vector2(width, 0)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 4)
+	card.add_child(col)
+	return card
+
+
+func _crime_card(row: Dictionary, width: float) -> PanelContainer:
+	var id := str(row.get("id", ""))
+	var held := Crime.unlocked(id)
+	var open := Crime.available(row)
+	var card := _goal_card_shell(width, Color("E4EBD6") if held else (Color("F6EEDC") if open else Color("EDE7DD")))
+	var col := card.get_child(0) as VBoxContainer
+	var line := HBoxContainer.new()
+	line.add_theme_constant_override("separation", 14)
+	col.add_child(line)
+	var text := VBoxContainer.new()
+	text.add_theme_constant_override("separation", 2)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	line.add_child(text)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	text.add_child(head)
+	head.add_child(UIKit.label("%s%s" % ["✓ " if held else "", row.get("name", id)], 28, UIKit.DARK if open else Color("9A9388"), "title", false))
+	var meta := UIKit.label("tier %d  ·  %s  ·  heat +%d, cred +%d" % [int(row.get("tier", 1)), ("yours" if held else ("%d cred" % int(row.get("cred_cost", 0)))), int(row.get("heat", 0)), int(row.get("cred", 0))], 24, UIKit.WOOD, "small", false)
+	meta.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(meta)
+	var blurb := UIKit.label(str(row.get("blurb", "")), 24, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(width - 360, 0)
+	text.add_child(blurb)
+	if not held:
+		var buy := UIKit.button("Unlock", UIKit.NIGHT)
+		buy.name = "Unlock_" + id
+		buy.custom_minimum_size = Vector2(150, 52)
+		buy.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		buy.disabled = not open
+		buy.pressed.connect(func():
+			var err := Crime.unlock(id)
+			if err != "":
+				_toast(err, "Sal")
+				AudioDirector.play_sfx("sfx_invalid_placement")
+				return
+			AudioDirector.play_sfx("sfx_cash_gain")
+			SaveManager.save_game()
+			_open_jobs("backroom")
+		)
+		line.add_child(buy)
+		return card
+	var action := str(row.get("action", ""))
+	if action == "fence" or action == "fence_bulk":
+		var count := 5 if action == "fence_bulk" else 1
+		var any := false
+		for good in ItemDB.trade_goods():
+			var good_id := str(good.get("id", ""))
+			if int(GameState.goods.get(good_id, 0)) < count:
+				continue
+			any = true
+			var sell := UIKit.button("Fence %s%s" % [good.get("name", good_id), (" x%d" % count) if count > 1 else ""], UIKit.TERRA)
+			sell.name = "Fence_%s_%d" % [good_id, count]
+			sell.custom_minimum_size = Vector2(240, 52)
+			sell.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			sell.pressed.connect(func():
+				var result: Dictionary = Crime.fence(good_id, count)
+				if result.has("error"):
+					_toast(str(result["error"]), "Sal")
+					return
+				AudioDirector.play_sfx("sfx_cash_gain")
+				SaveManager.save_game()
+				_open_jobs("backroom")
+				_toast("$%d, cash. Heat %d." % [int(result.get("pay", 0)), Crime.heat()], "Sal")
+			)
+			line.add_child(sell)
+			break
+		if not any:
+			text.add_child(UIKit.label("Buy a trade good at the market first.", 24, UIKit.BLUE, "small", false))
+	elif action == "fence_graded":
+		text.add_child(UIKit.label("Restored and mint goods on the workbench's Fix up tab can go to Sal instead.", 24, UIKit.BLUE, "small", false))
+	elif action == "night_job":
+		if Crime.night_job_available():
+			var go := UIKit.button("Take tonight's move", UIKit.TERRA)
+			go.name = "NightJob"
+			go.custom_minimum_size = Vector2(280, 52)
+			go.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			go.pressed.connect(func():
+				var err := Crime.take_night_job()
+				if err != "":
+					_toast(err, "Sal")
+					return
+				SaveManager.save_game()
+				AudioDirector.play_sfx("sfx_notification_soft")
+				emit_signal("request_rebuild")
+			)
+			line.add_child(go)
+		else:
+			text.add_child(UIKit.label("One a night. Back tomorrow.", 24, UIKit.BLUE, "small", false))
+	elif action == "knockoff":
+		var any_made := false
+		for recipe in Workshop.recipes():
+			var recipe_id := str(recipe.get("id", ""))
+			if Workshop.made_count(recipe_id) <= 0:
+				continue
+			any_made = true
+			var sell := UIKit.button("Pass off %s" % recipe.get("name", recipe_id), UIKit.TERRA)
+			sell.name = "Knockoff_" + recipe_id
+			sell.custom_minimum_size = Vector2(260, 52)
+			sell.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			sell.pressed.connect(func():
+				var result: Dictionary = Crime.knockoff(recipe_id)
+				if result.has("error"):
+					_toast(str(result["error"]), "Sal")
+					return
+				AudioDirector.play_sfx("sfx_cash_gain")
+				SaveManager.save_game()
+				_open_jobs("backroom")
+				_toast("$%d. Heat %d." % [int(result.get("pay", 0)), Crime.heat()], "Sal")
+			)
+			line.add_child(sell)
+			break
+		if not any_made:
+			text.add_child(UIKit.label("Make something on the workbench first.", 24, UIKit.BLUE, "small", false))
 	return card
 
 
@@ -3111,6 +3718,411 @@ func _tick_visitors(delta: float) -> void:
 		_spawn_customer()
 
 
+func _spawn_street() -> void:
+	# Passers-by on the pavement beyond the road: the town going about its day.
+	for entry in street:
+		var old: Node3D = entry.get("node")
+		if old and is_instance_valid(old):
+			old.queue_free()
+	street.clear()
+	if GameState.mode == "truck" or venue.is_empty():
+		return
+	var cx := float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.5
+	var z := float(venue.get("z", 0)) - 4.2
+	var palette := [Color("D9765F"), Color("8FAF7E"), Color("7FA3B8"), Color("E6B655"), Color("C68B59"), Color("D4C1D8")]
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("street:%s:%d" % [venue.get("id", ""), GameState.day])
+	for i in 4:
+		var person := _make_person(palette[(i + GameState.day) % palette.size()], Color("4A3626") if i % 2 == 0 else Color("2B2622"))
+		person.name = "Passerby%d" % i
+		var x := cx - 12.0 + rng.randf() * 24.0
+		var dir := 1.0 if rng.randf() < 0.5 else -1.0
+		person.position = Vector3(x, 0.0, z + rng.randf_range(-0.3, 0.3))
+		person.rotation.y = PI * 0.5 if dir > 0.0 else -PI * 0.5
+		add_child(person)
+		street.append({"node": person, "dir": dir, "speed": rng.randf_range(0.7, 1.1), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx})
+		if i == 1:
+			var dog := _make_dog(Color("B98A5A"))
+			dog.position = person.position + Vector3(-dir * 0.7, 0.0, 0.35)
+			add_child(dog)
+			street.append({"node": dog, "dir": dir, "speed": rng.randf_range(0.7, 1.1), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx, "dog": true, "owner": person})
+
+
+func _make_dog(color: Color) -> Node3D:
+	var dog := Node3D.new()
+	var figure := Node3D.new()
+	figure.name = "Figure"
+	dog.add_child(figure)
+	var body := Props.mesh_box(Vector3(0.22, 0.2, 0.5), color)
+	body.position.y = 0.2
+	figure.add_child(body)
+	var head := Props.mesh_box(Vector3(0.18, 0.18, 0.22), color)
+	head.position = Vector3(0, 0.36, 0.3)
+	figure.add_child(head)
+	var tail := Props.mesh_box(Vector3(0.04, 0.04, 0.2), color.darkened(0.2))
+	tail.name = "Tail"
+	tail.position = Vector3(0, 0.36, -0.3)
+	figure.add_child(tail)
+	for leg in [Vector3(-0.08, 0, 0.18), Vector3(0.08, 0, 0.18), Vector3(-0.08, 0, -0.18), Vector3(0.08, 0, -0.18)]:
+		var post := Props.mesh_cylinder(0.03, 0.2, color.darkened(0.15))
+		post.position = leg
+		figure.add_child(post)
+	return dog
+
+
+func _tick_street(delta: float) -> void:
+	ambient_time += delta
+	for entry in street:
+		var node: Node3D = entry.get("node")
+		if node == null or not is_instance_valid(node):
+			continue
+		var dir := float(entry.get("dir", 1.0))
+		if bool(entry.get("dog", false)):
+			var owner: Node3D = entry.get("owner")
+			if owner and is_instance_valid(owner):
+				var goal := owner.position + Vector3(-float(entry.get("dir", 1.0)) * 0.7, 0.0, 0.35)
+				node.position = node.position.lerp(goal, minf(1.0, delta * 3.0))
+				node.rotation.y = owner.rotation.y
+				var figure := node.get_node_or_null("Figure") as Node3D
+				if figure:
+					figure.position.y = absf(sin(ambient_time * 12.0 + float(entry.get("phase", 0.0)))) * 0.04
+					var tail := figure.get_node_or_null("Tail") as Node3D
+					if tail:
+						tail.rotation.y = sin(ambient_time * 10.0) * 0.6
+			continue
+		entry["pause"] = maxf(0.0, float(entry.get("pause", 0.0)) - delta)
+		var walking := float(entry["pause"]) <= 0.0
+		if walking:
+			node.position.x += dir * float(entry.get("speed", 0.9)) * delta
+			var cx := float(entry.get("cx", 0.0))
+			if node.position.x > cx + 13.0 or node.position.x < cx - 13.0:
+				entry["dir"] = -dir
+				node.rotation.y = PI * 0.5 if -dir > 0.0 else -PI * 0.5
+			if randf() < delta * 0.03:
+				entry["pause"] = randf_range(1.5, 4.0)
+				if randf() < 0.5:
+					_bubble(node, _chat("passing"))
+		_animate_person(node, ambient_time + float(entry.get("phase", 0.0)), walking, delta)
+
+
+func _browse_targets() -> Array:
+	# Placed things worth a look: a seat, a shelf, a plant, a picture.
+	var out: Array = []
+	for rec in GameState.office_items:
+		if str(rec.get("state", "")) != "placed":
+			continue
+		var item_id := str(rec.get("item", ""))
+		var kind := ""
+		if "beanbag" in item_id or "cushion" in item_id or item_id == "office_chair":
+			kind = "sit"
+		elif "shelf" in item_id or "bookshelf" in item_id or "picture" in item_id or "poster" in item_id or item_id == "whiteboard":
+			kind = "look"
+		elif "plant" in item_id or "fern" in item_id or "cactus" in item_id:
+			kind = "sniff"
+		elif "cat" in item_id or "lamp" in item_id or "clock" in item_id:
+			kind = "look"
+		if kind == "":
+			continue
+		var node: Node = nodes_by_uid.get(str(rec.get("uid", "")))
+		if node is Node3D:
+			out.append({"uid": str(rec.get("uid", "")), "node": node, "kind": kind, "item": item_id})
+	return out
+
+
+func _spawn_browser(from_car: Node3D = null) -> bool:
+	if not browser.is_empty() or GameState.mode != "office" or GameState.office_phase != "live" or backdrop:
+		return false
+	var targets := _browse_targets()
+	if targets.is_empty():
+		return false
+	var pick: Dictionary = targets[randi() % targets.size()]
+	var target: Node3D = pick["node"]
+	var names := ["Ravi", "Lou", "Mrs. Okafor", "the postie", "a neighbour", "Sam from next door"]
+	var who := str(names[randi() % names.size()])
+	var person := _make_person([UIKit.PINK, UIKit.BLUE, UIKit.SAGE, UIKit.MUSTARD][randi() % 4], Color("6E4A2F"))
+	person.name = "Browser"
+	var door := _door_world()
+	person.position = door + Vector3(0.6, 0.0, -3.2)
+	if from_car != null:
+		person.position = from_car.position + Vector3(1.1, 0.0, 0.2)
+	add_child(person)
+	_bubble(person, _chat("arriving"))
+	var at := target.global_position
+	var stand := at + (door - at).normalized() * 0.75
+	stand.y = 0.0
+	if str(pick["kind"]) == "sit":
+		stand = at + Vector3(0, 0, 0.05)
+	browser = {"node": person, "stage": "walking", "kind": pick["kind"], "item": pick["item"], "t": 0.0, "who": who, "timer": 0.0, "target": target, "car": from_car}
+	var tw := create_tween()
+	tw.tween_property(person, "position", door + Vector3(0.3, 0.0, 0.4), 1.4)
+	tw.tween_property(person, "position", stand, 1.6)
+	tw.tween_callback(func():
+		if browser.is_empty() or not is_instance_valid(person):
+			return
+		browser["stage"] = "busy"
+		browser["timer"] = randf_range(5.0, 8.0)
+		person.look_at(Vector3(at.x, person.position.y, at.z), Vector3.UP)
+		person.rotation.y += PI
+		var figure := person.get_node_or_null("Figure") as Node3D
+		_bubble(person, _chat_browsing(str(browser["kind"])))
+		match str(browser["kind"]):
+			"sit":
+				if figure:
+					figure.position.y = -0.22
+					figure.rotation.x = -0.25
+				_toast("%s flops on the %s. 'Don't mind me.'" % [who.capitalize(), ItemDB.display_name(str(browser["item"])).to_lower()], "Visitor")
+			"sniff":
+				_toast("%s leans in to the %s. 'Real? It's real.'" % [who.capitalize(), ItemDB.display_name(str(browser["item"])).to_lower()], "Visitor")
+			_:
+				_toast("%s stops at the %s. 'Huh. Nice.'" % [who.capitalize(), ItemDB.display_name(str(browser["item"])).to_lower()], "Visitor")
+	)
+	return true
+
+
+func _tick_browser(delta: float) -> void:
+	if GameState.mode == "office" and GameState.office_phase == "live" and not backdrop:
+		browser_wait -= delta
+		if browser_wait <= 0.0:
+			browser_wait = randf_range(35.0, 60.0)
+			_spawn_browser()
+	if browser.is_empty():
+		return
+	var node: Node3D = browser.get("node")
+	if node == null or not is_instance_valid(node):
+		browser = {}
+		return
+	browser["t"] = float(browser.get("t", 0.0)) + delta
+	var stage := str(browser.get("stage", ""))
+	if stage == "busy":
+		browser["timer"] = float(browser.get("timer", 0.0)) - delta
+		var figure := node.get_node_or_null("Figure") as Node3D
+		if figure and str(browser.get("kind", "")) != "sit":
+			var head := figure.get_node_or_null("Head") as Node3D
+			if head:
+				head.position.y = 1.18 + sin(float(browser["t"]) * 2.2) * 0.02
+			figure.rotation.y = sin(float(browser["t"]) * 1.1) * 0.2
+			if str(browser.get("kind", "")) == "sniff":
+				figure.rotation.x = 0.18
+		if float(browser["timer"]) <= 0.0:
+			browser["stage"] = "leaving"
+			if figure:
+				figure.position.y = 0.0
+				figure.rotation.x = 0.0
+			var door := _door_world()
+			_bubble(node, _chat("leaving"))
+			var car: Node3D = browser.get("car")
+			var tw := create_tween()
+			tw.tween_property(node, "position", door + Vector3(0.3, 0.0, 0.4), 1.6)
+			if car != null and is_instance_valid(car):
+				tw.tween_property(node, "position", car.position + Vector3(1.1, 0.0, 0.2), 1.5)
+			else:
+				tw.tween_property(node, "position", door + Vector3(0.6, 0.0, -3.4), 1.4)
+			tw.tween_callback(func():
+				if is_instance_valid(node):
+					node.queue_free()
+				if car != null and is_instance_valid(car):
+					_depart_car(car)
+				browser = {}
+			)
+	elif stage != "busy":
+		_animate_person(node, float(browser["t"]), true, delta)
+
+
+# ---------------------------------------------------------------- cars and bubbles
+
+func _parking_lot() -> Node3D:
+	var yard := get_node_or_null("Outdoors")
+	if yard == null:
+		return null
+	return yard.get_node_or_null("Parking") as Node3D
+
+
+func _free_slot() -> int:
+	var lot := _parking_lot()
+	if lot == null:
+		return -1
+	var slots: Array = lot.get_meta("slots", [])
+	for i in slots.size():
+		if not bool(parking_used.get(i, false)):
+			return i
+	return -1
+
+
+func _make_car(color: Color) -> Node3D:
+	var car := Node3D.new()
+	var body := Props.mesh_box(Vector3(1.7, 0.6, 3.6), color)
+	body.position.y = 0.3
+	car.add_child(body)
+	var cabin := Props.mesh_box(Vector3(1.5, 0.55, 1.8), color.darkened(0.15))
+	cabin.position = Vector3(0, 0.9, 0.1)
+	car.add_child(cabin)
+	var glass := Props.mesh_box(Vector3(1.3, 0.4, 0.1), Color("9FC4D6"))
+	glass.position = Vector3(0, 0.95, 1.0)
+	car.add_child(glass)
+	for dx in [-0.85, 0.85]:
+		for dz in [-1.2, 1.2]:
+			var wheel := Props.mesh_cylinder(0.3, 0.24, Color("2E2A2C"))
+			wheel.rotation.z = PI * 0.5
+			wheel.position = Vector3(dx, 0.3, dz)
+			car.add_child(wheel)
+	for side in [-0.5, 0.5]:
+		var lamp := Props.mesh_box(Vector3(0.22, 0.12, 0.06), Color("FFF1D2"))
+		lamp.position = Vector3(side, 0.55, 1.82)
+		car.add_child(lamp)
+	return car
+
+
+func _tick_cars(delta: float) -> void:
+	if backdrop or venue.is_empty() or GameState.mode == "truck" or _parking_lot() == null:
+		return
+	var want_customer := GameState.mode == "office" and GameState.office_phase == "live" and GameState.shop_accepting() and customers.size() < int(Catalog.shop_number("queue_max", 3))
+	var want_browser := GameState.mode == "office" and GameState.office_phase == "live" and browser.is_empty()
+	car_wait -= delta
+	if car_wait > 0.0 or not (want_customer or want_browser):
+		return
+	car_wait = randf_range(26.0, 48.0)
+	_arrive_car(want_customer)
+
+
+func _arrive_car(as_customer: bool) -> bool:
+	var lot := _parking_lot()
+	var slot := _free_slot()
+	if lot == null or slot < 0:
+		return false
+	var slots: Array = lot.get_meta("slots", [])
+	var target: Vector3 = slots[slot]
+	var entry_point: Vector3 = lot.get_meta("entry", target + Vector3(0, 0, -2.6))
+	var palette := [Color("D9765F"), Color("7FA3B8"), Color("E6B655"), Color("8FAF7E"), Color("D4C1D8"), Color("F4ECDD")]
+	var car := _make_car(palette[randi() % palette.size()])
+	car.name = "Car"
+	car.set_meta("slot", slot)
+	parking_used[slot] = true
+	var road_z := float(venue.get("z", 0)) - 6.0
+	var start := Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.5 - 16.0, 0.0, road_z - 0.6)
+	car.position = start
+	car.rotation.y = -PI * 0.5
+	add_child(car)
+	cars.append({"node": car, "slot": slot})
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(car, "position", Vector3(entry_point.x, 0.0, road_z - 0.6), 2.6)
+	tw.parallel().tween_property(car, "rotation:y", -PI * 0.5, 0.1)
+	tw.tween_property(car, "rotation:y", PI, 0.5)
+	tw.parallel().tween_property(car, "position", entry_point, 0.9)
+	tw.tween_property(car, "position", target, 1.1)
+	tw.tween_callback(func():
+		if not is_instance_valid(car):
+			return
+		_dust(car.position + Vector3(0, 0.3, 1.6))
+		# Door opens, someone steps out.
+		var spawned := false
+		if as_customer and GameState.shop_accepting():
+			_spawn_customer(car)
+			spawned = not customers.is_empty() and customers[customers.size() - 1].get("car") == car
+		if not spawned:
+			spawned = _spawn_browser(car)
+		if not spawned:
+			_depart_car(car)
+	)
+	return true
+
+
+func _depart_car(car: Node3D) -> void:
+	if car == null or not is_instance_valid(car):
+		return
+	var slot := int(car.get_meta("slot", -1))
+	var lot := _parking_lot()
+	var entry_point: Vector3 = lot.get_meta("entry", car.position) if lot else car.position + Vector3(0, 0, -2.6)
+	var road_z := float(venue.get("z", 0)) - 6.0
+	var away := Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) * 0.5 + 16.0, 0.0, road_z - 0.6)
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_interval(0.6)
+	tw.tween_property(car, "position", entry_point, 1.0)
+	tw.tween_property(car, "rotation:y", PI * 0.5, 0.5)
+	tw.parallel().tween_property(car, "position", Vector3(entry_point.x, 0.0, road_z - 0.6), 0.9)
+	tw.tween_property(car, "position", away, 2.8)
+	tw.tween_callback(func():
+		for entry in cars:
+			if entry.get("node") == car:
+				cars.erase(entry)
+				break
+		if slot >= 0:
+			parking_used[slot] = false
+		if is_instance_valid(car):
+			car.queue_free()
+	)
+
+
+func _chat(kind: String) -> String:
+	if chatter.is_empty():
+		var file := FileAccess.open("res://data/chatter.json", FileAccess.READ)
+		if file != null:
+			var parsed = JSON.parse_string(file.get_as_text())
+			if typeof(parsed) == TYPE_DICTIONARY:
+				chatter = parsed
+	var pool: Array = chatter.get(kind, [])
+	if pool.is_empty():
+		return ""
+	return str(pool[randi() % pool.size()])
+
+
+func _chat_browsing(kind: String) -> String:
+	_chat("arriving")
+	var pools: Dictionary = chatter.get("browsing", {})
+	var pool: Array = pools.get(kind, [])
+	if pool.is_empty():
+		return _chat("waiting")
+	return str(pool[randi() % pool.size()])
+
+
+func _bubble(node: Node3D, text: String, seconds := 4.0) -> void:
+	# A thought over someone's head: a little cloud with the line in it.
+	if node == null or not is_instance_valid(node) or text == "":
+		return
+	var old := node.get_node_or_null("Thought")
+	if old != null:
+		old.queue_free()
+	var label := Label3D.new()
+	label.name = "Thought"
+	label.text = text
+	label.font = UIKit.body_font()
+	label.font_size = 36
+	label.pixel_size = 0.0042
+	label.outline_size = 10
+	label.outline_modulate = UIKit.CREAM_CARD
+	label.modulate = UIKit.DARK
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.width = 420.0
+	label.position = Vector3(0, 1.95, 0)
+	label.set_meta("ttl", seconds)
+	node.add_child(label)
+	var dot := Props.mesh_cylinder(0.035, 0.01, UIKit.CREAM_CARD)
+	dot.name = "ThoughtDot"
+	dot.position = Vector3(0.1, 1.58, 0)
+	dot.set_meta("ttl", seconds)
+	node.add_child(dot)
+
+
+func _tick_bubbles(delta: float) -> void:
+	for label in get_tree().get_nodes_in_group("thought_bubbles"):
+		pass
+	for node in find_children("Thought", "Label3D", true, false):
+		var ttl := float(node.get_meta("ttl", 0.0)) - delta
+		node.set_meta("ttl", ttl)
+		var dot := node.get_parent().get_node_or_null("ThoughtDot")
+		if ttl <= 0.0:
+			node.queue_free()
+			if dot:
+				dot.queue_free()
+		elif ttl < 0.5:
+			(node as Label3D).modulate.a = ttl / 0.5
+			if dot:
+				(dot as MeshInstance3D).transparency = 1.0 - ttl / 0.5
+
+
 func _door_world() -> Vector3:
 	var x := float(venue.get("x", 0))
 	var w := float(venue.get("w", 6))
@@ -3120,9 +4132,13 @@ func _door_world() -> Vector3:
 
 
 func _counter_node() -> Node3D:
-	# The fixture a customer walks up to: a counter piece first (the coffee
-	# machine, the pitcher), and only then a shelf or the menu board.
+	# The fixture a customer walks up to: the stand in the yard once there is
+	# one, else a counter piece first (the coffee machine, the pitcher), and
+	# only then a shelf or the menu board.
 	# Straight from the catalogue, so a fixture that is still settling counts too.
+	var yard := _yard_counter()
+	if yard != null:
+		return yard
 	var fixtures: Array = Catalog.fixtures()
 	for want_counter in [true, false]:
 		for fix in fixtures:
@@ -3156,12 +4172,15 @@ func _queue_spot(index: int) -> Vector3:
 
 func _order_prop(dish_id: String) -> Node3D:
 	var kind := "mug"
-	if dish_id in ["lemonade", "iced_tea"]:
+	var tag := str(Catalog.menu_item(dish_id).get("tag", ""))
+	if dish_id in ["lemonade", "iced_tea"] or tag == "juice":
 		kind = "glass"
-	elif dish_id == "bun":
+	elif dish_id == "bun" or tag in ["snack", "sandwich", "grill"]:
 		kind = "bun"
-	elif dish_id in ["used_book", "pencil", "cutting"]:
+	elif dish_id in ["used_book", "pencil", "cutting"] or tag in ["goods", "plant"]:
 		kind = "part"
+	elif tag == "plate":
+		kind = "bowl"
 	var prop := Props.make("proc:" + kind)
 	var collision := prop.get_node_or_null("PropCollision")
 	if collision:
@@ -3169,37 +4188,16 @@ func _order_prop(dish_id: String) -> Node3D:
 	return prop
 
 
-func _spawn_customer() -> void:
+func _spawn_customer(from_car: Node3D = null) -> void:
 	var order: Dictionary = GameState.pick_order()
 	if order.is_empty():
 		return
 	customer_serial += 1
 	var uid := "c%d" % customer_serial
-	var person := Node3D.new()
-	person.name = "Customer_" + uid
 	var palette := [UIKit.BLUE, UIKit.SAGE, UIKit.TERRA, UIKit.MUSTARD, UIKit.WOOD]
 	var color: Color = palette[customer_serial % palette.size()]
-	var figure := Node3D.new()
-	figure.name = "Figure"
-	person.add_child(figure)
-	var legs := Props.mesh_cylinder(0.14, 0.5, Color("3E3A4F"))
-	figure.add_child(legs)
-	var body := Props.mesh_cylinder(0.2, 0.5, color)
-	body.position.y = 0.5
-	figure.add_child(body)
-	var head := MeshInstance3D.new()
-	var sphere := SphereMesh.new()
-	sphere.radius = 0.15
-	sphere.height = 0.3
-	head.mesh = sphere
-	head.material_override = Props.mat(Color("E7C9A8"))
-	head.position.y = 1.18
-	figure.add_child(head)
-	for side in [-1.0, 1.0]:
-		var arm := Props.mesh_cylinder(0.05, 0.42, color.darkened(0.12))
-		arm.name = "ArmL" if side < 0.0 else "ArmR"
-		arm.position = Vector3(side * 0.24, 0.56, 0.0)
-		figure.add_child(arm)
+	var person := _make_person(color)
+	person.name = "Customer_" + uid
 	# The order floats over their head until it is in their hand.
 	var bubble := Node3D.new()
 	bubble.name = "Order"
@@ -3216,14 +4214,17 @@ func _spawn_customer() -> void:
 	person.set_meta("uid", "visitor:" + uid)
 	Props.add_picker(person, Vector3(0.6, 1.4, 0.6))
 	var start := _door_world() + Vector3(0, 0, -3.5)
+	if from_car != null:
+		start = from_car.position + Vector3(1.1, 0.0, 0.2)
 	person.position = start
 	add_child(person)
 	var index := 0
 	for entry in customers:
 		if str(entry.get("stage", "")) != "leaving":
 			index += 1
-	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0}
+	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0, "car": from_car}
 	customers.append(entry)
+	_bubble(person, _chat("arriving"))
 	var who: Dictionary = order.get("who", {})
 	if OS.get_environment("CO_DEBUG") != "":
 		print("  spawn customer %s start=%s door=%s spot=%s counter=%s" % [uid, start, _door_world(), _queue_spot(index), _counter_node()])
@@ -3234,10 +4235,69 @@ func _spawn_customer() -> void:
 		if is_instance_valid(person):
 			entry["stage"] = "waiting"
 			entry["wait"] = Catalog.shop_number("serve_seconds", 9)
+			_bubble(person, _chat("waiting"))
 			if index == 0:
 				_toast(str(who.get("line", "Hello!")), str(who.get("name", "A neighbour")))
 	)
 	AudioDirector.play_sfx("sfx_l02_door_wind_chime")
+
+
+func _make_person(color: Color, hair: Color = Color("4A3626")) -> Node3D:
+	# A simple figure: legs, body, head, two arms, under a "Figure" node that
+	# the walk cycle bobs and sways without fighting the tween on the root.
+	var person := Node3D.new()
+	var figure := Node3D.new()
+	figure.name = "Figure"
+	person.add_child(figure)
+	var legs := Props.mesh_cylinder(0.14, 0.5, Color("3E3A4F"))
+	figure.add_child(legs)
+	var body := Props.mesh_cylinder(0.2, 0.5, color)
+	body.position.y = 0.5
+	figure.add_child(body)
+	var head := MeshInstance3D.new()
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.15
+	sphere.height = 0.3
+	head.mesh = sphere
+	head.material_override = Props.mat(Color("E7C9A8"))
+	head.position.y = 1.18
+	head.name = "Head"
+	figure.add_child(head)
+	var cap := Props.mesh_cylinder(0.15, 0.08, hair)
+	cap.position.y = 1.26
+	figure.add_child(cap)
+	for side in [-1.0, 1.0]:
+		var arm := Props.mesh_cylinder(0.05, 0.42, color.darkened(0.12))
+		arm.name = "ArmL" if side < 0.0 else "ArmR"
+		arm.position = Vector3(side * 0.24, 0.56, 0.0)
+		figure.add_child(arm)
+	return person
+
+
+func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> void:
+	# Walking: a bob and a swing of the arms. Standing: a slow sway and a glance around.
+	var figure := node.get_node_or_null("Figure") as Node3D
+	if figure == null:
+		return
+	if walking:
+		figure.position.y = absf(sin(t * 9.0)) * 0.06
+		figure.rotation.z = sin(t * 9.0) * 0.04
+		figure.rotation.y = 0.0
+		var swing := sin(t * 9.0) * 0.5
+		var arm_l := figure.get_node_or_null("ArmL") as Node3D
+		var arm_r := figure.get_node_or_null("ArmR") as Node3D
+		if arm_l:
+			arm_l.rotation.x = swing
+		if arm_r:
+			arm_r.rotation.x = -swing
+	else:
+		figure.position.y = sin(t * 1.6) * 0.01
+		figure.rotation.z = 0.0
+		figure.rotation.y = sin(t * 0.9) * 0.25
+		for name in ["ArmL", "ArmR"]:
+			var arm := figure.get_node_or_null(name) as Node3D
+			if arm:
+				arm.rotation.x = lerpf(arm.rotation.x, 0.0, minf(1.0, delta * 6.0))
 
 
 func _tick_customer(entry: Dictionary, delta: float) -> void:
@@ -3250,29 +4310,7 @@ func _tick_customer(entry: Dictionary, delta: float) -> void:
 	if bubble:
 		bubble.position.y = 1.55 + sin(t * 3.0) * 0.04
 		bubble.rotation.y += delta * 0.8
-	# Walking: a bob and a swing of the arms. Waiting: a slow sway and a glance around.
-	var figure := node.get_node_or_null("Figure") as Node3D
-	if figure:
-		var walking := str(entry.get("stage", "")) != "waiting"
-		if walking:
-			figure.position.y = absf(sin(t * 9.0)) * 0.06
-			figure.rotation.z = sin(t * 9.0) * 0.04
-			figure.rotation.y = 0.0
-			var swing := sin(t * 9.0) * 0.5
-			var arm_l := figure.get_node_or_null("ArmL") as Node3D
-			var arm_r := figure.get_node_or_null("ArmR") as Node3D
-			if arm_l:
-				arm_l.rotation.x = swing
-			if arm_r:
-				arm_r.rotation.x = -swing
-		else:
-			figure.position.y = sin(t * 1.6) * 0.01
-			figure.rotation.z = 0.0
-			figure.rotation.y = sin(t * 0.9) * 0.25
-			for name in ["ArmL", "ArmR"]:
-				var arm := figure.get_node_or_null(name) as Node3D
-				if arm:
-					arm.rotation.x = lerpf(arm.rotation.x, 0.0, minf(1.0, delta * 6.0))
+	_animate_person(node, t, str(entry.get("stage", "")) != "waiting", delta)
 	if str(entry.get("stage", "")) == "waiting":
 		# They never leave unserved; after the wait the till just rings them up without the big tip.
 		entry["wait"] = float(entry["wait"]) - delta
@@ -3310,12 +4348,19 @@ func _serve_customer(uid: String, by_hand: bool) -> void:
 			tw.tween_property(bubble, "position", Vector3(0.28, 0.75, 0.1), 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			tw.parallel().tween_property(bubble, "scale", Vector3(0.7, 0.7, 0.7), 0.35)
 		tw.tween_interval(0.5)
+		_bubble(node, _chat("served"))
+		var car: Node3D = entry.get("car")
 		tw.tween_property(node, "position", _door_world() + Vector3(0, 0, 0.3), 1.1)
-		tw.tween_property(node, "position", _door_world() + Vector3(0, 0, -4.0), 1.3)
+		if car != null and is_instance_valid(car):
+			tw.tween_property(node, "position", car.position + Vector3(1.1, 0.0, 0.2), 1.4)
+		else:
+			tw.tween_property(node, "position", _door_world() + Vector3(0, 0, -4.0), 1.3)
 		tw.tween_callback(func():
 			customers.erase(entry)
 			if is_instance_valid(node):
 				node.queue_free()
+			if car != null and is_instance_valid(car):
+				_depart_car(car)
 			_reflow_queue()
 		)
 		_refresh_hud_buttons()
@@ -3335,10 +4380,30 @@ func _reflow_queue() -> void:
 		index += 1
 
 
+func _sync_yard_shop() -> void:
+	# The stand in the yard follows the shop's rung on the ladder.
+	if backdrop or venue.is_empty() or GameState.mode != "office" or str(venue.get("id", "")) != GameState.office_id:
+		return
+	var tier := GameState.shop_tier
+	if yard_shop != null and is_instance_valid(yard_shop):
+		if str(yard_shop.get_meta("tier", "")) == tier:
+			return
+		yard_shop.queue_free()
+		yard_shop = null
+	yard_shop = YardShop.build(self, venue, tier)
+
+
+func _yard_counter() -> Node3D:
+	if yard_shop == null or not is_instance_valid(yard_shop):
+		return null
+	return yard_shop.get_node_or_null("YardCounter") as Node3D
+
+
 func _sync_shop_sign() -> void:
 	# An A-board by the door while the shop takes customers.
 	if backdrop or venue.is_empty() or GameState.mode != "office":
 		return
+	_sync_yard_shop()
 	var want := GameState.office_phase == "live" and GameState.shop_accepting()
 	if want and (shop_sign == null or not is_instance_valid(shop_sign)):
 		shop_sign = Props.make("proc:aframe")
@@ -3347,6 +4412,8 @@ func _sync_shop_sign() -> void:
 			collision.free()
 		shop_sign.name = "ShopSign"
 		shop_sign.position = _door_world() + Vector3(2.0, 0.0, -2.8)
+		if _yard_counter() != null:
+			shop_sign.position = _yard_counter().global_position + Vector3(-1.6, 0.0, 1.6)
 		add_child(shop_sign)
 	elif not want and shop_sign != null and is_instance_valid(shop_sign):
 		shop_sign.queue_free()

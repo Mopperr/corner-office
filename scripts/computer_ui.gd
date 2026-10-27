@@ -137,6 +137,7 @@ func _show_page() -> void:
 			body.add_child(preload("res://scripts/forest_page.gd").new())
 		"manager":
 			body.add_child(preload("res://scripts/shop_page.gd").new())
+	_sidebar()
 	_wire_screen()
 
 
@@ -379,63 +380,104 @@ func _shop() -> void:
 
 func _email() -> void:
 	AudioDirector.play_sfx("sfx_email_ping")
-	var y := 8.0
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(12, 12)
+	scroll.size = Vector2(1200, 530)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(scroll)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 12)
+	column.custom_minimum_size = Vector2(1180, 0)
+	scroll.add_child(column)
 	if GameState.inbox.is_empty():
-		var empty := UIKit.label("The inbox is quiet.", 18, UIKit.DARK)
-		empty.position = Vector2(16, 16)
-		body.add_child(empty)
+		column.add_child(UIKit.label("The inbox is quiet.", 28, UIKit.DARK, "small"))
 		return
-	for mail in GameState.inbox:
-		var card := Panel.new()
-		card.position = Vector2(12, y)
-		card.size = Vector2(1000, 148)
-		card.add_theme_stylebox_override("panel", UIKit.style(Color("F7F1E4"), 8))
-		var subject := UIKit.label("%s  —  %s" % [mail.get("subject", ""), mail.get("from", "")], 18, UIKit.DARK, "title")
-		subject.position = Vector2(10, 6)
-		subject.size = Vector2(960, 24)
-		card.add_child(subject)
-		var text := UIKit.label(str(mail.get("body", "")), 18, UIKit.DARK)
-		text.position = Vector2(10, 34)
-		text.size = Vector2(960, 104)
-		card.add_child(text)
+	var mails: Array = GameState.inbox.duplicate()
+	mails.reverse()
+	for mail in mails:
+		var card := PanelContainer.new()
+		var box := UIKit.style(Color("F7F1E4") if bool(mail.get("read", false)) else Color("FFF4E0"), 10)
+		box.shadow_size = 0
+		box.content_margin_left = 16
+		box.content_margin_right = 16
+		box.content_margin_top = 10
+		box.content_margin_bottom = 10
+		card.add_theme_stylebox_override("panel", box)
+		card.custom_minimum_size = Vector2(1180, 0)
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 4)
+		card.add_child(col)
+		var head := HBoxContainer.new()
+		head.add_theme_constant_override("separation", 12)
+		col.add_child(head)
+		head.add_child(UIKit.avatar(str(mail.get("from", "?")).left(1), UIKit.TERRA if str(mail.get("from", "")).begins_with("Marge") else UIKit.BLUE, 40))
+		var subject := UIKit.label(str(mail.get("subject", "")), 28, UIKit.DARK, "title", false)
+		subject.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		subject.custom_minimum_size = Vector2(500, 40)
+		subject.clip_text = true
+		head.add_child(subject)
+		var from := UIKit.label(str(mail.get("from", "")), 24, UIKit.WOOD, "small", false)
+		from.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		head.add_child(from)
+		var text := UIKit.label(str(mail.get("body", "")), 24, UIKit.DARK, "small")
+		text.custom_minimum_size = Vector2(1140, 0)
+		text.max_lines_visible = 8
+		col.add_child(text)
 		mail["read"] = true
-		body.add_child(card)
-		y += 156
+		column.add_child(card)
 
 
 func _listings() -> void:
-	var y := 12.0
+	var column := VBoxContainer.new()
+	column.position = Vector2(12, 12)
+	column.add_theme_constant_override("separation", 10)
+	column.custom_minimum_size = Vector2(1180, 0)
+	body.add_child(column)
 	for office in Tuning.get_value("offices", []):
 		var id := str(office.get("id", ""))
 		var met := GameState.office_gate_met(id)
 		var here := GameState.office_id == id
-		var text := "%s   $%s\nEarned $%d / $%d    Jobs %d / %d    Rep %d / %d" % [
-			office.get("name", id),
-			str(office.get("cost", 0)),
-			GameState.total_earned,
-			int(office.get("earned", 0)),
-			GameState.jobs_done,
-			int(office.get("jobs", 0)),
-			GameState.rep_rank(),
-			int(office.get("rep", 0)),
-		]
-		var card := UIKit.label(text, 18, UIKit.DARK)
-		card.position = Vector2(16, y)
-		card.size = Vector2(700, 70)
-		body.add_child(card)
+		var card := PanelContainer.new()
+		var box := UIKit.style(Color("E4EBD6") if here else Color("F7F1E4"), 10)
+		box.shadow_size = 0
+		box.content_margin_left = 16
+		box.content_margin_right = 16
+		box.content_margin_top = 8
+		box.content_margin_bottom = 8
+		card.add_theme_stylebox_override("panel", box)
+		card.custom_minimum_size = Vector2(1180, 0)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 14)
+		card.add_child(row)
+		var text := VBoxContainer.new()
+		text.add_theme_constant_override("separation", 2)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		var head := HBoxContainer.new()
+		head.add_theme_constant_override("separation", 12)
+		text.add_child(head)
+		head.add_child(UIKit.label(str(office.get("name", id)), 28, UIKit.DARK, "title", false))
+		var price := UIKit.label("$%s" % str(office.get("cost", 0)), 24, UIKit.SAGE, "small", false)
+		price.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		head.add_child(price)
+		text.add_child(UIKit.label("Earned $%d / $%d   ·   Jobs %d / %d   ·   Rep %d / %d" % [
+			GameState.total_earned, int(office.get("earned", 0)), GameState.jobs_done, int(office.get("jobs", 0)), GameState.rep_rank(), int(office.get("rep", 0))], 24, UIKit.DARK, "small", false))
 		if not here and bool(office.get("playable", false)):
 			var btn := UIKit.button("Move in" if met else "Locked", UIKit.SAGE if met else UIKit.BLUE)
-			btn.position = Vector2(760, y + 8)
-			btn.size = Vector2(220, 56)
-			btn.custom_minimum_size = Vector2(220, 56)
+			btn.custom_minimum_size = Vector2(200, 56)
+			btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 			btn.disabled = not met
 			btn.pressed.connect(_move_office.bind(id))
-			body.add_child(btn)
+			row.add_child(btn)
 		elif here:
-			var tag := UIKit.label("You are here", 18, UIKit.SAGE, "title")
-			tag.position = Vector2(780, y + 16)
-			body.add_child(tag)
-		y += 86
+			var tag := UIKit.label("You are here", 24, UIKit.SAGE, "title", false)
+			tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			row.add_child(tag)
+		else:
+			var later := UIKit.label("Coming later", 24, UIKit.WOOD, "small", false)
+			later.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			row.add_child(later)
+		column.add_child(card)
 
 
 func _buy_decor(id: String) -> void:
@@ -467,6 +509,160 @@ func _money() -> String:
 func _refresh_money() -> void:
 	if balance:
 		balance.text = _money()
+
+
+func _sidebar() -> void:
+	# The right-hand column only exists in a wide window; the pages fit the
+	# small one on their own. Ads, Marge's tip, the weather, a price mover.
+	var view := get_viewport_rect().size
+	if view.x < 1600.0:
+		return
+	var side := VBoxContainer.new()
+	side.name = "DeskSide"
+	side.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	side.add_theme_constant_override("separation", 14)
+	body.add_child(side)
+	side.layout_mode = 1
+	side.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
+	side.offset_left = -470
+	side.offset_right = -14
+	side.offset_top = 12
+	side.offset_bottom = -12
+	var day := GameState.day
+	var ads: Array = [
+		["TropicalForest", "Lightning deal, no rush. %s" % _deal_name(), "Order from the Forest page. It waits for you.", UIKit.SAGE, "box"],
+		["Toucan Prime", "Express shipping, free, forever.", "One payment. The toucan naps on your parcels.", UIKit.MUSTARD, "bird"],
+		["Corner Movers", "Jobs on the board, new every morning.", "Pad the fragile. Heavy goes low.", UIKit.TERRA, "truck"],
+		["The Till", "Serve by hand for the whole tip.", "Click a customer before the till rings them up.", UIKit.BLUE, "mug"],
+	]
+	var ad: Array = ads[day % ads.size()]
+	side.add_child(_side_card(str(ad[0]), str(ad[1]), str(ad[2]), ad[3], str(ad[4])))
+	var tips: Array = [
+		"Heavy on the bottom, fragile in padding, and the rest sorts itself.",
+		"Buy what's cheap today and sleep on it. Prices move overnight.",
+		"The alley is quicker. The alley is bumpier. Pick one.",
+		"A plant and a lamp raise the vibe more than a second beanbag.",
+		"Goals pay cash and Rep. The clipboard keeps the list.",
+		"If a box meows, open it before the drive.",
+	]
+	side.add_child(_side_card("Marge's tip", str(tips[day % tips.size()]), "", UIKit.WOOD, "note"))
+	var weather := "clear"
+	for job in GameState.generated_jobs:
+		var drive: Dictionary = JobDB.get_drive(str(job.get("drive", "")))
+		if not drive.is_empty():
+			weather = str(drive.get("weather", "clear"))
+			break
+	side.add_child(_side_card("Weather", "Rain on the board today." if weather == "rain" else "Clear skies for the drives.", "Rain makes stops longer. Brake early." if weather == "rain" else "A good day for the alley.", UIKit.BLUE, "rain" if weather == "rain" else "sun"))
+	var mover := _price_mover()
+	if not mover.is_empty():
+		side.add_child(_side_card("Market", "%s %s %d%%" % [mover.get("name", ""), "up" if float(mover.get("change", 0.0)) > 0.0 else "down", absi(int(round(float(mover.get("change", 0.0)) * 100.0)))], "Yesterday $%d, today $%d." % [int(mover.get("before", 0)), int(mover.get("now", 0))], UIKit.SAGE if float(mover.get("change", 0.0)) > 0.0 else UIKit.LOSS, "chart"))
+
+
+func _deal_name() -> String:
+	var Catalog = preload("res://scripts/catalog.gd")
+	var deals: Array = Catalog.deal_skus(GameState.day)
+	if deals.is_empty():
+		return "Today's deal is napping."
+	return "%s today." % Catalog.display_name(str(deals[0]))
+
+
+func _price_mover() -> Dictionary:
+	var best: Dictionary = {}
+	for good in ItemDB.trade_goods():
+		var id := str(good.get("id", ""))
+		var series: Array = GameState.history.get(id, [])
+		if series.size() < 2:
+			continue
+		var before := float(series[series.size() - 2])
+		var now := float(series[series.size() - 1])
+		if before <= 0.0:
+			continue
+		var change := (now - before) / before
+		if best.is_empty() or absf(change) > absf(float(best.get("change", 0.0))):
+			best = {"name": good.get("name", id), "change": change, "before": before, "now": now}
+	return best
+
+
+func _side_card(title: String, headline: String, text: String, accent: Color, picture: String) -> PanelContainer:
+	var card := PanelContainer.new()
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var box := UIKit.style(Color("F7F1E4"), 12, 3, accent)
+	box.shadow_size = 0
+	box.content_margin_left = 14
+	box.content_margin_right = 14
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	card.add_theme_stylebox_override("panel", box)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 12)
+	card.add_child(row)
+	var art := Control.new()
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	art.custom_minimum_size = Vector2(72, 72)
+	art.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	art.draw.connect(_draw_picture.bind(art, picture, accent))
+	row.add_child(art)
+	var col := VBoxContainer.new()
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_theme_constant_override("separation", 2)
+	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(col)
+	col.add_child(UIKit.label(title, 24, accent, "title", false))
+	var head := UIKit.label(headline, 24, UIKit.DARK, "small")
+	head.custom_minimum_size = Vector2(330, 0)
+	head.max_lines_visible = 2
+	col.add_child(head)
+	if text != "":
+		var line := UIKit.label(text, 24, UIKit.WOOD, "small")
+		line.custom_minimum_size = Vector2(330, 0)
+		line.max_lines_visible = 2
+		col.add_child(line)
+	return card
+
+
+func _draw_picture(art: Control, picture: String, accent: Color) -> void:
+	var c := Vector2(36, 36)
+	art.draw_circle(c, 34.0, Color(accent, 0.18))
+	match picture:
+		"box":
+			art.draw_rect(Rect2(14, 22, 44, 34), UIKit.CARD)
+			art.draw_rect(Rect2(14, 22, 44, 8), UIKit.CARD.darkened(0.2))
+			art.draw_rect(Rect2(33, 22, 6, 34), Color("B98451"))
+		"bird":
+			art.draw_circle(c + Vector2(-4, 4), 18.0, UIKit.DARK)
+			art.draw_circle(c + Vector2(10, -10), 10.0, UIKit.DARK)
+			art.draw_colored_polygon(PackedVector2Array([c + Vector2(16, -12), c + Vector2(38, -6), c + Vector2(16, -2)]), UIKit.MUSTARD)
+			art.draw_circle(c + Vector2(12, -12), 2.5, UIKit.CREAM_CARD)
+		"truck":
+			art.draw_rect(Rect2(10, 24, 34, 24), UIKit.TERRA)
+			art.draw_rect(Rect2(44, 32, 16, 16), UIKit.TERRA.darkened(0.15))
+			art.draw_circle(Vector2(20, 52), 6.0, UIKit.DARK)
+			art.draw_circle(Vector2(50, 52), 6.0, UIKit.DARK)
+		"mug":
+			art.draw_rect(Rect2(18, 22, 28, 30), UIKit.CREAM_CARD)
+			art.draw_arc(Vector2(48, 36), 9.0, -PI * 0.5, PI * 0.5, 10, UIKit.CREAM_CARD, 5.0)
+			art.draw_rect(Rect2(18, 22, 28, 6), Color("5A3B2A"))
+		"note":
+			art.draw_rect(Rect2(18, 16, 36, 40), UIKit.MUSTARD)
+			for i in 3:
+				art.draw_line(Vector2(24, 28 + i * 9), Vector2(48, 28 + i * 9), UIKit.DARK, 2.0)
+		"rain":
+			art.draw_circle(c + Vector2(-8, -6), 12.0, UIKit.CREAM_CARD)
+			art.draw_circle(c + Vector2(8, -8), 14.0, UIKit.CREAM_CARD)
+			art.draw_rect(Rect2(c.x - 20, c.y - 6, 40, 12), UIKit.CREAM_CARD)
+			for i in 4:
+				art.draw_line(c + Vector2(-14 + i * 9, 10), c + Vector2(-18 + i * 9, 22), UIKit.BLUE, 3.0)
+		"sun":
+			art.draw_circle(c, 14.0, UIKit.MUSTARD)
+			for i in 8:
+				var a := float(i) * TAU / 8.0
+				art.draw_line(c + Vector2(cos(a), sin(a)) * 19.0, c + Vector2(cos(a), sin(a)) * 27.0, UIKit.MUSTARD, 3.0)
+		"chart":
+			var pts := PackedVector2Array([Vector2(12, 52), Vector2(26, 40), Vector2(38, 46), Vector2(50, 28), Vector2(60, 22)])
+			art.draw_polyline(pts, accent, 4.0, true)
+		_:
+			art.draw_circle(c, 10.0, accent)
 
 
 func _show_day_card(summary: Dictionary) -> void:

@@ -124,6 +124,45 @@ static func material_count(root: Node) -> int:
 	return ids.size()
 
 
+static var _polished: Dictionary = {}
+
+
+static func _polished_copy(base: StandardMaterial3D) -> StandardMaterial3D:
+	# One polished twin per source material, so shared materials stay shared
+	# and the two-material cap still holds.
+	if base.has_meta("polished"):
+		return base
+	var key := base.get_instance_id()
+	if _polished.has(key):
+		return _polished[key]
+	var copy := base.duplicate() as StandardMaterial3D
+	copy.roughness = minf(copy.roughness, 0.62)
+	copy.specular_mode = BaseMaterial3D.SPECULAR_SCHLICK_GGX
+	copy.metallic_specular = 0.3
+	copy.set_meta("polished", true)
+	_polished[key] = copy
+	return copy
+
+
+static func polish(root: Node) -> void:
+	# Props pick up the room lights: a little specular, a little less chalk.
+	if root == null:
+		return
+	for mesh_instance in _mesh_instances(root):
+		var over := mesh_instance.material_override
+		if over is StandardMaterial3D:
+			mesh_instance.material_override = _polished_copy(over as StandardMaterial3D)
+			continue
+		if mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var base: Material = mesh_instance.get_surface_override_material(i)
+			if base == null:
+				base = mesh_instance.mesh.surface_get_material(i)
+			if base is StandardMaterial3D:
+				mesh_instance.set_surface_override_material(i, _polished_copy(base as StandardMaterial3D))
+
+
 static func cap_prop_materials(root: Node, limit := 2) -> void:
 	if root == null or limit < 1:
 		return
@@ -297,6 +336,7 @@ static func make(spec: String) -> Node3D:
 		if "box" in spec:
 			restyle_box(node)
 	cap_prop_materials(node, 2)
+	polish(node)
 	return node
 
 

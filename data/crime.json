@@ -1,0 +1,26 @@
+{
+  "contact": { "name": "Sal", "intro": "Sal runs the lock-up behind the depot. Cash, no receipts, no questions. Marge would hate this.", "line_low": "Keep it quiet and we're fine.", "line_high": "You're warm, kid. Lie low a day." },
+  "heat_decay": 2,
+  "heat_visit": 10,
+  "branches": [
+    { "id": "fence", "name": "Fencing", "blurb": "Goods go to Sal for more than the market pays. Nobody asks where they came from." },
+    { "id": "night", "name": "Night moves", "blurb": "Moves after dark for people who do not want a paper trail. Big pay, bigger heat." },
+    { "id": "knockoff", "name": "Knock-offs", "blurb": "Make it on the bench, sell it as the real thing." }
+  ],
+  "nodes": [
+    { "id": "fence_1", "branch": "fence", "tier": 1, "name": "Small fence", "blurb": "Sell one trade good to Sal at 1.5x.", "cred_cost": 0, "requires": "", "action": "fence", "mult": 1.5, "heat": 2, "cred": 1 },
+    { "id": "fence_2", "branch": "fence", "tier": 2, "name": "Bulk fence", "blurb": "Sell five at once at 1.8x.", "cred_cost": 3, "requires": "fence_1", "action": "fence_bulk", "mult": 1.8, "heat": 5, "cred": 3 },
+    { "id": "fence_3", "branch": "fence", "tier": 3, "name": "The good customer", "blurb": "Sal pays 2.4x for anything restored or mint.", "cred_cost": 8, "requires": "fence_2", "action": "fence_graded", "mult": 2.4, "heat": 6, "cred": 4 },
+    { "id": "night_1", "branch": "night", "tier": 1, "name": "After hours", "blurb": "Take a no-questions move at 1.6x pay. The route is dark.", "cred_cost": 2, "requires": "", "action": "night_job", "mult": 1.6, "heat": 4, "cred": 2 },
+    { "id": "night_2", "branch": "night", "tier": 2, "name": "Unmarked truck", "blurb": "Night moves pay 2.0x.", "cred_cost": 6, "requires": "night_1", "action": "night_job", "mult": 2.0, "heat": 6, "cred": 3 },
+    { "id": "night_3", "branch": "night", "tier": 3, "name": "The quiet route", "blurb": "Night moves pay 2.6x and the alley never costs heat.", "cred_cost": 12, "requires": "night_2", "action": "night_job", "mult": 2.6, "heat": 7, "cred": 5 },
+    { "id": "knock_1", "branch": "knockoff", "tier": 1, "name": "Close enough", "blurb": "Sell a made thing as the branded one at 1.7x.", "cred_cost": 2, "requires": "", "action": "knockoff", "mult": 1.7, "heat": 3, "cred": 2 },
+    { "id": "knock_2", "branch": "knockoff", "tier": 2, "name": "Convincing label", "blurb": "Knock-offs sell at 2.2x.", "cred_cost": 6, "requires": "knock_1", "action": "knockoff", "mult": 2.2, "heat": 5, "cred": 3 },
+    { "id": "knock_3", "branch": "knockoff", "tier": 3, "name": "Provenance", "blurb": "Knock-offs sell at 3.0x and come with a story.", "cred_cost": 12, "requires": "knock_2", "action": "knockoff", "mult": 3.0, "heat": 6, "cred": 5 }
+  ],
+  "visits": [
+    "A clipboard and a polite knock. Two trade goods confiscated and a fine.",
+    "Someone in a grey coat asks about the lock-up. You pay to make them bored.",
+    "Marge hears a rumour. She says nothing, which is worse. Rep slips."
+  ]
+}

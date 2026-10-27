@@ -9,6 +9,8 @@ extends Node
 # CO_FAST_DRIVE=1 finishes each drive after a few seconds instead of driving
 # the whole route.
 
+const Workshop = preload("res://scripts/workshop.gd")
+
 var app: Node
 var fails: Array[String] = []
 var shot_dir := ""
@@ -120,6 +122,8 @@ func _run() -> void:
 	print("money after 3 jobs: $%d, earned $%d, rep %d" % [GameState.money, GameState.total_earned, GameState.rep_rank()])
 
 	await _check_goals()
+	await _check_workbench()
+	await _check_backroom()
 	# Pin the board so every run plays the same generated job.
 	GameState.seed = int(OS.get_environment("CO_SEED")) if OS.get_environment("CO_SEED") != "" else 20261024
 	GameState.refresh_board()
@@ -131,6 +135,88 @@ func _run() -> void:
 		_check(int(GameState.stats.get("board_jobs", 0)) >= 1, "board job counted (%s)" % GameState.stats)
 
 	await _buy_loft()
+
+
+func _check_workbench() -> void:
+	_check(press("Workbench"), "HUD: Workbench button")
+	await wait(0.3)
+	var room := _room()
+	var card: Node = null
+	for layer in room.get_children():
+		if layer is CanvasLayer:
+			card = layer.get_node_or_null("WorkshopCard")
+	_check(card != null, "workbench card opens")
+	if card == null:
+		return
+	await shot("workbench")
+	_check(press("Shelf", card), "workbench: Shelf tab")
+	await wait(0.2)
+	GameState.money += 100
+	_check(press("Buy 5  $20", card), "workbench: buy clay")
+	await wait(0.2)
+	_check(Workshop.have("clay") >= 5, "workbench: clay on the shelf (%d)" % Workshop.have("clay"))
+	_check(press("Make", card), "workbench: Make tab")
+	await wait(0.2)
+	var made := false
+	for attempt in 6:
+		if not press("Make it", card):
+			break
+		await wait(0.2)
+		if Workshop.made_count("mug_glazed") > 0:
+			made = true
+			break
+		if Workshop.have("clay") < 2:
+			Workshop.buy_material("clay", 2)
+			await wait(0.1)
+	_check(made, "workbench: a mug came off the bench")
+	await shot("workbench_made")
+	if made:
+		var money_before := GameState.money
+		_check(press("Sell", card), "workbench: Sell button")
+		await wait(0.2)
+		_check(GameState.money > money_before, "workbench: the mug sold (%d -> %d)" % [money_before, GameState.money])
+	_check(press("Journal", card), "workbench: Journal tab")
+	await wait(0.2)
+	await shot("workbench_journal")
+	_check(press("Close", card), "workbench closes")
+	await wait(0.2)
+
+
+func _check_backroom() -> void:
+	_check(press("Jobs"), "HUD: Jobs button for the back room")
+	await wait(0.3)
+	var room := _room()
+	_check(press("Back room", room), "clipboard Back room tab")
+	await wait(0.3)
+	await shot("backroom")
+	_check(press("Unlock", room), "back room: unlock the first rung")
+	await wait(0.3)
+	var good_id := str(ItemDB.trade_goods()[0].get("id", ""))
+	GameState.goods[good_id] = int(GameState.goods.get(good_id, 0)) + 1
+	press("Back room", room)
+	await wait(0.3)
+	var money_before := GameState.money
+	var fenced := false
+	for btn in _buttons(room):
+		if str(btn.name).begins_with("Fence_"):
+			btn.pressed.emit()
+			fenced = true
+			break
+	await wait(0.3)
+	_check(fenced and GameState.money > money_before, "back room: fenced a good (%d -> %d)" % [money_before, GameState.money])
+	await shot("backroom_fenced")
+	_check(press("Close", room), "clipboard closes after the back room")
+	await wait(0.3)
+
+
+func _box_modal(room: Node) -> Node:
+	# The live box card, if one is open (never one that is on its way out).
+	for layer in room.get_children():
+		if layer is CanvasLayer:
+			var modal: Node = layer.get_node_or_null("BoxModal")
+			if modal != null and is_instance_valid(modal) and not modal.is_queued_for_deletion():
+				return modal
+	return null
 
 
 func _check_goals() -> void:
@@ -438,6 +524,22 @@ func _check_shop() -> void:
 	_check(GameState.money > money_before, "shop: serving by hand paid (%d -> %d)" % [money_before, GameState.money])
 	_check(not GameState.shop_ledger.is_empty() and bool(GameState.shop_ledger[0].get("hand", false)), "shop: ledger says served by hand")
 	await shot("shop_served")
+	# Climb one rung of the ladder on the Till.
+	_check(press("Computer"), "shop: Computer for the Till")
+	await wait(0.3)
+	var computer: Node = app.overlay.get_child(0) if app.overlay.get_child_count() > 0 else null
+	if computer != null:
+		press("Till", computer)
+		await wait(0.2)
+		GameState.money += 200
+		print("note: topped up $200 to test the shop upgrade")
+		_check(press("Upgrade to Coffee cart", computer), "till: Upgrade button")
+		await wait(0.2)
+		_check(GameState.shop_tier == "cart", "till: shop is a coffee cart now (%s)" % GameState.shop_tier)
+		_check("flat_white" in GameState.shop_dishes(), "till: cart menu serves flat whites")
+		await shot("till_ladder")
+		_check(press("x", computer), "till: computer closes")
+		await wait(0.3)
 	await wait(3.0)
 
 
@@ -492,7 +594,12 @@ func _do_job(job_id: String) -> void:
 	if GameState.mode != "job_pack":
 		return
 	await shot("pack_" + job_id)
-	await _pack()
+	if bool(GameState.job.get("def", {}).get("generated", false)):
+		_check(press("Pack the rest for me"), "%s: Pack the rest for me button" % job_id)
+		await wait(0.3)
+		_check(GameState.all_sealed(), "%s: everything boxed and sealed by the helper" % job_id)
+	else:
+		await _pack()
 	if not fails.is_empty():
 		return
 	_check(press("Load the truck"), "%s: Load the truck button" % job_id)
@@ -756,15 +863,52 @@ func _unpack() -> void:
 		_check(bool(room.carried.get(id, false)), "unpack: box %d carried in" % (id + 1))
 		room = _room()
 	await shot("unpack_carried")
-	# Open each box that is now in the room.
+	var generated := bool(GameState.job.get("def", {}).get("generated", false))
+	if generated:
+		# The lazy route: Dana's helpers put every box away.
+		_check(press("Unpack it all for me"), "unpack: Unpack it all for me button")
+		await wait(0.5)
+		var left := 0
+		for item in GameState.job.get("items", []):
+			if str(item.get("state", "")) != "placed":
+				left += 1
+		print("  auto-unpack left %d pieces to place by hand" % left)
+		await shot("unpack_auto")
+	# Open each box that is now in the room. The first box shows its contents
+	# modal: set one piece down from it, then tip the rest out.
+	var first := true
 	for box in GameState.job.get("boxes", []):
 		var id := int(box.get("id", 0))
 		room = _room()
 		var opened := _node_for(room, "boxopen:%d" % id)
 		if opened == null:
+			if generated:
+				continue
 			_fail("unpack: carried box %d is not in the room to open" % (id + 1))
 			return
 		await click_node(room, "boxopen:%d" % id, opened)
+		await wait(0.2)
+		var modal: Node = _box_modal(room)
+		if modal != null:
+			if first:
+				first = false
+				await shot("box_modal")
+				var before_placed := 0
+				for item in GameState.job.get("items", []):
+					if str(item.get("state", "")) == "placed":
+						before_placed += 1
+				if press("Set here", modal):
+					await wait(0.3)
+					var after_placed := 0
+					for item in GameState.job.get("items", []):
+						if str(item.get("state", "")) == "placed":
+							after_placed += 1
+					_check(after_placed >= before_placed, "box modal: Set here placed a piece (%d -> %d)" % [before_placed, after_placed])
+				modal = _box_modal(room)
+			if modal != null:
+				_check(press("Tip it out", modal), "box modal: Tip it out")
+				await wait(0.2)
+				_check(_box_modal(room) == null, "box modal closed after Tip it out")
 		await wait(0.1)
 	for item in GameState.job.get("items", []):
 		if str(item.get("state", "")) == "boxed":

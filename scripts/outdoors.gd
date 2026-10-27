@@ -38,7 +38,8 @@ static func build(parent: Node3D, venue: Dictionary) -> Node3D:
 	var door_x := _door_x(venue)
 	_driveway(root, door_x, z, kind)
 	_road(root, x + w * 0.5, z - 6.0, kind)
-	var keep: Array = [room, Rect2(door_x - 2.0, z - 7.5, 4.0, 7.5)]
+	_parking(root, door_x + 6.4, z - 2.4, kind)
+	var keep: Array = [room, Rect2(door_x - 2.0, z - 7.5, 4.0, 7.5), Rect2(door_x + 2.8, z - 4.2, 7.2, 3.6)]
 	match kind:
 		"park":
 			_pond(root, x + w + 5.5, z + d * 0.5)
@@ -94,6 +95,34 @@ static func _driveway(root: Node3D, door_x: float, z: float, kind: String) -> vo
 	drive.position = Vector3(door_x, -0.03, z - 2.9)
 	drive.name = "Driveway"
 	root.add_child(drive)
+
+
+static func _parking(root: Node3D, cx: float, cz: float, kind: String) -> void:
+	# Three bays off the road, nose-in, for the people who drive here.
+	var lot := Node3D.new()
+	lot.name = "Parking"
+	lot.set_meta("slots", [Vector3(cx - 2.2, 0.0, cz), Vector3(cx, 0.0, cz), Vector3(cx + 2.2, 0.0, cz)])
+	lot.set_meta("entry", Vector3(cx, 0.0, cz - 2.6))
+	root.add_child(lot)
+	var slab := Props.mesh_box(Vector3(7.0, 0.03, 3.0), Color("6E6A6C") if kind == "town" else Color("8A8588"))
+	slab.position = Vector3(cx, -0.03, cz)
+	lot.add_child(slab)
+	for i in 4:
+		var line := Props.mesh_box(Vector3(0.08, 0.01, 2.6), ROAD_LINE)
+		line.position = Vector3(cx - 3.3 + i * 2.2, 0.0, cz)
+		lot.add_child(line)
+	var stop := Props.mesh_box(Vector3(6.8, 0.1, 0.12), Color("C9C2B5"))
+	stop.position = Vector3(cx, 0.0, cz + 1.4)
+	lot.add_child(stop)
+	var sign_post := Props.mesh_box(Vector3(0.06, 1.8, 0.06), POST)
+	sign_post.position = Vector3(cx + 3.7, 0.0, cz + 1.3)
+	lot.add_child(sign_post)
+	var sign := Props.mesh_box(Vector3(0.5, 0.5, 0.04), Color("7FA3B8"))
+	sign.position = Vector3(cx + 3.7, 1.5, cz + 1.3)
+	lot.add_child(sign)
+	var letter := Props.mesh_box(Vector3(0.2, 0.3, 0.01), Color("FFF8EC"))
+	letter.position = Vector3(cx + 3.7, 1.6, cz + 1.33)
+	lot.add_child(letter)
 
 
 static func _road(root: Node3D, cx: float, z: float, kind: String) -> void:

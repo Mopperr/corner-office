@@ -444,6 +444,154 @@ func _content_engine() -> Array:
 	for venue_id in ["studio", "flat"]:
 		if not ItemDB.venues().has(venue_id):
 			found.append("venue %s missing" % venue_id)
+	# The shop ladder: gated by money and Rep, widens the menu, and is saved.
+	GameState.new_game("dana")
+	if Catalog.tiers().size() < 6 or GameState.shop_tier != "stand":
+		found.append("tiers %d / %s" % [Catalog.tiers().size(), GameState.shop_tier])
+	GameState.money = 10
+	if GameState.upgrade_shop() == "":
+		found.append("upgrade with no money")
+	GameState.money = 1000
+	if GameState.upgrade_shop() != "" or GameState.shop_tier != "cart":
+		found.append("upgrade to cart")
+	if GameState.upgrade_shop() == "":
+		found.append("sandwich bar without Rep")
+	GameState.rep_stars = 10
+	if GameState.upgrade_shop() != "" or GameState.shop_tier != "sandwich":
+		found.append("upgrade to sandwich bar")
+	if not GameState.contracts_done.has("tier_cart"):
+		found.append("tier goal")
+	GameState.office_items.append({"uid": "smoke_counter", "item": "coffee_machine", "state": "placed", "x": 2, "y": 0.76, "z": 4, "rot": 0})
+	var dishes := GameState.shop_dishes()
+	if not ("blt" in dishes and "flat_white" in dishes and "drip" in dishes):
+		found.append("tier dishes %s" % str(dishes))
+	if "tasting_menu" in dishes:
+		found.append("restaurant dish served early")
+	SaveManager.save_game()
+	GameState.shop_tier = "stand"
+	if not SaveManager.load_game() or GameState.shop_tier != "sandwich":
+		found.append("shop tier not saved")
+	# The workbench: materials, a make with a con, a sale with a story, fix-ups, and a save.
+	var Workshop = load("res://scripts/workshop.gd")
+	GameState.new_game("dana")
+	GameState.money = 500
+	if Workshop.skill() != 1 or Workshop.recipes().size() < 10:
+		found.append("workshop fresh %d / %d" % [Workshop.skill(), Workshop.recipes().size()])
+	if Workshop.craft("mug_glazed").get("ok", false):
+		found.append("craft without materials")
+	if Workshop.buy_material("clay", 5) != "" or Workshop.have("clay") != 5:
+		found.append("buy material")
+	if str(Workshop.con_of(1).get("name", "")) != "yellow" or str(Workshop.con_of(30).get("name", "")) != "red" or str(Workshop.con_of(-20).get("name", "")) != "grey":
+		found.append("con colours %s %s %s" % [Workshop.con_of(1).get("name", ""), Workshop.con_of(30).get("name", ""), Workshop.con_of(-20).get("name", "")])
+	var made_ok := false
+	for attempt in 8:
+		var result: Dictionary = Workshop.craft("mug_glazed")
+		if bool(result.get("ok", false)):
+			made_ok = true
+			break
+		if Workshop.have("clay") < 2:
+			Workshop.buy_material("clay", 2)
+	if not made_ok or Workshop.made_count("mug_glazed") < 1:
+		found.append("craft never succeeded")
+	if not GameState.contracts_done.has("first_craft"):
+		found.append("craft goal")
+	var before_money := GameState.money
+	var sale: Dictionary = Workshop.sell("mug_glazed", false)
+	if sale.has("error") or GameState.money <= before_money or str(sale.get("story", "")) == "":
+		found.append("craft sale %s" % str(sale))
+	if (Workshop.state().get("journal", []) as Array).is_empty():
+		found.append("journal empty")
+	var ask: Dictionary = Workshop.offer()
+	if ask.is_empty() or Workshop.offer() != ask:
+		found.append("craft offer not stable in a day")
+	# Fix-up: a worn good becomes restored, and a buyer who wants restored takes it.
+	var good_id := str(ItemDB.trade_goods()[0].get("id", ""))
+	GameState.goods[good_id] = 1
+	Workshop.buy_material("cloth", 2)
+	Workshop.buy_material("metal", 2)
+	var fixed: Dictionary = {}
+	for attempt in 6:
+		fixed = Workshop.fix_up(good_id)
+		if not fixed.has("error"):
+			break
+		Workshop.buy_material("cloth", 1)
+		Workshop.buy_material("metal", 1)
+	if fixed.has("error") or Workshop.graded(good_id, "restored") != 1 or int(GameState.goods.get(good_id, 0)) != 0:
+		found.append("fix up %s" % str(fixed))
+	GameState.buyer_offer = {"name": "Nia", "item": good_id, "grade": "restored", "price": 90, "line": ""}
+	var before2 := GameState.money
+	var sold: Dictionary = GameState.sell_to_buyer()
+	if sold.has("error") or GameState.money - before2 != 90 or Workshop.graded(good_id, "restored") != 0:
+		found.append("sell restored to buyer %s" % str(sold))
+	GameState.buyer_offer = {"name": "Nia", "item": good_id, "grade": "mint", "price": 120, "line": ""}
+	if not GameState.sell_to_buyer().has("error"):
+		found.append("sold a mint we do not have")
+	var skill_before: int = Workshop.skill()
+	SaveManager.save_game()
+	GameState.workshop = {}
+	if not SaveManager.load_game() or Workshop.skill() != skill_before or Workshop.have("clay") < 0:
+		found.append("workshop not saved")
+	# The back room: a tree bought with cred, fencing that heats up, a visit, and a save.
+	var Crime = load("res://scripts/crime.gd")
+	GameState.new_game("dana")
+	GameState.money = 300
+	if Crime.nodes().size() < 9 or Crime.cred() != 0 or Crime.heat() != 0:
+		found.append("crime fresh")
+	if Crime.unlock("fence_2") == "":
+		found.append("unlocked a rung without the one below")
+	if Crime.unlock("fence_1") != "" or not Crime.unlocked("fence_1"):
+		found.append("unlock fence_1")
+	var fence_good := str(ItemDB.trade_goods()[0].get("id", ""))
+	if not Crime.fence(fence_good, 1).has("error"):
+		found.append("fenced a good we do not own")
+	GameState.goods[fence_good] = 6
+	var cash_before := GameState.money
+	var fenced: Dictionary = Crime.fence(fence_good, 1)
+	if fenced.has("error") or GameState.money <= cash_before or Crime.cred() != 1 or Crime.heat() != 2:
+		found.append("fence %s cred %d heat %d" % [str(fenced), Crime.cred(), Crime.heat()])
+	if not Crime.fence(fence_good, 5).has("error"):
+		found.append("bulk fence before tier 2")
+	GameState.crime["heat"] = 9
+	Crime.fence(fence_good, 1)
+	var lie_low := 0
+	for mail in GameState.inbox:
+		if str(mail.get("subject", "")) == "Lie low":
+			lie_low += 1
+	if int(GameState.crime.get("visits", 0)) != 1 or Crime.heat() >= 9 or lie_low != 1:
+		found.append("visit heat %d visits %d mail %d" % [Crime.heat(), int(GameState.crime.get("visits", 0)), lie_low])
+	GameState.crime["heat"] = 6
+	GameState.advance_day()
+	if Crime.heat() != 4:
+		found.append("heat decay %d" % Crime.heat())
+	# Two more visits make a raid: goods halved, a fine, the shop shut.
+	GameState.crime["visits"] = 2
+	GameState.crime["heat"] = 9
+	GameState.goods[fence_good] = 4
+	GameState.money = 200
+	Crime.fence(fence_good, 1)
+	if int(GameState.crime.get("raids", 0)) != 1 or int(GameState.goods.get(fence_good, 0)) != 1 or GameState.money >= 200 or not Crime.raided_today():
+		found.append("raid goods %d money %d raided %s" % [int(GameState.goods.get(fence_good, 0)), GameState.money, Crime.raided_today()])
+	# Broke and idle, and Sal writes.
+	GameState.money = 20
+	var mail_before := GameState.inbox.size()
+	GameState.advance_day()
+	if GameState.inbox.size() != mail_before + 1 or not bool(GameState.crime.get("nudged", false)):
+		found.append("sal nudge")
+	GameState.money = 300
+	GameState.crime["cred"] = 20
+	GameState.tutorial_done = true
+	GameState.set_mode("office")
+	GameState.office_phase = "live"
+	var night_err: String = Crime.take_night_job() if Crime.unlock("night_1") == "" else "unlock failed"
+	if night_err != "" or GameState.mode != "job_pack" or not bool(GameState.job.get("def", {}).get("shady", false)):
+		found.append("night job %s (%s)" % [GameState.mode, night_err])
+	if JobDB.get_drive(str(GameState.job.get("def", {}).get("drive", ""))).is_empty():
+		found.append("night drive missing")
+	var cred_before: int = Crime.cred()
+	SaveManager.save_game()
+	GameState.crime = {}
+	if not SaveManager.load_game() or Crime.cred() != cred_before or not Crime.unlocked("night_1"):
+		found.append("crime not saved")
 	# Goals: progress, reward, mail, and a save round trip.
 	GameState.new_game("dana")
 	var money_before := GameState.money
@@ -1017,9 +1165,26 @@ func _qa_regressions() -> Array:
 			found.append("ssao")
 		if absf(office.glow_intensity - 0.4) > 0.001 or absf(office.glow_strength - 0.8) > 0.001 or office.glow_blend_mode != Environment.GLOW_BLEND_MODE_SOFTLIGHT:
 			found.append("glow")
+	# Ambient life: passers-by on the pavement, and a neighbour who wanders in.
+	var street_count: int = (play.get("street") as Array).size()
+	if street_count < 4:
+		found.append("street walkers %d" % street_count)
+	GameState.set_mode("office")
+	GameState.office_phase = "live"
+	if not (play.call("_browse_targets") as Array).is_empty():
+		if not play.call("_spawn_browser") or (play.get("browser") as Dictionary).is_empty():
+			found.append("browser did not spawn")
+	# A parking lot with three bays, a car that takes one, and a pool of things to think.
+	if play.call("_parking_lot") == null or (play.call("_parking_lot").get_meta("slots", []) as Array).size() != 3:
+		found.append("parking lot")
+	if str(play.call("_chat", "arriving")) == "" or str(play.call("_chat_browsing", "sit")) == "" or str(play.call("_chat", "passing")) == "":
+		found.append("chatter pool")
+	play.set("browser", {})
+	if not play.call("_arrive_car", false) or (play.get("cars") as Array).size() != 1 or int(play.call("_free_slot")) != 1:
+		found.append("car did not arrive (%d cars)" % (play.get("cars") as Array).size())
 	var play_cam: Camera3D = play.get("cam")
 	var garage_center := Vector3(3.0, 0.9, 4.0)
-	if play_cam == null or play_cam.position.distance_to(Vector3(11.2, 9.9, 12.0)) > 0.02 or absf(play_cam.size - maxf(6.0, 8.0) * 1.3) > 0.001:
+	if play_cam == null or play_cam.position.distance_to(Vector3(11.6, 9.9, 12.4)) > 0.02 or absf(play_cam.size - maxf(6.0, 8.0) * 1.12) > 0.001:
 		found.append("garage cam %s" % (play_cam.position if play_cam else "missing"))
 	elif (-play_cam.global_transform.basis.z).dot((garage_center - play_cam.global_position).normalized()) < 0.999:
 		found.append("garage look")

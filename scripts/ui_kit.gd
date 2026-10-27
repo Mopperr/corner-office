@@ -450,7 +450,16 @@ static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> vo
 		var row2 := label(moment, 28, BLUE, "small")
 		row2.custom_minimum_size = Vector2(960, 0)
 		column.add_child(row2)
+	passthrough(panel)
 	var tw := host.create_tween()
 	tw.tween_interval(8.5)
 	tw.tween_property(panel, "modulate:a", 0.0, 0.45)
 	tw.tween_callback(layer.queue_free)
+
+
+static func passthrough(node: Node) -> void:
+	# Informational UI never eats a click meant for the room behind it.
+	if node is Control:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		passthrough(child)

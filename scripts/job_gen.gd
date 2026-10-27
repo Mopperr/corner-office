@@ -144,13 +144,22 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 		recipe.append(group)
 		total += count
 	if twist == "mystery":
-		recipe.append({"item": "mystery_part", "count": 3})
+		_add_to_recipe(recipe, "mystery_part", 3)
 	if twist == "fragile":
-		recipe.append({"item": "bowl", "count": 2})
+		_add_to_recipe(recipe, "bowl", 2)
 	if twist == "heavy":
-		recipe.append({"item": "tool_box", "count": 2})
-		recipe.append({"item": "filing_cabinet", "count": 1})
+		_add_to_recipe(recipe, "tool_box", 2)
+		_add_to_recipe(recipe, "filing_cabinet", 1)
 	return recipe
+
+
+static func _add_to_recipe(recipe: Array, item: String, count: int) -> void:
+	# Merge into an existing group so two pieces never share a number.
+	for group in recipe:
+		if str(group.get("item", "")) == item:
+			group["count"] = int(group.get("count", 0)) + count
+			return
+	recipe.append({"item": item, "count": count})
 
 
 static func _drive(rng: RandomNumberGenerator, id: String, twist: String) -> Dictionary:

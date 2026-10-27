@@ -20,7 +20,7 @@
   "summary_email": {
     "from": "Marge Holloway",
     "subject": "The till, day {day}",
-    "body": "The shop took ${earned} from {visitors} visitors. Vibe sat at {vibe}. Nobody was rushed, and the base of the day is still yours.\n\nLeave the door open. I'll count it again tomorrow.\n\n\u2014 Marge"
+    "body": "The shop took ${earned} from {visitors} visitors. Vibe sat at {vibe}. Nobody was rushed, and the base of the day is still yours.\n\nLeave the door open. I'll count it again tomorrow.\n\n— Marge"
   },
   "fixtures": [
     {
@@ -171,6 +171,104 @@
       "name": "Iced tea",
       "price": 3,
       "tag": "juice"
+    },
+    {
+      "id": "flat_white",
+      "name": "Flat white",
+      "price": 5,
+      "tag": "coffee",
+      "tier": "cart"
+    },
+    {
+      "id": "cold_brew",
+      "name": "Cold brew",
+      "price": 5,
+      "tag": "juice",
+      "tier": "cart"
+    },
+    {
+      "id": "blt",
+      "name": "BLT",
+      "price": 8,
+      "tag": "sandwich",
+      "tier": "sandwich"
+    },
+    {
+      "id": "veggie_wrap",
+      "name": "Veggie wrap",
+      "price": 7,
+      "tag": "sandwich",
+      "tier": "sandwich"
+    },
+    {
+      "id": "soup_cup",
+      "name": "Cup of soup",
+      "price": 6,
+      "tag": "plate",
+      "tier": "sandwich"
+    },
+    {
+      "id": "chicken_shawarma",
+      "name": "Chicken shawarma",
+      "price": 11,
+      "tag": "grill",
+      "tier": "shawarma"
+    },
+    {
+      "id": "falafel_wrap",
+      "name": "Falafel wrap",
+      "price": 9,
+      "tag": "grill",
+      "tier": "shawarma"
+    },
+    {
+      "id": "garlic_fries",
+      "name": "Garlic fries",
+      "price": 5,
+      "tag": "plate",
+      "tier": "shawarma"
+    },
+    {
+      "id": "croissant",
+      "name": "Almond croissant",
+      "price": 6,
+      "tag": "snack",
+      "tier": "cafe"
+    },
+    {
+      "id": "eggs_benedict",
+      "name": "Eggs Benedict",
+      "price": 14,
+      "tag": "plate",
+      "tier": "cafe"
+    },
+    {
+      "id": "affogato",
+      "name": "Affogato",
+      "price": 7,
+      "tag": "coffee",
+      "tier": "cafe"
+    },
+    {
+      "id": "tasting_menu",
+      "name": "Tasting menu",
+      "price": 48,
+      "tag": "plate",
+      "tier": "restaurant"
+    },
+    {
+      "id": "steak_frites",
+      "name": "Steak frites",
+      "price": 32,
+      "tag": "plate",
+      "tier": "restaurant"
+    },
+    {
+      "id": "creme_brulee",
+      "name": "Crème brûlée",
+      "price": 12,
+      "tag": "plate",
+      "tier": "restaurant"
     }
   ],
   "markups": [
@@ -318,5 +416,80 @@
   },
   "serve_seconds": 9,
   "hand_tip_bonus": 1.6,
-  "queue_max": 3
+  "queue_max": 3,
+  "tiers": [
+    {
+      "id": "stand",
+      "name": "Lemonade stand",
+      "cost": 0,
+      "rep": 0,
+      "blurb": "A pitcher on the counter. It begins here.",
+      "tags": [
+        "juice",
+        "coffee",
+        "snack",
+        "goods",
+        "plant"
+      ]
+    },
+    {
+      "id": "cart",
+      "name": "Coffee cart",
+      "cost": 120,
+      "rep": 0,
+      "blurb": "Proper cups, a grinder, and a queue that forms by itself.",
+      "dishes": [
+        "flat_white",
+        "cold_brew"
+      ]
+    },
+    {
+      "id": "sandwich",
+      "name": "Sandwich bar",
+      "cost": 350,
+      "rep": 1,
+      "blurb": "Bread, a toaster, and lunch for the whole street.",
+      "dishes": [
+        "blt",
+        "veggie_wrap",
+        "soup_cup"
+      ]
+    },
+    {
+      "id": "shawarma",
+      "name": "Shawarma grill",
+      "cost": 800,
+      "rep": 2,
+      "blurb": "The spit turns all day. People follow their nose.",
+      "dishes": [
+        "chicken_shawarma",
+        "falafel_wrap",
+        "garlic_fries"
+      ]
+    },
+    {
+      "id": "cafe",
+      "name": "Corner Café",
+      "cost": 1600,
+      "rep": 3,
+      "blurb": "Table service, pastries, and your name on the window.",
+      "dishes": [
+        "croissant",
+        "eggs_benedict",
+        "affogato"
+      ]
+    },
+    {
+      "id": "restaurant",
+      "name": "Top-end restaurant",
+      "cost": 3500,
+      "rep": 4,
+      "blurb": "Tasting menu, white tablecloths, a waiting list.",
+      "dishes": [
+        "tasting_menu",
+        "steak_frites",
+        "creme_brulee"
+      ]
+    }
+  ]
 }
