@@ -2224,20 +2224,47 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 		var at := spot + Vector3(-1.1 + col * 0.5 - row * 0.55, 0.0, -1.1 - col * 0.5 - row * 0.55)
 		if at.x < x0 + 0.5 or at.x > x0 + w - 0.5 or at.z < z0 + 0.5 or at.z > z0 + d - 0.5:
 			continue
-		if _spot_free(at, taken) and not _spot_blocked(at):
+		if _spot_free(at, taken) and not _spot_blocked(at) and not _spot_hidden(at):
 			return at
-	# The pattern ran out of room: take the first free square, far corner first,
-	# so nothing lands between the boxes and the camera.
+	# The pattern ran out of room: sweep the free squares that still sit
+	# behind the box row, nearest the camera first, so a tall piece in front
+	# never hides what comes out of a box.
+	var squares: Array = []
 	var cz := z0 + 0.8
 	while cz < z0 + d - 0.5:
 		var cx := x0 + 0.8
 		while cx < x0 + w - 0.5:
 			var at2 := Vector3(cx, 0.0, cz)
-			if at2.x + at2.z < spot.x + spot.z - 0.3 and _spot_free(at2, taken) and not _spot_blocked(at2):
-				return at2
+			if at2.x + at2.z < spot.x + spot.z - 0.3:
+				squares.append(at2)
 			cx += 0.6
 		cz += 0.6
+	squares.sort_custom(func(a, b): return (a.x + a.z) > (b.x + b.z))
+	for at2 in squares:
+		if _spot_free(at2, taken) and not _spot_blocked(at2) and not _spot_hidden(at2):
+			return at2
+	for at2 in squares:
+		if _spot_free(at2, taken) and not _spot_blocked(at2):
+			return at2
 	return Vector3(x0 + w * 0.5, 0.0, z0 + d * 0.5)
+
+
+func _spot_hidden(at: Vector3) -> bool:
+	# A square the camera cannot see (a tall piece stands in the way) is no
+	# place to put something the player has to click.
+	if cam == null:
+		return false
+	var world := get_world_3d()
+	if world == null or world.direct_space_state == null:
+		return false
+	var target := at + Vector3(0, 0.15, 0)
+	var query := PhysicsRayQueryParameters3D.create(cam.global_position, target)
+	query.collision_mask = Props.MASK_QUERY
+	query.exclude = _cutaway_rids()
+	var hit := world.direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return false
+	return (hit["position"] as Vector3).distance_to(target) > 0.35
 
 
 func _spot_blocked(at: Vector3) -> bool:
