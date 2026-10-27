@@ -2503,10 +2503,11 @@ func _build_hud() -> void:
 	top.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.TERRA))
 	layer.add_child(top)
 	UIKit.pin_top_left(top, 16, 12, 760, 112)
-	status = UIKit.label("", 36, UIKit.DARK)
+	status = UIKit.label("", 30, UIKit.DARK, "small")
+	status.name = "Status"
 	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(status)
-	UIKit.fill(status, 16, 12, 16, 12)
+	UIKit.fill(status, 16, 8, 16, 8)
 	var hint_bar := Panel.new()
 	hint_bar.name = "HintBar"
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2732,7 +2733,7 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 		if str(item.get("state", "")) in ["boxed", "loose"] and bool(carried.get(int(item.get("box", -1)), false)):
 			waiting += 1
 	if waiting > 0:
-		_act_button(layer, "Unpack it all for me", Vector2(760, 36), func():
+		_act_button(layer, "Unpack it all for me", Vector2(860, y), func():
 			for box in GameState.job.get("boxes", []):
 				var id := int(box.get("id", 0))
 				if bool(carried.get(id, false)):
@@ -3340,7 +3341,7 @@ func _mode_hint() -> String:
 	var rep := "Rep %d" % GameState.rep_rank()
 	var today := GameState.money - int(GameState.day_log.get("money_start", GameState.money))
 	var ledger := "today %s$%d" % ["+" if today >= 0 else "−", absi(today)]
-	var head := "%s   %s   %s   %s" % [venue.get("name", "Office"), money, ledger, rep]
+	var head := "%s   %s\n%s   %s" % [venue.get("name", "Office"), money, ledger, rep]
 	if status:
 		if GameState.mode == "office" and GameState.office_phase == "live":
 			head += "   Vibe %d" % GameState.vibe_score()
