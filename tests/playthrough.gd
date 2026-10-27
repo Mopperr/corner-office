@@ -475,8 +475,9 @@ func _check_view() -> void:
 	room.zoom_view(-0.2)
 	_check(absf(float(room.view_zoom) - 0.8) < 0.001, "zoom applies (got %s)" % room.view_zoom)
 	room.zoom_view(0.2)
+	# The Room score card only shows while there is placing to do; a live corner keeps it hidden.
 	var goals: Node = room.goals_panel
-	_check(goals != null and goals.visible, "goals checklist is on screen")
+	_check(goals != null and not goals.visible, "room score card stays hidden once the corner is live")
 
 
 func _check_shop() -> void:
