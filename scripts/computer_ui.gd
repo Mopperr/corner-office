@@ -168,11 +168,11 @@ func _market() -> void:
 	# MARKET_LAYOUT_V2: the details column leaves room for two lines of copy at each step.
 	var list := ItemList.new()
 	list.position = Vector2(12, 12)
-	list.size = Vector2(280, 560)
-	list.custom_minimum_size = Vector2(280, 200)
+	list.size = Vector2(400, 524)
+	list.custom_minimum_size = Vector2(400, 200)
 	list.focus_mode = Control.FOCUS_ALL
 	list.add_theme_font_override("font", UIKit.body_font())
-	list.add_theme_font_size_override("font_size", UIKit.font_px(28))
+	list.add_theme_font_size_override("font_size", UIKit.small_px(24))
 	list.add_theme_color_override("font_color", UIKit.DARK)
 	list.add_theme_color_override("font_hovered_color", UIKit.DARK)
 	list.add_theme_color_override("font_selected_color", UIKit.CREAM_CARD)
@@ -189,20 +189,20 @@ func _market() -> void:
 		selected = str(goods[0].get("id", ""))
 	var item := ItemDB.get_item(selected)
 	var title := UIKit.label(str(item.get("name", "Market")), 28, UIKit.DARK, "title", false)
-	title.position = Vector2(310, 4)
+	title.position = Vector2(440, 4)
 	title.size = Vector2(480, 44)
 	title.custom_minimum_size = Vector2(minf(480.0, maxf(180.0, float(title.text.length()) * 16.0)), 44)
 	body.add_child(title)
 	var flavor := UIKit.label(str(item.get("flavor", "")), 28, UIKit.DARK)
-	flavor.position = Vector2(310, 50)
-	flavor.size = Vector2(860, 96)
+	flavor.position = Vector2(440, 50)
+	flavor.size = Vector2(760, 96)
 	flavor.custom_minimum_size = Vector2(480, 44)
 	flavor.max_lines_visible = 2
 	body.add_child(flavor)
 	chart = Control.new()
 	chart.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chart.position = Vector2(310, 156)
-	chart.size = Vector2(560, 80)
+	chart.position = Vector2(440, 150)
+	chart.size = Vector2(700, 80)
 	chart.draw.connect(_draw_chart)
 	body.add_child(chart)
 	var series: Array = GameState.history.get(selected, [])
@@ -210,29 +210,40 @@ func _market() -> void:
 	if series.size() >= 2:
 		yesterday = "Yesterday $%d" % int(round(float(series[series.size() - 2])))
 	var ylbl := UIKit.label("Dana's note: %s    You have %d" % [yesterday, int(GameState.goods.get(selected, 0))], 28, UIKit.BLUE)
-	ylbl.position = Vector2(310, 246)
-	ylbl.size = Vector2(860, 44)
+	ylbl.position = Vector2(440, 240)
+	ylbl.size = Vector2(760, 44)
 	ylbl.custom_minimum_size = Vector2(480, 44)
 	body.add_child(ylbl)
 	var buy := UIKit.button("BUY", UIKit.GREEN)
-	buy.position = Vector2(310, 420)
+	buy.position = Vector2(440, 470)
+	buy.size = Vector2(170, 56)
+	buy.custom_minimum_size = Vector2(170, 56)
+	buy.position = Vector2(440, 470)
 	buy.size = Vector2(180, 56)
 	buy.custom_minimum_size = Vector2(180, 56)
 	buy.pressed.connect(_buy)
 	body.add_child(buy)
 	var sell := UIKit.button("SELL", UIKit.TERRA)
-	sell.position = Vector2(500, 420)
+	sell.position = Vector2(630, 470)
+	sell.size = Vector2(170, 56)
+	sell.custom_minimum_size = Vector2(170, 56)
+	sell.position = Vector2(630, 470)
 	sell.size = Vector2(180, 56)
 	sell.custom_minimum_size = Vector2(180, 56)
 	sell.pressed.connect(_sell)
 	body.add_child(sell)
 	var nxt := UIKit.button("Next day", UIKit.BLUE)
-	nxt.position = Vector2(690, 420)
+	nxt.position = Vector2(820, 470)
+	nxt.size = Vector2(170, 56)
+	nxt.custom_minimum_size = Vector2(170, 56)
+	nxt.position = Vector2(820, 470)
 	nxt.size = Vector2(180, 56)
 	nxt.custom_minimum_size = Vector2(180, 56)
 	nxt.pressed.connect(func():
 		if not GameState.day_ended.is_connected(_show_day_card):
 			GameState.day_ended.connect(_show_day_card)
+		if pop and is_instance_valid(pop):
+			pop.queue_free()
 		GameState.advance_day()
 		AudioDirector.play_sfx("sfx_notification_soft")
 		_show_page()
@@ -243,13 +254,13 @@ func _market() -> void:
 		var offer: Dictionary = GameState.buyer_offer
 		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 24, UIKit.DARK)
 		line.name = "Offer"
-		line.position = Vector2(310, 300)
-		line.size = Vector2(660, 96)
+		line.position = Vector2(440, 296)
+		line.size = Vector2(760, 150)
 		line.custom_minimum_size = Vector2(490, 44)
-		line.max_lines_visible = 2
+		line.max_lines_visible = 3
 		body.add_child(line)
 		var take := UIKit.button("Sell to them", UIKit.MUSTARD, UIKit.DARK)
-		take.position = Vector2(990, 310)
+		take.position = Vector2(1010, 470)
 		take.size = Vector2(180, 56)
 		take.custom_minimum_size = Vector2(180, 56)
 		take.pressed.connect(_sell_buyer)
@@ -321,33 +332,48 @@ func _sell_buyer() -> void:
 
 
 func _shop() -> void:
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(12, 12)
+	scroll.size = Vector2(1200, 530)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(scroll)
 	var grid := GridContainer.new()
-	grid.columns = 3
-	grid.position = Vector2(12, 12)
-	grid.size = Vector2(1000, 430)
-	grid.add_theme_constant_override("h_separation", 12)
-	grid.add_theme_constant_override("v_separation", 12)
-	body.add_child(grid)
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 14)
+	scroll.add_child(grid)
 	for decor in ItemDB.decor_goods():
 		var id := str(decor.get("id", ""))
-		var card := Panel.new()
-		card.custom_minimum_size = Vector2(320, 120)
-		card.add_theme_stylebox_override("panel", UIKit.style(Color("F7F1E4"), 10))
-		var name := UIKit.label(str(decor.get("name", id)), 18, UIKit.DARK, "title")
-		name.position = Vector2(12, 8)
-		name.size = Vector2(200, 28)
-		card.add_child(name)
-		var flavor := UIKit.label(str(decor.get("flavor", "")), 18, UIKit.DARK)
-		flavor.position = Vector2(12, 38)
-		flavor.size = Vector2(200, 48)
-		card.add_child(flavor)
+		var card := PanelContainer.new()
+		var box := UIKit.style(Color("F7F1E4"), 12)
+		box.shadow_size = 0
+		box.content_margin_left = 16
+		box.content_margin_right = 16
+		box.content_margin_top = 10
+		box.content_margin_bottom = 10
+		card.add_theme_stylebox_override("panel", box)
+		card.custom_minimum_size = Vector2(590, 150)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		card.add_child(row)
+		var text := VBoxContainer.new()
+		text.add_theme_constant_override("separation", 4)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		var name := UIKit.label(str(decor.get("name", id)), 26, UIKit.DARK, "title", false)
+		name.custom_minimum_size = Vector2(400, 36)
+		name.clip_text = true
+		text.add_child(name)
+		var flavor := UIKit.label(str(decor.get("flavor", "")), 24, UIKit.DARK, "small")
+		flavor.custom_minimum_size = Vector2(400, 0)
+		flavor.max_lines_visible = 3
+		text.add_child(flavor)
 		var price := int(decor.get("price", 0))
 		var buy := UIKit.button("$%d" % price, UIKit.MUSTARD, UIKit.DARK)
-		buy.position = Vector2(210, 36)
-		buy.size = Vector2(120, 56)
-		buy.custom_minimum_size = Vector2(120, 56)
+		buy.custom_minimum_size = Vector2(130, 56)
+		buy.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		buy.pressed.connect(_buy_decor.bind(id))
-		card.add_child(buy)
+		row.add_child(buy)
 		grid.add_child(card)
 
 

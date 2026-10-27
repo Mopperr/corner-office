@@ -29,7 +29,7 @@
       "blurb": "Coming later. Helpers, a staff room, and a lot of windows." },
     { "id": "corner", "name": "Corner Office", "kind": "office", "office": "corner", "x": 1100, "y": 150,
       "blurb": "Coming later. The one with two windows and the view." },
-    { "id": "forest", "name": "TropicalForest Depot", "kind": "shop", "x": 160, "y": 380,
+    { "id": "forest", "name": "TropicalForest Depot", "kind": "shop", "x": 160, "y": 520,
       "blurb": "Where the courier starts from. Order from the beige computer." }
   ]
 }

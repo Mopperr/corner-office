@@ -21,37 +21,39 @@ func _ready() -> void:
 func _build() -> void:
 	for child in get_children():
 		child.queue_free()
-	var title := UIKit.label("TropicalForest", 28, UIKit.DARK, "title")
+	# Columns: categories (8..300), listings (320..1000), detail (1020..1840).
+	var title := UIKit.label("TropicalForest", 28, UIKit.DARK, "title", false)
 	title.position = Vector2(8, 4)
 	add_child(title)
-	var deal := UIKit.label(_deal_line(), 18, UIKit.TERRA)
-	deal.position = Vector2(280, 10)
-	deal.size = Vector2(740, 40)
-	add_child(deal)
 	var search := LineEdit.new()
 	search.placeholder_text = "Search the canopy"
 	search.text = query
-	search.position = Vector2(250, 48)
-	search.size = Vector2(280, 48)
-	search.custom_minimum_size = Vector2(280, 48)
+	search.position = Vector2(260, 8)
+	search.size = Vector2(300, 56)
+	search.custom_minimum_size = Vector2(300, 56)
 	search.focus_mode = Control.FOCUS_ALL
 	search.add_theme_font_override("font", UIKit.body_font())
-	search.add_theme_font_size_override("font_size", UIKit.font_px(18))
+	search.add_theme_font_size_override("font_size", UIKit.small_px(24))
 	search.text_submitted.connect(func(value: String):
 		query = value
 		_build()
 	)
 	add_child(search)
 	var go := UIKit.button("Search", UIKit.BLUE)
-	go.position = Vector2(510, 48)
-	go.size = Vector2(140, 56)
-	go.custom_minimum_size = Vector2(140, 56)
+	go.position = Vector2(570, 8)
+	go.size = Vector2(130, 56)
+	go.custom_minimum_size = Vector2(130, 56)
 	go.pressed.connect(func():
 		query = search.text
 		_build()
 	)
 	add_child(go)
-	var y := 52.0
+	var deal := UIKit.label(_deal_line(), 24, UIKit.TERRA, "small")
+	deal.position = Vector2(712, 4)
+	deal.size = Vector2(494, 72)
+	deal.max_lines_visible = 2
+	add_child(deal)
+	var y := 80.0
 	for cat in Catalog.categories():
 		var id := str(cat.get("id", ""))
 		var open := Catalog.category_open(id, GameState.office_id)
@@ -64,9 +66,9 @@ func _build() -> void:
 			btn.text = "%s  · later" % str(cat.get("name", id))
 		btn.pressed.connect(_pick_category.bind(id))
 		add_child(btn)
-		y += 60
+		y += 62
 	var prime := UIKit.button("Toucan Prime" if not GameState.prime else "Prime member", UIKit.MUSTARD, UIKit.DARK)
-	prime.position = Vector2(8, y)
+	prime.position = Vector2(8, y + 10)
 	prime.size = Vector2(240, 56)
 	prime.custom_minimum_size = Vector2(240, 56)
 	prime.disabled = GameState.prime
@@ -93,10 +95,11 @@ func _deal_line() -> String:
 
 func _list() -> void:
 	var rows: Array = Catalog.search(category, query, GameState.office_id)
-	var y := 92.0
+	var y := 80.0
 	if rows.is_empty():
-		var empty := UIKit.label("Nothing in this aisle yet.", 18, UIKit.DARK)
-		empty.position = Vector2(250, 100)
+		var empty := UIKit.label("Nothing in this aisle yet.", 24, UIKit.DARK, "small")
+		empty.position = Vector2(260, 90)
+		empty.size = Vector2(440, 40)
 		add_child(empty)
 		return
 	for entry in rows:
@@ -105,12 +108,14 @@ func _list() -> void:
 			selected = id
 		var btn := Button.new()
 		btn.text = "%s   $%d   %s" % [Catalog.display_name(id), Catalog.price_of(id, GameState.day), _stars(float(entry.get("stars", 4)))]
-		btn.position = Vector2(250, y)
+		btn.position = Vector2(260, y)
 		btn.focus_mode = Control.FOCUS_ALL
-		btn.custom_minimum_size = Vector2(360, 56)
-		btn.size = Vector2(360, 56)
+		btn.custom_minimum_size = Vector2(440, 56)
+		btn.size = Vector2(440, 56)
+		btn.clip_text = true
+		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.add_theme_font_override("font", UIKit.body_font())
-		btn.add_theme_font_size_override("font_size", UIKit.font_px(28))
+		btn.add_theme_font_size_override("font_size", UIKit.small_px(24))
 		var fill := UIKit.MUSTARD if id == selected else Color("F7F1E4")
 		btn.add_theme_color_override("font_color", UIKit.DARK)
 		btn.add_theme_color_override("font_hover_color", UIKit.DARK)
@@ -120,8 +125,8 @@ func _list() -> void:
 		btn.add_theme_stylebox_override("focus", UIKit.style(fill.lightened(0.08), 8, 4, UIKit.MUSTARD))
 		btn.pressed.connect(_pick_item.bind(id))
 		add_child(btn)
-		y += 60
-		if y > 420:
+		y += 62
+		if y > 480:
 			break
 
 
@@ -136,64 +141,71 @@ func _detail() -> void:
 	var entry := Catalog.sku(selected)
 	if entry.is_empty():
 		return
-	var panel := Panel.new()
-	panel.position = Vector2(640, 92)
-	panel.size = Vector2(380, 350)
-	panel.add_theme_stylebox_override("panel", UIKit.style(Color("F7F1E4"), 12))
+	var panel := PanelContainer.new()
+	panel.position = Vector2(712, 84)
+	panel.size = Vector2(494, 456)
+	var box := UIKit.style(Color("F7F1E4"), 12)
+	box.shadow_size = 0
+	for side in ["left", "right", "top", "bottom"]:
+		box.set("content_margin_" + side, 16)
+	panel.add_theme_stylebox_override("panel", box)
 	add_child(panel)
-	var name := UIKit.label(Catalog.display_name(selected), 22, UIKit.DARK, "title")
-	name.position = Vector2(12, 8)
-	name.size = Vector2(360, 32)
-	panel.add_child(name)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 8)
+	panel.add_child(column)
+	var name := UIKit.label(Catalog.display_name(selected), 28, UIKit.DARK, "title", false)
+	name.custom_minimum_size = Vector2(460, 40)
+	name.clip_text = true
+	column.add_child(name)
 	var price := Catalog.price_of(selected, GameState.day)
 	var list := Catalog.list_price(selected)
 	var price_text := "$%d" % price
 	if price < list:
 		price_text = "$%d  was $%d" % [price, list]
-	var meta := UIKit.label("%s   %s" % [price_text, _stars(float(entry.get("stars", 4)))], 18, UIKit.TERRA, "title")
-	meta.position = Vector2(12, 40)
-	panel.add_child(meta)
-	var flavor := UIKit.label(ItemDB.flavor(str(entry.get("item", ""))), 18, UIKit.DARK)
-	flavor.position = Vector2(12, 68)
-	flavor.size = Vector2(360, 40)
-	panel.add_child(flavor)
-	var ry := 110.0
+	column.add_child(UIKit.label("%s   %s" % [price_text, _stars(float(entry.get("stars", 4)))], 24, UIKit.TERRA, "title", false))
+	var flavor := UIKit.label(ItemDB.flavor(str(entry.get("item", ""))), 24, UIKit.DARK, "small")
+	flavor.custom_minimum_size = Vector2(460, 0)
+	flavor.max_lines_visible = 2
+	column.add_child(flavor)
+	var shown := 0
 	for review in entry.get("reviews", []):
-		var line := UIKit.label("%s  %s\n%s" % [_stars(float(review.get("stars", 5))), review.get("who", ""), review.get("text", "")], 18, UIKit.DARK)
-		line.position = Vector2(12, ry)
-		line.size = Vector2(360, 48)
-		panel.add_child(line)
-		ry += 52
+		if shown >= 2:
+			break
+		shown += 1
+		var line := UIKit.label("%s  %s: %s" % [_stars(float(review.get("stars", 5))), review.get("who", ""), review.get("text", "")], 24, UIKit.DARK, "small")
+		line.custom_minimum_size = Vector2(460, 0)
+		line.max_lines_visible = 2
+		column.add_child(line)
 	var also_bits: PackedStringArray = PackedStringArray()
 	for other in entry.get("also", []):
 		also_bits.append(Catalog.display_name(str(other)))
 	if also_bits.size() > 0:
-		var also := UIKit.label("Customers also bought  " + ", ".join(also_bits), 18, UIKit.BLUE)
-		also.position = Vector2(12, 250)
-		also.size = Vector2(360, 36)
-		panel.add_child(also)
+		var also := UIKit.label("Customers also bought  " + ", ".join(also_bits), 24, UIKit.BLUE, "small")
+		also.custom_minimum_size = Vector2(460, 0)
+		also.max_lines_visible = 1
+		column.add_child(also)
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(spacer)
+	var buttons := HBoxContainer.new()
+	buttons.add_theme_constant_override("separation", 12)
+	column.add_child(buttons)
 	var wished := selected in GameState.wishlist
-	var wish := UIKit.button("Wishlisted" if wished else "Wishlist", UIKit.BLUE)
-	wish.position = Vector2(12, 292)
-	wish.size = Vector2(180, 56)
-	wish.custom_minimum_size = Vector2(180, 56)
+	var wish := UIKit.button("Wished" if wished else "Wish", UIKit.BLUE)
+	wish.custom_minimum_size = Vector2(120, 56)
 	wish.pressed.connect(_wish)
-	panel.add_child(wish)
-	var standard := UIKit.button("Standard  free", UIKit.SAGE)
-	standard.position = Vector2(12, 342)
-	standard.size = Vector2(180, 56)
-	standard.custom_minimum_size = Vector2(180, 56)
+	buttons.add_child(wish)
+	var standard := UIKit.button("Standard", UIKit.SAGE)
+	standard.custom_minimum_size = Vector2(160, 56)
 	standard.pressed.connect(_buy.bind("standard"))
-	panel.add_child(standard)
+	buttons.add_child(standard)
 	var fee := int(Catalog.shipping("express").get("fee", 4))
 	if GameState.prime:
 		fee = 0
-	var express := UIKit.button("Express  $%d" % fee, UIKit.TERRA)
-	express.position = Vector2(196, 342)
-	express.size = Vector2(180, 56)
-	express.custom_minimum_size = Vector2(180, 56)
+	var express := UIKit.button("Express $%d" % fee, UIKit.TERRA)
+	express.custom_minimum_size = Vector2(160, 56)
 	express.pressed.connect(_buy.bind("express"))
-	panel.add_child(express)
+	buttons.add_child(express)
 
 
 func _stars(value: float) -> String:
@@ -232,6 +244,11 @@ func _prime() -> void:
 
 
 func _toast(text: String, color: Color) -> void:
-	var note := UIKit.label(text, 18, color, "title")
-	note.position = Vector2(250, 8)
+	var old := get_node_or_null("Toast")
+	if old != null:
+		old.queue_free()
+	var note := UIKit.label(text, 26, color, "title", false)
+	note.name = "Toast"
+	note.position = Vector2(260, 500)
+	note.custom_minimum_size = Vector2(440, 40)
 	add_child(note)

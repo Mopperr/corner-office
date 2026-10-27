@@ -92,8 +92,9 @@ func _build() -> void:
 	info.name = "Info"
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_theme_constant_override("separation", 8)
-	info.position = _at(Vector2(1180, 560))
-	info_w = clampf(board.size.x - info.position.x - 10.0, 260.0, 500.0)
+	# Top-left: the only corner with no pins under it.
+	info.position = _at(Vector2(40, 90))
+	info_w = clampf(560.0 * fit, 300.0, 560.0)
 	info.size = Vector2(info_w, 250)
 	board.add_child(info)
 	var focus: Array = [close]
@@ -269,7 +270,7 @@ func _board_rows() -> void:
 		if shown == 0:
 			info.add_child(UIKit.label("Today's board", 24, UIKit.TERRA, "title", false))
 		shown += 1
-		if shown > 3:
+		if shown > 2:
 			break
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 10)
