@@ -567,9 +567,10 @@ func _content_engine() -> Array:
 	GameState.crime["visits"] = 2
 	GameState.crime["heat"] = 9
 	GameState.goods[fence_good] = 4
-	GameState.money = 200
+	# A big jar so the fine (30%) outweighs the fence sale and any goal reward that ticks over.
+	GameState.money = 2000
 	Crime.fence(fence_good, 1)
-	if int(GameState.crime.get("raids", 0)) != 1 or int(GameState.goods.get(fence_good, 0)) != 1 or GameState.money >= 200 or not Crime.raided_today():
+	if int(GameState.crime.get("raids", 0)) != 1 or int(GameState.goods.get(fence_good, 0)) != 1 or GameState.money >= 1700 or not Crime.raided_today():
 		found.append("raid goods %d money %d raided %s" % [int(GameState.goods.get(fence_good, 0)), GameState.money, Crime.raided_today()])
 	# Broke and idle, and Sal writes.
 	GameState.money = 20
