@@ -17,9 +17,21 @@ const CLIENTS: Array = [
 	{"name": "Jonah Blake", "trade": "model maker", "venue": "train", "line": "There is a bag of parts I never sorted. Good luck."},
 	{"name": "Kay Nakamura", "trade": "yoga teacher", "venue": "park", "line": "Cushions, plants, and a kettle. The calmest move you will do."},
 	{"name": "Lou Ferreira", "trade": "mechanic", "venue": "cafe", "line": "Toolboxes. Heavy ones. Bottom of the truck, please."},
+	{"name": "Mira Solano", "trade": "ceramicist", "venue": "studio", "line": "Bowls, glazes, and a wheel I will carry myself."},
+	{"name": "Noor Rahimi", "trade": "architect", "venue": "studio", "line": "Rolled drawings and one very good lamp."},
+	{"name": "Otto Brandt", "trade": "clockmaker", "venue": "flat", "line": "Everything ticks. Please do not let it stop."},
+	{"name": "Pia Kowalski", "trade": "nurse", "venue": "flat", "line": "Night shifts. Boxes are labelled, mostly truthfully."},
+	{"name": "Quinn Adeyemi", "trade": "DJ", "venue": "train", "line": "Crates. Do not stack the crates. They are crates."},
+	{"name": "Rosa Leclerc", "trade": "pastry chef", "venue": "bakery", "line": "Trays and tins and a mixer older than me."},
+	{"name": "Sami Khoury", "trade": "bookseller", "venue": "flat", "line": "Forty boxes of books. Twenty are poetry. Be gentle."},
+	{"name": "Tove Lund", "trade": "sailor", "venue": "park", "line": "Rope, lamps, and a bench from the boat."},
+	{"name": "Uma Chandra", "trade": "violin teacher", "venue": "studio", "line": "The metronome rides on the seat beside you."},
+	{"name": "Viggo Hansen", "trade": "carpenter", "venue": "cafe", "line": "Tools in the red box. Coffee in the blue tin."},
+	{"name": "Wren Okafor", "trade": "photographer", "venue": "studio", "line": "Frames face each other. Lamps face the wall."},
+	{"name": "Yusuf Demir", "trade": "chess coach", "venue": "park", "line": "Boards, clocks, and a kettle. Nothing dramatic."},
 ]
 
-const TWISTS: Array = ["cat", "sets", "mystery", "ducks", "fragile", "plain"]
+const TWISTS: Array = ["cat", "sets", "mystery", "ducks", "fragile", "heavy", "plain"]
 
 # Household items the generator can hand out, with how many of each a move can carry.
 const POOL: Dictionary = {
@@ -135,6 +147,9 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 		recipe.append({"item": "mystery_part", "count": 3})
 	if twist == "fragile":
 		recipe.append({"item": "bowl", "count": 2})
+	if twist == "heavy":
+		recipe.append({"item": "tool_box", "count": 2})
+		recipe.append({"item": "filing_cabinet", "count": 1})
 	return recipe
 
 
@@ -195,6 +210,8 @@ static func _twist_line(twist: String) -> String:
 			return "The route runs past the pond. Honk, and the ducks hurry."
 		"fragile":
 			return "The glassware is unforgiving. Pad it."
+		"heavy":
+			return "Heavy boxes. Low in the truck, and lift with your knees."
 	return "A plain move, which is its own kind of nice."
 
 

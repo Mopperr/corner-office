@@ -420,6 +420,30 @@ func _content_engine() -> Array:
 		found.append("board did not refresh on a new day")
 	if not GameState.generated_drives.has(str(first.get("drive", ""))):
 		found.append("drive of the job in progress dropped on refresh")
+	# The night card: a day's log is summed up and handed over on Next day.
+	GameState.new_game("dana")
+	GameState.money = 500
+	GameState.day_log = GameState._fresh_day_log()
+	GameState.stats["cats_found"] = 2
+	GameState.check_contracts()
+	var summaries: Array = []
+	var catcher := func(summary: Dictionary): summaries.append(summary)
+	GameState.day_ended.connect(catcher)
+	GameState.advance_day()
+	GameState.day_ended.disconnect(catcher)
+	if summaries.size() != 1:
+		found.append("day_ended emitted %d" % summaries.size())
+	else:
+		var summary: Dictionary = summaries[0]
+		if int(summary.get("day", 0)) != 1 or int(summary.get("money_end", 0)) - int(summary.get("money_start", 0)) != 30:
+			found.append("day summary money %s" % summary)
+		if (summary.get("goals", []) as Array).size() != 1 or str(summary.get("next_job", "")) == "":
+			found.append("day summary goals/next %s" % summary)
+	if int(GameState.day_log.get("jobs", 0)) != 0 or int(GameState.day_log.get("money_start", 0)) != GameState.money:
+		found.append("day log not reset")
+	for venue_id in ["studio", "flat"]:
+		if not ItemDB.venues().has(venue_id):
+			found.append("venue %s missing" % venue_id)
 	# Goals: progress, reward, mail, and a save round trip.
 	GameState.new_game("dana")
 	var money_before := GameState.money

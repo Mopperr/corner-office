@@ -231,9 +231,10 @@ func _market() -> void:
 	nxt.size = Vector2(180, 56)
 	nxt.custom_minimum_size = Vector2(180, 56)
 	nxt.pressed.connect(func():
+		if not GameState.day_ended.is_connected(_show_day_card):
+			GameState.day_ended.connect(_show_day_card)
 		GameState.advance_day()
 		AudioDirector.play_sfx("sfx_notification_soft")
-		_pop_text("A new day", UIKit.BLUE)
 		_show_page()
 		_refresh_money()
 	)
@@ -440,6 +441,83 @@ func _money() -> String:
 func _refresh_money() -> void:
 	if balance:
 		balance.text = _money()
+
+
+func _show_day_card(summary: Dictionary) -> void:
+	# The night between two days: what the day brought, and what tomorrow holds.
+	var old := get_node_or_null("DayCard")
+	if old != null:
+		old.queue_free()
+	var dim := ColorRect.new()
+	dim.name = "DayCard"
+	dim.color = Color(UIKit.NIGHT, 0.55)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(dim)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var card := PanelContainer.new()
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 22))
+	dim.add_child(card)
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	card.offset_left = -380
+	card.offset_right = 380
+	card.offset_top = -40
+	card.offset_bottom = 40
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 26)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	margin.add_child(column)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 14)
+	column.add_child(head)
+	head.add_child(UIKit.avatar("%d" % int(summary.get("day", 1)), UIKit.BLUE, 48))
+	var title := UIKit.label("Day %d, closed" % int(summary.get("day", 1)), 34, UIKit.DARK, "title", false)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(title)
+	var delta := int(summary.get("money_end", 0)) - int(summary.get("money_start", 0))
+	var money_line := UIKit.label(("+$%d" if delta >= 0 else "-$%d") % absi(delta), 34, UIKit.SAGE if delta >= 0 else UIKit.LOSS, "title", false)
+	money_line.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(money_line)
+	var rows: Array = []
+	var jobs := int(summary.get("jobs", 0))
+	if jobs > 0:
+		rows.append("%d job%s done for $%d. %s" % [jobs, "" if jobs == 1 else "s", int(summary.get("job_pay", 0)), ("First up: %s." % summary.get("best_job", "")) if str(summary.get("best_job", "")) != "" else ""])
+	else:
+		rows.append("No jobs today. The truck stayed in the drive.")
+	var visitors := int(summary.get("shop_visitors", 0))
+	if visitors > 0:
+		rows.append("The shop served %d, %d of them by hand, for $%d." % [visitors, int(summary.get("served_by_hand", 0)), int(summary.get("shop_earned", 0))])
+	var trade := int(summary.get("trade_profit", 0))
+	if trade != 0:
+		rows.append(("Trading cleared $%d." if trade > 0 else "Trading lost $%d. Buy low, sell high.") % absi(trade))
+	var decor := int(summary.get("decor", 0))
+	if decor > 0:
+		rows.append("%d new piece%s of decor on the way." % [decor, "" if decor == 1 else "s"])
+	for goal in summary.get("goals", []):
+		rows.append("Goal done: %s." % goal)
+	for row in rows:
+		var line := UIKit.label(str(row), 24, UIKit.DARK, "small")
+		line.custom_minimum_size = Vector2(700, 0)
+		column.add_child(line)
+	var next_job := str(summary.get("next_job", ""))
+	var tomorrow := UIKit.label("Tomorrow's board: %s, and more." % next_job if next_job != "" else "A fresh board goes up in the morning.", 24, UIKit.BLUE, "small")
+	tomorrow.custom_minimum_size = Vector2(700, 0)
+	column.add_child(tomorrow)
+	var go := UIKit.button("Morning", UIKit.TERRA)
+	go.name = "Morning"
+	go.custom_minimum_size = Vector2(220, 56)
+	go.size_flags_horizontal = Control.SIZE_SHRINK_END
+	go.pressed.connect(func():
+		AudioDirector.play_sfx("sfx_ui_click")
+		dim.queue_free()
+		_pop_text("A new day", UIKit.BLUE)
+	)
+	column.add_child(go)
+	go.grab_focus()
 
 
 func _pop_text(text: String, color: Color) -> void:

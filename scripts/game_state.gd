@@ -12,6 +12,7 @@ signal mode_changed(mode)
 signal toast_requested(message)
 signal office_changed(office_id)
 signal held_cleared
+signal day_ended(summary)
 
 var character := "dana"
 var money := 120
@@ -54,6 +55,7 @@ var generated_jobs: Array = []
 var generated_drives: Dictionary = {}
 var stats: Dictionary = {}
 var contracts_done: Dictionary = {}
+var day_log: Dictionary = {}
 const JobGen = preload("res://scripts/job_gen.gd")
 var freebie_day := -1
 var forest_serial := 0
@@ -108,6 +110,7 @@ func new_game(who: String) -> void:
 	seed = int(rng.randi())
 	stats = {}
 	contracts_done = {}
+	day_log = _fresh_day_log()
 	refresh_board()
 	freebie_day = -1
 	forest_serial = 0
@@ -488,6 +491,8 @@ func check_contracts() -> void:
 		if contract_progress(contract) < int(contract.get("need", 1)):
 			continue
 		contracts_done[id] = day
+		if not day_log.is_empty():
+			(day_log.get("goals", []) as Array).append(str(contract.get("title", id)))
 		var money_reward := int(contract.get("money", 0))
 		var rep_reward := int(contract.get("rep", 0))
 		if money_reward > 0:
@@ -882,6 +887,12 @@ func finish_job() -> Dictionary:
 		stats["alley_runs"] = int(stats.get("alley_runs", 0)) + 1
 	if bool(def.get("generated", false)):
 		stats["board_jobs"] = int(stats.get("board_jobs", 0)) + 1
+	if day_log.is_empty():
+		day_log = _fresh_day_log()
+	day_log["jobs"] = int(day_log.get("jobs", 0)) + 1
+	day_log["job_pay"] = int(day_log.get("job_pay", 0)) + net_pay
+	if str(day_log.get("best_job", "")) == "":
+		day_log["best_job"] = str(def.get("title", ""))
 	check_contracts()
 	emit_signal("rep_changed", rep_rank(), rep_stars)
 	emit_signal("job_completed", job.get("id", ""), payout)
@@ -941,11 +952,35 @@ func _swing(base: float, current: float) -> float:
 	return clampf(nxt, base * floor_pct, base * ceil_pct)
 
 
+func _fresh_day_log() -> Dictionary:
+	return {"money_start": money, "jobs": 0, "job_pay": 0, "trade_profit": 0, "decor": 0, "goals": [], "served_by_hand": 0, "best_job": ""}
+
+
+func day_summary(closed_day: int) -> Dictionary:
+	var log: Dictionary = day_log if not day_log.is_empty() else _fresh_day_log()
+	return {
+		"day": closed_day,
+		"money_start": int(log.get("money_start", money)),
+		"money_end": money,
+		"jobs": int(log.get("jobs", 0)),
+		"job_pay": int(log.get("job_pay", 0)),
+		"best_job": str(log.get("best_job", "")),
+		"shop_earned": shop_today,
+		"shop_visitors": shop_visitors_today,
+		"served_by_hand": int(log.get("served_by_hand", 0)),
+		"trade_profit": int(log.get("trade_profit", 0)),
+		"decor": int(log.get("decor", 0)),
+		"goals": (log.get("goals", []) as Array).duplicate(),
+		"rep": rep_rank(),
+	}
+
+
 func advance_day() -> void:
 	var earned := shop_today
 	var visitors := shop_visitors_today
 	var vibe := vibe_score()
 	var closed_day := day
+	var summary := day_summary(closed_day)
 	day += 1
 	for good in ItemDB.trade_goods():
 		var id := str(good.get("id", ""))
@@ -965,6 +1000,10 @@ func advance_day() -> void:
 	shop_today = 0
 	shop_visitors_today = 0
 	refresh_board()
+	if not generated_jobs.is_empty():
+		summary["next_job"] = str(generated_jobs[0].get("title", ""))
+	day_log = _fresh_day_log()
+	emit_signal("day_ended", summary)
 
 
 func price_of(id: String) -> int:
@@ -998,6 +1037,8 @@ func sell_good(id: String) -> Dictionary:
 	if profit > 0:
 		fire_trigger("first_profitable_sale")
 	bump_stat("goods_sold")
+	if not day_log.is_empty():
+		day_log["trade_profit"] = int(day_log.get("trade_profit", 0)) + profit
 	return {"gain": gain, "profit": profit}
 
 
@@ -1049,6 +1090,8 @@ func buy_decor(id: String) -> String:
 	decor_serial += 1
 	decor_queue.append({"uid": "decor_%s_%d" % [id, decor_serial], "item": id})
 	bump_stat("decor_bought")
+	if not day_log.is_empty():
+		day_log["decor"] = int(day_log.get("decor", 0)) + 1
 	return ""
 
 
@@ -1399,6 +1442,8 @@ func serve_visitor(by_hand := false, order: Dictionary = {}) -> Dictionary:
 	shop_visitors_today += 1
 	if by_hand:
 		shop_hand_served += 1
+		if not day_log.is_empty():
+			day_log["served_by_hand"] = int(day_log.get("served_by_hand", 0)) + 1
 		check_contracts()
 	_visitor_request(who)
 	var sale := {
@@ -1505,6 +1550,7 @@ func to_dict() -> Dictionary:
 		"generated_drives": generated_drives.duplicate(true),
 		"stats": stats.duplicate(true),
 		"contracts_done": contracts_done.duplicate(true),
+		"day_log": day_log.duplicate(true),
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
 		"latched_goals": latched_goals.duplicate(true),
@@ -1561,6 +1607,9 @@ func from_dict(raw: Dictionary) -> void:
 	generated_drives = raw.get("generated_drives", {}).duplicate(true) if raw.has("generated_drives") else {}
 	stats = raw.get("stats", {}).duplicate(true) if raw.has("stats") else {}
 	contracts_done = raw.get("contracts_done", {}).duplicate(true) if raw.has("contracts_done") else {}
+	day_log = raw.get("day_log", {}).duplicate(true) if raw.has("day_log") else _fresh_day_log()
+	if day_log.is_empty():
+		day_log = _fresh_day_log()
 	if generated_jobs.is_empty():
 		refresh_board()
 	freebie_day = int(raw.get("freebie_day", -1))

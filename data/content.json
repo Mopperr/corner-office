@@ -833,6 +833,32 @@
       "shop_layout": "lemonade_stand",
       "music": "music_office_build",
       "ambience": "amb_l02_cafe_loop"
+    },
+    "studio": {
+      "name": "Corner Studio",
+      "x": 0,
+      "z": 0,
+      "w": 7,
+      "d": 6,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "studio": true,
+      "music": "music_office_build",
+      "ambience": "amb_l04_shop_clock_loop"
+    },
+    "flat": {
+      "name": "Flat over the Bakery",
+      "x": 0,
+      "z": 0,
+      "w": 5,
+      "d": 7,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "flat": true,
+      "music": "music_act2_morning",
+      "ambience": "amb_l02_cafe_loop"
     }
   },
   "jobs": [

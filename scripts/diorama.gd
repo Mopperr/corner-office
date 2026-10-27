@@ -50,6 +50,9 @@ var hint: Label
 var status: Label
 var cat_rig: Node3D
 var cat_player: AnimationPlayer
+var cat_base_y := 0.0
+var cat_time := 0.0
+var cat_stretching := false
 var stretch_in := 4.0
 var toast: Label
 var toast_time := 0.0
@@ -569,6 +572,7 @@ func _dress() -> void:
 		if cat_rig:
 			Props.play_clip(cat_rig, "idle", true)
 			cat_player = cat_rig.find_child("AnimationPlayer", true, false) as AnimationPlayer
+			cat_base_y = cat_rig.position.y
 	if id == "train" or bool(venue.get("train", false)):
 		var board := _place_model("train_layout_board", Vector3(5.6, 0, 2.4))
 		if board:
@@ -596,6 +600,15 @@ func _dress() -> void:
 			_mark_goal(stair, "stair_step", 0.22, 1.0, 0.3)
 			if stair:
 				stair.name = "StairStep%d" % step
+	if bool(venue.get("studio", false)):
+		_place_model("hanging_plant", Vector3(2.2, 2.15, 2.0))
+		_place_model("padding_roll", Vector3(5.8, 0, 1.2))
+		_place_model("folding_table", Vector3(5.6, 0, 4.6), 90)
+	if bool(venue.get("flat", false)):
+		var heater := _place_model("radiator", Vector3(0.55, 0, 3.6), 90)
+		if heater:
+			heater.name = "FlatRadiator"
+		_place_model("wall_clock", Vector3(0.12, 1.7, 5.4), 90)
 	if bool(venue.get("pastry", false)):
 		var bun := _place_model("pastry_basket", Vector3(1.5, 0, 1.3))
 		if bun:
@@ -794,6 +807,8 @@ func _process(delta: float) -> void:
 			stretch_in = randf_range(6.0, 11.0)
 			if not cat_player.animation_finished.is_connected(_on_cat_clip):
 				cat_player.animation_finished.connect(_on_cat_clip)
+	elif cat_rig and is_instance_valid(cat_rig) and cat_rig.visible:
+		_cat_idle(delta)
 	_update_ghost(delta)
 	_update_hover()
 	_sync_deliveries()
@@ -841,6 +856,30 @@ func _sync_goals_panel() -> void:
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	goals_panel.visible = true
+
+
+func _cat_idle(delta: float) -> void:
+	# The model has no clips, so Biscuit breathes, settles, and now and then
+	# stretches long and low, all in code.
+	cat_time += delta
+	stretch_in -= delta
+	if not cat_stretching:
+		var breath := 1.0 + sin(cat_time * 2.4) * 0.025
+		cat_rig.scale = Vector3(1.0, breath, 1.0)
+		cat_rig.rotation.z = sin(cat_time * 0.7) * 0.015
+		if stretch_in <= 0.0:
+			cat_stretching = true
+			stretch_in = randf_range(6.0, 11.0)
+			var tw := create_tween()
+			tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tw.tween_property(cat_rig, "scale", Vector3(1.0, 0.82, 1.22), 0.55)
+			tw.parallel().tween_property(cat_rig, "position:y", cat_base_y + 0.03, 0.55)
+			tw.tween_interval(0.5)
+			tw.tween_property(cat_rig, "scale", Vector3.ONE, 0.6)
+			tw.parallel().tween_property(cat_rig, "position:y", cat_base_y, 0.6)
+			tw.tween_callback(func(): cat_stretching = false)
+			if randf() < 0.3:
+				AudioDirector.play_sfx("sfx_cat_meow")
 
 
 func _on_cat_clip(anim_name: StringName) -> void:
@@ -3140,11 +3179,14 @@ func _spawn_customer() -> void:
 	person.name = "Customer_" + uid
 	var palette := [UIKit.BLUE, UIKit.SAGE, UIKit.TERRA, UIKit.MUSTARD, UIKit.WOOD]
 	var color: Color = palette[customer_serial % palette.size()]
+	var figure := Node3D.new()
+	figure.name = "Figure"
+	person.add_child(figure)
 	var legs := Props.mesh_cylinder(0.14, 0.5, Color("3E3A4F"))
-	person.add_child(legs)
+	figure.add_child(legs)
 	var body := Props.mesh_cylinder(0.2, 0.5, color)
 	body.position.y = 0.5
-	person.add_child(body)
+	figure.add_child(body)
 	var head := MeshInstance3D.new()
 	var sphere := SphereMesh.new()
 	sphere.radius = 0.15
@@ -3152,7 +3194,12 @@ func _spawn_customer() -> void:
 	head.mesh = sphere
 	head.material_override = Props.mat(Color("E7C9A8"))
 	head.position.y = 1.18
-	person.add_child(head)
+	figure.add_child(head)
+	for side in [-1.0, 1.0]:
+		var arm := Props.mesh_cylinder(0.05, 0.42, color.darkened(0.12))
+		arm.name = "ArmL" if side < 0.0 else "ArmR"
+		arm.position = Vector3(side * 0.24, 0.56, 0.0)
+		figure.add_child(arm)
 	# The order floats over their head until it is in their hand.
 	var bubble := Node3D.new()
 	bubble.name = "Order"
@@ -3198,10 +3245,34 @@ func _tick_customer(entry: Dictionary, delta: float) -> void:
 	if node == null or not is_instance_valid(node):
 		return
 	entry["hover"] = float(entry.get("hover", 0.0)) + delta
+	var t := float(entry["hover"])
 	var bubble := node.get_node_or_null("Order") as Node3D
 	if bubble:
-		bubble.position.y = 1.55 + sin(float(entry["hover"]) * 3.0) * 0.04
+		bubble.position.y = 1.55 + sin(t * 3.0) * 0.04
 		bubble.rotation.y += delta * 0.8
+	# Walking: a bob and a swing of the arms. Waiting: a slow sway and a glance around.
+	var figure := node.get_node_or_null("Figure") as Node3D
+	if figure:
+		var walking := str(entry.get("stage", "")) != "waiting"
+		if walking:
+			figure.position.y = absf(sin(t * 9.0)) * 0.06
+			figure.rotation.z = sin(t * 9.0) * 0.04
+			figure.rotation.y = 0.0
+			var swing := sin(t * 9.0) * 0.5
+			var arm_l := figure.get_node_or_null("ArmL") as Node3D
+			var arm_r := figure.get_node_or_null("ArmR") as Node3D
+			if arm_l:
+				arm_l.rotation.x = swing
+			if arm_r:
+				arm_r.rotation.x = -swing
+		else:
+			figure.position.y = sin(t * 1.6) * 0.01
+			figure.rotation.z = 0.0
+			figure.rotation.y = sin(t * 0.9) * 0.25
+			for name in ["ArmL", "ArmR"]:
+				var arm := figure.get_node_or_null(name) as Node3D
+				if arm:
+					arm.rotation.x = lerpf(arm.rotation.x, 0.0, minf(1.0, delta * 6.0))
 	if str(entry.get("stage", "")) == "waiting":
 		# They never leave unserved; after the wait the till just rings them up without the big tip.
 		entry["wait"] = float(entry["wait"]) - delta
