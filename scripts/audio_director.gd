@@ -23,7 +23,9 @@ func _ready() -> void:
 	music.bus = MUSIC_BUS
 	add_child(music)
 	apply_volumes()
-	_silent = AudioServer.get_driver_name() == "Dummy"
+	# Movie Maker mode runs on the dummy driver too, but there the server
+	# still mixes into the recording, so only a plain dummy driver mutes us.
+	_silent = AudioServer.get_driver_name() == "Dummy" and not OS.has_feature("movie")
 	if not _silent:
 		_preload_loops()
 	tree_exiting.connect(release_audio)
