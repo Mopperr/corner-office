@@ -49,6 +49,11 @@ static func crt_font() -> Font:
 	return font("res://assets/fonts/VT323-Regular.ttf")
 
 
+# The look: paper cut-outs. Light cards get a cocoa outline and a hard drop
+# shadow, buttons get a thick lip underneath so they read as something to press.
+const OUTLINE := Color("6B4A3A", 0.26)
+
+
 static func style(color: Color, radius := 14, border := -1, border_color: Color = DARK) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new()
 	box.bg_color = color
@@ -60,16 +65,58 @@ static func style(color: Color, radius := 14, border := -1, border_color: Color 
 	box.content_margin_right = 14
 	box.content_margin_top = 8
 	box.content_margin_bottom = 8
-	if border >= 0:
-		box.border_width_left = border
-		box.border_width_right = border
-		box.border_width_top = border
-		box.border_width_bottom = border
-		box.border_color = border_color
-	box.shadow_color = Color(NIGHT, 0.18)
-	box.shadow_size = 6
-	box.shadow_offset = Vector2(0, 3)
+	var outline := border
+	var outline_color := border_color
+	if border < 0 and color.a > 0.6 and color.get_luminance() > 0.72:
+		# Light cards always get the cut-out outline.
+		outline = 3
+		outline_color = OUTLINE
+	if outline >= 0:
+		box.border_width_left = outline
+		box.border_width_right = outline
+		box.border_width_top = outline
+		box.border_width_bottom = outline
+		box.border_color = outline_color
+	box.shadow_color = Color(NIGHT, 0.22)
+	box.shadow_size = 3
+	box.shadow_offset = Vector2(0, 6)
 	return box
+
+
+static func lip(fill: Color, radius := 22, depth := 6, ring: Color = Color(0, 0, 0, 0)) -> StyleBoxFlat:
+	# A button face with a darker lip under it. A ring colour adds a focus outline.
+	var box := style(fill, radius, 0)
+	box.border_width_bottom = depth
+	box.border_color = fill.darkened(0.32)
+	box.shadow_size = 2
+	box.shadow_offset = Vector2(0, 4)
+	box.content_margin_top = 8
+	box.content_margin_bottom = 8 + (6 - depth)
+	if ring.a > 0.0:
+		box.border_width_left = 4
+		box.border_width_right = 4
+		box.border_width_top = 4
+		box.border_width_bottom = maxi(depth, 4)
+		box.border_color = ring
+	return box
+
+
+static func ribbon(text: String, fill: Color = TERRA, size := 40, fg: Color = CREAM_CARD) -> Label:
+	# A title on a coloured tag: the cut-out look's headline.
+	var tag := label(text, size, fg, "title", false)
+	tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var box := style(fill, 16, 0)
+	box.shadow_size = 2
+	box.shadow_offset = Vector2(0, 4)
+	box.content_margin_left = 26
+	box.content_margin_right = 26
+	box.content_margin_top = 4
+	box.content_margin_bottom = 6
+	tag.add_theme_stylebox_override("normal", box)
+	tag.custom_minimum_size.x += 52.0
+	tag.custom_minimum_size.y += 10.0
+	return tag
 
 
 static func request_quit(tree: SceneTree) -> void:
@@ -88,11 +135,11 @@ static func button(text: String, fill: Color = SAGE, fg: Color = CREAM_CARD) -> 
 	btn.add_theme_color_override("font_hover_color", Color.WHITE)
 	btn.add_theme_color_override("font_focus_color", Color.WHITE)
 	btn.add_theme_color_override("font_pressed_color", Color.WHITE)
-	btn.add_theme_stylebox_override("normal", style(fill, 18))
-	btn.add_theme_stylebox_override("hover", style(fill.lightened(0.08), 18, 3, CREAM_CARD))
-	btn.add_theme_stylebox_override("pressed", style(fill.darkened(0.08), 18))
-	btn.add_theme_stylebox_override("focus", style(fill.lightened(0.12), 18, 4, MUSTARD))
-	btn.add_theme_stylebox_override("disabled", style(Color(fill, 0.45), 18))
+	btn.add_theme_stylebox_override("normal", lip(fill))
+	btn.add_theme_stylebox_override("hover", lip(fill.lightened(0.1)))
+	btn.add_theme_stylebox_override("pressed", lip(fill.darkened(0.06), 22, 2))
+	btn.add_theme_stylebox_override("focus", lip(fill.lightened(0.08), 22, 6, MUSTARD))
+	btn.add_theme_stylebox_override("disabled", lip(Color(fill, 0.45), 22, 3))
 	btn.add_theme_color_override("font_disabled_color", Color(fg, 0.7))
 	btn.mouse_entered.connect(func():
 		if btn.disabled:

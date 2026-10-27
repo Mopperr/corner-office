@@ -113,7 +113,7 @@ func _build() -> void:
 	card.custom_minimum_size = Vector2(860, 680)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
 	add_child(card)
-	var title := UIKit.label(str(GameState.payout.get("title", "Job done")), 40, UIKit.DARK, "title", false)
+	var title := UIKit.ribbon(str(GameState.payout.get("title", "Job done")), UIKit.TERRA, 40)
 	title.position = Vector2(36, 20)
 	title.size = Vector2(780, 56)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

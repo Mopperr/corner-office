@@ -61,9 +61,10 @@ func _home() -> void:
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_theme_constant_override("separation", 12)
 	margin.add_child(column)
-	var title := UIKit.label("Corner Office", 72, UIKit.DARK, "title", false)
-	title.custom_minimum_size = Vector2(720, 90)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var title := UIKit.ribbon("Corner Office", UIKit.TERRA, 72)
+	title.custom_minimum_size = Vector2(720, 104)
+	title.rotation_degrees = -1.5
+	title.pivot_offset = Vector2(360, 52)
 	column.add_child(title)
 	var sub := UIKit.label("Pack the old office. Make the new one yours.", 36, UIKit.DARK)
 	sub.custom_minimum_size = Vector2(720, 48)

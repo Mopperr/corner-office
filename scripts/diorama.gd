@@ -2500,7 +2500,7 @@ func _build_hud() -> void:
 	var top := Panel.new()
 	top.name = "StatusCard"
 	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	top.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
+	top.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.TERRA))
 	layer.add_child(top)
 	UIKit.pin_top_left(top, 16, 12, 760, 112)
 	status = UIKit.label("", 36, UIKit.DARK)
@@ -2510,7 +2510,7 @@ func _build_hud() -> void:
 	var hint_bar := Panel.new()
 	hint_bar.name = "HintBar"
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
+	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.WOOD))
 	layer.add_child(hint_bar)
 	UIKit.pin_bottom(hint_bar, 16, -150, -16, -12)
 	# Left: what to do now, and one line of how. Right: the keys that matter in this mode.
@@ -2543,7 +2543,7 @@ func _build_hud() -> void:
 	var goals_box := PanelContainer.new()
 	goals_box.name = "GoalsCard"
 	goals_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	goals_box.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 14))
+	goals_box.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 14, 4, UIKit.SAGE))
 	layer.add_child(goals_box)
 	goals_box.layout_mode = 1
 	goals_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -2567,7 +2567,7 @@ func _build_hud() -> void:
 	toast_bar.name = "ToastBar"
 	toast_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	toast_bar.visible = false
-	toast_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 18, 2, Color(UIKit.DARK, 0.25)))
+	toast_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 24, 4, UIKit.BLUE))
 	layer.add_child(toast_bar)
 	toast_bar.layout_mode = 1
 	toast_bar.set_anchors_preset(Control.PRESET_CENTER_TOP)
@@ -2853,8 +2853,8 @@ func _open_jobs(tab := "jobs") -> void:
 	layer.add_child(panel)
 	var card_size := Vector2(1100, 720)
 	UIKit.pin_center(panel, card_size)
-	var title := UIKit.label("Clipboard", 40, UIKit.DARK, "title", false)
-	title.position = Vector2(24, 16)
+	var title := UIKit.ribbon("Clipboard", UIKit.TERRA, 40)
+	title.position = Vector2(24, 14)
 	panel.add_child(title)
 	var day_tag := UIKit.label("Day %d  ·  Rep %d  ·  %d jobs done" % [GameState.day, GameState.rep_rank(), GameState.jobs_done], 24, UIKit.WOOD, "small", false)
 	day_tag.position = Vector2(300, 30)
@@ -3235,7 +3235,9 @@ func _goal_card(contract: Dictionary, width: float, done: bool) -> PanelContaine
 func _act_button(layer: CanvasLayer, text: String, at: Vector2, callback: Callable) -> void:
 	if layer == null:
 		return
-	var btn := UIKit.button(text, UIKit.TERRA if "Finish" in text or "Drive" in text else UIKit.SAGE)
+	var fills := {"Jobs": UIKit.TERRA, "Map": UIKit.BLUE, "Computer": UIKit.NIGHT, "Workbench": UIKit.WOOD, "Pause": UIKit.DARK, "Rotate view": UIKit.CARD}
+	var fill: Color = fills.get(text, UIKit.TERRA if "Finish" in text or "Drive" in text else UIKit.SAGE)
+	var btn := UIKit.button(text, fill, UIKit.DARK if fill == UIKit.CARD else UIKit.CREAM_CARD)
 	btn.name = "ActButton"
 	btn.custom_minimum_size = Vector2(280, 56)
 	btn.pressed.connect(callback)
