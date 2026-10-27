@@ -596,13 +596,18 @@ func _dress() -> void:
 		_place_model("parts_drawer_unit", Vector3(3.3, 0, 5.15))
 		_place_model("cuckoo_clock", Vector3(0.12, 1.55, 2.2), 90)
 	if id == "bakery":
-		_tag_beam(_place_model("ceiling_beam", Vector3(2.0, 2.7, 3.2)))
-		_tag_beam(_place_model("ceiling_beam", Vector3(5.2, 2.7, 3.2)))
-		_tag_beam(_place_model("ceiling_beam", Vector3(2.0, 2.7, 7.2)))
-		_tag_beam(_place_model("ceiling_beam", Vector3(5.2, 2.7, 7.2)))
+		# No ceiling beams: the loft keeps its skylight and a pool of morning light under it.
 		var frame := _place_model("skylight_frame", Vector3(4.0, 2.88, 5.0))
 		if frame:
 			frame.name = "SkylightFrame"
+		var sky := OmniLight3D.new()
+		sky.name = "SkylightGlow"
+		sky.position = Vector3(4.0, 2.6, 5.0)
+		sky.light_color = Color("FFF1D6")
+		sky.light_energy = 1.1
+		sky.omni_range = 5.0
+		sky.shadow_enabled = false
+		add_child(sky)
 		var radiator := _place_model("radiator", Vector3(0.55, 0, 6.4), 90)
 		if radiator:
 			radiator.name = "Radiator"
@@ -914,7 +919,8 @@ func _build_shell() -> void:
 		var nook: Dictionary = venue["nook"]
 		_fill_floor(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"]))
 		_build_nook_walls(nook)
-		var beam := Props.mesh_box(Vector3(float(nook["w"]) * 0.55, 0.1, 0.14), UIKit.WOOD)
+		# A slim painted picture rail along the back of the nook, not a beam.
+		var beam := Props.mesh_box(Vector3(float(nook["w"]) * 0.55, 0.06, 0.08), UIKit.CREAM_CARD)
 		beam.name = "NookBeam"
 		# Back of the nook, above the shelf line. The camera looks from +x +z, so this
 		# beam sits behind the fern instead of across its face.
@@ -3944,6 +3950,7 @@ func _tick_browser(delta: float) -> void:
 				figure.rotation.x = 0.18
 		if float(browser["timer"]) <= 0.0:
 			browser["stage"] = "leaving"
+			_act(node, "wave", 0.8)
 			if figure:
 				figure.position.y = 0.0
 				figure.rotation.x = 0.0
@@ -4209,17 +4216,23 @@ func _queue_spot(index: int) -> Vector3:
 	return spot
 
 
+const DISH_PROPS := {
+	"lemonade": "glass", "iced_tea": "glass", "cold_brew": "coldbrew",
+	"drip": "mug", "latte": "latte", "espresso_shot": "espresso", "tea": "teacup", "flat_white": "latte",
+	"affogato": "affogato", "bun": "bun", "croissant": "croissant",
+	"blt": "sandwich", "veggie_wrap": "wrap", "chicken_shawarma": "wrap", "falafel_wrap": "wrap",
+	"soup_cup": "soup", "garlic_fries": "fries", "eggs_benedict": "eggs",
+	"tasting_menu": "tasting", "steak_frites": "steak", "creme_brulee": "brulee",
+	"used_book": "book", "pencil": "pencil", "cutting": "cutting",
+}
+
+
 func _order_prop(dish_id: String) -> Node3D:
-	var kind := "mug"
-	var tag := str(Catalog.menu_item(dish_id).get("tag", ""))
-	if dish_id in ["lemonade", "iced_tea"] or tag == "juice":
-		kind = "glass"
-	elif dish_id == "bun" or tag in ["snack", "sandwich", "grill"]:
-		kind = "bun"
-	elif dish_id in ["used_book", "pencil", "cutting"] or tag in ["goods", "plant"]:
-		kind = "part"
-	elif tag == "plate":
-		kind = "bowl"
+	# Every dish on the ladder has its own little prop.
+	var kind := str(DISH_PROPS.get(dish_id, ""))
+	if kind == "":
+		var tag := str(Catalog.menu_item(dish_id).get("tag", ""))
+		kind = {"juice": "glass", "coffee": "mug", "snack": "bun", "sandwich": "sandwich", "grill": "wrap", "plate": "steak", "goods": "part", "plant": "cutting"}.get(tag, "mug")
 	var prop := Props.make("proc:" + kind)
 	var collision := prop.get_node_or_null("PropCollision")
 	if collision:
@@ -4266,6 +4279,11 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	if not asks.is_empty() and randf() < 0.45:
 		entry["ask"] = asks[randi() % asks.size()]
 	customers.append(entry)
+	var walk_in_seconds := 2.6
+	get_tree().create_timer(walk_in_seconds + 0.4).timeout.connect(func():
+		if is_instance_valid(person) and entry.has("ask") and not bool(entry.get("asked", false)):
+			_act(person, "point", 2.4)
+	)
 	_bubble(person, _chat("arriving"))
 	var who: Dictionary = order.get("who", {})
 	if OS.get_environment("CO_DEBUG") != "":
@@ -4316,11 +4334,66 @@ func _make_person(color: Color, hair: Color = Color("4A3626")) -> Node3D:
 	return person
 
 
+func _act(node: Node3D, action: String, seconds: float) -> void:
+	# A short pose on top of the walk or the idle: wave, sip, nod, shrug, point.
+	if node == null or not is_instance_valid(node):
+		return
+	node.set_meta("action", action)
+	node.set_meta("action_until", Time.get_ticks_msec() / 1000.0 + seconds)
+
+
 func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> void:
 	# Walking: a bob and a swing of the arms. Standing: a slow sway and a glance around.
 	var figure := node.get_node_or_null("Figure") as Node3D
 	if figure == null:
 		return
+	var action := str(node.get_meta("action", ""))
+	if action != "" and Time.get_ticks_msec() / 1000.0 < float(node.get_meta("action_until", 0.0)):
+		var arm_r := figure.get_node_or_null("ArmR") as Node3D
+		var arm_l := figure.get_node_or_null("ArmL") as Node3D
+		var head := figure.get_node_or_null("Head") as Node3D
+		figure.position.y = 0.0
+		figure.rotation.z = 0.0
+		match action:
+			"wave":
+				if arm_r:
+					arm_r.rotation.x = -2.7
+					arm_r.rotation.z = sin(t * 14.0) * 0.35
+			"sip":
+				if arm_r:
+					arm_r.rotation.x = -1.9
+					arm_r.rotation.z = -0.5
+				if head:
+					head.rotation.x = -0.18 + sin(t * 3.0) * 0.03
+			"nod":
+				if head:
+					head.position.y = 1.18 - absf(sin(t * 7.0)) * 0.05
+			"shrug":
+				if arm_r:
+					arm_r.rotation.z = -0.9
+				if arm_l:
+					arm_l.rotation.z = 0.9
+				if head:
+					head.rotation.z = sin(t * 5.0) * 0.12
+			"point":
+				if arm_r:
+					arm_r.rotation.x = -1.4
+			"clap":
+				if arm_r and arm_l:
+					var beat := absf(sin(t * 10.0))
+					arm_r.rotation.x = -1.3
+					arm_l.rotation.x = -1.3
+					arm_r.rotation.z = -0.5 + beat * 0.45
+					arm_l.rotation.z = 0.5 - beat * 0.45
+		return
+	elif action != "":
+		node.set_meta("action", "")
+		for name in ["ArmL", "ArmR", "Head"]:
+			var part := figure.get_node_or_null(name) as Node3D
+			if part:
+				part.rotation = Vector3.ZERO
+				if name == "Head":
+					part.position.y = 1.18
 	if walking:
 		figure.position.y = absf(sin(t * 9.0)) * 0.06
 		figure.rotation.z = sin(t * 9.0) * 0.04
@@ -4435,6 +4508,7 @@ func _answer_ask(uid: String, said_yes: bool, card: Node) -> void:
 		var node: Node3D = entry.get("node")
 		if node and is_instance_valid(node):
 			_bubble(node, str(ask.get("yes_line" if said_yes else "no_line", "")), 5.0)
+			_act(node, "nod" if said_yes else "shrug", 1.4)
 		if said_yes:
 			GameState.bump_stat("asks_granted")
 		_serve_customer(uid, true)
@@ -4470,10 +4544,20 @@ func _serve_customer(uid: String, by_hand: bool) -> void:
 		if bubble:
 			tw.tween_property(bubble, "position", Vector3(0.28, 0.75, 0.1), 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			tw.parallel().tween_property(bubble, "scale", Vector3(0.7, 0.7, 0.7), 0.35)
-		tw.tween_interval(0.5)
+		tw.tween_interval(0.4)
+		tw.tween_callback(func():
+			if is_instance_valid(node):
+				_act(node, "sip", 1.3)
+		)
+		tw.tween_interval(1.3)
 		_bubble(node, _chat("served"))
 		var car: Node3D = entry.get("car")
 		tw.tween_property(node, "position", _door_world() + Vector3(0, 0, 0.3), 1.1)
+		tw.tween_callback(func():
+			if is_instance_valid(node):
+				_act(node, "wave", 0.9)
+		)
+		tw.tween_interval(0.9)
 		if car != null and is_instance_valid(car):
 			tw.tween_property(node, "position", car.position + Vector3(1.1, 0.0, 0.2), 1.4)
 		else:

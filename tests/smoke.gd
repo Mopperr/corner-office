@@ -1188,6 +1188,45 @@ func _qa_regressions() -> Array:
 		if str(lazy_rec.get("state", "")) != "placed":
 			found.append("place it all for me left the chair %s" % lazy_rec.get("state", ""))
 	GameState.office_phase = "live"
+	# Every dish on the board has a prop of its own, and the loft has no ceiling beams.
+	var kinds := {}
+	for dish in Catalog.menu():
+		var prop: Node3D = play.call("_order_prop", str(dish.get("id", "")))
+		if prop == null or prop.get_child_count() == 0:
+			found.append("no prop for %s" % dish.get("id", ""))
+		else:
+			kinds[str(play.get("DISH_PROPS").get(str(dish.get("id", "")), ""))] = true
+			prop.free()
+	if kinds.size() < 18:
+		found.append("dish props share too much (%d kinds)" % kinds.size())
+	# Characters hold a short pose on request and drop it when it ends.
+	var poser: Node3D = play.call("_make_person", UIKit.BLUE)
+	play.add_child(poser)
+	play.call("_act", poser, "wave", 5.0)
+	play.call("_animate_person", poser, 1.0, false, 0.016)
+	var arm_r := poser.get_node("Figure/ArmR") as Node3D
+	if absf(arm_r.rotation.x + 2.7) > 0.01:
+		found.append("wave pose %s" % arm_r.rotation.x)
+	poser.set_meta("action_until", 0.0)
+	play.call("_animate_person", poser, 1.0, false, 0.016)
+	if str(poser.get_meta("action", "")) != "" or arm_r.rotation != Vector3.ZERO:
+		found.append("pose not cleared")
+	poser.free()
+	# Every sound effect the scripts name has a file.
+	var dir := DirAccess.open("res://scripts")
+	var missing_sfx: Array = []
+	if dir:
+		for file in dir.get_files():
+			if not file.ends_with(".gd"):
+				continue
+			var text := FileAccess.get_file_as_string("res://scripts/" + file)
+			var rx := RegEx.create_from_string("play_sfx\\(\"([a-z0-9_]+)\"")
+			for hit in rx.search_all(text):
+				var sfx := hit.get_string(1)
+				if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % sfx) and not missing_sfx.has(sfx):
+					missing_sfx.append(sfx)
+	if not missing_sfx.is_empty():
+		found.append("missing sfx %s" % str(missing_sfx))
 	# Customer asks: a dozen in the data, and a yes pays more than a no.
 	if Catalog.asks().size() < 10:
 		found.append("asks %d" % Catalog.asks().size())

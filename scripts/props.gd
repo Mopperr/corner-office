@@ -433,6 +433,159 @@ static func _proc(kind: String) -> Node3D:
 			root.add_child(brew)
 		"bun":
 			root.add_child(mesh_box(Vector3(0.12, 0.07, 0.1), Color("D9A866")))
+			var seeds := mesh_box(Vector3(0.08, 0.012, 0.06), Color("F2DCB2"))
+			seeds.position.y = 0.07
+			root.add_child(seeds)
+		"croissant":
+			for i in 3:
+				var crescent := mesh_box(Vector3(0.06, 0.05, 0.05), Color("D99A4E").lightened(i * 0.06))
+				crescent.position = Vector3(-0.05 + i * 0.05, 0.0, absf(1 - i) * 0.03)
+				crescent.rotation.y = (i - 1) * 0.5
+				root.add_child(crescent)
+		"sandwich":
+			var bread_base := mesh_box(Vector3(0.14, 0.02, 0.12), Color("E0B570"))
+			root.add_child(bread_base)
+			var filling := mesh_box(Vector3(0.14, 0.03, 0.12), Color("7FB069"))
+			filling.position.y = 0.02
+			root.add_child(filling)
+			var bacon := mesh_box(Vector3(0.15, 0.012, 0.05), Color("B5543A"))
+			bacon.position = Vector3(0, 0.05, 0.02)
+			root.add_child(bacon)
+			var top := mesh_box(Vector3(0.14, 0.03, 0.12), Color("E0B570"))
+			top.position.y = 0.065
+			root.add_child(top)
+		"wrap":
+			var roll := mesh_cylinder(0.04, 0.17, Color("E7D7B8"))
+			roll.rotation.z = 1.2
+			roll.position.y = 0.05
+			root.add_child(roll)
+			var foil := mesh_cylinder(0.042, 0.09, Color("C9CED3"))
+			foil.rotation.z = 1.2
+			foil.position = Vector3(-0.04, 0.035, 0)
+			root.add_child(foil)
+			var greens := mesh_box(Vector3(0.03, 0.03, 0.05), Color("7FB069"))
+			greens.position = Vector3(0.09, 0.07, 0)
+			root.add_child(greens)
+		"soup":
+			root.add_child(mesh_cylinder(0.06, 0.09, Color("F4EFE6")))
+			var broth := mesh_cylinder(0.052, 0.01, Color("D86B3A"))
+			broth.position.y = 0.09
+			root.add_child(broth)
+			var spoon := mesh_box(Vector3(0.012, 0.12, 0.02), Color("C9CED3"))
+			spoon.position = Vector3(0.03, 0.09, 0)
+			spoon.rotation.z = -0.5
+			root.add_child(spoon)
+		"fries":
+			var tray := mesh_box(Vector3(0.11, 0.08, 0.07), Color("D9534F"))
+			tray.position.y = 0.04
+			root.add_child(tray)
+			for i in 5:
+				var chip := mesh_box(Vector3(0.014, 0.11, 0.014), Color("F2C14E"))
+				chip.position = Vector3(-0.035 + i * 0.017, 0.1, (i % 2) * 0.02 - 0.01)
+				chip.rotation.z = (i - 2) * 0.12
+				root.add_child(chip)
+		"eggs":
+			root.add_child(mesh_cylinder(0.1, 0.012, UIKit.CREAM_CARD))
+			var muffin := mesh_cylinder(0.045, 0.03, Color("D9A866"))
+			muffin.position.y = 0.012
+			root.add_child(muffin)
+			var egg := mesh_cylinder(0.04, 0.025, Color("F7F1E1"))
+			egg.position.y = 0.042
+			root.add_child(egg)
+			var sauce := mesh_cylinder(0.032, 0.012, Color("F2C14E"))
+			sauce.position.y = 0.067
+			root.add_child(sauce)
+		"steak":
+			root.add_child(mesh_cylinder(0.11, 0.012, UIKit.CREAM_CARD))
+			var cut := mesh_box(Vector3(0.09, 0.03, 0.06), Color("7A3B2E"))
+			cut.position = Vector3(-0.03, 0.027, 0)
+			root.add_child(cut)
+			for i in 4:
+				var chip := mesh_box(Vector3(0.012, 0.012, 0.07), Color("F2C14E"))
+				chip.position = Vector3(0.04 + i * 0.014, 0.018, 0)
+				root.add_child(chip)
+		"tasting":
+			root.add_child(mesh_cylinder(0.12, 0.012, UIKit.DARK))
+			for i in 3:
+				var morsel := mesh_cylinder(0.02, 0.025, [Color("E07A5F"), Color("81B29A"), Color("F2CC8F")][i])
+				morsel.position = Vector3(-0.06 + i * 0.06, 0.012, 0)
+				root.add_child(morsel)
+			var smear := mesh_box(Vector3(0.14, 0.004, 0.02), Color("3D405B"))
+			smear.position = Vector3(0, 0.012, 0.05)
+			root.add_child(smear)
+		"brulee":
+			var dish := mesh_cylinder(0.055, 0.04, Color("F4EFE6"))
+			root.add_child(dish)
+			var sugar := mesh_cylinder(0.05, 0.008, Color("B8732F"))
+			sugar.position.y = 0.04
+			root.add_child(sugar)
+			var berry := mesh_cylinder(0.012, 0.015, Color("B5343E"))
+			berry.position = Vector3(0.02, 0.048, 0)
+			root.add_child(berry)
+		"latte":
+			root.add_child(mesh_cylinder(0.05, 0.1, UIKit.CREAM_CARD))
+			var grip := mesh_box(Vector3(0.02, 0.06, 0.04), UIKit.CREAM_CARD)
+			grip.position = Vector3(0.06, 0.05, 0)
+			root.add_child(grip)
+			var foam := mesh_cylinder(0.042, 0.012, Color("E9DCC7"))
+			foam.position.y = 0.1
+			root.add_child(foam)
+			var leaf := mesh_box(Vector3(0.012, 0.004, 0.04), Color("8A5A3C"))
+			leaf.position.y = 0.112
+			root.add_child(leaf)
+		"espresso":
+			root.add_child(mesh_cylinder(0.03, 0.055, UIKit.CREAM_CARD))
+			var crema := mesh_cylinder(0.025, 0.008, Color("A86B3C"))
+			crema.position.y = 0.055
+			root.add_child(crema)
+			var saucer := mesh_cylinder(0.055, 0.006, UIKit.CREAM_CARD)
+			root.add_child(saucer)
+		"teacup":
+			root.add_child(mesh_cylinder(0.045, 0.06, Color("DCE9EE")))
+			var tea := mesh_cylinder(0.04, 0.008, Color("B9814A"))
+			tea.position.y = 0.06
+			root.add_child(tea)
+			var tag := mesh_box(Vector3(0.02, 0.025, 0.004), UIKit.TERRA)
+			tag.position = Vector3(0.05, 0.03, 0)
+			root.add_child(tag)
+		"coldbrew":
+			root.add_child(mesh_cylinder(0.04, 0.13, Color("4A2E1E")))
+			var ice := mesh_box(Vector3(0.03, 0.03, 0.03), Color("DCE9EE"))
+			ice.position = Vector3(0.0, 0.11, 0.0)
+			root.add_child(ice)
+			var straw := mesh_box(Vector3(0.012, 0.17, 0.012), UIKit.DARK)
+			straw.position = Vector3(0.02, 0.07, 0)
+			root.add_child(straw)
+		"affogato":
+			root.add_child(mesh_cylinder(0.045, 0.07, Color("DCE9EE")))
+			var scoop := mesh_cylinder(0.035, 0.035, Color("F7F1E1"))
+			scoop.position.y = 0.07
+			root.add_child(scoop)
+			var shot := mesh_cylinder(0.038, 0.012, Color("5A3B2A"))
+			shot.position.y = 0.1
+			root.add_child(shot)
+		"book":
+			root.add_child(mesh_box(Vector3(0.14, 0.03, 0.1), UIKit.BLUE))
+			var pages := mesh_box(Vector3(0.13, 0.022, 0.09), UIKit.CREAM_CARD)
+			pages.position = Vector3(0.008, 0.004, 0)
+			root.add_child(pages)
+		"pencil":
+			var stick := mesh_cylinder(0.008, 0.18, UIKit.MUSTARD)
+			stick.rotation.z = 1.2
+			stick.position.y = 0.02
+			root.add_child(stick)
+			var tip := mesh_cylinder(0.006, 0.02, Color("E7C9A8"))
+			tip.rotation.z = 1.2
+			tip.position = Vector3(0.095, 0.055, 0)
+			root.add_child(tip)
+		"cutting":
+			root.add_child(mesh_cylinder(0.035, 0.05, UIKit.TERRA))
+			for i in 3:
+				var leaf := mesh_box(Vector3(0.02, 0.06, 0.006), UIKit.SAGE)
+				leaf.position = Vector3(0, 0.08, 0)
+				leaf.rotation.y = i * 2.1
+				leaf.rotation.z = 0.4
+				root.add_child(leaf)
 		"aframe":
 			for side in [-1.0, 1.0]:
 				var board := mesh_box(Vector3(0.6, 0.9, 0.03), UIKit.CREAM_CARD)

@@ -143,6 +143,13 @@ static func fixtures() -> Array:
 	return shop.get("fixtures", [])
 
 
+static func tier_name(tier_id: String) -> String:
+	for tier in tiers():
+		if str(tier.get("id", "")) == tier_id:
+			return str(tier.get("name", tier_id.capitalize()))
+	return tier_id.capitalize()
+
+
 static func asks() -> Array:
 	ensure()
 	return shop.get("asks", [])

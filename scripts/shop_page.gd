@@ -112,21 +112,19 @@ func _right_column() -> void:
 	var column := _column(620.0)
 	_heading(column, "Menu  ·  prices follow the mood")
 	var served := GameState.shop_dishes()
-	var listed := 0
-	var hidden := 0
+	# The whole board, grouped by rung; the column scrolls when the restaurant is open.
+	var last_tier := ""
 	for dish in Catalog.menu():
 		var id := str(dish.get("id", ""))
-		var on := served.has(id) or (served.is_empty() and str(dish.get("tier", "stand")) == "stand")
+		var tier := str(dish.get("tier", "stand"))
+		var on := served.has(id) or (served.is_empty() and tier == "stand")
 		if not on:
 			continue
-		if listed >= 8:
-			hidden += 1
-			continue
-		listed += 1
+		if tier != last_tier and tier != "stand":
+			last_tier = tier
+			_line(column, Catalog.tier_name(tier), UIKit.WOOD, 1)
 		var price := int(round(float(dish.get("price", 1)) * GameState.menu_markup))
 		_line(column, "%s   $%d" % [dish.get("name", ""), price], UIKit.DARK, 1)
-	if hidden > 0:
-		_line(column, "and %d more on the board" % hidden, UIKit.WOOD, 1)
 	var moods := HBoxContainer.new()
 	moods.add_theme_constant_override("separation", 10)
 	column.add_child(moods)
