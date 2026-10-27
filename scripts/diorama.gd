@@ -2689,7 +2689,7 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 		if str(item.get("state", "")) in ["boxed", "loose"] and bool(carried.get(int(item.get("box", -1)), false)):
 			waiting += 1
 	if waiting > 0:
-		_act_button(layer, "Unpack it all for me", Vector2(1060, 36), func():
+		_act_button(layer, "Unpack it all for me", Vector2(760, 36), func():
 			for box in GameState.job.get("boxes", []):
 				var id := int(box.get("id", 0))
 				if bool(carried.get(id, false)):
