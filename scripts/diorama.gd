@@ -1654,6 +1654,17 @@ func _maybe_live() -> void:
 func _pack_click(uid: String) -> void:
 	if uid == "":
 		return
+	if uid.begins_with("boxpack:"):
+		var pick := int(uid.trim_prefix("boxpack:"))
+		if bool(GameState.job_box(pick).get("sealed", false)):
+			_toast("Box %d is sealed. Pick an open one, or start a new box." % (pick + 1))
+		else:
+			selected_box = pick
+			_toast("Using box %d." % (pick + 1))
+			AudioDirector.play_sfx("sfx_box_fold", true)
+		_refresh_items()
+		_refresh_hud_buttons()
+		return
 	var item := GameState.job_item(uid)
 	if item.is_empty() or str(item.get("state", "")) != "loose":
 		return
@@ -2416,6 +2427,7 @@ func _refresh_items() -> void:
 		for item in GameState.job.get("items", []):
 			if str(item.get("state", "")) == "loose":
 				_spawn_record(item, str(item.get("item_id", "")), false)
+		_spawn_pack_boxes()
 	elif GameState.mode == "truck":
 		_spawn_truck_slots()
 	elif GameState.mode == "job_unpack":
@@ -2430,13 +2442,56 @@ func _refresh_items() -> void:
 
 
 func _layout_loose() -> void:
-	var i := 0
+	# Big pieces in the front rows, small ones behind, with a clear strip
+	# along the back wall for the boxes. Everything sits on the floor.
+	var loose: Array = []
 	for item in GameState.job.get("items", []):
-		if str(item.get("state", "")) != "loose":
-			continue
-		item["x"] = float(venue.get("x", 0)) + 1.1 + float(i % 5) * 0.85
-		item["z"] = float(venue.get("z", 0)) + 1.5 + float(int(i / 5)) * 0.85
+		if str(item.get("state", "")) == "loose":
+			loose.append(item)
+	loose.sort_custom(func(a, b):
+		var da := ItemDB.get_item(str(a.get("item_id", "")))
+		var db := ItemDB.get_item(str(b.get("item_id", "")))
+		var fa := float(da.get("w", 0.3)) * float(da.get("d", 0.3)) + (1.0 if bool(a.get("bulky", false)) or bool(a.get("heavy", false)) else 0.0)
+		var fb := float(db.get("w", 0.3)) * float(db.get("d", 0.3)) + (1.0 if bool(b.get("bulky", false)) or bool(b.get("heavy", false)) else 0.0)
+		return fa > fb
+	)
+	var w := float(venue.get("w", 6))
+	var cols := maxi(3, int((w - 1.6) / 0.85))
+	var i := 0
+	for item in loose:
+		item["x"] = float(venue.get("x", 0)) + 1.0 + float(i % cols) * 0.85
+		item["z"] = float(venue.get("z", 0)) + 2.2 + float(int(i / cols)) * 0.85
 		item["y"] = 0.0
+		i += 1
+
+
+func _spawn_pack_boxes() -> void:
+	# The boxes you are filling stand in a row along the back wall: open
+	# while they take pieces, closed once sealed, the one in use ringed.
+	var i := 0
+	for box in GameState.job.get("boxes", []):
+		var id := int(box.get("id", 0))
+		var node := Node3D.new()
+		node.position = Vector3(float(venue.get("x", 0)) + 0.8 + float(i) * 0.6, 0.0, float(venue.get("z", 0)) + 0.8)
+		node.set_meta("uid", "boxpack:%d" % id)
+		var sealed := bool(box.get("sealed", false))
+		node.add_child(Props.make("box_closed" if sealed else "box_open"))
+		if id == selected_box and not sealed:
+			var ring := Props.mesh_cylinder(0.36, 0.02, UIKit.MUSTARD)
+			ring.position.y = 0.01
+			node.add_child(ring)
+		var count := GameState.box_item_count(id)
+		if count > 0:
+			var tag := Label3D.new()
+			tag.text = "%d" % count
+			tag.font_size = 64
+			tag.modulate = UIKit.DARK
+			tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+			tag.position = Vector3(0, 0.62, 0)
+			tag.no_depth_test = true
+			node.add_child(tag)
+		Props.add_picker(node, Vector3(0.5, 0.45, 0.45))
+		items_root.add_child(node)
 		i += 1
 
 
@@ -3403,7 +3458,11 @@ func _mode_objective() -> String:
 				return "Set up %s" % venue.get("name", "the room")
 			return "Make it yours"
 		"job_pack":
-			return "Pack %d pieces" % GameState.job.get("items", []).size()
+			var left := 0
+			for item in GameState.job.get("items", []):
+				if str(item.get("state", "")) == "loose":
+					left += 1
+			return "Pack %d pieces" % GameState.job.get("items", []).size() if left == GameState.job.get("items", []).size() else "%d piece%s left to box" % [left, "" if left == 1 else "s"]
 		"truck":
 			return "Load the truck"
 		"job_unpack":
@@ -3443,6 +3502,9 @@ func _sync_chips() -> void:
 
 func _goal_hint() -> String:
 	if backdrop or venue.is_empty():
+		return ""
+	var placing := (GameState.mode == "office" and GameState.office_phase == "place") or GameState.mode == "job_unpack"
+	if not placing:
 		return ""
 	var goal: Dictionary = StackGoals.active(str(venue.get("id", "")), GameState.character, _goal_items(), GameState.latched_goals)
 	return str(goal.get("hint", ""))

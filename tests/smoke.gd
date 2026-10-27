@@ -1240,6 +1240,28 @@ func _qa_regressions() -> Array:
 			pool_prop.free()
 	if ItemDB.get_item("globe").get("flavor", "") == "" or ItemDB.get_item("easel").get("flavor", "") == "":
 		found.append("new items without a line")
+	# Packing: the boxes being filled stand by the back wall, and clicking one picks it.
+	GameState.job = {"def": {"id": "pack_test", "venue": "cafe"}, "items": [], "boxes": [{"id": 0, "sealed": true}, {"id": 1, "sealed": false}], "carried": []}
+	for b in 3:
+		GameState.job["items"].append({"uid": "p%d" % b, "item_id": "cafe_mug", "name": "Mug %d" % b, "state": "boxed" if b < 2 else "loose", "box": 0 if b < 2 else -1, "damage": 0, "x": 0, "y": 0, "z": 0})
+	GameState.mode = "job_pack"
+	play.selected_box = -1
+	play.call("_refresh_items")
+	var pack_nodes := 0
+	for child in play.items_root.get_children():
+		if child.has_meta("uid") and str(child.get_meta("uid")).begins_with("boxpack:"):
+			pack_nodes += 1
+	if pack_nodes != 2:
+		found.append("pack boxes shown %d" % pack_nodes)
+	play.call("_pack_click", "boxpack:1")
+	if int(play.selected_box) != 1:
+		found.append("pack click did not pick the box")
+	play.call("_pack_click", "boxpack:0")
+	if int(play.selected_box) != 1:
+		found.append("sealed box got picked")
+	GameState.mode = "office"
+	GameState.job = {}
+	play.call("_refresh_items")
 	# Box towers: carried boxes pile in threes, the top one opens, emptied ones leave the tower.
 	GameState.job = {"def": {"id": "stack_test", "venue": "cafe"}, "items": [], "boxes": [], "carried": [0, 1, 2, 3]}
 	for b in 4:
