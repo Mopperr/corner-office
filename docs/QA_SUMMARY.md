@@ -15,6 +15,7 @@ feel, not missing systems.
 | Area | State | Note |
 | --- | --- | --- |
 | Garage tutorial | Pass | Place it all / Box it all helpers; clipboard opens itself when you go live |
+| UI look | Pass | Paper cut-out cards with outlines and hard shadows, lipped buttons, ribbon titles, colour-coded HUD |
 | Computer pages | Pass | Shop, Market, Forest, Email, Listings, Till, night card, ads sidebar |
 | Map | Pass | Illustrated, pins, legend, board rows |
 | Jobs (story + daily board) | Pass | 25 clients, twists, goals, contracts; 10 drive routes |
@@ -37,14 +38,21 @@ feel, not missing systems.
 7. Carried boxes projected under the hint bar; tipped-out items piled or left the room; box card could stay open.
 8. Rotate view button sat over the boxed chair.
 9. Results card half empty.
+10. CI-only: the raid smoke check could see the jar go up when a fence sale and a goal reward outweighed the fine.
+11. The HUD status line wrapped and clipped once the ledger was added; it is two short lines now.
+12. "Unpack it all for me" sat on top of the Pause button.
+
+## Closed since the first pass
+
+- Bakery loft: ceiling beams gone, skylight glow and a painted picture rail instead.
+- Till: the whole board, grouped by rung, in a scrolling column.
+- Every dish has its own prop.
+- Characters hold poses (raise a hand, nod, shrug, sip, wave) on top of the code-driven walk and idle.
+- Sound: every effect the scripts name has a file (checked by smoke). Playback itself still cannot be heard in the container.
 
 ## Still open
 
-- No rigged animation; people and animals move by code.
-- Dishes past coffee, juice and buns share a few generic props.
-- The bakery office keeps its ceiling beams.
-- Till menu shows eight dishes then "more".
-- Sound unchecked in the container (no audio device).
+- No rigged animation data; all movement is code-driven.
 
 ## Does it hold two hours?
 
