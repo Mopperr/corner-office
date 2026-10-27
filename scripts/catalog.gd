@@ -150,6 +150,15 @@ static func tier_name(tier_id: String) -> String:
 	return tier_id.capitalize()
 
 
+static func ingredients() -> Dictionary:
+	ensure()
+	return shop.get("ingredients", {})
+
+
+static func ingredient(id: String) -> Dictionary:
+	return ingredients().get(id, {"name": id.capitalize(), "color": "C68B59"})
+
+
 static func asks() -> Array:
 	ensure()
 	return shop.get("asks", [])

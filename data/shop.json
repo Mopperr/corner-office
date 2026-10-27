@@ -116,159 +116,295 @@
       "id": "drip",
       "name": "Drip coffee",
       "price": 3,
-      "tag": "coffee"
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "drip"
+      ]
     },
     {
       "id": "latte",
       "name": "Oat latte",
       "price": 5,
-      "tag": "coffee"
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "espresso",
+        "oat_milk",
+        "foam"
+      ]
     },
     {
       "id": "espresso_shot",
       "name": "Espresso",
       "price": 4,
-      "tag": "coffee"
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "espresso"
+      ]
     },
     {
       "id": "tea",
       "name": "Kettle tea",
       "price": 3,
-      "tag": "coffee"
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "tea",
+        "water"
+      ]
     },
     {
       "id": "bun",
       "name": "Morning bun",
       "price": 4,
-      "tag": "snack"
+      "tag": "snack",
+      "recipe": [
+        "bun",
+        "butter",
+        "jam"
+      ]
     },
     {
       "id": "used_book",
       "name": "Used paperback",
       "price": 6,
-      "tag": "goods"
+      "tag": "goods",
+      "recipe": [
+        "book",
+        "bookmark"
+      ],
+      "vessel": "plate"
     },
     {
       "id": "pencil",
       "name": "A good pencil",
       "price": 2,
-      "tag": "goods"
+      "tag": "goods",
+      "recipe": [
+        "pencil",
+        "sharpener"
+      ],
+      "vessel": "plate"
     },
     {
       "id": "cutting",
       "name": "Plant cutting",
       "price": 7,
-      "tag": "plant"
+      "tag": "plant",
+      "recipe": [
+        "pot",
+        "soil",
+        "cutting"
+      ],
+      "vessel": "plate"
     },
     {
       "id": "lemonade",
       "name": "Fresh lemonade",
       "price": 4,
-      "tag": "juice"
+      "tag": "juice",
+      "recipe": [
+        "glass",
+        "ice",
+        "lemon",
+        "sugar",
+        "water"
+      ]
     },
     {
       "id": "iced_tea",
       "name": "Iced tea",
       "price": 3,
-      "tag": "juice"
+      "tag": "juice",
+      "recipe": [
+        "glass",
+        "ice",
+        "tea",
+        "mint"
+      ]
     },
     {
       "id": "flat_white",
       "name": "Flat white",
       "price": 5,
       "tag": "coffee",
-      "tier": "cart"
+      "tier": "cart",
+      "recipe": [
+        "cup",
+        "espresso",
+        "oat_milk"
+      ]
     },
     {
       "id": "cold_brew",
       "name": "Cold brew",
       "price": 5,
       "tag": "juice",
-      "tier": "cart"
+      "tier": "cart",
+      "recipe": [
+        "glass",
+        "ice",
+        "cold_brew"
+      ]
     },
     {
       "id": "blt",
       "name": "BLT",
       "price": 8,
       "tag": "sandwich",
-      "tier": "sandwich"
+      "tier": "sandwich",
+      "recipe": [
+        "bread",
+        "mayo",
+        "bacon",
+        "lettuce",
+        "tomato"
+      ]
     },
     {
       "id": "veggie_wrap",
       "name": "Veggie wrap",
       "price": 7,
       "tag": "sandwich",
-      "tier": "sandwich"
+      "tier": "sandwich",
+      "recipe": [
+        "wrap",
+        "hummus",
+        "peppers",
+        "lettuce"
+      ]
     },
     {
       "id": "soup_cup",
       "name": "Cup of soup",
       "price": 6,
       "tag": "plate",
-      "tier": "sandwich"
+      "tier": "sandwich",
+      "recipe": [
+        "cup",
+        "soup",
+        "cream"
+      ],
+      "vessel": "cup"
     },
     {
       "id": "chicken_shawarma",
       "name": "Chicken shawarma",
       "price": 11,
       "tag": "grill",
-      "tier": "shawarma"
+      "tier": "shawarma",
+      "recipe": [
+        "wrap",
+        "chicken",
+        "pickles",
+        "garlic_sauce"
+      ]
     },
     {
       "id": "falafel_wrap",
       "name": "Falafel wrap",
       "price": 9,
       "tag": "grill",
-      "tier": "shawarma"
+      "tier": "shawarma",
+      "recipe": [
+        "wrap",
+        "hummus",
+        "falafel",
+        "pickles"
+      ]
     },
     {
       "id": "garlic_fries",
       "name": "Garlic fries",
       "price": 5,
       "tag": "plate",
-      "tier": "shawarma"
+      "tier": "shawarma",
+      "recipe": [
+        "plate",
+        "fries",
+        "garlic",
+        "parsley"
+      ]
     },
     {
       "id": "croissant",
       "name": "Almond croissant",
       "price": 6,
       "tag": "snack",
-      "tier": "cafe"
+      "tier": "cafe",
+      "recipe": [
+        "plate",
+        "croissant",
+        "butter"
+      ]
     },
     {
       "id": "eggs_benedict",
       "name": "Eggs Benedict",
       "price": 14,
       "tag": "plate",
-      "tier": "cafe"
+      "tier": "cafe",
+      "recipe": [
+        "plate",
+        "muffin",
+        "egg",
+        "hollandaise"
+      ]
     },
     {
       "id": "affogato",
       "name": "Affogato",
       "price": 7,
       "tag": "coffee",
-      "tier": "cafe"
+      "tier": "cafe",
+      "recipe": [
+        "glass",
+        "ice_cream",
+        "espresso"
+      ],
+      "vessel": "cup"
     },
     {
       "id": "tasting_menu",
       "name": "Tasting menu",
       "price": 48,
       "tag": "plate",
-      "tier": "restaurant"
+      "tier": "restaurant",
+      "recipe": [
+        "plate",
+        "amuse",
+        "scallop",
+        "lamb",
+        "sorbet"
+      ]
     },
     {
       "id": "steak_frites",
       "name": "Steak frites",
       "price": 32,
       "tag": "plate",
-      "tier": "restaurant"
+      "tier": "restaurant",
+      "recipe": [
+        "plate",
+        "steak",
+        "fries",
+        "jus"
+      ]
     },
     {
       "id": "creme_brulee",
       "name": "Crème brûlée",
       "price": 12,
       "tag": "plate",
-      "tier": "restaurant"
+      "tier": "restaurant",
+      "recipe": [
+        "plate",
+        "custard",
+        "caramel",
+        "berry"
+      ]
     }
   ],
   "markups": [
@@ -577,5 +713,231 @@
       "yes_line": "Thursday. On my honour.",
       "no_line": "Found a coin. Found three. Fine."
     }
-  ]
+  ],
+  "ingredients": {
+    "cup": {
+      "name": "Paper cup",
+      "color": "F4EFE6"
+    },
+    "glass": {
+      "name": "Tall glass",
+      "color": "DCE9EE"
+    },
+    "ice": {
+      "name": "Ice",
+      "color": "CFE6F2"
+    },
+    "water": {
+      "name": "Water",
+      "color": "BFD9EA"
+    },
+    "lemon": {
+      "name": "Lemon",
+      "color": "F7D040"
+    },
+    "sugar": {
+      "name": "Sugar",
+      "color": "FFF6DC"
+    },
+    "tea": {
+      "name": "Tea",
+      "color": "B9814A"
+    },
+    "mint": {
+      "name": "Mint",
+      "color": "7FB069"
+    },
+    "espresso": {
+      "name": "Espresso",
+      "color": "5A3B2A"
+    },
+    "drip": {
+      "name": "Drip coffee",
+      "color": "6B4A3A"
+    },
+    "oat_milk": {
+      "name": "Oat milk",
+      "color": "E9DCC7"
+    },
+    "foam": {
+      "name": "Foam",
+      "color": "F7F1E1"
+    },
+    "cold_brew": {
+      "name": "Cold brew",
+      "color": "4A2E1E"
+    },
+    "ice_cream": {
+      "name": "Ice cream",
+      "color": "FBF3E4"
+    },
+    "bun": {
+      "name": "Bun",
+      "color": "D9A866"
+    },
+    "butter": {
+      "name": "Butter",
+      "color": "F2C14E"
+    },
+    "jam": {
+      "name": "Jam",
+      "color": "B5343E"
+    },
+    "croissant": {
+      "name": "Croissant",
+      "color": "D99A4E"
+    },
+    "bread": {
+      "name": "Bread",
+      "color": "E0B570"
+    },
+    "lettuce": {
+      "name": "Lettuce",
+      "color": "7FB069"
+    },
+    "tomato": {
+      "name": "Tomato",
+      "color": "E04E3A"
+    },
+    "bacon": {
+      "name": "Bacon",
+      "color": "B5543A"
+    },
+    "cheese": {
+      "name": "Cheese",
+      "color": "F2CC8F"
+    },
+    "mayo": {
+      "name": "Mayo",
+      "color": "FFF5E1"
+    },
+    "wrap": {
+      "name": "Flatbread",
+      "color": "E7D7B8"
+    },
+    "hummus": {
+      "name": "Hummus",
+      "color": "E6D5A8"
+    },
+    "peppers": {
+      "name": "Roast peppers",
+      "color": "D9534F"
+    },
+    "soup": {
+      "name": "Tomato soup",
+      "color": "D86B3A"
+    },
+    "cream": {
+      "name": "Cream",
+      "color": "FBF7EE"
+    },
+    "chicken": {
+      "name": "Chicken",
+      "color": "C98B5A"
+    },
+    "falafel": {
+      "name": "Falafel",
+      "color": "8A6A3C"
+    },
+    "pickles": {
+      "name": "Pickles",
+      "color": "8CA64B"
+    },
+    "garlic_sauce": {
+      "name": "Garlic sauce",
+      "color": "F4EDDA"
+    },
+    "fries": {
+      "name": "Fries",
+      "color": "F2C14E"
+    },
+    "garlic": {
+      "name": "Garlic",
+      "color": "EDE3C8"
+    },
+    "parsley": {
+      "name": "Parsley",
+      "color": "5E9A4E"
+    },
+    "muffin": {
+      "name": "English muffin",
+      "color": "D9A866"
+    },
+    "egg": {
+      "name": "Poached egg",
+      "color": "F7F1E1"
+    },
+    "hollandaise": {
+      "name": "Hollandaise",
+      "color": "F2C14E"
+    },
+    "steak": {
+      "name": "Steak",
+      "color": "7A3B2E"
+    },
+    "jus": {
+      "name": "Red wine jus",
+      "color": "4C2A2A"
+    },
+    "custard": {
+      "name": "Custard",
+      "color": "F6E3A1"
+    },
+    "caramel": {
+      "name": "Burnt sugar",
+      "color": "B8732F"
+    },
+    "berry": {
+      "name": "Berries",
+      "color": "8E2F4A"
+    },
+    "amuse": {
+      "name": "Amuse-bouche",
+      "color": "E07A5F"
+    },
+    "scallop": {
+      "name": "Scallop",
+      "color": "F4E6D2"
+    },
+    "lamb": {
+      "name": "Lamb",
+      "color": "8A4B3C"
+    },
+    "sorbet": {
+      "name": "Sorbet",
+      "color": "F0A0C0"
+    },
+    "plate": {
+      "name": "Plate",
+      "color": "FFFDF6"
+    },
+    "book": {
+      "name": "Book",
+      "color": "7FA3B8"
+    },
+    "bookmark": {
+      "name": "Bookmark",
+      "color": "E6B655"
+    },
+    "pencil": {
+      "name": "Pencil",
+      "color": "E6B655"
+    },
+    "sharpener": {
+      "name": "Sharpener",
+      "color": "6B4A3A"
+    },
+    "pot": {
+      "name": "Little pot",
+      "color": "D9765F"
+    },
+    "soil": {
+      "name": "Soil",
+      "color": "5B4030"
+    },
+    "cutting": {
+      "name": "Cutting",
+      "color": "8FAF7E"
+    }
+  }
 }

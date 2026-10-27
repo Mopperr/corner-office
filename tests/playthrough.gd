@@ -215,6 +215,14 @@ func _check_backroom() -> void:
 	await wait(0.3)
 
 
+func press_named(room: Node, name: String) -> bool:
+	for btn in _buttons(room):
+		if str(btn.name) == name and not btn.disabled:
+			btn.pressed.emit()
+			return true
+	return false
+
+
 func _any_button(room: Node, text_or_name: String) -> bool:
 	for btn in _buttons(room):
 		if btn.text == text_or_name or str(btn.name) == text_or_name:
@@ -542,6 +550,18 @@ func _check_shop() -> void:
 				btn.pressed.emit()
 				break
 		await wait(0.3)
+	# Then the order is made by hand: tap the recipe in order, then serve.
+	if _any_button(room, "MakeTill"):
+		var recipe: Array = Catalog.menu_item(str(entry.get("order", {}).get("dish", ""))).get("recipe", [])
+		_check(not recipe.is_empty(), "shop: the order has a recipe")
+		await shot("make_card")
+		for ing in recipe:
+			_check(press_named(room, "Ing_" + str(ing)), "shop: tray has %s" % ing)
+			await wait(0.15)
+		await shot("make_done")
+		_check(press_named(room, "MakeServe"), "shop: Serve it after a clean make")
+		await wait(0.4)
+		_check(int(GameState.stats.get("perfect_makes", 0)) >= 1, "shop: the make counted as perfect")
 	_check(GameState.money > money_before, "shop: serving by hand paid (%d -> %d)" % [money_before, GameState.money])
 	_check(not GameState.shop_ledger.is_empty() and bool(GameState.shop_ledger[0].get("hand", false)), "shop: ledger says served by hand")
 	await shot("shop_served")

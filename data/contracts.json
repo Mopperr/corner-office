@@ -241,5 +241,14 @@
     "need": 10,
     "money": 30,
     "rep": 0
+  },
+  {
+    "id": "perfect_ten",
+    "title": "Steady pour",
+    "blurb": "Make ten orders by hand without a slip.",
+    "stat": "perfect_makes",
+    "need": 10,
+    "money": 60,
+    "rep": 1
   }
 ]

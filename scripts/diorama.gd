@@ -1325,7 +1325,7 @@ func _click() -> void:
 	if item_uid.begins_with("visitor:") and GameState.mode == "office":
 		var visitor_uid := item_uid.trim_prefix("visitor:")
 		if not _open_ask(visitor_uid):
-			_serve_customer(visitor_uid, true)
+			_open_make(visitor_uid)
 		return
 	if item_uid == "pastry":
 		_pastry()
@@ -4429,7 +4429,7 @@ func _tick_customer(entry: Dictionary, delta: float) -> void:
 		bubble.position.y = 1.55 + sin(t * 3.0) * 0.04
 		bubble.rotation.y += delta * 0.8
 	_animate_person(node, t, str(entry.get("stage", "")) != "waiting", delta)
-	if str(entry.get("stage", "")) == "waiting":
+	if str(entry.get("stage", "")) == "waiting" and not bool(entry.get("making", false)):
 		# They never leave unserved; after the wait the till just rings them up without the big tip.
 		entry["wait"] = float(entry["wait"]) - delta
 		if float(entry["wait"]) <= 0.0:
@@ -4514,7 +4514,44 @@ func _answer_ask(uid: String, said_yes: bool, card: Node) -> void:
 			_act(node, "nod" if said_yes else "shrug", 1.4)
 		if said_yes:
 			GameState.bump_stat("asks_granted")
-		_serve_customer(uid, true)
+		_open_make(uid)
+		return
+
+
+func _open_make(uid: String) -> void:
+	# Serving by hand means making the thing: a card with the cup or plate,
+	# the recipe, and a tray of ingredients. The till can always take over.
+	for entry in customers:
+		if str(entry.get("uid", "")) != uid or str(entry.get("stage", "")) != "waiting":
+			continue
+		var order: Dictionary = entry.get("order", {})
+		var dish := Catalog.menu_item(str(order.get("dish", "")))
+		if (dish.get("recipe", []) as Array).is_empty():
+			_serve_customer(uid, true)
+			return
+		var layer := _hud_layer()
+		var old := layer.get_node_or_null("MakeCard")
+		if old != null:
+			layer.remove_child(old)
+			old.free()
+		entry["making"] = true
+		var card := MakeCard.new()
+		layer.add_child(card)
+		var who: Dictionary = order.get("who", {})
+		card.setup(dish, str(who.get("name", "a neighbour")), hash(uid) + GameState.day * 7)
+		card.finished.connect(func(result: Dictionary):
+			entry["making"] = false
+			var o: Dictionary = entry.get("order", {})
+			o["tip_mult"] = float(o.get("tip_mult", 1.0)) * float(result.get("tip_mult", 1.0))
+			entry["order"] = o
+			if bool(result.get("perfect", false)):
+				GameState.bump_stat("perfect_makes")
+				_toast("Perfect %s. Tip's up." % dish.get("name", "make"), "Till")
+			elif bool(result.get("by_hand", false)) and int(result.get("slips", 0)) > 0:
+				_toast("Served, with a wobble. Tip's a little lighter.", "Till")
+			_serve_customer(uid, bool(result.get("by_hand", false)))
+		)
+		AudioDirector.play_sfx("sfx_drawer_open")
 		return
 
 

@@ -1227,6 +1227,45 @@ func _qa_regressions() -> Array:
 					missing_sfx.append(sfx)
 	if not missing_sfx.is_empty():
 		found.append("missing sfx %s" % str(missing_sfx))
+	# Every dish has a recipe of known ingredients, and the make card scores it.
+	for dish in Catalog.menu():
+		var recipe: Array = dish.get("recipe", [])
+		if recipe.size() < 2:
+			found.append("recipe short for %s" % dish.get("id", ""))
+		for ing in recipe:
+			if not Catalog.ingredients().has(str(ing)):
+				found.append("unknown ingredient %s" % ing)
+	var make1 := MakeCard.new()
+	play.add_child(make1)
+	var latte: Dictionary = Catalog.menu_item("latte")
+	make1.setup(latte, "Nia", 7)
+	var tray_ids: Array = MakeCard.tray_ids(make1)
+	if tray_ids.size() != (latte.get("recipe", []) as Array).size() + 2:
+		found.append("tray size %d" % tray_ids.size())
+	var make_box: Dictionary = {}
+	make1.finished.connect(func(r): make_box["r"] = r)
+	make1._tap("foam")
+	if make1.slips != 1:
+		found.append("slip not counted")
+	for ing in latte.get("recipe", []):
+		make1._tap(str(ing))
+	if make1.serve_button.disabled:
+		found.append("serve stays disabled after the recipe")
+	make1._serve()
+	var make_result: Dictionary = make_box.get("r", {})
+	if make_result.is_empty() or bool(make_result.get("perfect", false)) or absf(float(make_result.get("tip_mult", 0.0)) - 1.0) > 0.001:
+		found.append("make result %s" % str(make_result))
+	var card2 := MakeCard.new()
+	play.add_child(card2)
+	card2.setup(latte, "Nia", 8)
+	var box2: Dictionary = {}
+	card2.finished.connect(func(r): box2["r"] = r)
+	for ing in latte.get("recipe", []):
+		card2._tap(str(ing))
+	card2._serve()
+	var result2: Dictionary = box2.get("r", {})
+	if not bool(result2.get("perfect", false)) or float(result2.get("tip_mult", 0.0)) < 1.2:
+		found.append("perfect make %s" % str(result2))
 	# Customer asks: a dozen in the data, and a yes pays more than a no.
 	if Catalog.asks().size() < 10:
 		found.append("asks %d" % Catalog.asks().size())
