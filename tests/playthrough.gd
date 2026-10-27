@@ -998,6 +998,13 @@ func _unpack() -> void:
 			if picked != "":
 				break
 		if picked == "":
+			for item in loose:
+				var node := _node_for(room, str(item.get("uid", "")))
+				var hit_name := ""
+				if node != null:
+					await hover_world(room, node.global_position + Vector3(0, 0.15, 0))
+					hit_name = room._pick_uid()
+				print("  loose %s (%s) at %s node=%s ray hits '%s'" % [item.get("name", ""), item.get("item_id", ""), Vector3(float(item.get("x", 0)), float(item.get("y", 0)), float(item.get("z", 0))), node != null, hit_name])
 			_fail("unpack: none of %d loose items can be clicked" % loose.size())
 			return
 		await click_world(room, _last_hover)

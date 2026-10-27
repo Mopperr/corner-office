@@ -2224,20 +2224,35 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 		var at := spot + Vector3(-1.1 + col * 0.5 - row * 0.55, 0.0, -1.1 - col * 0.5 - row * 0.55)
 		if at.x < x0 + 0.5 or at.x > x0 + w - 0.5 or at.z < z0 + 0.5 or at.z > z0 + d - 0.5:
 			continue
-		if _spot_free(at, taken):
+		if _spot_free(at, taken) and not _spot_blocked(at):
 			return at
 	# The pattern ran out of room: take the first free square, far corner first,
 	# so nothing lands between the boxes and the camera.
-	var cz := z0 + 0.6
+	var cz := z0 + 0.8
 	while cz < z0 + d - 0.5:
-		var cx := x0 + 0.6
+		var cx := x0 + 0.8
 		while cx < x0 + w - 0.5:
 			var at2 := Vector3(cx, 0.0, cz)
-			if at2.x + at2.z < spot.x + spot.z - 0.3 and _spot_free(at2, taken):
+			if at2.x + at2.z < spot.x + spot.z - 0.3 and _spot_free(at2, taken) and not _spot_blocked(at2):
 				return at2
 			cx += 0.6
 		cz += 0.6
 	return Vector3(x0 + w * 0.5, 0.0, z0 + d * 0.5)
+
+
+func _spot_blocked(at: Vector3) -> bool:
+	# Anything solid standing on this square (a café table, the counter, a
+	# placed piece) means a tipped-out piece would land inside it.
+	var world := get_world_3d()
+	if world == null:
+		return false
+	var space := world.direct_space_state
+	if space == null:
+		return false
+	var query := PhysicsRayQueryParameters3D.create(Vector3(at.x, 2.4, at.z), Vector3(at.x, 0.06, at.z))
+	query.collision_mask = Props.LAYER_BLOCKING
+	query.exclude = _cutaway_rids()
+	return not space.intersect_ray(query).is_empty()
 
 
 func _spot_free(at: Vector3, taken: Array) -> bool:
