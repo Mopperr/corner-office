@@ -53,6 +53,14 @@ func _ready() -> void:
 			lines.append("Not quite: %s." % ", ".join(wrong.slice(0, 2)))
 	if int(pay.get("caught_cut", 0)) > 0:
 		lines.append("Seen pocketing  −$%d and a rep star" % int(pay.get("caught_cut", 0)))
+	if int(pay.get("broken", 0)) > 0:
+		lines.append("Dropped  %d piece%s" % [int(pay.get("broken", 0)), "" if int(pay.get("broken", 0)) == 1 else "s"])
+	if int(pay.get("sue_won", 0)) > 0:
+		lines.append("Small claims, the shove  +$%d" % int(pay.get("sue_won", 0)))
+	elif int(pay.get("counter_sued", 0)) > 0:
+		lines.append("Counter-sued for fraud  −$%d and two rep stars" % int(pay.get("counter_sued", 0)))
+	elif bool(pay.get("attacked", false)):
+		lines.append("Shoved over, let it go")
 	elif int(pay.get("pocketed", 0)) > 0:
 		lines.append("In the bag  %d piece%s, about $%d to Sal" % [int(pay.get("pocketed", 0)), "" if int(pay.get("pocketed", 0)) == 1 else "s", int(pay.get("loot_value", 0))])
 	if int(pay.get("life_extra", 0)) > 0:

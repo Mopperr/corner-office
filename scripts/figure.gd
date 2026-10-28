@@ -257,6 +257,18 @@ static func animate(node: Node3D, t: float, walking: bool, delta: float) -> void
 	if walking and moved.length() > 0.002:
 		var yaw := atan2(moved.x, moved.z)
 		node.rotation.y = lerp_angle(node.rotation.y, yaw, minf(1.0, delta * 10.0))
+	if bool(node.get_meta("down", false)):
+		# Flat on her back: the whole figure tips over from the feet.
+		figure.rotation.x = lerpf(figure.rotation.x, -1.45, minf(1.0, delta * 6.0))
+		figure.position.y = lerpf(figure.position.y, 0.12, k)
+		for arm in [arm_l, arm_r]:
+			if arm:
+				arm.rotation.x = lerpf(arm.rotation.x, -1.6, k)
+		return
+	if figure.rotation.x != 0.0:
+		figure.rotation.x = lerpf(figure.rotation.x, 0.0, minf(1.0, delta * 5.0))
+		if absf(figure.rotation.x) < 0.01:
+			figure.rotation.x = 0.0
 	if sitting:
 		if hips:
 			hips.position.y = lerpf(hips.position.y, 0.38, k)
@@ -365,7 +377,7 @@ static func animate(node: Node3D, t: float, walking: bool, delta: float) -> void
 
 static func reset_pose(node: Node3D) -> void:
 	# After an action pose: arms straight, head level.
-	for name in ["ArmL", "ArmR", "Head", "ArmL/ForeL", "ArmR/ForeR"]:
+	for name in ["ArmL", "ArmR", "Head", "ArmL/ForeL", "ArmR/ForeR", "Torso"]:
 		var p := part(node, name)
 		if p:
 			p.rotation = Vector3.ZERO

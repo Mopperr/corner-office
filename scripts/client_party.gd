@@ -31,6 +31,7 @@ var beats: Array = []
 var beat := 0
 var beat_in := 0.0
 var ending := ""
+var temper := 0
 var rng := RandomNumberGenerator.new()
 
 
@@ -137,6 +138,9 @@ func setup(owner: Node, def: Dictionary, door: Vector3, inward: Vector3) -> void
 		# In the tree first: look_at needs a world transform.
 		person.look_at(person.position + inward, Vector3.UP)
 		person.rotate_y(PI)
+		# Where they stand; an angry owner comes back here after the shove.
+		person.set_meta("home_pos", person.position)
+		person.set_meta("home_yaw", person.rotation.y)
 		members.append(person)
 		n += 1
 	started_at = 0.0
@@ -149,9 +153,9 @@ func _process(delta: float) -> void:
 	for person in members:
 		if is_instance_valid(person):
 			if diorama != null and diorama.has_method("_animate_person"):
-				diorama.call("_animate_person", person, time, false, delta)
+				diorama.call("_animate_person", person, time, bool(person.get_meta("walking", false)), delta)
 			else:
-				Figure.animate(person, time, false, delta)
+				Figure.animate(person, time, bool(person.get_meta("walking", false)), delta)
 	if beat == 0 and not beats.is_empty():
 		# The first part of the story comes a moment after the hello.
 		beat_in -= delta
@@ -241,7 +245,7 @@ func react(event: String, fills: Dictionary, force := false, who_uid := "") -> S
 		diorama.call("_bubble", who, said, 4.5)
 	var pose := "nod"
 	match event:
-		"wrong_room", "scuff", "caught", "tipped":
+		"wrong_room", "scuff", "caught", "tipped", "broken", "attack":
 			pose = "point" if mood != "warm" else "shrug"
 		"placed_good", "finish_good", "stacked":
 			pose = "clap"

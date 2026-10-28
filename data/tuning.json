@@ -105,6 +105,22 @@
   "room_match": 3,
   "caught_cut": 0.25
  },
+ "handling": {
+  "_about": "Dana's hands. Every piece packed or unpacked counts toward a level; the helper breaks fewer things as it climbs. Fragile pieces break twice as often. The temper is how many breaks an owner takes before they come at you.",
+  "per_level": 12,
+  "max_level": 5,
+  "break_base": 0.12,
+  "break_step": 0.02,
+  "break_floor": 0.02,
+  "fragile_mult": 2.0,
+  "temper": 3,
+  "sue_min": 1000,
+  "sue_max": 2000,
+  "counter_step": 0.25,
+  "counter_cap": 0.85,
+  "counter_mult": 12,
+  "counter_rep": 2
+ },
  "rep_star_gates": [
   0,
   2,

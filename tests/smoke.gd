@@ -343,6 +343,7 @@ func _ready() -> void:
 	failures.append_array(await _home_checks())
 	failures.append_array(await _party_checks())
 	failures.append_array(await _life_checks())
+	failures.append_array(_handling_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -2512,6 +2513,70 @@ func _party_checks() -> Array:
 	_bury(play)
 	GameState.job = {}
 	GameState.mode = "office"
+	return found
+
+
+func _handling_checks() -> Array:
+	# Dana's hands: the level climbs with pieces handled, breaks get rarer,
+	# fragile breaks twice as often, the first suit pays, and a serial
+	# litigant gets counter-sued for more than ten times the claim.
+	var found: Array = []
+	var Party = load("res://scripts/client_party.gd")
+	var pools: Dictionary = Party.load_data()
+	for mood in Party.MOODS:
+		for event in ["broken", "attack"]:
+			if (((pools.get("moods", {}) as Dictionary).get(mood, {}) as Dictionary).get(event, []) as Array).is_empty():
+				found.append("no %s lines for a %s client" % [event, mood])
+	GameState.new_game("dana")
+	if GameState.handling_level() != 0:
+		found.append("new game starts at level %d" % GameState.handling_level())
+	var plain := {"uid": "a", "name": "Lamp"}
+	var fragile := {"uid": "b", "name": "Vase", "fragile": true}
+	var low := GameState.break_chance(plain)
+	if absf(GameState.break_chance(fragile) - low * 2.0) > 0.001:
+		found.append("fragile does not double the break chance")
+	for i in 60:
+		GameState.note_handled()
+	if GameState.handling_level() != 5:
+		found.append("60 pieces gives level %d" % GameState.handling_level())
+	if GameState.break_chance(plain) >= low or GameState.break_chance(plain) < 0.02:
+		found.append("level 5 break chance %.3f vs level 0 %.3f" % [GameState.break_chance(plain), low])
+	GameState.job = {"items": [plain], "def": {"client": "Mo"}}
+	if GameState.roll_break(plain, -2.0):
+		found.append("a negative bias still breaks")
+	if not GameState.roll_break(plain, 1.0) or int(plain.get("damage", 0)) != 2 or int(GameState.job.get("broken", 0)) != 1:
+		found.append("a forced break does not chip")
+	if not GameState.sue_owner().has("error"):
+		found.append("sued without being shoved")
+	GameState.job["attacked"] = true
+	var jar := GameState.money
+	var first: Dictionary = GameState.sue_owner()
+	if bool(first.get("countered", false)) or int(first.get("amount", 0)) < 1000 or int(first.get("amount", 0)) > 2000 or GameState.money - jar != int(first.get("amount", 0)):
+		found.append("first suit: %s" % str(first))
+	if not GameState.sue_owner().has("error"):
+		found.append("sued the same job twice")
+	var countered := 0
+	var penalty := 0
+	var claim := 0
+	for i in 12:
+		GameState.job = {"items": [], "def": {"client": "Mo %d" % i}, "attacked": true}
+		var result: Dictionary = GameState.sue_owner()
+		if bool(result.get("countered", false)):
+			countered += 1
+			penalty = int(result.get("penalty", 0))
+			claim = int(result.get("amount", 0))
+	if countered == 0:
+		found.append("twelve suits and never counter-sued")
+	elif penalty < claim * 10:
+		found.append("counter-suit %d is under ten times the %d claim" % [penalty, claim])
+	if int(GameState.stats.get("lawsuits", 0)) != 13:
+		found.append("lawsuits stat %d" % int(GameState.stats.get("lawsuits", 0)))
+	var letter := false
+	for mail in GameState.inbox:
+		if str(mail.get("from", "")).begins_with("Hale"):
+			letter = true
+	if countered > 0 and not letter:
+		found.append("no solicitor's letter after a counter-suit")
 	return found
 
 

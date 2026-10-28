@@ -490,6 +490,85 @@ func bump_stat(key: String, amount := 1) -> void:
 	check_contracts()
 
 
+# ----------------------------------------------------------- handling
+# Dana's hands. Every piece she packs or unpacks counts; the level climbs
+# every dozen and the helper drops fewer things. A dropped piece is chipped
+# on the spot, the owner's temper rises, and past a point they come at you.
+
+func handling_level() -> int:
+	var per := maxi(1, int(Tuning.get_value("handling.per_level", 12)))
+	return mini(int(Tuning.get_value("handling.max_level", 5)), int(stats.get("handled", 0)) / per)
+
+
+func note_handled() -> int:
+	# One more piece through Dana's hands. Returns the new level when it just went up, else -1.
+	var before := handling_level()
+	bump_stat("handled")
+	var after := handling_level()
+	return after if after > before else -1
+
+
+func break_chance(item: Dictionary) -> float:
+	var level := handling_level()
+	var chance := maxf(float(Tuning.get_value("handling.break_floor", 0.02)), float(Tuning.get_value("handling.break_base", 0.18)) - float(Tuning.get_value("handling.break_step", 0.035)) * float(level))
+	if bool(item.get("fragile", false)):
+		chance *= float(Tuning.get_value("handling.fragile_mult", 2.0))
+	return clampf(chance, 0.0, 1.0)
+
+
+func roll_break(item: Dictionary, bias := 0.0) -> bool:
+	# The helper's hands slip: the piece is chipped and the job remembers. A
+	# bias of 1.0 breaks for certain (tests); below 0 never breaks.
+	if item.is_empty():
+		return false
+	var chance := break_chance(item) + bias
+	if chance <= 0.0 or rng.randf() >= chance:
+		return false
+	item["damage"] = maxi(int(item.get("damage", 0)), 2)
+	job["broken"] = int(job.get("broken", 0)) + 1
+	bump_stat("broken")
+	emit_signal("box_damaged", str(item.get("uid", "")), 2)
+	return true
+
+
+func temper_limit() -> int:
+	return int(Tuning.get_value("handling.temper", 3))
+
+
+func sue_owner() -> Dictionary:
+	# Dana goes to the small claims court over the shove. The first one pays;
+	# each one after that is likelier to come back as a fraud claim ten times
+	# over, with two stars off the rep and a solicitor's letter.
+	if not bool(job.get("attacked", false)):
+		return {"error": "Nobody has laid a hand on you."}
+	if bool(job.get("sued", false)):
+		return {"error": "Already filed."}
+	var suits := int(stats.get("lawsuits", 0))
+	var amount := rng.randi_range(int(Tuning.get_value("handling.sue_min", 1000)), int(Tuning.get_value("handling.sue_max", 2000)))
+	var chance := minf(float(Tuning.get_value("handling.counter_cap", 0.85)), float(Tuning.get_value("handling.counter_step", 0.25)) * float(suits))
+	var countered := suits > 0 and rng.randf() < chance
+	job["sued"] = true
+	bump_stat("lawsuits")
+	var out := {"amount": amount, "countered": countered, "penalty": 0}
+	if countered:
+		var penalty := amount * int(Tuning.get_value("handling.counter_mult", 12))
+		out["penalty"] = penalty
+		job["counter_sued"] = penalty
+		add_money(-penalty, false)
+		var stars_off := int(Tuning.get_value("handling.counter_rep", 2))
+		rep_stars = maxi(0, rep_stars - stars_off)
+		emit_signal("rep_changed", rep_rank(), rep_stars)
+		bump_stat("counter_sued")
+		var client := str(job.get("def", {}).get("client", "the client"))
+		inbox.append({"id": "counter_%d" % int(stats.get("lawsuits", 0)), "from": "Hale & Pruett, solicitors", "subject": "Re: %s v. Corner Office" % client, "body": "Our client has read the file. %d claims from one mover, every one after a dropped box, and witnesses who say the shoving started with you. The court found fraud and vexatious conduct. Judgment: $%d, plus costs. We suggest you find a gentler line of work." % [suits + 1, penalty], "read": false})
+	else:
+		job["sue_won"] = amount
+		add_money(amount, true)
+		bump_stat("sue_won")
+	return out
+	check_contracts()
+
+
 func contracts() -> Array:
 	var file := FileAccess.open("res://data/contracts.json", FileAccess.READ)
 	if file == null:
@@ -981,6 +1060,10 @@ func finish_job() -> Dictionary:
 		loot_value += int(entry.get("value", 0))
 	payout["loot_value"] = loot_value
 	payout["caught_pocketing"] = bool(job.get("caught_pocketing", false))
+	payout["broken"] = int(job.get("broken", 0))
+	payout["attacked"] = bool(job.get("attacked", false))
+	payout["sue_won"] = int(job.get("sue_won", 0))
+	payout["counter_sued"] = int(job.get("counter_sued", 0))
 	if bool(job.get("caught_pocketing", false)):
 		var cut := int(round(float(int(payout.get("base", 0))) * float(Tuning.get_value("pay.caught_cut", 0.25))))
 		payout["caught_cut"] = cut

@@ -718,9 +718,15 @@ func _play_job(job_id: String) -> void:
 		return
 	await shot("pack_" + job_id)
 	if bool(GameState.job.get("def", {}).get("generated", false)):
+		var room_pack := _room()
+		if room_pack != null:
+			# Steady hands while packing: the shove and the suit are tested on the unpack.
+			room_pack.break_bias = -1.0
 		_check(press("Pack the rest for me"), "%s: Pack the rest for me button" % job_id)
-		await wait(0.3)
+		_check(room_pack != null and bool(room_pack.get("auto_busy")), "%s: Dana works through the packing herself" % job_id)
+		await _wait_auto(room_pack, "pack")
 		_check(GameState.all_sealed(), "%s: everything boxed and sealed by the helper" % job_id)
+		_check(int(GameState.stats.get("handled", 0)) > 0, "%s: packed pieces count toward handling (%d)" % [job_id, int(GameState.stats.get("handled", 0))])
 	else:
 		await _pack()
 	if not fails.is_empty():
@@ -1035,8 +1041,25 @@ func _unpack() -> void:
 					await wait(0.2)
 	if generated:
 		# The lazy route: Dana's helpers put every box away.
+		# With a family watching, three pieces slip on purpose: the owner comes
+		# over, shoves Dana, and the small claims card comes up.
+		# Only the first time: later jobs keep steady hands so the test stays
+		# deterministic (the counter-suit is covered by the smoke test).
+		var family: bool = room.party != null and room.party.members.size() > 0 and int(GameState.stats.get("lawsuits", 0)) == 0
+		room.break_bias = -1.0
+		if family:
+			room.break_force = 3
+		var money_before := GameState.money
 		_check(press("Unpack it all for me"), "unpack: Unpack it all for me button")
-		await wait(0.5)
+		_check(bool(room.get("auto_busy")), "unpack: Dana walks the pieces over herself")
+		await wait(0.3)
+		_check(room.player_moving or room.player_carrying or not room.auto_queue.is_empty(), "unpack: the queue is live")
+		await _wait_auto(room, "unpack")
+		if family:
+			_check(int(GameState.job.get("broken", 0)) == 3, "breaks: three pieces chipped (%d)" % int(GameState.job.get("broken", 0)))
+			_check(bool(GameState.job.get("attacked", false)), "breaks: the owner came over and shoved Dana")
+			_check(bool(GameState.job.get("sued", false)) and int(GameState.stats.get("lawsuits", 0)) == 1, "sue: filed once (%d)" % int(GameState.stats.get("lawsuits", 0)))
+			_check(GameState.money - money_before >= 1000, "sue: small claims paid $%d (jar %d -> %d, won %d, countered %d)" % [GameState.money - money_before, money_before, GameState.money, int(GameState.job.get("sue_won", 0)), int(GameState.job.get("counter_sued", 0))])
 		var left := 0
 		for item in GameState.job.get("items", []):
 			if str(item.get("state", "")) != "placed":
@@ -1394,6 +1417,22 @@ func click_world(room: Node, world: Vector3) -> void:
 
 func wait(sec: float) -> void:
 	await get_tree().create_timer(sec).timeout
+
+
+func _wait_auto(room: Node, label: String) -> void:
+	# Dana works through the queue on her own; a shove pauses it on the
+	# small claims card, which the test answers by suing.
+	var waited := 0.0
+	var sued := false
+	while room != null and is_instance_valid(room) and bool(room.get("auto_busy")) and waited < 240.0:
+		await wait(0.25)
+		waited += 0.25
+		if not sued and press("Sue them"):
+			sued = true
+			print("  sue: pressed; jar $%d, won $%d, countered $%d, rent owed %d, lawsuits %d" % [GameState.money, int(GameState.job.get("sue_won", 0)), int(GameState.job.get("counter_sued", 0)), GameState.rent_owed, int(GameState.stats.get("lawsuits", 0))])
+			await shot(label + "_sued")
+	_check(room == null or not is_instance_valid(room) or not bool(room.get("auto_busy")), "%s: the helper finished within %.0fs" % [label, waited])
+	print("  %s: Dana's queue took %.1fs" % [label, waited])
 
 
 func wait_until(pred: Callable, timeout: float) -> bool:

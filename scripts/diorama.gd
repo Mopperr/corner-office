@@ -2078,6 +2078,7 @@ func _open_box_modal(box_id: int) -> void:
 	)
 	foot.add_child(tip)
 	var auto := UIKit.button("Put it all away for me", UIKit.SAGE)
+	auto.disabled = auto_busy
 	auto.custom_minimum_size = Vector2(320, 56)
 	auto.pressed.connect(func():
 		panel.queue_free()
@@ -2201,27 +2202,501 @@ func _set_from_box(uid: String, box_id: int) -> void:
 
 
 func _auto_unpack_box(box_id: int) -> void:
-	# Dana's helpers put the lot away: nearest free spot for each piece.
-	var contents := _box_contents(box_id)
-	var n := 0
-	var missed := 0
-	for item in contents:
-		_loosen(item, box_id, n)
-		n += 1
+	# Dana puts the lot away herself, piece by piece: to the box, a piece out,
+	# across the room, down. See the auto queue below.
+	_auto_unpack([box_id])
+
+
+# ------------------------------------------------------------ the auto queue
+# "Unpack it all" and "Pack the rest" are not instant: Dana walks to each
+# box or piece, lifts it, carries it over and sets it down, one step at a
+# time. Her hands are only as good as her handling level, so a low-level
+# helper drops the odd piece: it chips, the owner sees, and after enough of
+# them the owner comes over and shoves her. Then there is the small claims
+# court. See GameState.handling_level, roll_break and sue_owner.
+
+var auto_queue: Array = []
+var auto_busy := false
+var auto_mode := ""
+var auto_hold := false
+var auto_missed := 0
+var auto_handled := 0
+var auto_box_opened := -1
+var break_bias := 0.0
+var break_force := 0
+var auto_fast := OS.get_environment("CO_FAST_DRIVE") != ""
+
+
+func _auto_pace() -> float:
+	return 0.06 if auto_fast else 0.35
+
+
+func _auto_unpack(box_ids: Array) -> void:
+	if auto_busy:
+		return
+	var steps: Array = []
+	for box_id in box_ids:
+		for item in _box_contents(int(box_id)):
+			steps.append({"kind": "unpack", "box": int(box_id), "uid": str(item.get("uid", ""))})
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) == "loose":
+			steps.append({"kind": "lift", "uid": str(item.get("uid", ""))})
+	if steps.is_empty():
+		_toast("Nothing left to put away.")
+		return
+	_auto_start(steps, "job_unpack")
+	_toast("Right. I'll do the lot. Shout if you want anything moved.")
+
+
+func _auto_start(steps: Array, mode: String) -> void:
+	auto_queue = steps
+	auto_busy = true
+	auto_hold = false
+	auto_mode = mode
+	auto_missed = 0
+	auto_handled = 0
+	auto_box_opened = -1
+	_refresh_hud_buttons()
+	_auto_next()
+
+
+func _auto_next() -> void:
+	if not auto_busy or auto_hold:
+		return
+	if not is_inside_tree() or GameState.mode != auto_mode or auto_queue.is_empty():
+		_auto_finish()
+		return
+	var step: Dictionary = auto_queue.pop_front()
+	match str(step.get("kind", "")):
+		"unpack":
+			_auto_walk(_open_box_spot(int(step["box"])), _auto_take_out.bind(step))
+		"carry":
+			var spot: Dictionary = step["spot"]
+			_auto_walk(Vector3(float(spot["x"]), 0.0, float(spot["z"])), _auto_set_down.bind(step))
+		"lift":
+			var item := GameState.job_item(str(step["uid"]))
+			if item.is_empty() or str(item.get("state", "")) != "loose":
+				_auto_after()
+				return
+			_auto_walk(Vector3(float(item.get("x", 0.0)), 0.0, float(item.get("z", 0.0))), _auto_lift.bind(step))
+		"pack_pick":
+			var item := GameState.job_item(str(step["uid"]))
+			if item.is_empty() or str(item.get("state", "")) != "loose":
+				_auto_after()
+				return
+			_auto_walk(Vector3(float(item.get("x", 0.0)), 0.0, float(item.get("z", 0.0))), _auto_pack_pick.bind(step))
+		"pack_drop":
+			_auto_walk(_pack_box_spot(GameState.ensure_open_box()), _auto_pack_drop.bind(step))
+		_:
+			_auto_after()
+
+
+func _auto_walk(at: Vector3, then: Callable) -> void:
+	_player_go(at)
+	if player != null and is_instance_valid(player) and player_moving:
+		player_on_arrive = then
+	else:
+		get_tree().create_timer(_auto_pace()).timeout.connect(then)
+
+
+func _auto_after() -> void:
+	# A beat between steps so each lift and set-down reads.
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(_auto_pace()).timeout.connect(_auto_next)
+
+
+func _auto_take_out(step: Dictionary) -> void:
+	# At the box: one piece out, find it a home, carry it over.
+	var box_id := int(step["box"])
+	var item := GameState.job_item(str(step["uid"]))
+	if item.is_empty() or str(item.get("state", "")) != "boxed":
+		_auto_after()
+		return
+	if auto_box_opened != box_id:
+		auto_box_opened = box_id
+		AudioDirector.play_sfx("sfx_box_open")
+	_loosen(item, box_id, GameState.box_item_count(box_id))
 	_refresh_items()
-	for item in contents:
-		if not _auto_place_item(item):
-			missed += 1
-	AudioDirector.play_sfx("sfx_box_open")
+	_auto_lift(step)
+
+
+func _auto_lift(step: Dictionary) -> void:
+	# A loose piece into Dana's arms, with its spot already picked.
+	var item := GameState.job_item(str(step["uid"]))
+	if item.is_empty() or str(item.get("state", "")) != "loose":
+		_auto_after()
+		return
+	if not _auto_place_item(item):
+		auto_missed += 1
+		_refresh_items()
+		_unhide_loose()
+		_auto_after()
+		return
+	var spot := {"x": item["x"], "y": item["y"], "z": item["z"], "rot": item.get("rot", 0.0), "wall": item.get("wall", ""), "floor": item.get("floor", home_floor)}
+	item["state"] = "hand"
+	player_carrying = true
+	AudioDirector.play_sfx("sfx_item_pick_up", true)
+	_refresh_items()
+	auto_queue.push_front({"kind": "carry", "uid": str(step["uid"]), "spot": spot})
+	_auto_after()
+
+
+func _auto_set_down(step: Dictionary) -> void:
+	# Across the room: the piece lands where it was going, unless it slips.
+	var item := GameState.job_item(str(step["uid"]))
+	player_carrying = false
+	if item.is_empty():
+		_auto_after()
+		return
+	var spot: Dictionary = step["spot"]
+	for key in ["x", "y", "z", "rot", "wall", "floor"]:
+		item[key] = spot[key]
+	item["state"] = "placed"
+	item["settle"] = false
+	var uid := str(step["uid"])
+	if player != null and is_instance_valid(player):
+		arrive_from[uid] = player.position + Vector3(0, 0.8, 0)
+	_last_placed_uid = uid
+	auto_handled += 1
+	_note_handled()
+	var broke := _auto_roll_break(item)
 	AudioDirector.play_sfx("sfx_item_snap", true)
 	_refresh_items()
 	_unhide_loose()
-	_refresh_hud_buttons()
-	if missed > 0:
-		_toast("%d piece%s wouldn't fit anywhere tidy. They're on the floor." % [missed, "" if missed == 1 else "s"])
+	if broke:
+		_break_piece(item, Vector3(float(item["x"]), float(item["y"]), float(item["z"])))
 	else:
-		_toast("All put away. Nudge anything you'd rather have elsewhere.")
+		_party_on_place()
 	_maybe_job_done()
+	_auto_after()
+
+
+func _auto_roll_break(item: Dictionary) -> bool:
+	if break_force > 0:
+		break_force -= 1
+		return GameState.roll_break(item, 1.0)
+	return GameState.roll_break(item, break_bias)
+
+
+func _note_handled() -> void:
+	var level := GameState.note_handled()
+	if level >= 0:
+		_toast("Handling level %d. Steadier hands." % level, "Dana")
+		AudioDirector.play_sfx("sfx_success_chime")
+
+
+func _auto_finish() -> void:
+	var was := auto_mode
+	auto_queue.clear()
+	auto_busy = false
+	auto_hold = false
+	player_carrying = false
+	if not is_inside_tree():
+		return
+	if was == "job_pack":
+		_pack_finish()
+	elif was == "job_unpack":
+		_refresh_items()
+		_unhide_loose()
+		if auto_missed > 0:
+			_toast("%d piece%s wouldn't fit anywhere tidy. They're on the floor." % [auto_missed, "" if auto_missed == 1 else "s"])
+		elif auto_handled > 0:
+			_toast("All put away. Nudge anything you'd rather have elsewhere.")
+		_maybe_job_done()
+	_refresh_hud_buttons()
+
+
+# Packing: Dana goes to each loose piece, lifts it, carries it to the open
+# box and sets it in. Big pieces are wrapped where they stand.
+
+func _pack_box_spot(box_id: int) -> Vector3:
+	var i := 0
+	for box in GameState.job.get("boxes", []):
+		if int(box.get("id", -1)) == box_id:
+			break
+		i += 1
+	return Vector3(float(venue.get("x", 0)) + 0.8 + float(i) * 0.6, 0.0, float(venue.get("z", 0)) + 0.8)
+
+
+func _auto_pack_pick(step: Dictionary) -> void:
+	var item := GameState.job_item(str(step["uid"]))
+	if item.is_empty() or str(item.get("state", "")) != "loose":
+		_auto_after()
+		return
+	if bool(item.get("nobox", false)):
+		if GameState.job.get("boxes", []).size() >= slot_count:
+			auto_missed += 1
+		elif GameState.wrap_big(str(item.get("uid", ""))) == "":
+			auto_handled += 1
+			_note_handled()
+			AudioDirector.play_sfx("sfx_tape_rip", true)
+			_refresh_items()
+		_auto_after()
+		return
+	player_carrying = true
+	item["state"] = "hand"
+	AudioDirector.play_sfx("sfx_item_pick_up", true)
+	_refresh_items()
+	auto_queue.push_front({"kind": "pack_drop", "uid": str(step["uid"])})
+	_auto_after()
+
+
+func _auto_pack_drop(step: Dictionary) -> void:
+	var item := GameState.job_item(str(step["uid"]))
+	player_carrying = false
+	if item.is_empty():
+		_auto_after()
+		return
+	item["state"] = "loose"
+	var uid := str(step["uid"])
+	var box_id := GameState.ensure_open_box()
+	if GameState.job.get("boxes", []).size() > slot_count:
+		auto_missed += 1
+		_refresh_items()
+		_auto_after()
+		return
+	var err := GameState.pack_into(uid, box_id)
+	if err != "":
+		GameState.seal_box(box_id)
+		box_id = GameState.make_box()
+		err = GameState.pack_into(uid, box_id)
+	if err != "":
+		auto_missed += 1
+		_refresh_items()
+		_auto_after()
+		return
+	auto_handled += 1
+	_note_handled()
+	selected_box = box_id
+	var broke := _auto_roll_break(item)
+	AudioDirector.play_sfx("sfx_box_set_down", true)
+	if GameState.box_item_count(box_id) >= 5:
+		GameState.seal_box(box_id)
+		AudioDirector.play_sfx("sfx_tape_rip", true)
+	_refresh_items()
+	if broke:
+		_break_piece(item, _pack_box_spot(box_id) + Vector3(0, 0.3, 0))
+	_auto_after()
+
+
+func _pack_finish() -> void:
+	for box in GameState.job.get("boxes", []):
+		var id := int(box.get("id", 0))
+		if GameState.box_needs_padding(id):
+			box["padded"] = true
+		if not bool(box.get("sealed", false)) and GameState.box_item_count(id) > 0:
+			GameState.seal_box(id)
+	selected_box = -1
+	AudioDirector.play_sfx("sfx_tape_rip")
+	_refresh_items()
+	var left: Array = []
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) != "boxed":
+			left.append("%s:%s" % [str(item.get("uid", "")), str(item.get("state", ""))])
+	print("auto pack: %d handled, %d missed, %d boxes of %d, not boxed: %s" % [auto_handled, auto_missed, GameState.job.get("boxes", []).size(), slot_count, ", ".join(left)])
+	if auto_missed > 0:
+		_toast("%d piece%s wouldn't go in. The truck only takes so many boxes." % [auto_missed, "" if auto_missed == 1 else "s"])
+	else:
+		_toast("Boxed, padded and sealed. Truck next.")
+
+
+# Breakages: a piece slips, shards fly, the owner sees.
+
+func _break_piece(item: Dictionary, at: Vector3) -> void:
+	var label := str(item.get("name", "piece"))
+	AudioDirector.play_sfx("sfx_l07_glass_clink")
+	AudioDirector.play_sfx("sfx_trade_loss_thud", true)
+	_shards(at)
+	if player != null and is_instance_valid(player):
+		_act(player, "flinch", 1.3)
+	_toast("That was the %s. That's chipped now." % label.to_lower(), "Dana")
+	_refresh_hud_buttons()
+	if party == null or not is_instance_valid(party):
+		return
+	party.react("broken", {"item": label.to_lower()}, true)
+	party.temper += 1
+	if party.temper >= GameState.temper_limit() and not bool(GameState.job.get("attacked", false)):
+		_owner_attack()
+
+
+func _shards(at: Vector3) -> void:
+	var root := Node3D.new()
+	root.position = at
+	add_child(root)
+	for i in 7:
+		var bit := MeshInstance3D.new()
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(0.06, 0.02, 0.05)
+		bit.mesh = mesh
+		bit.material_override = Props.mat(Color("E9E2D3") if i % 2 == 0 else Color("B8AC98"))
+		bit.position = Vector3(0, 0.3, 0)
+		root.add_child(bit)
+		var ang := float(i) * TAU / 7.0 + 0.3
+		var land := Vector3(cos(ang) * (0.25 + 0.08 * float(i % 3)), 0.01, sin(ang) * (0.25 + 0.08 * float(i % 3)))
+		var tw := create_tween()
+		tw.set_parallel(true)
+		tw.tween_property(bit, "position", land, 0.45).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+		tw.tween_property(bit, "rotation", Vector3(randf() * 3.0, randf() * 3.0, randf() * 3.0), 0.45)
+	_dust(at)
+	get_tree().create_timer(3.0).timeout.connect(root.queue_free)
+
+
+func _owner_attack() -> void:
+	# The owner has had enough: over to Dana, two hands, and down she goes.
+	if party == null or not is_instance_valid(party) or player == null or not is_instance_valid(player):
+		return
+	var who: Node3D = party.speaker("attack")
+	for person in party.members:
+		if is_instance_valid(person) and not bool(person.get_meta("kid", false)):
+			who = person
+			break
+	if who == null:
+		return
+	GameState.job["attacked"] = true
+	GameState.bump_stat("attacked")
+	auto_hold = true
+	party.react("attack", {}, true, str(who.get_meta("uid", "")))
+	var to := player.position - who.position
+	to.y = 0.0
+	var stand := player.position - to.normalized() * 0.7
+	var seconds := maxf(0.4, to.length() / 2.2)
+	who.set_meta("walking", true)
+	var tw := create_tween()
+	tw.tween_property(who, "position", stand, seconds).set_trans(Tween.TRANS_SINE)
+	tw.tween_callback(_owner_shove.bind(who))
+
+
+func _owner_shove(who: Node3D) -> void:
+	if not is_instance_valid(who) or player == null or not is_instance_valid(player):
+		auto_hold = false
+		_auto_next()
+		return
+	who.set_meta("walking", false)
+	who.look_at(player.position, Vector3.UP)
+	who.rotate_y(PI)
+	_act(who, "shove", 1.6)
+	AudioDirector.play_sfx("sfx_invalid_placement")
+	get_tree().create_timer(0.45).timeout.connect(_dana_down)
+	get_tree().create_timer(2.0).timeout.connect(_owner_return.bind(who))
+
+
+func _owner_return(who: Node3D) -> void:
+	# Back to the door, still fuming, so the room is clickable again.
+	if not is_instance_valid(who):
+		return
+	var home: Vector3 = who.get_meta("home_pos", who.position)
+	var seconds := maxf(0.3, who.position.distance_to(home) / 2.0)
+	who.set_meta("walking", true)
+	var tw := create_tween()
+	tw.tween_property(who, "position", home, seconds).set_trans(Tween.TRANS_SINE)
+	tw.tween_callback(func():
+		if is_instance_valid(who):
+			who.set_meta("walking", false)
+			who.rotation.y = float(who.get_meta("home_yaw", who.rotation.y))
+	)
+
+
+func _dana_down() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	player.set_meta("down", true)
+	player.set_meta("action", "")
+	AudioDirector.play_sfx("sfx_trade_loss_thud")
+	_dust(player.position)
+	_toast("Hey! HEY. There are witnesses, you know.", "Dana")
+	get_tree().create_timer(2.2).timeout.connect(func():
+		if player != null and is_instance_valid(player):
+			player.set_meta("down", false)
+		_open_sue_card()
+	)
+
+
+func _open_sue_card() -> void:
+	# After the shove: small claims, or let it go. The more Dana sues, the
+	# likelier the next one comes back as a fraud claim ten times over.
+	var layer := _hud_layer()
+	if layer == null:
+		auto_hold = false
+		_auto_next()
+		return
+	var old := layer.get_node_or_null("SueCard")
+	if old != null:
+		layer.remove_child(old)
+		old.free()
+	var card := PanelContainer.new()
+	card.name = "SueCard"
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.NIGHT))
+	layer.add_child(card)
+	card.layout_mode = 1
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	card.offset_left = -380
+	card.offset_right = 380
+	card.offset_top = -140
+	card.offset_bottom = 140
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 18)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	margin.add_child(column)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	column.add_child(head)
+	head.add_child(UIKit.ribbon("Shoved", UIKit.NIGHT, 30))
+	var client := str(GameState.job.get("def", {}).get("client", "The client"))
+	var title := UIKit.label("%s put two hands on you" % client, 30, UIKit.DARK, "title", false)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(title)
+	var suits := int(GameState.stats.get("lawsuits", 0))
+	var line := "In front of witnesses. Small claims would pay $%d to $%d for that." % [int(Tuning.get_value("handling.sue_min", 1000)), int(Tuning.get_value("handling.sue_max", 2000))]
+	if suits == 1:
+		line += " You have sued once before. A second file looks like a habit."
+	elif suits > 1:
+		line += " You have sued %d people. Courts notice a mover who keeps dropping things and keeps getting shoved. Fraud claims come back ten times over." % suits
+	var blurb := UIKit.label(line, 25, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(700, 0)
+	column.add_child(blurb)
+	var foot := HBoxContainer.new()
+	foot.add_theme_constant_override("separation", 12)
+	column.add_child(foot)
+	var close := func():
+		if is_instance_valid(card):
+			layer.remove_child(card)
+			card.queue_free()
+		auto_hold = false
+		_refresh_hud_buttons()
+		_auto_next()
+	var leave := UIKit.button("Let it go", UIKit.SAGE)
+	leave.name = "SueLeave"
+	leave.custom_minimum_size = Vector2(200, 54)
+	leave.pressed.connect(func():
+		_toast("Fine. Let's just finish and go.", "Dana")
+		close.call()
+	)
+	foot.add_child(leave)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	foot.add_child(spacer)
+	var sue := UIKit.button("Sue them", UIKit.NIGHT)
+	sue.name = "SueFile"
+	sue.custom_minimum_size = Vector2(220, 54)
+	sue.pressed.connect(func():
+		var result: Dictionary = GameState.sue_owner()
+		if result.has("error"):
+			_toast(str(result["error"]), "Dana")
+		elif bool(result.get("countered", false)):
+			AudioDirector.play_sfx("sfx_trade_loss_thud")
+			_toast("Counter-sued. Fraud, they said. $%d and two rep stars gone. There's a letter." % int(result.get("penalty", 0)), "Dana")
+		else:
+			AudioDirector.play_sfx("sfx_tip_jar_coin")
+			_toast("Small claims says $%d. Lovely." % int(result.get("amount", 0)), "Dana")
+		close.call()
+	)
+	foot.add_child(sue)
 
 
 func _place_office_all() -> void:
@@ -2325,39 +2800,20 @@ func _auto_place_item(item: Dictionary, source := "job") -> bool:
 
 
 func _pack_rest() -> void:
-	# Tired of packing: box everything that is still loose, pad the fragile
-	# boxes, seal the lot, and head for the truck.
-	var items: Array = GameState.job.get("items", [])
-	var packed := 0
-	for item in items:
-		if str(item.get("state", "")) != "loose":
-			continue
-		if bool(item.get("nobox", false)):
-			if GameState.job.get("boxes", []).size() >= slot_count:
-				break
-			if GameState.wrap_big(str(item.get("uid", ""))) == "":
-				packed += 1
-			continue
-		var box_id := GameState.ensure_open_box()
-		if GameState.job.get("boxes", []).size() > slot_count:
-			break
-		var err := GameState.pack_into(str(item.get("uid", "")), box_id)
-		if err != "":
-			GameState.seal_box(box_id)
-			box_id = GameState.make_box()
-			err = GameState.pack_into(str(item.get("uid", "")), box_id)
-		if err == "":
-			packed += 1
-		if GameState.box_item_count(box_id) >= 5:
-			GameState.seal_box(box_id)
-	for box in GameState.job.get("boxes", []):
-		var id := int(box.get("id", 0))
-		if GameState.box_needs_padding(id):
-			box["padded"] = true
-		if not bool(box.get("sealed", false)) and GameState.box_item_count(id) > 0:
-			GameState.seal_box(id)
-	selected_box = -1
-	AudioDirector.play_sfx("sfx_tape_rip")
+	# Tired of packing: Dana boxes everything still loose herself, piece by
+	# piece, pads the fragile boxes, seals the lot, and the truck is next.
+	if auto_busy:
+		return
+	var steps: Array = []
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) == "loose":
+			steps.append({"kind": "pack_pick", "uid": str(item.get("uid", ""))})
+	if steps.is_empty():
+		_pack_finish()
+		_refresh_hud_buttons()
+		return
+	_auto_start(steps, "job_pack")
+	_toast("Leave it with me. Fragile ones get a wrap.")
 	AudioDirector.play_sfx("sfx_box_fold", true)
 	_refresh_items()
 	_refresh_hud_buttons()
@@ -2734,7 +3190,7 @@ func _tick_player(delta: float) -> void:
 	if player_moving:
 		var to := player_target - player.position
 		to.y = 0.0
-		var step := PLAYER_SPEED * delta
+		var step := PLAYER_SPEED * delta * (4.0 if auto_busy and auto_fast else 1.0)
 		if to.length() <= step:
 			player.position = player_target
 			player_moving = false
@@ -3546,7 +4002,7 @@ func _refresh_hud_buttons() -> void:
 		)
 		_act_button(layer, "Add padding", Vector2(1060, 158), func(): _pad_selected())
 		_act_button(layer, "Seal box", Vector2(1060, 216), func(): _seal_selected())
-		if not GameState.all_sealed():
+		if not GameState.all_sealed() and not auto_busy:
 			_act_button(layer, "Pack the rest for me", Vector2(1060, 290), _pack_rest)
 		if GameState.all_sealed():
 			_act_button(layer, "Load the truck", Vector2(1060, 290), func():
@@ -3609,21 +4065,14 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 	if _stackable_count() >= 2:
 		_act_button(layer, "Stack the boxes", Vector2(860, y), _stack_boxes)
 		y += 52
-	if waiting > 0:
+	if waiting > 0 and not auto_busy:
 		_act_button(layer, "Unpack it all for me", Vector2(860, y), func():
+			var ids: Array = []
 			for box in GameState.job.get("boxes", []):
 				var id := int(box.get("id", 0))
 				if bool(carried.get(id, false)):
-					_auto_unpack_box(id)
-			var loose_left: Array = []
-			for item in GameState.job.get("items", []):
-				if str(item.get("state", "")) == "loose":
-					loose_left.append(item)
-			for item in loose_left:
-				_auto_place_item(item)
-			_refresh_items()
-			_refresh_hud_buttons()
-			_maybe_job_done()
+					ids.append(id)
+			_auto_unpack(ids)
 		)
 	if ready and all_in:
 		_act_button(layer, "Finish job", Vector2(1060, 620), func():
@@ -5319,6 +5768,24 @@ func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> voi
 			"point":
 				if arm_r:
 					arm_r.rotation.x = -1.4
+			"flinch":
+				# Hands up, head down: that was not meant to happen.
+				if arm_r and arm_l:
+					arm_r.rotation.x = -2.8
+					arm_l.rotation.x = -2.8
+					arm_r.rotation.z = -0.3
+					arm_l.rotation.z = 0.3
+				if head:
+					head.rotation.x = 0.35
+			"shove":
+				# Two arms straight out and a lean in: the owner has had enough.
+				var push := 0.5 + 0.5 * sin(t * 9.0)
+				if arm_r and arm_l:
+					arm_r.rotation.x = -1.3 - push * 0.4
+					arm_l.rotation.x = -1.3 - push * 0.4
+				var body := figure.get_node_or_null("Torso") as Node3D
+				if body:
+					body.rotation.x = 0.1 + push * 0.2
 			"reach":
 				# Bending down to pick up or set down: both arms forward and low, a little stoop.
 				if arm_r and arm_l:
