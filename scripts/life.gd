@@ -310,6 +310,8 @@ static func check_milestones(before: int, after: int) -> void:
 		_log("%s, on day %d." % [str(row.get("name", id)), GameState.day])
 		GameState.bump_stat("milestone_" + id)
 		GameState.emit_signal("toast_requested", "%s. %s" % [str(row.get("name", id)), str(row.get("blurb", ""))])
+		if str(row.get("music", "")) != "":
+			AudioDirector.play_music(str(row["music"]))
 
 
 static func millionaire() -> bool:

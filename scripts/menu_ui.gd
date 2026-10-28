@@ -305,6 +305,7 @@ func _arm_remap(id: String) -> void:
 
 
 func _credits() -> void:
+	AudioDirector.play_music("music_credits_reprise")
 	var lines: PackedStringArray = []
 	var copy := _json_file("res://data/narrative/credits.json")
 	var headline := str(copy.get("headline", "Created by Andrew's Helpers (Grok Bots)"))

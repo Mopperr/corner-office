@@ -1541,7 +1541,7 @@
       "open_w": 2,
       "windows": true,
       "train": true,
-      "music": "music_office_build",
+      "music": "music_record_store",
       "ambience": "amb_l04_shop_clock_loop",
       "box_row": 2.8
     },
@@ -1563,7 +1563,7 @@
         "max_h": 1.5
       },
       "pastry": true,
-      "music": "music_act2_morning",
+      "music": "music_act3_loft",
       "ambience": "amb_l06_skylight_rain_loop"
     },
     "park": {
@@ -1575,7 +1575,8 @@
       "opening": "door",
       "open_w": 2,
       "windows": true,
-      "music": "music_office_build"
+      "music": "music_office_build",
+      "ambience": "amb_outdoor_stand_loop"
     },
     "coffee_counter": {
       "name": "Coffee Counter",
@@ -1600,8 +1601,8 @@
       "open_w": 2,
       "windows": true,
       "shop_layout": "lemonade_stand",
-      "music": "music_office_build",
-      "ambience": "amb_l02_cafe_loop"
+      "music": "music_shop_stand",
+      "ambience": "amb_outdoor_stand_loop"
     },
     "studio": {
       "name": "Corner Studio",
@@ -1614,7 +1615,7 @@
       "windows": true,
       "studio": true,
       "music": "music_office_build",
-      "ambience": "amb_l04_shop_clock_loop"
+      "ambience": "amb_l09_studio_loop"
     },
     "flat": {
       "name": "Flat over the Bakery",
@@ -1627,7 +1628,7 @@
       "windows": true,
       "flat": true,
       "music": "music_act2_morning",
-      "ambience": "amb_l02_cafe_loop"
+      "ambience": "amb_l19_office_loop"
     }
   },
   "jobs": [

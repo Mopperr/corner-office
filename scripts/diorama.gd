@@ -961,7 +961,7 @@ func _open_truck_door(open: bool) -> void:
 		var target := deg_to_rad(float(Tuning.get_value("truck_door_open_deg", 105))) if open else 0.0
 		var tw := create_tween()
 		tw.tween_property(back_door, "rotation:y", target, 0.55)
-	AudioDirector.play_sfx("sfx_truck_door")
+	AudioDirector.play_sfx("sfx_truck_backdoor_open" if open else "sfx_truck_backdoor_close")
 	_sync_cargo()
 
 
@@ -2371,6 +2371,7 @@ func _stack_boxes() -> void:
 	# Pile the carried, still-packed boxes into towers of three, in id order,
 	# so the floor behind them is clear for the pieces that come out.
 	_party_react("stacked", {})
+	AudioDirector.play_sfx("sfx_box_scrape", true)
 	var packed: Array = []
 	for box in GameState.job.get("boxes", []):
 		var id := int(box.get("id", -1))
@@ -4843,6 +4844,7 @@ func _spawn_browser(from_car: Node3D = null) -> bool:
 		person.position = from_car.position + Vector3(1.1, 0.0, 0.2)
 	add_child(person)
 	_bubble(person, _chat("arriving"))
+	AudioDirector.play_sfx("sfx_customer_bell", true)
 	var at := target.global_position
 	var stand := at + (door - at).normalized() * 0.75
 	stand.y = 0.0
@@ -5433,6 +5435,7 @@ func _answer_ask(uid: String, said_yes: bool, card: Node) -> void:
 		if node and is_instance_valid(node):
 			_bubble(node, str(ask.get("yes_line" if said_yes else "no_line", "")), 5.0)
 			_act(node, "nod" if said_yes else "shrug", 1.4)
+		AudioDirector.play_sfx("sfx_customer_happy_chirp" if said_yes else "sfx_customer_unhappy_chirp", true)
 		if said_yes:
 			GameState.bump_stat("asks_granted")
 		_open_make(uid)

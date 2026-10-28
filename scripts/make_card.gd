@@ -14,6 +14,14 @@ const CUP_SIZE := Vector2(220, 300)
 const PLATE_SIZE := Vector2(320, 220)
 const PERFECT_MULT := 1.3
 const SLIP_MULT := 0.85
+# What each ingredient sounds like going in; anything else pours.
+const TAP_SFX := {
+	"espresso": "sfx_espresso_pull", "drip": "sfx_drip_brew", "cold_brew": "sfx_drip_brew", "foam": "sfx_milk_foam", "oat_milk": "sfx_milk_steam",
+	"ice": "sfx_ice_clink", "lemon": "sfx_lemon_squeeze", "sugar": "sfx_sugar_pour", "tea": "sfx_tea_steep", "mint": "sfx_muddle",
+	"caramel": "sfx_syrup_drizzle", "jam": "sfx_syrup_drizzle", "cream": "sfx_whip_topping", "ice_cream": "sfx_whip_topping",
+	"cup": "sfx_cup_set_down", "glass": "sfx_cup_set_down", "plate": "sfx_cup_set_down", "water": "sfx_pour", "soup": "sfx_pour",
+	"custard": "sfx_spoon_stir", "hollandaise": "sfx_spoon_stir", "garlic_sauce": "sfx_spoon_stir", "mayo": "sfx_spoon_stir",
+}
 
 var dish: Dictionary = {}
 var recipe: Array = []
@@ -168,7 +176,7 @@ func _tap(ing_id: String) -> void:
 		row.text = "●" + row.text.substr(1)
 		row.add_theme_color_override("font_color", UIKit.SAGE.darkened(0.25))
 		step += 1
-		AudioDirector.play_sfx("sfx_item_snap", true)
+		AudioDirector.play_sfx(str(TAP_SFX.get(ing_id, "sfx_items_grab")), true)
 		if step >= recipe.size():
 			serve_button.disabled = false
 			status_label.text = "Perfect. Serve it!" if slips == 0 else "Done, with %d slip%s. Serve it." % [slips, "" if slips == 1 else "s"]
@@ -228,6 +236,9 @@ func _finish(by_hand: bool) -> void:
 	var mult := 1.0
 	if by_hand:
 		mult = PERFECT_MULT if slips == 0 else (1.0 if slips == 1 else SLIP_MULT)
+		AudioDirector.play_sfx("sfx_cup_set_down")
+		if slips == 0:
+			AudioDirector.play_sfx("sfx_tip_jar_coin")
 	emit_signal("finished", {"by_hand": by_hand, "slips": slips, "tip_mult": mult, "perfect": by_hand and slips == 0})
 	queue_free()
 

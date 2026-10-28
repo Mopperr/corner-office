@@ -77,6 +77,9 @@ const STATIONS: Array = [
 	{"name": "Trading Floor", "track": "music_computer_trading", "ident": "Numbers, with a beat."},
 	{"name": "Build Hour", "track": "music_office_build", "ident": "Hammer along."},
 	{"name": "Menu Lounge", "track": "music_main_menu", "ident": "Easy listening for parked trucks."},
+	{"name": "Downtown", "track": "music_act4_downtown", "ident": "Big-city songs for a small town."},
+	{"name": "The Record Store", "track": "music_record_store", "ident": "Crates of vinyl, one needle."},
+	{"name": "Parade Band", "track": "music_parade_band", "ident": "Brass, drums, and a tuba that is late."},
 	{"name": "Radio off", "track": "", "ident": "Just the engine."},
 ]
 var jogger_cd := 0.0
@@ -181,7 +184,10 @@ func _ready() -> void:
 	_hud()
 	UIKit.show_level_beat(self, GameState.present_current_slice_level(), true)
 	var weather := str(course.get("weather", "clear"))
-	AudioDirector.play_bed(str(course.get("music", "music_driving")), str(course.get("ambience", "")))
+	var air := str(course.get("ambience", ""))
+	if air == "" and str(course.get("weather", "clear")) == "night":
+		air = "amb_l13_night_loop"
+	AudioDirector.play_bed(str(course.get("music", "music_driving")), air)
 	_radio_apply(false)
 	if weather == "rain":
 		_make_rain()
@@ -2155,6 +2161,7 @@ func _begin_load() -> void:
 	state = "load"
 	_set_action("")
 	_start_box_anim(true)
+	AudioDirector.play_sfx("sfx_truck_ramp_in")
 	AudioDirector.play_sfx("sfx_box_set_down")
 
 
@@ -2165,6 +2172,7 @@ func _begin_unload() -> void:
 	vel = Vector2.ZERO
 	speed = 0.0
 	_start_box_anim(false)
+	AudioDirector.play_sfx("sfx_truck_ramp_out")
 	AudioDirector.play_sfx("sfx_box_set_down")
 
 

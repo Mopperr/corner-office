@@ -131,11 +131,12 @@ func setup(owner: Node, def: Dictionary, door: Vector3, inward: Vector3) -> void
 		var side := -1.0 if n % 2 == 0 else 1.0
 		var offset := Vector3(side * (1.5 + 0.6 * float(n / 2)), 0.0, 0.8 + 0.4 * float(n % 2))
 		person.position = door + inward * offset.z + Vector3(offset.x, 0, 0)
-		person.look_at(person.position + inward, Vector3.UP)
-		person.rotate_y(PI)
 		# A body the click ray can land on, like a customer's.
 		Props.add_picker(person, Vector3(0.6, 1.5 * (0.68 if str(kind) == "kid" else 1.0), 0.6))
 		add_child(person)
+		# In the tree first: look_at needs a world transform.
+		person.look_at(person.position + inward, Vector3.UP)
+		person.rotate_y(PI)
 		members.append(person)
 		n += 1
 	started_at = 0.0

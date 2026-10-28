@@ -183,14 +183,27 @@
   "quiet_sfx": [
    "sfx_box_fold",
    "sfx_box_open",
-   "sfx_paper_rustle"
+   "sfx_paper_rustle",
+   "sfx_cup_set_down",
+   "sfx_spoon_stir",
+   "sfx_tea_steep",
+   "sfx_sugar_pour",
+   "sfx_syrup_drizzle"
   ],
   "ambience_boost_db": 8,
   "ambience_boost": [
    "amb_l02_cafe_loop",
    "amb_l03_rain_loop",
    "amb_l04_shop_clock_loop",
-   "amb_l06_skylight_rain_loop"
+   "amb_l06_skylight_rain_loop",
+   "amb_outdoor_stand_loop",
+   "amb_l09_studio_loop",
+   "amb_l19_office_loop",
+   "amb_l10_library_loop",
+   "amb_l20_lodge_loop",
+   "amb_l14_greenhouse_loop",
+   "amb_l15_coastal_loop",
+   "amb_l13_night_loop"
   ],
   "pitch_rand": 0.08,
   "music_db_default": -4,

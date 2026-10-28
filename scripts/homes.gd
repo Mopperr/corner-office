@@ -42,6 +42,9 @@ const OWNER_ITEMS := {
 	"shed": ["lawnmower", "ladder", "paint_tins", "watering_can"],
 }
 
+# What a house sounds like, by what it is built of.
+const STYLE_AIR := {"brick": "amb_l04_shop_clock_loop", "render": "amb_l10_library_loop", "stone": "amb_l20_lodge_loop", "timber": "amb_l14_greenhouse_loop", "clapboard": "amb_l15_coastal_loop"}
+
 static var _data: Dictionary = {}
 
 
@@ -68,7 +71,7 @@ static func venue_for(id: String) -> Dictionary:
 		"theme": "home_" + str(home.get("style", "brick")),
 		"floors": home.get("floors", []),
 		"box_row": 1.4,
-		"music": "music_act1_home", "ambience": "amb_l04_shop_clock_loop",
+		"music": "music_act1_home", "ambience": str(STYLE_AIR.get(str(home.get("style", "brick")), "amb_l04_shop_clock_loop")),
 	}
 
 

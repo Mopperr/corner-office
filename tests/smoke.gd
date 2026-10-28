@@ -133,7 +133,7 @@ func _ready() -> void:
 	var bakery_venue: Dictionary = ItemDB.venues().get("bakery", {})
 	if str(garage_venue.get("music", "")) != "music_act1_home" or str(garage_venue.get("ambience", "")) != "amb_l01_garage_loop":
 		failures.append("garage bed")
-	if str(bakery_venue.get("music", "")) != "music_act2_morning" or not str(bakery_venue.get("ambience", "")).contains("amb_l06"):
+	if str(bakery_venue.get("music", "")) != "music_act3_loft" or not str(bakery_venue.get("ambience", "")).contains("amb_l06"):
 		failures.append("bakery bed")
 	var rainy: Dictionary = JobDB.get_drive("rainy_afternoon")
 	var pond: Dictionary = JobDB.get_drive("duck_pond")

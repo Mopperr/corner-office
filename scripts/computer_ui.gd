@@ -301,7 +301,7 @@ func _buy() -> void:
 		_pop_text(err, UIKit.LOSS)
 		AudioDirector.play_sfx("sfx_invalid_placement")
 		return
-	AudioDirector.play_sfx("sfx_buy_click")
+	AudioDirector.play_sfx("sfx_trade_buy")
 	_pop_text("-$%d" % GameState.price_of(selected), UIKit.LOSS)
 	_refresh_money()
 	_show_page()
@@ -313,9 +313,9 @@ func _sell() -> void:
 	if result.has("error"):
 		_pop_text(str(result["error"]), UIKit.LOSS)
 		return
-	AudioDirector.play_sfx("sfx_sell_click")
-	AudioDirector.play_sfx("sfx_cash_gain")
+	AudioDirector.play_sfx("sfx_trade_sell")
 	var profit := int(result.get("profit", 0))
+	AudioDirector.play_sfx("sfx_trade_profit_chime" if profit >= 0 else "sfx_trade_loss_thud")
 	_pop_text("+$%d" % int(result.get("gain", 0)), UIKit.GREEN if profit >= 0 else UIKit.LOSS)
 	_refresh_money()
 	_show_page()

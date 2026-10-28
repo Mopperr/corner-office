@@ -218,7 +218,8 @@
     "from": "Marge \"Mile Marker\" Holloway",
     "subject": "A million",
     "body": "Dana,\n\nA million. From a garage that smelled of diesel.\n\nMy first partner said the first million is the hard one. He was wrong about most things. We'll see about that.\n\n— Mile Marker"
-   }
+   },
+   "music": "music_finale"
   },
   {
    "id": "ten_million",
@@ -229,7 +230,8 @@
     "from": "Marge \"Mile Marker\" Holloway",
     "subject": "Ten",
     "body": "Ten million. I framed your first invoice. It was for $100 and you spelled 'receipt' wrong.\n\n— Mile Marker"
-   }
+   },
+   "music": "music_parade_band"
   },
   {
    "id": "hundred_million",
@@ -240,7 +242,8 @@
     "from": "Grayline Logistics",
     "subject": "An offer",
     "body": "Ms Reyes,\n\nGrayline would like to acquire Corner Office in full for $250,000,000. The offer stands for as long as you like. We note you once worked for us. We note it with some embarrassment.\n\nGrayline Logistics"
-   }
+   },
+   "music": "music_act4_downtown"
   },
   {
    "id": "billion",
@@ -251,7 +254,8 @@
     "from": "Dana Reyes",
     "subject": "A note to myself",
     "body": "Day one: $120, a garage, and a truck I didn't own.\n\nToday: a billion. Pickle is asleep under the desk. Sam says dinner's at seven.\n\nI think I'll do a job tomorrow. A small one. By hand.\n\nDana"
-   }
+   },
+   "music": "music_curtain_call"
   }
  ],
  "run_pay": 140,

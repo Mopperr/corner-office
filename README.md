@@ -96,6 +96,8 @@ The Shop Manager app (Till) wakes up after the garage is unpacked. It earns only
 
 Saves go to `user://corner_office_save.json`. Volume sliders live in `user://settings.cfg`.
 
+**Sound from the team.** `docs/ADDITIONS_README.md` lists the audio Andrew's helpers added: nine songs (the lemonade stand has its own, the train shop plays the record store, the loft its own act; Downtown, The Record Store and Parade Band are radio stations; the finale plays at the first million, the parade at ten, downtown at a hundred, the curtain call at the billion, and the credits their reprise), sixteen airs (the stand outdoors, the studio, the flat, the night drive, and a house's air by what it is built of: library for render, lodge for stone, greenhouse for timber, coastal for clapboard) and fifty-odd sounds now wired in: every ingredient on the Make it card sounds like itself (an espresso pull, milk foam, ice, a lemon, sugar, tea, a muddle, a drizzle, whipped topping), the cup goes down and the tip jar rings on a clean make, a bell at the shop door, a chirp for a yes or a no to an ask, the truck's back door and the ramp, boxes scraping into a tower, and the market's buy, sell, profit chime and loss thud. The robber, alarm and fire sounds were left out for the tone.
+
 ## Credits
 
 Fonts: Fredoka (titles), Nunito (body), VT323 (the computer). See `assets/fonts/OFL.txt`.
