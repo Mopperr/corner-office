@@ -67,6 +67,18 @@ var time_alive := 0.0
 var rain: CPUParticles3D
 var wiper := 0.0
 var rev_cd := 0.0
+var brake_cd := 0.0
+var radio_button: Button
+const STATIONS: Array = [
+	{"name": "Corner FM", "track": "music_driving", "ident": "All the hits from the corner."},
+	{"name": "Rainy Nights", "track": "music_driving_rain", "ident": "Slow songs for wet roads."},
+	{"name": "The Home Hour", "track": "music_act1_home", "ident": "Something for the drive home."},
+	{"name": "Morning Show", "track": "music_act2_morning", "ident": "Up and at it."},
+	{"name": "Trading Floor", "track": "music_computer_trading", "ident": "Numbers, with a beat."},
+	{"name": "Build Hour", "track": "music_office_build", "ident": "Hammer along."},
+	{"name": "Menu Lounge", "track": "music_main_menu", "ident": "Easy listening for parked trucks."},
+	{"name": "Radio off", "track": "", "ident": "Just the engine."},
+]
 var jogger_cd := 0.0
 var shake := 0.0
 var running := true
@@ -170,6 +182,7 @@ func _ready() -> void:
 	UIKit.show_level_beat(self, GameState.present_current_slice_level(), true)
 	var weather := str(course.get("weather", "clear"))
 	AudioDirector.play_bed(str(course.get("music", "music_driving")), str(course.get("ambience", "")))
+	_radio_apply(false)
 	if weather == "rain":
 		_make_rain()
 	if str(course.get("id", "")) == "duck_pond":
@@ -1097,6 +1110,14 @@ func _hud() -> void:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_bar.add_child(name_label)
 	UIKit.fill(name_label, 12, 8, 12, 8)
+	radio_button = UIKit.button("♪ Radio", UIKit.NIGHT)
+	radio_button.name = "RadioButton"
+	radio_button.custom_minimum_size = Vector2(300, 52)
+	radio_button.pressed.connect(_radio_next)
+	hud_root.add_child(radio_button)
+	UIKit.pin_top_right(radio_button, -332, 396, -16, 448)
+	radio_button.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	UIKit.link_focus([radio_button])
 	# Minimap under the title: the whole town, the route, the truck.
 	var map_card := Panel.new()
 	map_card.name = "Minimap"
@@ -1127,6 +1148,8 @@ func _set_action(text: String) -> void:
 		act_button.queue_free()
 		act_button = null
 	if text == "":
+		if radio_button:
+			UIKit.link_focus([radio_button])
 		return
 	act_button = UIKit.button(text, UIKit.TERRA)
 	act_button.name = "ActButton"
@@ -1139,7 +1162,7 @@ func _set_action(text: String) -> void:
 	act_button.offset_right = -32
 	act_button.offset_top = -124
 	act_button.offset_bottom = -60
-	UIKit.link_focus([act_button])
+	UIKit.link_focus([act_button, radio_button] if radio_button else [act_button])
 
 
 func _hint_text() -> String:
@@ -1341,6 +1364,14 @@ func _drive(delta: float, weather: String) -> void:
 	var throttle: float = Controls.axis("drive_back", "drive_forward")
 	var forward := Vector2.RIGHT.rotated(heading)
 	speed = vel.dot(forward)
+	# The engine note climbs with speed and leans in under the throttle; a
+	# hard stop from pace squeals.
+	AudioDirector.set_loop_pitch("sfx_truck_idle_loop", _engine_pitch(speed) + (0.08 if throttle > 0.0 else 0.0))
+	AudioDirector.set_loop_volume("sfx_truck_idle_loop", float(Tuning.get_value("audio.truck_idle_db", -10)) + (4.0 if throttle > 0.0 else 0.0) + clampf(absf(speed) / max_speed, 0.0, 1.0) * 3.0)
+	brake_cd = maxf(0.0, brake_cd - delta)
+	if brake_cd <= 0.0 and absf(speed) > max_speed * 0.45 and ((throttle < 0.0 and speed > 0.0) or handbrake):
+		brake_cd = 1.6
+		AudioDirector.play_sfx("sfx_l19_bus_brakes")
 	if throttle > 0.0 and speed < max_speed * 0.25 and rev_cd <= 0.0:
 		AudioDirector.play_sfx("sfx_truck_rev")
 		rev_cd = 1.6
@@ -1366,7 +1397,8 @@ func _drive(delta: float, weather: String) -> void:
 			vel = vel.move_toward(Vector2.ZERO, brake * delta)
 			_maybe_hard_brake(weather, absf(before), delta)
 		elif speed < cap:
-			vel += forward * accel * delta * throttle
+			# Punchy off the line, tapering as it winds up: a gear-step feel.
+			vel += forward * accel * delta * throttle * (1.35 - 0.6 * clampf(speed / max_speed, 0.0, 1.0))
 	elif throttle < 0.0:
 		if speed > 5.0:
 			var before2 := speed
@@ -1813,8 +1845,40 @@ func _check_dropoff() -> void:
 			_set_action("")
 
 
+func _station() -> int:
+	return clampi(int(GameState.stats.get("radio", 0)), 0, STATIONS.size() - 1)
+
+
+func _radio_apply(announce: bool) -> void:
+	var st: Dictionary = STATIONS[_station()]
+	var track := str(st.get("track", ""))
+	if track == "":
+		AudioDirector.stop_music()
+	else:
+		AudioDirector.play_music(track)
+	if radio_button:
+		radio_button.text = "♪ %s" % st.get("name", "Radio")
+	if announce:
+		AudioDirector.play_sfx("sfx_l01_cb_static")
+		if hint:
+			hint.text = "%s: %s" % [st.get("name", "Radio"), st.get("ident", "")]
+
+
+func _radio_next() -> void:
+	GameState.stats["radio"] = (_station() + 1) % STATIONS.size()
+	_radio_apply(true)
+
+
+func _engine_pitch(at_speed: float) -> float:
+	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+	return 0.85 + clampf(absf(at_speed) / maxf(1.0, max_speed), 0.0, 1.25) * 0.95
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not running:
+		return
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_R:
+		_radio_next()
 		return
 	if Controls.event_pressed(event, "horn"):
 		_count_honk()
@@ -2097,29 +2161,66 @@ func _draw_minimap() -> void:
 	var bounds: Rect2 = city.bounds
 	var k := minf(size.x / bounds.size.x, size.y / bounds.size.y)
 	var offset := (size - bounds.size * k) * 0.5
-	# Paper, with the roads as the gaps between soft blocks.
-	minimap.draw_rect(Rect2(offset, bounds.size * k), Color("E9E1CF"))
+	# Tarmac under everything, blocks on top, so the roads read as roads.
+	var night := str(course.get("weather", "clear")) == "night"
+	minimap.draw_rect(Rect2(offset, bounds.size * k), Color("5E5A5C") if night else Color("8E8A86"))
 	for c in city.cols:
 		for r in city.rows:
 			var rect: Rect2 = city.block_rect(c, r)
-			var color := Color("B9D4A4") if Vector2i(c, r) == city.park_block else Color("CFC3AE")
 			var box := Rect2(offset + rect.position * k + Vector2(1, 1), rect.size * k - Vector2(2, 2))
-			minimap.draw_rect(box, color)
-			minimap.draw_rect(box, Color(UIKit.DARK, 0.12), false, 1.0)
+			minimap.draw_rect(box, Color("B9D4A4") if Vector2i(c, r) == city.park_block else Color("E9E1CF"))
+	# Lane lines down the middle of every road.
+	var dash := Color("F6EEDC", 0.8)
+	for c in range(city.cols - 1):
+		var a: Rect2 = city.block_rect(c, 0)
+		var b: Rect2 = city.block_rect(c + 1, 0)
+		var x := offset.x + (a.end.x + b.position.x) * 0.5 * k
+		var y := offset.y
+		while y < offset.y + bounds.size.y * k:
+			minimap.draw_line(Vector2(x, y), Vector2(x, y + 5.0), dash, 1.0)
+			y += 10.0
+	for r in range(city.rows - 1):
+		var a2: Rect2 = city.block_rect(0, r)
+		var b2: Rect2 = city.block_rect(0, r + 1)
+		var yy := offset.y + (a2.end.y + b2.position.y) * 0.5 * k
+		var xx := offset.x
+		while xx < offset.x + bounds.size.x * k:
+			minimap.draw_line(Vector2(xx, yy), Vector2(xx + 5.0, yy), dash, 1.0)
+			xx += 10.0
+	# Buildings in their own colours, with the two that matter picked out.
+	for entry in city.buildings:
+		var brect: Rect2 = entry.get("rect", Rect2())
+		var bcol: Color = entry.get("color", Color("CFC3AE"))
+		minimap.draw_rect(Rect2(offset + brect.position * k, brect.size * k), bcol.darkened(0.08))
 	var water: Dictionary = city.pond()
 	minimap.draw_circle(offset + (water.get("center", Vector2.ZERO) as Vector2) * k, float(water.get("radius", 100)) * k, Color("9FC4D6"))
 	for cut in city.alleys:
 		minimap.draw_rect(Rect2(offset + (cut as Rect2).position * k, (cut as Rect2).size * k), Color("8E6E5A"))
-	# The route: a cream underlay, then terracotta, from where the truck is.
+	# The route as a dotted line from where the truck is.
 	if route.size() > 1 and state == "drive":
 		var points := PackedVector2Array()
-		points.append(offset + pos * k)
+		points.append(pos)
 		for i in range(clampi(route_index, 1, route.size() - 1), route.size()):
-			points.append(offset + route[i] * k)
-		minimap.draw_polyline(points, Color("F6EEDC"), 7.0, true)
-		minimap.draw_polyline(points, UIKit.TERRA, 3.5, true)
+			points.append(route[i])
+		var carry := 0.0
+		for i in range(points.size() - 1):
+			var a3 := points[i]
+			var b3 := points[i + 1]
+			var seg_len := a3.distance_to(b3)
+			var t := carry
+			while t < seg_len:
+				var p := offset + a3.lerp(b3, t / maxf(seg_len, 0.001)) * k
+				minimap.draw_circle(p, 2.6, Color("F6EEDC"))
+				minimap.draw_circle(p, 1.8, UIKit.TERRA)
+				t += 14.0
+			carry = t - seg_len
 	for car in cars:
-		minimap.draw_circle(offset + (car["pos"] as Vector2) * k, 2.0, Color(UIKit.DARK, 0.35))
+		if bool(car.get("patrol", false)):
+			var flash := fmod(patrol_flash, 0.6) < 0.3
+			var size_r := 4.5 if str(car.get("mode", "")) == "pursuit" else 3.2
+			minimap.draw_circle(offset + (car["pos"] as Vector2) * k, size_r, Color("FF3344") if flash else Color("3B6CFF"))
+		else:
+			minimap.draw_circle(offset + (car["pos"] as Vector2) * k, 2.0, Color(UIKit.DARK, 0.45))
 	# Pins: a blue dot where the boxes came from, a green flag where they go.
 	var pick: Rect2 = pickup.get("bay", Rect2())
 	var drop: Rect2 = dropoff.get("bay", Rect2())
@@ -2131,6 +2232,9 @@ func _draw_minimap() -> void:
 	minimap.draw_circle(drop_at, 5.5, UIKit.GREEN)
 	minimap.draw_line(drop_at, drop_at + Vector2(0, -16), UIKit.DARK, 2.0)
 	minimap.draw_colored_polygon(PackedVector2Array([drop_at + Vector2(0, -16), drop_at + Vector2(12, -12), drop_at + Vector2(0, -8)]), UIKit.GREEN)
+	var font := UIKit.body_bold()
+	minimap.draw_string(font, pick_at + Vector2(8, 5), "LOAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, UIKit.DARK)
+	minimap.draw_string(font, drop_at + Vector2(8, 5), "DROP", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, UIKit.DARK)
 	# The truck as a wedge pointing where it faces, with a soft shadow.
 	var at := offset + pos * k
 	var fwd := Vector2.RIGHT.rotated(heading)

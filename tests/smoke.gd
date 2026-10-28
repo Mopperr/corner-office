@@ -1277,6 +1277,27 @@ func _qa_regressions() -> Array:
 			pool_prop.free()
 	if ItemDB.get_item("globe").get("flavor", "") == "" or ItemDB.get_item("easel").get("flavor", "") == "":
 		found.append("new items without a line")
+	# The truck stage: the place's front stands behind the truck, Dana carries each box to the bed.
+	GameState.job = {"def": {"id": "truck_smoke", "venue": "cafe", "title": "Truck test"}, "items": [], "boxes": [{"id": 0, "sealed": true, "slot": -1}, {"id": 1, "sealed": true, "slot": -1}], "carried": []}
+	GameState.mode = "truck"
+	play.call("_build_venue")
+	if play.find_child("Facade", true, false) == null or play.find_child("BoxPile", true, false) == null:
+		found.append("truck stage facade missing")
+	if play.player == null or not is_instance_valid(play.player):
+		found.append("no player on the truck stage")
+	play.selected_box = 0
+	play.call("_truck_click", "slot:0")
+	if int(GameState.job["boxes"][0].get("slot", -1)) != 0:
+		found.append("truck click did not load the box")
+	if not play.truck_pending or not play.player_moving:
+		found.append("Dana did not set off with the box")
+	for i in 120:
+		play.call("_tick_player", 0.05)
+	if play.truck_pending:
+		found.append("the box never landed on the pad")
+	GameState.mode = "office"
+	GameState.job = {}
+	play.call("_build_venue")
 	# Packing: the boxes being filled stand by the back wall, and clicking one picks it.
 	GameState.job = {"def": {"id": "pack_test", "venue": "cafe"}, "items": [], "boxes": [{"id": 0, "sealed": true}, {"id": 1, "sealed": false}], "carried": []}
 	for b in 3:
@@ -1396,6 +1417,21 @@ func _qa_regressions() -> Array:
 	if GameState.rent_due_in() != 4:
 		found.append("rent due in %d" % GameState.rent_due_in())
 	GameState.rent_owed = 0
+	# The radio: stations cycle and stick; the engine note climbs with speed.
+	GameState.job = {"def": {"id": "radio_smoke", "venue": "cafe", "drive": "rainy_afternoon"}, "items": [], "boxes": []}
+	var radio_drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(radio_drive)
+	if (radio_drive.STATIONS as Array).size() < 6 or radio_drive.radio_button == null:
+		found.append("radio stations")
+	GameState.stats["radio"] = 0
+	radio_drive.call("_radio_next")
+	if int(GameState.stats.get("radio", 0)) != 1 or not str(radio_drive.radio_button.text).contains("Rainy Nights"):
+		found.append("radio switch %s %s" % [GameState.stats.get("radio", -1), radio_drive.radio_button.text])
+	if float(radio_drive.call("_engine_pitch", 0.0)) >= float(radio_drive.call("_engine_pitch", 150.0)):
+		found.append("engine pitch")
+	radio_drive.free()
+	GameState.stats["radio"] = 0
+	GameState.job = {}
 	# A night drive: patrols with light bars, headlights, and a watching patrol spots a speeding truck.
 	GameState.generated_drives["smoke_night"] = {"id": "smoke_night", "title": "Night run", "weather": "night", "pickup": "garage", "dropoff": "cafe", "hazards": [], "length_m": 200}
 	GameState.job = {"def": {"id": "night_smoke", "venue": "cafe", "drive": "smoke_night"}, "items": [], "boxes": []}
@@ -1477,6 +1513,22 @@ func _qa_regressions() -> Array:
 	if course_node.backed_in:
 		found.append("backed_in stuck after leaving")
 	course_node.free()
+	# Unpacking: a piece leaving a box arcs into place instead of popping.
+	GameState.job = {"def": {"id": "arc_test", "venue": "cafe"}, "items": [{"uid": "arc0", "item_id": "cafe_mug", "name": "Mug", "state": "boxed", "box": 0, "damage": 0, "x": 0, "y": 0, "z": 0}], "boxes": [{"id": 0, "sealed": true}], "carried": [0]}
+	GameState.mode = "job_unpack"
+	play.carried = {0: true}
+	play.call("_loosen", GameState.job["items"][0], 0, 0)
+	if not play.arrive_from.has("arc0"):
+		found.append("no arrival noted for the loosened piece")
+	play.call("_refresh_items")
+	var arc_node: Node3D = play.nodes_by_uid.get("arc0")
+	if arc_node == null or play.arrive_from.has("arc0"):
+		found.append("arrival not consumed")
+	elif arc_node.get_child_count() > 0 and (arc_node.get_child(0) as Node3D).position.length() < 0.05:
+		found.append("piece did not start its arc")
+	GameState.mode = "office"
+	GameState.job = {}
+	play.carried = {}
 	# Box towers: carried boxes pile in threes, the top one opens, emptied ones leave the tower.
 	GameState.job = {"def": {"id": "stack_test", "venue": "cafe"}, "items": [], "boxes": [], "carried": [0, 1, 2, 3]}
 	for b in 4:

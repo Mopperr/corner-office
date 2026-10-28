@@ -788,6 +788,7 @@ func _build_truck_stage() -> void:
 	var apron := Props.mesh_box(Vector3(8, 0.03, 6), Outdoors.PAVEMENT)
 	apron.position = Vector3(2, -0.03, 1)
 	yard.add_child(apron)
+	_build_facade()
 	truck_root = Props.model("mover_truck")
 	if truck_root:
 		add_child(truck_root)
@@ -812,6 +813,75 @@ func _build_truck_stage() -> void:
 	sun.shadow_enabled = true
 	sun.shadow_blur = 2.0
 	add_child(sun)
+
+
+func _build_facade() -> void:
+	# The place the boxes come from stands behind the truck: its front wall,
+	# a door, two windows, the name over the door, and the boxes on the step.
+	var def: Dictionary = GameState.job.get("def", {})
+	var place: Dictionary = ItemDB.venues().get(str(def.get("venue", "cafe")), {})
+	var look: Dictionary = Catalog.theme(str(def.get("venue", "cafe")))
+	var facade := Node3D.new()
+	facade.name = "Facade"
+	add_child(facade)
+	var wall := Props.mesh_box(Vector3(9.0, 3.0, 0.3), Color(str(look.get("wall", "9A8C7E"))))
+	wall.position = Vector3(2.0, 1.5, -2.45)
+	facade.add_child(wall)
+	var trim := Props.mesh_box(Vector3(9.0, 0.16, 0.36), Color(str(look.get("trim", "7A5C40"))))
+	trim.position = Vector3(2.0, 3.0, -2.45)
+	facade.add_child(trim)
+	var door := Props.mesh_box(Vector3(1.0, 2.2, 0.1), Color(str(look.get("trim", "7A5C40"))))
+	door.position = Vector3(2.0, 1.1, -2.26)
+	facade.add_child(door)
+	var knob := Props.mesh_cylinder(0.03, 0.04, UIKit.MUSTARD)
+	knob.rotation.x = PI * 0.5
+	knob.position = Vector3(2.35, 1.05, -2.2)
+	facade.add_child(knob)
+	for wx in [-0.6, 4.6]:
+		var pane := Props.mesh_box(Vector3(1.2, 1.1, 0.08), Color("DCE9EE"))
+		pane.position = Vector3(wx, 1.6, -2.26)
+		facade.add_child(pane)
+		var sill := Props.mesh_box(Vector3(1.3, 0.08, 0.2), Color(str(look.get("trim", "7A5C40"))))
+		sill.position = Vector3(wx, 1.02, -2.2)
+		facade.add_child(sill)
+	var sign := Label3D.new()
+	sign.text = str(place.get("name", def.get("title", "The job")))
+	sign.font_size = 110
+	sign.pixel_size = 0.004
+	sign.modulate = UIKit.CREAM_CARD
+	sign.outline_modulate = Color(str(look.get("trim", "7A5C40")))
+	sign.outline_size = 14
+	sign.position = Vector3(2.0, 2.55, -2.2)
+	facade.add_child(sign)
+	var step := Props.mesh_box(Vector3(1.6, 0.1, 0.8), Outdoors.PAVEMENT.darkened(0.1))
+	step.position = Vector3(2.0, 0.05, -1.9)
+	facade.add_child(step)
+	# The boxes still to go, piled by the door; the pile shrinks as the bed fills.
+	var pile := Node3D.new()
+	pile.name = "BoxPile"
+	pile.position = Vector3(0.4, 0.0, -1.5)
+	facade.add_child(pile)
+	_sync_pile()
+
+
+func _sync_pile() -> void:
+	var pile := find_child("BoxPile", true, false) as Node3D
+	if pile == null:
+		return
+	for child in pile.get_children():
+		child.free()
+	var waiting := 0
+	for box in GameState.job.get("boxes", []):
+		if bool(box.get("sealed", false)) and int(box.get("slot", -1)) < 0:
+			waiting += 1
+	for i in waiting:
+		var crate := Props.make("box_closed")
+		var collision := crate.get_node_or_null("PropCollision")
+		if collision:
+			collision.free()
+		crate.position = Vector3(float(i % 3) * 0.55, float(int(i / 3)) * 0.42, float(int(i / 6)) * 0.5)
+		crate.rotation.y = 0.15 * float(i % 2)
+		pile.add_child(crate)
 
 
 func _begin_drive() -> void:
@@ -1565,6 +1635,8 @@ func _try_place_held() -> void:
 	var source := held_source
 	var uid := held_uid
 	var on_wall := str(spot.get("wall", "")) != ""
+	if ghost != null and is_instance_valid(ghost):
+		arrive_from[uid] = ghost.global_position + Vector3(0, 0.25, 0)
 	if source == "decor":
 		GameState.place_decor_from_queue(spot, uid)
 		var decor := GameState.find_office_item(uid)
@@ -1616,6 +1688,7 @@ func _after_place(source: String) -> void:
 	if source == "office" or source == "decor":
 		_maybe_live()
 	elif source == "job":
+		_unhide_loose()
 		_maybe_job_done()
 
 
@@ -1780,8 +1853,28 @@ func _truck_click(uid: String) -> void:
 		_toast(err)
 		AudioDirector.play_sfx("sfx_invalid_placement")
 		return
-	AudioDirector.play_sfx("sfx_box_set_down", true)
 	selected_box = -1
+	_refresh_hud_buttons()
+	_sync_pile()
+	# Dana carries it from the pile to the bed; the box lands on the pad when she gets there.
+	if player != null and is_instance_valid(player) and truck_root != null:
+		truck_pending = true
+		player_carrying = true
+		var local := _slot_pos(slot)
+		var bed := truck_root.to_global(Vector3(local.x - 1.35, 0.0, local.z))
+		player_target = bed
+		player_moving = true
+		player_on_arrive = func():
+			truck_pending = false
+			player_carrying = false
+			AudioDirector.play_sfx("sfx_box_set_down", true)
+			_refresh_items()
+			_sync_cargo()
+			_refresh_hud_buttons()
+			player_target = Vector3(1.6, 0.0, -0.9)
+			player_moving = true
+		return
+	AudioDirector.play_sfx("sfx_box_set_down", true)
 	_refresh_items()
 	_sync_cargo()
 	_refresh_hud_buttons()
@@ -1998,6 +2091,7 @@ func _box_row(item: Dictionary, box_id: int, width: float) -> PanelContainer:
 
 func _loosen(item: Dictionary, box_id: int, index: int) -> void:
 	item["state"] = "loose"
+	arrive_from[str(item.get("uid", ""))] = _open_box_spot(box_id) + Vector3(0, 0.35, 0)
 	var at := _spill_spot(box_id, index)
 	item["x"] = at.x
 	item["z"] = at.z
@@ -2030,6 +2124,7 @@ func _set_from_box(uid: String, box_id: int) -> void:
 	else:
 		AudioDirector.play_sfx("sfx_item_snap", true)
 	_refresh_items()
+	_unhide_loose()
 	_refresh_hud_buttons()
 	_maybe_job_done()
 
@@ -2049,6 +2144,7 @@ func _auto_unpack_box(box_id: int) -> void:
 	AudioDirector.play_sfx("sfx_box_open")
 	AudioDirector.play_sfx("sfx_item_snap", true)
 	_refresh_items()
+	_unhide_loose()
 	_refresh_hud_buttons()
 	if missed > 0:
 		_toast("%d piece%s wouldn't fit anywhere tidy. They're on the floor." % [missed, "" if missed == 1 else "s"])
@@ -2092,6 +2188,7 @@ func _auto_place_item(item: Dictionary, source := "job") -> bool:
 	# Try spots spiralling out from where the piece lies, using the same
 	# snap rules a click would, so nothing lands inside a wall or another piece.
 	var uid := str(item.get("uid", ""))
+	arrive_from[uid] = Vector3(float(item.get("x", 0.0)), float(item.get("y", 0.0)) + 0.3, float(item.get("z", 0.0)))
 	var was_held := held_uid
 	var was_source := held_source
 	var was_rot := held_rot
@@ -2317,6 +2414,32 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 	return Vector3(x0 + w * 0.5, 0.0, z0 + d * 0.5)
 
 
+func _unhide_loose() -> void:
+	# A piece set down in front of a loose one can hide it from the camera;
+	# move the hidden one to a square that can be seen.
+	if GameState.mode != "job_unpack":
+		return
+	var moved := false
+	var k := 0
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) != "loose":
+			continue
+		var at := Vector3(float(item.get("x", 0.0)), 0.0, float(item.get("z", 0.0)))
+		if not _spot_hidden(at):
+			continue
+		var box_id := maxi(0, int(item.get("box", 0)))
+		var fresh := _spill_spot(box_id, 12 + k)
+		k += 1
+		if not _spot_hidden(fresh):
+			item["x"] = fresh.x
+			item["z"] = fresh.z
+			item["y"] = 0.0
+			arrive_from[str(item.get("uid", ""))] = at + Vector3(0, 0.3, 0)
+			moved = true
+	if moved:
+		_refresh_items()
+
+
 func _spot_hidden(at: Vector3) -> bool:
 	# A square the camera cannot see (a tall piece stands in the way) is no
 	# place to put something the player has to click.
@@ -2460,6 +2583,10 @@ var player_target: Vector3 = Vector3.ZERO
 var player_moving := false
 var player_time := 0.0
 var player_start: Vector3 = Vector3.ZERO
+var player_on_arrive: Callable = Callable()
+var player_carrying := false
+var truck_pending := false
+var arrive_from: Dictionary = {}
 const PLAYER_SPEED := 2.4
 
 
@@ -2467,7 +2594,7 @@ func _spawn_player() -> void:
 	if player != null and is_instance_valid(player):
 		player.queue_free()
 	player = null
-	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack"]):
+	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack", "truck"]):
 		return
 	player = Figure.build(UIKit.TERRA, Color("2B2622"), "adult", Color("3E3A4F"))
 	player.name = "Player"
@@ -2476,6 +2603,8 @@ func _spawn_player() -> void:
 	player.get_node("Figure").add_child(scarf)
 	var door := _door_world()
 	player.position = door + Vector3(0.6, 0.0, 1.3)
+	if GameState.mode == "truck":
+		player.position = Vector3(1.6, 0.0, -0.9)
 	player.rotation.y = PI
 	player_start = player.position
 	player_target = player.position
@@ -2502,7 +2631,7 @@ func _tick_player(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
 	player_time += delta
-	player.set_meta("carry", held_uid != "" or selected_box >= 0 and GameState.mode == "job_pack")
+	player.set_meta("carry", held_uid != "" or (selected_box >= 0 and GameState.mode == "job_pack") or player_carrying)
 	if player_moving:
 		var to := player_target - player.position
 		to.y = 0.0
@@ -2512,6 +2641,10 @@ func _tick_player(delta: float) -> void:
 			player_moving = false
 			_act(player, "reach", 0.7)
 			AudioDirector.play_sfx("sfx_footstep_office")
+			if player_on_arrive.is_valid():
+				var cb := player_on_arrive
+				player_on_arrive = Callable()
+				cb.call()
 		else:
 			player.position += to.normalized() * step
 	_animate_person(player, player_time, player_moving, delta)
@@ -2691,6 +2824,36 @@ func _spawn_office() -> void:
 			boxed += 1
 
 
+func _arrive(root: Node3D, from_world: Vector3) -> void:
+	# A piece does not pop into place: it rises from where it was, arcs over,
+	# and lands with a little squash and a puff of dust.
+	if root == null or settling:
+		return
+	var visual: Node3D = null
+	for child in root.get_children():
+		if child is Node3D and not (child is CollisionShape3D) and not (child is StaticBody3D) and str(child.name) not in ["Picker", "PropCollision"]:
+			visual = child
+			break
+	if visual == null:
+		return
+	var start := root.to_local(from_world)
+	if start.length() < 0.05:
+		return
+	visual.position = start
+	visual.scale = Vector3(0.8, 0.8, 0.8)
+	var mid := start * 0.5 + Vector3(0, 0.45, 0)
+	var tw := create_tween()
+	tw.tween_property(visual, "position", mid, 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(visual, "position", Vector3.ZERO, 0.24).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(visual, "scale", Vector3(1.08, 0.92, 1.08), 0.24)
+	tw.tween_property(visual, "scale", Vector3.ONE, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	var land := root.global_position
+	tw.tween_callback(func():
+		if is_instance_valid(root):
+			_dust(land)
+	)
+
+
 func _spawn_record(rec: Dictionary, item_id: String, cracked: bool) -> void:
 	var def := ItemDB.get_item(item_id)
 	var state := str(rec.get("state", ""))
@@ -2723,6 +2886,11 @@ func _spawn_record(rec: Dictionary, item_id: String, cracked: bool) -> void:
 			root.add_child(loose_crack)
 		items_root.add_child(root)
 	nodes_by_uid[str(rec.get("uid", ""))] = root
+	var arriving := str(rec.get("uid", ""))
+	if arrive_from.has(arriving):
+		var from: Vector3 = arrive_from[arriving]
+		arrive_from.erase(arriving)
+		_arrive(root, from)
 
 
 func _is_stack_item(node: Node) -> bool:

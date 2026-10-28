@@ -132,6 +132,27 @@ func start_loop(sfx_name: String) -> void:
 	loops[sfx_name] = player
 
 
+func set_loop_pitch(sfx_name: String, pitch: float) -> void:
+	if not loops.has(sfx_name):
+		return
+	var player: AudioStreamPlayer = loops[sfx_name]
+	if is_instance_valid(player):
+		player.pitch_scale = clampf(pitch, 0.5, 2.5)
+
+
+func set_loop_volume(sfx_name: String, db: float) -> void:
+	if not loops.has(sfx_name):
+		return
+	var player: AudioStreamPlayer = loops[sfx_name]
+	if is_instance_valid(player):
+		player.volume_db = db
+
+
+func stop_music() -> void:
+	if music and music.playing:
+		music.stop()
+
+
 func stop_loop(sfx_name: String) -> void:
 	if not loops.has(sfx_name):
 		return
