@@ -1,0 +1,42 @@
+{
+ "id": "wren",
+ "name": "Wren",
+ "glb": "wren.glb",
+ "height_m": 1.68,
+ "seat_height_m": 0.476,
+ "hip_height_m": 0.857,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Wren_Notebook",
+   "bone": "RightHand"
+  }
+ ],
+ "tris": 46356,
+ "tris_triangulated": 87305,
+ "smoothing": {
+  "pass_": 3,
+  "rig": "v1 skeleton (rest pose diff 0)",
+  "helper": "v2/_build/smooth_head.py (read-only, sha256 09b9fdbf2f59)",
+  "head": "metaball forms + lids/lips -> voxel remesh -> subsurf 1 -> laplacian",
+  "cloth": "remesh -> subsurf 1 (applied)",
+  "hard_parts": "bevel 2 seg",
+  "weights": "assigned after smoothing"
+ }
+}

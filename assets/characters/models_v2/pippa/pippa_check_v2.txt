@@ -1,0 +1,24 @@
+v1: customers3d/pippa.glb
+v2: customers3d/v2/pippa/pippa.glb
+v2 loads OK: meshes=['Icosphere', 'Pippa_Body', 'Pippa_Clipboard'] tris=84864 (v1 meshes=['Icosphere', 'Pippa_Body', 'Pippa_Clipboard'] tris=55964)
+[PASS] bone count 23 vs 23
+[PASS] bone names identical []
+[PASS] hierarchy identical 
+[PASS] rest pose identical max diff 0.00e+00 m
+[PASS] clip names identical ['idle_Pippa_Skeleton', 'sit_Pippa_Skeleton', 'walk_Pippa_Skeleton'] vs ['idle_Pippa_Skeleton', 'sit_Pippa_Skeleton', 'walk_Pippa_Skeleton']
+[PASS] clip idle_Pippa_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip idle_Pippa_Skeleton channel set 230/230 channels
+[PASS] clip idle_Pippa_Skeleton key count + frame times 
+[PASS] clip idle_Pippa_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip idle_Pippa_Skeleton arm/hand key values changed on: ['LeftHand', 'LeftLowerArm', 'LeftUpperArm', 'RightHand', 'RightLowerArm', 'RightUpperArm'] (max diff 0.392)
+[PASS] clip sit_Pippa_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip sit_Pippa_Skeleton channel set 230/230 channels
+[PASS] clip sit_Pippa_Skeleton key count + frame times 
+[PASS] clip sit_Pippa_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip sit_Pippa_Skeleton arm/hand key values changed on: ['LeftHand', 'LeftLowerArm', 'LeftUpperArm', 'RightHand', 'RightLowerArm', 'RightUpperArm'] (max diff 0.391)
+[PASS] clip walk_Pippa_Skeleton frame range (0.0, 25.6) vs (0.0, 25.6)
+[PASS] clip walk_Pippa_Skeleton channel set 230/230 channels
+[PASS] clip walk_Pippa_Skeleton key count + frame times 
+[PASS] clip walk_Pippa_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip walk_Pippa_Skeleton arm/hand key values changed on: ['LeftHand', 'LeftLowerArm', 'LeftUpperArm', 'RightHand', 'RightLowerArm', 'RightUpperArm'] (max diff 0.392)
+RESULT: ALL PASS
