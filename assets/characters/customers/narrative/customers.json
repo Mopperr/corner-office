@@ -1,0 +1,663 @@
+{
+  "_meta": {
+    "version": 2,
+    "phase": "slice",
+    "product_source": "/workspace/game/drink_unlocks.json (14 drinks; products.json from Programmer Master not yet present, ids to match)",
+    "product_ids": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee",
+      "espresso",
+      "honey_lavender_lemonade",
+      "latte",
+      "cappuccino",
+      "mocha",
+      "iced_coffee",
+      "vanilla_latte",
+      "seasonal_special"
+    ],
+    "product_ids_provisional": false,
+    "tone": "Cozy sitcom. Customers are kind. Off drinks get gentle, funny feedback and the customer still pays.",
+    "taste_scale": [
+      "none",
+      "low",
+      "medium",
+      "high"
+    ],
+    "temperature_scale": [
+      "cold",
+      "warm",
+      "hot"
+    ],
+    "cameo_note": "steve, lamp_lady, keyclackr are the market regulars StaplerSteve88, Lamp_Lady, KeyClackr appearing in person.",
+    "slice_drinks": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee"
+    ],
+    "legacy_product_ids": {
+      "lemonade": "classic_lemonade",
+      "iced_lemonade": "classic_lemonade (served with extra ice; heat-weather variant)",
+      "sweet_coffee": "black_coffee + sugar (no longer a menu item; nearest menu drinks: mocha, vanilla_latte)"
+    },
+    "quality_bands": {
+      "great": ">=80",
+      "okay": "50-79",
+      "off": "<50"
+    },
+    "gating": "A customer appears from appears_from. Until favourite_drink unlocks they order slice_order (e.g. Wren appears at L6 and orders black_coffee until honey_lavender_lemonade unlocks at L8). Orders and banter are only picked when every drink they mention is unlocked.",
+    "event_cast_note": "event_cast maps every speaker id (including unused generic ones like queue_npc, regular, narration) to a display name. The roster for one-offs is customers[] with is_regular:false.",
+    "roster_note": "customers[] holds the 8 regulars (is_regular: true) and the one-off event cast (22 entries, is_regular: false). Spawners and banter use is_regular entries only. kind: one_off | pet | player | crowd | alias (alias_of names the canonical id). orders:false = never queues or orders.",
+    "id_renames": {
+      "_note": "Oct 23 (Programmer Master): ids unified. Old -> new. Aliases merged into the canonical entry (no alias rows).",
+      "cat_cafe_owner": "priya_okafor",
+      "florist": "rosa_pemberton",
+      "cyclist_from_L3": "cyclist_from_l3",
+      "customers": "customer",
+      "queue_npcs": "queue_npc"
+    },
+    "id_flags": {
+      "dana": "Player character; never orders."
+    },
+    "regular_ids": [
+      "steve",
+      "lamp_lady",
+      "keyclackr",
+      "dottie",
+      "theo",
+      "pippa",
+      "rocco",
+      "wren"
+    ]
+  },
+  "customers": [
+    {
+      "id": "steve",
+      "name": "Steve (StaplerSteve88)",
+      "is_regular": true,
+      "look": "Cardigan, lanyard, a stapler holstered like a sheriff's badge.",
+      "personality": "The market regular in person. Earnest collector of office supplies, polite to a fault, tips in exact change.",
+      "favorite_products": [
+        "black_coffee",
+        "espresso",
+        "vanilla_latte"
+      ],
+      "taste": {
+        "sweet": "medium",
+        "sour": "low",
+        "ice": "none",
+        "foam": "none",
+        "strength": "high",
+        "temperature": "hot"
+      },
+      "quirks": [
+        "Rates every drink in staples out of five.",
+        "Asks if the cups are stackable.",
+        "Says 'acquired' instead of 'bought'."
+      ],
+      "pronouns": "they/them",
+      "appears_from": "L6",
+      "favourite_drink": "black_coffee",
+      "favourite_unlock": "L6",
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "lamp_lady",
+      "name": "Lorna (Lamp_Lady)",
+      "is_regular": true,
+      "look": "Big sunhat, bigger tote bag, always backlit somehow.",
+      "personality": "The lamp-trading regular. Sunny optimist who describes every drink in terms of lighting.",
+      "favorite_products": [
+        "pink_lemonade",
+        "honey_lavender_lemonade",
+        "latte"
+      ],
+      "taste": {
+        "sweet": "high",
+        "sour": "medium",
+        "ice": "high",
+        "foam": "high",
+        "strength": "low",
+        "temperature": "cold"
+      },
+      "quirks": [
+        "Holds cups up to the light before sipping.",
+        "Calls good drinks 'warm wattage'."
+      ],
+      "pronouns": "she/her (explicit: 'Lamp Lady' is her chosen handle)",
+      "appears_from": "L2",
+      "favourite_drink": "pink_lemonade",
+      "favourite_unlock": "L2",
+      "slice_order": "pink_lemonade"
+    },
+    {
+      "id": "keyclackr",
+      "name": "Kit (KeyClackr)",
+      "is_regular": true,
+      "look": "Wrist braces, mechanical keyboard in a backpack, typing on the counter.",
+      "personality": "The keyboard enthusiast. Fast talker, mild typo in everything they say, generous reviewer.",
+      "favorite_products": [
+        "espresso",
+        "iced_coffee",
+        "black_coffee"
+      ],
+      "taste": {
+        "sweet": "low",
+        "sour": "low",
+        "ice": "low",
+        "foam": "medium",
+        "strength": "high",
+        "temperature": "hot"
+      },
+      "quirks": [
+        "Drums fingers in actual keyboard rhythms.",
+        "Reviews drinks like switch types: 'tactile', 'linear'."
+      ],
+      "pronouns": "they/them",
+      "appears_from": "L6",
+      "favourite_drink": "espresso",
+      "favourite_unlock": "L7",
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "dottie",
+      "name": "Dottie Ruiz",
+      "is_regular": true,
+      "look": "Retired crossing guard, reflective vest worn 'for fashion now'.",
+      "personality": "Grandmotherly traffic-controller of the line. Waves everyone forward. Has opinions on lemon wedges.",
+      "favorite_products": [
+        "classic_lemonade",
+        "iced_tea_lemonade",
+        "mocha"
+      ],
+      "taste": {
+        "sweet": "high",
+        "sour": "medium",
+        "ice": "low",
+        "foam": "none",
+        "strength": "medium",
+        "temperature": "warm"
+      },
+      "quirks": [
+        "Says 'slow down, sweetie' to the espresso machine.",
+        "Tells you about her late husband's lemon tree."
+      ],
+      "pronouns": "she/her (explicit)",
+      "appears_from": "L1",
+      "favourite_drink": "classic_lemonade",
+      "favourite_unlock": "L1",
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "theo",
+      "name": "Theo Nakamura",
+      "is_regular": true,
+      "look": "Scrubs, sleepy eyes, comfy sneakers, a single heroic yawn.",
+      "personality": "Night-shift nurse heading home. Gentle, dry humor, deeply grateful for anything warm.",
+      "favorite_products": [
+        "latte",
+        "cappuccino",
+        "black_coffee"
+      ],
+      "taste": {
+        "sweet": "low",
+        "sour": "none",
+        "ice": "none",
+        "foam": "high",
+        "strength": "high",
+        "temperature": "hot"
+      },
+      "quirks": [
+        "Orders a coffee to sleep after, somehow.",
+        "Thanks you twice, once for each eye that's open."
+      ],
+      "pronouns": "they/them",
+      "appears_from": "L6",
+      "favourite_drink": "latte",
+      "favourite_unlock": "L9",
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "pippa",
+      "name": "Pippa Mensah",
+      "is_regular": true,
+      "look": "Nine years old, clipboard, sticker-covered glasses.",
+      "personality": "Junior lemonade critic and future business mogul. Serious notes, enormous smiles.",
+      "favorite_products": [
+        "classic_lemonade",
+        "strawberry_lemonade",
+        "pink_lemonade"
+      ],
+      "taste": {
+        "sweet": "high",
+        "sour": "high",
+        "ice": "high",
+        "foam": "none",
+        "strength": "low",
+        "temperature": "cold"
+      },
+      "quirks": [
+        "Grades with stickers: gold star, silver star, 'nice try' frog.",
+        "Asks about your profit margins."
+      ],
+      "pronouns": "she/her (explicit, kid character)",
+      "appears_from": "L1",
+      "favourite_drink": "classic_lemonade",
+      "favourite_unlock": "L1",
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "rocco",
+      "name": "Rocco Delgado",
+      "is_regular": true,
+      "look": "Mail carrier shorts in every season, satchel, sunburned nose.",
+      "personality": "Chatty route-runner who knows every dog by name. Drinks fast, talks faster, never in a bad mood.",
+      "favorite_products": [
+        "mint_lemonade",
+        "iced_coffee",
+        "strawberry_lemonade"
+      ],
+      "taste": {
+        "sweet": "medium",
+        "sour": "high",
+        "ice": "high",
+        "foam": "none",
+        "strength": "medium",
+        "temperature": "cold"
+      },
+      "quirks": [
+        "Delivers neighborhood gossip like parcels.",
+        "Times his sips to his step counter."
+      ],
+      "pronouns": "he/him (explicit)",
+      "appears_from": "L4",
+      "favourite_drink": "mint_lemonade",
+      "favourite_unlock": "L5",
+      "slice_order": "strawberry_lemonade"
+    },
+    {
+      "id": "wren",
+      "name": "Wren Albright",
+      "is_regular": true,
+      "look": "Hand-knit scarf, notebook, ink on one finger.",
+      "personality": "Quiet poet who writes a tiny haiku about every drink. Soft-spoken, notices everything.",
+      "favorite_products": [
+        "honey_lavender_lemonade",
+        "cappuccino",
+        "seasonal_special"
+      ],
+      "taste": {
+        "sweet": "medium",
+        "sour": "low",
+        "ice": "low",
+        "foam": "high",
+        "strength": "medium",
+        "temperature": "warm"
+      },
+      "quirks": [
+        "Leaves haiku on napkins as a tip.",
+        "Counts the bubbles in the foam."
+      ],
+      "pronouns": "they/them",
+      "appears_from": "L6",
+      "favourite_drink": "honey_lavender_lemonade",
+      "favourite_unlock": "L8",
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "neighbor_kid",
+      "name": "Neighbor kid",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Kid from next door with a fistful of quarters; the very first customer.",
+      "first_level": "L1",
+      "first_event": "ev_drink_classic_first_sale",
+      "orders": true,
+      "favourite_drink": "classic_lemonade",
+      "favorite_products": [
+        "classic_lemonade"
+      ],
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "dana",
+      "name": "Dana (player character)",
+      "is_regular": false,
+      "kind": "player",
+      "description": "The player. Listed so event lines can name Dana as a speaker; never queues or orders.",
+      "first_level": "L1",
+      "first_event": "ev_drink_classic_first_sale",
+      "orders": false,
+      "favourite_drink": "classic_lemonade",
+      "favorite_products": [],
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "priya_okafor",
+      "name": "Priya Okafor",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Owner of the Whisker & Bean cat cafe. Debuts in her L2 pink-lemonade event (with Biscuit), then comes back as a regular-for-a-day after great serves.",
+      "first_level": "L2",
+      "first_event": "ev_drink_pink_biscuit_nose",
+      "orders": true,
+      "favourite_drink": "pink_lemonade",
+      "favorite_products": [
+        "pink_lemonade"
+      ],
+      "slice_order": "pink_lemonade"
+    },
+    {
+      "id": "biscuit",
+      "name": "Biscuit (the cat)",
+      "is_regular": false,
+      "kind": "pet",
+      "description": "The Whisker & Bean cat. Wanders in, sniffs cups, never orders.",
+      "first_level": "L2",
+      "first_event": "ev_drink_pink_biscuit_nose",
+      "orders": false,
+      "favourite_drink": "pink_lemonade",
+      "favorite_products": [],
+      "slice_order": "pink_lemonade"
+    },
+    {
+      "id": "cyclist_from_l3",
+      "name": "Soggy cyclist",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Drenched cyclist from the L3 rainy drive who shelters at the stand.",
+      "first_level": "L3",
+      "first_event": "ev_drink_icedtea_after_rain",
+      "orders": true,
+      "favourite_drink": "iced_tea_lemonade",
+      "favorite_products": [
+        "iced_tea_lemonade"
+      ],
+      "slice_order": "iced_tea_lemonade"
+    },
+    {
+      "id": "grandpa_train_shop",
+      "name": "Grandpa Walt Hale",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Retired conductor from the L4 train shop; strawberry lemonade fan and caboose collector.",
+      "first_level": "L4",
+      "first_event": "ev_drink_strawberry_caboose",
+      "orders": true,
+      "favourite_drink": "strawberry_lemonade",
+      "favorite_products": [
+        "strawberry_lemonade"
+      ],
+      "slice_order": "strawberry_lemonade"
+    },
+    {
+      "id": "duckling",
+      "name": "Duckling",
+      "is_regular": false,
+      "kind": "pet",
+      "description": "A very small duck at the L5 pond. Waddles, quacks, does not drink lemonade.",
+      "first_level": "L5",
+      "first_event": "ev_drink_mint_duckling",
+      "orders": false,
+      "favourite_drink": "mint_lemonade",
+      "favorite_products": [],
+      "slice_order": "mint_lemonade"
+    },
+    {
+      "id": "delbert_finch",
+      "name": "Delbert Finch",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Retired watchmaker in the bakery loft building. Times every coffee to the second.",
+      "first_level": "L6",
+      "first_event": "ev_drink_black_delbert_clock",
+      "orders": true,
+      "favourite_drink": "black_coffee",
+      "favorite_products": [
+        "black_coffee"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "retiring_dentist",
+      "name": "Dr. Barry Plum",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Cheerful dentist on his last day at the L7 office; espresso, no sugar, 'for professional reasons'.",
+      "first_level": "L7",
+      "first_event": "ev_drink_espresso_dentist",
+      "orders": true,
+      "favourite_drink": "espresso",
+      "favorite_products": [
+        "espresso"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "gerald",
+      "name": "Gerald (the fish)",
+      "is_regular": false,
+      "kind": "pet",
+      "description": "The dentist's goldfish and VIP of the L7 move. Watches from his bowl.",
+      "first_level": "L7",
+      "first_event": "ev_drink_espresso_dentist",
+      "orders": false,
+      "favourite_drink": "espresso",
+      "favorite_products": [],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "npc_vendor",
+      "name": "Market vendor",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Honey seller at the L8 Saturday market who trades a jar for a honey-lavender lemonade.",
+      "first_level": "L8",
+      "first_event": "ev_drink_honeylav_vendor",
+      "orders": true,
+      "favourite_drink": "honey_lavender_lemonade",
+      "favorite_products": [
+        "honey_lavender_lemonade"
+      ],
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "npc_architect",
+      "name": "Imogen Vance-Okoro",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Architect from the L9 job who sketches on everything, including latte foam.",
+      "first_level": "L9",
+      "first_event": "ev_drink_latte_sketch_art",
+      "orders": true,
+      "favourite_drink": "latte",
+      "favorite_products": [
+        "latte"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "agnes_pell",
+      "name": "Ms. Agnes Pell",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Town librarian moving the library to its new branch at the L10 job. Speaks in a whisper; loves a quiet cappuccino.",
+      "first_level": "L10",
+      "first_event": "ev_drink_cappuccino_quiet",
+      "orders": true,
+      "favourite_drink": "cappuccino",
+      "favorite_products": [
+        "cappuccino"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "juno_park",
+      "name": "Juno Park",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Drummer in The Laundromats and a regular at Lou's record shop (L12); drops by the L11 loft. Mocha-powered and always late.",
+      "first_level": "L11",
+      "first_event": "ev_drink_mocha_juno",
+      "orders": true,
+      "favourite_drink": "mocha",
+      "favorite_products": [
+        "mocha"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "record_store_owner",
+      "name": "Lou Marchetti",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Record shop owner at the L12 job; keeps a turntable spinning and the iced coffee on beat.",
+      "first_level": "L12",
+      "first_event": "ev_drink_iced_on_beat",
+      "orders": true,
+      "favourite_drink": "iced_coffee",
+      "favorite_products": [
+        "iced_coffee"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "rosa_pemberton",
+      "name": "Rosa Pemberton",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Florist with an orchid corner. Debuts in her L14 vanilla-latte event, then comes back as a regular-for-a-day; met Ray in this very line.",
+      "first_level": "L14",
+      "first_event": "ev_drink_vanilla_orchid",
+      "orders": true,
+      "favourite_drink": "vanilla_latte",
+      "favorite_products": [
+        "vanilla_latte"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "ray_pemberton",
+      "name": "Ray Pemberton",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Rosa's husband-to-be; first met her chatting in your queue. Plain-coffee man.",
+      "first_level": "L14",
+      "first_event": "ev_gen_two_customers_chat",
+      "orders": true,
+      "favourite_drink": "black_coffee",
+      "favorite_products": [
+        "black_coffee"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "coworker_npc",
+      "name": "Co-worker",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Friendly teammate in Dana's L16 glass suite who always tries the seasonal special first.",
+      "first_level": "L16",
+      "first_event": "ev_drink_seasonal_board",
+      "orders": true,
+      "favourite_drink": "seasonal_special",
+      "favorite_products": [
+        "seasonal_special"
+      ],
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "food_critic",
+      "name": "Quiet critic",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Notebook-carrying critic who visits once you reach Rep 2 and 30 orders. Silent, then surprisingly kind.",
+      "first_level": "L3",
+      "first_event": "ev_gen_critic_visit",
+      "orders": true,
+      "favourite_drink": "black_coffee",
+      "favorite_products": [
+        "black_coffee"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "marge_holloway",
+      "name": "Marge 'Mile Marker' Holloway",
+      "is_regular": false,
+      "kind": "one_off",
+      "description": "Dana's mentor and dispatcher; drops in at each office move to check on the shop.",
+      "first_level": "L6",
+      "first_event": "ev_gen_marge_checkin",
+      "orders": true,
+      "favourite_drink": "black_coffee",
+      "favorite_products": [
+        "black_coffee"
+      ],
+      "slice_order": "black_coffee"
+    },
+    {
+      "id": "queue_npc",
+      "name": "Queue customers (generic crowd)",
+      "is_regular": false,
+      "kind": "crowd",
+      "description": "Generic background customers used for rush hour and weather crowds. Not a character; a crowd tag.",
+      "first_level": "L1",
+      "first_event": "ev_gen_weather_turn",
+      "orders": true,
+      "favourite_drink": "classic_lemonade",
+      "favorite_products": [
+        "classic_lemonade"
+      ],
+      "slice_order": "classic_lemonade"
+    },
+    {
+      "id": "customer",
+      "name": "Any customer (generic)",
+      "is_regular": false,
+      "kind": "crowd",
+      "description": "Generic 'any customer' tag used by the review board. Not a character; a crowd tag.",
+      "first_level": "L1",
+      "first_event": "ev_gen_review_board",
+      "orders": true,
+      "favourite_drink": "classic_lemonade",
+      "favorite_products": [
+        "classic_lemonade"
+      ],
+      "slice_order": "classic_lemonade"
+    }
+  ],
+  "event_cast": {
+    "neighbor_kid": "Neighbor kid",
+    "dana": "Dana (player character, name only)",
+    "priya_okafor": "Priya Okafor",
+    "biscuit": "Biscuit (the cat)",
+    "cyclist_from_l3": "Soggy cyclist (L3 rainy drive)",
+    "grandpa_train_shop": "Grandpa Walt Hale",
+    "pond_jogger": "Pond jogger (L5)",
+    "duckling": "Duckling",
+    "delbert_finch": "Delbert Finch",
+    "retiring_dentist": "Dr. Barry Plum",
+    "gerald": "Gerald (the fish)",
+    "npc_vendor": "Market vendor (L8)",
+    "npc_architect": "Imogen Vance-Okoro",
+    "agnes_pell": "Ms. Agnes Pell",
+    "juno_park": "Juno Park",
+    "record_store_owner": "Lou Marchetti",
+    "rosa_pemberton": "Rosa Pemberton",
+    "ray_pemberton": "Ray Pemberton",
+    "coworker_npc": "Co-worker (L16 suite)",
+    "food_critic": "Quiet critic",
+    "marge_holloway": "Marge 'Mile Marker' Holloway",
+    "queue_npc": "Queue customer (generic)",
+    "customer": "Any customer (generic)",
+    "regular": "Any returning regular (generic)",
+    "narration": "Scene text (no speaker)"
+  }
+}

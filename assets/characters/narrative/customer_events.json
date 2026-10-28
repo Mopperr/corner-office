@@ -1,0 +1,2054 @@
+{
+  "meta": {
+    "version": 1,
+    "for": [
+      "Narrative Writer",
+      "Programmer Master"
+    ],
+    "drinks_source": "drink_unlocks.json",
+    "builder": "tools/build_customer_events.py",
+    "quality_bands": {
+      "great": ">=80",
+      "okay": "50-79",
+      "off": "<50",
+      "status": "TUNE (Design Specialist thresholds)"
+    },
+    "rules": [
+      "No-fail: an off result still pays the base price and offers a gentle redo; reviews never go below 3\u2605 and rep never goes down.",
+      "Tips are % of the drink's base price (products.json owns prices).",
+      "Rep points feed rep_star_gates [0,2,6,12,20,30] in tuning.json; event rep is 0-2.",
+      "chance is rolled once per eligible check; cooldown_orders counts orders served since the event last fired. Max one general event active at a time.",
+      "Line ids are placeholders for Narrative Writer: line_<event_id>_<beat>. Existing names come from narrative/stand_minigame.md.",
+      "Customer lines added for Narrative Writer's 8 customers all start with line_cust_ (signature events: line_cust_<customer>_<event>_<beat>; cameos in existing events: line_cust_<customer>_<beat>).",
+      "Customers (narrative/customers/customers.json) appear from appears_from; before their favourite_drink unlocks they order slice_order."
+    ],
+    "counts": {
+      "drink": 14,
+      "general": 9,
+      "customer": 11,
+      "events": 34,
+      "line_ids": 165,
+      "line_ids_cust": 63,
+      "customers": 8
+    }
+  },
+  "customers": [
+    {
+      "id": "steve",
+      "name": "Steve (StaplerSteve88)",
+      "pronouns": "they/them",
+      "favourite_drink": "black_coffee",
+      "favourite_unlock": "L6",
+      "also_likes": [
+        "espresso",
+        "vanilla_latte"
+      ],
+      "slice_order": "black_coffee",
+      "appears_from": "L6",
+      "signature_events": [
+        "ev_cust_steve_staple_rating"
+      ],
+      "events": [
+        "ev_drink_black_delbert_clock",
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_review_board",
+        "ev_cust_steve_staple_rating"
+      ]
+    },
+    {
+      "id": "lamp_lady",
+      "name": "Lorna (Lamp_Lady)",
+      "pronouns": "she/her (explicit: 'Lamp Lady' is her chosen handle)",
+      "favourite_drink": "pink_lemonade",
+      "favourite_unlock": "L2",
+      "also_likes": [
+        "honey_lavender_lemonade",
+        "latte"
+      ],
+      "slice_order": "pink_lemonade",
+      "appears_from": "L2",
+      "signature_events": [
+        "ev_cust_lamp_lady_golden_hour"
+      ],
+      "events": [
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_review_board",
+        "ev_cust_lamp_lady_golden_hour"
+      ]
+    },
+    {
+      "id": "keyclackr",
+      "name": "Kit (KeyClackr)",
+      "pronouns": "they/them",
+      "favourite_drink": "espresso",
+      "favourite_unlock": "L7",
+      "also_likes": [
+        "iced_coffee",
+        "black_coffee"
+      ],
+      "slice_order": "black_coffee",
+      "appears_from": "L6",
+      "signature_events": [
+        "ev_cust_keyclackr_typed_order"
+      ],
+      "events": [
+        "ev_drink_black_delbert_clock",
+        "ev_drink_iced_on_beat",
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_review_board",
+        "ev_cust_keyclackr_typed_order"
+      ]
+    },
+    {
+      "id": "dottie",
+      "name": "Dottie Ruiz",
+      "pronouns": "she/her (explicit)",
+      "favourite_drink": "classic_lemonade",
+      "favourite_unlock": "L1",
+      "also_likes": [
+        "iced_tea_lemonade",
+        "mocha"
+      ],
+      "slice_order": "classic_lemonade",
+      "appears_from": "L1",
+      "signature_events": [
+        "ev_cust_dottie_crossing_guard",
+        "ev_cust_dottie_lemon_tree"
+      ],
+      "events": [
+        "ev_drink_icedtea_after_rain",
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_weather_turn",
+        "ev_gen_review_board",
+        "ev_cust_dottie_crossing_guard",
+        "ev_cust_dottie_lemon_tree"
+      ]
+    },
+    {
+      "id": "theo",
+      "name": "Theo Nakamura",
+      "pronouns": "they/them",
+      "favourite_drink": "latte",
+      "favourite_unlock": "L9",
+      "also_likes": [
+        "cappuccino",
+        "black_coffee"
+      ],
+      "slice_order": "black_coffee",
+      "appears_from": "L6",
+      "signature_events": [
+        "ev_cust_theo_night_shift"
+      ],
+      "events": [
+        "ev_drink_black_delbert_clock",
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_review_board",
+        "ev_cust_theo_night_shift"
+      ]
+    },
+    {
+      "id": "pippa",
+      "name": "Pippa Mensah",
+      "pronouns": "she/her (explicit, kid character)",
+      "favourite_drink": "classic_lemonade",
+      "favourite_unlock": "L1",
+      "also_likes": [
+        "strawberry_lemonade",
+        "pink_lemonade"
+      ],
+      "slice_order": "classic_lemonade",
+      "appears_from": "L1",
+      "signature_events": [
+        "ev_cust_pippa_critique",
+        "ev_cust_pippa_margins"
+      ],
+      "events": [
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_critic_visit",
+        "ev_gen_review_board",
+        "ev_cust_pippa_critique",
+        "ev_cust_pippa_margins"
+      ]
+    },
+    {
+      "id": "rocco",
+      "name": "Rocco Delgado",
+      "pronouns": "he/him (explicit)",
+      "favourite_drink": "mint_lemonade",
+      "favourite_unlock": "L5",
+      "also_likes": [
+        "iced_coffee",
+        "strawberry_lemonade"
+      ],
+      "slice_order": "strawberry_lemonade",
+      "appears_from": "L4",
+      "signature_events": [
+        "ev_cust_rocco_route_stop"
+      ],
+      "events": [
+        "ev_drink_mint_duckling",
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_weather_turn",
+        "ev_gen_review_board",
+        "ev_cust_rocco_route_stop"
+      ]
+    },
+    {
+      "id": "wren",
+      "name": "Wren Albright",
+      "pronouns": "they/them",
+      "favourite_drink": "honey_lavender_lemonade",
+      "favourite_unlock": "L8",
+      "also_likes": [
+        "cappuccino",
+        "seasonal_special"
+      ],
+      "slice_order": "black_coffee",
+      "appears_from": "L6",
+      "signature_events": [
+        "ev_cust_wren_haiku_card",
+        "ev_cust_wren_napkin_wall"
+      ],
+      "events": [
+        "ev_drink_cappuccino_quiet",
+        "ev_drink_seasonal_board",
+        "ev_gen_regular_returns",
+        "ev_gen_two_customers_chat",
+        "ev_gen_rush_hour",
+        "ev_gen_biscuit_visit",
+        "ev_gen_review_board",
+        "ev_cust_wren_haiku_card",
+        "ev_cust_wren_napkin_wall"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_drink_classic_first_sale",
+      "kind": "drink",
+      "drink": "classic_lemonade",
+      "unlock": "L1 after job 1",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "first stand session after classic_lemonade unlocks; first customer",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Neighbor kid walks up holding a fistful of quarters.",
+        "Orders classic lemonade, 'quiet straw, please'.",
+        "Tutorial prompts show the 3 steps (lemons \u2192 sugar \u2192 ice)."
+      ],
+      "resolve": "Make the classic lemonade (tutorial-guided; can't fail).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 50,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Kid drops a quarter in the tip jar; first 5\u2605 review lands."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 25,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Kid sips anyway: 'it's still lemonade!'"
+        }
+      },
+      "characters": [
+        "neighbor_kid",
+        "dana"
+      ],
+      "line_ids": [
+        "line_ev_drink_classic_first_sale_order",
+        "line_ev_drink_classic_first_sale_success",
+        "line_ev_drink_classic_first_sale_okay",
+        "line_ev_drink_classic_first_sale_off"
+      ],
+      "notes": "Teaches the order \u2192 make \u2192 serve loop and introduces reviews."
+    },
+    {
+      "id": "ev_drink_pink_biscuit_nose",
+      "kind": "drink",
+      "drink": "pink_lemonade",
+      "unlock": "L2 after job",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "first order of Pink Lemonade after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "The cat cafe owner stops by with Biscuit in a carrier.",
+        "Asks for 'the pink one, like his nose'.",
+        "Biscuit watches the pitcher."
+      ],
+      "resolve": "Make pink lemonade; optional: keep the pour steady (Biscuit tracks the stream).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "priya_okafor",
+        "biscuit"
+      ],
+      "line_ids": [
+        "line_ev_drink_pink_biscuit_nose_order",
+        "line_ev_drink_pink_biscuit_nose_success",
+        "line_ev_drink_pink_biscuit_nose_okay",
+        "line_ev_drink_pink_biscuit_nose_off",
+        "line_ev_drink_pink_biscuit_nose_biscuit_meow"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_icedtea_after_rain",
+      "kind": "drink",
+      "drink": "iced_tea_lemonade",
+      "unlock": "L3 after drive",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "first order of Iced Tea Lemonade after it unlocks with weather = after_rain (forced for the first session after L3)",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Rain stops; the sidewalk sparkles.",
+        "A cyclist in a dripping jacket orders iced tea lemonade.",
+        "The tea needs a short cool step.",
+        "Dottie waves the soggy line in under the awning and asks for iced tea lemonade too, 'not too cold, sweetie'."
+      ],
+      "resolve": "Brew \u2192 cool (hold) \u2192 lemons \u2192 ice. Cooling too short gives 'okay', never 'off' by itself.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "cyclist_from_l3",
+        "dottie"
+      ],
+      "line_ids": [
+        "line_ev_drink_icedtea_after_rain_order",
+        "line_ev_drink_icedtea_after_rain_success",
+        "line_ev_drink_icedtea_after_rain_okay",
+        "line_ev_drink_icedtea_after_rain_off",
+        "line_cust_dottie_rain_wave"
+      ],
+      "notes": "Dottie is a second order in the same session; she uses the standard outcomes."
+    },
+    {
+      "id": "ev_drink_strawberry_caboose",
+      "kind": "drink",
+      "drink": "strawberry_lemonade",
+      "unlock": "L4 after job",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "first order of Strawberry Lemonade after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Grandpa (L4 client) shows up with a tiny caboose.",
+        "Orders 'caboose-red' strawberry lemonade.",
+        "He sets the caboose on the counter as a timer joke."
+      ],
+      "resolve": "Muddle strawberries, then the classic steps.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Grandpa leaves the caboose as a decor gift (toy_train.glb)."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "grandpa_train_shop"
+      ],
+      "line_ids": [
+        "line_ev_drink_strawberry_caboose_order",
+        "line_ev_drink_strawberry_caboose_success",
+        "line_ev_drink_strawberry_caboose_okay",
+        "line_ev_drink_strawberry_caboose_off",
+        "line_ev_drink_strawberry_caboose_caboose_gift"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_mint_duckling",
+      "kind": "drink",
+      "drink": "mint_lemonade",
+      "unlock": "L5 after drive",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "first order of Mint Lemonade after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Rocco, on the pond leg of his mail route, orders mint lemonade between steps.",
+        "A duckling waddles in behind him and sits by the stand."
+      ],
+      "resolve": "Make mint lemonade. Optional calm serve: skip the noisy ice scoop while the duckling is there.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Calm serve: +$5 'Duck Friend' tip on top."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "rocco",
+        "duckling"
+      ],
+      "line_ids": [
+        "line_ev_drink_mint_duckling_order",
+        "line_ev_drink_mint_duckling_success",
+        "line_ev_drink_mint_duckling_okay",
+        "line_ev_drink_mint_duckling_off",
+        "line_ev_drink_mint_duckling_duck_quack"
+      ],
+      "notes": "Rocco replaces the generic pond jogger (his favourite drink is mint lemonade)."
+    },
+    {
+      "id": "ev_drink_black_delbert_clock",
+      "kind": "drink",
+      "drink": "black_coffee",
+      "unlock": "L6 move-in or Rep 1",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Black Coffee after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Delbert Finch arrives winding a pocket clock.",
+        "Orders black coffee, 'quiet cup'.",
+        "Coffee counter tutorial: brew \u2192 pour."
+      ],
+      "resolve": "Brew and pour (tutorial-guided).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Delbert becomes a regular (eligible for ev_gen_regular_returns)."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "delbert_finch",
+        "steve",
+        "keyclackr",
+        "theo"
+      ],
+      "line_ids": [
+        "line_ev_drink_black_delbert_clock_order",
+        "line_ev_drink_black_delbert_clock_success",
+        "line_ev_drink_black_delbert_clock_okay",
+        "line_ev_drink_black_delbert_clock_off",
+        "line_ev_drink_black_delbert_clock_clock_tick"
+      ],
+      "notes": "Coffee counter intro. From the next session, Steve, Kit and Theo join the coffee pool (black coffee is in all three of their favourites)."
+    },
+    {
+      "id": "ev_drink_espresso_dentist",
+      "kind": "drink",
+      "drink": "espresso",
+      "unlock": "L7 after job",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Espresso after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "The retired dentist visits with Gerald in his travel bag.",
+        "Orders an espresso 'before I never hear a drill again'.",
+        "Gerald's bag sits on the counter."
+      ],
+      "resolve": "Pull one shot inside the timing window.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "retiring_dentist",
+        "gerald"
+      ],
+      "line_ids": [
+        "line_ev_drink_espresso_dentist_order",
+        "line_ev_drink_espresso_dentist_success",
+        "line_ev_drink_espresso_dentist_okay",
+        "line_ev_drink_espresso_dentist_off",
+        "line_ev_drink_espresso_dentist_gerald_bubble"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_honeylav_vendor",
+      "kind": "drink",
+      "drink": "honey_lavender_lemonade",
+      "unlock": "L8 after drive",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "first order of Honey-Lavender Lemonade after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "The market vendor who waved you through brings honey and a lavender bunch.",
+        "Asks you to try 'the fancy one'.",
+        "Recipe card appears (first complexity-3 drink)."
+      ],
+      "resolve": "Steep lavender \u2192 honey \u2192 lemons \u2192 ice.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "npc_vendor"
+      ],
+      "line_ids": [
+        "line_ev_drink_honeylav_vendor_order",
+        "line_ev_drink_honeylav_vendor_success",
+        "line_ev_drink_honeylav_vendor_okay",
+        "line_ev_drink_honeylav_vendor_off",
+        "line_ev_drink_honeylav_vendor_honey_gift"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_latte_sketch_art",
+      "kind": "drink",
+      "drink": "latte",
+      "unlock": "L9 after job",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Latte after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "The architect rushes in and sketches a shape on a napkin.",
+        "Orders a latte 'with this on top'.",
+        "The latte-art step shows the napkin sketch as a ghost."
+      ],
+      "resolve": "Shot \u2192 steam \u2192 pour; trace the napkin shape (a partial match is fine).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 50,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Architect pins the napkin on your wall (decor)."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 25,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "npc_architect"
+      ],
+      "line_ids": [
+        "line_ev_drink_latte_sketch_art_order",
+        "line_ev_drink_latte_sketch_art_success",
+        "line_ev_drink_latte_sketch_art_okay",
+        "line_ev_drink_latte_sketch_art_off",
+        "line_ev_drink_latte_sketch_art_grudging_not_bad"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_cappuccino_quiet",
+      "kind": "drink",
+      "drink": "cappuccino",
+      "unlock": "L10 after job",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Cappuccino after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Agnes Pell (librarian) comes in with a book under her arm.",
+        "Orders a cappuccino in her library voice.",
+        "Ambience dips; loud actions show a soft 'shh' icon.",
+        "Wren is already at the window seat, writing; they whisper their cappuccino order after Agnes."
+      ],
+      "resolve": "Make the cappuccino; quieter actions (slow tamp, gentle steam) count toward great.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "agnes_pell",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_drink_cappuccino_quiet_order",
+        "line_ev_drink_cappuccino_quiet_success",
+        "line_ev_drink_cappuccino_quiet_okay",
+        "line_ev_drink_cappuccino_quiet_off",
+        "line_ev_drink_cappuccino_quiet_shh",
+        "line_cust_wren_whisper_order"
+      ],
+      "notes": "Wren's cappuccino can trigger ev_cust_wren_haiku_card."
+    },
+    {
+      "id": "ev_drink_mocha_juno",
+      "kind": "drink",
+      "drink": "mocha",
+      "unlock": "L11 move-in",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Mocha after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Juno Park arrives late, out of breath: 'mocha!! extra whip!!'",
+        "She tips well, rushed or not."
+      ],
+      "resolve": "Shot \u2192 chocolate \u2192 steam; optional extra whip.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 60,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 35,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "juno_park"
+      ],
+      "line_ids": [
+        "line_ev_drink_mocha_juno_order",
+        "line_ev_drink_mocha_juno_success",
+        "line_ev_drink_mocha_juno_okay",
+        "line_ev_drink_mocha_juno_off"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_iced_on_beat",
+      "kind": "drink",
+      "drink": "iced_coffee",
+      "unlock": "L12 after job",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Iced Coffee after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "The record store owner drops off a record and puts it on.",
+        "Orders iced coffee.",
+        "Each step on the beat lights the beat ring.",
+        "Kit drums the beat on the counter; following Kit's drumming counts as on the beat."
+      ],
+      "resolve": "Cold brew \u2192 ice \u2192 pour; steps on the beat build a combo (visual ring + haptic).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Combo of 3: coupon for the record-player decor."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "record_store_owner",
+        "keyclackr"
+      ],
+      "line_ids": [
+        "line_ev_drink_iced_on_beat_order",
+        "line_ev_drink_iced_on_beat_success",
+        "line_ev_drink_iced_on_beat_okay",
+        "line_ev_drink_iced_on_beat_off",
+        "line_ev_drink_iced_on_beat_needle_drop",
+        "line_cust_keyclackr_drum_along"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_vanilla_orchid",
+      "kind": "drink",
+      "drink": "vanilla_latte",
+      "unlock": "L14 after job",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of Vanilla Latte after it unlocks",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "The florist brings a vanilla pod from her orchid corner.",
+        "Orders a vanilla latte; her watering can goes on the counter."
+      ],
+      "resolve": "Shot \u2192 vanilla syrup \u2192 steam \u2192 pour.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "rosa_pemberton"
+      ],
+      "line_ids": [
+        "line_ev_drink_vanilla_orchid_order",
+        "line_ev_drink_vanilla_orchid_success",
+        "line_ev_drink_vanilla_orchid_okay",
+        "line_ev_drink_vanilla_orchid_off"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_drink_seasonal_board",
+      "kind": "drink",
+      "drink": "seasonal_special",
+      "unlock": "L16 move-in; repeats each in-game season",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "first order of seasonal_special each in-game season",
+        "chance": 1.0,
+        "once_per_save": false,
+        "repeat": "once per season"
+      },
+      "steps": [
+        "Dana chalks the new seasonal flavour on the menu board.",
+        "A co-worker reads it aloud and orders one.",
+        "The topping changes with the season (winter spice by L20).",
+        "Wren is the first in line for every new seasonal flavour."
+      ],
+      "resolve": "Shot \u2192 seasonal syrup \u2192 steam \u2192 topping.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "coworker_npc",
+        "dana",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_drink_seasonal_board_board_reveal",
+        "line_ev_drink_seasonal_board_order",
+        "line_ev_drink_seasonal_board_success",
+        "line_ev_drink_seasonal_board_okay",
+        "line_ev_drink_seasonal_board_off",
+        "line_cust_wren_seasonal_first"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_gen_regular_returns",
+      "kind": "general",
+      "drink": null,
+      "unlock": "a customer has 3 great serves",
+      "shop": "both",
+      "trigger": {
+        "when": "session start; a customer with >= 3 great serves exists",
+        "chance": 0.25,
+        "cooldown_orders": 8,
+        "once_per_save": false
+      },
+      "steps": [
+        "A regular walks in and says 'the usual'.",
+        "No order card: the player remembers it, or opens the review log to check."
+      ],
+      "resolve": "Make their usual. Opening the log is allowed and caps the result at okay.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 60,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Loyalty heart +1; at 5 hearts they send a postcard."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 30,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "delbert_finch",
+        "priya_okafor",
+        "juno_park",
+        "rosa_pemberton",
+        "ray_pemberton",
+        "agnes_pell",
+        "steve",
+        "lamp_lady",
+        "keyclackr",
+        "dottie",
+        "theo",
+        "pippa",
+        "rocco",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_gen_regular_returns_greeting",
+        "line_ev_gen_regular_returns_usual",
+        "line_ev_gen_regular_returns_success",
+        "line_ev_gen_regular_returns_okay",
+        "line_ev_gen_regular_returns_off"
+      ],
+      "notes": "Any of the 8 customers can become a regular; their 'usual' is their favourite_drink once it is unlocked, otherwise slice_order."
+    },
+    {
+      "id": "ev_gen_two_customers_chat",
+      "kind": "general",
+      "drink": null,
+      "unlock": "shop open with 2+ customers queued",
+      "shop": "both",
+      "trigger": {
+        "when": "2 customers in queue for >= 10 s",
+        "chance": 0.2,
+        "cooldown_orders": 6,
+        "once_per_save": false
+      },
+      "steps": [
+        "Two customers start chatting (Rosa & Ray Pemberton once met).",
+        "Their patience timers pause while they talk.",
+        "One recommends a drink to the other, changing the second order."
+      ],
+      "resolve": "Serve the changed order; timers stay paused until you start it.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "rosa_pemberton",
+        "ray_pemberton",
+        "steve",
+        "lamp_lady",
+        "keyclackr",
+        "dottie",
+        "theo",
+        "pippa",
+        "rocco",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_gen_two_customers_chat_chat_a",
+        "line_ev_gen_two_customers_chat_chat_b",
+        "line_ev_gen_two_customers_chat_order_change",
+        "line_ev_gen_two_customers_chat_success",
+        "line_ev_gen_two_customers_chat_okay",
+        "line_ev_gen_two_customers_chat_off"
+      ],
+      "notes": "Pairs and lines for the 8 customers come from narrative/customers/banter.json (48 exchanges, filtered by context tags); Rosa & Ray keep their scripted first meeting."
+    },
+    {
+      "id": "ev_gen_rush_hour",
+      "kind": "general",
+      "drink": null,
+      "unlock": "10 orders served in total",
+      "shop": "both",
+      "trigger": {
+        "when": "in-game 8:00-9:00 or 12:00-13:00 (lemonade stand: 15:00-16:00)",
+        "chance": 0.3,
+        "cooldown_orders": 15,
+        "once_per_save": false
+      },
+      "steps": [
+        "Bell rings; 4-5 customers arrive within 20 s.",
+        "Rush banner; music tempo up a step.",
+        "Patience timers run 25% slower during the rush."
+      ],
+      "resolve": "Serve them in any order; batching two of the same drink is allowed.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 30,
+          "review_stars": 5,
+          "rep_points": 2,
+          "extra": "All great: 'Rush Hour Hero' stamp."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 15,
+          "review_stars": 4,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "queue_npc",
+        "steve",
+        "lamp_lady",
+        "keyclackr",
+        "dottie",
+        "theo",
+        "pippa",
+        "rocco",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_gen_rush_hour_rush_start",
+        "line_ev_gen_rush_hour_rush_clear_great",
+        "line_ev_gen_rush_hour_rush_clear_okay"
+      ],
+      "notes": "Band is the average quality across the rush; rep is for the whole rush, not per order. Rush customers are drawn from the 8 customers first (whoever has appears_from met), then queue_npc."
+    },
+    {
+      "id": "ev_gen_biscuit_visit",
+      "kind": "general",
+      "drink": null,
+      "unlock": "L2 completed",
+      "shop": "both",
+      "trigger": {
+        "when": "any session; Biscuit not already in the scene",
+        "chance": 0.15,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Biscuit wanders in and sits on the counter (or the stand's cushion crate).",
+        "Customers stop to pet him; patience timers pause.",
+        "He may sit on an ingredient, which then needs a tap to free."
+      ],
+      "resolve": "Tap Biscuit for a scratch; he leaves after 2 scratches or 1 served order.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 30,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Each customer served while he's there leaves a cat-photo review."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 30,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 30,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Even an off drink gets 4\u2605: 'the cat was worth it'."
+        }
+      },
+      "characters": [
+        "biscuit",
+        "steve",
+        "lamp_lady",
+        "keyclackr",
+        "dottie",
+        "theo",
+        "pippa",
+        "rocco",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_gen_biscuit_visit_arrive",
+        "line_ev_gen_biscuit_visit_pet",
+        "line_ev_gen_biscuit_visit_customer_aww",
+        "line_ev_gen_biscuit_visit_leave"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_gen_kid_short_quarter",
+      "kind": "general",
+      "drink": null,
+      "unlock": "lemonade stand open",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "neighbor_kid in the queue",
+        "chance": 0.2,
+        "cooldown_orders": 12,
+        "once_per_save": false
+      },
+      "steps": [
+        "Neighbor kid is one quarter short and glances at the tip jar."
+      ],
+      "resolve": "Choose 'On the house' or 'Pay me next time'. Both are good.",
+      "outcomes": {
+        "great": {
+          "choice": "on_the_house",
+          "tip_pct_of_price": 0,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Kid's parent leaves a 5\u2605 review later."
+        },
+        "okay": {
+          "choice": "next_time",
+          "tip_pct_of_price": 0,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": "Kid pays double next visit."
+        },
+        "off": {
+          "choice": "n/a",
+          "extra": "No off outcome; it's a choice."
+        }
+      },
+      "characters": [
+        "neighbor_kid"
+      ],
+      "line_ids": [
+        "line_ev_gen_kid_short_quarter_short",
+        "line_ev_gen_kid_short_quarter_on_house",
+        "line_ev_gen_kid_short_quarter_next_time",
+        "line_ev_gen_kid_short_quarter_payback"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_gen_critic_visit",
+      "kind": "general",
+      "drink": null,
+      "unlock": "Rep 2+ and 30 orders served",
+      "shop": "both",
+      "trigger": {
+        "when": "session start",
+        "chance": 0.1,
+        "cooldown_orders": 30,
+        "once_per_save": false
+      },
+      "steps": [
+        "A quiet customer with a notebook orders your most complex unlocked drink.",
+        "No timer is shown.",
+        "If Pippa is in the shop, she sits beside the critic and copies their notes."
+      ],
+      "resolve": "Make the drink; only quality counts.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 50,
+          "review_stars": 5,
+          "rep_points": 2,
+          "extra": "'Hidden Gems' column: framed clipping decor."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 25,
+          "review_stars": 4,
+          "rep_points": 1,
+          "extra": "Polite 4\u2605 mention."
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Promising.' (the critic never goes below 4\u2605)"
+        }
+      },
+      "characters": [
+        "food_critic",
+        "pippa"
+      ],
+      "line_ids": [
+        "line_ev_gen_critic_visit_arrive",
+        "line_ev_gen_critic_visit_order",
+        "line_ev_gen_critic_visit_review_great",
+        "line_ev_gen_critic_visit_review_okay",
+        "line_ev_gen_critic_visit_review_off",
+        "line_cust_pippa_critic_copy"
+      ],
+      "notes": "Flavour only; Pippa does not change the critic's outcome."
+    },
+    {
+      "id": "ev_gen_marge_checkin",
+      "kind": "general",
+      "drink": null,
+      "unlock": "each office move (L6, L11, L16, L21)",
+      "shop": "both",
+      "trigger": {
+        "when": "first shop session after an office move",
+        "chance": 1.0,
+        "once_per_save": false,
+        "repeat": "once per office"
+      },
+      "steps": [
+        "Marge 'Mile Marker' Holloway stops by and orders 'whatever's newest'."
+      ],
+      "resolve": "Serve the newest unlocked drink.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Marge: 'Logged and loaded.' plus a hint about the next drink."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "marge_holloway"
+      ],
+      "line_ids": [
+        "line_ev_gen_marge_checkin_arrive",
+        "line_ev_gen_marge_checkin_order",
+        "line_ev_gen_marge_checkin_logged_and_loaded",
+        "line_ev_gen_marge_checkin_hint_next"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_gen_weather_turn",
+      "kind": "general",
+      "drink": null,
+      "unlock": "lemonade stand open",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "weather changes during a session (rain or heat)",
+        "chance": 1.0,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Rain: customers crowd under the awning and order iced tea lemonade (or hot coffee once the counter is unlocked).",
+        "Heat: everyone asks for extra ice.",
+        "Rain: Dottie directs the awning crowd. Heat: Rocco asks for 'all the ice you've got'."
+      ],
+      "resolve": "Follow the suggestion shown on the order card.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": ""
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Gentle redo offered; customer stays happy. Only a little stock is used."
+        }
+      },
+      "characters": [
+        "queue_npc",
+        "dottie",
+        "rocco"
+      ],
+      "line_ids": [
+        "line_ev_gen_weather_turn_rain_start",
+        "line_ev_gen_weather_turn_heat_start",
+        "line_ev_gen_weather_turn_weather_quip",
+        "line_cust_dottie_rain_traffic",
+        "line_cust_rocco_heat_ice"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_gen_review_board",
+      "kind": "general",
+      "drink": null,
+      "unlock": "5 reviews received",
+      "shop": "both",
+      "trigger": {
+        "when": "end of every session",
+        "chance": 1.0,
+        "once_per_save": false
+      },
+      "steps": [
+        "The review board shows the session's 3 best reviews and highlights a 'fan favourite' drink."
+      ],
+      "resolve": "Nothing to do; tap to read.",
+      "outcomes": {
+        "great": {
+          "extra": "Average >= 4.5\u2605: board glows; +5% tips next session."
+        },
+        "okay": {
+          "extra": "Average 3.5-4.4\u2605: normal."
+        },
+        "off": {
+          "extra": "Average < 3.5\u2605: Dana's sticky note gives one gentle tip. No penalty."
+        }
+      },
+      "characters": [
+        "dana",
+        "customer",
+        "steve",
+        "lamp_lady",
+        "keyclackr",
+        "dottie",
+        "theo",
+        "pippa",
+        "rocco",
+        "wren"
+      ],
+      "line_ids": [
+        "line_ev_gen_review_board_fan_favourite",
+        "line_ev_gen_review_board_tip_note"
+      ],
+      "notes": "Wren's haiku and Pippa's sticker grades show on the board in their own card style."
+    },
+    {
+      "id": "ev_cust_steve_staple_rating",
+      "kind": "customer",
+      "drink": "black_coffee",
+      "unlock": "coffee counter open (L6 or Rep 1)",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "Steve is in the queue",
+        "chance": 0.25,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Steve orders, then asks: 'Are the cups stackable?'",
+        "Optional mini stack: set 3 spare cups into a neat stack on the counter (uses the stacking controls).",
+        "Steve rates the drink in staples out of five."
+      ],
+      "resolve": "Make Steve's order. The cup stack is optional and can't fall badly (cups reset gently).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Neat stack: Steve 'acquires' a cup for his collection and leaves exact-change +$2."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Steve: 'Three staples. Solid binding.'"
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "Steve: 'Two staples. Still holds the pages together!'"
+        }
+      },
+      "characters": [
+        "steve"
+      ],
+      "line_ids": [
+        "line_cust_steve_staple_rating_order",
+        "line_cust_steve_staple_rating_stackable_ask",
+        "line_cust_steve_staple_rating_stack_done",
+        "line_cust_steve_staple_rating_staples_great",
+        "line_cust_steve_staple_rating_staples_okay",
+        "line_cust_steve_staple_rating_staples_off"
+      ],
+      "notes": "Ties the shop back to the stacking game."
+    },
+    {
+      "id": "ev_cust_lamp_lady_golden_hour",
+      "kind": "customer",
+      "drink": "pink_lemonade",
+      "unlock": "L2 after job",
+      "shop": "both",
+      "trigger": {
+        "when": "in-game 17:00-19:00 and Lorna in the queue",
+        "chance": 0.3,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Lorna holds her cup up to the low sun before sipping.",
+        "Bright drinks (clear ice, pink, garnish) catch the light with a soft glow."
+      ],
+      "resolve": "Make her order; an optional garnish adds 'warm wattage' (counts toward great).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "'Warm wattage!' She gifts a small lamp decor at her 3rd golden-hour great."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'A cosy 40 watts.'"
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "'A little dim, but I brought my own sunshine.'"
+        }
+      },
+      "characters": [
+        "lamp_lady"
+      ],
+      "line_ids": [
+        "line_cust_lamp_lady_golden_hour_order",
+        "line_cust_lamp_lady_golden_hour_hold_to_light",
+        "line_cust_lamp_lady_golden_hour_warm_wattage",
+        "line_cust_lamp_lady_golden_hour_forty_watts",
+        "line_cust_lamp_lady_golden_hour_dim_but_sunny",
+        "line_cust_lamp_lady_golden_hour_lamp_gift"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_cust_keyclackr_typed_order",
+      "kind": "customer",
+      "drink": "black_coffee",
+      "unlock": "coffee counter open (L6 or Rep 1)",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "Kit is in the queue",
+        "chance": 0.25,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Kit types the order on the counter in keyboard rhythm.",
+        "The order ticket appears as typed text with one friendly typo ('blakc coffee' in the slice; 'expresso', 'lattee' once those unlock).",
+        "Tap the typo to auto-correct it (or just make the drink; the game knows what Kit meant)."
+      ],
+      "resolve": "Make Kit's order. The typo is a joke, never a trap.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Kit rates it 'tactile' and posts a 5\u2605 review with a keyboard emoji."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Linear. Smooth enough.'"
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "'Bit mushy, like a membrane board. Still paying!'"
+        }
+      },
+      "characters": [
+        "keyclackr"
+      ],
+      "line_ids": [
+        "line_cust_keyclackr_typed_order_typing",
+        "line_cust_keyclackr_typed_order_typo_fix",
+        "line_cust_keyclackr_typed_order_tactile",
+        "line_cust_keyclackr_typed_order_linear",
+        "line_cust_keyclackr_typed_order_mushy"
+      ],
+      "notes": "Drink is black_coffee (unlocked L6, when Kit first appears; ticket '1x blakc coffee plz'). Kit's favourite espresso unlocks at L7; from then the ticket can use the 'expresso' variant."
+    },
+    {
+      "id": "ev_cust_dottie_crossing_guard",
+      "kind": "customer",
+      "drink": null,
+      "unlock": "3 customers queued at once",
+      "shop": "both",
+      "trigger": {
+        "when": "3+ customers in queue and Dottie is one of them",
+        "chance": 0.35,
+        "cooldown_orders": 12,
+        "once_per_save": false
+      },
+      "steps": [
+        "Dottie stands up, vest on, and waves the line into order.",
+        "All patience timers pause for 10 s while she 'directs traffic'.",
+        "She lets someone ahead of her: 'You go, sweetie, I'm retired.'"
+      ],
+      "resolve": "Nothing extra needed; serve as normal. Dottie is served last and always happily.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "'Smooth traffic today.' Everyone in the line leaves +1\u2605 (cap 5)."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 30,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": "'Nice and orderly.'"
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Slow down, sweetie. You're doing fine.'"
+        }
+      },
+      "characters": [
+        "dottie"
+      ],
+      "line_ids": [
+        "line_cust_dottie_crossing_guard_stand_up",
+        "line_cust_dottie_crossing_guard_wave_line",
+        "line_cust_dottie_crossing_guard_you_go_first",
+        "line_cust_dottie_crossing_guard_smooth_traffic",
+        "line_cust_dottie_crossing_guard_slow_down_sweetie"
+      ],
+      "notes": "Pairs well with ev_gen_rush_hour (Dottie can fire inside a rush)."
+    },
+    {
+      "id": "ev_cust_dottie_lemon_tree",
+      "kind": "customer",
+      "drink": "classic_lemonade",
+      "unlock": "L3 after drive",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "Dottie has 2 great serves; next lemonade-stand session",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Dottie brings a paper bag of lemons from Harold's old tree.",
+        "She tells you about the tree while you make classic lemonade with her lemons."
+      ],
+      "resolve": "Make classic lemonade with Harold's lemons (they count as perfect lemons).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 50,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "'Harold's lemon tree would be proud.' The lemons become a free restock and a jar-of-lemons decor."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 30,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": ""
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Lemons were too sour anyway, sweetie. He always said so.'"
+        }
+      },
+      "characters": [
+        "dottie"
+      ],
+      "line_ids": [
+        "line_cust_dottie_lemon_tree_arrive_bag",
+        "line_cust_dottie_lemon_tree_harold_story",
+        "line_cust_dottie_lemon_tree_harold_proud",
+        "line_cust_dottie_lemon_tree_bag_gift"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ev_cust_theo_night_shift",
+      "kind": "customer",
+      "drink": "black_coffee",
+      "unlock": "coffee counter open (L6 or Rep 1)",
+      "shop": "coffee_counter",
+      "trigger": {
+        "when": "in-game 6:00-8:00 and Theo is in the queue",
+        "chance": 0.4,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Theo shuffles in after a night shift with one heroic yawn.",
+        "Orders 'a coffee to sleep after, somehow'.",
+        "Optional quiet serve: the shop dims a little while Theo waits."
+      ],
+      "resolve": "Make Theo's order hot. Serving it within 60 s counts toward great (a soft timer, no failure).",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Theo thanks you twice, once for each open eye, and leaves a warm 5\u2605."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Vitals stable.'"
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'I've had worse at 4 a.m. Thank you, truly.'"
+        }
+      },
+      "characters": [
+        "theo"
+      ],
+      "line_ids": [
+        "line_cust_theo_night_shift_yawn",
+        "line_cust_theo_night_shift_order",
+        "line_cust_theo_night_shift_thanks_twice",
+        "line_cust_theo_night_shift_vitals_stable",
+        "line_cust_theo_night_shift_worse_at_4am"
+      ],
+      "notes": "Drink is black_coffee (unlocked L6, when Theo first appears). His favourite latte unlocks at L9; from then the order line can use the latte variant."
+    },
+    {
+      "id": "ev_cust_pippa_critique",
+      "kind": "customer",
+      "drink": "classic_lemonade",
+      "unlock": "L2 after job (after 5 lemonade orders served)",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "Pippa is in the queue",
+        "chance": 0.3,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Pippa arrives with her clipboard: 'This is an official review.'",
+        "She orders a lemonade and watches each step, ticking boxes.",
+        "Her rubric card shows 3 boxes: Balance (sweet vs sour), Chill (ice), Service (timing)."
+      ],
+      "resolve": "Make the lemonade. Each rubric box gets a sticker: gold star (great), silver star (okay) or the 'nice try' frog (off). She always ends with one kind, specific tip.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Three gold stars: Pippa's 'Official Seal' sticker goes on the stand (decor)."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Silver star. Room to grow!' plus one tip for the weakest box."
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "'You get the nice-try frog. He's very proud of you.' plus one tip; she comes back next session to re-check."
+        }
+      },
+      "characters": [
+        "pippa"
+      ],
+      "line_ids": [
+        "line_cust_pippa_critique_arrive_official",
+        "line_cust_pippa_critique_watching",
+        "line_cust_pippa_critique_box_balance",
+        "line_cust_pippa_critique_box_chill",
+        "line_cust_pippa_critique_box_service",
+        "line_cust_pippa_critique_gold_seal",
+        "line_cust_pippa_critique_silver_tip",
+        "line_cust_pippa_critique_frog_tip"
+      ],
+      "notes": "Strict but kind: the rubric is honest about which box was weakest, but the tone is encouraging, the stars never drop below 3 and rep never goes down. Rubric boxes map to the quality score parts (ingredients/amounts, ice/temperature, timing window)."
+    },
+    {
+      "id": "ev_cust_pippa_margins",
+      "kind": "customer",
+      "drink": null,
+      "unlock": "Pippa has 2 critiques done",
+      "shop": "lemonade_stand",
+      "trigger": {
+        "when": "next Pippa visit after 2 critiques",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Pippa asks: 'What are your profit margins?'",
+        "A kid-friendly ledger card shows one drink's price, ingredient cost and profit (from products.json, about 30% margin).",
+        "She nods seriously and writes it down."
+      ],
+      "resolve": "Read the card and tap 'Makes sense!'. No wrong answers.",
+      "outcomes": {
+        "great": {
+          "choice": "read_card",
+          "tip_pct_of_price": 20,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Pippa: 'Future business partner.' She unlocks her 'Mogul' review stickers."
+        },
+        "okay": {
+          "choice": "n/a",
+          "extra": "No okay outcome; it's a read-and-tap."
+        },
+        "off": {
+          "choice": "n/a",
+          "extra": "No off outcome; it's a read-and-tap."
+        }
+      },
+      "characters": [
+        "pippa"
+      ],
+      "line_ids": [
+        "line_cust_pippa_margins_margins_ask",
+        "line_cust_pippa_margins_ledger_card",
+        "line_cust_pippa_margins_business_partner"
+      ],
+      "notes": "Soft tutorial for the shop economy."
+    },
+    {
+      "id": "ev_cust_rocco_route_stop",
+      "kind": "customer",
+      "drink": "strawberry_lemonade",
+      "unlock": "L4 after job",
+      "shop": "both",
+      "trigger": {
+        "when": "Rocco is in the queue",
+        "chance": 0.3,
+        "cooldown_orders": 10,
+        "once_per_save": false
+      },
+      "steps": [
+        "Rocco jogs up mid-route: 'Two minutes, chief, step count's on!'",
+        "He delivers one piece of neighbourhood gossip while you make his drink.",
+        "Serving him fast earns a step-counter 'personal best' bubble."
+      ],
+      "resolve": "Make his order. Fast is nice, never required: a slow serve just means more gossip.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "'Signed, sealed, delicious!' His gossip is a hint about the next level or drink unlock."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 20,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "'Arrived a little dented, but it got here!'"
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 5,
+          "review_stars": 3,
+          "rep_points": 0,
+          "extra": "'Return to sender? Nah, I'll keep it. Paid in full!'"
+        }
+      },
+      "characters": [
+        "rocco"
+      ],
+      "line_ids": [
+        "line_cust_rocco_route_stop_arrive_route",
+        "line_cust_rocco_route_stop_gossip",
+        "line_cust_rocco_route_stop_personal_best",
+        "line_cust_rocco_route_stop_signed_sealed",
+        "line_cust_rocco_route_stop_dented",
+        "line_cust_rocco_route_stop_return_to_sender"
+      ],
+      "notes": "Gossip lines are hints, so Narrative Writer writes one per upcoming level. Drink is strawberry_lemonade (unlocks L4, when Rocco first appears); his favourite mint_lemonade only unlocks at L5, so his L4 order jokes that the mint is 'still in the mail'."
+    },
+    {
+      "id": "ev_cust_wren_haiku_card",
+      "kind": "customer",
+      "drink": "black_coffee",
+      "unlock": "L6 (coffee counter open) or L8 honey-lavender",
+      "shop": "both",
+      "trigger": {
+        "when": "after serving Wren any drink",
+        "chance": 1.0,
+        "cooldown_orders": 0,
+        "once_per_save": false
+      },
+      "steps": [
+        "Wren sips slowly and counts the foam bubbles.",
+        "Instead of the normal review card, a cream haiku card slides in (3 lines, 5-7-5) with the stars underneath.",
+        "Wren leaves the haiku on a napkin as part of the tip."
+      ],
+      "resolve": "Nothing extra; the haiku matches the quality band (great, okay or off) and the drink.",
+      "outcomes": {
+        "great": {
+          "quality": ">=80",
+          "tip_pct_of_price": 40,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Golden haiku; the napkin is added to the 'Haiku Book' in the review log."
+        },
+        "okay": {
+          "quality": "50-79",
+          "tip_pct_of_price": 25,
+          "review_stars": 5,
+          "rep_points": 0,
+          "extra": "Gentle haiku; napkin collected."
+        },
+        "off": {
+          "quality": "<50",
+          "tip_pct_of_price": 10,
+          "review_stars": 4,
+          "rep_points": 0,
+          "extra": "Kind 'brave little cup' haiku; napkin collected. Wren never goes below 4\u2605."
+        }
+      },
+      "characters": [
+        "wren"
+      ],
+      "line_ids": [
+        "line_cust_wren_haiku_card_sip_count",
+        "line_cust_wren_haiku_card_haiku_great",
+        "line_cust_wren_haiku_card_haiku_okay",
+        "line_cust_wren_haiku_card_haiku_off",
+        "line_cust_wren_haiku_card_napkin_tip"
+      ],
+      "notes": "Drink is black_coffee (unlocked L6, when Wren first appears); Wren orders black coffee until their favourite honey_lavender_lemonade unlocks at L8, then the card can fire on that too. Haiku text comes from narrative/customers/reviews.json (per_customer.wren and per_customer_product.wren). Design Specialist: the haiku card is a variant of shop_review_card."
+    },
+    {
+      "id": "ev_cust_wren_napkin_wall",
+      "kind": "customer",
+      "drink": null,
+      "unlock": "Haiku Book has 5 napkins",
+      "shop": "both",
+      "trigger": {
+        "when": "session start after the 5th napkin",
+        "chance": 1.0,
+        "once_per_save": true
+      },
+      "steps": [
+        "Wren notices the napkins and asks to pin them up.",
+        "Pick a wall spot for a small 'poem corner' (uses the normal placement controls)."
+      ],
+      "resolve": "Place the poem corner anywhere; every spot works.",
+      "outcomes": {
+        "great": {
+          "choice": "placed",
+          "tip_pct_of_price": 0,
+          "review_stars": 5,
+          "rep_points": 1,
+          "extra": "Poem corner decor; Wren writes a haiku about the shop itself."
+        },
+        "okay": {
+          "choice": "n/a",
+          "extra": "No okay outcome; placement always succeeds."
+        },
+        "off": {
+          "choice": "n/a",
+          "extra": "No off outcome; placement always succeeds."
+        }
+      },
+      "characters": [
+        "wren"
+      ],
+      "line_ids": [
+        "line_cust_wren_napkin_wall_notice_napkins",
+        "line_cust_wren_napkin_wall_pin_request",
+        "line_cust_wren_napkin_wall_shop_haiku"
+      ],
+      "notes": ""
+    }
+  ]
+}
