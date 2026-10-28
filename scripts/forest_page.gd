@@ -12,6 +12,8 @@ func _ready() -> void:
 	Catalog.ensure()
 	if get_parent() is Control:
 		size = (get_parent() as Control).size
+	if size.x < 400.0:
+		size = Vector2(1348, 804)
 	var cats := Catalog.categories()
 	if not cats.is_empty():
 		category = str(cats[0].get("id", "furniture"))
@@ -126,7 +128,7 @@ func _list() -> void:
 		btn.pressed.connect(_pick_item.bind(id))
 		add_child(btn)
 		y += 62
-		if y > 480:
+		if y > size.y - 70.0:
 			break
 
 
@@ -143,7 +145,8 @@ func _detail() -> void:
 		return
 	var panel := PanelContainer.new()
 	panel.position = Vector2(712, 84)
-	panel.size = Vector2(494, 456)
+	panel.size = Vector2(maxf(494.0, size.x - 724.0), maxf(456.0, size.y - 96.0))
+	panel.custom_minimum_size = panel.size
 	var box := UIKit.style(Color("F7F1E4"), 12)
 	box.shadow_size = 0
 	for side in ["left", "right", "top", "bottom"]:

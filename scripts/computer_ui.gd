@@ -13,6 +13,7 @@ var selected := ""
 var chart: Control
 var body: Control
 var balance: Label
+var page_title: Label
 var pop: Label
 var pop_time := 0.0
 
@@ -70,10 +71,10 @@ func _build() -> void:
 	home.position = Vector2(18, 12)
 	home.custom_minimum_size = Vector2(220, 40)
 	bar.add_child(home)
-	var market_name := UIKit.label("MARKET.EXE", 28, UIKit.MUSTARD, "crt", false)
-	market_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	screen.add_child(market_name)
-	UIKit.pin_center_top(market_name, -180, 28, 180, 76)
+	page_title = UIKit.label(_page_title(), 28, UIKit.MUSTARD, "crt", false)
+	page_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	screen.add_child(page_title)
+	UIKit.pin_center_top(page_title, -180, 28, 180, 76)
 	balance = UIKit.label(_money(), 28, UIKit.MUSTARD, "crt", false)
 	bar.add_child(balance)
 	UIKit.pin_top_right(balance, -360, 12, -88, 52)
@@ -117,16 +118,49 @@ func _build() -> void:
 
 const SIDEBAR_W := 456.0
 
+const OFFICE_BLURBS := {
+	"garage": "A roll-up door, a folding table and a kettle. Everyone starts somewhere; most start here.",
+	"bakery": "Over the bakery on Mill Lane. Warm floors, a flour smell that never leaves, and a window on the street.",
+	"warehouse": "Brick, beams and a goods lift. Room for two trucks and a proper workbench.",
+	"glass": "The suite with the view: glass walls, a lobby, and a lease that assumes you have arrived.",
+	"corner": "The corner office. The one with the plant nobody waters and the chair that cost more than the truck.",
+}
+
+const PAGE_TITLES := {"market": "MARKET.EXE", "shop": "SHOP.EXE", "forest": "FOREST.EXE", "manager": "TILL.EXE", "email": "MAIL.EXE", "listings": "LISTINGS.EXE", "life": "LIFE.EXE", "books": "BOOKS.EXE"}
+
+
+func _page_title() -> String:
+	return str(PAGE_TITLES.get(page, "HOMEDESK.EXE"))
+
 
 func _sidebar_fits() -> bool:
 	var view := get_viewport_rect().size
 	return view.x >= 1800.0
 
 
+func _view() -> Vector2:
+	var view := get_viewport_rect().size
+	if view.x < 8.0 or view.y < 8.0:
+		view = Vector2(1920, 1080)
+	return view
+
+
+func _body_w() -> float:
+	# The page body: the screen less its bezel, the margins and the sidebar column.
+	return _view().x - 104.0 - (SIDEBAR_W + 12.0 if _sidebar_fits() else 0.0)
+
+
+func _body_h() -> float:
+	return _view().y - 276.0
+
+
 func _icon(row: HBoxContainer, caption: String, path: String, id: String) -> Button:
 	var btn := UIKit.icon_button(path, caption)
 	# The bar fills the row: every icon takes an equal share of the width.
 	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn.set_meta("page_id", id)
+	if id == page:
+		UIKit.icon_button_select(btn, true)
 	if id == "email" and GameState.unread_count() > 0:
 		btn.text = "%s (%d)" % [caption, GameState.unread_count()]
 	btn.pressed.connect(func():
@@ -141,7 +175,13 @@ func _icon(row: HBoxContainer, caption: String, path: String, id: String) -> But
 
 func _show_page() -> void:
 	for child in body.get_children():
+		body.remove_child(child)
 		child.queue_free()
+	if page_title != null and is_instance_valid(page_title):
+		page_title.text = _page_title()
+	for node in find_children("*", "Button", true, false):
+		if node.has_meta("page_id"):
+			UIKit.icon_button_select(node as Button, str(node.get_meta("page_id")) == page)
 	match page:
 		"market":
 			_market()
@@ -190,8 +230,10 @@ func _market() -> void:
 	var goods := ItemDB.trade_goods()
 	# MARKET_LAYOUT_V2: the details column leaves room for two lines of copy at each step.
 	var list := ItemList.new()
+	var body_h := _body_h()
+	var foot := body_h - 70.0
 	list.position = Vector2(12, 12)
-	list.size = Vector2(400, 524)
+	list.size = Vector2(400, body_h - 24.0)
 	list.custom_minimum_size = Vector2(400, 200)
 	list.focus_mode = Control.FOCUS_ALL
 	list.add_theme_font_override("font", UIKit.body_font())
@@ -225,9 +267,10 @@ func _market() -> void:
 	chart = Control.new()
 	chart.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chart.position = Vector2(440, 150)
-	chart.size = Vector2(700, 80)
+	chart.size = Vector2(minf(760.0, _body_w() - 480.0), maxf(80.0, minf(150.0, foot - 420.0)))
 	chart.draw.connect(_draw_chart)
 	body.add_child(chart)
+	var chart_foot := chart.position.y + chart.size.y + 10.0
 	var series: Array = GameState.history.get(selected, [])
 	var yesterday := ""
 	if series.size() >= 2:
@@ -235,33 +278,24 @@ func _market() -> void:
 	if not GameState.perk("spreadsheet_brain"):
 		yesterday = ""
 	var ylbl := UIKit.label("%s's note: %s    You have %d" % [GameState.first_name(), yesterday if yesterday != "" else "no head for prices", int(GameState.goods.get(selected, 0))], 28, UIKit.BLUE)
-	ylbl.position = Vector2(440, 240)
+	ylbl.position = Vector2(440, chart_foot)
 	ylbl.size = Vector2(760, 44)
 	ylbl.custom_minimum_size = Vector2(480, 44)
 	body.add_child(ylbl)
 	var buy := UIKit.button("BUY", UIKit.GREEN)
-	buy.position = Vector2(440, 470)
-	buy.size = Vector2(170, 56)
-	buy.custom_minimum_size = Vector2(170, 56)
-	buy.position = Vector2(440, 470)
+	buy.position = Vector2(440, foot)
 	buy.size = Vector2(180, 56)
 	buy.custom_minimum_size = Vector2(180, 56)
 	buy.pressed.connect(_buy)
 	body.add_child(buy)
 	var sell := UIKit.button("SELL", UIKit.TERRA)
-	sell.position = Vector2(630, 470)
-	sell.size = Vector2(170, 56)
-	sell.custom_minimum_size = Vector2(170, 56)
-	sell.position = Vector2(630, 470)
+	sell.position = Vector2(630, foot)
 	sell.size = Vector2(180, 56)
 	sell.custom_minimum_size = Vector2(180, 56)
 	sell.pressed.connect(_sell)
 	body.add_child(sell)
 	var nxt := UIKit.button("Next day", UIKit.BLUE)
-	nxt.position = Vector2(820, 470)
-	nxt.size = Vector2(170, 56)
-	nxt.custom_minimum_size = Vector2(170, 56)
-	nxt.position = Vector2(820, 470)
+	nxt.position = Vector2(820, foot)
 	nxt.size = Vector2(180, 56)
 	nxt.custom_minimum_size = Vector2(180, 56)
 	nxt.pressed.connect(func():
@@ -279,13 +313,13 @@ func _market() -> void:
 		var offer: Dictionary = GameState.buyer_offer
 		var line := UIKit.label("%s wants a %s for $%d. %s" % [offer.get("name", ""), ItemDB.display_name(str(offer.get("item", ""))), int(offer.get("price", 0)), offer.get("line", "")], 24, UIKit.DARK)
 		line.name = "Offer"
-		line.position = Vector2(440, 296)
+		line.position = Vector2(440, chart_foot + 56.0)
 		line.size = Vector2(760, 150)
 		line.custom_minimum_size = Vector2(490, 44)
 		line.max_lines_visible = 3
 		body.add_child(line)
 		var take := UIKit.button("Sell to them", UIKit.MUSTARD, UIKit.DARK)
-		take.position = Vector2(1010, 470)
+		take.position = Vector2(1010, foot)
 		take.size = Vector2(180, 56)
 		take.custom_minimum_size = Vector2(180, 56)
 		take.pressed.connect(_sell_buyer)
@@ -359,11 +393,12 @@ func _sell_buyer() -> void:
 func _shop() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(12, 12)
-	scroll.size = Vector2(1200, 530)
+	scroll.size = Vector2(_body_w() - 24.0, _body_h() - 24.0)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(scroll)
 	var grid := GridContainer.new()
 	grid.columns = 2
+	var card_w := (scroll.size.x - 14.0 - 16.0) * 0.5
 	grid.add_theme_constant_override("h_separation", 14)
 	grid.add_theme_constant_override("v_separation", 14)
 	scroll.add_child(grid)
@@ -377,7 +412,7 @@ func _shop() -> void:
 		box.content_margin_top = 10
 		box.content_margin_bottom = 10
 		card.add_theme_stylebox_override("panel", box)
-		card.custom_minimum_size = Vector2(590, 150)
+		card.custom_minimum_size = Vector2(card_w, 150)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 12)
 		card.add_child(row)
@@ -386,11 +421,11 @@ func _shop() -> void:
 		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(text)
 		var name := UIKit.label(str(decor.get("name", id)), 26, UIKit.DARK, "title", false)
-		name.custom_minimum_size = Vector2(400, 36)
+		name.custom_minimum_size = Vector2(card_w - 190.0, 36)
 		name.clip_text = true
 		text.add_child(name)
 		var flavor := UIKit.label(str(decor.get("flavor", "")), 24, UIKit.DARK, "small")
-		flavor.custom_minimum_size = Vector2(400, 0)
+		flavor.custom_minimum_size = Vector2(card_w - 190.0, 0)
 		flavor.max_lines_visible = 3
 		text.add_child(flavor)
 		var price := int(decor.get("price", 0))
@@ -406,12 +441,13 @@ func _email() -> void:
 	AudioDirector.play_sfx("sfx_email_ping")
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(12, 12)
-	scroll.size = Vector2(1200, 530)
+	scroll.size = Vector2(_body_w() - 24.0, _body_h() - 24.0)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(scroll)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 12)
-	column.custom_minimum_size = Vector2(1180, 0)
+	var mail_w := scroll.size.x - 20.0
+	column.custom_minimum_size = Vector2(mail_w, 0)
 	scroll.add_child(column)
 	if GameState.inbox.is_empty():
 		column.add_child(UIKit.label("The inbox is quiet.", 28, UIKit.DARK, "small"))
@@ -427,7 +463,7 @@ func _email() -> void:
 		box.content_margin_top = 10
 		box.content_margin_bottom = 10
 		card.add_theme_stylebox_override("panel", box)
-		card.custom_minimum_size = Vector2(1180, 0)
+		card.custom_minimum_size = Vector2(mail_w, 0)
 		var col := VBoxContainer.new()
 		col.add_theme_constant_override("separation", 4)
 		card.add_child(col)
@@ -444,7 +480,7 @@ func _email() -> void:
 		from.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		head.add_child(from)
 		var text := UIKit.label(GameState.fill_tokens(str(mail.get("body", ""))), 24, UIKit.DARK, "small")
-		text.custom_minimum_size = Vector2(1140, 0)
+		text.custom_minimum_size = Vector2(mail_w - 40.0, 0)
 		text.max_lines_visible = 8
 		col.add_child(text)
 		mail["read"] = true
@@ -628,8 +664,10 @@ func _listings() -> void:
 	var column := VBoxContainer.new()
 	column.position = Vector2(12, 12)
 	column.add_theme_constant_override("separation", 10)
-	column.custom_minimum_size = Vector2(1180, 0)
+	var list_w := _body_w() - 24.0
+	column.custom_minimum_size = Vector2(list_w, 0)
 	body.add_child(column)
+	column.add_child(UIKit.label("Every office in town, and what each one asks of you before the keys change hands.", 24, UIKit.WOOD, "small", false))
 	for office in Tuning.get_value("offices", []):
 		var id := str(office.get("id", ""))
 		var met := GameState.office_gate_met(id)
@@ -642,7 +680,7 @@ func _listings() -> void:
 		box.content_margin_top = 8
 		box.content_margin_bottom = 8
 		card.add_theme_stylebox_override("panel", box)
-		card.custom_minimum_size = Vector2(1180, 0)
+		card.custom_minimum_size = Vector2(list_w, 0)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 14)
 		card.add_child(row)
@@ -654,11 +692,17 @@ func _listings() -> void:
 		head.add_theme_constant_override("separation", 12)
 		text.add_child(head)
 		head.add_child(UIKit.label(str(office.get("name", id)), 28, UIKit.DARK, "title", false))
-		var price := UIKit.label("$%s" % str(office.get("cost", 0)), 24, UIKit.SAGE, "small", false)
+		var price := UIKit.label("$%s" % UIKit.commas(int(office.get("cost", 0))), 24, UIKit.SAGE, "small", false)
 		price.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		head.add_child(price)
-		text.add_child(UIKit.label("Earned $%d / $%d   ·   Jobs %d / %d   ·   Rep %d / %d" % [
-			GameState.total_earned, int(office.get("earned", 0)), GameState.jobs_done, int(office.get("jobs", 0)), GameState.rep_rank(), int(office.get("rep", 0))], 24, UIKit.DARK, "small", false))
+		text.add_child(UIKit.label("Earned $%s / $%s   ·   Jobs %d / %d   ·   Rep %d / %d" % [
+			UIKit.commas(GameState.total_earned), UIKit.commas(int(office.get("earned", 0))), GameState.jobs_done, int(office.get("jobs", 0)), GameState.rep_rank(), int(office.get("rep", 0))], 24, UIKit.DARK, "small", false))
+		var blurb := str(OFFICE_BLURBS.get(id, ""))
+		if blurb != "":
+			var about := UIKit.label(blurb, 24, UIKit.WOOD, "small")
+			about.custom_minimum_size = Vector2(list_w - 280.0, 0)
+			about.max_lines_visible = 2
+			text.add_child(about)
 		if not here and bool(office.get("playable", false)):
 			var btn := UIKit.button("Move in" if met else "Locked", UIKit.SAGE if met else UIKit.BLUE)
 			btn.custom_minimum_size = Vector2(200, 56)
@@ -714,8 +758,10 @@ func _sidebar() -> void:
 	if not _sidebar_fits():
 		return
 	var old := body.get_parent().get_node_or_null("DeskSide")
-	if old != null:
-		old.queue_free()
+	while old != null:
+		body.get_parent().remove_child(old)
+		old.free()
+		old = body.get_parent().get_node_or_null("DeskSide")
 	var side := VBoxContainer.new()
 	side.name = "DeskSide"
 	side.mouse_filter = Control.MOUSE_FILTER_IGNORE

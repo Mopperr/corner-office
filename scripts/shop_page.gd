@@ -7,13 +7,17 @@ extends Control
 const Catalog = preload("res://scripts/catalog.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
 
-const COLUMN_W := 580.0
+var COLUMN_W := 580.0
 
 
 func _ready() -> void:
 	Catalog.ensure()
 	if get_parent() is Control:
 		size = (get_parent() as Control).size
+	if size.x < 400.0:
+		size = Vector2(1348, 804)
+	# Two columns share the page, whatever the window.
+	COLUMN_W = floorf((size.x - 60.0) * 0.5)
 	_build()
 
 
@@ -43,7 +47,7 @@ func _build() -> void:
 func _column(x: float) -> VBoxContainer:
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(x, 56)
-	scroll.size = Vector2(COLUMN_W + 20.0, 490)
+	scroll.size = Vector2(COLUMN_W + 20.0, maxf(300.0, size.y - 68.0))
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)
 	var column := VBoxContainer.new()
@@ -109,7 +113,7 @@ func _left_column() -> void:
 
 
 func _right_column() -> void:
-	var column := _column(620.0)
+	var column := _column(COLUMN_W + 40.0)
 	_heading(column, "Menu  ·  prices follow the mood")
 	var served := GameState.shop_dishes()
 	# The whole board, grouped by rung; the column scrolls when the restaurant is open.

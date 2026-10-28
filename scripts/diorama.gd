@@ -1200,12 +1200,47 @@ func _sync_cargo() -> void:
 	cargo_boxes.visible = loaded > 0 and not truck_door_open
 
 
+const MODAL_CARDS := ["ActJobs", "WorkshopCard", "BoxModal", "SueCard", "HaggleCard", "MakeCard", "Unbox"]
+
+
+func _sync_dim() -> void:
+	# A modal card (clipboard, workbench, box, the suit, Sal, the make card)
+	# gets a dark wash under it, so the HUD and the toasts behind it go quiet.
+	var layer := _hud_layer()
+	if layer == null:
+		return
+	var first: Node = null
+	for card_name in MODAL_CARDS:
+		var card := layer.get_node_or_null(card_name)
+		if card != null and (first == null or card.get_index() < first.get_index()):
+			first = card
+	var dim := layer.get_node_or_null("ModalDim") as ColorRect
+	if first == null:
+		if dim != null:
+			dim.visible = false
+		return
+	if dim == null:
+		dim = ColorRect.new()
+		dim.name = "ModalDim"
+		dim.color = Color(UIKit.NIGHT, 0.38)
+		dim.mouse_filter = Control.MOUSE_FILTER_STOP
+		layer.add_child(dim)
+		UIKit.fill(dim, 0, 0, 0, 0)
+	dim.visible = true
+	var want := first.get_index()
+	if dim.get_index() < want:
+		want -= 1
+	if dim.get_index() != want:
+		layer.move_child(dim, want)
+
+
 func _process(delta: float) -> void:
 	if hud_only:
 		return
 	if backdrop:
 		_drift_camera(delta)
 		return
+	_sync_dim()
 	if toast_time > 0.0:
 		toast_time -= delta
 		if toast:
@@ -2367,7 +2402,9 @@ func _tea_card() -> void:
 	card.name = "TeaCard"
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.SAGE))
 	layer.add_child(card)
-	UIKit.pin_top_right(card, -470, 96, -16, 96)
+	# Top centre, between the status card and the action column, where the
+	# regulars' cards go in the shop: never under a button.
+	UIKit.pin_center_top(card, -300, 130, 300, 130)
 	var margin := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 16)
@@ -4600,7 +4637,7 @@ func _build_hud() -> void:
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.WOOD))
 	layer.add_child(hint_bar)
-	UIKit.pin_bottom(hint_bar, 16, -150, -16, -12)
+	UIKit.pin_bottom(hint_bar, 16, -156, -16, -12)
 	# Left: what to do now, and one line of how. Right: the keys that matter in this mode.
 	var bar_row := HBoxContainer.new()
 	bar_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -4616,9 +4653,10 @@ func _build_hud() -> void:
 	objective.name = "Objective"
 	objective.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar_text.add_child(objective)
-	hint = UIKit.label("", 28, UIKit.DARK, "small")
+	hint = UIKit.label("", 26, UIKit.DARK, "small")
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint.max_lines_visible = 2
+	hint.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bar_text.add_child(hint)
 	chips_slot = VBoxContainer.new()
@@ -4810,7 +4848,9 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 	# The right column starts under the truck while boxes are still on it.
 	var y := 500.0 if on_truck > 0 else 100.0
 	if on_truck > 0 and not unload_pending and not auto_busy and not GameState.no_helper():
-		_act_button(layer, "Unload it all for me", Vector2(16, 440), _auto_unload)
+		# Under the truck in the right column, clear of the goals card on the left.
+		_act_button(layer, "Unload it all for me", Vector2(980, y), _auto_unload)
+		y += 58
 	# Mending and the mystery parts wait until the truck is empty: those
 	# buttons would sit over the bed and take the clicks meant for the boxes.
 	if on_truck == 0 and bool(GameState.job.get("def", {}).get("mystery", false)) and not bool(GameState.job.get("mystery_sorted", false)):
@@ -6738,7 +6778,7 @@ func _ward_card(layer: CanvasLayer) -> void:
 	card.set_meta("act_button", true)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, Color("8FA5A0")))
 	layer.add_child(card)
-	UIKit.pin_top_right(card, -470, 96, -16, 96)
+	UIKit.pin_top_right(card, -540, 96, -16, 96)
 	var margin := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 16)
@@ -6750,36 +6790,38 @@ func _ward_card(layer: CanvasLayer) -> void:
 	head.add_theme_constant_override("separation", 12)
 	column.add_child(head)
 	head.add_child(UIKit.ribbon("Patient chart", Color("8FA5A0"), 28))
-	var who := UIKit.label(GameState.player_name(), 28, UIKit.DARK, "title", false)
+	var who := UIKit.label(GameState.player_name(), 24, UIKit.DARK, "title", false)
 	who.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	who.custom_minimum_size = Vector2(200, 40)
+	who.clip_text = true
 	head.add_child(who)
 	var h: Dictionary = GameState.hospital
 	var days := int(h.get("days", 1))
 	var total := int(h.get("total", 1))
 	var night := total - days + 1
 	var injury := UIKit.label("Fall from %s: %s." % [h.get("window", "a window"), h.get("injury", "bruises")], 25, UIKit.DARK, "small")
-	injury.custom_minimum_size = Vector2(420, 0)
+	injury.custom_minimum_size = Vector2(480, 0)
 	column.add_child(injury)
 	var stay := UIKit.label("Night %d of %d.  Bill $%d%s." % [night, total, int(h.get("bill", 0)), ", $%d paid back" % int(h.get("refund", 0)) if int(h.get("refund", 0)) > 0 else ""], 25, UIKit.WOOD, "small")
-	stay.custom_minimum_size = Vector2(420, 0)
+	stay.custom_minimum_size = Vector2(480, 0)
 	column.add_child(stay)
 	var choice := str(h.get("choice", ""))
 	var buttons: Array = []
 	if choice == "":
 		var ask := UIKit.label("Lying here, what do you do with it?", 25, UIKit.DARK, "small")
-		ask.custom_minimum_size = Vector2(420, 0)
+		ask.custom_minimum_size = Vector2(480, 0)
 		column.add_child(ask)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 10)
 		column.add_child(row)
 		var forgive := UIKit.button("Forgive them", UIKit.SAGE)
 		forgive.name = "HospitalForgive"
-		forgive.custom_minimum_size = Vector2(200, 52)
+		forgive.custom_minimum_size = Vector2(235, 52)
 		forgive.pressed.connect(_ward_choose.bind("forgive"))
 		row.add_child(forgive)
 		var revenge := UIKit.button("Plan revenge", UIKit.NIGHT)
 		revenge.name = "HospitalRevenge"
-		revenge.custom_minimum_size = Vector2(200, 52)
+		revenge.custom_minimum_size = Vector2(235, 52)
 		revenge.pressed.connect(_ward_choose.bind("revenge"))
 		row.add_child(revenge)
 		buttons.append(forgive)
@@ -6787,11 +6829,11 @@ func _ward_card(layer: CanvasLayer) -> void:
 	else:
 		var said := "Forgiven. A star for grace, half the bill back, and a thicker skin." if choice == "forgive" else "A grudge. The next owner who raises a hand finds you ready, and the claim is doubled."
 		var mind := UIKit.label(said, 25, UIKit.SAGE if choice == "forgive" else UIKit.NIGHT, "small")
-		mind.custom_minimum_size = Vector2(420, 0)
+		mind.custom_minimum_size = Vector2(480, 0)
 		column.add_child(mind)
 	var sleep := UIKit.button("Sleep it off" if days > 1 else "Sleep, then home", Color("8FA5A0"), UIKit.DARK)
 	sleep.name = "HospitalSleep"
-	sleep.custom_minimum_size = Vector2(420, 52)
+	sleep.custom_minimum_size = Vector2(480, 52)
 	sleep.pressed.connect(_ward_sleep)
 	column.add_child(sleep)
 	buttons.append(sleep)

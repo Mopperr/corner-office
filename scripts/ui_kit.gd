@@ -197,6 +197,17 @@ static func icon_button(icon_path: String, caption: String) -> Button:
 	return btn
 
 
+static func icon_button_select(btn: Button, on: bool) -> void:
+	# The open page's icon stays lit: a mustard rim and a lighter face.
+	var solid := Color("1B2A24")
+	if on:
+		btn.add_theme_stylebox_override("normal", style(solid.lightened(0.16), 10, 4, MUSTARD))
+		btn.add_theme_color_override("font_color", MUSTARD)
+	else:
+		btn.add_theme_stylebox_override("normal", style(solid, 10, 2, BLUE))
+		btn.add_theme_color_override("font_color", CREAM_CARD)
+
+
 static func font_px(size: int) -> int:
 	var scaled := int(round(float(maxi(size, MIN_FONT)) * SaveManager.text_scale))
 	return maxi(MIN_FONT, scaled)

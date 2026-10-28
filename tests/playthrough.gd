@@ -1175,8 +1175,11 @@ func _unpack() -> void:
 		# deterministic (the counter-suit is covered by the smoke test).
 		var family: bool = room.party != null and room.party.members.size() > 0 and int(GameState.stats.get("lawsuits", 0)) == 0
 		room.break_bias = -1.0
+		# As many slips as this owner's temper takes: one more for every
+		# forgiveness in the ward, so a forgiven run still ends in the shove.
+		var slips: int = GameState.temper_limit()
 		if family:
-			room.break_force = 3
+			room.break_force = slips
 		var money_before := GameState.money
 		_check(press("Unpack it all for me"), "unpack: Unpack it all for me button")
 		_check(bool(room.get("auto_busy")), "unpack: Dana walks the pieces over herself")
@@ -1186,7 +1189,7 @@ func _unpack() -> void:
 		if await _maybe_thrown():
 			return
 		if family:
-			_check(int(GameState.job.get("broken", 0)) == 3, "breaks: three pieces chipped (%d)" % int(GameState.job.get("broken", 0)))
+			_check(int(GameState.job.get("broken", 0)) == slips, "breaks: %d pieces chipped (%d)" % [slips, int(GameState.job.get("broken", 0))])
 			_check(bool(GameState.job.get("attacked", false)), "breaks: the owner came over and shoved Dana")
 			_check(bool(GameState.job.get("sued", false)) and int(GameState.stats.get("lawsuits", 0)) == 1, "sue: filed once (%d)" % int(GameState.stats.get("lawsuits", 0)))
 			_check(GameState.money - money_before >= 1000, "sue: small claims paid $%d (jar %d -> %d, won %d, countered %d)" % [GameState.money - money_before, money_before, GameState.money, int(GameState.job.get("sue_won", 0)), int(GameState.job.get("counter_sued", 0))])

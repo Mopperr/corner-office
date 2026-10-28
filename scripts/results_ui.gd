@@ -152,7 +152,7 @@ func _center_card() -> void:
 	layout_mode = 0
 	position = Vector2.ZERO
 	size = vp
-	var card_size := Vector2(860, 680)
+	var card_size := Vector2(900, 760)
 	if vp.y < card_size.y + 16.0:
 		card_size.y = maxf(360.0, vp.y - 16.0)
 	if vp.x < card_size.x + 16.0:
@@ -180,12 +180,12 @@ func _build() -> void:
 	UIKit.fill(dim, 0, 0, 0, 0)
 	var card := Panel.new()
 	card.name = "Card"
-	card.custom_minimum_size = Vector2(860, 680)
+	card.custom_minimum_size = Vector2(900, 760)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
 	add_child(card)
 	var title := UIKit.ribbon(str(GameState.payout.get("title", "Job done")), UIKit.TERRA, 40)
 	title.position = Vector2(36, 20)
-	title.size = Vector2(780, 56)
+	title.size = Vector2(820, 56)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.add_child(title)
 	var stars := int(GameState.payout.get("stars", 1))
@@ -198,32 +198,64 @@ func _build() -> void:
 		expression = "tired"
 	var face := UIKit.portrait(112, expression)
 	face.name = "ResultsFace"
-	face.position = Vector2(732, 14)
+	face.position = Vector2(772, 14)
 	card.add_child(face)
 	var star_row := UIKit.label("★".repeat(clampi(stars, 0, 3)) + "☆".repeat(3 - clampi(stars, 0, 3)), 44, UIKit.MUSTARD, "title", false)
 	star_row.position = Vector2(36, 76)
-	star_row.size = Vector2(780, 56)
+	star_row.size = Vector2(820, 56)
 	star_row.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.add_child(star_row)
-	var y := 136.0
-	var step := 40.0
+	# Two columns: the money on the left down to what you take home, the
+	# stamps, stars and the rest on the right; the story lines run full
+	# width beneath. A thrown or busted card has only its own few lines.
+	var story_from := maxi(0, lines.size() - 2)
+	var money_end := story_from
 	for i in lines.size():
-		var is_story := i >= lines.size() - 2
-		var row := UIKit.label(lines[i], 24 if is_story else 30, UIKit.BLUE if is_story else UIKit.DARK, "small" if is_story else "body", is_story)
-		row.position = Vector2(40, y)
-		row.size = Vector2(780, 44 if not is_story else 80)
-		if not is_story:
-			row.custom_minimum_size = Vector2(minf(760.0, maxf(180.0, float(str(lines[i]).length()) * 17.0)), 40)
-		else:
-			row.custom_minimum_size = Vector2(760, 0)
+		if str(lines[i]).begins_with("You take home"):
+			money_end = i + 1
+			break
+	var columns := money_end < story_from
+	var left_y := 136.0
+	var right_y := 136.0
+	for i in lines.size():
+		var is_story := i >= story_from
+		var text := str(lines[i])
+		var home := text.begins_with("You take home")
+		var row: Label
+		if is_story:
+			row = UIKit.label(text, 24, UIKit.BLUE, "small", true)
+			row.position = Vector2(40, 536.0 + 64.0 * float(i - story_from))
+			row.size = Vector2(820, 80)
+			row.custom_minimum_size = Vector2(800, 0)
 			row.max_lines_visible = 2
+		elif columns and i >= money_end:
+			row = UIKit.label(text, 25, UIKit.WOOD, "small", true)
+			row.position = Vector2(490, right_y)
+			row.size = Vector2(370, 60)
+			row.custom_minimum_size = Vector2(370, 0)
+			row.max_lines_visible = 2
+			row.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			right_y += 34.0 if text.length() < 30 else 58.0
+		else:
+			row = UIKit.label(text, 32 if home else 28, UIKit.TERRA if home else UIKit.DARK, "title" if home else "body", false)
+			row.position = Vector2(40, left_y)
+			row.size = Vector2(430 if columns else 820, 40)
+			row.custom_minimum_size = Vector2(430 if columns else 820, 40)
+			row.clip_text = true
+			left_y += 38.0 if not home else 44.0
 		row.modulate.a = 0.0
 		row.name = "Line%d" % i
 		card.add_child(row)
-		y += step if not is_story else 64
+	if columns:
+		# A hairline between the columns.
+		var rule := ColorRect.new()
+		rule.color = Color(UIKit.WOOD, 0.35)
+		rule.position = Vector2(472, 140)
+		rule.size = Vector2(2, maxf(left_y, right_y) - 140.0)
+		card.add_child(rule)
 	var to_ward := GameState.in_hospital()
 	var btn := UIKit.button("To the ward" if to_ward else "Back to the office", UIKit.NIGHT if to_ward else UIKit.SAGE)
-	btn.position = Vector2(250, 604)
+	btn.position = Vector2(270, 684)
 	btn.size = Vector2(360, 56)
 	btn.custom_minimum_size = Vector2(360, 56)
 	btn.pressed.connect(func():
@@ -245,7 +277,7 @@ func _reveal() -> void:
 		if row == null:
 			continue
 		var tw := create_tween()
-		tw.tween_interval(0.28 * float(i))
-		tw.tween_property(row, "modulate:a", 1.0, 0.25)
+		tw.tween_interval(0.12 * float(i))
+		tw.tween_property(row, "modulate:a", 1.0, 0.22)
 		if i == lines.size() - 2:
 			tw.tween_callback(func(): AudioDirector.play_sfx("sfx_cash_gain"))

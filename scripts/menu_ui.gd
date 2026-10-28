@@ -46,7 +46,7 @@ func _home() -> void:
 	var card := Panel.new()
 	card.name = "HomeCard"
 	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.custom_minimum_size = Vector2(880, 720)
+	card.custom_minimum_size = Vector2(880, 640)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 22))
 	center.add_child(card)
 	var margin := MarginContainer.new()
@@ -70,7 +70,7 @@ func _home() -> void:
 	sway.tween_property(title, "rotation_degrees", 1.2, 2.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	sway.tween_property(title, "rotation_degrees", -1.5, 2.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	column.add_child(title)
-	var sub := UIKit.label("Pack the old office. Make the new one yours.", 36, UIKit.DARK)
+	var sub := UIKit.label("Pack the old office. Make the new one yours.", 32, UIKit.DARK, "body", false)
 	sub.custom_minimum_size = Vector2(720, 48)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(sub)
@@ -103,36 +103,53 @@ func _choose() -> void:
 	var card := Panel.new()
 	card.name = "ChooseCard"
 	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.custom_minimum_size = Vector2(1200, 700)
-	card.size = Vector2(1200, 700)
+	card.custom_minimum_size = Vector2(1240, 720)
+	card.size = Vector2(1240, 720)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
 	center.add_child(card)
 	var margin := MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for side in ["left", "right"]:
-		margin.add_theme_constant_override("margin_" + side, 28)
-	margin.add_theme_constant_override("margin_top", 18)
-	margin.add_theme_constant_override("margin_bottom", 16)
+		margin.add_theme_constant_override("margin_" + side, 20)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	card.add_child(margin)
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	column.add_theme_constant_override("separation", 8)
+	column.add_theme_constant_override("separation", 6)
 	margin.add_child(column)
 	var head := HBoxContainer.new()
 	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	head.add_theme_constant_override("separation", 16)
 	column.add_child(head)
 	var title := UIKit.ribbon("Who's moving in?", UIKit.TERRA, 36)
-	title.custom_minimum_size = Vector2(420, 52)
+	title.custom_minimum_size = Vector2(420, 46)
 	head.add_child(title)
+	var lead := UIKit.label("Five people, one garage, five perks.", 18, UIKit.WOOD, "small", false)
+	lead.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lead.custom_minimum_size = Vector2(540, 46)
+	lead.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lead.clip_text = true
+	head.add_child(lead)
+	# Back lives in the head row, so the five rows get the height.
+	var back := UIKit.button("Back", UIKit.DARK)
+	back.custom_minimum_size = Vector2(160, 44)
+	back.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	back.pressed.connect(_home)
+	head.add_child(back)
 	var buttons: Array = []
 	var fills := {"dana": UIKit.TERRA, "sol": Color("4F8A8B"), "hank": UIKit.WOOD, "milo": UIKit.MUSTARD, "bea": UIKit.SAGE}
 	for who in GameState.playable_characters():
 		var id := str(who["id"])
 		var tile := PanelContainer.new()
 		tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		tile.custom_minimum_size = Vector2(1140, 88)
-		tile.add_theme_stylebox_override("panel", UIKit.style(Color("F8F3E8"), 12, 3, fills.get(id, UIKit.TERRA)))
+		tile.custom_minimum_size = Vector2(1200, 0)
+		var tile_style := UIKit.style(Color("F8F3E8"), 12, 3, fills.get(id, UIKit.TERRA))
+		tile_style.content_margin_top = 5
+		tile_style.content_margin_bottom = 5
+		tile_style.content_margin_left = 12
+		tile_style.content_margin_right = 12
+		tile.add_theme_stylebox_override("panel", tile_style)
 		column.add_child(tile)
 		var row := HBoxContainer.new()
 		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -152,45 +169,40 @@ func _choose() -> void:
 		row.add_child(face)
 		var who_col := VBoxContainer.new()
 		who_col.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		who_col.custom_minimum_size = Vector2(300, 0)
+		who_col.add_theme_constant_override("separation", 2)
+		who_col.custom_minimum_size = Vector2(980, 0)
+		who_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		who_col.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		row.add_child(who_col)
+		var head_row := HBoxContainer.new()
+		head_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		head_row.add_theme_constant_override("separation", 16)
+		who_col.add_child(head_row)
 		var name_tag := UIKit.label(str(who["name"]), 22, UIKit.DARK, "title", false)
-		name_tag.custom_minimum_size = Vector2(300, 30)
-		who_col.add_child(name_tag)
-		var pitch := UIKit.label(str(who["pitch"]), 15, UIKit.DARK, "small")
-		pitch.custom_minimum_size = Vector2(300, 0)
-		pitch.max_lines_visible = 1
+		name_tag.custom_minimum_size = Vector2(260, 30)
+		head_row.add_child(name_tag)
+		var perk := UIKit.label("Perk: %s" % who["perk"], 18, fills.get(id, UIKit.TERRA), "title", false)
+		perk.custom_minimum_size = Vector2(300, 30)
+		head_row.add_child(perk)
+		var start := UIKit.label("$%d to start" % int(who["money"]), 18, UIKit.WOOD, "small", false)
+		start.custom_minimum_size = Vector2(140, 30)
+		start.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		head_row.add_child(start)
+		var pitch := UIKit.label(str(who["pitch"]), 16, UIKit.DARK, "small", false)
+		pitch.custom_minimum_size = Vector2(980, 0)
 		pitch.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		who_col.add_child(pitch)
-		var perk_col := VBoxContainer.new()
-		perk_col.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		perk_col.custom_minimum_size = Vector2(420, 0)
-		perk_col.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		row.add_child(perk_col)
-		var perk := UIKit.label("Perk: %s" % who["perk"], 18, fills.get(id, UIKit.TERRA), "title", false)
-		perk.custom_minimum_size = Vector2(420, 26)
-		perk_col.add_child(perk)
-		var perk_desc := UIKit.label(str(who["perk_desc"]), 15, UIKit.WOOD, "small")
-		perk_desc.custom_minimum_size = Vector2(420, 0)
-		perk_desc.max_lines_visible = 1
+		var perk_desc := UIKit.label(str(who["perk_desc"]), 16, UIKit.WOOD, "small", false)
+		perk_desc.custom_minimum_size = Vector2(980, 0)
 		perk_desc.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		perk_col.add_child(perk_desc)
-		var start := UIKit.label("$%d to start" % int(who["money"]), 18, UIKit.DARK, "small", false)
-		start.custom_minimum_size = Vector2(110, 0)
-		start.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		row.add_child(start)
+		who_col.add_child(perk_desc)
 		var pick := UIKit.button("Play", fills.get(id, UIKit.TERRA), UIKit.DARK if id in ["milo", "bea"] else UIKit.CREAM_CARD)
 		pick.name = "Pick_" + id
-		pick.custom_minimum_size = Vector2(130, 46)
+		pick.custom_minimum_size = Vector2(112, 46)
 		pick.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		pick.pressed.connect(func(): _intro(id))
 		row.add_child(pick)
 		buttons.append(pick)
-	var back := UIKit.button("Back", UIKit.DARK)
-	back.custom_minimum_size = Vector2(200, 46)
-	back.pressed.connect(_home)
-	column.add_child(back)
 	buttons.append(back)
 	UIKit.link_focus(buttons)
 	UIKit.pop_in(card)

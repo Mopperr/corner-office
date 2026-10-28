@@ -1374,7 +1374,7 @@ func _hud() -> void:
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16))
 	hud_root.add_child(hint_bar)
-	UIKit.pin_bottom(hint_bar, 16, -150, -16, -12)
+	UIKit.pin_bottom(hint_bar, 16, -156, -16, -12)
 	var bar_row := HBoxContainer.new()
 	bar_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar_row.add_theme_constant_override("separation", 24)
@@ -1388,8 +1388,9 @@ func _hud() -> void:
 	objective = UIKit.label("", 30, UIKit.TERRA, "title", false)
 	objective.name = "Objective"
 	bar_text.add_child(objective)
-	hint = UIKit.label("", 28, UIKit.DARK, "small")
+	hint = UIKit.label("", 26, UIKit.DARK, "small")
 	hint.max_lines_visible = 2
+	hint.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	bar_text.add_child(hint)
 	chips_slot = VBoxContainer.new()
 	chips_slot.name = "ChipsSlot"

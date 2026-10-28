@@ -1846,7 +1846,8 @@ func _qa_regressions() -> Array:
 		found.append("computer title")
 	var offer := computer.find_child("Offer", true, false) as Label
 	var hint_top := vp.y - 104.0
-	if offer == null or offer.position.y > 320.0 or offer.size.x < 400.0 or offer.global_position.y + offer.size.y >= hint_top:
+	# The buyer's line sits under the chart and clear of the buttons at the foot.
+	if offer == null or offer.position.y > 420.0 or offer.size.x < 400.0 or offer.global_position.y + offer.size.y >= hint_top:
 		found.append("offer overlap %s" % (offer.position if offer else "missing"))
 	_bury(computer)
 	GameState.job = {"def": {"drive": "sunny_main", "level": "L3"}, "boxes": [], "items": []}
