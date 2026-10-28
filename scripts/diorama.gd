@@ -2457,8 +2457,15 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 
 func _unhide_loose() -> void:
 	# A piece set down in front of a loose one can hide it from the camera;
-	# move the hidden one to a square that can be seen.
+	# move the hidden one to a square that can be seen. Pieces placed this
+	# frame are not in the physics world yet, so the rays wait a step.
 	if GameState.mode != "job_unpack":
+		return
+	var tree := get_tree()
+	if tree != null:
+		await tree.physics_frame
+		await tree.physics_frame
+	if not is_inside_tree() or GameState.mode != "job_unpack" or held_uid != "":
 		return
 	var moved := false
 	var k := 0
@@ -2888,11 +2895,8 @@ func _arrive(root: Node3D, from_world: Vector3) -> void:
 	tw.tween_property(visual, "position", Vector3.ZERO, 0.24).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tw.parallel().tween_property(visual, "scale", Vector3(1.08, 0.92, 1.08), 0.24)
 	tw.tween_property(visual, "scale", Vector3.ONE, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	var land := root.global_position
-	tw.tween_callback(func():
-		if is_instance_valid(root):
-			_dust(land)
-	)
+	# Bound, not captured: the piece's node may be rebuilt before the tween ends.
+	tw.tween_callback(_dust.bind(root.global_position))
 
 
 func _spawn_record(rec: Dictionary, item_id: String, cracked: bool) -> void:
