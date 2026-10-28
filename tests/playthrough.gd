@@ -140,6 +140,14 @@ func _run() -> void:
 	# Pin the board so every run plays the same generated job.
 	GameState.seed = int(OS.get_environment("CO_SEED")) if OS.get_environment("CO_SEED") != "" else 20261024
 	GameState.refresh_board()
+	# A house move, so the stairs and the rooms get played: walk the seed
+	# forward until the first job on the board is one.
+	var seed_guard := 0
+	while seed_guard < 80 and not (GameState.generated_jobs.size() > 0 and bool(GameState.generated_jobs[0].get("home", false))):
+		GameState.seed += 1
+		GameState.refresh_board()
+		seed_guard += 1
+	_check(GameState.generated_jobs.size() > 0 and bool(GameState.generated_jobs[0].get("home", false)), "board job is a house move (seed %d)" % GameState.seed)
 	print("board seed %d: %s" % [GameState.seed, GameState.generated_jobs[0].get("title", "") if not GameState.generated_jobs.is_empty() else "none"])
 	if limit > 0 and not GameState.generated_jobs.is_empty():
 		await _do_job(str(GameState.generated_jobs[0].get("id", "")))
@@ -794,8 +802,12 @@ func _load_truck() -> void:
 	for box in heavy_first:
 		var id := int(box.get("id", 0))
 		var picked := false
+		# A wrapped big piece rides under its own name instead of a box number.
+		var wanted := "Box %d" % (id + 1)
+		if str(box.get("big", "")) != "":
+			wanted = str(GameState.job_item(str(box["big"])).get("name", "Big piece"))
 		for btn in _buttons(room):
-			if btn.text.begins_with("Box %d" % (id + 1)):
+			if btn.text.begins_with(wanted):
 				btn.pressed.emit()
 				picked = true
 				break
@@ -1029,6 +1041,11 @@ func _unpack() -> void:
 			_fail("unpack: %s is still boxed after opening every box" % item.get("uid", ""))
 			return
 	await shot("unpack_opened")
+	if bool(room.call("_is_home")):
+		await _home_floors(room)
+		if not fails.is_empty():
+			return
+		room = _room()
 	# Pick each item up and place it. Items crowd each other, so pick whichever
 	# loose one the ray lands on.
 	var guard := 0
@@ -1121,6 +1138,77 @@ func _unpack() -> void:
 		press("Sort mystery parts")
 		await wait(0.1)
 	await shot("unpack_done")
+
+
+func _home_floors(room: Node) -> void:
+	# A house: pick a loose piece up, take it upstairs, put it down there, come back.
+	var Homes = load("res://scripts/homes.gd")
+	var floors: int = Homes.floors(room.venue).size()
+	_check(room.get_node_or_null("Interior") != null, "home: interior walls built")
+	_check(GameState.job.get("owner_items", []).size() > 0, "home: the family's things are in the rooms")
+	if floors < 2:
+		print("  single-storey home, no stairs to climb")
+		return
+	var picked := ""
+	# The helpers may have put everything away already: a placed piece is
+	# picked back up the same way.
+	for item in GameState.job.get("items", []):
+		if not str(item.get("state", "")) in ["loose", "placed"] or str(item.get("mount", "floor")) != "floor" or int(item.get("floor", 0)) != 0:
+			continue
+		var node := _node_for(room, str(item.get("uid", "")))
+		if node == null:
+			continue
+		picked = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) in ["loose", "placed"])
+		if picked != "":
+			break
+	if picked == "":
+		print("  no floor piece to carry upstairs")
+		return
+	await click_world(room, _last_hover)
+	await wait(0.1)
+	_check(room.held_uid == picked, "home: holding %s for the stairs" % picked)
+	_check(press("Up to upstairs") or press("Up to loft"), "home: Up button")
+	await wait(0.3)
+	room = _room()
+	_check(room.home_floor == 1, "home: upstairs (floor %d)" % room.home_floor)
+	_check(room.held_uid == picked, "home: still holding the piece upstairs")
+	await shot("home_upstairs")
+	var placed := false
+	for hit in _floor_candidates(room):
+		await hover_world(room, hit)
+		var aim = room._aim_point()
+		if aim == null or not bool(room._snap_point(aim)["valid"]):
+			continue
+		await click_world(room, hit)
+		if await wait_until(func(): return str(GameState.job_item(picked).get("state", "")) == "placed" and not room.settling, 3.0):
+			placed = true
+			break
+	_check(placed and int(GameState.job_item(picked).get("floor", -1)) == 1, "home: piece set down upstairs")
+	# Downstairs again by the stairs themselves.
+	var stairs: Node3D = room.get_node("Interior").get_node_or_null("Stairs")
+	_check(stairs != null, "home: stairwell to click")
+	if stairs != null:
+		await click_node(room, "stairs", stairs)
+		await wait(0.3)
+		room = _room()
+	_check(room.home_floor == 0, "home: back downstairs (floor %d)" % room.home_floor)
+	# Something of theirs: open the card and leave it.
+	var owner_uid := ""
+	for rec in GameState.job.get("owner_items", []):
+		if int(rec.get("floor", 0)) == 0 and bool(rec.get("pocketable", false)):
+			owner_uid = str(rec["uid"])
+			break
+	if owner_uid != "":
+		var owner_node := _node_for(room, owner_uid)
+		if owner_node != null:
+			await click_node(room, owner_uid, owner_node)
+			await wait(0.2)
+			var card: Node = room.call("_hud_layer").get_node_or_null("OwnerCard")
+			_check(card != null, "home: the family's piece opens its card")
+			if card != null:
+				await shot("home_owner_card")
+				_check(press("Leave it", card), "home: Leave it")
+				await wait(0.1)
 
 
 # ---------------------------------------------------------------- loft

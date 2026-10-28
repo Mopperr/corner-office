@@ -340,6 +340,7 @@ func _ready() -> void:
 	failures.append_array(_content_engine())
 	failures.append_array(await _stack_world())
 	failures.append_array(await _menu_audit())
+	failures.append_array(await _home_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -2147,6 +2148,221 @@ func _label_with(root: Node, text: String) -> Label:
 		if label.text == text:
 			return label
 	return null
+
+
+func _home_checks() -> Array:
+	# Houses: blueprints that tile, walls with doorways, floors to switch,
+	# the client's things in the rooms, pieces scored by room, pocketing.
+	var found: Array = []
+	var Homes = load("res://scripts/homes.gd")
+	var homes: Dictionary = Homes.all()
+	if homes.size() < 15:
+		found.append("only %d homes" % homes.size())
+	var storeys := 0
+	var kinds: Dictionary = {}
+	for home_id in homes.keys():
+		var venue: Dictionary = Homes.venue_for(str(home_id))
+		if not ItemDB.venues().has(home_id) or not bool(ItemDB.venues()[home_id].get("home", false)):
+			found.append("%s not a venue" % home_id)
+		var floors: Array = Homes.floors(venue)
+		if floors.size() > 1:
+			storeys += 1
+		for index in floors.size():
+			var area := 0.0
+			for room in Homes.rooms(venue, index):
+				area += float(room["w"]) * float(room["d"])
+				kinds[Homes.kind(str(room["id"]))] = true
+			if absf(area - float(venue["w"]) * float(venue["d"])) > 0.01:
+				found.append("%s floor %d does not tile (%.1f)" % [home_id, index, area])
+			if Homes.rooms(venue, index).size() > 1 and Homes.walls(venue, index).is_empty():
+				found.append("%s floor %d has no walls" % [home_id, index])
+			if Homes.stairs(venue, index) != Vector3.INF and floors.size() == 1:
+				found.append("%s has stairs on one floor" % home_id)
+		if Catalog.theme(str(venue.get("theme", ""))).get("name", "") == "Plain":
+			found.append("%s has no theme" % home_id)
+	if storeys < 8:
+		found.append("only %d homes with an upstairs" % storeys)
+	for want in ["kitchen", "bathroom", "bedroom", "lounge", "loft", "shed"]:
+		if not kinds.has(want):
+			found.append("no %s in any home" % want)
+	# Walls and doorways on the semi: the lounge/hall wall has a gap in the middle.
+	var semi: Dictionary = Homes.venue_for("semi_a")
+	if Homes.doorways(semi, 0).size() < Homes.rooms(semi, 0).size():
+		found.append("semi: fewer doorways than rooms")
+	if not Homes.crosses_wall(semi, 0, Rect2(2.6, 0.8, 0.4, 0.4)):
+		found.append("semi: a piece on the lounge wall is allowed")
+	if Homes.crosses_wall(semi, 0, Rect2(2.6, 2.3, 0.4, 0.4)):
+		found.append("semi: the doorway counts as wall")
+	if Homes.crosses_wall(semi, 0, Rect2(1.2, 1.2, 0.4, 0.4)):
+		found.append("semi: the middle of the lounge counts as wall")
+	if Homes.room_at(semi, 0, 1.0, 6.0).get("id", "") != "kitchen" or Homes.room_at(semi, 1, 1.0, 1.0).get("id", "") != "bedroom":
+		found.append("semi: room_at wrong")
+	if Homes.floor_for_tag(semi, "bedroom") != 1 or Homes.floor_for_tag(semi, "kitchen") != 0:
+		found.append("semi: floor_for_tag wrong")
+	# A household job on the semi.
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	var JobGen = load("res://scripts/job_gen.gd")
+	var home_job: Dictionary = {}
+	var seed := 1
+	while home_job.is_empty() and seed < 40:
+		var made: Dictionary = JobGen.board(seed, 1, 1, 2, 3)
+		for job in made["jobs"]:
+			if bool(job.get("home", false)):
+				home_job = job
+				GameState.generated_drives = made["drives"]
+				break
+		seed += 1
+	if home_job.is_empty():
+		found.append("no home job in 40 boards")
+		return found
+	var tagged := 0
+	for group in home_job.get("recipe", []):
+		if str(ItemDB.get_item(str(group.get("item", ""))).get("room", "")) != "":
+			tagged += 1
+	if tagged < 4:
+		found.append("home job carries %d household pieces" % tagged)
+	home_job["venue"] = "semi_a"
+	GameState.generated_jobs = [home_job]
+	GameState.start_job(str(home_job["id"]))
+	var owners: Array = GameState.job.get("owner_items", [])
+	if owners.size() < 6:
+		found.append("semi: only %d owner items" % owners.size())
+	for rec in owners:
+		var room: Dictionary = Homes.room_at(semi, int(rec["floor"]), float(rec["x"]), float(rec["z"]))
+		if str(room.get("id", "")) != str(rec.get("room", "")):
+			found.append("owner %s stands in %s not %s" % [rec.get("item_id", ""), room.get("id", "?"), rec.get("room", "")])
+		var def := ItemDB.get_item(str(rec.get("item_id", "")))
+		if Homes.crosses_wall(semi, int(rec["floor"]), Homes.footprint(Vector3(float(rec["x"]), 0, float(rec["z"])), float(rec["rot"]), float(def.get("w", 0.4)), float(def.get("d", 0.4)))):
+			found.append("owner %s stands in a wall" % rec.get("item_id", ""))
+	for box in GameState.job.get("boxes", []):
+		box["sealed"] = true
+	GameState.set_mode("job_unpack")
+	var play: Node = RoomLib.new()
+	add_child(play)
+	var interior: Node = play.get_node_or_null("Interior")
+	if interior == null:
+		found.append("semi: no interior")
+		_bury(play)
+		return found
+	if interior.find_children("InnerWall_*", "", false, false).size() < 3:
+		found.append("semi: too few inner walls")
+	if interior.find_children("RoomName_*", "", false, false).size() != Homes.rooms(semi, 0).size():
+		found.append("semi: room names")
+	if interior.get_node_or_null("Stairs") == null:
+		found.append("semi: no stairs downstairs")
+	if play.find_children("Owner_*", "", true, false).size() != play.call("_owner_items_here").size():
+		found.append("semi: owner items not spawned")
+	play.call("_refresh_hud_buttons")
+	play.call("_refresh_hud_buttons")
+	var rotate_buttons := 0
+	for btn in play.find_children("*", "Button", true, false):
+		if str(btn.text) == "Rotate view":
+			rotate_buttons += 1
+	if rotate_buttons != 1:
+		found.append("HUD refresh leaves stale buttons (%d Rotate view)" % rotate_buttons)
+	var up_button := false
+	for btn in play.find_children("*", "Button", true, false):
+		if str(btn.text).begins_with("Up to"):
+			up_button = true
+	if not up_button:
+		found.append("semi: no Up button")
+	# Placement respects the walls; a piece held through the stairs lands upstairs.
+	var first: Dictionary = GameState.job["items"][0]
+	first["state"] = "loose"
+	first["x"] = 1.4
+	first["z"] = 1.5
+	first["floor"] = 0
+	first["mount"] = "floor"
+	first["item_id"] = "toaster"
+	first["room"] = "kitchen"
+	play.held_uid = str(first["uid"])
+	play.held_source = "job"
+	play.held_rot = 0.0
+	if bool(play.call("_snap_point", Vector3(2.8, 0, 1.0))["valid"]):
+		found.append("semi: a piece can stand in the lounge wall")
+	if not bool(play.call("_snap_point", Vector3(1.4, 0, 1.6))["valid"]):
+		found.append("semi: the lounge floor refuses a toaster")
+	play.held_uid = ""
+	play.held_source = ""
+	play.call("_set_floor", 1)
+	if play.home_floor != 1 or int(play.get_node("Interior").get_meta("floor", 0)) != 1:
+		found.append("semi: did not go upstairs")
+	if play.get_node("Interior").get_node_or_null("Stairs") == null:
+		found.append("semi: no stairwell upstairs")
+	if not play.find_children("*", "", true, false).any(func(n): return str(n.name).begins_with("Owner_")):
+		found.append("semi: no owner items upstairs")
+	for n in play.items_root.get_children():
+		if str(n.get_meta("uid", "")).begins_with("boxcarry:"):
+			found.append("semi: carry boxes upstairs")
+			break
+	play.call("_use_stairs")
+	if play.home_floor != 0:
+		found.append("semi: the stairs did not come back down")
+	# Rooms tally: a kitchen piece in the kitchen counts, one in the lounge does not.
+	for item in GameState.job["items"]:
+		item["state"] = "placed"
+		item["room"] = ""
+	first["room"] = "kitchen"
+	first["x"] = 2.0
+	first["z"] = 6.5
+	first["floor"] = 0
+	var second: Dictionary = GameState.job["items"][1]
+	second["room"] = "kitchen"
+	second["x"] = 1.4
+	second["z"] = 1.5
+	second["floor"] = 0
+	play.call("_tally_rooms")
+	if int(GameState.job.get("rooms_right", -1)) != 1 or int(GameState.job.get("rooms_total", -1)) != 2:
+		found.append("semi: rooms tally %s/%s" % [GameState.job.get("rooms_right"), GameState.job.get("rooms_total")])
+	# Pocketing: a small piece goes in the bag with heat; a bathtub does not.
+	var small := ""
+	var big := ""
+	for rec in owners:
+		if bool(rec.get("pocketable", false)) and small == "":
+			small = str(rec["uid"])
+		if not bool(rec.get("pocketable", true)) and big == "":
+			big = str(rec["uid"])
+	var Crime = load("res://scripts/crime.gd")
+	var heat_before: int = Crime.heat()
+	if small == "" or big == "":
+		found.append("semi: owner items all one size (small %s big %s)" % [small, big])
+	else:
+		if not GameState.pocket_owner_item(big).has("error"):
+			found.append("pocketed a %s" % big)
+		var took: Dictionary = GameState.pocket_owner_item(small)
+		if took.has("error") or Crime.loot().size() != 1 or Crime.heat() <= heat_before:
+			found.append("pocketing failed %s loot %d" % [took, Crime.loot().size()])
+		if GameState.pocket_owner_item(small).get("error", "") == "":
+			found.append("pocketed the same thing twice")
+		play.call("_refresh_items")
+		if play.find_children("Owner_" + small.replace(":", "_"), "", true, false).size() > 0:
+			found.append("pocketed piece still standing")
+		play.call("_open_owner_card", owners[owners.size() - 1]["uid"])
+		if play.call("_hud_layer").get_node_or_null("OwnerCard") == null:
+			found.append("no owner card")
+	if not Crime.sell_loot().has("error"):
+		found.append("sold loot without a fence")
+	GameState.crime["unlocked"]["fence_1"] = true
+	var jar := GameState.money
+	var sale: Dictionary = Crime.sell_loot()
+	if sale.has("error") or GameState.money <= jar or not Crime.loot().is_empty():
+		found.append("loot sale %s" % sale)
+	# Results: the room bonus, and being seen costs a cut and a star.
+	GameState.job["rooms_right"] = 3
+	GameState.job["rooms_total"] = 4
+	GameState.job["caught_pocketing"] = true
+	GameState.job["condition"] = 95
+	var pay: Dictionary = GameState.finish_job()
+	if int(pay.get("room_pay", 0)) != 9 or int(pay.get("caught_cut", 0)) <= 0 or int(pay.get("rooms_right", 0)) != 3:
+		found.append("home payout %s" % pay)
+	# Buttons swapped out by the floor change are freed at the end of the frame.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_bury(play)
+	GameState.job = {}
+	GameState.mode = "office"
+	return found
 
 
 func _review_fixes() -> Array:

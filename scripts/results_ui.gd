@@ -46,6 +46,15 @@ func _ready() -> void:
 		lines.append(extra)
 	if int(pay.get("honks", 0)) > 0:
 		lines.append("Friendly honks  +$%d" % int(pay.get("honk_pay", 0)))
+	if int(pay.get("rooms_total", 0)) > 0:
+		lines.append("In the right room  %d/%d  +$%d" % [int(pay.get("rooms_right", 0)), int(pay.get("rooms_total", 0)), int(pay.get("room_pay", 0))])
+		var wrong: Array = pay.get("rooms_wrong", [])
+		if not wrong.is_empty():
+			lines.append("Not quite: %s." % ", ".join(wrong.slice(0, 2)))
+	if int(pay.get("caught_cut", 0)) > 0:
+		lines.append("Seen pocketing  −$%d and a rep star" % int(pay.get("caught_cut", 0)))
+	elif int(pay.get("pocketed", 0)) > 0:
+		lines.append("In the bag  %d piece%s, about $%d to Sal" % [int(pay.get("pocketed", 0)), "" if int(pay.get("pocketed", 0)) == 1 else "s", int(pay.get("loot_value", 0))])
 	if int(pay.get("split_loss", 0)) > 0:
 		lines.append("Split sets  −$%d" % int(pay.get("split_loss", 0)))
 	if int(pay.get("cut", 0)) > 0:

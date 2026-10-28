@@ -1,4 +1,5 @@
 extends RefCounted
+const Homes = preload("res://scripts/homes.gd")
 # Generates the day's job board: who is moving, where, what they own, which
 # twist the job carries, and a route through the town to drive. Everything
 # is seeded from the save's seed and the day, so a board is the same after a
@@ -29,7 +30,25 @@ const CLIENTS: Array = [
 	{"name": "Viggo Hansen", "trade": "carpenter", "venue": "cafe", "line": "Tools in the red box. Coffee in the blue tin."},
 	{"name": "Wren Okafor", "trade": "photographer", "venue": "studio", "line": "Frames face each other. Lamps face the wall."},
 	{"name": "Yusuf Demir", "trade": "chess coach", "venue": "park", "line": "Boards, clocks, and a kettle. Nothing dramatic."},
+	# Households moving into houses: whole families, couples, people on their own.
+	{"name": "The Okonkwos", "title": "The Okonkwos' move", "trade": "family", "venue": "semi_a", "line": "Two kids, one dog, a piano nobody plays. Kitchen things first."},
+	{"name": "Maeve and Tom", "title": "Maeve and Tom's first house", "trade": "couple", "venue": "terrace_a", "line": "Our first place with stairs. Everything says FRAGILE because Tom panicked."},
+	{"name": "Grandma Ilse", "title": "Grandma Ilse's bungalow", "trade": "retired", "venue": "bungalow_a", "line": "Sixty years in boxes. The clock goes in the lounge, the rest you can guess."},
+	{"name": "The Reyes family", "title": "The Reyes family's big move", "trade": "family", "venue": "detached_a", "line": "Four bedrooms to fill. The bunk beds are in bits. Sorry."},
+	{"name": "Priya", "title": "Priya's flat", "trade": "junior doctor", "venue": "flat_b", "line": "One trip, I hope. The bed is the only heavy thing."},
+	{"name": "The Lindgrens", "title": "The Lindgrens' townhouse", "trade": "family", "venue": "townhouse_b", "line": "The loft is for the train set. Do not tell my wife it is for the train set."},
+	{"name": "Old Mr Bello", "title": "Mr Bello's cottage", "trade": "gardener", "venue": "cottage_a", "line": "The shed matters more than the house. Mower first."},
+	{"name": "Jun and Sol", "title": "Jun and Sol's loft", "trade": "designers", "venue": "loftflat_a", "line": "Open plan, so put things where they look right, not where they go."},
+	{"name": "The Achebe twins", "title": "The Achebe twins' maisonette", "trade": "students", "venue": "maisonette_b", "line": "Two of everything, and we will argue about which is whose."},
+	{"name": "The Varga family", "title": "The Vargas' villa", "trade": "family", "venue": "villa_a", "line": "Three floors and a shed. Bring a flask."},
+	{"name": "Mrs Castellano", "title": "Mrs Castellano's new start", "trade": "widow", "venue": "semi_b", "line": "Half a house of things. Gentle with the photographs."},
+	{"name": "Dev and the boys", "title": "Dev and the boys", "trade": "single dad", "venue": "terrace_b", "line": "Bunk beds, a telly, and an unreasonable amount of football kit."},
+	{"name": "The Haddads", "title": "The Haddads come home", "trade": "family", "venue": "villa_b", "line": "We have been abroad ten years. The containers arrive today. All of them."},
+	{"name": "Noor and Amal", "title": "Noor and Amal's cottage", "trade": "couple", "venue": "cottage_b", "line": "The bath is cast iron. We know. We are sorry."},
 ]
+
+# What a house move carries, by the room it belongs in; big pieces are capped.
+const HOME_MAX_BIG := 4
 
 const TWISTS: Array = ["cat", "sets", "mystery", "ducks", "fragile", "heavy", "plain"]
 
@@ -76,11 +95,16 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 		var drive_id := "gen_drive_d%d_%d" % [day, n]
 		var twist := str(TWISTS[rng.randi_range(0, TWISTS.size() - 1)])
 		var venue := str(client.get("venue", "cafe"))
+		var home: Dictionary = ItemDB.venues().get(venue, {})
+		var is_home := bool(home.get("home", false))
 		if twist == "ducks":
-			venue = "park"
+			if is_home:
+				twist = "plain"
+			else:
+				venue = "park"
 		var size := 8 + rng.randi_range(0, 6) + mini(jobs_done, 8)
 		size = clampi(size, 8, 22)
-		var recipe := _recipe(rng, size, twist)
+		var recipe := _recipe_home(rng, size, twist, home) if is_home else _recipe(rng, size, twist)
 		var drive := _drive(rng, drive_id, twist)
 		drives[drive_id] = drive
 		var pay := 90 + size * 4 + int(float(drive.get("length_m", 150)) * 0.25) + rep * 12
@@ -91,7 +115,8 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 			"venue": venue,
 			"drive": drive_id,
 			"unlock": "tutorial_done",
-			"title": "%s's %s move" % [str(client.get("name", "Someone")).split(" ")[0], client.get("trade", "")],
+			"title": str(client.get("title", "%s's %s move" % [str(client.get("name", "Someone")).split(" ")[0], client.get("trade", "")])),
+			"home": is_home,
 			"client": client.get("name", ""),
 			"brief": "%s %d pieces to %s. %s" % [client.get("line", ""), size, drive.get("title", "the new place"), _twist_line(twist)],
 			"mentor_note": _mentor_line(twist, rng),
@@ -153,6 +178,58 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 	if twist == "heavy":
 		_add_to_recipe(recipe, "tool_box", 2)
 		_add_to_recipe(recipe, "filing_cabinet", 1)
+	return recipe
+
+
+static func _recipe_home(rng: RandomNumberGenerator, size: int, twist: String, home: Dictionary) -> Array:
+	# A household: pieces for the rooms this house has, a few big ones that
+	# ride wrapped on the truck, and the usual twist on top.
+	var tags: Array = []
+	for floor_def in home.get("floors", []):
+		for room in floor_def.get("rooms", []):
+			var tag := str(Homes.KIND_TAG.get(Homes.kind(str(room.get("id", ""))), ""))
+			if tag != "" and not tags.has(tag):
+				tags.append(tag)
+	var pool: Array = []
+	for item_id in ItemDB.content_items.keys():
+		var def: Dictionary = ItemDB.content_items[item_id]
+		if tags.has(str(def.get("room", ""))):
+			pool.append(str(item_id))
+	pool.sort()
+	var recipe: Array = []
+	var total := 0
+	var big := 0
+	var guard := 0
+	while total < size and guard < 80 and not pool.is_empty():
+		guard += 1
+		var item := str(pool[rng.randi_range(0, pool.size() - 1)])
+		var def: Dictionary = ItemDB.get_item(item)
+		var already := false
+		for group in recipe:
+			if str(group.get("item", "")) == item:
+				already = true
+		if already:
+			continue
+		if bool(def.get("nobox", false)):
+			if big >= HOME_MAX_BIG:
+				continue
+			big += 1
+		var cap := 2 if item in ["kitchen_chair", "pillow_stack", "flower_pots", "paint_tins", "garden_chair", "bedside_table"] else 1
+		var count := clampi(rng.randi_range(1, cap), 1, size - total)
+		recipe.append({"item": item, "count": count})
+		total += count
+	# A few of the old favourites so the sets and twists still work.
+	if twist == "sets":
+		_add_to_recipe(recipe, "clock_small", 2)
+		recipe[recipe.size() - 1]["set"] = "clocks"
+	if twist == "mystery":
+		_add_to_recipe(recipe, "mystery_part", 3)
+	if twist == "fragile":
+		_add_to_recipe(recipe, "bowl", 2)
+	if twist == "heavy":
+		_add_to_recipe(recipe, "tool_box", 2)
+	if twist == "cat":
+		_add_to_recipe(recipe, "cushion", 1)
 	return recipe
 
 

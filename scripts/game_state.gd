@@ -63,6 +63,7 @@ var crime: Dictionary = {}
 const Workshop = preload("res://scripts/workshop.gd")
 const Crime = preload("res://scripts/crime.gd")
 const JobGen = preload("res://scripts/job_gen.gd")
+const Homes = preload("res://scripts/homes.gd")
 var freebie_day := -1
 var forest_serial := 0
 var latched_goals: Dictionary = {}
@@ -564,7 +565,14 @@ func start_job(id: String) -> void:
 		"heavy_ok": true,
 		"mystery_sorted": false,
 		"phase": "pack",
+		"floor": 0,
+		"owner_items": [],
+		"pocketed": [],
+		"caught_pocketing": false,
 	}
+	var place: Dictionary = ItemDB.venues().get(str(def.get("venue", "")), {})
+	if Homes.is_home(place):
+		job["owner_items"] = Homes.owner_layout(place, hash("%s:%d" % [id, seed]))
 	set_mode("job_pack")
 
 
@@ -935,6 +943,8 @@ func finish_job() -> Dictionary:
 		bonuses += int(Tuning.get_value("pay.duck_friend_bonus", 15))
 	var honk_pay := int(job.get("honks", 0)) * int(Tuning.get_value("pay.honk_tip", 2))
 	bonuses += honk_pay
+	var room_pay := int(job.get("rooms_right", 0)) * int(Tuning.get_value("pay.room_match", 3))
+	bonuses += room_pay
 	if int(job.get("honks", 0)) > 0:
 		stats["honks"] = int(stats.get("honks", 0)) + int(job.get("honks", 0))
 	var scuffed := 0
@@ -956,6 +966,22 @@ func finish_job() -> Dictionary:
 	payout["honks"] = int(job.get("honks", 0))
 	payout["honk_pay"] = honk_pay
 	payout["duck"] = bool(job.get("duck_friend", false))
+	payout["rooms_right"] = int(job.get("rooms_right", 0))
+	payout["rooms_total"] = int(job.get("rooms_total", 0))
+	payout["rooms_wrong"] = job.get("rooms_wrong", [])
+	payout["room_pay"] = room_pay
+	var pocketed: Array = job.get("pocketed", [])
+	payout["pocketed"] = pocketed.size()
+	var loot_value := 0
+	for entry in pocketed:
+		loot_value += int(entry.get("value", 0))
+	payout["loot_value"] = loot_value
+	payout["caught_pocketing"] = bool(job.get("caught_pocketing", false))
+	if bool(job.get("caught_pocketing", false)):
+		var cut := int(round(float(int(payout.get("base", 0))) * float(Tuning.get_value("pay.caught_cut", 0.25))))
+		payout["caught_cut"] = cut
+		payout["base"] = int(payout.get("base", 0)) - cut
+		payout["total"] = int(payout.get("total", 0)) - cut
 	payout["job_id"] = job.get("id", "")
 	payout["title"] = def.get("title", "Job")
 	var stars := 1
@@ -963,6 +989,9 @@ func finish_job() -> Dictionary:
 		stars += 1
 	if all_fine:
 		stars += 1
+	if bool(job.get("caught_pocketing", false)):
+		stars = maxi(1, stars - 1)
+		rep_stars = maxi(0, rep_stars - 1)
 	stars = mini(3, stars)
 	payout["stars"] = stars
 	var net_pay := int(payout.get("base", 0)) + int(payout.get("net_tips", 0)) + int(payout.get("shortcut", 0))
@@ -1009,6 +1038,31 @@ func job_item(uid: String) -> Dictionary:
 		if str(item.get("uid", "")) == uid:
 			return item
 	return {}
+
+
+func pocket_owner_item(uid: String) -> Dictionary:
+	# Something of the client's goes in the bag: loot for Sal, heat for you,
+	# and a growing chance someone notices, which costs pay and a rep star.
+	for rec in job.get("owner_items", []):
+		if str(rec.get("uid", "")) != uid or str(rec.get("state", "placed")) != "placed":
+			continue
+		if not bool(rec.get("pocketable", true)):
+			return {"error": "Too big to walk out with."}
+		rec["state"] = "pocketed"
+		var pocketed: Array = job.get("pocketed", [])
+		var entry := {"item_id": str(rec.get("item_id", "")), "name": str(rec.get("name", "")), "value": int(rec.get("value", 10))}
+		pocketed.append(entry)
+		job["pocketed"] = pocketed
+		var heat := int(Tuning.get_value("crime.pocket_heat", 1))
+		Crime.add_loot(entry)
+		Crime.bump_heat(heat)
+		var chance := float(Tuning.get_value("crime.pocket_notice", 0.2)) + float(Tuning.get_value("crime.pocket_notice_step", 0.15)) * float(pocketed.size() - 1)
+		var noticed := rng.randf() < clampf(chance, 0.0, 0.8)
+		if noticed:
+			job["caught_pocketing"] = true
+		bump_stat("pocketed")
+		return {"noticed": noticed, "heat": heat, "value": int(entry["value"])}
+	return {"error": "That is not here any more."}
 
 
 func job_box(id: int) -> Dictionary:

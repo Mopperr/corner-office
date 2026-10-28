@@ -51,6 +51,23 @@ func _run() -> void:
 			_check(room.get_node_or_null("Outdoors") != null, "%s: outdoors" % venue_id)
 			_check((room.get("street") as Array).size() >= 4, "%s: passers-by" % venue_id)
 		)
+	# Upstairs in three houses: the stairwell, the landing, the bedrooms.
+	for home_id in ["semi_a", "townhouse_b", "villa_a"]:
+		var made_up: Dictionary = JobGen.board(5, 2, 1, 2, 1)
+		var up_job: Dictionary = made_up["jobs"][0]
+		up_job["venue"] = home_id
+		GameState.generated_jobs = [up_job]
+		GameState.generated_drives = made_up["drives"]
+		GameState.start_job(str(up_job["id"]))
+		GameState.set_mode("job_unpack")
+		for box in GameState.job.get("boxes", []):
+			box["sealed"] = true
+		await _show(home_id + "_up", func(room: Node):
+			room.call("_set_floor", 1)
+			var interior: Node = room.get_node_or_null("Interior")
+			_check(interior != null and int(interior.get_meta("floor", 0)) == 1, "%s: upstairs shown" % home_id)
+			_check(interior != null and interior.get_node_or_null("Stairs") != null, "%s: stairwell upstairs" % home_id)
+		)
 	# The office, and the yard at every rung of the ladder.
 	GameState.new_game("dana")
 	GameState.tutorial_done = true

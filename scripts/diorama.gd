@@ -230,7 +230,8 @@ func _build_venue() -> void:
 	var id := _venue_id()
 	venue = ItemDB.venues().get(id, ItemDB.venues().get("garage", {})).duplicate(true)
 	venue["id"] = id
-	theme = Catalog.theme(id)
+	theme = Catalog.theme(str(venue.get("theme", id)))
+	home_floor = int(GameState.job.get("floor", 0)) if _is_home() else 0
 	Props.lamp_scale = float(Catalog.day_phase_mults(GameState.day_phase()).get("lamps", 1.0))
 	if GameState.mode == "truck":
 		_build_truck_stage()
@@ -820,7 +821,7 @@ func _build_facade() -> void:
 	# a door, two windows, the name over the door, and the boxes on the step.
 	var def: Dictionary = GameState.job.get("def", {})
 	var place: Dictionary = ItemDB.venues().get(str(def.get("venue", "cafe")), {})
-	var look: Dictionary = Catalog.theme(str(def.get("venue", "cafe")))
+	var look: Dictionary = Catalog.theme(str(place.get("theme", str(def.get("venue", "cafe")))))
 	var facade := Node3D.new()
 	facade.name = "Facade"
 	add_child(facade)
@@ -1087,6 +1088,8 @@ func _on_cat_clip(anim_name: StringName) -> void:
 
 func _build_shell() -> void:
 	_build_rect(float(venue.get("x", 0)), float(venue.get("z", 0)), float(venue.get("w", 6)), float(venue.get("d", 8)), true)
+	if _is_home():
+		_build_interior()
 	if venue.has("nook"):
 		var nook: Dictionary = venue["nook"]
 		_fill_floor(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"]))
@@ -1675,6 +1678,8 @@ func _try_place_held() -> void:
 	rec["wall"] = spot.get("wall", "")
 	rec["state"] = "placed" if on_wall else "settling"
 	rec["settle"] = false
+	if _is_home():
+		rec["floor"] = home_floor
 	if source == "office":
 		GameState.note_first_place()
 	AudioDirector.play_sfx("sfx_item_snap", true)
@@ -1911,6 +1916,12 @@ func _truck_click(uid: String) -> void:
 
 
 func _unpack_click(uid: String) -> void:
+	if uid == "stairs" and _is_home():
+		_use_stairs()
+		return
+	if uid.begins_with("owner:"):
+		_open_owner_card(uid)
+		return
 	if uid.begins_with("boxcarry:"):
 		var box_id := int(uid.trim_prefix("boxcarry:"))
 		carried[box_id] = true
@@ -2131,6 +2142,8 @@ func _loosen(item: Dictionary, box_id: int, index: int) -> void:
 	item["x"] = at.x
 	item["z"] = at.z
 	item["y"] = 0.0
+	if _is_home():
+		item["floor"] = home_floor
 	var box := GameState.job_box(box_id)
 	if not box.is_empty() and bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
 		_open_cat(box_id)
@@ -2276,6 +2289,8 @@ func _auto_place_item(item: Dictionary, source := "job") -> bool:
 		item["wall"] = spot.get("wall", "")
 		item["state"] = "placed"
 		item["settle"] = false
+		if _is_home():
+			item["floor"] = home_floor
 		placed = true
 		break
 	if not placed:
@@ -2472,6 +2487,8 @@ func _unhide_loose() -> void:
 	for item in GameState.job.get("items", []):
 		if str(item.get("state", "")) != "loose":
 			continue
+		if _is_home() and int(item.get("floor", 0)) != home_floor:
+			continue
 		var at := Vector3(float(item.get("x", 0.0)), 0.0, float(item.get("z", 0.0)))
 		if not _spot_hidden(at):
 			continue
@@ -2552,6 +2569,7 @@ func _maybe_job_done() -> void:
 	for item in GameState.job.get("items", []):
 		if str(item.get("state", "")) != "placed":
 			return
+	_tally_rooms()
 	_refresh_hud_buttons()
 
 
@@ -2587,9 +2605,16 @@ func _snap_point(hit: Vector3) -> Dictionary:
 	if venue.has("nook"):
 		var nook: Dictionary = venue["nook"]
 		extra.append(Rect2(float(nook["x"]), float(nook["z"]), float(nook["w"]), float(nook["d"])))
+	if _is_home():
+		for owner in _owner_items_here():
+			others.append(owner)
 	var spot := PlaceLib.resolve(hit.x, hit.z, hit.y, rot, def, others, room, SaveManager.snap_to_grid, extra)
 	var placed: Vector3 = spot["pos"]
 	spot["valid"] = bool(spot["valid"]) and _in_room_world(placed.x, placed.z) and not _too_tall(placed, def)
+	if bool(spot["valid"]) and _is_home():
+		var foot := Homes.footprint(placed, float(spot["rot"]), float(def.get("w", 0.4)), float(def.get("d", 0.4)))
+		if Homes.crosses_wall(venue, home_floor, foot):
+			spot["valid"] = false
 	return spot
 
 
@@ -2712,6 +2737,186 @@ func _in_room_world(px: float, pz: float) -> bool:
 	return false
 
 
+# ------------------------------------------------------------------ homes
+# A house is a footprint split into rooms per floor. One floor shows at a
+# time, blueprint style: waist-high walls, a name on every floor, the stairs
+# to click. The client's own pieces stand in the rooms, and a light-fingered
+# mover can pocket the small ones.
+
+const Homes = preload("res://scripts/homes.gd")
+var home_floor := 0
+
+
+func _is_home() -> bool:
+	return Homes.is_home(venue)
+
+
+func _build_interior() -> void:
+	var old := get_node_or_null("Interior")
+	if old != null:
+		remove_child(old)
+		old.free()
+	Homes.build(self, venue, home_floor, _wall_color(), _trim_color(), _floor_color(), GameState.mode != "job_pack")
+
+
+func _set_floor(index: int) -> void:
+	var count := Homes.floors(venue).size()
+	if not _is_home() or index < 0 or index >= count or index == home_floor:
+		return
+	home_floor = index
+	GameState.job["floor"] = index
+	_build_interior()
+	_refresh_items()
+	_refresh_hud_buttons()
+	_spawn_player()
+	if held_uid != "":
+		_toast("Up the stairs with it. Put it down where it belongs.", "Dana")
+	else:
+		_toast("%s." % Homes.floor_name(venue, index), "Dana")
+	AudioDirector.play_sfx("sfx_footstep_office")
+	SaveManager.save_game()
+
+
+func _use_stairs() -> void:
+	var count := Homes.floors(venue).size()
+	if home_floor < count - 1:
+		_set_floor(home_floor + 1)
+	elif home_floor > 0:
+		_set_floor(home_floor - 1)
+
+
+func _owner_items_here() -> Array:
+	var out: Array = []
+	for rec in GameState.job.get("owner_items", []):
+		if int(rec.get("floor", 0)) == home_floor and str(rec.get("state", "placed")) == "placed":
+			out.append(rec)
+	return out
+
+
+func _spawn_owner_items() -> void:
+	# The client's own furniture, already in the rooms when you arrive.
+	if not _is_home():
+		return
+	for rec in _owner_items_here():
+		var def := ItemDB.get_item(str(rec.get("item_id", "")))
+		var root := Node3D.new()
+		root.name = "Owner_" + str(rec.get("uid", "")).replace(":", "_")
+		root.position = Vector3(float(rec.get("x", 0)), 0.0, float(rec.get("z", 0)))
+		root.rotation.y = deg_to_rad(float(rec.get("rot", 0)))
+		root.set_meta("uid", str(rec.get("uid", "")))
+		root.set_meta("owner_item", true)
+		var visual := Props.make(str(def.get("model", "box_closed")))
+		root.add_child(visual)
+		Props.prepare(visual)
+		Props.add_picker(root, Vector3(float(def.get("w", 0.4)), float(def.get("h", 0.3)), float(def.get("d", 0.4))))
+		items_root.add_child(root)
+		nodes_by_uid[str(rec.get("uid", ""))] = root
+
+
+func _tally_rooms() -> void:
+	# How many pieces ended up in the kind of room they belong in.
+	if not _is_home():
+		return
+	var right := 0
+	var total := 0
+	var wrong: Array = []
+	for item in GameState.job.get("items", []):
+		var tag := str(item.get("room", ""))
+		if tag == "" or not Homes.has_tag(venue, tag) or str(item.get("state", "")) != "placed":
+			continue
+		total += 1
+		var room := Homes.room_at(venue, int(item.get("floor", 0)), float(item.get("x", 0)), float(item.get("z", 0)))
+		if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) == tag:
+			right += 1
+		else:
+			wrong.append("%s in the %s" % [str(item.get("name", "piece")), str(room.get("name", "hall")).to_lower()])
+	GameState.job["rooms_right"] = right
+	GameState.job["rooms_total"] = total
+	GameState.job["rooms_wrong"] = wrong
+
+
+func _open_owner_card(uid: String) -> void:
+	# Something of the client's. Leave it, or pocket it for Sal.
+	var rec: Dictionary = {}
+	for entry in GameState.job.get("owner_items", []):
+		if str(entry.get("uid", "")) == uid:
+			rec = entry
+	if rec.is_empty():
+		return
+	var layer := _hud_layer()
+	var old := layer.get_node_or_null("OwnerCard")
+	if old != null:
+		layer.remove_child(old)
+		old.free()
+	var card := PanelContainer.new()
+	card.name = "OwnerCard"
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.NIGHT))
+	layer.add_child(card)
+	card.layout_mode = 1
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	card.offset_left = -360
+	card.offset_right = 360
+	card.offset_top = -120
+	card.offset_bottom = 120
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 18)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	margin.add_child(column)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	column.add_child(head)
+	head.add_child(UIKit.ribbon("Theirs", UIKit.NIGHT, 30))
+	var title := UIKit.label(str(rec.get("name", "Something")), 30, UIKit.DARK, "title", false)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(title)
+	var can := bool(rec.get("pocketable", true))
+	var line := "Sal would give about $%d for it. Nobody is looking. Probably." % int(rec.get("value", 10)) if can else "Too big to walk out with under a blanket."
+	var blurb := UIKit.label(line, 25, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(660, 0)
+	column.add_child(blurb)
+	var foot := HBoxContainer.new()
+	foot.add_theme_constant_override("separation", 12)
+	column.add_child(foot)
+	var leave := UIKit.button("Leave it", UIKit.SAGE)
+	leave.name = "OwnerLeave"
+	leave.custom_minimum_size = Vector2(200, 54)
+	leave.pressed.connect(func():
+		layer.remove_child(card)
+		card.queue_free()
+	)
+	foot.add_child(leave)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	foot.add_child(spacer)
+	var pocket := UIKit.button("Pocket it", UIKit.NIGHT)
+	pocket.name = "OwnerPocket"
+	pocket.custom_minimum_size = Vector2(220, 54)
+	pocket.disabled = not can
+	pocket.pressed.connect(func():
+		layer.remove_child(card)
+		card.queue_free()
+		var result: Dictionary = GameState.pocket_owner_item(uid)
+		if result.has("error"):
+			_toast(str(result["error"]), "Dana")
+			return
+		AudioDirector.play_sfx("sfx_paper_rustle")
+		if bool(result.get("noticed", false)):
+			AudioDirector.play_sfx("sfx_invalid_placement")
+			_toast("They saw that go into the bag. That will cost you.", "Dana")
+		else:
+			_toast("Into the bag. Nobody saw. Heat +%d." % int(result.get("heat", 1)), "Dana")
+		_refresh_items()
+	)
+	foot.add_child(pocket)
+	UIKit.link_focus([leave, pocket])
+	leave.grab_focus()
+
+
 func _ensure_stack_room() -> void:
 	if backdrop or stack_room != null:
 		return
@@ -2791,9 +2996,13 @@ func _refresh_items() -> void:
 	elif GameState.mode == "job_unpack":
 		for item in GameState.job.get("items", []):
 			var job_state := str(item.get("state", ""))
+			if _is_home() and int(item.get("floor", 0)) != home_floor:
+				continue
 			if job_state == "loose" or job_state == "placed" or job_state == "settling":
 				_spawn_record(item, str(item.get("item_id", "")), int(item.get("damage", 0)) > 0)
-		_spawn_carry_boxes()
+		_spawn_owner_items()
+		if not _is_home() or home_floor == 0:
+			_spawn_carry_boxes()
 	if stack_room:
 		stack_room.evaluate_frozen()
 		stack_room.flush_drops()
@@ -3168,7 +3377,8 @@ func _refresh_hud_buttons() -> void:
 	if layer == null:
 		return
 	for child in layer.get_children():
-		if str(child.name).begins_with("Act"):
+		# Godot renames a second "ActButton" to "@Button@n", so the mark is a meta.
+		if child.has_meta("act_button") or str(child.name).begins_with("Act"):
 			layer.remove_child(child)
 			child.queue_free()
 	var y := 100.0
@@ -3178,6 +3388,14 @@ func _refresh_hud_buttons() -> void:
 		# Left column, under the snap toggle: the right-hand corner is where the
 		# boxed pieces of a bigger room end up, and a button there eats clicks.
 		_act_button(layer, "Rotate view", Vector2(16, y + 58), func(): rotate_view(1))
+		if _is_home() and GameState.mode == "job_unpack" and Homes.floors(venue).size() > 1:
+			# Low in the left column, under the hint card: the stairs buttons.
+			var fy := 556.0
+			if home_floor > 0:
+				_act_button(layer, "Down to %s" % Homes.floor_name(venue, home_floor - 1).to_lower(), Vector2(16, fy), func(): _set_floor(home_floor - 1))
+				fy -= 58
+			if home_floor < Homes.floors(venue).size() - 1:
+				_act_button(layer, "Up to %s" % Homes.floor_name(venue, home_floor + 1).to_lower(), Vector2(16, fy), func(): _set_floor(home_floor + 1))
 	if GameState.mode == "office" and GameState.office_phase == "place":
 		_act_button(layer, "Place it all for me", Vector2(1100, y), _place_office_all)
 	if GameState.mode == "office" and GameState.office_phase == "pack":
@@ -3685,6 +3903,22 @@ func _crime_card(row: Dictionary, width: float) -> PanelContainer:
 			break
 		if not any:
 			text.add_child(UIKit.label("Buy a trade good at the market first.", 24, UIKit.BLUE, "small", false))
+		if action == "fence" and not Crime.loot().is_empty():
+			var bag := UIKit.button("Sell the bag ($%d)" % Crime.loot_value(), UIKit.NIGHT)
+			bag.name = "SellLoot"
+			bag.custom_minimum_size = Vector2(240, 52)
+			bag.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			bag.pressed.connect(func():
+				var result: Dictionary = Crime.sell_loot()
+				if result.has("error"):
+					_toast(str(result["error"]), "Sal")
+					return
+				AudioDirector.play_sfx("sfx_cash_gain")
+				_toast("Sal takes the bag. $%d, no questions." % int(result.get("paid", 0)), "Sal")
+				SaveManager.save_game()
+				_open_jobs("backroom")
+			)
+			line.add_child(bag)
 	elif action == "fence_graded":
 		text.add_child(UIKit.label("Restored and mint goods on the workbench's Fix up tab can go to Sal instead.", 24, UIKit.BLUE, "small", false))
 	elif action == "lie_low":
@@ -3843,6 +4077,7 @@ func _act_button(layer: CanvasLayer, text: String, at: Vector2, callback: Callab
 	var fill: Color = fills.get(text, UIKit.TERRA if "Finish" in text or "Drive" in text else UIKit.SAGE)
 	var btn := UIKit.button(text, fill, UIKit.DARK if fill == UIKit.CARD else UIKit.CREAM_CARD)
 	btn.name = "ActButton"
+	btn.set_meta("act_button", true)
 	btn.custom_minimum_size = Vector2(280, 56)
 	btn.pressed.connect(callback)
 	layer.add_child(btn)

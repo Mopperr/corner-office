@@ -109,6 +109,45 @@ static func _earn(row: Dictionary) -> void:
 	_maybe_visit()
 
 
+static func loot() -> Array:
+	return state().get("loot", [])
+
+
+static func add_loot(entry: Dictionary) -> void:
+	var s := state()
+	var bag: Array = s.get("loot", [])
+	bag.append(entry)
+	s["loot"] = bag
+
+
+static func bump_heat(amount: int) -> void:
+	var s := state()
+	s["heat"] = heat() + amount
+
+
+static func loot_value() -> int:
+	# What Sal pays for the bag: a cut of what the pieces are worth.
+	var total := 0
+	for entry in loot():
+		total += int(entry.get("value", 0))
+	return int(round(float(total) * float(Tuning.get_value("crime.loot_rate", 0.6))))
+
+
+static func sell_loot() -> Dictionary:
+	if loot().is_empty():
+		return {"error": "The bag is empty."}
+	if not unlocked("fence_1"):
+		return {"error": "You need a fence before the bag is worth anything."}
+	var paid := loot_value()
+	var count := loot().size()
+	var s := state()
+	s["loot"] = []
+	GameState.add_money(paid, true)
+	GameState.bump_stat("loot_sold", count)
+	_log("Sal took %d piece%s from the bag for $%d." % [count, "" if count == 1 else "s", paid])
+	return {"paid": paid, "count": count}
+
+
 static func fence_offer(item_id: String, count := 1) -> Dictionary:
 	# Sal names a price. You can take it or push, twice; the third push loses him.
 	ensure()

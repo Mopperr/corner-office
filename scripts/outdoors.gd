@@ -59,7 +59,7 @@ static func style_for(venue: Dictionary) -> String:
 	var id := str(venue.get("id", ""))
 	if id == "park":
 		return "park"
-	if id == "garage" or id == "":
+	if id == "garage" or id == "" or bool(venue.get("home", false)):
 		return "suburb"
 	return "town"
 

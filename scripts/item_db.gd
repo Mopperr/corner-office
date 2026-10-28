@@ -86,8 +86,16 @@ func base_price(id: String) -> int:
 	return int(get_item(id).get("price", 10))
 
 
+var _venues_cache: Dictionary = {}
+
+
 func venues() -> Dictionary:
-	return content.get("venues", {})
+	# The authored venues plus every home in data/homes.json.
+	if _venues_cache.is_empty():
+		_venues_cache = (content.get("venues", {}) as Dictionary).duplicate(true)
+		for home_id in Homes.all().keys():
+			_venues_cache[str(home_id)] = Homes.venue_for(str(home_id))
+	return _venues_cache
 
 
 func starter_layout() -> Array:
