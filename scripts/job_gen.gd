@@ -35,15 +35,20 @@ const CLIENTS: Array = [
 
 # What a house move carries, by the room it belongs in; big pieces are capped.
 const HOME_MAX_BIG := 4
-# The truck takes eight boxes or wrapped pieces. A piece too big for a box
-# takes a place of its own, a bulky or heavy one a box of its own, and five
-# ordinary pieces share a box; a recipe keeps within that with a box spare.
+# The truck takes eighteen boxes in two columns, three rows and three
+# layers. A piece too big for a box takes a floor place and the two above
+# it, a bulky or heavy one a box of its own, and five ordinary pieces share
+# a box; a recipe keeps within that with a box spare.
 static func truck_slots() -> float:
 	return float(Tuning.get_value("truck.slots", 8))
 
 
 static func slots_for(def: Dictionary, count: int) -> float:
-	if bool(def.get("nobox", false)) or bool(def.get("bulky", false)) or bool(def.get("heavy", false)):
+	# A wrapped piece costs its whole column: nothing stacks on a sofa, so
+	# the places above it on the bed are lost with it.
+	if bool(def.get("nobox", false)):
+		return float(count) * float(Tuning.get_value("truck.layers", 2))
+	if bool(def.get("bulky", false)) or bool(def.get("heavy", false)):
 		return float(count)
 	return float(count) / float(Tuning.get_value("pack.per_box", 5))
 
