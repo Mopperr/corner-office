@@ -2669,7 +2669,10 @@ func _life_checks() -> Array:
 		found.append("the fund has no yield")
 	GameState.money = 1000000
 	var night2: Dictionary = Life.nightly(100)
-	if int(night2.get("grown", 0)) != 10000 or int(night2.get("truck_pay", 0)) < 1000:
+	# A strike can take the trucks off the road for a night; only a night with
+	# no event has the full run pay.
+	var trucks_short := int(night2.get("truck_pay", 0)) < 1000 and str(night2.get("event", "")) == ""
+	if int(night2.get("grown", 0)) != 10000 or trucks_short:
 		found.append("empire night wrong: %s" % night2)
 	GameState.total_earned = 99999999
 	GameState.add_money(10, true)
