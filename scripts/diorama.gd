@@ -178,7 +178,7 @@ func _level_cues() -> void:
 func _world() -> void:
 	var env := WorldEnvironment.new()
 	env.name = "World"
-	var world := Graphics.load_environment(SaveManager.graphics_quality)
+	var world: Environment = Graphics.load_environment(SaveManager.graphics_quality).duplicate()
 	if backdrop:
 		world.background_color = UIKit.CREAM
 	env.environment = world
@@ -223,20 +223,83 @@ func _venue_id() -> String:
 			return GameState.office_id if ItemDB.venues().has(GameState.office_id) else "garage"
 
 
+var theme: Dictionary = {}
+
+
 func _build_venue() -> void:
 	var id := _venue_id()
 	venue = ItemDB.venues().get(id, ItemDB.venues().get("garage", {})).duplicate(true)
 	venue["id"] = id
+	theme = Catalog.theme(id)
+	Props.lamp_scale = float(Catalog.day_phase_mults(GameState.day_phase()).get("lamps", 1.0))
 	if GameState.mode == "truck":
 		_build_truck_stage()
 		return
 	_build_shell()
+	_theme_lights()
 	_ensure_stack_room()
 	_frame_camera()
 	_dress()
 	Outdoors.build(self, venue)
 	_sync_yard_shop()
 	_spawn_street()
+
+
+func _wall_color() -> Color:
+	return Color(str(theme.get("wall", "8E8276")))
+
+
+func _trim_color() -> Color:
+	return Color(str(theme.get("trim", "7A5C40")))
+
+
+func _floor_color() -> Color:
+	return Color(str(theme.get("floor", "8E8276")))
+
+
+func _theme_lights() -> void:
+	# The room's own light: a dimmer, tinted sun, a key light through the
+	# window wall, and a low mood glow in the room's accent. Lamps get
+	# brighter and the sun warmer as the day goes on.
+	var phase := Catalog.day_phase_mults(GameState.day_phase())
+	var sun := find_child("Sun", true, false) as DirectionalLight3D
+	if sun:
+		sun.light_color = Color(str(theme.get("sun", "FFE3C0"))).lerp(Color(str(phase.get("sun_tint", "FFE3C0"))), 0.5)
+		sun.light_energy = float(theme.get("sun_energy", 0.6)) * float(phase.get("sun", 1.0))
+	var fill := find_child("Fill", true, false) as DirectionalLight3D
+	if fill:
+		fill.light_color = Color(str(theme.get("fill", "A9C4D4")))
+		fill.light_energy = float(theme.get("fill_energy", 0.16))
+	var world := find_child("World", true, false) as WorldEnvironment
+	if world and world.environment and not backdrop:
+		world.environment.ambient_light_color = Color(str(theme.get("ambient", "EAD9C6")))
+		world.environment.ambient_light_energy = float(theme.get("ambient_energy", 0.22)) * float(phase.get("ambient", 1.0))
+	if backdrop:
+		return
+	var x := float(venue.get("x", 0))
+	var z := float(venue.get("z", 0))
+	var w := float(venue.get("w", 6))
+	var d := float(venue.get("d", 8))
+	var key := SpotLight3D.new()
+	key.name = "RoomKey"
+	key.position = Vector3(x + 0.35, 2.45, z + 2.0)
+	key.light_color = Color(str(theme.get("key", "FFD2A1")))
+	key.light_energy = float(theme.get("key_energy", 1.3))
+	key.spot_range = w + 5.0
+	key.spot_angle = 62.0
+	key.spot_angle_attenuation = 0.8
+	key.shadow_enabled = true
+	key.shadow_blur = 2.0
+	add_child(key)
+	key.look_at(Vector3(x + w * 0.55, 0.0, z + d * 0.5))
+	var mood := OmniLight3D.new()
+	mood.name = "RoomMood"
+	mood.position = Vector3(x + w * 0.5, 1.4, z + d * 0.5)
+	mood.light_color = Color(str(theme.get("mood", "FFB36B")))
+	mood.light_energy = float(theme.get("mood_energy", 0.25)) * float(phase.get("mood", 1.0))
+	mood.omni_range = maxf(w, d) * 0.9
+	mood.shadow_enabled = false
+	add_child(mood)
 
 
 func _frame_camera() -> void:
@@ -332,7 +395,7 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 			var tile := Props.model(_piece("floor2"))
 			if tile:
 				tile.position = Vector3(cx, 0, cz)
-				Props.restyle_architecture(tile)
+				Props.restyle_architecture(tile, _floor_color(), _trim_color())
 				Props.prepare(tile)
 				add_child(tile)
 			cx += 2.0
@@ -348,7 +411,7 @@ func _fill_floor(x: float, z: float, w: float, d: float) -> void:
 					if small:
 						small.position = Vector3(xx, 0, zz)
 						small.set_meta("floor_scrap", true)
-						Props.restyle_architecture(small)
+						Props.restyle_architecture(small, _floor_color(), _trim_color())
 						Props.prepare(small)
 						add_child(small)
 				xx += 1.0
@@ -440,7 +503,7 @@ func _corner(at: Vector3, rot: float, mirror_z: bool, cutaway := false) -> void:
 		node.add_to_group("cutaway_shell")
 	node.set_meta("shell_corner", true)
 	node.set_meta("corner_at", Vector2(at.x, at.z))
-	Props.restyle_architecture(node)
+	Props.restyle_architecture(node, _wall_color(), _trim_color())
 	Props.prepare(node)
 	add_child(node)
 
@@ -468,7 +531,7 @@ func _fill_run(a: float, b: float, fixed: float, along_x: bool, hidden: bool, wi
 			if hidden:
 				node.add_to_group("cutaway_shell")
 			node.set_meta("shell_side", _side_of(along_x, fixed))
-			Props.restyle_architecture(node)
+			Props.restyle_architecture(node, _wall_color(), _trim_color())
 			Props.prepare(node)
 			add_child(node)
 		cursor += length
@@ -482,7 +545,7 @@ func _place_opening(center_x: float, z: float) -> void:
 			return
 		garage.position = Vector3(center_x, 0, z)
 		garage.set_meta("shell_side", "N")
-		Props.restyle_architecture(garage)
+		Props.restyle_architecture(garage, _wall_color(), _trim_color())
 		Props.prepare(garage)
 		add_child(garage)
 		garage_door = garage.find_child("GarageDoor", true, false)
@@ -497,7 +560,7 @@ func _place_opening(center_x: float, z: float) -> void:
 			return
 		door.position = Vector3(center_x, 0, z)
 		door.set_meta("shell_side", "N")
-		Props.restyle_architecture(door)
+		Props.restyle_architecture(door, _wall_color(), _trim_color())
 		Props.prepare(door)
 		add_child(door)
 		var leaf := door.find_child("DoorLeaf", true, false)

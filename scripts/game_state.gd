@@ -469,6 +469,14 @@ func refresh_board() -> void:
 	generated_drives = keep
 
 
+func day_phase() -> String:
+	# Morning until the first job is done, afternoon after it, evening after two.
+	var done := int(day_log.get("jobs", 0))
+	if done <= 0:
+		return "morning"
+	return "afternoon" if done == 1 else "evening"
+
+
 func bump_stat(key: String, amount := 1) -> void:
 	stats[key] = int(stats.get(key, 0)) + amount
 	check_contracts()

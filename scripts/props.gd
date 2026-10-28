@@ -11,7 +11,7 @@ const WALL_BODY_HALF := 0.12
 
 static var _cache: Dictionary = {}
 
-static func restyle_architecture(root: Node) -> void:
+static func restyle_architecture(root: Node, light: Color = Color("8E8276"), mid: Color = Color("7A5C40")) -> void:
 	if root == null:
 		return
 	var meshes: Array = []
@@ -32,9 +32,9 @@ static func restyle_architecture(root: Node) -> void:
 			var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D
 			var luma := std.albedo_color.get_luminance()
 			if luma > 0.72:
-				std.albedo_color = Color("8E8276")
+				std.albedo_color = light
 			elif luma > 0.42:
-				std.albedo_color = Color("7A5C40")
+				std.albedo_color = mid
 			std.roughness = maxf(std.roughness, 0.88)
 			keep_material(mesh_instance, i, std)
 
@@ -364,6 +364,15 @@ static func _proc(kind: String) -> Node3D:
 			var lid := mesh_cylinder(0.07, 0.04, UIKit.DARK)
 			lid.position.y = 0.22
 			root.add_child(lid)
+			var spout := mesh_box(Vector3(0.09, 0.025, 0.025), UIKit.DARK)
+			spout.position = Vector3(0.11, 0.17, 0)
+			spout.rotation.z = 0.5
+			root.add_child(spout)
+			var handle := mesh_box(Vector3(0.03, 0.12, 0.025), UIKit.DARK)
+			handle.position = Vector3(-0.11, 0.13, 0)
+			root.add_child(handle)
+			var base := mesh_cylinder(0.1, 0.015, UIKit.DARK)
+			root.add_child(base)
 		"lights":
 			var wire := mesh_box(Vector3(1.1, 0.02, 0.02), UIKit.DARK)
 			wire.position.y = 0.12
@@ -377,6 +386,13 @@ static func _proc(kind: String) -> Node3D:
 			var rim := mesh_box(Vector3(0.48, 0.1, 0.06), UIKit.PINK.darkened(0.08))
 			rim.position = Vector3(0, 0.04, -0.16)
 			root.add_child(rim)
+			var pad := mesh_box(Vector3(0.36, 0.03, 0.24), UIKit.CREAM_CARD)
+			pad.position = Vector3(0, 0.08, 0.03)
+			root.add_child(pad)
+			for side in [-1.0, 1.0]:
+				var wall := mesh_box(Vector3(0.06, 0.1, 0.3), UIKit.PINK.darkened(0.08))
+				wall.position = Vector3(side * 0.21, 0.04, 0.0)
+				root.add_child(wall)
 		"cattree":
 			root.add_child(mesh_cylinder(0.22, 0.08, UIKit.CARD))
 			var post := mesh_cylinder(0.05, 0.9, UIKit.WOOD)
@@ -387,20 +403,59 @@ static func _proc(kind: String) -> Node3D:
 			root.add_child(perch)
 		"cushion":
 			root.add_child(mesh_box(Vector3(0.42, 0.12, 0.42), UIKit.PINK))
+			var piping := mesh_box(Vector3(0.44, 0.02, 0.44), UIKit.PINK.darkened(0.2))
+			piping.position.y = 0.06
+			root.add_child(piping)
+			var button := mesh_cylinder(0.025, 0.01, UIKit.PINK.darkened(0.3))
+			button.position.y = 0.12
+			root.add_child(button)
 		"bowl":
 			root.add_child(mesh_cylinder(0.09, 0.05, UIKit.PINK.lightened(0.1)))
+			var rim := mesh_cylinder(0.095, 0.012, UIKit.PINK.darkened(0.15))
+			rim.position.y = 0.05
+			root.add_child(rim)
+			var kibble := mesh_cylinder(0.06, 0.012, Color("B5543A"))
+			kibble.position.y = 0.055
+			root.add_child(kibble)
 		"clock":
 			root.add_child(mesh_box(Vector3(0.22, 0.22, 0.08), UIKit.WOOD))
 			var face := mesh_box(Vector3(0.16, 0.16, 0.02), UIKit.CREAM_CARD)
 			face.position = Vector3(0, 0.02, 0.04)
 			root.add_child(face)
+			var hour := mesh_box(Vector3(0.012, 0.05, 0.006), UIKit.DARK)
+			hour.position = Vector3(0, 0.04, 0.055)
+			root.add_child(hour)
+			var minute := mesh_box(Vector3(0.06, 0.012, 0.006), UIKit.DARK)
+			minute.position = Vector3(0.025, 0.02, 0.055)
+			root.add_child(minute)
+			var feet := mesh_box(Vector3(0.2, 0.02, 0.1), UIKit.DARK)
+			feet.position = Vector3(0, -0.1, 0)
+			root.add_child(feet)
 		"tin":
 			root.add_child(mesh_box(Vector3(0.32, 0.14, 0.2), UIKit.MUSTARD))
+			var lid := mesh_box(Vector3(0.33, 0.02, 0.21), UIKit.MUSTARD.darkened(0.25))
+			lid.position.y = 0.14
+			root.add_child(lid)
+			var latch := mesh_box(Vector3(0.05, 0.04, 0.012), UIKit.DARK)
+			latch.position = Vector3(0, 0.11, 0.105)
+			root.add_child(latch)
+			var grip := mesh_box(Vector3(0.1, 0.02, 0.03), UIKit.DARK)
+			grip.position = Vector3(0, 0.17, 0)
+			root.add_child(grip)
 		"house":
 			root.add_child(mesh_box(Vector3(0.22, 0.16, 0.18), UIKit.CREAM))
 			var roof := mesh_box(Vector3(0.26, 0.08, 0.22), UIKit.TERRA)
 			roof.position.y = 0.16
 			root.add_child(roof)
+			var door := mesh_box(Vector3(0.05, 0.08, 0.01), UIKit.DARK)
+			door.position = Vector3(0, 0.04, 0.095)
+			root.add_child(door)
+			var window := mesh_box(Vector3(0.05, 0.04, 0.01), UIKit.BLUE)
+			window.position = Vector3(0.07, 0.09, 0.095)
+			root.add_child(window)
+			var chimney := mesh_box(Vector3(0.03, 0.06, 0.03), UIKit.DARK)
+			chimney.position = Vector3(-0.07, 0.21, 0)
+			root.add_child(chimney)
 		"pitcher":
 			var jug := mesh_cylinder(0.1, 0.26, Color("F2E27A"))
 			root.add_child(jug)
@@ -414,10 +469,15 @@ static func _proc(kind: String) -> Node3D:
 			lemon.position = Vector3(0.0, 0.29, 0.06)
 			root.add_child(lemon)
 		"cup":
+			var saucer := mesh_cylinder(0.09, 0.01, UIKit.CREAM_CARD)
+			root.add_child(saucer)
 			for i in 3:
 				var cup := mesh_cylinder(0.045 + i * 0.004, 0.08, UIKit.CREAM_CARD if i % 2 == 0 else Color("D9765F"))
-				cup.position.y = i * 0.06
+				cup.position.y = 0.01 + i * 0.06
 				root.add_child(cup)
+				var band := mesh_cylinder(0.05 + i * 0.004, 0.012, UIKit.DARK if i % 2 == 0 else UIKit.CREAM_CARD)
+				band.position.y = 0.075 + i * 0.06
+				root.add_child(band)
 		"glass":
 			root.add_child(mesh_cylinder(0.04, 0.12, Color("F2E27A")))
 			var straw := mesh_box(Vector3(0.012, 0.16, 0.012), Color("D9765F"))
@@ -760,6 +820,13 @@ static func _proc(kind: String) -> Node3D:
 			var stripe := mesh_box(Vector3(0.08, 0.04, 0.12), UIKit.MUSTARD)
 			stripe.position = Vector3(0.04, 0.06, 0)
 			root.add_child(stripe)
+			for i in 3:
+				var bolt := mesh_cylinder(0.012, 0.015, Color("C9CED3"))
+				bolt.position = Vector3(-0.08 + i * 0.04, 0.06, -0.03)
+				root.add_child(bolt)
+			var tag := mesh_box(Vector3(0.05, 0.02, 0.002), UIKit.CREAM_CARD)
+			tag.position = Vector3(-0.05, 0.03, 0.052)
+			root.add_child(tag)
 		_:
 			root.add_child(mesh_box(Vector3(0.3, 0.3, 0.3), UIKit.CARD))
 	ensure_box_collision(root)
@@ -1187,12 +1254,15 @@ static func play_clip(root: Node, clip: String, looping: bool) -> void:
 	player.play(clip)
 
 
+static var lamp_scale := 1.0
+
+
 static func attach_lamp_light(root: Node3D) -> void:
 	var light := OmniLight3D.new()
 	light.name = "LampLight"
 	light.position = Vector3(0, 0.42, 0)
 	light.light_color = Color("FFD9A0")
-	light.light_energy = 0.8
+	light.light_energy = 0.8 * lamp_scale
 	light.omni_range = 2.5
 	light.shadow_enabled = false
 	root.add_child(light)

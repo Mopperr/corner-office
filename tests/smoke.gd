@@ -1156,7 +1156,9 @@ func _qa_regressions() -> Array:
 			found.append("office background %s" % office.background_color)
 		if office.tonemap_mode != Environment.TONE_MAPPER_AGX or absf(office.tonemap_exposure - 0.85) > 0.001 or absf(office.tonemap_white - 4.0) > 0.001 or absf(office.tonemap_agx_white - 4.0) > 0.001:
 			found.append("tonemap")
-		if office.ambient_light_color != Color("F2E2CC") or absf(office.ambient_light_energy - 0.25) > 0.001:
+		var office_theme: Dictionary = Catalog.theme("garage")
+		var ambient_want := float(office_theme.get("ambient_energy", 0.22)) * float(Catalog.day_phase_mults(GameState.day_phase()).get("ambient", 1.0))
+		if office.ambient_light_color != Color(str(office_theme.get("ambient", ""))) or absf(office.ambient_light_energy - ambient_want) > 0.001:
 			found.append("ambient")
 		if not office.adjustment_enabled or absf(office.adjustment_contrast - 1.2) > 0.001 or absf(office.adjustment_saturation - 1.08) > 0.001:
 			found.append("grade")
@@ -1262,6 +1264,26 @@ func _qa_regressions() -> Array:
 	GameState.mode = "office"
 	GameState.job = {}
 	play.call("_refresh_items")
+	# The drive wants the truck backed into the bay: nose-first is not parked.
+	var course_node = load("res://scripts/drive_course.gd").new()
+	course_node.dropoff = {"bay": Rect2(0, 0, 180, 60)}
+	course_node.pos = Vector2(90, 30)
+	course_node.speed = 0.0
+	course_node.vel = Vector2.ZERO
+	course_node._check_dropoff()
+	if course_node.at_dropoff:
+		found.append("nose-first counted as parked")
+	course_node.speed = -20.0
+	course_node._check_dropoff()
+	course_node.speed = 0.0
+	course_node._check_dropoff()
+	if not course_node.backed_in or not course_node.at_dropoff:
+		found.append("backing in did not park")
+	course_node.pos = Vector2(600, 600)
+	course_node._check_dropoff()
+	if course_node.backed_in:
+		found.append("backed_in stuck after leaving")
+	course_node.free()
 	# Box towers: carried boxes pile in threes, the top one opens, emptied ones leave the tower.
 	GameState.job = {"def": {"id": "stack_test", "venue": "cafe"}, "items": [], "boxes": [], "carried": [0, 1, 2, 3]}
 	for b in 4:
@@ -1361,17 +1383,33 @@ func _qa_regressions() -> Array:
 		found.append("garage cam %s" % (play_cam.position if play_cam else "missing"))
 	elif (-play_cam.global_transform.basis.z).dot((garage_center - play_cam.global_position).normalized()) < 0.999:
 		found.append("garage look")
+	var garage_theme: Dictionary = Catalog.theme("garage")
+	var phase_mults: Dictionary = Catalog.day_phase_mults(GameState.day_phase())
+	var want_sun := Color(str(garage_theme.get("sun", ""))).lerp(Color(str(phase_mults.get("sun_tint", "FFE3C0"))), 0.5)
+	var want_energy := float(garage_theme.get("sun_energy", 0.6)) * float(phase_mults.get("sun", 1.0))
 	var sun := play.find_child("Sun", true, false) as DirectionalLight3D
-	if sun == null or sun.light_color != Color("FFE3C0") or absf(sun.light_energy - 0.85) > 0.001 or sun.rotation_degrees.distance_to(Vector3(-50, 35, 0)) > 0.1 or not sun.shadow_enabled or absf(sun.light_angular_distance - 1.75) > 0.001:
+	if sun == null or not sun.light_color.is_equal_approx(want_sun) or absf(sun.light_energy - want_energy) > 0.001 or sun.rotation_degrees.distance_to(Vector3(-50, 35, 0)) > 0.1 or not sun.shadow_enabled or absf(sun.light_angular_distance - 1.75) > 0.001:
 		found.append("sun")
 	var fill := play.find_child("Fill", true, false) as DirectionalLight3D
-	if fill == null or fill.light_color != Color("A9C4D4") or absf(fill.light_energy - 0.2) > 0.001 or fill.shadow_enabled:
+	if fill == null or fill.light_color != Color(str(garage_theme.get("fill", ""))) or absf(fill.light_energy - float(garage_theme.get("fill_energy", 0.16))) > 0.001 or fill.shadow_enabled:
 		found.append("fill")
+	var room_key := play.find_child("RoomKey", true, false) as SpotLight3D
+	var room_mood := play.find_child("RoomMood", true, false) as OmniLight3D
+	if room_key == null or room_mood == null or room_key.light_color != Color(str(garage_theme.get("key", ""))) or not room_key.shadow_enabled:
+		found.append("room lights")
+	for venue_id in ItemDB.venues().keys():
+		var venue_theme: Dictionary = Catalog.theme(str(venue_id))
+		if str(venue_theme.get("wall", "")) == "" or str(venue_theme.get("key", "")) == "":
+			found.append("theme for %s" % venue_id)
+	if str(Catalog.theme("cafe").get("wall", "")) == str(Catalog.theme("train").get("wall", "")):
+		found.append("themes all the same")
+	if float(Catalog.day_phase_mults("evening").get("sun", 1.0)) >= float(Catalog.day_phase_mults("morning").get("sun", 1.0)):
+		found.append("evening not dimmer")
 	var door := play.find_child("DoorGlow", true, false) as OmniLight3D
 	if door == null or door.light_color != Color("FFC98A") or absf(door.light_energy - 0.9) > 0.001:
 		found.append("door glow")
 	var lamp_light := play.find_child("LampLight", true, false) as OmniLight3D
-	if lamp_light == null or lamp_light.light_color != Color("FFD9A0") or absf(lamp_light.light_energy - 0.8) > 0.001 or absf(lamp_light.omni_range - 2.5) > 0.001 or lamp_light.shadow_enabled:
+	if lamp_light == null or lamp_light.light_color != Color("FFD9A0") or absf(lamp_light.light_energy - 0.8 * float(phase_mults.get("lamps", 1.0))) > 0.001 or absf(lamp_light.omni_range - 2.5) > 0.001 or lamp_light.shadow_enabled:
 		found.append("lamp omni")
 	else:
 		var shade_mesh: MeshInstance3D = null

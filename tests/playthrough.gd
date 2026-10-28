@@ -857,6 +857,13 @@ func _steer(drive: Node) -> void:
 	var target_speed := 60.0 if slow_zone else 400.0
 	if last and dist < 40.0:
 		target_speed = 0.0
+	# In the bay: the truck has to be backed in, so reverse for a moment.
+	if last and bool(drive.in_bay) and not bool(drive.backed_in):
+		_key(KEY_W, false)
+		_key(KEY_A, false)
+		_key(KEY_D, false)
+		_key(KEY_S, true)
+		return
 	# Creep forward while turning: the truck cannot turn on the spot.
 	_key(KEY_W, speed < target_speed and (absf(diff) < 1.3 or absf(speed) < 40.0))
 	_key(KEY_S, speed > target_speed + 30.0)

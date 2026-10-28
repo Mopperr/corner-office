@@ -143,6 +143,29 @@ static func fixtures() -> Array:
 	return shop.get("fixtures", [])
 
 
+static var themes: Dictionary = {}
+
+
+static func theme(venue_id: String) -> Dictionary:
+	# A room's palette and light: walls, floor, trim, sun, key, mood.
+	if themes.is_empty():
+		var file := FileAccess.open("res://data/themes.json", FileAccess.READ)
+		if file:
+			var parsed: Variant = JSON.parse_string(file.get_as_text())
+			if typeof(parsed) == TYPE_DICTIONARY:
+				themes = parsed
+	var base: Dictionary = (themes.get("_default", {}) as Dictionary).duplicate()
+	for key in (themes.get(venue_id, {}) as Dictionary).keys():
+		base[key] = themes[venue_id][key]
+	return base
+
+
+static func day_phase_mults(phase: String) -> Dictionary:
+	theme("garage")
+	var phases: Dictionary = themes.get("phases", {})
+	return phases.get(phase, {"sun": 1.0, "sun_tint": "FFE3C0", "ambient": 1.0, "lamps": 1.0, "mood": 1.0})
+
+
 static func tier_name(tier_id: String) -> String:
 	for tier in tiers():
 		if str(tier.get("id", "")) == tier_id:

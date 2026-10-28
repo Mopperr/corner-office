@@ -82,6 +82,10 @@ var cars: Array = []
 var walkers: Array = []
 var wave_t := 0.0
 var at_dropoff := false
+var backed_in := false
+var in_bay := false
+var reverse_beep := 0.0
+var reverse_lights: Array = []
 var box_count := 4
 var box_anim: Array = []
 var anim_t := 0.0
@@ -823,6 +827,18 @@ func _build_truck() -> void:
 	add_child(truck)
 	truck.position = to_world(pos)
 	truck.rotation.y = -heading
+	# Reversing lights on the tail, lit while backing up.
+	for side in [-0.7, 0.7]:
+		var lamp := Props.mesh_box(Vector3(0.08, 0.14, 0.2), Color("FFF6DC"))
+		var glow := Props.mat(Color("FFF6DC"))
+		glow.emission_enabled = true
+		glow.emission = Color("FFF1C9")
+		glow.emission_energy_multiplier = 2.5
+		lamp.material_override = glow
+		lamp.position = Vector3(-2.35, 0.55, side)
+		lamp.visible = false
+		truck.add_child(lamp)
+		reverse_lights.append(lamp)
 	arrow = Outdoors._cone(0.45, 0.9, UIKit.TERRA)
 	arrow.name = "RouteArrow"
 	arrow.rotation.x = PI * 0.5
@@ -1042,9 +1058,11 @@ func _hint_text() -> String:
 			line = "The boxes are on the curb. Pull them into the bed."
 		"drive":
 			if at_dropoff:
-				line = "Stopped in the bay. Hand the boxes over."
+				line = "Backed into the bay. Hand the boxes over."
+			elif in_bay and not backed_in:
+				line = "Nose-first won't do. Pull out and back the truck into the bay."
 			else:
-				line = "Follow the arrow and the dots."
+				line = "Follow the arrow and the dots. Back into the bay at the end."
 				if bool(course.get("alley", false)):
 					line += " The alley is shorter, but bumpy."
 				elif str(course.get("id", "")) == "duck_pond":
@@ -1058,7 +1076,7 @@ func _hint_text() -> String:
 			"load":
 				objective.text = "Load up at %s" % pickup.get("name", "the curb")
 			"drive":
-				objective.text = "Park in the bay" if at_dropoff else "Deliver to %s" % dest
+				objective.text = "Backed in" if at_dropoff else ("Back into the bay" if in_bay else "Deliver to %s" % dest)
 			"unload":
 				objective.text = "Unloading"
 			_:
@@ -1108,6 +1126,17 @@ func _process(delta: float) -> void:
 	else:
 		_drive(delta, weather)
 		honk_cool = maxf(0.0, honk_cool - delta)
+		var reversing := speed < -3.0
+		for lamp in reverse_lights:
+			if is_instance_valid(lamp):
+				(lamp as Node3D).visible = reversing
+		if reversing and in_bay:
+			reverse_beep -= delta
+			if reverse_beep <= 0.0:
+				reverse_beep = 0.7
+				AudioDirector.play_sfx("sfx_notification_soft")
+		else:
+			reverse_beep = 0.0
 		_traffic(delta)
 		_hazards()
 		_check_alley()
@@ -1393,7 +1422,15 @@ func _check_alley() -> void:
 
 func _check_dropoff() -> void:
 	var bay: Rect2 = dropoff.get("bay", Rect2())
-	var parked := bay.has_point(_art_center()) and absf(speed) < 14.0 and vel.length() < 20.0
+	var inside := bay.has_point(_art_center())
+	# A borrowed truck is backed into the bay: coming in nose-first does not
+	# count until you reverse. Reversing anywhere inside the bay sets it.
+	if inside and speed < -3.0:
+		backed_in = true
+	if not inside:
+		backed_in = false
+	in_bay = inside
+	var parked := inside and backed_in and absf(speed) < 14.0 and vel.length() < 20.0
 	if parked != at_dropoff:
 		at_dropoff = parked
 		if at_dropoff:
@@ -1667,6 +1704,7 @@ func _complete() -> void:
 		"condition": condition,
 		"alley": alley,
 		"honks": honks,
+		"backed_in": backed_in,
 		"duck_friend": duck_friend and not near_miss and bool(GameState.job.get("def", {}).get("duck_friend", false)),
 		"near_miss": near_miss,
 		"time": time_alive,
