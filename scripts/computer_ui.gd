@@ -481,7 +481,7 @@ func _email() -> void:
 		head.add_child(from)
 		var text := UIKit.label(GameState.fill_tokens(str(mail.get("body", ""))), 24, UIKit.DARK, "small")
 		text.custom_minimum_size = Vector2(mail_w - 40.0, 0)
-		text.max_lines_visible = 8
+		text.max_lines_visible = 14
 		col.add_child(text)
 		mail["read"] = true
 		column.add_child(card)
@@ -1209,7 +1209,8 @@ func _side_card(title: String, headline: String, text: String, accent: Color, pi
 	col.add_child(UIKit.label(title, 24, accent, "title", false))
 	var head := UIKit.label(headline, 24, UIKit.DARK, "small")
 	head.custom_minimum_size = Vector2(330, 0)
-	head.max_lines_visible = 2
+	# A card with only a headline (Marge's tip, the weather) gets the lines.
+	head.max_lines_visible = lines if text == "" else 2
 	head.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	col.add_child(head)
 	if text != "":

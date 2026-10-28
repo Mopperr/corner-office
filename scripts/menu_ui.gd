@@ -95,6 +95,14 @@ func _menu_button(column: VBoxContainer, text: String, fill: Color, on_press: Ca
 	return btn
 
 
+# The two perks whose full wording runs past a row; the whole text is in the
+# record and on the intro card.
+const SHORT_PERK := {
+	"dana": "The Market chart shows yesterday's price as a dotted line.",
+	"sol": "The Cat Cafe job from day one; Biscuit always leaves a pawprint photo.",
+}
+
+
 func _choose() -> void:
 	# Who runs Corner Office: five rows, a face, a line, a perk and a start.
 	_listen = ""
@@ -184,7 +192,7 @@ func _choose() -> void:
 		pitch.custom_minimum_size = Vector2(980, 0)
 		pitch.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		who_col.add_child(pitch)
-		var perk_desc := UIKit.label(str(who["perk_desc"]), 16, UIKit.WOOD, "small", false)
+		var perk_desc := UIKit.label(str(SHORT_PERK.get(id, who["perk_desc"])), 16, UIKit.WOOD, "small", false)
 		perk_desc.custom_minimum_size = Vector2(980, 0)
 		perk_desc.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		who_col.add_child(perk_desc)
