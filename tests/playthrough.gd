@@ -129,6 +129,9 @@ func _run() -> void:
 		if not fails.is_empty():
 			return
 	print("money after 3 jobs: $%d, earned $%d, rep %d" % [GameState.money, GameState.total_earned, GameState.rep_rank()])
+	await _adopt_pickle()
+	if not fails.is_empty():
+		return
 
 	await _check_goals()
 	await _check_workbench()
@@ -435,10 +438,16 @@ func _check_computer() -> void:
 	if computer == null:
 		return
 	var before := GameState.money
-	for page in ["Market", "Shop", "Email", "Listings", "Forest", "Till"]:
+	for page in ["Market", "Shop", "Email", "Listings", "Forest", "Till", "Life"]:
 		if press(page, computer):
 			await wait(0.2)
 			await shot("computer_" + page.to_lower())
+	# Dana's own ladder: the dog is the first rung, and she can afford him
+	# already. He is adopted after the first jobs, when the jar can spare it.
+	press("Life", computer)
+	await wait(0.2)
+	var dog_button: Button = computer.find_child("LifeBuy_dog", true, false) as Button
+	_check(dog_button != null and not dog_button.disabled, "life: Pickle is on offer")
 	press("Market", computer)
 	await wait(0.2)
 	if press("BUY", computer):
@@ -500,6 +509,29 @@ func _check_view() -> void:
 	# The Room score card only shows while there is placing to do; a live corner keeps it hidden.
 	var goals: Node = room.goals_panel
 	_check(goals != null and not goals.visible, "room score card stays hidden once the corner is live")
+
+
+func _adopt_pickle() -> void:
+	# The first rung of Dana's own ladder, bought from the Life page.
+	_check(press("Computer"), "life: Computer for the Life page")
+	await wait(0.5)
+	var computer: Node = app.overlay.get_child(0) if app.overlay.get_child_count() > 0 else null
+	if computer == null:
+		_fail("life: computer did not open")
+		return
+	press("Life", computer)
+	await wait(0.2)
+	await shot("computer_life")
+	var dog_button: Button = computer.find_child("LifeBuy_dog", true, false) as Button
+	_check(dog_button != null and not dog_button.disabled, "life: Pickle is on offer ($%d in the jar)" % GameState.money)
+	if dog_button != null and not dog_button.disabled:
+		var jar := GameState.money
+		dog_button.pressed.emit()
+		await wait(0.2)
+		_check(GameState.money == jar - 60 and load("res://scripts/life.gd").pet() == "dog", "life: Pickle adopted ($%d left)" % GameState.money)
+		await shot("computer_life_dog")
+	_check(press("x", computer), "life: computer closes")
+	await wait(0.3)
 
 
 func _check_shop() -> void:
@@ -969,13 +1001,16 @@ func _unpack() -> void:
 		_check(bool(room.carried.get(id, false)), "unpack: box %d carried in" % (id + 1))
 		room = _room()
 	await shot("unpack_carried")
+	if load("res://scripts/life.gd").pet() == "dog":
+		_check(room.get_node_or_null("Pickle") != null, "life: Pickle came along on the job")
 	var party: Node = room.party
 	_check(party != null and party.members.size() > 0, "family: on site (%d)" % (party.members.size() if party else 0))
 	if party != null and party.members.size() > 0:
 		var member: Node3D = party.members[0]
 		await click_node(room, "client:0", member)
 		await wait(0.2)
-		_check(member.get_node_or_null("Thought") != null, "family: answers a click")
+		var hovered := get_viewport().gui_get_hovered_control()
+		_check(member.get_node_or_null("Thought") != null, "family: answers a click (ray %s, over %s)" % [room._pick_uid(), hovered.name if hovered else "nothing"])
 		await shot("family_talk")
 	var generated := bool(GameState.job.get("def", {}).get("generated", false))
 	if generated and press("Stack the boxes"):

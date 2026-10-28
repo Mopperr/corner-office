@@ -1,0 +1,227 @@
+{
+ "_about": "What Dana is earning for. Rungs are bought in any order their requirements allow; the million is a milestone, not a purchase. Costs climb steeply so the top is a long way off.",
+ "rungs": [
+  {
+   "id": "dog",
+   "name": "Adopt Pickle",
+   "cost": 60,
+   "blurb": "A scruffy terrier from the shelter on Mill Lane. He rides in the cab and sleeps under the desk.",
+   "effect": "Pickle greets every customer: tips +5%. Food is $4 a day.",
+   "tip_mult": 0.05,
+   "upkeep": 4,
+   "pet": "dog",
+   "mail": {
+    "from": "Mill Lane Shelter",
+    "subject": "Pickle is yours",
+    "body": "Dana,\n\nThe paperwork's done. He answers to Pickle, mostly. He likes the front seat and does not like the hoover.\n\nSend us a photo when he's settled.\n\n— Jo, Mill Lane Shelter"
+   }
+  },
+  {
+   "id": "room",
+   "name": "A room of her own",
+   "cost": 400,
+   "blurb": "Dana has been sleeping on the garage sofa since Grayline let her go. A rented room over the laundromat, with a window.",
+   "effect": "Rested: the first job each day pays a 10% bigger tip.",
+   "first_job_mult": 0.1,
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "Heard you got a bed",
+    "body": "About time. The sofa was a tax write-off, not a plan.\n\nSleep. The truck will still be there.\n\n— Mile Marker"
+   }
+  },
+  {
+   "id": "crew",
+   "name": "Hire Ray",
+   "cost": 900,
+   "rep": 1,
+   "blurb": "Ray Dunbar, ex-Grayline, carries a sofa like it's a loaf. He wants a wage and a radio he can choose.",
+   "effect": "One more job on the board every day.",
+   "board_jobs": 1,
+   "mail": {
+    "from": "Ray Dunbar",
+    "subject": "Start Monday",
+    "body": "Boss,\n\nI'll be at the garage at seven. I bring my own gloves. I do not bring my own radio, so we'll need to talk about that.\n\nRay"
+   }
+  },
+  {
+   "id": "truck2",
+   "name": "A second truck",
+   "cost": 2400,
+   "rep": 2,
+   "needs": [
+    "crew"
+   ],
+   "blurb": "A used box van with a dent Ray says gives it character. Ray takes it out on his own run every day.",
+   "effect": "Ray's run brings in a job's pay every night, without you.",
+   "trucks": 1,
+   "mail": {
+    "from": "Ray Dunbar",
+    "subject": "The van",
+    "body": "She pulls to the left and the radio only gets one station. I love her.\n\nFirst run tomorrow. I'll leave the money in the tin.\n\nRay"
+   }
+  },
+  {
+   "id": "flat",
+   "name": "The flat on Quay Street",
+   "cost": 3500,
+   "blurb": "Two rooms, a balcony the width of a chair, and a view of the river if you lean. Dana's name on the buzzer.",
+   "effect": "A proper kitchen: Dana cooks for the crew. Customers feel it: vibe +4.",
+   "vibe": 4,
+   "mail": {
+    "from": "Sam Achterberg",
+    "subject": "Housewarming?",
+    "body": "Hi Dana,\n\nIt's Sam, from the Thursday delivery. You mentioned the flat. If you're having people round I make a good lasagne and I'm told I'm good at carrying things, which seems relevant.\n\nNo pressure.\n\nSam"
+   }
+  },
+  {
+   "id": "shop2",
+   "name": "A second counter",
+   "cost": 6000,
+   "needs": [
+    "flat"
+   ],
+   "shop_tier": "sandwich",
+   "blurb": "The empty unit by the station, fitted out like the yard: a counter, a grinder, and someone you trust on the till.",
+   "effect": "A second shop earns half of what the yard takes, every night.",
+   "shops": 1,
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "Two shops",
+    "body": "Two shops. My first partner said never open a second one until the first one bores you.\n\nIs it boring you yet?\n\n— Mile Marker"
+   }
+  },
+  {
+   "id": "truck3",
+   "name": "A third truck, and Mei",
+   "cost": 9000,
+   "rep": 3,
+   "needs": [
+    "truck2"
+   ],
+   "blurb": "Mei Tanaka drove coaches for twenty years and reverses better than you. A newer van, this time with two working stations.",
+   "effect": "Mei's run joins Ray's: two jobs' pay a night.",
+   "trucks": 1,
+   "mail": {
+    "from": "Mei Tanaka",
+    "subject": "Keys",
+    "body": "Dana,\n\nThe keys are on the hook. I checked the tyres; two were low. They aren't now.\n\nI'll take the long routes. Nobody tips for a dent.\n\nMei"
+   }
+  },
+  {
+   "id": "house",
+   "name": "A house of her own",
+   "cost": 18000,
+   "needs": [
+    "flat"
+   ],
+   "blurb": "A terrace on Elm Row with a garden Pickle can dig up. Sam moves in, with the lasagne dish.",
+   "effect": "Sam packs the crew's lunches: every job's tips +10%.",
+   "tip_mult": 0.1,
+   "mail": {
+    "from": "Sam Achterberg",
+    "subject": "Keys, plural",
+    "body": "We have keys. Plural. I have put the lasagne dish in the cupboard by the cooker, which I believe makes this official.\n\nPickle has already found the one soft patch in the lawn.\n\nSam"
+   }
+  },
+  {
+   "id": "family",
+   "name": "A family",
+   "cost": 25000,
+   "needs": [
+    "house"
+   ],
+   "blurb": "A cot in the back bedroom, a pram in the hall, and the first client Dana cannot say no to.",
+   "effect": "Word gets round: Rep +2, and the day ends an hour earlier.",
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "Congratulations",
+    "body": "I've sent a bear. It is too big. That is the point of a bear.\n\nTake the week. Ray can drive.\n\n— Mile Marker"
+   },
+   "rep_gain": 2
+  },
+  {
+   "id": "depot",
+   "name": "The depot",
+   "cost": 40000,
+   "needs": [
+    "truck3"
+   ],
+   "rep": 4,
+   "blurb": "The old Grayline yard on Harbour Road, with the sign taken down. Room for six trucks and a kettle that never cools.",
+   "effect": "Three more trucks and crews: five runs a night.",
+   "trucks": 3,
+   "mail": {
+    "from": "Ray Dunbar",
+    "subject": "The yard",
+    "body": "Boss. The Grayline yard. I had my locker there for nine years.\n\nI've put my new locker in the same spot. Feels right.\n\nRay"
+   }
+  },
+  {
+   "id": "shop3",
+   "name": "Three counters",
+   "cost": 60000,
+   "needs": [
+    "shop2"
+   ],
+   "shop_tier": "cafe",
+   "blurb": "The third counter opens by the park. The name on the window is in the same hand on all three.",
+   "effect": "Two more shops: each earns half of the yard's takings a night.",
+   "shops": 2,
+   "mail": {
+    "from": "Hollis Property",
+    "subject": "A conversation",
+    "body": "Ms Reyes,\n\nWe note your business now spans three units, two of them ours. We would like to discuss terms over lunch, which we will pay for, which should tell you something.\n\n— Hollis Property"
+   }
+  },
+  {
+   "id": "fleet",
+   "name": "Ten trucks",
+   "cost": 150000,
+   "needs": [
+    "depot"
+   ],
+   "rep": 5,
+   "blurb": "Ten vans in Corner Office cream, a dispatcher, and a weekly fuel bill with a comma in it.",
+   "effect": "Five more runs a night. The town knows the trucks by name.",
+   "trucks": 5,
+   "mail": {
+    "from": "Mei Tanaka",
+    "subject": "Ten",
+    "body": "Ten vans. I have taught the new drivers to reverse. Four of them can.\n\nWe need a bigger kettle.\n\nMei"
+   }
+  },
+  {
+   "id": "franchise",
+   "name": "Corner Office, everywhere",
+   "cost": 400000,
+   "needs": [
+    "shop3",
+    "fleet"
+   ],
+   "blurb": "Counters in four towns and a truck in each. Dana signs things now, mostly.",
+   "effect": "Six more shops across the county, each earning a share of the yard's takings.",
+   "shops": 6,
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "The sign",
+    "body": "I drove past a Corner Office in Harbourmouth today. Same lettering. Same bad coffee, I assume.\n\nI am very proud and I will deny saying so.\n\n— Mile Marker"
+   }
+  }
+ ],
+ "milestones": [
+  {
+   "id": "million",
+   "at": 1000000,
+   "name": "The first million",
+   "blurb": "A million dollars earned, one box at a time.",
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "A million",
+    "body": "Dana,\n\nA million. From a garage that smelled of diesel.\n\nMy first partner said the first million is the hard one. He was wrong about most things. We'll see about that.\n\n— Mile Marker"
+   }
+  }
+ ],
+ "run_pay": 140,
+ "shop_share": 0.5,
+ "shop_floor": 40
+}

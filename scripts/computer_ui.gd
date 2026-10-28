@@ -94,6 +94,7 @@ func _build() -> void:
 	_icon(icons, "Till", "res://assets/ui/icons/icon_shop.png", "manager")
 	_icon(icons, "Email", "res://assets/ui/icons/icon_email.png", "email")
 	_icon(icons, "Listings", "res://assets/ui/icons/icon_listings.png", "listings")
+	_icon(icons, "Life", "res://assets/ui/icons/icon_email.png", "life")
 	body = Panel.new()
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 12))
@@ -133,6 +134,8 @@ func _show_page() -> void:
 			_email()
 		"listings":
 			_listings()
+		"life":
+			_life()
 		"forest":
 			body.add_child(preload("res://scripts/forest_page.gd").new())
 		"manager":
@@ -427,6 +430,144 @@ func _email() -> void:
 		column.add_child(card)
 
 
+func _life() -> void:
+	# What Dana is earning for: the next milestone, and the ladder of her own things.
+	var Life = load("res://scripts/life.gd")
+	# The ladder sits left of the sidebar's column of cards.
+	var wide := 870.0
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(12, 12)
+	scroll.size = Vector2(wide + 20.0, 530)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(scroll)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	column.custom_minimum_size = Vector2(wide, 0)
+	scroll.add_child(column)
+	var goal: Dictionary = Life.progress()
+	var head := PanelContainer.new()
+	var head_box := UIKit.style(Color("E4EBD6"), 10)
+	head_box.shadow_size = 0
+	head_box.content_margin_left = 16
+	head_box.content_margin_right = 16
+	head_box.content_margin_top = 10
+	head_box.content_margin_bottom = 10
+	head.add_theme_stylebox_override("panel", head_box)
+	head.custom_minimum_size = Vector2(wide, 0)
+	column.add_child(head)
+	var head_col := VBoxContainer.new()
+	head_col.add_theme_constant_override("separation", 6)
+	head.add_child(head_col)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 12)
+	head_col.add_child(title_row)
+	title_row.add_child(UIKit.label(str(goal.get("name", "")), 30, UIKit.DARK, "title", false))
+	var earned_text := "earned $%s" % _commas(int(goal.get("earned", 0)))
+	if int(goal.get("at", 0)) > 0:
+		earned_text = "earned $%s of $%s" % [_commas(int(goal.get("earned", 0))), _commas(int(goal.get("at", 0)))]
+	var earned_label := UIKit.label(earned_text, 24, UIKit.SAGE, "small", false)
+	earned_label.name = "LifeEarned"
+	earned_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(earned_label)
+	var bar := ProgressBar.new()
+	bar.name = "LifeBar"
+	bar.min_value = 0.0
+	bar.max_value = 1.0
+	bar.value = float(goal.get("share", 0.0))
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(wide - 40.0, 18)
+	var trough := UIKit.style(Color("D9D2C4"), 9)
+	trough.shadow_size = 0
+	var fill := UIKit.style(UIKit.SAGE, 9)
+	fill.shadow_size = 0
+	bar.add_theme_stylebox_override("background", trough)
+	bar.add_theme_stylebox_override("fill", fill)
+	head_col.add_child(bar)
+	var pet_note := ""
+	if Life.upkeep() > 0:
+		pet_note = "   ·   Pickle: $%d a day" % Life.upkeep()
+	var fleet := UIKit.label("Trucks %d   ·   Counters %d   ·   Tips +%d%%   ·   Jobs on the board +%d%s" % [Life.trucks(), Life.shops(), int(round((Life.tip_mult() - 1.0) * 100.0)), Life.board_bonus(), pet_note], 22, UIKit.DARK, "small", false)
+	head_col.add_child(fleet)
+	if Life.millionaire():
+		head_col.add_child(UIKit.label("A millionaire, since day %d. The town is small. The map is not." % int((Life.state().get("milestones", {}) as Dictionary).get("million", 0)), 24, UIKit.TERRA, "small", false))
+	for row in Life.rungs():
+		var id := str(row.get("id", ""))
+		var owned: bool = Life.bought(id)
+		var why: String = Life.blocker(row)
+		var open_rung := why == "" or why.begins_with("short by")
+		var card := PanelContainer.new()
+		var box := UIKit.style(Color("E4EBD6") if owned else (Color("F7F1E4") if open_rung else Color("EDE7DD")), 10)
+		box.shadow_size = 0
+		box.content_margin_left = 16
+		box.content_margin_right = 16
+		box.content_margin_top = 8
+		box.content_margin_bottom = 8
+		card.add_theme_stylebox_override("panel", box)
+		card.custom_minimum_size = Vector2(wide, 0)
+		var line := HBoxContainer.new()
+		line.add_theme_constant_override("separation", 14)
+		card.add_child(line)
+		var text := VBoxContainer.new()
+		text.add_theme_constant_override("separation", 2)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		line.add_child(text)
+		var name_row := HBoxContainer.new()
+		name_row.add_theme_constant_override("separation", 12)
+		text.add_child(name_row)
+		name_row.add_child(UIKit.label("%s%s" % ["✓ " if owned else "", row.get("name", id)], 28, UIKit.DARK if (owned or open_rung) else Color("9A9388"), "title", false))
+		var price_text := "$%s" % _commas(int(row.get("cost", 0)))
+		if owned:
+			price_text = "day %d" % int((Life.state().get("bought", {}) as Dictionary).get(id, 0))
+		var price := UIKit.label(price_text, 24, UIKit.SAGE, "small", false)
+		price.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_row.add_child(price)
+		var blurb := UIKit.label(str(row.get("blurb", "")), 24, UIKit.DARK, "small")
+		blurb.custom_minimum_size = Vector2(wide - 240.0, 0)
+		text.add_child(blurb)
+		var effect_text := str(row.get("effect", ""))
+		if not owned and why != "":
+			effect_text += "   ·   %s" % why
+		var effect_label := UIKit.label(effect_text, 22, UIKit.BLUE if owned or why == "" else UIKit.WOOD, "small")
+		effect_label.custom_minimum_size = Vector2(wide - 240.0, 0)
+		text.add_child(effect_label)
+		if not owned:
+			var buy := UIKit.button("Buy", UIKit.SAGE if why == "" else UIKit.BLUE)
+			buy.name = "LifeBuy_" + id
+			buy.custom_minimum_size = Vector2(160, 56)
+			buy.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			buy.disabled = why != ""
+			buy.pressed.connect(func():
+				var result: Dictionary = Life.buy(id)
+				if result.has("error"):
+					AudioDirector.play_sfx("sfx_invalid_placement")
+					return
+				AudioDirector.play_sfx("sfx_cash_gain")
+				SaveManager.save_game()
+				GameState.emit_signal("toast_requested", "%s. %s" % [str(row.get("name", id)), str(row.get("effect", ""))])
+				_show_page()
+			)
+			line.add_child(buy)
+		column.add_child(card)
+	var log: Array = Life.state().get("log", [])
+	if not log.is_empty():
+		var bits: Array = []
+		for entry in log.slice(0, 4):
+			bits.append("day %d, %s" % [int(entry.get("day", 0)), str(entry.get("line", ""))])
+		column.add_child(UIKit.label("So far: " + " ".join(bits), 22, UIKit.WOOD, "small"))
+
+
+static func _commas(n: int) -> String:
+	var text := str(absi(n))
+	var out := ""
+	var count := 0
+	for i in range(text.length() - 1, -1, -1):
+		out = text[i] + out
+		count += 1
+		if count % 3 == 0 and i > 0:
+			out = "," + out
+	return ("-" if n < 0 else "") + out
+
+
 func _listings() -> void:
 	var column := VBoxContainer.new()
 	column.position = Vector2(12, 12)
@@ -536,7 +677,12 @@ func _sidebar() -> void:
 		["The Till", "Serve by hand for the whole tip.", "Click a customer before the till rings them up.", UIKit.BLUE, "mug"],
 	]
 	var ad: Array = ads[day % ads.size()]
-	side.add_child(_side_card(str(ad[0]), str(ad[1]), str(ad[2]), ad[3], str(ad[4])))
+	var next_rung: Dictionary = load("res://scripts/life.gd").next_rung()
+	if next_rung.is_empty():
+		side.add_child(_side_card(str(ad[0]), str(ad[1]), str(ad[2]), ad[3], str(ad[4])))
+	else:
+		# The ad's slot goes to what Dana is saving for, so the column still fits.
+		side.add_child(_side_card("Next up", "%s, $%s" % [str(next_rung.get("name", "")), _commas(int(next_rung.get("cost", 0)))], str(next_rung.get("effect", "")), UIKit.TERRA, "note"))
 	var tips: Array = [
 		"Heavy on the bottom, fragile in padding, and the rest sorts itself.",
 		"Buy what's cheap today and sleep on it. Prices move overnight.",
@@ -546,6 +692,7 @@ func _sidebar() -> void:
 		"If a box meows, open it before the drive.",
 	]
 	side.add_child(_side_card("Marge's tip", str(tips[day % tips.size()]), "", UIKit.WOOD, "note"))
+
 	var weather := "clear"
 	for job in GameState.generated_jobs:
 		var drive: Dictionary = JobDB.get_drive(str(job.get("drive", "")))
@@ -721,6 +868,13 @@ func _show_day_card(summary: Dictionary) -> void:
 		rows.append("%d new piece%s of decor on the way." % [decor, "" if decor == 1 else "s"])
 	for goal in summary.get("goals", []):
 		rows.append("Goal done: %s." % goal)
+	var life_night: Dictionary = summary.get("life", {})
+	if int(life_night.get("truck_pay", 0)) > 0:
+		rows.append("%d other truck%s ran today and brought in $%d." % [int(life_night.get("trucks", 0)), "" if int(life_night.get("trucks", 0)) == 1 else "s", int(life_night.get("truck_pay", 0))])
+	if int(life_night.get("shop_pay", 0)) > 0:
+		rows.append("The other counter%s took $%d." % ["" if int(life_night.get("shops", 0)) == 1 else "s", int(life_night.get("shop_pay", 0))])
+	if int(life_night.get("upkeep", 0)) > 0:
+		rows.append("Pickle ate $%d of it." % int(life_night.get("upkeep", 0)))
 	if int(summary.get("rent", 0)) > 0:
 		if int(summary.get("rent_owed", 0)) > 0:
 			rows.append("Rent of $%d came due and the jar was short: $%d owed, the shop is shut until it's paid." % [int(summary.get("rent", 0)), int(summary.get("rent_owed", 0))])

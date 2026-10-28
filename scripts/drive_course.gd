@@ -330,6 +330,9 @@ func _build_town() -> void:
 			if Vector2i(c, r) == city.park_block:
 				_build_park(rect)
 				continue
+			if city.is_park(Vector2i(c, r)):
+				_build_green(rect)
+				continue
 			# Raised kerb around the block.
 			_slab(Vector3(rect.size.x / PX, 0.12, rect.size.y / PX), rect_center(rect, 0.0), KERB)
 	for entry in city.buildings:
@@ -388,8 +391,9 @@ func _dress_sidewalks(rng: RandomNumberGenerator) -> void:
 	var bays: Array = [pickup.get("bay", Rect2()), dropoff.get("bay", Rect2())]
 	for c in city.cols:
 		for r in city.rows:
-			if Vector2i(c, r) == city.park_block:
+			if city.is_park(Vector2i(c, r)):
 				continue
+			var houses_block: bool = city.block_kind(Vector2i(c, r)) == "houses"
 			var rect: Rect2 = city.block_rect(c, r)
 			var edge: float = city.sidewalk * 0.5
 			var ring: Array = [
@@ -422,8 +426,8 @@ func _dress_sidewalks(rng: RandomNumberGenerator) -> void:
 							world.add_child(planter)
 							Outdoors._bush(world, to_world(at, 0.5), 0.45)
 					d += step
-			# A bus stop on the south-west corner of every other block.
-			if (c + r) % 2 == 0:
+			# A bus stop on the south-west corner of every other block (not on a street of houses).
+			if (c + r) % 2 == 0 and not houses_block:
 				var corner := Vector2(rect.position.x + edge * 2.5, rect.end.y - edge)
 				var pole := Props.mesh_cylinder(0.05, 2.6, Color("4E4A48"))
 				pole.position = to_world(corner, 0.12)
@@ -440,7 +444,7 @@ func _dress_sidewalks(rng: RandomNumberGenerator) -> void:
 					world.add_child(post)
 				Outdoors._bench(world, to_world(corner).x + 2.0, to_world(corner).z + 0.1)
 			# A parked van on one long side.
-			if rng.randf() < 0.4:
+			if rng.randf() < 0.4 and not houses_block:
 				var van := _make_car(Color("D9D2C4"))
 				var body := van.get_child(0) as MeshInstance3D
 				if body:
@@ -478,7 +482,7 @@ func _spawn_walkers(rng: RandomNumberGenerator) -> void:
 	for i in count:
 		var c := rng.randi_range(0, city.cols - 1)
 		var r := rng.randi_range(0, city.rows - 1)
-		if Vector2i(c, r) == city.park_block:
+		if city.is_park(Vector2i(c, r)):
 			continue
 		var rect: Rect2 = city.block_rect(c, r).grow(-city.sidewalk * 0.5)
 		var loop := PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
@@ -538,6 +542,9 @@ const FACADES: Array = ["C9A27E", "B5705A", "E3D9C6", "9C8F85", "A8B5BE", "D6B89
 func _build_building(entry: Dictionary, rng: RandomNumberGenerator) -> void:
 	# A block is a row of separate buildings, not one slab: different widths,
 	# heights, colours and roofs, with real windows, shop glazing, a plinth and a cornice.
+	if str(entry.get("kind", "town")) == "houses":
+		_build_house_row(entry, rng)
+		return
 	var rect: Rect2 = entry.get("rect", Rect2())
 	var along_x := rect.size.x >= rect.size.y
 	var length := (rect.size.x if along_x else rect.size.y) / PX
@@ -572,6 +579,26 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 	for f in range(1, floors):
 		_slab(Vector3(footprint.x + 0.08, 0.14, footprint.z + 0.08), center + Vector3(0, f * floor_h - 0.07, 0), trim)
 	_slab(Vector3(footprint.x + 0.36, 0.32, footprint.z + 0.36), center + Vector3(0, height - 0.32, 0), trim)
+	_slab(Vector3(footprint.x + 0.2, 0.18, footprint.z + 0.2), center + Vector3(0, height - 0.6, 0), trim.darkened(0.08))
+	# Pilasters up the street corners, so one building reads apart from the next.
+	for corner in [Vector3(-1, 0, -1), Vector3(1, 0, -1), Vector3(-1, 0, 1), Vector3(1, 0, 1)]:
+		var post := Props.mesh_box(Vector3(0.36, height - 0.4, 0.36), trim.darkened(0.04))
+		post.position = center + Vector3(corner.x * (footprint.x * 0.5 - 0.1), (height - 0.4) * 0.5 + 0.7, corner.z * (footprint.z * 0.5 - 0.1))
+		world.add_child(post)
+	# One corner building in a while turns a rounded tower to the junction.
+	if (first or last) and rng.randf() < 0.3:
+		var tower := Props.mesh_cylinder(1.5, height + 0.5, color.darkened(0.06))
+		var tx := footprint.x * 0.5 - 1.2
+		if first:
+			tx = -footprint.x * 0.5 + 1.2
+		var tz := footprint.z * 0.5 - 1.2
+		if along_x:
+			tz = -footprint.z * 0.5 + 1.2
+		tower.position = center + Vector3(tx, 0, tz)
+		world.add_child(tower)
+		var cap := Outdoors._cone(1.7, 1.4, Color("6E6A66"))
+		cap.position = tower.position + Vector3(0, height + 0.5, 0)
+		world.add_child(cap)
 	# Windows: one multimesh of frames and one of glass per building.
 	var faces: Array = []
 	if along_x:
@@ -590,7 +617,10 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 			faces.append({"origin": at + Vector3(footprint.x, 0, footprint.z), "dir": Vector3(-1, 0, 0), "normal": Vector3(0, 0, 1), "len": footprint.x, "street": true})
 	var frames: Array = []
 	var panes: Array = []
+	var sills: Array = []
 	var glass_color := Color("4A5F6E") if rng.randf() < 0.6 else Color("5C6B5A")
+	var awning_color: Color = [Color("D9765F"), Color("7FA3B8"), Color("8FAF7E"), Color("E6B655")][rng.randi_range(0, 3)]
+	var awnings := rng.randf() < 0.55
 	for face in faces:
 		var origin: Vector3 = face["origin"]
 		var dir: Vector3 = face["dir"]
@@ -606,6 +636,17 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 				band.rotation.y = atan2(dir.x, -dir.z) if absf(dir.x) > 0.5 else atan2(dir.x, -dir.z)
 				band.rotation.y = -atan2(dir.z, dir.x)
 				world.add_child(band)
+				if awnings and bool(face.get("street", false)):
+					# A striped awning over the shopfront.
+					var awning := Props.mesh_box(Vector3(maxf(face_len - 1.6, 1.0), 0.1, 1.1), awning_color)
+					awning.position = origin + dir * (face_len * 0.5) + normal * 0.6 + Vector3(0, 2.45, 0)
+					awning.rotation.y = -atan2(dir.z, dir.x)
+					awning.rotation.x = 0.18
+					world.add_child(awning)
+					var valance := Props.mesh_box(Vector3(maxf(face_len - 1.6, 1.0), 0.22, 0.04), awning_color.lightened(0.35))
+					valance.position = origin + dir * (face_len * 0.5) + normal * 1.12 + Vector3(0, 2.3, 0)
+					valance.rotation.y = -atan2(dir.z, dir.x)
+					world.add_child(valance)
 				var mullion_count := maxi(1, int(face_len / 1.6))
 				for m in range(1, mullion_count):
 					var mullion := Props.mesh_box(Vector3(0.08, 2.1, 0.12), trim)
@@ -620,6 +661,7 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 				var basis := Basis(Vector3.UP, -atan2(dir.z, dir.x))
 				frames.append(Transform3D(basis, pos))
 				panes.append(Transform3D(basis, pos + normal * 0.03))
+				sills.append(Transform3D(basis, pos + normal * 0.08 + Vector3(0, -0.84, 0)))
 			# A balcony on one upper floor, now and then.
 			if f >= 1 and rng.randf() < 0.25:
 				var rail := Props.mesh_box(Vector3(minf(face_len * 0.6, 4.0), 0.9, 0.08), trim)
@@ -632,6 +674,7 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 				world.add_child(deck)
 	_multimesh(Vector3(1.3, 1.6, 0.08), trim, frames)
 	_multimesh(Vector3(1.05, 1.35, 0.08), glass_color, panes)
+	_multimesh(Vector3(1.5, 0.08, 0.22), trim.darkened(0.1), sills)
 	# Roof: a parapet with clutter, or a gable.
 	if rng.randf() < 0.35:
 		var roof := MeshInstance3D.new()
@@ -646,6 +689,11 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 		if not ridge_along_x:
 			roof.rotation.y = PI * 0.5
 		world.add_child(roof)
+		var stack := Props.mesh_box(Vector3(0.6, 1.1, 0.6), color.darkened(0.25))
+		var stack_x := footprint.x * 0.3 if ridge_along_x else 0.0
+		var stack_z := 0.0 if ridge_along_x else footprint.z * 0.3
+		stack.position = center + Vector3(stack_x, height + prism.size.y * 0.55, stack_z)
+		world.add_child(stack)
 	else:
 		_slab(Vector3(footprint.x, 0.6, 0.25), center + Vector3(0, height, -footprint.z * 0.5 + 0.12), color.darkened(0.12))
 		_slab(Vector3(footprint.x, 0.6, 0.25), center + Vector3(0, height, footprint.z * 0.5 - 0.12), color.darkened(0.12))
@@ -730,6 +778,164 @@ func _build_park(rect: Rect2) -> void:
 	for i in 3:
 		var d := _duck(ducklings, Vector3(i * 0.45, 0, (i % 2) * 0.3), 0.55)
 		d.name = "duckling_%d" % i
+
+
+func _build_green(rect: Rect2) -> void:
+	# A small park: lawn, gravel paths crossing to a bandstand, benches,
+	# flowerbeds, and trees round the edge.
+	var green := Node3D.new()
+	green.name = "Green"
+	world.add_child(green)
+	_slab(Vector3(rect.size.x / PX, 0.08, rect.size.y / PX), rect_center(rect, 0.0), GRASS, green)
+	var center := rect_center(rect, 0.08)
+	var w := rect.size.x / PX
+	var d := rect.size.y / PX
+	_slab(Vector3(w - 1.0, 0.02, 1.6), center, Color("C9B99A"), green)
+	_slab(Vector3(1.6, 0.02, d - 1.0), center, Color("C9B99A"), green)
+	var stand := Node3D.new()
+	stand.name = "Bandstand"
+	stand.position = center
+	green.add_child(stand)
+	var base := Props.mesh_cylinder(2.6, 0.4, Color("D9D2C4"))
+	stand.add_child(base)
+	for i in 6:
+		var post := Props.mesh_cylinder(0.08, 2.8, Color("F4ECDD"))
+		post.position = Vector3(cos(i * PI / 3.0) * 2.1, 0.4, sin(i * PI / 3.0) * 2.1)
+		stand.add_child(post)
+	var roof := Outdoors._cone(3.0, 1.4, Color("6B8E7A"))
+	roof.position = Vector3(0, 3.2, 0)
+	stand.add_child(roof)
+	var finial := Props.mesh_cylinder(0.06, 0.6, Color("E6B655"))
+	finial.position = Vector3(0, 4.6, 0)
+	stand.add_child(finial)
+	var park_rng := RandomNumberGenerator.new()
+	park_rng.seed = 11
+	for corner in [Vector3(-1, 0, -1), Vector3(1, 0, -1), Vector3(-1, 0, 1), Vector3(1, 0, 1)]:
+		var bed := Outdoors._disc(1.3, Color("7E9B5E"))
+		bed.position = center + Vector3(corner.x * (w * 0.5 - 3.2), 0.03, corner.z * (d * 0.5 - 3.2))
+		green.add_child(bed)
+		for k in 7:
+			var flower := Props.mesh_box(Vector3(0.18, 0.18, 0.18), [Color("D9765F"), Color("E6B655"), Color("D4C1D8"), Color("F4ECDD")][k % 4])
+			flower.position = bed.position + Vector3(cos(k * 0.9) * 0.8, 0.22, sin(k * 0.9) * 0.8)
+			green.add_child(flower)
+		Outdoors._bench(green, bed.position.x - corner.x * 2.4, bed.position.z)
+	for i in 10:
+		var along := float(i) / 10.0 * TAU
+		var at := center + Vector3(cos(along) * (w * 0.5 - 1.4), 0.0, sin(along) * (d * 0.5 - 1.4))
+		if absf(at.x - center.x) < 1.4 or absf(at.z - center.z) < 1.4:
+			continue
+		Outdoors._tree(green, at, park_rng.randf_range(0.9, 1.5))
+	var post := Props.mesh_cylinder(0.08, 4.0, Color("4E4A48"))
+	post.position = center + Vector3(3.6, 0.08, 3.6)
+	green.add_child(post)
+	var head := Props.mesh_box(Vector3(0.5, 0.25, 0.5), Color("FFE3A8"))
+	head.position = post.position + Vector3(0, 4.0, 0)
+	green.add_child(head)
+
+
+func _build_house_row(entry: Dictionary, rng: RandomNumberGenerator) -> void:
+	# A street of houses: pitched roofs, chimneys, a front garden with a
+	# hedge and a path on each street side, back gardens with a shed between.
+	var rect: Rect2 = entry.get("rect", Rect2())
+	var along_x := rect.size.x >= rect.size.y
+	var origin := Vector3(rect.position.x / PX, 0.12, rect.position.y / PX)
+	var length := (rect.size.x if along_x else rect.size.y) / PX
+	var depth := (rect.size.y if along_x else rect.size.x) / PX
+	var row := Node3D.new()
+	row.name = "Houses"
+	world.add_child(row)
+	# The block's own lawn, so the gardens read green from the kerb.
+	_slab(Vector3(rect.size.x / PX, 0.1, rect.size.y / PX), rect_center(rect, 0.02), Color("9CC07E"), row)
+	var plot := 8.0
+	var garden := 4.0
+	var house_d := 6.0
+	var cursor := 0.6
+	var i := 0
+	while length - cursor >= plot * 0.8:
+		var w := minf(plot - 1.4, length - cursor - 0.6)
+		for side in [-1.0, 1.0]:
+			# Two rows of houses, each facing its own street across a front garden.
+			var h := 5.4 + rng.randf_range(-0.4, 0.8)
+			var color: Color = Outdoors.HOUSES[(i + (1 if side > 0.0 else 0)) % Outdoors.HOUSES.size()]
+			var roof_color: Color = [Color("8A5A44"), Color("6E6A66"), Color("5A3B2A"), Color("7A6A5A")][rng.randi_range(0, 3)]
+			var across := depth - garden - house_d * 0.5
+			if side < 0.0:
+				across = garden + house_d * 0.5
+			var house := Node3D.new()
+			house.name = "House_%d" % row.get_child_count()
+			var local := Vector3(across, 0, cursor + w * 0.5)
+			if along_x:
+				local = Vector3(cursor + w * 0.5, 0, across)
+			house.position = origin + local
+			row.add_child(house)
+			if not along_x:
+				house.rotation.y = PI * 0.5
+			var body := Props.mesh_box(Vector3(w, h, house_d), color)
+			body.position = Vector3(0, h * 0.5, 0)
+			house.add_child(body)
+			var roof := MeshInstance3D.new()
+			var prism := PrismMesh.new()
+			prism.size = Vector3(w + 0.5, 2.2, house_d + 0.6)
+			prism.left_to_right = 0.5
+			roof.mesh = prism
+			roof.material_override = Props.mat(roof_color)
+			roof.position = Vector3(0, h + 1.1, 0)
+			house.add_child(roof)
+			var stack := Props.mesh_box(Vector3(0.5, 1.2, 0.5), color.darkened(0.3))
+			stack.position = Vector3(w * 0.3, h + 1.4, 0.0)
+			house.add_child(stack)
+			# Door and windows on the garden side.
+			var out := 1.0
+			if side < 0.0:
+				out = -1.0
+			var front_z := out * house_d * 0.5
+			var door := Props.mesh_box(Vector3(0.9, 2.0, 0.08), roof_color.darkened(0.2))
+			door.position = Vector3(-w * 0.25, 1.0, front_z + out * 0.05)
+			house.add_child(door)
+			var step := Props.mesh_box(Vector3(1.2, 0.14, 0.5), Color("C9C2B5"))
+			step.position = Vector3(-w * 0.25, 0.07, front_z + out * 0.3)
+			house.add_child(step)
+			var window_spots: Array = [Vector2(w * 0.22, 1.4), Vector2(w * 0.22, 4.0), Vector2(-w * 0.25, 4.0)]
+			for spot in window_spots:
+				var frame := Props.mesh_box(Vector3(1.1, 1.2, 0.08), Color("F4ECDD"))
+				frame.position = Vector3(spot.x, spot.y, front_z + out * 0.04)
+				house.add_child(frame)
+				var pane := Props.mesh_box(Vector3(0.9, 1.0, 0.06), Color("5C7F8E"))
+				pane.position = frame.position + Vector3(0, 0, out * 0.03)
+				house.add_child(pane)
+			# The front garden: hedge along the pavement, a path to the door, a tree.
+			var hedge := Props.mesh_box(Vector3(w + 0.8, 0.8, 0.5), Color("5E8A4A"))
+			hedge.position = Vector3(0, 0.4, front_z + out * (garden - 0.4))
+			house.add_child(hedge)
+			var path := Props.mesh_box(Vector3(1.0, 0.03, garden - 0.6), Color("C9B99A"))
+			path.position = Vector3(-w * 0.25, 0.03, front_z + out * (garden * 0.5 - 0.2))
+			house.add_child(path)
+			var tree_local := Vector3(w * 0.3, 0, out * (house_d * 0.5 + garden * 0.55))
+			var tree_at := house.position + (tree_local if along_x else Vector3(tree_local.z, 0, tree_local.x))
+			if rng.randf() < 0.6:
+				Outdoors._tree(row, tree_at, rng.randf_range(0.6, 0.9))
+			else:
+				Outdoors._bush(row, tree_at, 0.5)
+			# A fence between plots.
+			var fence := Props.mesh_box(Vector3(0.06, 0.9, house_d + garden), Color("A9774C"))
+			fence.position = Vector3(w * 0.5 + 0.6, 0.45, out * garden * 0.5)
+			house.add_child(fence)
+		# Between the back gardens: a shed or a tree.
+		var mid_local := Vector3(depth * 0.5, 0, cursor + w * 0.5)
+		if along_x:
+			mid_local = Vector3(cursor + w * 0.5, 0, depth * 0.5)
+		var mid := origin + mid_local
+		if rng.randf() < 0.5:
+			var shed := Props.mesh_box(Vector3(1.6, 1.8, 1.2), Color("7A6A5A"))
+			shed.position = mid + Vector3(1.6, 0.9, 0.5)
+			row.add_child(shed)
+			var shed_roof := Props.mesh_box(Vector3(1.9, 0.12, 1.5), Color("5A3B2A"))
+			shed_roof.position = mid + Vector3(1.6, 1.86, 0.5)
+			row.add_child(shed_roof)
+		else:
+			Outdoors._tree(row, mid + Vector3(-1.2, 0, 0.4), rng.randf_range(0.9, 1.3))
+		cursor += plot
+		i += 1
 
 
 func _duck(parent: Node3D, at: Vector3, scale := 1.0) -> Node3D:
@@ -2168,7 +2374,7 @@ func _draw_minimap() -> void:
 		for r in city.rows:
 			var rect: Rect2 = city.block_rect(c, r)
 			var box := Rect2(offset + rect.position * k + Vector2(1, 1), rect.size * k - Vector2(2, 2))
-			minimap.draw_rect(box, Color("B9D4A4") if Vector2i(c, r) == city.park_block else Color("E9E1CF"))
+			minimap.draw_rect(box, Color("B9D4A4") if city.is_park(Vector2i(c, r)) else Color("E9E1CF"))
 	# Lane lines down the middle of every road.
 	var dash := Color("F6EEDC", 0.8)
 	for c in range(city.cols - 1):

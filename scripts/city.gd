@@ -19,6 +19,8 @@ var places: Dictionary = {}
 var shops: Array = []
 var roof_colors: Array = []
 var bounds := Rect2()
+var kinds: Dictionary = {}
+var parks: Array = []
 
 
 static func load_default():
@@ -44,6 +46,17 @@ func setup(data: Dictionary) -> void:
 	park_block = Vector2i(int(park[0]), int(park[1]))
 	roof_colors = data.get("roof_colors", ["B9A58C"])
 	bounds = Rect2(0, 0, road + cols * (block.x + road), road + rows * (block.y + road))
+	# What each block is: "town" by default, "houses" with gardens, or a "green".
+	kinds.clear()
+	parks = [park_block]
+	for key in (data.get("kinds", {}) as Dictionary).keys():
+		var parts: PackedStringArray = str(key).split(",")
+		if parts.size() != 2:
+			continue
+		var at := Vector2i(int(parts[0]), int(parts[1]))
+		kinds[at] = str(data["kinds"][key])
+		if str(data["kinds"][key]) == "green" and not parks.has(at):
+			parks.append(at)
 	alleys.clear()
 	alley_blocks.clear()
 	var defs: Array = data.get("alleys", [])
@@ -72,10 +85,12 @@ func setup(data: Dictionary) -> void:
 	buildings.clear()
 	for c in cols:
 		for r in rows:
-			if Vector2i(c, r) == park_block:
+			if is_park(Vector2i(c, r)):
 				continue
 			var footprint := block_rect(c, r).grow(-sidewalk)
 			var color := Color(str(roof_colors[(c * 3 + r * 5) % roof_colors.size()]))
+			if block_kind(Vector2i(c, r)) == "houses":
+				color = Color("A9BF8E")
 			var cut_index := alley_blocks.find(Vector2i(c, r))
 			if cut_index >= 0:
 				# An alley splits this block in two.
@@ -83,15 +98,15 @@ func setup(data: Dictionary) -> void:
 				if cut.size.y > cut.size.x:
 					var left := Rect2(footprint.position, Vector2(cut.position.x - footprint.position.x, footprint.size.y))
 					var right := Rect2(Vector2(cut.end.x, footprint.position.y), Vector2(footprint.end.x - cut.end.x, footprint.size.y))
-					buildings.append({"rect": left, "color": color, "block": Vector2i(c, r)})
-					buildings.append({"rect": right, "color": color.darkened(0.08), "block": Vector2i(c, r)})
+					buildings.append({"rect": left, "color": color, "block": Vector2i(c, r), "kind": block_kind(Vector2i(c, r))})
+					buildings.append({"rect": right, "color": color.darkened(0.08), "block": Vector2i(c, r), "kind": block_kind(Vector2i(c, r))})
 				else:
 					var top := Rect2(footprint.position, Vector2(footprint.size.x, cut.position.y - footprint.position.y))
 					var bottom := Rect2(Vector2(footprint.position.x, cut.end.y), Vector2(footprint.size.x, footprint.end.y - cut.end.y))
-					buildings.append({"rect": top, "color": color, "block": Vector2i(c, r)})
-					buildings.append({"rect": bottom, "color": color.darkened(0.08), "block": Vector2i(c, r)})
+					buildings.append({"rect": top, "color": color, "block": Vector2i(c, r), "kind": block_kind(Vector2i(c, r))})
+					buildings.append({"rect": bottom, "color": color.darkened(0.08), "block": Vector2i(c, r), "kind": block_kind(Vector2i(c, r))})
 			else:
-				buildings.append({"rect": footprint, "color": color, "block": Vector2i(c, r)})
+				buildings.append({"rect": footprint, "color": color, "block": Vector2i(c, r), "kind": block_kind(Vector2i(c, r))})
 	places.clear()
 	for place in data.get("places", []):
 		var entry := _curb_entry(place)
@@ -107,6 +122,16 @@ func block_rect(c: int, r: int) -> Rect2:
 
 func park_rect() -> Rect2:
 	return block_rect(park_block.x, park_block.y)
+
+
+func block_kind(at: Vector2i) -> String:
+	if at == park_block:
+		return "park"
+	return str(kinds.get(at, "town"))
+
+
+func is_park(at: Vector2i) -> bool:
+	return parks.has(at)
 
 
 func pond() -> Dictionary:
@@ -170,7 +195,10 @@ func on_road(p: Vector2) -> bool:
 
 
 func in_park(p: Vector2) -> bool:
-	return park_rect().has_point(p)
+	for at in parks:
+		if block_rect((at as Vector2i).x, (at as Vector2i).y).has_point(p):
+			return true
+	return false
 
 
 func node_at(i: int, j: int) -> Vector2:
@@ -281,7 +309,7 @@ func curb_spots(rng: RandomNumberGenerator) -> Array:
 	var spots: Array = []
 	for c in cols:
 		for r in rows:
-			if Vector2i(c, r) == park_block:
+			if is_park(Vector2i(c, r)):
 				continue
 			var rect := block_rect(c, r)
 			spots.append({"kind": "lamppost", "at": rect.position + Vector2(sidewalk * 0.5, sidewalk * 0.5)})

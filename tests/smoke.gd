@@ -342,6 +342,8 @@ func _ready() -> void:
 	failures.append_array(await _menu_audit())
 	failures.append_array(await _home_checks())
 	failures.append_array(await _party_checks())
+	failures.append_array(await _life_checks())
+	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -2424,6 +2426,13 @@ func _party_checks() -> Array:
 		found.append("no thought bubble over the family")
 	if party.react("placed", {}, true) == "":
 		found.append("nothing to say about a placed piece")
+	# A second bubble on the same person keeps the name, so it fades and can be found.
+	var talker: Node3D = party.members[0]
+	play.call("_bubble", talker, "one", 4.0)
+	play.call("_bubble", talker, "two", 4.0)
+	var named: Node = talker.get_node_or_null("Thought")
+	if named == null or str(named.text) != "two":
+		found.append("the second thought bubble lost its name")
 	party.cooldown = 0.0
 	if party.react("talk", {}, true) == "":
 		found.append("a click gets no answer")
@@ -2481,6 +2490,153 @@ func _party_checks() -> Array:
 	_bury(play)
 	GameState.job = {}
 	GameState.mode = "office"
+	return found
+
+
+func _life_checks() -> Array:
+	# Dana's own ladder: the data climbs, buying works and pays back, the
+	# other trucks and counters earn at night, the million is a milestone.
+	var found: Array = []
+	var Life = load("res://scripts/life.gd")
+	var rungs: Array = Life.rungs()
+	if rungs.size() < 12:
+		found.append("only %d life rungs" % rungs.size())
+	var last_cost := 0
+	for row in rungs:
+		if str(row.get("name", "")) == "" or str(row.get("blurb", "")) == "" or str(row.get("effect", "")) == "" or (row.get("mail", {}) as Dictionary).is_empty():
+			found.append("rung %s is thin" % row.get("id", "?"))
+		if int(row.get("cost", 0)) < last_cost:
+			found.append("rung %s is cheaper than the one before" % row.get("id", "?"))
+		last_cost = int(row.get("cost", 0))
+		for need in row.get("needs", []):
+			if Life.rung(str(need)).is_empty():
+				found.append("rung %s needs unknown %s" % [row.get("id", "?"), need])
+	if last_cost < 300000:
+		found.append("the top rung costs only $%d" % last_cost)
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	if Life.trucks() != 1 or Life.shops() != 1 or Life.pet() != "" or absf(Life.tip_mult() - 1.0) > 0.001:
+		found.append("a new game already owns things")
+	var dog: Dictionary = Life.rung("dog")
+	var jar := GameState.money
+	if Life.blocker(dog) != "":
+		found.append("the dog is blocked: %s" % Life.blocker(dog))
+	if Life.buy("dog").has("error") or GameState.money != jar - int(dog.get("cost", 0)):
+		found.append("buying the dog failed")
+	if Life.pet() != "dog" or absf(Life.tip_mult() - 1.05) > 0.001 or Life.upkeep() != 4:
+		found.append("the dog has no effect")
+	if not Life.buy("dog").has("error"):
+		found.append("bought the dog twice")
+	if not Life.buy("truck2").has("error"):
+		found.append("bought a truck without the crew or the rep")
+	var inbox_before := GameState.inbox.size()
+	GameState.money = 5000
+	GameState.rep_stars = 100
+	if Life.buy("crew").has("error") or Life.board_bonus() != 1:
+		found.append("Ray did not add a job to the board")
+	GameState.refresh_board()
+	if GameState.generated_jobs.size() < 3:
+		found.append("board has %d jobs with Ray" % GameState.generated_jobs.size())
+	if Life.buy("truck2").has("error") or Life.trucks() != 2:
+		found.append("the second truck did not count")
+	if GameState.inbox.size() < inbox_before + 2:
+		found.append("no mail for the rungs")
+	# The night: Ray's run pays, Pickle eats.
+	var before_night := GameState.money
+	var night: Dictionary = Life.nightly(100)
+	if int(night.get("truck_pay", 0)) <= 0 or int(night.get("upkeep", 0)) != 4 or GameState.money != before_night + int(night.get("truck_pay", 0)) - 4:
+		found.append("night income wrong: %s" % night)
+	GameState.shop_tier = "cafe"
+	GameState.money = 20000
+	if Life.buy("flat").has("error") or Life.buy("shop2").has("error") or Life.shops() != 2 or Life.vibe_bonus() != 4:
+		found.append("the second counter did not open")
+	var with_shop: Dictionary = Life.nightly(100)
+	if int(with_shop.get("shop_pay", 0)) != 50:
+		found.append("second counter pays %s" % with_shop)
+	# The results line and the first-job lift.
+	GameState.money = 5000
+	if Life.buy("room").has("error"):
+		found.append("no room of her own")
+	var next_up: Dictionary = Life.next_rung()
+	if next_up.is_empty() or Life.bought(str(next_up.get("id", ""))):
+		found.append("next rung points at something owned")
+	# The million is a milestone with a mail, not a purchase.
+	GameState.total_earned = 999000
+	var mails := GameState.inbox.size()
+	GameState.add_money(2000, true)
+	if not Life.millionaire() or GameState.inbox.size() != mails + 1 or float(Life.progress().get("share", 0.0)) < 1.0:
+		found.append("the million did not land (%s)" % Life.progress())
+	# Save and load keep the ladder.
+	SaveManager.save_game()
+	GameState.life = {}
+	if not SaveManager.load_game() or not Life.bought("dog") or not Life.millionaire():
+		found.append("life state lost in the save")
+	# The office has Pickle at Dana's heel, and the Life page lists the ladder.
+	GameState.office_phase = "live"
+	GameState.set_mode("office")
+	var play: Node = RoomLib.new()
+	add_child(play)
+	if play.get_node_or_null("Pickle") == null:
+		found.append("no dog in the office")
+	var computer: Control = load("res://scripts/computer_ui.gd").new()
+	add_child(computer)
+	computer.page = "life"
+	computer.call("_show_page")
+	var buys := 0
+	for btn in computer.find_children("LifeBuy_*", "Button", true, false):
+		buys += 1
+	if buys == 0 or computer.find_child("LifeBar", true, false) == null:
+		found.append("life page shows %d buy buttons" % buys)
+	await get_tree().process_frame
+	_bury(computer)
+	_bury(play)
+	GameState.new_game("dana")
+	return found
+
+
+func _town_checks() -> Array:
+	# The drive's town: a second green, streets of houses with gardens, and
+	# the fancier façades, all still solid to the truck.
+	var found: Array = []
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	GameState.job = {"def": {"id": "town_smoke", "drive": "rainy_afternoon", "venue": "cafe"}, "items": [], "boxes": []}
+	var drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(drive)
+	var town = drive.city
+	if town.parks.size() < 2:
+		found.append("town has %d parks" % town.parks.size())
+	var house_blocks := 0
+	for entry in town.buildings:
+		if str(entry.get("kind", "")) == "houses":
+			house_blocks += 1
+	if house_blocks < 2:
+		found.append("town has %d house parcels" % house_blocks)
+	if drive.world.find_children("Green", "", true, false).is_empty() or drive.world.find_children("Bandstand", "", true, false).is_empty():
+		found.append("no green with a bandstand")
+	var houses: Array = drive.world.find_children("House_*", "", true, false)
+	if houses.size() < 8:
+		found.append("only %d houses on the streets" % houses.size())
+	for at in town.parks:
+		if not town.in_park(town.block_rect((at as Vector2i).x, (at as Vector2i).y).get_center()):
+			found.append("in_park misses a park")
+	# A house parcel is still a wall to the truck.
+	var parcel: Dictionary = {}
+	for entry in town.buildings:
+		if str(entry.get("kind", "")) == "houses":
+			parcel = entry
+			break
+	if not parcel.is_empty():
+		var rect: Rect2 = parcel["rect"]
+		drive.pos = Vector2(rect.position.x + 8.0, rect.get_center().y)
+		drive.vel = Vector2(200, 0)
+		var before_hit: Vector2 = drive.pos
+		drive.call("_collide_buildings")
+		if drive.pos.distance_to(before_hit) < 1.0:
+			found.append("the truck drives through the gardens")
+	await get_tree().process_frame
+	_bury(drive)
+	GameState.job = {}
 	return found
 
 

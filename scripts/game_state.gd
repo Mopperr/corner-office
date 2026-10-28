@@ -60,10 +60,12 @@ var shop_tier := "stand"
 var rent_owed := 0
 var workshop: Dictionary = {}
 var crime: Dictionary = {}
+var life: Dictionary = {}
 const Workshop = preload("res://scripts/workshop.gd")
 const Crime = preload("res://scripts/crime.gd")
 const JobGen = preload("res://scripts/job_gen.gd")
 const Homes = preload("res://scripts/homes.gd")
+const Life = preload("res://scripts/life.gd")
 var freebie_day := -1
 var forest_serial := 0
 var latched_goals: Dictionary = {}
@@ -121,6 +123,7 @@ func new_game(who: String) -> void:
 	shop_tier = "stand"
 	workshop = Workshop.fresh()
 	crime = Crime.fresh()
+	life = Life.fresh()
 	refresh_board()
 	freebie_day = -1
 	forest_serial = 0
@@ -159,6 +162,7 @@ func _credit_net(profit: int) -> void:
 		var before := total_earned
 		total_earned = maxi(0, total_earned + profit)
 		_check_earn_triggers(before, total_earned)
+		Life.check_milestones(before, total_earned)
 	emit_signal("money_changed", money)
 	_check_unlock_email()
 
@@ -460,7 +464,7 @@ func job_available(job: Dictionary) -> bool:
 
 func refresh_board() -> void:
 	# A fresh board every day: three generated moves beside the story jobs.
-	var count := 2 + mini(jobs_done / 2, 2)
+	var count := 2 + mini(jobs_done / 2, 2) + Life.board_bonus()
 	var made: Dictionary = JobGen.board(seed, day, rep_rank(), jobs_done, count)
 	generated_jobs = made.get("jobs", [])
 	# Keep the drives of jobs still in progress or on the old board for a day.
@@ -995,6 +999,14 @@ func finish_job() -> Dictionary:
 	stars = mini(3, stars)
 	payout["stars"] = stars
 	var net_pay := int(payout.get("base", 0)) + int(payout.get("net_tips", 0)) + int(payout.get("shortcut", 0))
+	# Dana's own life pays back: Pickle at the door, Sam's lunches, a rested first job.
+	var life_mult := Life.tip_mult() - 1.0
+	if int(day_log.get("jobs", 0)) == 0:
+		life_mult += Life.first_job_mult() - 1.0
+	var life_extra := int(round(float(int(payout.get("net_tips", 0))) * life_mult))
+	payout["life_extra"] = life_extra
+	payout["total"] = int(payout.get("total", 0)) + life_extra
+	net_pay += life_extra
 	add_money(net_pay, true)
 	rep_stars += stars
 	jobs_done += 1
@@ -1150,6 +1162,7 @@ func advance_day() -> void:
 	refresh_board()
 	Crime.new_day()
 	_charge_rent(summary)
+	summary["life"] = Life.nightly(earned)
 	Crime.maybe_nudge(summary)
 	if not generated_jobs.is_empty():
 		summary["next_job"] = str(generated_jobs[0].get("title", ""))
@@ -1572,6 +1585,7 @@ func vibe_score() -> int:
 			score -= int(Catalog.shop_number("damage_penalty", 2))
 	if _barista_on():
 		score += int(Catalog.shop.get("barista", {}).get("vibe", 8))
+	score += Life.vibe_bonus()
 	var cap := int(Catalog.shop_number("cap", 100))
 	var floor_v := int(Catalog.shop_number("floor_vibe", 8))
 	return clampi(score, floor_v, cap)
@@ -1818,6 +1832,7 @@ func to_dict() -> Dictionary:
 		"shop_tier": shop_tier,
 		"workshop": workshop.duplicate(true),
 		"crime": crime.duplicate(true),
+		"life": life.duplicate(true),
 		"rent_owed": rent_owed,
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
@@ -1886,6 +1901,9 @@ func from_dict(raw: Dictionary) -> void:
 	rent_owed = int(raw.get("rent_owed", 0))
 	if crime.is_empty():
 		crime = Crime.fresh()
+	life = raw.get("life", {}).duplicate(true) if raw.has("life") else Life.fresh()
+	if life.is_empty():
+		life = Life.fresh()
 	if generated_jobs.is_empty():
 		refresh_board()
 	freebie_day = int(raw.get("freebie_day", -1))

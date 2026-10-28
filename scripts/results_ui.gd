@@ -55,6 +55,8 @@ func _ready() -> void:
 		lines.append("Seen pocketing  −$%d and a rep star" % int(pay.get("caught_cut", 0)))
 	elif int(pay.get("pocketed", 0)) > 0:
 		lines.append("In the bag  %d piece%s, about $%d to Sal" % [int(pay.get("pocketed", 0)), "" if int(pay.get("pocketed", 0)) == 1 else "s", int(pay.get("loot_value", 0))])
+	if int(pay.get("life_extra", 0)) > 0:
+		lines.append("Your own people  +$%d" % int(pay.get("life_extra", 0)))
 	if int(pay.get("split_loss", 0)) > 0:
 		lines.append("Split sets  −$%d" % int(pay.get("split_loss", 0)))
 	if int(pay.get("cut", 0)) > 0:

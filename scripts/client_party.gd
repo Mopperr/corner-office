@@ -8,6 +8,7 @@ extends Node3D
 ## calls react() when something happens.
 
 const Figure = preload("res://scripts/figure.gd")
+const Props = preload("res://scripts/props.gd")
 
 const MOODS := ["warm", "fussy", "rude"]
 const COOLDOWN := 2.5
@@ -125,12 +126,15 @@ func setup(owner: Node, def: Dictionary, door: Vector3, inward: Vector3) -> void
 		person.name = "Client%d" % n
 		person.set_meta("uid", "client:%d" % n)
 		person.set_meta("kid", str(kind) == "kid")
-		# A loose cluster just inside the door, out of the box row, facing the room.
+		# A loose cluster just inside the door, to either side of it: out of the
+		# box row and the spill behind it, facing the room.
 		var side := -1.0 if n % 2 == 0 else 1.0
-		var offset := Vector3(side * (1.1 + 0.5 * float(n / 2)), 0.0, 0.9 + 0.45 * float(n % 3))
+		var offset := Vector3(side * (1.5 + 0.6 * float(n / 2)), 0.0, 0.8 + 0.4 * float(n % 2))
 		person.position = door + inward * offset.z + Vector3(offset.x, 0, 0)
 		person.look_at(person.position + inward, Vector3.UP)
 		person.rotate_y(PI)
+		# A body the click ray can land on, like a customer's.
+		Props.add_picker(person, Vector3(0.6, 1.5 * (0.68 if str(kind) == "kid" else 1.0), 0.6))
 		add_child(person)
 		members.append(person)
 		n += 1
@@ -212,16 +216,19 @@ func speaker(event: String) -> Node3D:
 	return adults[rng.randi() % adults.size()]
 
 
-func react(event: String, fills: Dictionary, force := false) -> String:
+func react(event: String, fills: Dictionary, force := false, who_uid := "") -> String:
 	# Say something about what just happened. Chatter about placing is
-	# rationed so the family is not a commentary track on every piece.
+	# rationed so the family is not a commentary track on every piece. A
+	# click names who answers.
 	if members.is_empty():
 		return ""
 	if not force and cooldown > 0.0:
 		return ""
 	if not force and event == "placed" and rng.randf() > 0.3:
 		return ""
-	var who := speaker(event)
+	var who := member_for(who_uid) if who_uid != "" else speaker(event)
+	if who == null:
+		who = speaker(event)
 	if who == null:
 		return ""
 	var pool_mood := "kid" if bool(who.get_meta("kid", false)) else mood

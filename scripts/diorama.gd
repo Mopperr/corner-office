@@ -247,6 +247,19 @@ func _build_venue() -> void:
 	Outdoors.build(self, venue)
 	_sync_yard_shop()
 	_spawn_street()
+	_spawn_pet()
+
+
+func _spawn_pet() -> void:
+	# Pickle, once adopted: trots after Dana round the office and the jobs.
+	var LifeLib = load("res://scripts/life.gd")
+	if backdrop or player == null or str(LifeLib.pet()) != "dog" or not (GameState.mode in ["office", "job_pack", "job_unpack"]):
+		return
+	var dog := _make_dog(Color("B98A5A"))
+	dog.name = "Pickle"
+	dog.position = player.position + Vector3(-0.7, 0.0, 0.35)
+	add_child(dog)
+	street.append({"node": dog, "dir": 1.0, "speed": 1.0, "phase": randf() * TAU, "pause": 0.0, "cx": 0.0, "dog": true, "owner": player, "pet": true})
 
 
 func _wall_color() -> Color:
@@ -1503,7 +1516,7 @@ func _click() -> void:
 		_delivery_click(item_uid.trim_prefix("delivery:"))
 		return
 	if item_uid.begins_with("client:") and party != null:
-		party.react("talk", {}, true)
+		party.react("talk", {}, true, item_uid)
 		return
 	if item_uid.begins_with("visitor:") and GameState.mode == "office":
 		var visitor_uid := item_uid.trim_prefix("visitor:")
@@ -2843,6 +2856,12 @@ func _set_floor(index: int) -> void:
 	_refresh_items()
 	_refresh_hud_buttons()
 	_spawn_player()
+	for entry in street:
+		if bool(entry.get("pet", false)):
+			entry["owner"] = player
+			var dog: Node3D = entry.get("node")
+			if dog != null and is_instance_valid(dog) and player != null:
+				dog.position = player.position + Vector3(-0.7, 0.0, 0.35)
 	if held_uid != "":
 		_toast("Up the stairs with it. Put it down where it belongs.", "Dana")
 	else:
@@ -5059,9 +5078,16 @@ func _bubble(node: Node3D, text: String, seconds := 4.0) -> void:
 	# A thought over someone's head: a little cloud with the line in it.
 	if node == null or not is_instance_valid(node) or text == "":
 		return
+	# The old bubble gives its name up at once, or the new one is renamed
+	# "@Label3D@n" and neither the fade nor a test can find it.
 	var old := node.get_node_or_null("Thought")
 	if old != null:
+		old.name = "ThoughtGone"
 		old.queue_free()
+	var old_dot := node.get_node_or_null("ThoughtDot")
+	if old_dot != null:
+		old_dot.name = "ThoughtDotGone"
+		old_dot.queue_free()
 	var label := Label3D.new()
 	label.name = "Thought"
 	label.text = text
