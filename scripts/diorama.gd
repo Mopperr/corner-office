@@ -4577,6 +4577,10 @@ func _build_hud() -> void:
 	top.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.TERRA))
 	layer.add_child(top)
 	UIKit.pin_top_left(top, 16, 12, 760, 112)
+	# Money in or out floats off the status card as it changes.
+	money_seen = GameState.money
+	if not GameState.money_changed.is_connected(_money_float):
+		GameState.money_changed.connect(_money_float)
 	status = UIKit.label("", 30, UIKit.DARK, "small")
 	status.name = "Status"
 	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -5535,7 +5539,15 @@ func _hint_text() -> String:
 	var line := _mode_hint()
 	var goal := _goal_hint()
 	if objective:
-		objective.text = goal if goal != "" else _mode_objective()
+		var next_objective := goal if goal != "" else _mode_objective()
+		if objective.text != next_objective:
+			objective.text = next_objective
+			if objective.is_inside_tree() and objective.text != "":
+				# A new step: the objective pops once so the eye goes to it.
+				objective.pivot_offset = Vector2(0, objective.size.y * 0.5)
+				objective.scale = Vector2(1.08, 1.08)
+				var tw := objective.create_tween()
+				tw.tween_property(objective, "scale", Vector2.ONE, 0.28).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_sync_chips()
 	return line
 
@@ -5814,6 +5826,29 @@ func _add_goal_ring(root: Node3D, pose: Dictionary) -> void:
 	ring.material_override = material
 	ring.position = Vector3(float(pose.get("x", 0.0)), float(pose.get("y", 0.03)), float(pose.get("z", 0.0)))
 	root.add_child(ring)
+
+
+var money_seen := 0
+
+
+func _money_float(now: int) -> void:
+	# "+$12" rises off the status card and fades; losses sink in red.
+	var delta := now - money_seen
+	money_seen = now
+	var layer := _hud_layer()
+	if delta == 0 or layer == null or backdrop or hud_only:
+		return
+	var tag := UIKit.label(("+$%d" if delta > 0 else "−$%d") % absi(delta), 30, UIKit.SAGE if delta > 0 else UIKit.LOSS, "title", false)
+	tag.name = "MoneyFloat"
+	tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tag.set_meta("act_button", false)
+	layer.add_child(tag)
+	tag.position = Vector2(300, 64)
+	var tw := tag.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(tag, "position", Vector2(300, 64 + (-42 if delta > 0 else 42)), 1.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(tag, "modulate", Color(1, 1, 1, 0), 1.1).set_delay(0.35)
+	tw.chain().tween_callback(tag.queue_free)
 
 
 func _toast(message: String, who := "Dana") -> void:

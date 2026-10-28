@@ -65,6 +65,10 @@ func _home() -> void:
 	title.custom_minimum_size = Vector2(720, 104)
 	title.rotation_degrees = -1.5
 	title.pivot_offset = Vector2(360, 52)
+	# The title sways a degree either way, slowly, like a hung sign.
+	var sway := title.create_tween().set_loops()
+	sway.tween_property(title, "rotation_degrees", 1.2, 2.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	sway.tween_property(title, "rotation_degrees", -1.5, 2.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	column.add_child(title)
 	var sub := UIKit.label("Pack the old office. Make the new one yours.", 36, UIKit.DARK)
 	sub.custom_minimum_size = Vector2(720, 48)

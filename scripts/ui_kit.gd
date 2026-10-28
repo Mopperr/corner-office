@@ -145,9 +145,26 @@ static func button(text: String, fill: Color = SAGE, fg: Color = CREAM_CARD) -> 
 		if btn.disabled:
 			return
 		AudioDirector.play_sfx("sfx_ui_hover")
+		_nudge(btn, 1.03, 0.08)
 	)
+	btn.mouse_exited.connect(func(): _nudge(btn, 1.0, 0.12))
+	btn.button_down.connect(func(): _nudge(btn, 0.96, 0.05))
+	btn.button_up.connect(func(): _nudge(btn, 1.0, 0.16, true))
 	btn.pressed.connect(func(): AudioDirector.play_sfx("sfx_ui_click"))
 	return btn
+
+
+static func _nudge(control: Control, to: float, seconds: float, spring := false) -> void:
+	# A button gives under the press and springs back; a touch of lift on hover.
+	if control == null or not is_instance_valid(control) or not control.is_inside_tree():
+		return
+	control.pivot_offset = control.size * 0.5
+	var tw := control.create_tween()
+	var step := tw.tween_property(control, "scale", Vector2(to, to), seconds)
+	if spring:
+		step.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	else:
+		step.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 
 static func icon_button(icon_path: String, caption: String) -> Button:
