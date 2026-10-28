@@ -874,7 +874,22 @@ func _sync_pile() -> void:
 	for box in GameState.job.get("boxes", []):
 		if bool(box.get("sealed", false)) and int(box.get("slot", -1)) < 0:
 			waiting += 1
-	for i in waiting:
+	var big_ids: Array = []
+	for box in GameState.job.get("boxes", []):
+		if str(box.get("big", "")) != "" and int(box.get("slot", -1)) < 0:
+			big_ids.append(str(box["big"]))
+	var shown_big := 0
+	for big_uid in big_ids:
+		var big_item := GameState.job_item(big_uid)
+		var piece := Props.make(str(ItemDB.get_item(str(big_item.get("item_id", ""))).get("model", "box_closed")))
+		var pc := piece.get_node_or_null("PropCollision")
+		if pc:
+			pc.free()
+		piece.scale = Vector3(0.6, 0.6, 0.6)
+		piece.position = Vector3(-1.1 - float(shown_big) * 0.9, 0.0, 0.2)
+		pile.add_child(piece)
+		shown_big += 1
+	for i in waiting - big_ids.size():
 		var crate := Props.make("box_closed")
 		var collision := crate.get_node_or_null("PropCollision")
 		if collision:
@@ -1809,6 +1824,21 @@ func _pack_click(uid: String) -> void:
 	var item := GameState.job_item(uid)
 	if item.is_empty() or str(item.get("state", "")) != "loose":
 		return
+	if bool(item.get("nobox", false)):
+		if GameState.job.get("boxes", []).size() >= slot_count:
+			_toast("The truck only takes %d pieces and boxes." % slot_count)
+			AudioDirector.play_sfx("sfx_invalid_placement")
+			return
+		var wrap_err := GameState.wrap_big(uid)
+		if wrap_err != "":
+			_toast(wrap_err)
+			return
+		AudioDirector.play_sfx("sfx_paper_rustle")
+		AudioDirector.play_sfx("sfx_tape_rip")
+		_toast("Too big for a box. Blanket round it, straight onto the truck.")
+		_refresh_items()
+		_refresh_hud_buttons()
+		return
 	var box_id := selected_box
 	if box_id < 0 or GameState.job_box(box_id).is_empty() or bool(GameState.job_box(box_id).get("sealed", false)):
 		box_id = GameState.ensure_open_box()
@@ -1884,6 +1914,11 @@ func _unpack_click(uid: String) -> void:
 	if uid.begins_with("boxcarry:"):
 		var box_id := int(uid.trim_prefix("boxcarry:"))
 		carried[box_id] = true
+		if str(GameState.job_box(box_id).get("big", "")) != "":
+			# A wrapped piece: the blanket comes off and it stands where the box row would be.
+			var big := GameState.job_item(str(GameState.job_box(box_id)["big"]))
+			_loosen(big, box_id, 0)
+			AudioDirector.play_sfx("sfx_paper_rustle")
 		var saved: Array = GameState.job.get("carried", [])
 		if not saved.has(box_id):
 			saved.append(box_id)
@@ -1953,7 +1988,7 @@ func _open_box_modal(box_id: int) -> void:
 	var contents := _box_contents(box_id)
 	if OS.get_environment("CO_DEBUG") != "":
 		print("  open box modal %d: %d inside, settling=%s held=%s" % [box_id, contents.size(), settling, held_uid])
-	if contents.is_empty():
+	if contents.is_empty() or str(GameState.job_box(box_id).get("big", "")) != "":
 		_open_carried_box(box_id)
 		return
 	var layer := _hud_layer()
@@ -2258,6 +2293,12 @@ func _pack_rest() -> void:
 	var packed := 0
 	for item in items:
 		if str(item.get("state", "")) != "loose":
+			continue
+		if bool(item.get("nobox", false)):
+			if GameState.job.get("boxes", []).size() >= slot_count:
+				break
+			if GameState.wrap_big(str(item.get("uid", ""))) == "":
+				packed += 1
 			continue
 		var box_id := GameState.ensure_open_box()
 		if GameState.job.get("boxes", []).size() > slot_count:
@@ -2956,6 +2997,16 @@ func _spawn_truck_slots() -> void:
 			items_root.add_child(pad)
 		for box in GameState.job.get("boxes", []):
 			if int(box.get("slot", -1)) == i:
+				if str(box.get("big", "")) != "":
+					var big := GameState.job_item(str(box["big"]))
+					var piece := Props.make(str(ItemDB.get_item(str(big.get("item_id", ""))).get("model", "box_closed")))
+					piece.scale = Vector3(0.45, 0.45, 0.45)
+					piece.position = Vector3(0, 0.02, 0)
+					pad.add_child(piece)
+					var blanket := Props.mesh_box(Vector3(0.4, 0.06, 0.34), UIKit.BLUE)
+					blanket.position = Vector3(0, 0.03, 0)
+					pad.add_child(blanket)
+					continue
 				var visual_name := "box_closed_damaged" if int(GameState.job.get("condition", 100)) < int(Tuning.get_value("damage.mesh_swap_below", 70)) else "box_closed"
 				var box_node := Props.make(visual_name)
 				box_node.position = Vector3(0, 0.2, 0)
@@ -3319,7 +3370,9 @@ func _box_list(layer: CanvasLayer) -> void:
 	for box in GameState.job.get("boxes", []):
 		var id := int(box.get("id", 0))
 		var label := "Box %d" % (id + 1)
-		if bool(box.get("sealed", false)):
+		if str(box.get("big", "")) != "":
+			label = "%s · wrapped" % GameState.job_item(str(box["big"])).get("name", "Big piece")
+		elif bool(box.get("sealed", false)):
 			label += " sealed"
 		if bool(box.get("padded", false)):
 			label += " · padded"
@@ -3342,6 +3395,8 @@ func _truck_list(layer: CanvasLayer) -> void:
 		var id := int(box.get("id", 0))
 		var heavy := GameState.box_has_heavy(id)
 		var text := "Box %d%s" % [id + 1, " · heavy" if heavy else ""]
+		if str(box.get("big", "")) != "":
+			text = "%s%s" % [GameState.job_item(str(box["big"])).get("name", "Big piece"), " · heavy" if heavy else ""]
 		if int(box.get("slot", -1)) >= 0:
 			text += " loaded"
 		var capture := id

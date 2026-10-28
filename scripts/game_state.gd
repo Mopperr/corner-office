@@ -596,6 +596,8 @@ func pack_into(uid: String, box_id: int) -> String:
 		return "That box isn't here."
 	if bool(box.get("sealed", false)):
 		return "That box is already sealed."
+	if bool(item.get("nobox", false)):
+		return "Too big for a box. Wrap it and it goes on the truck as it is."
 	if bool(item.get("bulky", false)) or bool(item.get("heavy", false)):
 		if box_item_count(box_id) > 0:
 			return "This one wants a box of its own."
@@ -644,6 +646,25 @@ func seal_box(box_id: int) -> bool:
 		if int(item.get("box", -1)) == box_id and str(item.get("uid", "")) == str(job.get("cat_uid", "")):
 			box["has_cat"] = true
 	return true
+
+
+func wrap_big(uid: String) -> String:
+	# A piece too big for any box: a blanket round it and its own place on the truck.
+	var item := job_item(uid)
+	if item.is_empty():
+		return "That piece isn't here."
+	if not bool(item.get("nobox", false)):
+		return "That one fits in a box."
+	if str(item.get("state", "")) != "loose":
+		return "Already wrapped."
+	var id := make_box()
+	var box := job_box(id)
+	box["sealed"] = true
+	box["padded"] = true
+	box["big"] = uid
+	item["box"] = id
+	item["state"] = "boxed"
+	return ""
 
 
 func all_sealed() -> bool:

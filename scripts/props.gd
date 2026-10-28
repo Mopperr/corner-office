@@ -828,9 +828,49 @@ static func _proc(kind: String) -> Node3D:
 			tag.position = Vector3(-0.05, 0.03, 0.052)
 			root.add_child(tag)
 		_:
-			root.add_child(mesh_box(Vector3(0.3, 0.3, 0.3), UIKit.CARD))
+			if not _proc_from_data(root, kind):
+				root.add_child(mesh_box(Vector3(0.3, 0.3, 0.3), UIKit.CARD))
 	ensure_box_collision(root)
 	return root
+
+
+static var _prop_data: Dictionary = {}
+
+
+static func _proc_from_data(root: Node3D, kind: String) -> bool:
+	# Household props are authored as a short list of primitives in data/props.json.
+	if _prop_data.is_empty():
+		var file := FileAccess.open("res://data/props.json", FileAccess.READ)
+		if file:
+			var parsed: Variant = JSON.parse_string(file.get_as_text())
+			if typeof(parsed) == TYPE_DICTIONARY:
+				_prop_data = parsed
+	if not _prop_data.has(kind):
+		return false
+	for part in _prop_data[kind]:
+		var kind_t := str(part.get("t", "box"))
+		var s: Array = part.get("s", [0.2, 0.2, 0.2])
+		var p: Array = part.get("p", [0, 0, 0])
+		var color := Color(str(part.get("c", "C68B59")))
+		var node: MeshInstance3D
+		match kind_t:
+			"cyl":
+				node = mesh_cylinder(float(s[0]), float(s[1]), color)
+			"sph":
+				node = MeshInstance3D.new()
+				var sphere := SphereMesh.new()
+				sphere.radius = float(s[0])
+				sphere.height = float(s[0]) * 2.0
+				node.mesh = sphere
+				node.material_override = mat(color)
+			_:
+				node = mesh_box(Vector3(float(s[0]), float(s[1]), float(s[2])), color)
+		node.position = Vector3(float(p[0]), float(p[1]), float(p[2]))
+		if part.has("r"):
+			var r: Array = part["r"]
+			node.rotation = Vector3(float(r[0]), float(r[1]), float(r[2]))
+		root.add_child(node)
+	return true
 
 
 static func content_aabb(node: Node3D) -> AABB:

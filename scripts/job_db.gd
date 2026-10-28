@@ -101,6 +101,8 @@ func build_job_items(job: Dictionary) -> Array:
 				"rot": 0.0,
 				"fragile": bool(def.get("fragile", false)),
 				"heavy": bool(def.get("heavy", false)),
+				"nobox": bool(def.get("nobox", false)),
+				"room": str(def.get("room", "")),
 				"bulky": bool(def.get("bulky", false)),
 				"mystery": bool(def.get("mystery", false)),
 				"mount": str(def.get("mount", "floor")),

@@ -1264,6 +1264,33 @@ func _qa_regressions() -> Array:
 					missing_sfx.append(sfx)
 	if not missing_sfx.is_empty():
 		found.append("missing sfx %s" % str(missing_sfx))
+	# Every household item builds from data/props.json and has a room and a line.
+	var rooms := {}
+	for item_id in ItemDB.content_items.keys():
+		var hdef: Dictionary = ItemDB.get_item(str(item_id))
+		if str(hdef.get("room", "")) == "":
+			continue
+		rooms[str(hdef["room"])] = true
+		var hprop := Props.make(str(hdef.get("model", "")))
+		if hprop == null or hprop.get_child_count() < 2:
+			found.append("household prop %s is a placeholder" % item_id)
+		else:
+			hprop.free()
+		if str(hdef.get("flavor", "")) == "":
+			found.append("household item %s without a line" % item_id)
+	for room_name in ["kitchen", "bathroom", "bedroom", "living", "loft", "shed"]:
+		if not rooms.has(room_name):
+			found.append("no items for the %s" % room_name)
+	# A piece too big for a box is wrapped and takes a place on the truck as itself.
+	GameState.job = {"def": {"id": "wrap_test", "venue": "cafe"}, "items": [{"uid": "w0", "item_id": "sofa", "name": "Sofa", "state": "loose", "box": -1, "damage": 0, "nobox": true, "heavy": true, "x": 1, "y": 0, "z": 1}, {"uid": "w1", "item_id": "cafe_mug", "name": "Mug", "state": "loose", "box": -1, "damage": 0, "x": 2, "y": 0, "z": 1}], "boxes": [], "next_box": 0, "carried": []}
+	var open_id := GameState.make_box()
+	if GameState.pack_into("w0", open_id) == "":
+		found.append("a sofa went in a box")
+	if GameState.wrap_big("w0") != "" or GameState.job["boxes"].size() != 2 or str(GameState.job_box(1).get("big", "")) != "w0" or not bool(GameState.job_box(1).get("sealed", false)):
+		found.append("wrap_big %s" % str(GameState.job["boxes"]))
+	if GameState.wrap_big("w1") == "":
+		found.append("a mug got wrapped")
+	GameState.job = {}
 	# Every pool item builds a prop and carries a line about itself.
 	for pool_id in load("res://scripts/job_gen.gd").POOL.keys():
 		var pool_def := ItemDB.get_item(str(pool_id))
