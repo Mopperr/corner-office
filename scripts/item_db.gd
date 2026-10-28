@@ -2,6 +2,12 @@ extends Node
 
 var narrative_items: Dictionary = {}
 var content_items: Dictionary = {}
+# The big catalogue (data/items/*.json): generated families plus whatever
+# the team adds in the same format. Items merge into content_items; the
+# primitive models live in catalog_props for Props to build from.
+var catalog_items: Dictionary = {}
+var catalog_props: Dictionary = {}
+var catalog_files: Array = []
 var content: Dictionary = {}
 var buyers: Array = []
 var characters: Array = []
@@ -20,8 +26,54 @@ func _load() -> void:
 	if typeof(content) != TYPE_DICTIONARY:
 		content = {}
 	content_items = content.get("items", {})
+	_load_catalog()
 	buyers = content.get("buyers", [])
 	characters = content.get("characters", [])
+
+
+func _load_catalog() -> void:
+	catalog_items = {}
+	catalog_props = {}
+	catalog_files = []
+	var dir := DirAccess.open("res://data/items")
+	if dir == null:
+		return
+	var names: Array = []
+	for file_name in dir.get_files():
+		if file_name.ends_with(".json"):
+			names.append(file_name)
+	names.sort()
+	for file_name in names:
+		var parsed: Variant = _read_json("res://data/items/%s" % file_name)
+		if typeof(parsed) != TYPE_DICTIONARY:
+			continue
+		catalog_files.append(file_name)
+		var props: Dictionary = parsed.get("props", {})
+		for key in props.keys():
+			catalog_props[str(key)] = props[key]
+		var items: Dictionary = parsed.get("items", {})
+		for key in items.keys():
+			var id := str(key)
+			if content_items.has(id) or catalog_items.has(id):
+				continue
+			var def: Dictionary = items[key]
+			def["catalog"] = file_name.trim_suffix(".json")
+			catalog_items[id] = def
+			content_items[id] = def
+
+
+func room_pool(tags: Array, mounts: Array = []) -> Array:
+	# Catalogue ids for these rooms (and mounts), in a fixed order.
+	var out: Array = []
+	for id in catalog_items.keys():
+		var def: Dictionary = catalog_items[id]
+		if not tags.has(str(def.get("room", ""))):
+			continue
+		if not mounts.is_empty() and not mounts.has(str(def.get("mount", "floor"))):
+			continue
+		out.append(str(id))
+	out.sort()
+	return out
 
 
 func _read_json(path: String) -> Variant:

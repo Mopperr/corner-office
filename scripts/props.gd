@@ -928,9 +928,12 @@ static func _proc_from_data(root: Node3D, kind: String) -> bool:
 			var parsed: Variant = JSON.parse_string(file.get_as_text())
 			if typeof(parsed) == TYPE_DICTIONARY:
 				_prop_data = parsed
-	if not _prop_data.has(kind):
+	var parts: Array = _prop_data.get(kind, [])
+	if parts.is_empty():
+		parts = ItemDB.catalog_props.get(kind, [])
+	if parts.is_empty():
 		return false
-	for part in _prop_data[kind]:
+	for part in parts:
 		var kind_t := str(part.get("t", "box"))
 		var s: Array = part.get("s", [0.2, 0.2, 0.2])
 		var p: Array = part.get("p", [0, 0, 0])

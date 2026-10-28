@@ -48,6 +48,12 @@ func _run() -> void:
 			box["sealed"] = true
 		await _show(str(venue_id), func(room: Node):
 			_check(room.get_node_or_null("VenueDressing") != null, "%s: dressing" % venue_id)
+			if not bool(room.call("_is_home")):
+				var clutter := 0
+				for child in room.get_children():
+					if bool(child.get_meta("clutter", false)):
+						clutter += 1
+				_check(clutter >= 2, "%s: clutter from the catalogue (%d)" % [venue_id, clutter])
 			_check(room.get_node_or_null("Outdoors") != null, "%s: outdoors" % venue_id)
 			_check((room.get("street") as Array).size() >= 4, "%s: passers-by" % venue_id)
 		)

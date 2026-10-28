@@ -345,6 +345,7 @@ func _ready() -> void:
 	failures.append_array(await _life_checks())
 	failures.append_array(_handling_checks())
 	failures.append_array(_texture_checks())
+	failures.append_array(_catalog_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -1292,12 +1293,19 @@ func _qa_regressions() -> Array:
 					missing_sfx.append(sfx)
 	if not missing_sfx.is_empty():
 		found.append("missing sfx %s" % str(missing_sfx))
-	# Every household item builds from data/props.json and has a room and a line.
+	# Every household item builds from data/props.json and has a room and a
+	# line (the big catalogue is sampled; _catalog_checks covers the rest).
 	var rooms := {}
+	var sampled := 0
 	for item_id in ItemDB.content_items.keys():
 		var hdef: Dictionary = ItemDB.get_item(str(item_id))
 		if str(hdef.get("room", "")) == "":
 			continue
+		if ItemDB.catalog_items.has(str(item_id)):
+			rooms[str(hdef["room"])] = true
+			sampled += 1
+			if sampled % 25 != 0:
+				continue
 		rooms[str(hdef["room"])] = true
 		var hprop := Props.make(str(hdef.get("model", "")))
 		if hprop == null or hprop.get_child_count() < 2:
@@ -2514,6 +2522,90 @@ func _party_checks() -> Array:
 	_bury(play)
 	GameState.job = {}
 	GameState.mode = "office"
+	return found
+
+
+func _catalog_checks() -> Array:
+	# The big catalogue: over a thousand pieces in data/items, every one with
+	# a model of at least two parts inside its own size, a room, a mount and
+	# a line; house moves and the owners' rooms draw on it; offices get
+	# clutter (checked by the venue gallery).
+	var found: Array = []
+	if ItemDB.catalog_items.size() < 1000:
+		found.append("only %d catalogue items" % ItemDB.catalog_items.size())
+	if ItemDB.catalog_files.size() < 7:
+		found.append("only %d catalogue files" % ItemDB.catalog_files.size())
+	var rooms := {}
+	var thin := 0
+	var outside := 0
+	var mounts := {"floor": 0, "small": 0, "hang": 0}
+	for id in ItemDB.catalog_items.keys():
+		var def: Dictionary = ItemDB.catalog_items[id]
+		rooms[str(def.get("room", ""))] = true
+		var mount := str(def.get("mount", ""))
+		if not mounts.has(mount):
+			found.append("%s has mount %s" % [id, mount])
+			continue
+		mounts[mount] += 1
+		if str(def.get("flavor", "")) == "" or str(def.get("name", "")) == "":
+			found.append("%s has no name or line" % id)
+		var parts: Array = ItemDB.catalog_props.get(str(def.get("model", "")).trim_prefix("proc:"), [])
+		if parts.size() < 2:
+			thin += 1
+			continue
+		var w := float(def.get("w", 0)) * 0.6 + 0.08
+		var d := float(def.get("d", 0)) * 0.6 + 0.08
+		var h := float(def.get("h", 0)) * 1.15 + 0.08
+		for part in parts:
+			var p: Array = part.get("p", [0, 0, 0])
+			if absf(float(p[0])) > w or absf(float(p[2])) > d or float(p[1]) > h or float(p[1]) < -0.02:
+				outside += 1
+				break
+	if thin > 0:
+		found.append("%d catalogue pieces with under two parts" % thin)
+	if outside > 0:
+		found.append("%d catalogue pieces with parts outside their size" % outside)
+	for room in ["kitchen", "bathroom", "bedroom", "living", "loft", "shed", "office"]:
+		if not rooms.has(room):
+			found.append("no catalogue items for the %s" % room)
+	if mounts["hang"] < 40 or mounts["floor"] < 150 or mounts["small"] < 300:
+		found.append("catalogue mounts thin: %s" % str(mounts))
+	# A sample of them builds into real props.
+	var ids: Array = ItemDB.catalog_items.keys()
+	ids.sort()
+	for i in range(0, ids.size(), 23):
+		var def: Dictionary = ItemDB.catalog_items[ids[i]]
+		var node: Node3D = Props.make(str(def.get("model", "")))
+		if node == null or node.get_child_count() < 3:
+			found.append("catalogue piece %s does not build" % ids[i])
+		if node != null:
+			node.free()
+	# The pool helpers and the owners' rooms.
+	if ItemDB.room_pool(["office"], ["hang"]).size() < 8 or ItemDB.room_pool(["kitchen"]).size() < 150:
+		found.append("room_pool is thin")
+	var Homes = load("res://scripts/homes.gd")
+	var venue: Dictionary = Homes.venue_for("detached_a")
+	var layout: Array = Homes.owner_layout(venue, 11)
+	var from_catalog := 0
+	for rec in layout:
+		if ItemDB.catalog_items.has(str(rec.get("item_id", ""))):
+			from_catalog += 1
+	if layout.size() < 10 or from_catalog < 3:
+		found.append("owner layout has %d pieces, %d from the catalogue" % [layout.size(), from_catalog])
+	if Homes.owner_layout(venue, 11) != layout:
+		found.append("owner layout is not deterministic")
+	# A house move draws on the catalogue.
+	var JobGen = load("res://scripts/job_gen.gd")
+	var made: Dictionary = JobGen.board(9, 2, 1, 2, 3)
+	var catalog_in_jobs := 0
+	for candidate in made["jobs"]:
+		for group in candidate.get("recipe", []):
+			if ItemDB.catalog_items.has(str(group.get("item", ""))):
+				catalog_in_jobs += 1
+	if catalog_in_jobs == 0:
+		found.append("no board job carries a catalogue piece")
+	if not FileAccess.file_exists("res://docs/ITEMS.md") or not FileAccess.file_exists("res://tools/check_items.py"):
+		found.append("catalogue docs or checker missing")
 	return found
 
 

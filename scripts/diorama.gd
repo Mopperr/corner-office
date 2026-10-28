@@ -244,6 +244,7 @@ func _build_venue() -> void:
 	_ensure_stack_room()
 	_frame_camera()
 	_dress()
+	_dress_clutter()
 	Outdoors.build(self, venue)
 	_sync_yard_shop()
 	_spawn_street()
@@ -640,6 +641,131 @@ func _place_model(model_name: String, at: Vector3, rot_deg := 0.0) -> Node3D:
 	Props.prepare(node)
 	add_child(node)
 	return node
+
+
+# What the catalogue lends each kind of place: the odd pieces along the walls
+# that make an office an office and a shop somebody's shop.
+const CLUTTER_TAGS := {
+	"cafe": ["kitchen", "office", "living"], "train": ["loft", "office"], "bakery": ["kitchen", "living"],
+	"park": ["shed", "living"], "studio": ["living", "office", "bedroom"], "flat": ["living", "bedroom", "kitchen"],
+	"coffee_counter": ["kitchen", "office"], "lemonade_stand": ["shed", "kitchen"],
+}
+
+
+func _dress_clutter() -> void:
+	# A few floor pieces along the back and left walls and a few on the
+	# walls, drawn from the catalogue by what the place is, each checked
+	# against what already stands there. Seeded by the place and the day,
+	# so a return visit finds the same room with a few things moved.
+	if backdrop or _is_home() or venue.is_empty():
+		return
+	var id := str(venue.get("id", ""))
+	if id == "garage" or GameState.mode == "office":
+		# Dana's own place is furnished from the shop, not the catalogue.
+		return
+	var tags: Array = CLUTTER_TAGS.get(id, ["office", "living"])
+	var floor_pool: Array = ItemDB.room_pool(tags, ["floor"])
+	var hang_pool: Array = ItemDB.room_pool(tags, ["hang"])
+	if floor_pool.is_empty() and hang_pool.is_empty():
+		return
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(id) + GameState.day * 7919
+	var x0 := float(venue.get("x", 0))
+	var z0 := float(venue.get("z", 0))
+	var w := float(venue.get("w", 6))
+	var d := float(venue.get("d", 8))
+	var door := _door_world()
+	var taken: Array = []
+	for child in get_children():
+		if not (child is Node3D) or child == player or child == party or child == items_root:
+			continue
+		var box := Props.content_aabb(child as Node3D)
+		if box.size.length() < 0.05 or box.size.x > w * 0.8 or box.size.z > d * 0.8:
+			continue
+		taken.append(Props._transform_aabb((child as Node3D).transform, box))
+	for child in items_root.get_children():
+		var box := Props.content_aabb(child as Node3D)
+		if box.size.length() > 0.05:
+			taken.append(Props._transform_aabb((child as Node3D).transform, box))
+	var spots: Array = []
+	var cx := x0 + 0.6
+	while cx < x0 + w - 0.5:
+		if absf(cx - door.x) > 1.4:
+			spots.append({"pos": Vector3(cx, 0.0, z0 + 0.42), "rot": 0.0, "kind": "floor"})
+		cx += 0.7
+	var cz := z0 + 1.2
+	while cz < z0 + d - 1.6:
+		spots.append({"pos": Vector3(x0 + 0.42, 0.0, cz), "rot": 90.0, "kind": "floor"})
+		cz += 0.7
+	cx = x0 + 1.0
+	while cx < x0 + w - 0.8:
+		if absf(cx - door.x) > 1.6:
+			spots.append({"pos": Vector3(cx, 1.2 + rng.randf() * 0.3, z0 + 0.04), "rot": 0.0, "kind": "hang"})
+		cx += 0.9
+	cz = z0 + 1.2
+	while cz < z0 + d - 1.2:
+		spots.append({"pos": Vector3(x0 + 0.04, 1.2 + rng.randf() * 0.3, cz), "rot": 90.0, "kind": "hang"})
+		cz += 0.9
+	spots.shuffle()
+	var want_floor := clampi(3 + int(w * d / 14.0), 3, 7)
+	var want_hang := clampi(2 + int(w / 4.0), 2, 4)
+	var placed := 0
+	var hung := 0
+	var n := 0
+	for spot in spots:
+		var on_wall := str(spot["kind"]) == "hang"
+		if on_wall and hung >= want_hang:
+			continue
+		if not on_wall and placed >= want_floor:
+			continue
+		var pool: Array = hang_pool if on_wall else floor_pool
+		if pool.is_empty():
+			continue
+		var pick := str(pool[rng.randi_range(0, pool.size() - 1)])
+		var def: Dictionary = ItemDB.get_item(pick)
+		if float(def.get("w", 0)) > 1.4 or float(def.get("h", 0)) > 1.9:
+			continue
+		var node := Props.make(str(def.get("model", "")))
+		if node == null:
+			continue
+		var pos: Vector3 = spot["pos"]
+		var rot := deg_to_rad(float(spot["rot"]))
+		if not on_wall:
+			# Stand it off the wall by half its depth.
+			var depth := float(def.get("d", 0.4)) * 0.5 + 0.06
+			if float(spot["rot"]) == 0.0:
+				pos.z = z0 + depth
+			else:
+				pos.x = x0 + depth
+		else:
+			var depth := float(def.get("d", 0.05)) * 0.5 + 0.01
+			if float(spot["rot"]) == 0.0:
+				pos.z = z0 + depth
+			else:
+				pos.x = x0 + depth
+		node.position = pos
+		node.rotation.y = rot
+		var box := Props._transform_aabb(node.transform, Props.content_aabb(node)).grow(0.08)
+		var clear := box.position.x >= x0 and box.end.x <= x0 + w and box.position.z >= z0 - 0.02 and box.end.z <= z0 + d
+		if clear:
+			for other in taken:
+				if (other as AABB).intersects(box):
+					clear = false
+					break
+		if not clear:
+			node.free()
+			continue
+		node.name = "Clutter_%d" % n
+		node.set_meta("clutter", true)
+		node.set_meta("item_id", pick)
+		Props.prepare(node)
+		add_child(node)
+		taken.append(box)
+		n += 1
+		if on_wall:
+			hung += 1
+		else:
+			placed += 1
 
 
 func _dress() -> void:

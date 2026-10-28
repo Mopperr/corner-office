@@ -427,19 +427,37 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 		for room in rooms(venue, index):
 			var room_kind := kind(str(room.get("id", "")))
 			var pool: Array = (OWNER_ITEMS.get(room_kind, []) as Array).duplicate()
+			# Plus a few of the catalogue's floor pieces for this kind of room,
+			# so no two houses are furnished alike.
+			var tag := tag_of_kind(room_kind)
+			if tag != "":
+				var extra: Array = ItemDB.room_pool([tag], ["floor"])
+				var picks := 0
+				var guard := 0
+				while picks < 4 and guard < 24 and not extra.is_empty():
+					guard += 1
+					var id := str(extra[rng.randi_range(0, extra.size() - 1)])
+					var edef: Dictionary = ItemDB.get_item(id)
+					if float(edef.get("w", 0.0)) > 1.3 or float(edef.get("d", 0.0)) > 0.9 or pool.has(id):
+						continue
+					pool.append(id)
+					picks += 1
 			if pool.is_empty():
 				continue
 			var rx := ox + float(room.get("x", 0))
 			var rz := oz + float(room.get("z", 0))
 			var rw := float(room.get("w", 2))
 			var rd := float(room.get("d", 2))
-			var want := mini(pool.size(), 2 + (1 if rw * rd > 11.0 else 0))
-			# Slots along the back wall (min z) and the left wall (min x): the sides the camera looks into.
+			var want := mini(pool.size(), 3 + (1 if rw * rd > 11.0 else 0) + (1 if rw * rd > 16.0 else 0))
+			# Slots along the back wall (min z), the left wall (min x) and the
+			# right wall: the sides the camera looks into, and the one it looks past.
 			var slots: Array = []
-			for f in [0.22, 0.5, 0.78]:
+			for f in [0.18, 0.4, 0.62, 0.84]:
 				slots.append({"x": rx + rw * f, "z": rz, "rot": 0.0, "side": "back"})
-			for f in [0.3, 0.7]:
+			for f in [0.3, 0.6, 0.85]:
 				slots.append({"x": rx, "z": rz + rd * f, "rot": 90.0, "side": "left"})
+			for f in [0.35, 0.7]:
+				slots.append({"x": rx + rw, "z": rz + rd * f, "rot": 270.0, "side": "right"})
 			var placed := 0
 			var k := 0
 			while placed < want and k < pool.size():
@@ -459,6 +477,8 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 					var rot := float(slot["rot"])
 					if str(slot["side"]) == "back":
 						pos.z += d * 0.5 + 0.14
+					elif str(slot["side"]) == "right":
+						pos.x -= d * 0.5 + 0.14
 					else:
 						pos.x += d * 0.5 + 0.14
 					var rect := footprint(pos, rot, w, d)
