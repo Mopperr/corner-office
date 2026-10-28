@@ -102,3 +102,6 @@ Each file was converted to 44.1 kHz, 16-bit mono WAV, filtered, trimmed, faded, 
 
 ### All other new level SFX (src/gen_levels.py)
 All other `sfx_l01_*` to `sfx_l21_*` files, plus `sfx_truck_rev`, `sfx_truck_horn`, `sfx_box_rattle`, `sfx_reverse_beep`, `sfx_neon_buzz_loop` and `sfx_l21_city_hum_loop`, are original sounds made from scratch for Corner Office. They are owned by the project and cleared for commercial use.
+
+### Team additions (Andrew's Helpers)
+The sounds, airs, textures and the courtroom sting listed in `docs/ADDITIONS_README.md` are original work by the team, CC0, except that `stings/music_courtroom_sting.ogg` is rendered with the FluidR3_GM soundfont by Frank Wen (MIT). The full licence text is in `credits_team_additions.md` next to this file and must ship with the game.

@@ -2752,6 +2752,7 @@ func _open_sue_card() -> void:
 		layer.remove_child(old)
 		old.free()
 	AudioDirector.play_sfx("sfx_gavel")
+	AudioDirector.play_sting("music_courtroom_sting")
 	var card := PanelContainer.new()
 	card.name = "SueCard"
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.NIGHT))

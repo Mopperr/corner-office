@@ -2678,6 +2678,12 @@ func _texture_checks() -> Array:
 			found.append("team sound %s missing" % sfx)
 	if Tuning.audio_gain("sfx_crockery_crack") > -5.0:
 		found.append("the crack is not trimmed")
+	if not ResourceLoader.exists("res://assets/audio/stings/music_courtroom_sting.ogg"):
+		found.append("the courtroom sting is missing")
+	if not AudioDirector.has_method("play_sting"):
+		found.append("no sting player")
+	if not FileAccess.file_exists("res://assets/audio/credits_team_additions.md") or not ("credits_team_additions" in FileAccess.get_file_as_string("res://assets/audio/credits.md")):
+		found.append("the soundfont licence is not in the credits")
 	return found
 
 

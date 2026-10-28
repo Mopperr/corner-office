@@ -94,6 +94,28 @@ func play_music(track: String) -> void:
 	music.play()
 
 
+func play_sting(sting_name: String) -> void:
+	# A one-shot musical sting (assets/audio/stings/*.ogg) over the music:
+	# the music dips for its length and comes back.
+	if _silent:
+		return
+	var stream := _load_stream("res://assets/audio/stings/%s.ogg" % sting_name)
+	if stream == null:
+		return
+	var player := AudioStreamPlayer.new()
+	player.bus = MUSIC_BUS
+	player.stream = stream
+	player.volume_db = float(Tuning.get_value("audio.sting_db", -2))
+	add_child(player)
+	player.play()
+	var was := music.volume_db
+	var tw := create_tween()
+	tw.tween_property(music, "volume_db", was - 9.0, 0.3)
+	tw.tween_interval(maxf(0.5, stream.get_length() - 0.6))
+	tw.tween_property(music, "volume_db", was, 0.8)
+	player.finished.connect(player.queue_free)
+
+
 func play_sfx(sfx_name: String, pitch_rand := false) -> void:
 	if _silent:
 		return
