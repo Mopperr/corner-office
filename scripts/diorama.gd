@@ -2448,6 +2448,14 @@ func _tea_card() -> void:
 	UIKit.link_focus([yes, no])
 	UIKit.pop_in(card)
 	AudioDirector.play_sfx("sfx_notification_soft")
+	# An offer, not a demand: left unanswered a while, the kettle goes cold
+	# and the card goes, so it never sits over the room for good.
+	get_tree().create_timer(14.0).timeout.connect(func():
+		if is_instance_valid(card) and card.is_inside_tree():
+			_toast("The tea went cold. Another time.", client)
+			layer.remove_child(card)
+			card.queue_free()
+	)
 
 
 func _carry_next() -> void:

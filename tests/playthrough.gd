@@ -1289,6 +1289,10 @@ func _unpack() -> void:
 				loose.append(item)
 		if loose.is_empty():
 			break
+		# The kettle card, if it is up, takes a click before the room does.
+		if press("Yes please"):
+			print("  tea: yes please, then back to it")
+			await wait(0.4)
 		var picked := ""
 		for item in loose:
 			var node := _node_for(room, str(item.get("uid", "")))
