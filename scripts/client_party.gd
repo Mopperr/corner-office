@@ -73,7 +73,7 @@ static func line(pool_mood: String, event: String, seed: int, fills: Dictionary 
 	for key in fills.keys():
 		text = text.replace("{%s}" % key, str(fills[key]))
 	text = text.replace("{name}", str(fills.get("name", GameState.first_name())))
-	return text
+	return GameState.fill_tokens(text)
 
 
 static func story_for(def: Dictionary) -> Dictionary:

@@ -435,7 +435,7 @@ func _email() -> void:
 		head.add_theme_constant_override("separation", 12)
 		col.add_child(head)
 		head.add_child(UIKit.avatar(str(mail.get("from", "?")).left(1), UIKit.TERRA if str(mail.get("from", "")).begins_with("Marge") else UIKit.BLUE, 40))
-		var subject := UIKit.label(str(mail.get("subject", "")), 28, UIKit.DARK, "title", false)
+		var subject := UIKit.label(GameState.fill_tokens(str(mail.get("subject", ""))), 28, UIKit.DARK, "title", false)
 		subject.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		subject.custom_minimum_size = Vector2(500, 40)
 		subject.clip_text = true
@@ -443,7 +443,7 @@ func _email() -> void:
 		var from := UIKit.label(str(mail.get("from", "")), 24, UIKit.WOOD, "small", false)
 		from.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		head.add_child(from)
-		var text := UIKit.label(str(mail.get("body", "")), 24, UIKit.DARK, "small")
+		var text := UIKit.label(GameState.fill_tokens(str(mail.get("body", ""))), 24, UIKit.DARK, "small")
 		text.custom_minimum_size = Vector2(1140, 0)
 		text.max_lines_visible = 8
 		col.add_child(text)

@@ -333,7 +333,7 @@ static func _story(tag: String, who: String, item_name: String) -> String:
 	if pool.is_empty():
 		return "%s took the %s home." % [who, item_name]
 	var line := str(pool[GameState.rng.randi() % pool.size()])
-	return line.replace("{buyer}", who).replace("{item}", item_name.to_lower())
+	return GameState.fill_tokens(line, {"buyer": who, "item": item_name.to_lower()})
 
 
 static func _journal(line: String, pay: int) -> void:

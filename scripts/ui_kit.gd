@@ -558,7 +558,7 @@ static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> vo
 	head.add_theme_constant_override("separation", 12)
 	column.add_child(head)
 	head.add_child(portrait(40))
-	var title := label("%s" % beat.get("level_name", ""), 32, TERRA, "title", false)
+	var title := label(GameState.fill_tokens(str(beat.get("level_name", ""))), 32, TERRA, "title", false)
 	title.name = "LevelTitle"
 	title.custom_minimum_size = Vector2(420, 44)
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -566,12 +566,12 @@ static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> vo
 	var tag := label(str(beat.get("level_id", beat.get("level", ""))), 24, BLUE, "small", false)
 	tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	head.add_child(tag)
-	var arrival := str(beat.get("arrival", "")).strip_edges()
+	var arrival := GameState.fill_tokens(str(beat.get("arrival", ""))).strip_edges()
 	if arrival != "":
 		var row := label(arrival, 28, DARK, "small")
 		row.custom_minimum_size = Vector2(960, 0)
 		column.add_child(row)
-	var moment := str(beat.get("moment", "")).strip_edges()
+	var moment := GameState.fill_tokens(str(beat.get("moment", ""))).strip_edges()
 	if moment != "":
 		var row2 := label(moment, 28, BLUE, "small")
 		row2.custom_minimum_size = Vector2(960, 0)

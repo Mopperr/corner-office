@@ -58,12 +58,12 @@ func _ready() -> void:
 		failures.append("desk height")
 	if GameState.inbox.is_empty() or str(GameState.inbox[0].get("id", "")) != "tut_welcome":
 		failures.append("welcome email")
-	if not str(GameState.inbox[0].get("body", "")).contains("Hey Dana") or str(GameState.inbox[0].get("subject", "")) != "Welcome to the garage, boss":
+	if not GameState.fill_tokens(str(GameState.inbox[0].get("body", ""))).contains("Hey Dana") or str(GameState.inbox[0].get("subject", "")) != "Welcome to the garage, boss":
 		failures.append("dana welcome")
 	if GameState.character != "dana" or GameState.office_id != "garage" or GameState.slice_character_id() != "dana":
 		failures.append("dana start")
 	var listing := FileAccess.get_file_as_string("res://data/narrative/emails.json")
-	if listing.contains("Shared Coworking") or not listing.contains("Bakery Loft") or not listing.contains("Hey Dana"):
+	if listing.contains("Shared Coworking") or not listing.contains("Bakery Loft") or not (listing.contains("Hey Dana") or listing.contains("Hey {player_name}")):
 		failures.append("bakery email rename")
 	var notes_def := ItemDB.get_item("sticky_note_stack")
 	if str(notes_def.get("model", "")) != "sticky_note_stack":
@@ -357,6 +357,9 @@ func _ready() -> void:
 	failures.append_array(await _books_checks())
 	failures.append_array(await _play_checks())
 	failures.append_array(await _team_bundle_checks())
+	failures.append_array(await _token_checks())
+	failures.append_array(_days_after_checks())
+	failures.append_array(_lighthouse_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -3434,6 +3437,141 @@ func _team_bundle_checks() -> Array:
 			placed += 1
 	if placed != 11:
 		found.append("bed with three sofas took %d of 11 boxes" % placed)
+	GameState.job = {}
+	GameState.new_game("dana")
+	return found
+
+
+func _token_checks() -> Array:
+	# {player_name} fills with the PC's first name when text is shown, never
+	# when it is stored; unknown tokens stay; every shipped email renders clean.
+	var found: Array = []
+	GameState.new_game("dana")
+	if GameState.first_name() != "Dana" or GameState.player_name() != "Dana Reyes":
+		found.append("player name %s / %s" % [GameState.first_name(), GameState.player_name()])
+	var filled := GameState.fill_tokens("Not bad for {player_name}. +{rep_gained} {unknown_token} {PLAYER_NAME}!")
+	if filled != "Not bad for Dana. +{rep_gained} {unknown_token} DANA!":
+		found.append("tokens %s" % filled)
+	if GameState.fill_tokens("no braces here") != "no braces here":
+		found.append("plain text changed")
+	if GameState.fill_tokens("{player_full_name}") != "Dana Reyes":
+		found.append("full name token")
+	for mail in GameState._read_emails():
+		var shown := GameState.fill_tokens(str(mail.get("subject", "")) + str(mail.get("body", "")))
+		if shown.contains("{player_name}"):
+			found.append("raw token in %s" % mail.get("id", "?"))
+	GameState.new_game("hank")
+	if GameState.fill_tokens("The {player_name}") != "The Hank":
+		found.append("Hank's token: %s" % GameState.fill_tokens("The {player_name}"))
+	GameState.inbox.append({"id": "tok_test", "from": "Marge", "subject": "Hi {player_name}", "body": "The label says 'The {player_name}'.", "read": false})
+	var computer: Control = load("res://scripts/computer_ui.gd").new()
+	add_child(computer)
+	computer.page = "email"
+	computer.call("_show_page")
+	await get_tree().process_frame
+	var raw_on_screen := false
+	var filled_on_screen := false
+	for node in computer.find_children("*", "Label", true, false):
+		var text := (node as Label).text
+		if text.contains("{player_name}"):
+			raw_on_screen = true
+		if text.contains("The label says 'The Hank'."):
+			filled_on_screen = true
+	if raw_on_screen or not filled_on_screen:
+		found.append("email page token (raw %s, filled %s)" % [raw_on_screen, filled_on_screen])
+	_bury(computer)
+	GameState.new_game("dana")
+	return found
+
+
+func _days_after_checks() -> Array:
+	# days_after:<trigger>:<N> mail is queued when the trigger fires, once,
+	# survives a save with an int day, and arrives N days on, exactly once.
+	var found: Array = []
+	GameState.new_game("dana")
+	GameState.test_emails = [
+		{"id": "keeper_test", "from": "The keeper", "subject": "Your photo", "body": "Came out well, {player_name}.", "trigger": "days_after:lighthouse_photo_collected:1"},
+		{"id": "later_test", "from": "The keeper", "subject": "And another", "body": "Two days on.", "trigger": "days_after:lighthouse_photo_collected:2"},
+	]
+	var has_mail := func(id: String) -> int:
+		var n := 0
+		for m in GameState.inbox:
+			if str(m.get("id", "")) == id:
+				n += 1
+		return n
+	GameState.fire_trigger("lighthouse_photo_collected")
+	if has_mail.call("keeper_test") != 0 or GameState.mail_schedule.size() != 2:
+		found.append("days_after queued %s" % [GameState.mail_schedule])
+	GameState.fire_trigger("lighthouse_photo_collected")
+	if GameState.mail_schedule.size() != 2:
+		found.append("days_after double queue")
+	SaveManager.save_game()
+	GameState.mail_schedule = []
+	if not SaveManager.load_game() or GameState.mail_schedule.size() != 2 or typeof(GameState.mail_schedule[0]["due"]) != TYPE_INT:
+		found.append("days_after save %s" % [GameState.mail_schedule])
+	GameState.advance_day()
+	if has_mail.call("keeper_test") != 1 or has_mail.call("later_test") != 0 or GameState.mail_schedule.size() != 1:
+		found.append("keeper after 1 day %d, later %d, queue %d" % [has_mail.call("keeper_test"), has_mail.call("later_test"), GameState.mail_schedule.size()])
+	GameState.advance_day()
+	GameState.advance_day()
+	if has_mail.call("keeper_test") != 1 or has_mail.call("later_test") != 1 or not GameState.mail_schedule.is_empty():
+		found.append("keeper exactly once %d, later %d" % [has_mail.call("keeper_test"), has_mail.call("later_test")])
+	# An old save with no mail_schedule key loads clean.
+	var raw: Dictionary = GameState.to_dict()
+	raw.erase("mail_schedule")
+	GameState.from_dict(raw)
+	if not GameState.mail_schedule.is_empty():
+		found.append("old save grew a schedule")
+	GameState.test_emails = []
+	GameState.new_game("dana")
+	return found
+
+
+func _lighthouse_checks() -> Array:
+	# L15: stop two seconds in the lighthouse turnout and the photo is
+	# taken once; drive through and nothing; the result fires the trigger
+	# once and the keeper writes the next day.
+	var found: Array = []
+	GameState.new_game("dana")
+	GameState.job = {"def": {"drive": "windy_coast", "level": "L15"}, "boxes": [], "items": []}
+	var coast: Node = load("res://scripts/drive_course.gd").new()
+	add_child(coast)
+	var spots: Array = coast.get("turnouts")
+	if spots.size() != 1 or not bool(coast.call("_on_road", (spots[0]["rect"] as Rect2).get_center())):
+		found.append("l15 turnout %s" % [spots])
+	var middle: Vector2 = (spots[0]["rect"] as Rect2).get_center() if spots.size() > 0 else Vector2.ZERO
+	coast.set("state", "drive")
+	coast.set("pos", middle)
+	coast.set("speed", 200.0)
+	for i in 30:
+		coast.call("_check_lighthouse_photo", 0.1)
+	if not (coast.get("photos") as Dictionary).is_empty():
+		found.append("l15 photo on pass-through")
+	coast.set("speed", 0.0)
+	for i in 21:
+		coast.call("_check_lighthouse_photo", 0.1)
+	if not (coast.get("photos") as Dictionary).has("lighthouse_photo"):
+		found.append("l15 no photo after 2 s")
+	_bury(coast)
+	GameState.test_emails = [{"id": "lighthouse_L15_keeper", "from": "The keeper", "subject": "Your photo", "body": "Came out well.", "trigger": "days_after:lighthouse_photo_collected:1"}]
+	GameState.job = {"def": {}, "items": [], "boxes": []}
+	GameState.apply_drive_result({"condition": 100, "lighthouse_photo": true})
+	GameState.apply_drive_result({"condition": 100, "lighthouse_photo": true})
+	if not GameState.fired.has("lighthouse_photo_collected") or GameState.mail_schedule.size() != 1:
+		found.append("l15 trigger once %s" % [GameState.mail_schedule])
+	GameState.advance_day()
+	var keeper := 0
+	for m in GameState.inbox:
+		if str(m.get("id", "")) == "lighthouse_L15_keeper":
+			keeper += 1
+	if keeper != 1:
+		found.append("keeper email %d" % keeper)
+	GameState.test_emails = []
+	GameState.new_game("dana")
+	GameState.job = {"def": {}, "items": [], "boxes": []}
+	GameState.apply_drive_result({"condition": 100, "lighthouse_photo": false})
+	if GameState.fired.has("lighthouse_photo_collected"):
+		found.append("l15 fired without photo")
 	GameState.job = {}
 	GameState.new_game("dana")
 	return found

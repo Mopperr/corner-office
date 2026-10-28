@@ -32,6 +32,10 @@ var prices: Dictionary = {}
 var history: Dictionary = {}
 var inbox: Array = []
 var fired: Dictionary = {}
+# Mail that arrives N days after a trigger: [{"trigger": "days_after:X:N", "due": day}].
+var mail_schedule: Array = []
+# Tests inject their own email list here; empty means the shipped file.
+var test_emails: Array = []
 var tutorial_done := false
 var first_placed := false
 var museum: Array = []
@@ -101,6 +105,7 @@ func new_game(who: String) -> void:
 	goods_cost = {}
 	inbox = []
 	fired = {}
+	mail_schedule = []
 	tutorial_done = false
 	first_placed = false
 	museum = []
@@ -281,9 +286,16 @@ func fire_trigger(trigger: String) -> void:
 	if fired.has(trigger):
 		return
 	fired[trigger] = true
-	var emails = _read_emails()
+	var emails: Array = test_emails if not test_emails.is_empty() else _read_emails()
 	var added := false
+	# Anything written as days_after:<this trigger>:<N> is queued for N days on.
+	var prefix := "days_after:%s:" % trigger
 	for email in emails:
+		var t := str(email.get("trigger", ""))
+		if t.begins_with(prefix):
+			var wait := maxi(0, t.trim_prefix(prefix).to_int())
+			if not fired.has(t) and not _scheduled(t):
+				mail_schedule.append({"trigger": t, "due": day + wait})
 		if str(email.get("trigger", "")) == trigger:
 			inbox.append({
 				"id": email.get("id", trigger),
@@ -295,6 +307,28 @@ func fire_trigger(trigger: String) -> void:
 			added = true
 	if added:
 		emit_signal("emails_changed")
+
+
+func _scheduled(trigger: String) -> bool:
+	for entry in mail_schedule:
+		if str(entry.get("trigger", "")) == trigger:
+			return true
+	return false
+
+
+func _fire_due_mail() -> void:
+	# The queue is split before anything fires, so a days_after mail can
+	# itself queue another without the loop seeing it.
+	var waiting: Array = []
+	var due: Array = []
+	for entry in mail_schedule:
+		if day >= int(entry.get("due", 0)):
+			due.append(str(entry.get("trigger", "")))
+		else:
+			waiting.append(entry)
+	mail_schedule = waiting
+	for t in due:
+		fire_trigger(t)
 
 
 func loaded_arc_characters() -> int:
@@ -415,6 +449,20 @@ func first_name() -> String:
 	var full := player_name()
 	var bits := full.split(" ")
 	return str(bits[0]) if bits.size() > 0 else full
+
+
+func fill_tokens(text: String, extra: Dictionary = {}) -> String:
+	# Narrative text carries {player_name} (the first name), {player_full_name}
+	# and {PLAYER_NAME} (shouted), filled when shown, never when stored, so a
+	# save keeps the raw token. Unknown tokens are left as they are.
+	if not text.contains("{"):
+		return text
+	var out := text.replace("{player_name}", first_name())
+	out = out.replace("{player_full_name}", player_name())
+	out = out.replace("{PLAYER_NAME}", first_name().to_upper())
+	for key in extra.keys():
+		out = out.replace("{%s}" % key, str(extra[key]))
+	return out
 
 
 func perk(id: String) -> bool:
@@ -1491,6 +1539,8 @@ func apply_drive_result(result: Dictionary) -> void:
 	job["near_miss"] = bool(result.get("near_miss", false))
 	job["honks"] = int(result.get("honks", 0))
 	job["spotted"] = int(result.get("spotted", 0))
+	if bool(result.get("lighthouse_photo", false)):
+		fire_trigger("lighthouse_photo_collected")
 	if int(job.get("spotted", 0)) > 0:
 		Crime.on_drive(result)
 	_assign_damage()
@@ -1901,6 +1951,7 @@ func advance_day() -> void:
 	var closed_day := day
 	var summary := day_summary(closed_day)
 	day += 1
+	_fire_due_mail()
 	for good in ItemDB.trade_goods():
 		var id := str(good.get("id", ""))
 		var base := float(ItemDB.base_price(id))
@@ -2531,15 +2582,11 @@ func _visitor_request(who: Dictionary) -> void:
 
 func _shop_summary(closed_day: int, earned: int, visitors: int, vibe: int) -> void:
 	var spec: Dictionary = Catalog.shop.get("summary_email", {})
-	var body := str(spec.get("body", ""))
-	body = body.replace("{day}", str(closed_day))
-	body = body.replace("{earned}", str(earned))
-	body = body.replace("{visitors}", str(visitors))
-	body = body.replace("{vibe}", str(vibe))
+	var body := fill_tokens(str(spec.get("body", "")), {"day": closed_day, "earned": earned, "visitors": visitors, "vibe": vibe})
 	inbox.append({
 		"id": "shop_day_%d" % closed_day,
 		"from": str(spec.get("from", "Marge Holloway")),
-		"subject": str(spec.get("subject", "The till")).replace("{day}", str(closed_day)),
+		"subject": fill_tokens(str(spec.get("subject", "The till")), {"day": closed_day}),
 		"body": body,
 		"read": false,
 	})
@@ -2571,6 +2618,7 @@ func to_dict() -> Dictionary:
 		"history": history.duplicate(true),
 		"inbox": inbox.duplicate(true),
 		"fired": fired.duplicate(true),
+		"mail_schedule": mail_schedule.duplicate(true),
 		"tutorial_done": tutorial_done,
 		"first_placed": first_placed,
 		"museum": museum.duplicate(),
@@ -2640,6 +2688,10 @@ func from_dict(raw: Dictionary) -> void:
 	history = raw.get("history", {})
 	inbox = raw.get("inbox", [])
 	fired = raw.get("fired", {})
+	mail_schedule = []
+	for entry in raw.get("mail_schedule", []):
+		if typeof(entry) == TYPE_DICTIONARY:
+			mail_schedule.append({"trigger": str(entry.get("trigger", "")), "due": int(entry.get("due", 0))})
 	tutorial_done = bool(raw.get("tutorial_done", false))
 	first_placed = bool(raw.get("first_placed", false))
 	museum = raw.get("museum", [])

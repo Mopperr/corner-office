@@ -263,7 +263,7 @@ static func story_check() -> void:
 		sent.append(id)
 		GameState.inbox.append({"id": id, "from": "Sal", "subject": str(beat.get("subject", "")), "body": str(beat.get("body", "")), "read": false})
 		GameState.emit_signal("emails_changed")
-		GameState.emit_signal("toast_requested", "Sal wrote: %s." % beat.get("subject", ""))
+		GameState.emit_signal("toast_requested", "Sal wrote: %s." % GameState.fill_tokens(str(beat.get("subject", ""))))
 	s["story_sent"] = sent
 
 

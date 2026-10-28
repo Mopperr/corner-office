@@ -52,6 +52,11 @@ var honk_cool := 0.0
 var duck_friend := false
 var near_miss := false
 var wobble_done := false
+# Turnouts: a pull-in you can stop in for a moment (the L15 lighthouse); a
+# reward is taken once per drive and goes out with the result.
+var turnouts: Array = []
+var turnout_hold := 0.0
+var photos: Dictionary = {}
 var hazard_cd: Dictionary = {}
 var touching: Dictionary = {}
 var contact_ready: Dictionary = {}
@@ -165,6 +170,7 @@ func _ready() -> void:
 		heading = round(first / (PI * 0.5)) * PI * 0.5
 	box_count = maxi(1, GameState.job.get("boxes", []).size())
 	_resolve_hazards()
+	_resolve_turnouts()
 	_lights()
 	world = Node3D.new()
 	world.name = "Town"
@@ -216,6 +222,39 @@ func _forward() -> Vector3:
 
 
 # ---------------------------------------------------------------- setup
+
+func _resolve_turnouts() -> void:
+	turnouts.clear()
+	for raw in course.get("turnouts", []):
+		var spec: Dictionary = raw
+		var spot: Dictionary = city.point_along(route, float(spec.get("along", 0.5)))
+		var dir: Vector2 = spot.get("dir", Vector2.RIGHT)
+		var side := Vector2(-dir.y, dir.x)
+		var at: Vector2 = spot.get("pos", Vector2.ZERO) + side * float(spec.get("lane", 0)) * city.road * 0.25
+		var size := Vector2(float(spec.get("w", 160)), float(spec.get("h", 120)))
+		turnouts.append({"id": str(spec.get("id", "")), "rect": Rect2(at - size * 0.5, size), "stop_s": float(spec.get("stop_s", 2.0)), "reward": str(spec.get("reward", ""))})
+
+
+func _check_lighthouse_photo(delta: float) -> void:
+	# Stop inside a turnout for its few seconds and the photo is taken, once.
+	var inside := false
+	for spot in turnouts:
+		var reward := str(spot.get("reward", ""))
+		if reward == "" or photos.has(reward):
+			continue
+		if (spot["rect"] as Rect2).has_point(pos):
+			inside = true
+			if absf(speed) < 14.0:
+				turnout_hold += delta
+				if turnout_hold >= float(spot.get("stop_s", 2.0)):
+					photos[reward] = true
+					turnout_hold = 0.0
+					AudioDirector.play_sfx("sfx_notification_soft")
+			else:
+				turnout_hold = 0.0
+	if not inside:
+		turnout_hold = 0.0
+
 
 func _resolve_hazards() -> void:
 	hazards.clear()
@@ -1513,6 +1552,7 @@ func _process(delta: float) -> void:
 		_traffic(delta)
 		_hazards()
 		_check_alley()
+		_check_lighthouse_photo(delta)
 		_check_dropoff()
 	_walkers(delta)
 	_place_truck(delta)
@@ -2407,6 +2447,7 @@ func _complete() -> void:
 		"duck_friend": duck_friend and not near_miss and bool(GameState.job.get("def", {}).get("duck_friend", false)),
 		"near_miss": near_miss,
 		"time": time_alive,
+		"lighthouse_photo": photos.has("lighthouse_photo"),
 	}
 	AudioDirector.play_sfx("sfx_success_chime")
 	emit_signal("finished", result)

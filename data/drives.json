@@ -1,55 +1,161 @@
 {
-  "rainy_afternoon": {
-    "id": "rainy_afternoon",
-    "title": "Rainy Afternoon",
-    "weather": "rain",
-    "music": "music_driving_rain",
-    "ambience": "amb_l03_rain_loop",
-    "pickup": "cafe",
-    "dropoff": "cafe_new",
-    "alley": true,
-    "hazards": [
-      { "type": "puddle", "along": 0.12, "lane": 0, "r": 64 },
-      { "type": "puddle", "along": 0.3, "lane": 1, "r": 56 },
-      { "type": "bump", "along": 0.42, "w": 170, "h": 36 },
-      { "type": "cone", "along": 0.52, "lane": -1 },
-      { "type": "cone", "along": 0.6, "lane": 1 },
-      { "type": "cone", "along": 0.68, "lane": -1 },
-      { "type": "ducks", "along": 0.86, "w": 220, "h": 160, "auto_stop": true }
-    ],
-    "scenery": "town"
+ "rainy_afternoon": {
+  "id": "rainy_afternoon",
+  "title": "Rainy Afternoon",
+  "weather": "rain",
+  "music": "music_driving_rain",
+  "ambience": "amb_l03_rain_loop",
+  "pickup": "cafe",
+  "dropoff": "cafe_new",
+  "alley": true,
+  "hazards": [
+   {
+    "type": "puddle",
+    "along": 0.12,
+    "lane": 0,
+    "r": 64
+   },
+   {
+    "type": "puddle",
+    "along": 0.3,
+    "lane": 1,
+    "r": 56
+   },
+   {
+    "type": "bump",
+    "along": 0.42,
+    "w": 170,
+    "h": 36
+   },
+   {
+    "type": "cone",
+    "along": 0.52,
+    "lane": -1
+   },
+   {
+    "type": "cone",
+    "along": 0.6,
+    "lane": 1
+   },
+   {
+    "type": "cone",
+    "along": 0.68,
+    "lane": -1
+   },
+   {
+    "type": "ducks",
+    "along": 0.86,
+    "w": 220,
+    "h": 160,
+    "auto_stop": true
+   }
+  ],
+  "scenery": "town"
+ },
+ "sunny_main": {
+  "id": "sunny_main",
+  "title": "Sunny Main Street",
+  "weather": "clear",
+  "music": "music_driving",
+  "pickup": "train",
+  "dropoff": "train_new",
+  "alley": true,
+  "hazards": [
+   {
+    "type": "bump",
+    "along": 0.35,
+    "w": 170,
+    "h": 36
+   },
+   {
+    "type": "cone",
+    "along": 0.55,
+    "lane": 1
+   },
+   {
+    "type": "puddle",
+    "along": 0.7,
+    "lane": -1,
+    "r": 48
+   },
+   {
+    "type": "ducks",
+    "along": 0.85,
+    "w": 220,
+    "h": 160,
+    "auto_stop": true
+   }
+  ],
+  "scenery": "town"
+ },
+ "duck_pond": {
+  "id": "duck_pond",
+  "title": "Duck Pond",
+  "weather": "park",
+  "music": "music_driving",
+  "ambience": "amb_l05_park_birds_loop",
+  "pickup": "park_shed",
+  "dropoff": "boathouse",
+  "alley": false,
+  "hazards": [
+   {
+    "type": "gravel",
+    "along": 0.2,
+    "w": 280,
+    "h": 80
+   },
+   {
+    "type": "ducks",
+    "along": 0.5,
+    "w": 240,
+    "h": 160,
+    "auto_stop": false,
+    "honk": true
+   },
+   {
+    "type": "gravel",
+    "along": 0.72,
+    "w": 300,
+    "h": 80
+   },
+   {
+    "type": "bump",
+    "along": 0.88,
+    "w": 40,
+    "h": 120
+   }
+  ],
+  "scenery": "pond"
+ },
+ "windy_coast": {
+  "id": "windy_coast",
+  "title": "Windy Coast",
+  "weather": "clear",
+  "music": "music_driving",
+  "ambience": "amb_l15_coastal_loop",
+  "pickup": "glass",
+  "dropoff": "forest",
+  "alley": false,
+  "source_route": "drive_routes/l15_windycoast.json",
+  "hazards": [],
+  "turnouts": [
+   {
+    "id": "lighthouse_turnout",
+    "along": 0.62,
+    "lane": -1,
+    "w": 160,
+    "h": 120,
+    "stop_s": 2.0,
+    "reward": "lighthouse_photo"
+   }
+  ],
+  "rewards": {
+   "lighthouse_photo": {
+    "id": "lighthouse_photo",
+    "type": "collectible",
+    "add_only": true
+   }
   },
-  "sunny_main": {
-    "id": "sunny_main",
-    "title": "Sunny Main Street",
-    "weather": "clear",
-    "music": "music_driving",
-    "pickup": "train",
-    "dropoff": "train_new",
-    "alley": true,
-    "hazards": [
-      { "type": "bump", "along": 0.35, "w": 170, "h": 36 },
-      { "type": "cone", "along": 0.55, "lane": 1 },
-      { "type": "puddle", "along": 0.7, "lane": -1, "r": 48 },
-      { "type": "ducks", "along": 0.85, "w": 220, "h": 160, "auto_stop": true }
-    ],
-    "scenery": "town"
-  },
-  "duck_pond": {
-    "id": "duck_pond",
-    "title": "Duck Pond",
-    "weather": "park",
-    "music": "music_driving",
-    "ambience": "amb_l05_park_birds_loop",
-    "pickup": "park_shed",
-    "dropoff": "boathouse",
-    "alley": false,
-    "hazards": [
-      { "type": "gravel", "along": 0.2, "w": 280, "h": 80 },
-      { "type": "ducks", "along": 0.5, "w": 240, "h": 160, "auto_stop": false, "honk": true },
-      { "type": "gravel", "along": 0.72, "w": 300, "h": 80 },
-      { "type": "bump", "along": 0.88, "w": 40, "h": 120 }
-    ],
-    "scenery": "pond"
-  }
+  "scenery": "town"
+ }
 }
