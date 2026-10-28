@@ -341,6 +341,7 @@ func _ready() -> void:
 	failures.append_array(await _stack_world())
 	failures.append_array(await _menu_audit())
 	failures.append_array(await _home_checks())
+	failures.append_array(await _party_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	if leaked > 0:
@@ -2358,6 +2359,124 @@ func _home_checks() -> Array:
 		found.append("home payout %s" % pay)
 	# Buttons swapped out by the floor change are freed at the end of the frame.
 	await get_tree().process_frame
+	await get_tree().process_frame
+	_bury(play)
+	GameState.job = {}
+	GameState.mode = "office"
+	return found
+
+
+func _party_checks() -> Array:
+	# The people being moved: every mood has every line, the family stands
+	# by the door, and it answers a scuff, a wrong room and a click.
+	var found: Array = []
+	var Party = load("res://scripts/client_party.gd")
+	var pools: Dictionary = Party.load_data()
+	var events := ["greet", "idle", "placed", "placed_good", "wrong_room", "scuff", "tipped", "stacked", "cat", "caught", "talk", "slow", "finish_good", "finish_ok", "finish_bad"]
+	for mood in Party.MOODS:
+		for event in events:
+			if (((pools.get("moods", {}) as Dictionary).get(mood, {}) as Dictionary).get(event, []) as Array).is_empty():
+				found.append("no %s lines for a %s client" % [event, mood])
+	for event in events:
+		if ((pools.get("kid", {}) as Dictionary).get(event, []) as Array).is_empty():
+			found.append("no %s lines for a kid" % event)
+	var filled: String = Party.line("fussy", "wrong_room", 0, {"item": "toaster", "room": "bathroom"})
+	if "{" in filled or not ("toaster" in filled or "bathroom" in filled):
+		found.append("line fill: %s" % filled)
+	for client in load("res://scripts/job_gen.gd").clients():
+		if (client.get("party", []) as Array).is_empty() or not (str(client.get("mood", "")) in Party.MOODS):
+			found.append("client %s has no party or mood" % client.get("name", "?"))
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	var JobGen = load("res://scripts/job_gen.gd")
+	var made: Dictionary = JobGen.board(3, 1, 1, 2, 3)
+	var job: Dictionary = {}
+	for candidate in made["jobs"]:
+		if (candidate.get("party", []) as Array).size() >= 2:
+			job = candidate
+	if job.is_empty():
+		job = made["jobs"][0]
+	GameState.generated_jobs = [job]
+	GameState.generated_drives = made["drives"]
+	GameState.start_job(str(job["id"]))
+	for box in GameState.job.get("boxes", []):
+		box["sealed"] = true
+	GameState.set_mode("job_unpack")
+	var play: Node = RoomLib.new()
+	add_child(play)
+	var party: Node = play.party
+	if party == null:
+		found.append("no party on site")
+		_bury(play)
+		return found
+	if party.members.size() != (job.get("party", []) as Array).size():
+		found.append("party of %d, wanted %d" % [party.members.size(), (job.get("party", []) as Array).size()])
+	if party.member_for("client:0") == null:
+		found.append("party members not clickable")
+	var said: String = party.react("wrong_room", {"item": "toaster", "room": "bathroom"}, true)
+	if said == "":
+		found.append("the family said nothing about the toaster")
+	var bubbles := 0
+	for person in party.members:
+		if person.get_node_or_null("Thought") != null:
+			bubbles += 1
+	if bubbles == 0:
+		found.append("no thought bubble over the family")
+	if party.react("placed", {}, true) == "":
+		found.append("nothing to say about a placed piece")
+	party.cooldown = 0.0
+	if party.react("talk", {}, true) == "":
+		found.append("a click gets no answer")
+	var verdict: String = Party.finish_line(GameState.job["def"], 95, 4, 4)
+	if verdict == "":
+		found.append("finish line: %s" % verdict)
+	# Twenty stories: a household, a house, a reason, three beats and an ending each.
+	var stories: Array = JobGen.stories()
+	if stories.size() < 20:
+		found.append("only %d stories" % stories.size())
+	var homes_seen: Dictionary = {}
+	for tale in stories:
+		if (tale.get("beats", []) as Array).size() != 3 or str(tale.get("ending", "")) == "" or str(tale.get("why", "")) == "":
+			found.append("story %s is short" % tale.get("id", "?"))
+		if not ItemDB.venues().has(str(tale.get("venue", ""))):
+			found.append("story %s has no house" % tale.get("id", "?"))
+		if (tale.get("party", []) as Array).is_empty() or not (str(tale.get("mood", "")) in Party.MOODS):
+			found.append("story %s has no people" % tale.get("id", "?"))
+		homes_seen[str(tale.get("venue", ""))] = true
+	if homes_seen.size() < 15:
+		found.append("stories cover only %d houses" % homes_seen.size())
+	var storied := 0
+	for client in JobGen.clients():
+		if str(client.get("story", "")) != "":
+			storied += 1
+	if storied != stories.size():
+		found.append("board clients carry %d stories" % storied)
+	# A story job: the brief says why, the party tells it in beats, the results close it.
+	var tale_job: Dictionary = {}
+	var seed2 := 1
+	while tale_job.is_empty() and seed2 < 60:
+		for candidate in JobGen.board(seed2, 2, 1, 2, 3)["jobs"]:
+			if str(candidate.get("story", "")) != "":
+				tale_job = candidate
+				break
+		seed2 += 1
+	if tale_job.is_empty():
+		found.append("no story job in 60 boards")
+	else:
+		if not (str(tale_job.get("why", "")) in str(tale_job.get("brief", ""))):
+			found.append("story brief lacks the why")
+		GameState.job = {"def": tale_job, "items": [], "boxes": []}
+		var teller: Node = Party.new()
+		add_child(teller)
+		teller.setup(null, tale_job, Vector3.ZERO, Vector3(0, 0, 1))
+		var first: String = teller.tell()
+		teller.on_progress(1, 2)
+		teller.on_progress(2, 2)
+		if first == "" or teller.beat != 3:
+			found.append("story beats: first '%s', told %d" % [first, teller.beat])
+		if Party.finish_line(tale_job, 90, 1, 1) != str(JobGen.story(str(tale_job["story"])).get("ending", "")):
+			found.append("story ending not on the results")
+		_bury(teller)
 	await get_tree().process_frame
 	_bury(play)
 	GameState.job = {}

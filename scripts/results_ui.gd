@@ -83,7 +83,10 @@ func _ready() -> void:
 	var condition := int(pay.get("condition", 100))
 	var def: Dictionary = GameState.job.get("def", {})
 	var client := str(def.get("client", "the client"))
-	if condition >= 90:
+	var verdict: String = load("res://scripts/client_party.gd").finish_line(def, condition, int(pay.get("rooms_right", 0)), int(pay.get("rooms_total", 0)))
+	if verdict != "":
+		lines.append(verdict)
+	elif condition >= 90:
 		lines.append("%s walks the room twice and says nothing, which is the good kind of nothing." % client)
 	elif condition >= 70:
 		lines.append("%s finds the scuff, shrugs, and puts the kettle on." % client)

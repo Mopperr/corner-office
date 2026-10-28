@@ -6,45 +6,30 @@ const Homes = preload("res://scripts/homes.gd")
 # reload and different on every new game.
 
 const CLIENTS: Array = [
-	{"name": "Ada Lindqvist", "trade": "potter", "venue": "cafe", "line": "The kiln pieces are wrapped. The rest is just mugs."},
-	{"name": "Benji Osei", "trade": "record collector", "venue": "train", "line": "Crates of vinyl. Heavy, and I will know if one is scuffed."},
-	{"name": "Carmen Ruiz", "trade": "florist", "venue": "park", "line": "Plants first, please. They do not like the dark."},
-	{"name": "Dev Patel", "trade": "tailor", "venue": "cafe", "line": "The dress forms are awkward, not fragile. Mostly."},
-	{"name": "Esme Hart", "trade": "baker", "venue": "bakery", "line": "Everything smells of cinnamon. You will too, by the end."},
-	{"name": "Farouk Haddad", "trade": "watchmaker", "venue": "train", "line": "Small boxes, big consequences. Pad the clocks."},
-	{"name": "Greta Voss", "trade": "retired teacher", "venue": "park", "line": "Forty years of books. Keep the sets together or I will cry."},
-	{"name": "Hiro Tanaka", "trade": "barista", "venue": "cafe", "line": "The machine rides alone. It is the only thing I own that matters."},
-	{"name": "Ines Moreau", "trade": "illustrator", "venue": "bakery", "line": "Frames, pencils, one lamp I am very attached to."},
-	{"name": "Jonah Blake", "trade": "model maker", "venue": "train", "line": "There is a bag of parts I never sorted. Good luck."},
-	{"name": "Kay Nakamura", "trade": "yoga teacher", "venue": "park", "line": "Cushions, plants, and a kettle. The calmest move you will do."},
-	{"name": "Lou Ferreira", "trade": "mechanic", "venue": "cafe", "line": "Toolboxes. Heavy ones. Bottom of the truck, please."},
-	{"name": "Mira Solano", "trade": "ceramicist", "venue": "studio", "line": "Bowls, glazes, and a wheel I will carry myself."},
-	{"name": "Noor Rahimi", "trade": "architect", "venue": "studio", "line": "Rolled drawings and one very good lamp."},
-	{"name": "Otto Brandt", "trade": "clockmaker", "venue": "flat", "line": "Everything ticks. Please do not let it stop."},
-	{"name": "Pia Kowalski", "trade": "nurse", "venue": "flat", "line": "Night shifts. Boxes are labelled, mostly truthfully."},
-	{"name": "Quinn Adeyemi", "trade": "DJ", "venue": "train", "line": "Crates. Do not stack the crates. They are crates."},
-	{"name": "Rosa Leclerc", "trade": "pastry chef", "venue": "bakery", "line": "Trays and tins and a mixer older than me."},
-	{"name": "Sami Khoury", "trade": "bookseller", "venue": "flat", "line": "Forty boxes of books. Twenty are poetry. Be gentle."},
-	{"name": "Tove Lund", "trade": "sailor", "venue": "park", "line": "Rope, lamps, and a bench from the boat."},
-	{"name": "Uma Chandra", "trade": "violin teacher", "venue": "studio", "line": "The metronome rides on the seat beside you."},
-	{"name": "Viggo Hansen", "trade": "carpenter", "venue": "cafe", "line": "Tools in the red box. Coffee in the blue tin."},
-	{"name": "Wren Okafor", "trade": "photographer", "venue": "studio", "line": "Frames face each other. Lamps face the wall."},
-	{"name": "Yusuf Demir", "trade": "chess coach", "venue": "park", "line": "Boards, clocks, and a kettle. Nothing dramatic."},
-	# Households moving into houses: whole families, couples, people on their own.
-	{"name": "The Okonkwos", "title": "The Okonkwos' move", "trade": "family", "venue": "semi_a", "line": "Two kids, one dog, a piano nobody plays. Kitchen things first."},
-	{"name": "Maeve and Tom", "title": "Maeve and Tom's first house", "trade": "couple", "venue": "terrace_a", "line": "Our first place with stairs. Everything says FRAGILE because Tom panicked."},
-	{"name": "Grandma Ilse", "title": "Grandma Ilse's bungalow", "trade": "retired", "venue": "bungalow_a", "line": "Sixty years in boxes. The clock goes in the lounge, the rest you can guess."},
-	{"name": "The Reyes family", "title": "The Reyes family's big move", "trade": "family", "venue": "detached_a", "line": "Four bedrooms to fill. The bunk beds are in bits. Sorry."},
-	{"name": "Priya", "title": "Priya's flat", "trade": "junior doctor", "venue": "flat_b", "line": "One trip, I hope. The bed is the only heavy thing."},
-	{"name": "The Lindgrens", "title": "The Lindgrens' townhouse", "trade": "family", "venue": "townhouse_b", "line": "The loft is for the train set. Do not tell my wife it is for the train set."},
-	{"name": "Old Mr Bello", "title": "Mr Bello's cottage", "trade": "gardener", "venue": "cottage_a", "line": "The shed matters more than the house. Mower first."},
-	{"name": "Jun and Sol", "title": "Jun and Sol's loft", "trade": "designers", "venue": "loftflat_a", "line": "Open plan, so put things where they look right, not where they go."},
-	{"name": "The Achebe twins", "title": "The Achebe twins' maisonette", "trade": "students", "venue": "maisonette_b", "line": "Two of everything, and we will argue about which is whose."},
-	{"name": "The Varga family", "title": "The Vargas' villa", "trade": "family", "venue": "villa_a", "line": "Three floors and a shed. Bring a flask."},
-	{"name": "Mrs Castellano", "title": "Mrs Castellano's new start", "trade": "widow", "venue": "semi_b", "line": "Half a house of things. Gentle with the photographs."},
-	{"name": "Dev and the boys", "title": "Dev and the boys", "trade": "single dad", "venue": "terrace_b", "line": "Bunk beds, a telly, and an unreasonable amount of football kit."},
-	{"name": "The Haddads", "title": "The Haddads come home", "trade": "family", "venue": "villa_b", "line": "We have been abroad ten years. The containers arrive today. All of them."},
-	{"name": "Noor and Amal", "title": "Noor and Amal's cottage", "trade": "couple", "venue": "cottage_b", "line": "The bath is cast iron. We know. We are sorry."},
+	{"name": "Ada Lindqvist", "party": ["adult"], "mood": "warm", "trade": "potter", "venue": "cafe", "line": "The kiln pieces are wrapped. The rest is just mugs."},
+	{"name": "Benji Osei", "party": ["adult"], "mood": "fussy", "trade": "record collector", "venue": "train", "line": "Crates of vinyl. Heavy, and I will know if one is scuffed."},
+	{"name": "Carmen Ruiz", "party": ["adult"], "mood": "warm", "trade": "florist", "venue": "park", "line": "Plants first, please. They do not like the dark."},
+	{"name": "Dev Patel", "party": ["adult"], "mood": "fussy", "trade": "tailor", "venue": "cafe", "line": "The dress forms are awkward, not fragile. Mostly."},
+	{"name": "Esme Hart", "party": ["adult"], "mood": "warm", "trade": "baker", "venue": "bakery", "line": "Everything smells of cinnamon. You will too, by the end."},
+	{"name": "Farouk Haddad", "party": ["elder"], "mood": "fussy", "trade": "watchmaker", "venue": "train", "line": "Small boxes, big consequences. Pad the clocks."},
+	{"name": "Greta Voss", "party": ["elder"], "mood": "warm", "trade": "retired teacher", "venue": "park", "line": "Forty years of books. Keep the sets together or I will cry."},
+	{"name": "Hiro Tanaka", "party": ["adult"], "mood": "rude", "trade": "barista", "venue": "cafe", "line": "The machine rides alone. It is the only thing I own that matters."},
+	{"name": "Ines Moreau", "party": ["adult"], "mood": "warm", "trade": "illustrator", "venue": "bakery", "line": "Frames, pencils, one lamp I am very attached to."},
+	{"name": "Jonah Blake", "party": ["adult"], "mood": "fussy", "trade": "model maker", "venue": "train", "line": "There is a bag of parts I never sorted. Good luck."},
+	{"name": "Kay Nakamura", "party": ["adult"], "mood": "warm", "trade": "yoga teacher", "venue": "park", "line": "Cushions, plants, and a kettle. The calmest move you will do."},
+	{"name": "Lou Ferreira", "party": ["adult"], "mood": "rude", "trade": "mechanic", "venue": "cafe", "line": "Toolboxes. Heavy ones. Bottom of the truck, please."},
+	{"name": "Mira Solano", "party": ["adult"], "mood": "fussy", "trade": "ceramicist", "venue": "studio", "line": "Bowls, glazes, and a wheel I will carry myself."},
+	{"name": "Noor Rahimi", "party": ["adult"], "mood": "fussy", "trade": "architect", "venue": "studio", "line": "Rolled drawings and one very good lamp."},
+	{"name": "Otto Brandt", "party": ["elder"], "mood": "fussy", "trade": "clockmaker", "venue": "flat", "line": "Everything ticks. Please do not let it stop."},
+	{"name": "Pia Kowalski", "party": ["adult"], "mood": "warm", "trade": "nurse", "venue": "flat", "line": "Night shifts. Boxes are labelled, mostly truthfully."},
+	{"name": "Quinn Adeyemi", "party": ["adult"], "mood": "rude", "trade": "DJ", "venue": "train", "line": "Crates. Do not stack the crates. They are crates."},
+	{"name": "Rosa Leclerc", "party": ["adult"], "mood": "warm", "trade": "pastry chef", "venue": "bakery", "line": "Trays and tins and a mixer older than me."},
+	{"name": "Sami Khoury", "party": ["adult"], "mood": "warm", "trade": "bookseller", "venue": "flat", "line": "Forty boxes of books. Twenty are poetry. Be gentle."},
+	{"name": "Tove Lund", "party": ["adult"], "mood": "rude", "trade": "sailor", "venue": "park", "line": "Rope, lamps, and a bench from the boat."},
+	{"name": "Uma Chandra", "party": ["adult"], "mood": "fussy", "trade": "violin teacher", "venue": "studio", "line": "The metronome rides on the seat beside you."},
+	{"name": "Viggo Hansen", "party": ["adult"], "mood": "warm", "trade": "carpenter", "venue": "cafe", "line": "Tools in the red box. Coffee in the blue tin."},
+	{"name": "Wren Okafor", "party": ["adult"], "mood": "fussy", "trade": "photographer", "venue": "studio", "line": "Frames face each other. Lamps face the wall."},
+	{"name": "Yusuf Demir", "party": ["elder"], "mood": "warm", "trade": "chess coach", "venue": "park", "line": "Boards, clocks, and a kettle. Nothing dramatic."},
 ]
 
 # What a house move carries, by the room it belongs in; big pieces are capped.
@@ -78,17 +63,54 @@ const DRIVE_ENDS: Array = [
 const STREETS: Array = ["Larch Street", "Mill Lane", "Harbour Road", "Elm Row", "Station Hill", "Copper Lane", "Quay Street"]
 
 
+static var _clients_cache: Array = []
+
+
+static func clients() -> Array:
+	# The trade clients above, plus every household with a story in data/stories.json.
+	if _clients_cache.is_empty():
+		_clients_cache = CLIENTS.duplicate(true)
+		for story in stories():
+			_clients_cache.append({
+				"name": str(story.get("client", "")), "title": str(story.get("title", "")), "trade": str(story.get("trade", "")),
+				"venue": str(story.get("venue", "")), "line": str(story.get("line", "")), "party": story.get("party", ["adult"]),
+				"mood": str(story.get("mood", "warm")), "story": str(story.get("id", "")), "why": str(story.get("why", "")),
+			})
+	return _clients_cache
+
+
+static var _stories_cache: Array = []
+
+
+static func stories() -> Array:
+	if _stories_cache.is_empty():
+		var file := FileAccess.open("res://data/stories.json", FileAccess.READ)
+		if file:
+			var parsed: Variant = JSON.parse_string(file.get_as_text())
+			if typeof(parsed) == TYPE_DICTIONARY:
+				_stories_cache = parsed.get("stories", [])
+	return _stories_cache
+
+
+static func story(id: String) -> Dictionary:
+	for entry in stories():
+		if str(entry.get("id", "")) == id:
+			return entry
+	return {}
+
+
 static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("%d:%d" % [seed, day])
 	var jobs: Array = []
 	var drives: Dictionary = {}
 	var used_clients: Array = []
+	var pool: Array = clients()
 	for n in count:
-		var client: Dictionary = CLIENTS[rng.randi_range(0, CLIENTS.size() - 1)]
+		var client: Dictionary = pool[rng.randi_range(0, pool.size() - 1)]
 		var guard := 0
 		while used_clients.has(client.get("name", "")) and guard < 12:
-			client = CLIENTS[rng.randi_range(0, CLIENTS.size() - 1)]
+			client = pool[rng.randi_range(0, pool.size() - 1)]
 			guard += 1
 		used_clients.append(client.get("name", ""))
 		var id := "gen_d%d_%d" % [day, n]
@@ -118,7 +140,11 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 			"title": str(client.get("title", "%s's %s move" % [str(client.get("name", "Someone")).split(" ")[0], client.get("trade", "")])),
 			"home": is_home,
 			"client": client.get("name", ""),
-			"brief": "%s %d pieces to %s. %s" % [client.get("line", ""), size, drive.get("title", "the new place"), _twist_line(twist)],
+			"party": client.get("party", ["adult"]),
+			"mood": client.get("mood", ""),
+			"story": client.get("story", ""),
+			"why": client.get("why", ""),
+			"brief": "%s%s %d pieces to %s. %s" % [(str(client.get("why", "")) + " ") if str(client.get("why", "")) != "" else "", client.get("line", ""), size, drive.get("title", "the new place"), _twist_line(twist)],
 			"mentor_note": _mentor_line(twist, rng),
 			"narrative_base": pay,
 			"recipe": recipe,

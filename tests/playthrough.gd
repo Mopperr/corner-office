@@ -969,6 +969,14 @@ func _unpack() -> void:
 		_check(bool(room.carried.get(id, false)), "unpack: box %d carried in" % (id + 1))
 		room = _room()
 	await shot("unpack_carried")
+	var party: Node = room.party
+	_check(party != null and party.members.size() > 0, "family: on site (%d)" % (party.members.size() if party else 0))
+	if party != null and party.members.size() > 0:
+		var member: Node3D = party.members[0]
+		await click_node(room, "client:0", member)
+		await wait(0.2)
+		_check(member.get_node_or_null("Thought") != null, "family: answers a click")
+		await shot("family_talk")
 	var generated := bool(GameState.job.get("def", {}).get("generated", false))
 	if generated and press("Stack the boxes"):
 		await wait(0.3)
@@ -1184,11 +1192,26 @@ func _home_floors(room: Node) -> void:
 			placed = true
 			break
 	_check(placed and int(GameState.job_item(picked).get("floor", -1)) == 1, "home: piece set down upstairs")
-	# Downstairs again by the stairs themselves.
+	# The stairs themselves change floor (up first in a taller house), then
+	# the Down buttons bring Dana back to the hall.
 	var stairs: Node3D = room.get_node("Interior").get_node_or_null("Stairs")
 	_check(stairs != null, "home: stairwell to click")
 	if stairs != null:
 		await click_node(room, "stairs", stairs)
+		await wait(0.3)
+		room = _room()
+		_check(room.home_floor != 1, "home: the stairs change floor (floor %d)" % room.home_floor)
+	var down_guard := 0
+	while room.home_floor > 0 and down_guard < 4:
+		down_guard += 1
+		var pressed_down := false
+		for btn in _buttons(room):
+			if btn.text.begins_with("Down to"):
+				btn.pressed.emit()
+				pressed_down = true
+				break
+		if not pressed_down:
+			break
 		await wait(0.3)
 		room = _room()
 	_check(room.home_floor == 0, "home: back downstairs (floor %d)" % room.home_floor)

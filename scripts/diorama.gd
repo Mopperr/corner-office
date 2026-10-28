@@ -19,6 +19,7 @@ const Workshop = preload("res://scripts/workshop.gd")
 const Crime = preload("res://scripts/crime.gd")
 const YardShop = preload("res://scripts/yard_shop.gd")
 const VenueDressing = preload("res://scripts/venue_dressing.gd")
+const ClientPartyLib = preload("res://scripts/client_party.gd")
 
 const MENU_YAW_DEG := 45.0
 const MENU_PITCH_DEG := -30.0
@@ -239,6 +240,7 @@ func _build_venue() -> void:
 	_build_shell()
 	_theme_lights()
 	_spawn_player()
+	_spawn_party()
 	_ensure_stack_room()
 	_frame_camera()
 	_dress()
@@ -1500,6 +1502,9 @@ func _click() -> void:
 	if item_uid.begins_with("delivery:") and GameState.mode == "office" and GameState.office_phase == "live":
 		_delivery_click(item_uid.trim_prefix("delivery:"))
 		return
+	if item_uid.begins_with("client:") and party != null:
+		party.react("talk", {}, true)
+		return
 	if item_uid.begins_with("visitor:") and GameState.mode == "office":
 		var visitor_uid := item_uid.trim_prefix("visitor:")
 		if not _open_ask(visitor_uid):
@@ -1686,6 +1691,7 @@ func _try_place_held() -> void:
 	AudioDirector.play_sfx("sfx_box_set_down", true)
 	held_uid = ""
 	held_source = ""
+	_last_placed_uid = uid
 	_commit_place(uid, source, on_wall)
 
 
@@ -1709,6 +1715,7 @@ func _after_place(source: String) -> void:
 		_maybe_live()
 	elif source == "job":
 		_unhide_loose()
+		_party_on_place()
 		_maybe_job_done()
 
 
@@ -1966,6 +1973,7 @@ func _unpack_click(uid: String) -> void:
 
 func _open_carried_box(box_id: int) -> void:
 	# Tip the box out: its items turn loose on the floor behind where it sat.
+	_party_react("tipped", {})
 	var n := 0
 	for item in GameState.job.get("items", []):
 		if int(item.get("box", -1)) != box_id or str(item.get("state", "")) != "boxed":
@@ -2144,6 +2152,8 @@ func _loosen(item: Dictionary, box_id: int, index: int) -> void:
 	item["y"] = 0.0
 	if _is_home():
 		item["floor"] = home_floor
+	if int(item.get("damage", 0)) > 0:
+		_party_react("scuff", {"item": str(item.get("name", "piece")).to_lower()})
 	var box := GameState.job_box(box_id)
 	if not box.is_empty() and bool(box.get("has_cat", false)) and not bool(GameState.job.get("cat_opened", false)):
 		_open_cat(box_id)
@@ -2347,6 +2357,7 @@ func _pack_rest() -> void:
 func _stack_boxes() -> void:
 	# Pile the carried, still-packed boxes into towers of three, in id order,
 	# so the floor behind them is clear for the pieces that come out.
+	_party_react("stacked", {})
 	var packed: Array = []
 	for box in GameState.job.get("boxes", []):
 		var id := int(box.get("id", -1))
@@ -2559,6 +2570,7 @@ func _open_cat(box_id: int) -> void:
 	AudioDirector.play_sfx("sfx_cat_meow")
 	AudioDirector.play_sfx("sfx_success_chime")
 	_confetti()
+	_party_react("cat", {})
 	_toast("Biscuit! There's a photo for the museum shelf, and a little tip.")
 	if cat_rig:
 		cat_rig.visible = true
@@ -2751,6 +2763,68 @@ func _is_home() -> bool:
 	return Homes.is_home(venue)
 
 
+# ------------------------------------------------------------ the client
+# The person or family you are moving stands by the door and talks:
+# a greeting, idle chatter, and a word about every scuff, tipped box and
+# piece set down in the wrong room. See scripts/client_party.gd.
+
+var party: Node3D = null
+
+
+func _spawn_party() -> void:
+	if party != null and is_instance_valid(party):
+		party.queue_free()
+	party = null
+	if backdrop or not (GameState.mode in ["job_pack", "job_unpack"]) or GameState.job.is_empty():
+		return
+	var def: Dictionary = GameState.job.get("def", {})
+	party = ClientPartyLib.new()
+	add_child(party)
+	party.setup(self, def, _door_world(), Vector3(0, 0, 1))
+	party.react("greet", {}, true)
+
+
+func _party_react(event: String, fills: Dictionary, force := false) -> void:
+	if party != null and is_instance_valid(party):
+		party.react(event, fills, force)
+
+
+func _party_on_place() -> void:
+	# The last piece placed: the right room gets a nod, the wrong one a remark,
+	# and the story moves on as the room fills.
+	if party == null or not is_instance_valid(party):
+		return
+	var done := 0
+	var total := 0
+	for item in GameState.job.get("items", []):
+		total += 1
+		if str(item.get("state", "")) in ["placed", "settling"]:
+			done += 1
+	party.on_progress(done, total)
+	if party.cooldown > 2.5:
+		_last_placed_uid = ""
+		return
+	var latest: Dictionary = {}
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) in ["placed", "settling"] and str(item.get("uid", "")) == _last_placed_uid:
+			latest = item
+	if latest.is_empty():
+		party.react("placed", {})
+		return
+	var tag := str(latest.get("room", ""))
+	if _is_home() and tag != "" and Homes.has_tag(venue, tag):
+		var room := Homes.room_at(venue, int(latest.get("floor", 0)), float(latest.get("x", 0)), float(latest.get("z", 0)))
+		if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) == tag:
+			party.react("placed_good", {"item": str(latest.get("name", "piece")).to_lower()})
+		else:
+			party.react("wrong_room", {"item": str(latest.get("name", "piece")).to_lower(), "room": str(room.get("name", "hall")).to_lower()}, true)
+		return
+	party.react("placed", {"item": str(latest.get("name", "piece")).to_lower()})
+
+
+var _last_placed_uid := ""
+
+
 func _build_interior() -> void:
 	var old := get_node_or_null("Interior")
 	if old != null:
@@ -2908,6 +2982,7 @@ func _open_owner_card(uid: String) -> void:
 		if bool(result.get("noticed", false)):
 			AudioDirector.play_sfx("sfx_invalid_placement")
 			_toast("They saw that go into the bag. That will cost you.", "Dana")
+			_party_react("caught", {}, true)
 		else:
 			_toast("Into the bag. Nobody saw. Heat +%d." % int(result.get("heat", 1)), "Dana")
 		_refresh_items()
