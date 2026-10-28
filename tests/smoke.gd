@@ -2617,6 +2617,14 @@ func _catalog_checks() -> Array:
 		found.append("%d of %d board recipes overflow the truck" % [over, recipes])
 	if not FileAccess.file_exists("res://docs/ITEMS.md") or not FileAccess.file_exists("res://tools/check_items.py"):
 		found.append("catalogue docs or checker missing")
+	# The hook for the team's Blender models: nothing yet, so the primitives build.
+	if Props.catalog_model("mug_mustard") != null:
+		found.append("a catalogue model loaded with no file")
+	var mug: Node3D = Props.make("proc:mug_mustard")
+	if mug == null or mug.get_child_count() < 3 or not str((ItemDB.catalog_items["mug_mustard"] as Dictionary).get("way_hex", "")).length() == 6:
+		found.append("mug_mustard does not build from its primitives with a way_hex")
+	if mug != null:
+		mug.free()
 	return found
 
 

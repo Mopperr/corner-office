@@ -13,6 +13,10 @@
 - **props**: a list of parts. `t` is `box`, `cyl` or `sph`; `s` is the size (box: w, h, d; cyl: radius, height; sph: radius); `p` is the part's centre with y up and the origin at the floor under the piece's middle; `c` is a hex colour; `r` an optional rotation in radians. Keep a piece inside its `w`/`d`/`h` and give it at least two parts.
 - Check a file with `python3 tools/check_items.py data/items/<file>.json`.
 
+## Real models for a family (GLB)
+
+A piece builds from its primitive list unless a Blender model for it exists in `assets/models/`: `hh_cat_<family>_<variant>.glb` first, then `hh_cat_<family>.glb` (`family` and `variant` are fields on every generated item; a variant is `plain` when unnamed, else the suffix with spaces as underscores, e.g. `two_cup`). The model is built like the household ones in `tools/build_household.py`: Z-up in Blender, front toward -Y, origin at the floor centre, sized to the family's base `w`/`d`/`h` (the game scales it by the item's `scale` field for sized variants), exported with `export_yup=True`. Meshes whose names start with `way_` are recoloured to the item's colour way (`way_hex`); every other mesh keeps its own material. Keep it under seven materials. Nothing else changes: the item's data, box rules and line stay as they are.
+
 ## Counts by room
 
 | Room | Pieces | Families |

@@ -402,10 +402,49 @@ static func model(name: String) -> Node3D:
 	return packed.instantiate() as Node3D
 
 
+static func catalog_model(id: String) -> Node3D:
+	# A Blender model for a catalogue family, when the team has made one:
+	# hh_cat_<family>_<variant>.glb, then hh_cat_<family>.glb, scaled for
+	# the sized variants and recoloured on the way_* meshes.
+	var def: Dictionary = ItemDB.catalog_items.get(id, {})
+	if def.is_empty():
+		return null
+	var fam := str(def.get("family", ""))
+	if fam == "":
+		return null
+	var variant := str(def.get("variant", "plain")).replace(" ", "_").replace("-", "_")
+	for name in ["hh_cat_%s_%s" % [fam, variant], "hh_cat_%s" % fam]:
+		if not ResourceLoader.exists("res://assets/models/%s.glb" % name):
+			continue
+		var node := model(name)
+		if node == null:
+			continue
+		var k := float(def.get("scale", 1.0))
+		if absf(k - 1.0) > 0.001:
+			node.scale = Vector3(k, k, k)
+		var way := str(def.get("way_hex", ""))
+		if way != "":
+			for mesh_instance in _mesh_instances(node):
+				if not str(mesh_instance.name).to_lower().begins_with("way_") or mesh_instance.mesh == null:
+					continue
+				for i in mesh_instance.mesh.get_surface_count():
+					var base: Material = mesh_instance.mesh.surface_get_material(i)
+					var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D if base is StandardMaterial3D else mat(Color(way))
+					std.albedo_color = Color(way)
+					keep_material(mesh_instance, i, std)
+		node.set_meta("catalog_model", name)
+		return node
+	return null
+
+
 static func make(spec: String) -> Node3D:
 	var node: Node3D
 	if spec.begins_with("proc:"):
-		node = _proc(spec.trim_prefix("proc:"))
+		node = catalog_model(spec.trim_prefix("proc:"))
+		if node != null:
+			ensure_box_collision(node)
+		else:
+			node = _proc(spec.trim_prefix("proc:"))
 	else:
 		node = model(spec)
 		if node == null:
@@ -418,7 +457,7 @@ static func make(spec: String) -> Node3D:
 		if spec.begins_with("hh_"):
 			dress_household(node, spec.trim_prefix("hh_"))
 	# Blender-built household pieces keep their own few colours.
-	cap_prop_materials(node, 7 if spec.begins_with("hh_") else 2)
+	cap_prop_materials(node, 7 if (spec.begins_with("hh_") or node.has_meta("catalog_model")) else 2)
 	polish(node)
 	return node
 
