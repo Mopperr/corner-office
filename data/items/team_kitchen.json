@@ -1,0 +1,8373 @@
+{
+ "items": {
+  "kit_bread_maker": {
+   "name": "Bread maker",
+   "model": "proc:kit_bread_maker",
+   "w": 0.26,
+   "d": 0.4,
+   "h": 0.34,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Wakes the house at six with a smell and a thud.",
+   "family": "kit_bread_maker",
+   "variant": "plain"
+  },
+  "kit_slow_cooker": {
+   "name": "Slow cooker",
+   "model": "proc:kit_slow_cooker",
+   "w": 0.38,
+   "d": 0.33,
+   "h": 0.265,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Put it on before work. Come home to the same stew as last week.",
+   "family": "kit_slow_cooker",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_rice_cooker": {
+   "name": "Rice cooker",
+   "model": "proc:kit_rice_cooker",
+   "w": 0.26,
+   "d": 0.265,
+   "h": 0.295,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Clicks to warm and stays smug about it.",
+   "family": "kit_rice_cooker",
+   "variant": "plain"
+  },
+  "kit_pressure_cooker": {
+   "name": "Pressure cooker",
+   "model": "proc:kit_pressure_cooker",
+   "w": 0.54,
+   "d": 0.24,
+   "h": 0.24,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Hisses like it knows something.",
+   "family": "kit_pressure_cooker",
+   "variant": "plain"
+  },
+  "kit_food_processor": {
+   "name": "Food processor",
+   "model": "proc:kit_food_processor",
+   "w": 0.24,
+   "d": 0.23,
+   "h": 0.44,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Eleven attachments. One gets used.",
+   "family": "kit_food_processor",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_citrus_juicer": {
+   "name": "Citrus juicer",
+   "model": "proc:kit_citrus_juicer",
+   "w": 0.2,
+   "d": 0.16,
+   "h": 0.18,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Half a lemon, and most of it on the counter.",
+   "family": "kit_citrus_juicer",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_waffle_iron": {
+   "name": "Waffle iron",
+   "model": "proc:kit_waffle_iron",
+   "w": 0.38,
+   "d": 0.26,
+   "h": 0.12,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Sunday only. Sticks every Sunday.",
+   "family": "kit_waffle_iron",
+   "variant": "plain"
+  },
+  "kit_sandwich_toaster": {
+   "name": "Sandwich toaster",
+   "model": "proc:kit_sandwich_toaster",
+   "w": 0.24,
+   "d": 0.26,
+   "h": 0.12,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Molten cheese at the temperature of the sun.",
+   "family": "kit_sandwich_toaster",
+   "variant": "plain"
+  },
+  "kit_deep_fat_fryer": {
+   "name": "Deep fat fryer",
+   "model": "proc:kit_deep_fat_fryer",
+   "w": 0.32,
+   "d": 0.48,
+   "h": 0.26,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Kept for chips. Smells of chips. Forever.",
+   "family": "kit_deep_fat_fryer",
+   "variant": "plain"
+  },
+  "kit_ice_cream_maker": {
+   "name": "Ice cream maker",
+   "model": "proc:kit_ice_cream_maker",
+   "w": 0.24,
+   "d": 0.24,
+   "h": 0.32,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Made vanilla once, in 2016. Still talked about.",
+   "family": "kit_ice_cream_maker",
+   "variant": "plain"
+  },
+  "kit_pasta_machine": {
+   "name": "Pasta machine",
+   "model": "proc:kit_pasta_machine",
+   "w": 0.315,
+   "d": 0.2,
+   "h": 0.22,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Flour in the rollers since the first attempt.",
+   "family": "kit_pasta_machine",
+   "variant": "plain"
+  },
+  "kit_mincer": {
+   "name": "Hand mincer",
+   "model": "proc:kit_mincer",
+   "w": 0.285,
+   "d": 0.14,
+   "h": 0.28,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Clamped to the table, cranked by the youngest.",
+   "family": "kit_mincer",
+   "variant": "plain"
+  },
+  "kit_colander": {
+   "name": "Enamel colander",
+   "model": "proc:kit_colander",
+   "w": 0.34,
+   "d": 0.26,
+   "h": 0.13,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Drains the peas and half the peas.",
+   "family": "kit_colander",
+   "variant": "plain"
+  },
+  "kit_flour_sifter": {
+   "name": "Flour sifter",
+   "model": "proc:kit_flour_sifter",
+   "w": 0.185,
+   "d": 0.12,
+   "h": 0.16,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Squeak, squeak, a cloud, a cough.",
+   "family": "kit_flour_sifter",
+   "variant": "plain"
+  },
+  "kit_rolling_pin_board": {
+   "name": "Rolling pin and pastry board",
+   "model": "proc:kit_rolling_pin_board",
+   "w": 0.5,
+   "d": 0.35,
+   "h": 0.085,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Pastry for one pie, flour for the whole kitchen.",
+   "family": "kit_rolling_pin_board",
+   "variant": "plain"
+  },
+  "kit_egg_timer": {
+   "name": "Sand egg timer",
+   "model": "proc:kit_egg_timer",
+   "w": 0.08,
+   "d": 0.08,
+   "h": 0.16,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Three minutes, or two if you shake it.",
+   "family": "kit_egg_timer",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_kitchen_timer": {
+   "name": "Wind-up kitchen timer",
+   "model": "proc:kit_kitchen_timer",
+   "w": 0.08,
+   "d": 0.085,
+   "h": 0.095,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Rings loud enough to burn the toast anyway.",
+   "family": "kit_kitchen_timer",
+   "variant": "plain"
+  },
+  "kit_cheese_dome": {
+   "name": "Cheese dome",
+   "model": "proc:kit_cheese_dome",
+   "w": 0.27,
+   "d": 0.26,
+   "h": 0.26,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Keeps the cheese in and the smell mostly in.",
+   "family": "kit_cheese_dome",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_butter_dish": {
+   "name": "Butter dish",
+   "model": "proc:kit_butter_dish",
+   "w": 0.2,
+   "d": 0.13,
+   "h": 0.08,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "The butter is always hard. That is the deal.",
+   "family": "kit_butter_dish",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_gravy_boat": {
+   "name": "Gravy boat",
+   "model": "proc:kit_gravy_boat",
+   "w": 0.24,
+   "d": 0.12,
+   "h": 0.12,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Comes out at Christmas and on no other day.",
+   "family": "kit_gravy_boat",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_soup_tureen": {
+   "name": "Soup tureen",
+   "model": "proc:kit_soup_tureen",
+   "w": 0.36,
+   "d": 0.265,
+   "h": 0.26,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "For soup, in theory. Holds the good napkins.",
+   "family": "kit_soup_tureen",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_roasting_tin": {
+   "name": "Roasting tin with a chicken",
+   "model": "proc:kit_roasting_tin",
+   "w": 0.43,
+   "d": 0.3,
+   "h": 0.14,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Sunday lunch, at least an hour late.",
+   "family": "kit_roasting_tin",
+   "variant": "plain"
+  },
+  "kit_wok": {
+   "name": "Wok",
+   "model": "proc:kit_wok",
+   "w": 0.725,
+   "d": 0.38,
+   "h": 0.16,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Seasoned, the owner says. Rusty, says everyone else.",
+   "family": "kit_wok",
+   "variant": "plain"
+  },
+  "kit_skillet": {
+   "name": "Cast-iron skillet",
+   "model": "proc:kit_skillet",
+   "w": 0.56,
+   "d": 0.28,
+   "h": 0.065,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Weighs as much as a small dog. Never washed with soap.",
+   "family": "kit_skillet",
+   "variant": "plain",
+   "heavy": true
+  },
+  "kit_steamer_baskets": {
+   "name": "Bamboo steamer",
+   "model": "proc:kit_steamer_baskets",
+   "w": 0.26,
+   "d": 0.26,
+   "h": 0.24,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Three tiers of dumplings, one tier of good intentions.",
+   "family": "kit_steamer_baskets",
+   "variant": "plain"
+  },
+  "kit_tagine": {
+   "name": "Tagine",
+   "model": "proc:kit_tagine",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.32,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Brought back in hand luggage. Never again.",
+   "family": "kit_tagine",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_fondue_set": {
+   "name": "Fondue set",
+   "model": "proc:kit_fondue_set",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.36,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Seventies wedding present, rediscovered every decade.",
+   "family": "kit_fondue_set",
+   "variant": "plain"
+  },
+  "kit_cafetiere": {
+   "name": "Cafetiere",
+   "model": "proc:kit_cafetiere",
+   "w": 0.16,
+   "d": 0.11,
+   "h": 0.28,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Plunged too early, every time.",
+   "family": "kit_cafetiere",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_moka_pot": {
+   "name": "Stovetop espresso pot",
+   "model": "proc:kit_moka_pot",
+   "w": 0.14,
+   "d": 0.1,
+   "h": 0.21,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Gurgles like a drain, tastes like Italy, roughly.",
+   "family": "kit_moka_pot",
+   "variant": "plain"
+  },
+  "kit_cup_and_saucer": {
+   "name": "Cup and saucer",
+   "model": "proc:kit_cup_and_saucer",
+   "w": 0.15,
+   "d": 0.15,
+   "h": 0.08,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Bone china, for the vicar and nobody else.",
+   "family": "kit_cup_and_saucer",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_egg_cups": {
+   "name": "Egg cups",
+   "model": "proc:kit_egg_cups",
+   "w": 0.2,
+   "d": 0.08,
+   "h": 0.1,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Three cups, three eggs, one with a face drawn on.",
+   "family": "kit_egg_cups",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_toast_rack": {
+   "name": "Toast rack",
+   "model": "proc:kit_toast_rack",
+   "w": 0.18,
+   "d": 0.08,
+   "h": 0.12,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Keeps toast cold, as tradition demands.",
+   "family": "kit_toast_rack",
+   "variant": "plain"
+  },
+  "kit_pestle_mortar": {
+   "name": "Pestle and mortar",
+   "model": "proc:kit_pestle_mortar",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.175,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Granite. Could stop a door, or a burglar.",
+   "family": "kit_pestle_mortar",
+   "variant": "plain",
+   "heavy": true
+  },
+  "kit_kitchen_roll_holder": {
+   "name": "Kitchen roll holder",
+   "model": "proc:kit_kitchen_roll_holder",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.325,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Always on the last few sheets.",
+   "family": "kit_kitchen_roll_holder",
+   "variant": "plain"
+  },
+  "kit_washing_up_bowl": {
+   "name": "Washing-up bowl",
+   "model": "proc:kit_washing_up_bowl",
+   "w": 0.38,
+   "d": 0.3,
+   "h": 0.14,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "A spoon has lived at the bottom since March.",
+   "family": "kit_washing_up_bowl",
+   "variant": "plain"
+  },
+  "kit_pan_rail": {
+   "name": "Pan rail with utensils",
+   "model": "proc:kit_pan_rail",
+   "w": 0.8,
+   "d": 0.15,
+   "h": 0.42,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Everything to hand, and all of it banging together.",
+   "family": "kit_pan_rail",
+   "variant": "plain"
+  },
+  "kit_knife_strip": {
+   "name": "Magnetic knife strip",
+   "model": "proc:kit_knife_strip",
+   "w": 0.45,
+   "d": 0.05,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Sharp knives, kept just above eye level. Sensible.",
+   "family": "kit_knife_strip",
+   "variant": "plain"
+  },
+  "kit_chalkboard": {
+   "name": "Kitchen chalkboard",
+   "model": "proc:kit_chalkboard",
+   "w": 0.5,
+   "d": 0.08,
+   "h": 0.7,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "MILK, written three times in three hands.",
+   "family": "kit_chalkboard",
+   "variant": "plain"
+  },
+  "kit_key_hooks": {
+   "name": "Key hooks",
+   "model": "proc:kit_key_hooks",
+   "w": 0.3,
+   "d": 0.08,
+   "h": 0.12,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Four hooks, and the keys are in yesterday's coat.",
+   "family": "kit_key_hooks",
+   "variant": "plain"
+  },
+  "kit_oven_gloves": {
+   "name": "Oven gloves on a hook",
+   "model": "proc:kit_oven_gloves",
+   "w": 0.3,
+   "d": 0.095,
+   "h": 0.45,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Scorched on the thumb that matters.",
+   "family": "kit_oven_gloves",
+   "variant": "plain"
+  },
+  "kit_apron_peg": {
+   "name": "Apron on a peg",
+   "model": "proc:kit_apron_peg",
+   "w": 0.4,
+   "d": 0.105,
+   "h": 0.8,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Clean. Worn twice a year for photographs.",
+   "family": "kit_apron_peg",
+   "variant": "plain"
+  },
+  "kit_extractor_hood": {
+   "name": "Extractor hood",
+   "model": "proc:kit_extractor_hood",
+   "w": 0.6,
+   "d": 0.51,
+   "h": 0.7,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Loud, and moves the steam around a bit.",
+   "family": "kit_extractor_hood",
+   "variant": "plain",
+   "bulky": true
+  },
+  "kit_wall_cupboard": {
+   "name": "Wall cupboard",
+   "model": "proc:kit_wall_cupboard",
+   "w": 0.6,
+   "d": 0.39,
+   "h": 0.7,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Top shelf: the fondue forks and a mystery lid.",
+   "family": "kit_wall_cupboard",
+   "variant": "plain",
+   "heavy": true
+  },
+  "kit_shopping_trolley": {
+   "name": "Shopping trolley bag",
+   "model": "proc:kit_shopping_trolley",
+   "w": 0.4,
+   "d": 0.3,
+   "h": 0.96,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Tartan, with a wheel that pulls left.",
+   "family": "kit_shopping_trolley",
+   "variant": "plain"
+  },
+  "kit_step_stool": {
+   "name": "Folding step stool",
+   "model": "proc:kit_step_stool",
+   "w": 0.42,
+   "d": 0.4,
+   "h": 0.62,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "For the top cupboard and nothing else, ever.",
+   "family": "kit_step_stool",
+   "variant": "plain"
+  },
+  "kit_recycling_crates": {
+   "name": "Recycling crates",
+   "model": "proc:kit_recycling_crates",
+   "w": 0.6,
+   "d": 0.4,
+   "h": 0.67,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Sorted with religious care, collected on the wrong day.",
+   "family": "kit_recycling_crates",
+   "variant": "plain"
+  },
+  "kit_washing_machine": {
+   "name": "Washing machine",
+   "model": "proc:kit_washing_machine",
+   "w": 0.6,
+   "d": 0.63,
+   "h": 0.85,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Walks across the floor on the spin cycle.",
+   "family": "kit_washing_machine",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "kit_tumble_dryer": {
+   "name": "Tumble dryer",
+   "model": "proc:kit_tumble_dryer",
+   "w": 0.6,
+   "d": 0.63,
+   "h": 0.85,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Shrinks one jumper per year, as a tithe.",
+   "family": "kit_tumble_dryer",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "kit_dishwasher": {
+   "name": "Dishwasher",
+   "model": "proc:kit_dishwasher",
+   "w": 0.6,
+   "d": 0.66,
+   "h": 0.86,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Loaded wrong, according to everyone else.",
+   "family": "kit_dishwasher",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "kit_chest_freezer": {
+   "name": "Chest freezer",
+   "model": "proc:kit_chest_freezer",
+   "w": 0.92,
+   "d": 0.66,
+   "h": 0.86,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Peas from the last century at the bottom.",
+   "family": "kit_chest_freezer",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "kit_larder_cupboard": {
+   "name": "Larder cupboard",
+   "model": "proc:kit_larder_cupboard",
+   "w": 0.74,
+   "d": 0.53,
+   "h": 1.9,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Tins arranged by date, then by panic.",
+   "family": "kit_larder_cupboard",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "kit_welsh_dresser": {
+   "name": "Welsh dresser",
+   "model": "proc:kit_welsh_dresser",
+   "w": 1.24,
+   "d": 0.48,
+   "h": 1.93,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Every plate on show and none of them used.",
+   "family": "kit_welsh_dresser",
+   "variant": "plain",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "kit_settle_bench": {
+   "name": "Kitchen settle",
+   "model": "proc:kit_settle_bench",
+   "w": 1.25,
+   "d": 0.5,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Hard as a church pew, and about as old.",
+   "family": "kit_settle_bench",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "kit_milk_churn": {
+   "name": "Milk churn",
+   "model": "proc:kit_milk_churn",
+   "w": 0.36,
+   "d": 0.36,
+   "h": 0.75,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "From a farm, allegedly. Holds umbrellas now.",
+   "family": "kit_milk_churn",
+   "variant": "plain",
+   "heavy": true
+  },
+  "kit_belfast_sink": {
+   "name": "Belfast sink on legs",
+   "model": "proc:kit_belfast_sink",
+   "w": 1.0,
+   "d": 0.6,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Deep enough to bath a spaniel. It has.",
+   "family": "kit_belfast_sink",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "kit_lunchbox": {
+   "name": "Lunchbox",
+   "model": "proc:kit_lunchbox",
+   "w": 0.225,
+   "d": 0.17,
+   "h": 0.12,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "A sandwich, a satsuma and a note nobody reads.",
+   "family": "kit_lunchbox",
+   "variant": "plain"
+  },
+  "kit_sugar_bowl": {
+   "name": "Sugar bowl and tongs",
+   "model": "proc:kit_sugar_bowl",
+   "w": 0.14,
+   "d": 0.1,
+   "h": 0.08,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Lumps, for the one aunt who still takes them.",
+   "family": "kit_sugar_bowl",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_popcorn_maker": {
+   "name": "Popcorn maker",
+   "model": "proc:kit_popcorn_maker",
+   "w": 0.24,
+   "d": 0.32,
+   "h": 0.32,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Film night, and the smoke alarm joins in.",
+   "family": "kit_popcorn_maker",
+   "variant": "plain"
+  },
+  "kit_milk_crate": {
+   "name": "Crate of milk bottles",
+   "model": "proc:kit_milk_crate",
+   "w": 0.4,
+   "d": 0.28,
+   "h": 0.22,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Gold top on Fridays. Somebody insists.",
+   "family": "kit_milk_crate",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_herb_trough": {
+   "name": "Windowsill herb trough",
+   "model": "proc:kit_herb_trough",
+   "w": 0.5,
+   "d": 0.16,
+   "h": 0.24,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Basil, dying slowly and in public.",
+   "family": "kit_herb_trough",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_baking_trays": {
+   "name": "Baking trays and a muffin tin",
+   "model": "proc:kit_baking_trays",
+   "w": 0.42,
+   "d": 0.3,
+   "h": 0.07,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Blackened in a way no scourer will touch.",
+   "family": "kit_baking_trays",
+   "variant": "plain"
+  },
+  "kit_cooling_rack": {
+   "name": "Cooling rack with biscuits",
+   "model": "proc:kit_cooling_rack",
+   "w": 0.42,
+   "d": 0.3,
+   "h": 0.06,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Biscuits cooling, and vanishing one at a time.",
+   "family": "kit_cooling_rack",
+   "variant": "plain"
+  },
+  "kit_cake_carrier": {
+   "name": "Cake carrier",
+   "model": "proc:kit_cake_carrier",
+   "w": 0.32,
+   "d": 0.32,
+   "h": 0.22,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Arrives at the fete with a dent in the icing.",
+   "family": "kit_cake_carrier",
+   "variant": "plain"
+  },
+  "kit_jelly_mould": {
+   "name": "Jelly on a plate",
+   "model": "proc:kit_jelly_mould",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 0.13,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Wobbles when anyone walks past. Everyone walks past.",
+   "family": "kit_jelly_mould",
+   "variant": "plain"
+  },
+  "kit_lazy_susan": {
+   "name": "Lazy Susan with sauces",
+   "model": "proc:kit_lazy_susan",
+   "w": 0.36,
+   "d": 0.36,
+   "h": 0.17,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Spun for fun, sauce flies off the side.",
+   "family": "kit_lazy_susan",
+   "variant": "plain"
+  },
+  "kit_pie_dish": {
+   "name": "Pie in an enamel dish",
+   "model": "proc:kit_pie_dish",
+   "w": 0.28,
+   "d": 0.24,
+   "h": 0.115,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Steak and kidney, with a bird in the middle for the steam.",
+   "family": "kit_pie_dish",
+   "variant": "plain"
+  },
+  "kit_jam_pan": {
+   "name": "Jam pan and jars",
+   "model": "proc:kit_jam_pan",
+   "w": 0.42,
+   "d": 0.3,
+   "h": 0.2,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Plum jam for the whole street, labelled in biro.",
+   "family": "kit_jam_pan",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_mixing_bowl": {
+   "name": "Mixing bowl with whisk",
+   "model": "proc:kit_mixing_bowl",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.235,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Cake mix, licked from the spoon by committee.",
+   "family": "kit_mixing_bowl",
+   "variant": "plain",
+   "fragile": true
+  },
+  "kit_box_grater": {
+   "name": "Box grater and cheese",
+   "model": "proc:kit_box_grater",
+   "w": 0.18,
+   "d": 0.14,
+   "h": 0.26,
+   "mount": "small",
+   "room": "kitchen",
+   "flavor": "Takes a knuckle with every block of cheddar.",
+   "family": "kit_box_grater",
+   "variant": "plain"
+  },
+  "kit_veg_rack": {
+   "name": "Three-tier vegetable rack",
+   "model": "proc:kit_veg_rack",
+   "w": 0.42,
+   "d": 0.32,
+   "h": 0.7,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Onions at the bottom, sprouting quietly.",
+   "family": "kit_veg_rack",
+   "variant": "plain"
+  },
+  "kit_potato_sack": {
+   "name": "Sack of potatoes",
+   "model": "proc:kit_potato_sack",
+   "w": 0.47,
+   "d": 0.35,
+   "h": 0.55,
+   "mount": "floor",
+   "room": "kitchen",
+   "flavor": "Twenty-five kilos, bought in a fit of thrift.",
+   "family": "kit_potato_sack",
+   "variant": "plain",
+   "heavy": true
+  },
+  "kit_garlic_string": {
+   "name": "Strings of garlic and chillies",
+   "model": "proc:kit_garlic_string",
+   "w": 0.34,
+   "d": 0.15,
+   "h": 0.6,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Wards off vampires and most visitors.",
+   "family": "kit_garlic_string",
+   "variant": "plain"
+  },
+  "kit_herb_drying_rack": {
+   "name": "Herb drying rack",
+   "model": "proc:kit_herb_drying_rack",
+   "w": 0.6,
+   "d": 0.16,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "kitchen",
+   "flavor": "Bunches of thyme that crumble when looked at.",
+   "family": "kit_herb_drying_rack",
+   "variant": "plain"
+  }
+ },
+ "props": {
+  "kit_bread_maker": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.3,
+     0.36
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.03,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.315,
+     -0.04
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.006,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.333,
+     -0.04
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.183
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     -0.05,
+     0.2,
+     0.188
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.05,
+     0.2,
+     0.188
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_slow_cooker": [
+   {
+    "t": "cyl",
+    "s": [
+     0.155,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.17
+    ],
+    "p": [
+     0.0,
+     0.105,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.135,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.225,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.018
+    ],
+    "p": [
+     0.0,
+     0.245,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.17,
+     0.17,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.06
+    ],
+    "p": [
+     -0.17,
+     0.17,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.155
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "kit_rice_cooker": [
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.115,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.235,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.03,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.125
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.04,
+     0.12,
+     0.12
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_pressure_cooker": [
+   {
+    "t": "cyl",
+    "s": [
+     0.115,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.118,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.025,
+     0.035
+    ],
+    "p": [
+     0.19,
+     0.17,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.035
+    ],
+    "p": [
+     -0.15,
+     0.15,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.225,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "kit_food_processor": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.14,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.095,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.31,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.09
+    ],
+    "p": [
+     0.04,
+     0.36,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.03
+    ],
+    "p": [
+     0.04,
+     0.42,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.105
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.12,
+     0.02
+    ],
+    "p": [
+     -0.1,
+     0.22,
+     0.0
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_citrus_juicer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.075,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.085,
+     0.09,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.145,
+     0.0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "kit_waffle_iron": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.05,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.04,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.03
+    ],
+    "p": [
+     0.16,
+     0.06,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.006,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.093,
+     -0.06
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.006,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.093,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.006,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.093,
+     0.06
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.1,
+     0.03,
+     0.12
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_sandwich_toaster": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.05,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.04,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.12
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.006,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.093,
+     0.0
+    ],
+    "c": "2B2622",
+    "r": [
+     0.0,
+     0.785,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.006,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.093,
+     0.0
+    ],
+    "c": "2B2622",
+    "r": [
+     0.0,
+     -0.785,
+     0.0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.08,
+     0.03,
+     0.112
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "kit_deep_fat_fryer": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.2,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.04,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.006,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.243,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.18
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.012
+    ],
+    "p": [
+     0.1,
+     0.1,
+     0.135
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.1,
+     0.1,
+     0.13
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_ice_cream_maker": [
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.105,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.23,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.06,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.04
+    ],
+    "p": [
+     0.06,
+     0.26,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.015,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.112
+    ],
+    "c": "8FA882"
+   }
+  ],
+  "kit_pasta_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.14,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.025
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.15,
+     -0.025
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.02
+    ],
+    "p": [
+     0.105,
+     0.12,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.05
+    ],
+    "p": [
+     0.13,
+     0.17,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.015
+    ],
+    "p": [
+     -0.095,
+     0.1,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.004,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.002,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "kit_mincer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.08
+    ],
+    "p": [
+     -0.02,
+     0.21,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.1,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.04
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.02
+    ],
+    "p": [
+     0.09,
+     0.17,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.05
+    ],
+    "p": [
+     0.115,
+     0.22,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.047,
+     0.01
+    ],
+    "p": [
+     -0.085,
+     0.14,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "kit_colander": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.0075,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.015,
+     0.04
+    ],
+    "p": [
+     0.145,
+     0.105,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.015,
+     0.04
+    ],
+    "p": [
+     -0.145,
+     0.105,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.05,
+     0.06,
+     0.115
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.12
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.05,
+     0.06,
+     0.115
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_flour_sifter": [
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.1,
+     0.04
+    ],
+    "p": [
+     0.065,
+     0.08,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.07,
+     0.03
+    ],
+    "p": [
+     0.085,
+     0.09,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.135,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "kit_rolling_pin_board": [
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.02,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.024,
+     0.06
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.028,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.056,
+     0.06
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.07
+    ],
+    "p": [
+     0.165,
+     0.056,
+     0.06
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.07
+    ],
+    "p": [
+     -0.165,
+     0.056,
+     0.06
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.002,
+     0.06
+    ],
+    "p": [
+     0.15,
+     0.021,
+     -0.1
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_egg_timer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.006,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.154,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.045,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.115,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.14,
+     0.008
+    ],
+    "p": [
+     0.032,
+     0.08,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.14,
+     0.008
+    ],
+    "p": [
+     -0.032,
+     0.08,
+     0.0
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "kit_kitchen_timer": [
+   {
+    "t": "sph",
+    "s": [
+     0.038
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.039,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.045,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.083,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.004,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.078,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.012,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.045,
+     0.04
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "kit_cheese_dome": [
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.11
+    ],
+    "p": [
+     0.0,
+     0.075,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.016
+    ],
+    "p": [
+     0.0,
+     0.24,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.015,
+     0.12
+    ],
+    "p": [
+     0.105,
+     0.0275,
+     0.0
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "kit_butter_dish": [
+   {
+    "t": "box",
+    "s": [
+     0.19,
+     0.012,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.006,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.05,
+     0.09
+    ],
+    "p": [
+     0.0,
+     0.037,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.152,
+     0.008,
+     0.092
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.068,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.004,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.014,
+     0.053
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "kit_gravy_boat": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.01,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.05,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.08,
+     0.08,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.05,
+     0.015
+    ],
+    "p": [
+     -0.075,
+     0.075,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.11,
+     0.004,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.086,
+     0.0
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "kit_soup_tureen": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.131,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.125,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.185,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.215,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.24,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0.15,
+     0.15,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.05
+    ],
+    "p": [
+     -0.15,
+     0.15,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "kit_roasting_tin": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.008,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.004,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.07,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.135
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.07,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.035,
+     -0.135
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.07,
+     0.28
+    ],
+    "p": [
+     0.185,
+     0.035,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.07,
+     0.28
+    ],
+    "p": [
+     -0.185,
+     0.035,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.1
+    ],
+    "p": [
+     0.2,
+     0.065,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.1
+    ],
+    "p": [
+     -0.2,
+     0.065,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.06,
+     0.05,
+     0.05
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.06,
+     0.05,
+     0.05
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "kit_wok": [
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.095,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.18
+    ],
+    "p": [
+     0.27,
+     0.1,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.03
+    ],
+    "p": [
+     -0.21,
+     0.09,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.04,
+     0.105,
+     0.03
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.03,
+     0.105,
+     -0.02
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.06
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "kit_skillet": [
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.115,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.022,
+     0.035
+    ],
+    "p": [
+     0.2,
+     0.03,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.04
+    ],
+    "p": [
+     -0.14,
+     0.03,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.006
+    ],
+    "p": [
+     -0.03,
+     0.044,
+     0.02
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.03,
+     0.048,
+     0.02
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "kit_steamer_baskets": [
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.122,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.092,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.122,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.092,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.154,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.122,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.154,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.115,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.222,
+     0.0
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "kit_tagine": [
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.145,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.044,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.121,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.24,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "kit_fondue_set": [
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.0075,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0.07,
+     0.075,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.012
+    ],
+    "p": [
+     -0.035,
+     0.075,
+     0.06
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.012
+    ],
+    "p": [
+     -0.035,
+     0.075,
+     -0.06
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.075,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.196,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.25,
+     0.006
+    ],
+    "p": [
+     0.03,
+     0.24,
+     0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.3,
+     0.0,
+     -0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.25,
+     0.006
+    ],
+    "p": [
+     -0.03,
+     0.24,
+     0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.3,
+     0.0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.11,
+     0.17,
+     0.0
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "kit_cafetiere": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.048,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.049,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.052,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.235,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.013
+    ],
+    "p": [
+     0.0,
+     0.26,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.12,
+     0.02
+    ],
+    "p": [
+     0.07,
+     0.11,
+     0.0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "kit_moka_pot": [
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.187,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.197,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.07,
+     0.015
+    ],
+    "p": [
+     -0.06,
+     0.14,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.02,
+     0.015
+    ],
+    "p": [
+     0.05,
+     0.17,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "kit_cup_and_saucer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.041,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.069,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.03,
+     0.008
+    ],
+    "p": [
+     0.048,
+     0.045,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.012,
+     0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.3,
+     0.0
+    ]
+   }
+  ],
+  "kit_egg_cups": [
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.01
+    ],
+    "p": [
+     -0.065,
+     0.005,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.03
+    ],
+    "p": [
+     -0.065,
+     0.03,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.065,
+     0.058,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.058,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.01
+    ],
+    "p": [
+     0.065,
+     0.005,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.03
+    ],
+    "p": [
+     0.065,
+     0.03,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.065,
+     0.058,
+     0.0
+    ],
+    "c": "E7DCC6"
+   }
+  ],
+  "kit_toast_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.01,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.09,
+     0.06
+    ],
+    "p": [
+     -0.08,
+     0.055,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.09,
+     0.06
+    ],
+    "p": [
+     -0.04,
+     0.055,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.09,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.055,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.09,
+     0.06
+    ],
+    "p": [
+     0.04,
+     0.055,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.09,
+     0.06
+    ],
+    "p": [
+     0.08,
+     0.055,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.08,
+     0.07
+    ],
+    "p": [
+     -0.02,
+     0.05,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.08,
+     0.07
+    ],
+    "p": [
+     0.02,
+     0.05,
+     0.0
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "kit_pestle_mortar": [
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.068,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.075,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.081,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.12
+    ],
+    "p": [
+     0.02,
+     0.11,
+     0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.0,
+     0.0,
+     -0.4
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.03,
+     0.085,
+     0.02
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "kit_kitchen_roll_holder": [
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.0075,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.145,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.31,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0.03,
+     0.1,
+     0.062
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_washing_up_bowl": [
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.01,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.134
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.06,
+     -0.134
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.28
+    ],
+    "p": [
+     0.174,
+     0.06,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.12,
+     0.28
+    ],
+    "p": [
+     -0.174,
+     0.06,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.33,
+     0.004,
+     0.25
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.05,
+     0.085,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.06,
+     0.085,
+     -0.04
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.018
+    ],
+    "p": [
+     0.1,
+     0.085,
+     -0.06
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_pan_rail": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.76
+    ],
+    "p": [
+     0.0,
+     0.38,
+     0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.04,
+     0.06
+    ],
+    "p": [
+     0.37,
+     0.38,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.04,
+     0.06
+    ],
+    "p": [
+     -0.37,
+     0.38,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.02
+    ],
+    "p": [
+     -0.22,
+     0.17,
+     0.04
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.12,
+     0.014
+    ],
+    "p": [
+     -0.22,
+     0.31,
+     0.04
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.24,
+     0.008
+    ],
+    "p": [
+     0.04,
+     0.24,
+     0.04
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.04,
+     0.11,
+     0.04
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.12
+    ],
+    "p": [
+     0.22,
+     0.22,
+     0.04
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.08
+    ],
+    "p": [
+     0.22,
+     0.32,
+     0.04
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "kit_knife_strip": [
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.05,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.14,
+     0.004
+    ],
+    "p": [
+     -0.13,
+     0.11,
+     0.014
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.022,
+     0.08,
+     0.014
+    ],
+    "p": [
+     -0.13,
+     0.25,
+     0.018
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.16,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.014
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.022,
+     0.08,
+     0.014
+    ],
+    "p": [
+     0.0,
+     0.25,
+     0.018
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.11,
+     0.004
+    ],
+    "p": [
+     0.13,
+     0.125,
+     0.014
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.022,
+     0.08,
+     0.014
+    ],
+    "p": [
+     0.13,
+     0.25,
+     0.018
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "kit_chalkboard": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.7,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.6,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.37,
+     0.012
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.012,
+     0.003
+    ],
+    "p": [
+     -0.03,
+     0.55,
+     0.016
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.012,
+     0.003
+    ],
+    "p": [
+     -0.07,
+     0.48,
+     0.016
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.012,
+     0.003
+    ],
+    "p": [
+     -0.05,
+     0.41,
+     0.016
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.02
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.01,
+     0.01
+    ],
+    "p": [
+     0.1,
+     0.055,
+     0.025
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_key_hooks": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.1,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.01,
+     0.03
+    ],
+    "p": [
+     -0.1,
+     0.05,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.01,
+     0.03
+    ],
+    "p": [
+     -0.035,
+     0.05,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.01,
+     0.03
+    ],
+    "p": [
+     0.035,
+     0.05,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.01,
+     0.03
+    ],
+    "p": [
+     0.1,
+     0.05,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.04,
+     0.004
+    ],
+    "p": [
+     -0.1,
+     0.03,
+     0.035
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.04,
+     0.004
+    ],
+    "p": [
+     0.035,
+     0.03,
+     0.035
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.03,
+     0.004
+    ],
+    "p": [
+     0.045,
+     0.02,
+     0.037
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_oven_gloves": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.08,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.37,
+     0.03
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.3,
+     0.03
+    ],
+    "p": [
+     -0.06,
+     0.18,
+     0.03
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.3,
+     0.03
+    ],
+    "p": [
+     0.06,
+     0.18,
+     0.03
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.03
+    ],
+    "p": [
+     -0.12,
+     0.2,
+     0.03
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.03
+    ],
+    "p": [
+     0.12,
+     0.2,
+     0.03
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.012,
+     0.032
+    ],
+    "p": [
+     -0.06,
+     0.06,
+     0.03
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.012,
+     0.032
+    ],
+    "p": [
+     0.06,
+     0.06,
+     0.03
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "kit_apron_peg": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.76,
+     0.025
+    ],
+    "c": "C68B59",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.1,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.7,
+     0.03
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.25,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.53,
+     0.03
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.4,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.03
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.1,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.038
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.015,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.038
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "kit_extractor_hood": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.12,
+     0.5
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.58,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.41,
+     -0.14
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.006,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.003,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.004
+    ],
+    "p": [
+     0.18,
+     0.002,
+     0.15
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.004
+    ],
+    "p": [
+     -0.18,
+     0.002,
+     0.15
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.02,
+     0.006
+    ],
+    "p": [
+     0.2,
+     0.06,
+     0.252
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "kit_wall_cupboard": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.7,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.29,
+     0.68,
+     0.02
+    ],
+    "p": [
+     0.148,
+     0.35,
+     0.16
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.29,
+     0.68,
+     0.02
+    ],
+    "p": [
+     -0.148,
+     0.35,
+     0.16
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.5,
+     0.004
+    ],
+    "p": [
+     0.148,
+     0.35,
+     0.172
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.5,
+     0.004
+    ],
+    "p": [
+     -0.148,
+     0.35,
+     0.172
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.03,
+     0.12,
+     0.18
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.03,
+     0.12,
+     0.18
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "kit_shopping_trolley": [
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.5,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.38,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.322,
+     0.03,
+     0.222
+    ],
+    "p": [
+     0.0,
+     0.3,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.322,
+     0.03,
+     0.222
+    ],
+    "p": [
+     0.0,
+     0.48,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.5,
+     0.222
+    ],
+    "p": [
+     0.0,
+     0.38,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.645,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.4,
+     0.02
+    ],
+    "p": [
+     0.14,
+     0.75,
+     -0.12
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.4,
+     0.02
+    ],
+    "p": [
+     -0.14,
+     0.75,
+     -0.12
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.94,
+     -0.12
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.03
+    ],
+    "p": [
+     0.175,
+     0.06,
+     -0.08
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.03
+    ],
+    "p": [
+     -0.175,
+     0.06,
+     -0.08
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "kit_step_stool": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.03,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.585,
+     -0.08
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.004,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.602,
+     -0.08
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.03,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.1
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.6,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.3,
+     -0.17
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.6,
+     0.03
+    ],
+    "p": [
+     -0.18,
+     0.3,
+     -0.17
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.62,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.3,
+     0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.3,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.62,
+     0.03
+    ],
+    "p": [
+     -0.18,
+     0.3,
+     0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.3,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "kit_recycling_crates": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.25,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.125,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.25,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.4,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.005
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.193
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.005
+    ],
+    "p": [
+     0.0,
+     0.49,
+     0.193
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     -0.15,
+     0.55,
+     0.05
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.22
+    ],
+    "p": [
+     -0.06,
+     0.56,
+     -0.05
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.04,
+     0.25
+    ],
+    "p": [
+     0.12,
+     0.54,
+     0.0
+    ],
+    "c": "E7DCC6"
+   }
+  ],
+  "kit_washing_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.85,
+     0.58
+    ],
+    "p": [
+     0.0,
+     0.425,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.29
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.295
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.77,
+     0.295
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.02
+    ],
+    "p": [
+     0.18,
+     0.77,
+     0.3
+    ],
+    "c": "8E8276",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.08,
+     0.012
+    ],
+    "p": [
+     -0.18,
+     0.77,
+     0.3
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.06,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.293
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "kit_tumble_dryer": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.85,
+     0.58
+    ],
+    "p": [
+     0.0,
+     0.425,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.29
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.297
+    ],
+    "c": "8E8276",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.77,
+     0.295
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.012
+    ],
+    "p": [
+     -0.15,
+     0.79,
+     0.3
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.02
+    ],
+    "p": [
+     0.18,
+     0.77,
+     0.3
+    ],
+    "c": "8E8276",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.08,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.295
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "kit_dishwasher": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.85,
+     0.58
+    ],
+    "p": [
+     0.0,
+     0.425,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.58,
+     0.7,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0.3
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.58,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.82,
+     0.3
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.025,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.72,
+     0.315
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.2,
+     0.82,
+     0.31
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.23,
+     0.82,
+     0.31
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.06,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.305
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "kit_chest_freezer": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.8,
+     0.6
+    ],
+    "p": [
+     0.0,
+     0.4,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.92,
+     0.06,
+     0.62
+    ],
+    "p": [
+     0.0,
+     0.83,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.8,
+     0.315
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.15,
+     0.8,
+     0.31
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.35,
+     0.75,
+     0.302
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.06,
+     0.006
+    ],
+    "p": [
+     0.25,
+     0.08,
+     0.302
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "kit_larder_cupboard": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     1.84,
+     0.45
+    ],
+    "p": [
+     0.0,
+     0.92,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.74,
+     0.06,
+     0.48
+    ],
+    "p": [
+     0.0,
+     1.87,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.33,
+     1.0,
+     0.02
+    ],
+    "p": [
+     0.172,
+     1.33,
+     0.232
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.33,
+     1.0,
+     0.02
+    ],
+    "p": [
+     -0.172,
+     1.33,
+     0.232
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.33,
+     0.75,
+     0.02
+    ],
+    "p": [
+     0.172,
+     0.42,
+     0.232
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.33,
+     0.75,
+     0.02
+    ],
+    "p": [
+     -0.172,
+     0.42,
+     0.232
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.03,
+     1.2,
+     0.25
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.03,
+     1.2,
+     0.25
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.03,
+     0.6,
+     0.25
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.03,
+     0.6,
+     0.25
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "kit_welsh_dresser": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.85,
+     0.45
+    ],
+    "p": [
+     0.0,
+     0.425,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.24,
+     0.04,
+     0.48
+    ],
+    "p": [
+     0.0,
+     0.87,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.1,
+     0.14,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.73,
+     0.229
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.14,
+     1.0,
+     0.03
+    ],
+    "p": [
+     0.0,
+     1.39,
+     -0.2
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.0,
+     0.25
+    ],
+    "p": [
+     0.57,
+     1.39,
+     -0.1
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.0,
+     0.25
+    ],
+    "p": [
+     -0.57,
+     1.39,
+     -0.1
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.14,
+     0.025,
+     0.22
+    ],
+    "p": [
+     0.0,
+     1.2,
+     -0.1
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.14,
+     0.025,
+     0.22
+    ],
+    "p": [
+     0.0,
+     1.55,
+     -0.1
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.22,
+     0.06,
+     0.28
+    ],
+    "p": [
+     0.0,
+     1.9,
+     -0.09
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.015
+    ],
+    "p": [
+     -0.35,
+     1.31,
+     -0.17
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.015
+    ],
+    "p": [
+     0.0,
+     1.31,
+     -0.17
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.015
+    ],
+    "p": [
+     0.35,
+     1.31,
+     -0.17
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "kit_settle_bench": [
+   {
+    "t": "box",
+    "s": [
+     1.16,
+     0.42,
+     0.42
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.02
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.05,
+     0.45
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.02
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.1,
+     0.06,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.505,
+     0.03
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.65,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.77,
+     -0.21
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.25,
+     0.45
+    ],
+    "p": [
+     0.6,
+     0.6,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.25,
+     0.45
+    ],
+    "p": [
+     -0.6,
+     0.6,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.55,
+     0.006
+    ],
+    "p": [
+     -0.3,
+     0.77,
+     -0.188
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.55,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.77,
+     -0.188
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.55,
+     0.006
+    ],
+    "p": [
+     0.3,
+     0.77,
+     -0.188
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "kit_milk_churn": [
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.45
+    ],
+    "p": [
+     0.0,
+     0.225,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.162,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.162,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.38,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.49,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.15
+    ],
+    "p": [
+     0.0,
+     0.6,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.69,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.72,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.06
+    ],
+    "p": [
+     0.12,
+     0.6,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.06
+    ],
+    "p": [
+     -0.12,
+     0.6,
+     0.0
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "kit_belfast_sink": [
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.66,
+     0.05
+    ],
+    "p": [
+     0.45,
+     0.33,
+     0.25
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.66,
+     0.05
+    ],
+    "p": [
+     -0.45,
+     0.33,
+     0.25
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.66,
+     0.05
+    ],
+    "p": [
+     0.45,
+     0.33,
+     -0.25
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.66,
+     0.05
+    ],
+    "p": [
+     -0.45,
+     0.33,
+     -0.25
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.25,
+     0.5
+    ],
+    "p": [
+     0.0,
+     0.785,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.04,
+     0.55
+    ],
+    "p": [
+     0.4,
+     0.89,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.04,
+     0.55
+    ],
+    "p": [
+     -0.4,
+     0.89,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.62,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.275
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.18,
+     0.02
+    ],
+    "p": [
+     0.0,
+     1.0,
+     -0.22
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.02,
+     0.14
+    ],
+    "p": [
+     0.0,
+     1.08,
+     -0.15
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "kit_lunchbox": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.07,
+     0.15
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.222,
+     0.02,
+     0.152
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.08,
+     0.07,
+     0.08
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.03,
+     0.01
+    ],
+    "p": [
+     -0.08,
+     0.07,
+     0.08
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.003
+    ],
+    "p": [
+     0.04,
+     0.04,
+     0.0765
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "kit_sugar_bowl": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.015,
+     0.015
+    ],
+    "p": [
+     0.01,
+     0.055,
+     0.01
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.015,
+     0.015
+    ],
+    "p": [
+     -0.015,
+     0.055,
+     -0.01
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.015,
+     0.015
+    ],
+    "p": [
+     0.015,
+     0.058,
+     -0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.006,
+     0.012
+    ],
+    "p": [
+     0.02,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     0.25
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.025,
+     0.01
+    ],
+    "p": [
+     0.055,
+     0.03,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.025,
+     0.01
+    ],
+    "p": [
+     -0.055,
+     0.03,
+     0.0
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_popcorn_maker": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.12,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.085,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.11
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.113
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_milk_crate": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.02,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.15,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.075,
+     0.134
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.15,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.075,
+     -0.134
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.15,
+     0.28
+    ],
+    "p": [
+     0.194,
+     0.075,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.15,
+     0.28
+    ],
+    "p": [
+     -0.194,
+     0.075,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     -0.12,
+     0.1,
+     -0.065
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     -0.12,
+     0.1,
+     0.065
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.1,
+     -0.065
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.065
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     0.12,
+     0.1,
+     -0.065
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     0.12,
+     0.1,
+     0.065
+    ],
+    "c": "BFD6DA"
+   }
+  ],
+  "kit_herb_trough": [
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.12,
+     0.15
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.01,
+     0.13
+    ],
+    "p": [
+     0.0,
+     0.12,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     -0.15,
+     0.16,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.055
+    ],
+    "p": [
+     0.0,
+     0.165,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0.15,
+     0.155,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.05,
+     0.003
+    ],
+    "p": [
+     -0.08,
+     0.14,
+     0.07
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.05,
+     0.003
+    ],
+    "p": [
+     0.08,
+     0.14,
+     0.07
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "kit_baking_trays": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.012,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.006,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.012,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.012,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.034,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.004
+    ],
+    "p": [
+     -0.07,
+     0.061,
+     -0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.004
+    ],
+    "p": [
+     -0.07,
+     0.061,
+     0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.004
+    ],
+    "p": [
+     0.07,
+     0.061,
+     -0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.004
+    ],
+    "p": [
+     0.07,
+     0.061,
+     0.05
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "kit_cooling_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.026,
+     0.28
+    ],
+    "p": [
+     0.18,
+     0.013,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.026,
+     0.28
+    ],
+    "p": [
+     -0.18,
+     0.013,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.03,
+     -0.12
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.03,
+     -0.06
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.06
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.12
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.012
+    ],
+    "p": [
+     -0.1,
+     0.04,
+     0.03
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.04,
+     -0.05
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.012
+    ],
+    "p": [
+     0.11,
+     0.04,
+     0.04
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "kit_cake_carrier": [
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.195,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.15
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.03,
+     -0.15
+    ],
+    "c": "E8B4A8"
+   }
+  ],
+  "kit_jelly_mould": [
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.027,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.062,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.094,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.118,
+     0.0
+    ],
+    "c": "6E4B6E"
+   }
+  ],
+  "kit_lazy_susan": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.09
+    ],
+    "p": [
+     0.09,
+     0.085,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.145,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.09
+    ],
+    "p": [
+     -0.045,
+     0.085,
+     0.078
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     -0.045,
+     0.145,
+     0.078
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.09
+    ],
+    "p": [
+     -0.045,
+     0.085,
+     -0.078
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     -0.045,
+     0.145,
+     -0.078
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "kit_pie_dish": [
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.042,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.105,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.105,
+     0.01
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.02
+    ],
+    "p": [
+     0.05,
+     0.077,
+     -0.05
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.0,
+     0.5,
+     0.0
+    ]
+   }
+  ],
+  "kit_jam_pan": [
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.12
+    ],
+    "p": [
+     -0.06,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.125,
+     0.004
+    ],
+    "p": [
+     -0.06,
+     0.115,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.012,
+     0.28
+    ],
+    "p": [
+     -0.06,
+     0.17,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.08
+    ],
+    "p": [
+     0.15,
+     0.04,
+     0.06
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.015
+    ],
+    "p": [
+     0.15,
+     0.087,
+     0.06
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.08
+    ],
+    "p": [
+     0.15,
+     0.04,
+     -0.05
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.015
+    ],
+    "p": [
+     0.15,
+     0.087,
+     -0.05
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "kit_mixing_bowl": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.122,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.18
+    ],
+    "p": [
+     0.05,
+     0.15,
+     0.02
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     -0.5
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.02,
+     0.1,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.2
+    ],
+    "p": [
+     -0.06,
+     0.14,
+     -0.02
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     0.55
+    ]
+   }
+  ],
+  "kit_box_grater": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.22,
+     0.08
+    ],
+    "p": [
+     -0.03,
+     0.11,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.03
+    ],
+    "p": [
+     -0.03,
+     0.235,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.003,
+     0.05
+    ],
+    "p": [
+     -0.03,
+     0.12,
+     0.041
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.05,
+     0.08
+    ],
+    "p": [
+     0.06,
+     0.025,
+     0.01
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.012,
+     0.08
+    ],
+    "p": [
+     0.06,
+     0.056,
+     0.01
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_veg_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.68,
+     0.02
+    ],
+    "p": [
+     0.19,
+     0.34,
+     0.14
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.68,
+     0.02
+    ],
+    "p": [
+     -0.19,
+     0.34,
+     0.14
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.68,
+     0.02
+    ],
+    "p": [
+     0.19,
+     0.34,
+     -0.14
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.68,
+     0.02
+    ],
+    "p": [
+     -0.19,
+     0.34,
+     -0.14
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.1,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.1,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.32,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.1,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.54,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     -0.08,
+     0.6,
+     0.02
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0.08,
+     0.38,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.03
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "kit_potato_sack": [
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.1,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.171
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.2,
+     0.035,
+     0.05
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "kit_garlic_string": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.58,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.5,
+     0.008
+    ],
+    "p": [
+     -0.08,
+     0.32,
+     0.04
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.5,
+     0.008
+    ],
+    "p": [
+     0.08,
+     0.32,
+     0.04
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.08,
+     0.45,
+     0.04
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.08,
+     0.33,
+     0.04
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.08,
+     0.2,
+     0.04
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.08,
+     0.45,
+     0.04
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.08,
+     0.33,
+     0.04
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.08,
+     0.2,
+     0.04
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "kit_herb_drying_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.38,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.06,
+     0.06
+    ],
+    "p": [
+     -0.25,
+     0.34,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.06,
+     0.06
+    ],
+    "p": [
+     0.25,
+     0.34,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.56
+    ],
+    "p": [
+     0.0,
+     0.3,
+     0.05
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.14
+    ],
+    "p": [
+     -0.18,
+     0.21,
+     0.05
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.12
+    ],
+    "p": [
+     -0.06,
+     0.22,
+     0.05
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.15
+    ],
+    "p": [
+     0.06,
+     0.205,
+     0.05
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.13
+    ],
+    "p": [
+     0.18,
+     0.215,
+     0.05
+    ],
+    "c": "5E7B52"
+   }
+  ]
+ }
+}
