@@ -346,6 +346,7 @@ func _ready() -> void:
 	failures.append_array(_handling_checks())
 	failures.append_array(_texture_checks())
 	failures.append_array(_catalog_checks())
+	failures.append_array(_characters_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -2522,6 +2523,65 @@ func _party_checks() -> Array:
 	_bury(play)
 	GameState.job = {}
 	GameState.mode = "office"
+	return found
+
+
+func _characters_checks() -> Array:
+	# The team's characters bundle: Dana's painted portraits in the UI, the
+	# eight regulars with lines and voices, the seven named NPC models with
+	# their walk and idle clips.
+	var found: Array = []
+	if not UIKit.has_portrait():
+		found.append("Dana's portrait is missing")
+	for expression in ["base", "happy", "neutral", "proud", "surprised", "tired"]:
+		if not ResourceLoader.exists("res://assets/characters/dana/portraits/expressions/dana_portrait_%s.png" % expression):
+			found.append("portrait expression %s missing" % expression)
+	var small: Control = UIKit.portrait(48)
+	var proud: Control = UIKit.portrait(112, "proud")
+	if not (small is TextureRect) or not (proud is TextureRect):
+		found.append("UIKit.portrait does not give a picture")
+	small.free()
+	proud.free()
+	var Reg = load("res://scripts/regulars.gd")
+	if not Reg.available():
+		found.append("regulars data missing")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 3
+	for id in Reg.IDS:
+		if Reg.bio(id).is_empty():
+			found.append("no bio for %s" % id)
+		var line: String = Reg.order_line(id, "drip", "Drip coffee", rng)
+		if line == "" or "{product}" in line:
+			found.append("order line for %s: %s" % [id, line])
+		if Reg.idle_line(id, rng) == "":
+			found.append("no idle thought for %s" % id)
+		if Reg.review_line(id, "lemonade", "great", rng) == "":
+			found.append("no review for %s" % id)
+		if Reg.kind(id) == "" or Reg.colours(id).size() < 4:
+			found.append("no look for %s" % id)
+		for variant in ["greet", "happy", "okay", "unhappy", "goodbye"]:
+			for take in range(1, int(Reg.TAKES[variant]) + 1):
+				var path := "%svoices/sfx_vo_%s_%s_%02d.wav" % [Reg.ROOT, str(Reg.VOICE.get(id, id)), variant, take]
+				if not ResourceLoader.exists(path):
+					found.append("voice clip missing: %s" % path.get_file())
+	var a: String = Reg.voice_path("steve", "greet", rng)
+	var b: String = Reg.voice_path("steve", "greet", rng)
+	if a == b:
+		found.append("the same take twice in a row")
+	if not AudioDirector.has_method("play_voice"):
+		found.append("no voice player")
+	if Reg.pick(rng, ["steve", "lamp_lady", "keyclackr", "dottie", "theo", "pippa", "rocco", "wren"]) != "":
+		found.append("pick ignores the exclusions")
+	for name in ["npc_delbert", "npc_vendor", "npc_architect", "npc_flagger", "npc_helper", "npc_band", "npc_rival"]:
+		var path := "res://assets/characters/npcs/%s.glb" % name
+		if not ResourceLoader.exists(path):
+			found.append("%s missing" % name)
+			continue
+		var node: Node3D = (load(path) as PackedScene).instantiate()
+		var ap := node.find_child("AnimationPlayer", true, false) as AnimationPlayer
+		if ap == null or not ap.has_animation("walk") or not ap.has_animation("idle"):
+			found.append("%s has no walk and idle clips" % name)
+		node.free()
 	return found
 
 

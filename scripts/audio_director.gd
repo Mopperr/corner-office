@@ -94,6 +94,22 @@ func play_music(track: String) -> void:
 	music.play()
 
 
+func play_voice(path: String) -> void:
+	# A wordless voice clip (the regulars): a one-shot on the SFX bus.
+	if _silent:
+		return
+	var stream := _load_stream(path)
+	if stream == null:
+		return
+	var player := AudioStreamPlayer.new()
+	player.bus = SFX_BUS
+	player.stream = stream
+	player.volume_db = float(Tuning.get_value("audio.voice_db", -3))
+	add_child(player)
+	player.play()
+	player.finished.connect(player.queue_free)
+
+
 func play_sting(sting_name: String) -> void:
 	# A one-shot musical sting (assets/audio/stings/*.ogg) over the music:
 	# the music dips for its length and comes back.

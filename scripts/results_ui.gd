@@ -155,6 +155,17 @@ func _build() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.add_child(title)
 	var stars := int(GameState.payout.get("stars", 1))
+	# Dana's face for the day: proud of three stars, happy with two, tired
+	# after one, and still surprised if she was shoved.
+	var expression := "proud" if stars >= 3 else ("happy" if stars == 2 else "tired")
+	if bool(GameState.payout.get("attacked", false)):
+		expression = "surprised"
+	if bool(GameState.payout.get("busted", false)):
+		expression = "tired"
+	var face := UIKit.portrait(112, expression)
+	face.name = "ResultsFace"
+	face.position = Vector2(732, 14)
+	card.add_child(face)
 	var star_row := UIKit.label("★".repeat(clampi(stars, 0, 3)) + "☆".repeat(3 - clampi(stars, 0, 3)), 44, UIKit.MUSTARD, "title", false)
 	star_row.position = Vector2(36, 76)
 	star_row.size = Vector2(780, 56)

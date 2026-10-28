@@ -108,18 +108,35 @@ func _intro(character: String) -> void:
 	margin.add_theme_constant_override("margin_top", 28)
 	margin.add_theme_constant_override("margin_bottom", 24)
 	card.add_child(margin)
+	var row_box := HBoxContainer.new()
+	row_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row_box.add_theme_constant_override("separation", 24)
+	margin.add_child(row_box)
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_theme_constant_override("separation", 8)
-	margin.add_child(column)
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row_box.add_child(column)
+	# Dana herself, box in hand, from the team's painted select card.
+	var select_path := "res://assets/characters/dana/portraits/dana_select_full@1x.png"
+	if ResourceLoader.exists(select_path):
+		var pic := TextureRect.new()
+		pic.name = "DanaSelect"
+		pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		pic.texture = load(select_path)
+		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pic.custom_minimum_size = Vector2(200, 480)
+		pic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row_box.add_child(pic)
 	var text := _read_text("res://data/narrative/intro.md")
 	text = text.replace("# Intro", "").strip_edges()
 	for para in text.split("\n\n"):
 		var bit := para.strip_edges()
 		if bit == "":
 			continue
-		var row := UIKit.label(bit, 36, UIKit.DARK)
-		row.custom_minimum_size = Vector2(980, 44)
+		var row := UIKit.label(bit, 22, UIKit.DARK)
+		row.custom_minimum_size = Vector2(770, 36)
 		column.add_child(row)
 	var go := UIKit.button("Put the kettle on", UIKit.TERRA)
 	go.custom_minimum_size = Vector2(360, 56)

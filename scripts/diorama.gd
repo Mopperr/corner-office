@@ -4036,6 +4036,12 @@ func _build_hud() -> void:
 	face.name = "ToastFace"
 	face.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	bubble.add_child(face)
+	var dana_face := UIKit.portrait(48)
+	dana_face.name = "ToastPortrait"
+	dana_face.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	dana_face.visible = false
+	bubble.add_child(dana_face)
+	bubble.move_child(dana_face, 0)
 	var words := VBoxContainer.new()
 	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5079,7 +5085,12 @@ func _toast(message: String, who := "Dana") -> void:
 	if toast_name:
 		toast_name.text = who
 		var face := toast_name.get_parent().get_parent().get_node_or_null("ToastFace")
+		var dana_face := toast_name.get_parent().get_parent().get_node_or_null("ToastPortrait")
+		var painted := who == "Dana" and dana_face != null and dana_face is TextureRect
+		if dana_face:
+			dana_face.visible = painted
 		if face:
+			face.visible = not painted
 			var letter := face.get_child(0) as Label
 			if letter:
 				letter.text = who.left(1)
@@ -5317,11 +5328,39 @@ func _spawn_street() -> void:
 		person.rotation.y = PI * 0.5 if dir > 0.0 else -PI * 0.5
 		add_child(person)
 		street.append({"node": person, "dir": dir, "speed": rng.randf_range(0.7, 1.1), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx})
+		if i == 2 and rng.randf() < 0.6:
+			# One of the town's named faces, from the team's models, walking by.
+			var cameo := _cameo_npc(rng)
+			if cameo != null:
+				cameo.position = person.position + Vector3(dir * 2.4, 0.0, 0.1)
+				cameo.rotation.y = person.rotation.y
+				add_child(cameo)
+				Props.play_clip(cameo, "walk", true)
+				street.append({"node": cameo, "dir": dir, "speed": rng.randf_range(0.6, 0.9), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx, "clip": true})
 		if i == 1:
 			var dog := _make_dog(Color("B98A5A"))
 			dog.position = person.position + Vector3(-dir * 0.7, 0.0, 0.35)
 			add_child(dog)
 			street.append({"node": dog, "dir": dir, "speed": rng.randf_range(0.7, 1.1), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx, "dog": true, "owner": person})
+
+
+const CAMEOS := ["npc_delbert", "npc_vendor", "npc_architect", "npc_flagger", "npc_helper", "npc_band", "npc_rival"]
+
+
+func _cameo_npc(rng: RandomNumberGenerator) -> Node3D:
+	var name := str(CAMEOS[rng.randi_range(0, CAMEOS.size() - 1)])
+	var path := "res://assets/characters/npcs/%s.glb" % name
+	if not ResourceLoader.exists(path):
+		return null
+	var packed: PackedScene = load(path)
+	if packed == null:
+		return null
+	var node := packed.instantiate() as Node3D
+	if node == null:
+		return null
+	node.name = "Cameo_" + name
+	node.set_meta("cameo", name)
+	return node
 
 
 func _make_dog(color: Color) -> Node3D:
@@ -5378,6 +5417,13 @@ func _tick_street(delta: float) -> void:
 				entry["pause"] = randf_range(1.5, 4.0)
 				if randf() < 0.5:
 					_bubble(node, _chat("passing"))
+		if bool(entry.get("clip", false)):
+			# A modelled cameo: its own walk and idle clips instead of the rig's motion.
+			var ap := node.find_child("AnimationPlayer", true, false) as AnimationPlayer
+			var want := "walk" if walking else "idle"
+			if ap != null and ap.current_animation != want:
+				Props.play_clip(node, want, true)
+			continue
 		_animate_person(node, ambient_time + float(entry.get("phase", 0.0)), walking, delta)
 
 
@@ -5780,6 +5826,9 @@ func _order_prop(dish_id: String) -> Node3D:
 	return prop
 
 
+var regular_rng := RandomNumberGenerator.new()
+
+
 func _spawn_customer(from_car: Node3D = null) -> void:
 	var order: Dictionary = GameState.pick_order()
 	if order.is_empty():
@@ -5788,7 +5837,26 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	var uid := "c%d" % customer_serial
 	var palette := [UIKit.BLUE, UIKit.SAGE, UIKit.TERRA, UIKit.MUSTARD, UIKit.WOOD]
 	var color: Color = palette[customer_serial % palette.size()]
-	var person := _make_person(color)
+	# Four times in ten it is one of the regulars, in their own clothes, with
+	# their own name on the till and their own voice.
+	var regular := ""
+	if Regulars.available() and regular_rng.randf() < 0.4:
+		var here: Array = []
+		for entry in customers:
+			if str(entry.get("regular", "")) != "":
+				here.append(str(entry["regular"]))
+		regular = Regulars.pick(regular_rng, here)
+	var person: Node3D
+	if regular != "":
+		var look := Regulars.colours(regular)
+		person = Figure.build(look["top"], look["hair"], Regulars.kind(regular), look["trousers"], look["skin"])
+		var who_was: Dictionary = order.get("who", {})
+		var named := who_was.duplicate()
+		named["name"] = Regulars.full_name(regular)
+		named["regular"] = regular
+		order["who"] = named
+	else:
+		person = _make_person(color)
 	person.name = "Customer_" + uid
 	# The order floats over their head until it is in their hand.
 	var bubble := Node3D.new()
@@ -5814,7 +5882,7 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	for entry in customers:
 		if str(entry.get("stage", "")) != "leaving":
 			index += 1
-	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0, "car": from_car}
+	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0, "car": from_car, "regular": regular}
 	var asks: Array = Catalog.asks()
 	if not asks.is_empty() and randf() < 0.45:
 		entry["ask"] = asks[randi() % asks.size()]
@@ -5824,7 +5892,13 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 		if is_instance_valid(person) and entry.has("ask") and not bool(entry.get("asked", false)):
 			_act(person, "point", 2.4)
 	)
-	_bubble(person, _chat("arriving"))
+	if regular != "":
+		var dish_name := str(Catalog.menu_item(str(order.get("dish", ""))).get("name", "something"))
+		var said := Regulars.order_line(regular, str(order.get("dish", "")), dish_name, regular_rng)
+		_bubble(person, said if said != "" else _chat("arriving"), 5.0)
+		AudioDirector.play_voice(Regulars.voice_path(regular, "greet", regular_rng))
+	else:
+		_bubble(person, _chat("arriving"))
 	var who: Dictionary = order.get("who", {})
 	if OS.get_environment("CO_DEBUG") != "":
 		print("  spawn customer %s start=%s door=%s spot=%s counter=%s" % [uid, start, _door_world(), _queue_spot(index), _counter_node()])
@@ -5944,6 +6018,11 @@ func _tick_customer(entry: Dictionary, delta: float) -> void:
 		return
 	entry["hover"] = float(entry.get("hover", 0.0)) + delta
 	var t := float(entry["hover"])
+	if str(entry.get("regular", "")) != "" and str(entry.get("stage", "")) == "waiting" and not bool(entry.get("mused", false)) and t > 7.0:
+		entry["mused"] = true
+		var thought := Regulars.idle_line(str(entry["regular"]), regular_rng)
+		if thought != "":
+			_bubble(node, thought, 4.0)
 	var bubble := node.get_node_or_null("Order") as Node3D
 	if bubble:
 		bubble.position.y = 1.55 + sin(t * 3.0) * 0.04
@@ -6192,12 +6271,21 @@ func _serve_customer(uid: String, by_hand: bool) -> void:
 				_act(node, "sip", 1.3)
 		)
 		tw.tween_interval(1.3)
-		_bubble(node, _chat("served"))
+		var regular := str(entry.get("regular", ""))
+		if regular != "":
+			var quality := "great" if by_hand else "okay"
+			var verdict := Regulars.review_line(regular, dish_id, quality, regular_rng)
+			_bubble(node, verdict if verdict != "" else _chat("served"), 4.5)
+			AudioDirector.play_voice(Regulars.voice_path(regular, "happy" if by_hand else "okay", regular_rng))
+		else:
+			_bubble(node, _chat("served"))
 		var car: Node3D = entry.get("car")
 		tw.tween_property(node, "position", _door_world() + Vector3(0, 0, 0.3), 1.1)
 		tw.tween_callback(func():
 			if is_instance_valid(node):
 				_act(node, "wave", 0.9)
+			if regular != "":
+				AudioDirector.play_voice(Regulars.voice_path(regular, "goodbye", regular_rng))
 		)
 		tw.tween_interval(0.9)
 		if car != null and is_instance_valid(car):

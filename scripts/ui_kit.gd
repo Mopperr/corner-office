@@ -401,6 +401,33 @@ static func chips(items: Array) -> HBoxContainer:
 	return row
 
 
+const DANA_PORTRAITS := "res://assets/characters/dana/portraits/"
+
+
+static func has_portrait() -> bool:
+	return ResourceLoader.exists(DANA_PORTRAITS + "icons/dana_portrait_circle_128.png")
+
+
+static func portrait(size := 44, expression := "") -> Control:
+	# Dana's painted portrait from the team's bundle: the circle crop for
+	# small faces, an expression for a card. Falls back to the initial.
+	var path := DANA_PORTRAITS + ("icons/dana_portrait_circle_128.png" if size <= 72 else "icons/dana_portrait_circle_256.png")
+	if expression != "":
+		path = DANA_PORTRAITS + "expressions/dana_portrait_%s.png" % expression
+	if not ResourceLoader.exists(path):
+		return avatar("D", TERRA, size)
+	var pic := TextureRect.new()
+	pic.name = "Portrait"
+	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pic.texture = load(path)
+	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pic.custom_minimum_size = Vector2(size, size)
+	pic.size = Vector2(size, size)
+	pic.set_meta("expression", expression)
+	return pic
+
+
 static func avatar(initial: String, color: Color, size := 44) -> Panel:
 	var disc := Panel.new()
 	disc.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -478,7 +505,7 @@ static func show_level_beat(host: Node, beat: Dictionary, at_top := false) -> vo
 	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	head.add_theme_constant_override("separation", 12)
 	column.add_child(head)
-	head.add_child(avatar("D", TERRA, 40))
+	head.add_child(portrait(40))
 	var title := label("%s" % beat.get("level_name", ""), 32, TERRA, "title", false)
 	title.name = "LevelTitle"
 	title.custom_minimum_size = Vector2(420, 44)
