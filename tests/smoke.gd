@@ -1297,6 +1297,18 @@ func _qa_regressions() -> Array:
 		found.append("towers %s %s" % [str(tower_box2), str(tower_box3)])
 	if int(play.call("_tower_top", 0)) != 2 or (play.call("_open_box_spot", 2) as Vector3).y < 0.8:
 		found.append("tower top %d spot %s" % [int(play.call("_tower_top", 0)), str(play.call("_open_box_spot", 2))])
+	# The HUD lists the unpack helper exactly once after stacking.
+	GameState.mode = "job_unpack"
+	play.call("_refresh_hud_buttons")
+	var unpack_buttons := 0
+	for layer_node in play.get_children():
+		if layer_node is CanvasLayer:
+			for child in layer_node.get_children():
+				if child is Button and (child as Button).text == "Unpack it all for me":
+					unpack_buttons += 1
+	if unpack_buttons != 1:
+		found.append("unpack helper listed %d times" % unpack_buttons)
+	GameState.mode = "office"
 	GameState.job["items"][0]["state"] = "placed"
 	play.call("_normalize_towers")
 	if GameState.job_box(0).has("tower") or int(GameState.job_box(1).get("level", -1)) != 0 or int(GameState.job_box(2).get("level", -1)) != 1:

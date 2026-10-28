@@ -2761,6 +2761,7 @@ func _slot_pos(i: int) -> Vector3:
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
+	layer.name = "HUD"
 	add_child(layer)
 	var top := Panel.new()
 	top.name = "StatusCard"
@@ -3540,6 +3541,11 @@ func _wire_hud_focus(layer: CanvasLayer) -> void:
 
 
 func _hud_layer() -> CanvasLayer:
+	# The HUD layer by name: a level postcard adds a CanvasLayer of its own,
+	# and taking the first one found used to leave action buttons behind in it.
+	var named := get_node_or_null("HUD")
+	if named is CanvasLayer:
+		return named
 	for child in get_children():
 		if child is CanvasLayer:
 			return child
