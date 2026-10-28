@@ -775,7 +775,7 @@
     },
     "fridge_home": {
       "name": "Fridge",
-      "model": "proc:fridge_home",
+      "model": "hh_fridge_home",
       "w": 0.6,
       "d": 0.6,
       "h": 1.7,
@@ -787,7 +787,7 @@
     },
     "cooker": {
       "name": "Cooker",
-      "model": "proc:cooker",
+      "model": "hh_cooker",
       "w": 0.6,
       "d": 0.6,
       "h": 0.95,
@@ -799,7 +799,7 @@
     },
     "microwave": {
       "name": "Microwave",
-      "model": "proc:microwave",
+      "model": "hh_microwave",
       "w": 0.5,
       "d": 0.36,
       "h": 0.3,
@@ -810,7 +810,7 @@
     },
     "toaster": {
       "name": "Toaster",
-      "model": "proc:toaster",
+      "model": "hh_toaster",
       "w": 0.3,
       "d": 0.18,
       "h": 0.2,
@@ -820,7 +820,7 @@
     },
     "knife_block": {
       "name": "Knife block",
-      "model": "proc:knife_block",
+      "model": "hh_knife_block",
       "w": 0.14,
       "d": 0.14,
       "h": 0.3,
@@ -831,7 +831,7 @@
     },
     "spice_rack": {
       "name": "Spice rack",
-      "model": "proc:spice_rack",
+      "model": "hh_spice_rack",
       "w": 0.5,
       "d": 0.1,
       "h": 0.3,
@@ -841,7 +841,7 @@
     },
     "pot_stack": {
       "name": "Pot stack",
-      "model": "proc:pot_stack",
+      "model": "hh_pot_stack",
       "w": 0.3,
       "d": 0.3,
       "h": 0.3,
@@ -851,7 +851,7 @@
     },
     "bread_bin": {
       "name": "Bread bin",
-      "model": "proc:bread_bin",
+      "model": "hh_bread_bin",
       "w": 0.4,
       "d": 0.26,
       "h": 0.3,
@@ -861,7 +861,7 @@
     },
     "kitchen_table": {
       "name": "Kitchen table",
-      "model": "proc:kitchen_table",
+      "model": "hh_kitchen_table",
       "w": 1.2,
       "d": 0.8,
       "h": 0.76,
@@ -873,7 +873,7 @@
     },
     "kitchen_chair": {
       "name": "Kitchen chair",
-      "model": "proc:kitchen_chair",
+      "model": "hh_kitchen_chair",
       "w": 0.42,
       "d": 0.42,
       "h": 0.9,
@@ -884,7 +884,7 @@
     },
     "dish_rack": {
       "name": "Dish rack",
-      "model": "proc:dish_rack",
+      "model": "hh_dish_rack",
       "w": 0.4,
       "d": 0.3,
       "h": 0.2,
@@ -894,7 +894,7 @@
     },
     "bathtub": {
       "name": "Bathtub",
-      "model": "proc:bathtub",
+      "model": "hh_bathtub",
       "w": 1.64,
       "d": 0.79,
       "h": 0.6,
@@ -907,7 +907,7 @@
     },
     "toilet": {
       "name": "Toilet",
-      "model": "proc:toilet",
+      "model": "hh_toilet",
       "w": 0.42,
       "d": 0.5,
       "h": 0.8,
@@ -919,7 +919,7 @@
     },
     "pedestal_sink": {
       "name": "Pedestal sink",
-      "model": "proc:pedestal_sink",
+      "model": "hh_pedestal_sink",
       "w": 0.55,
       "d": 0.42,
       "h": 0.9,
@@ -931,7 +931,7 @@
     },
     "mirror_cabinet": {
       "name": "Mirror cabinet",
-      "model": "proc:mirror_cabinet",
+      "model": "hh_mirror_cabinet",
       "w": 0.5,
       "d": 0.12,
       "h": 0.62,
@@ -942,7 +942,7 @@
     },
     "towel_stack": {
       "name": "Towel stack",
-      "model": "proc:towel_stack",
+      "model": "hh_towel_stack",
       "w": 0.36,
       "d": 0.26,
       "h": 0.34,
@@ -952,7 +952,7 @@
     },
     "bath_mat": {
       "name": "Bath mat",
-      "model": "proc:bath_mat",
+      "model": "hh_bath_mat",
       "w": 0.6,
       "d": 0.4,
       "h": 0.04,
@@ -962,7 +962,7 @@
     },
     "laundry_basket": {
       "name": "Laundry basket",
-      "model": "proc:laundry_basket",
+      "model": "hh_laundry_basket",
       "w": 0.46,
       "d": 0.46,
       "h": 0.6,
@@ -972,7 +972,7 @@
     },
     "shower_caddy": {
       "name": "Shower caddy",
-      "model": "proc:shower_caddy",
+      "model": "hh_shower_caddy",
       "w": 0.26,
       "d": 0.1,
       "h": 0.5,
@@ -982,7 +982,7 @@
     },
     "toothbrush_cup": {
       "name": "Toothbrush cup",
-      "model": "proc:toothbrush_cup",
+      "model": "hh_toothbrush_cup",
       "w": 0.1,
       "d": 0.1,
       "h": 0.22,
@@ -993,7 +993,7 @@
     },
     "bed_single": {
       "name": "Single bed",
-      "model": "proc:bed_single",
+      "model": "hh_bed_single",
       "w": 1.0,
       "d": 2.0,
       "h": 0.75,
@@ -1006,7 +1006,7 @@
     },
     "bed_double": {
       "name": "Double bed",
-      "model": "proc:bed_double",
+      "model": "hh_bed_double",
       "w": 1.6,
       "d": 2.0,
       "h": 0.85,
@@ -1019,7 +1019,7 @@
     },
     "wardrobe": {
       "name": "Wardrobe",
-      "model": "proc:wardrobe",
+      "model": "hh_wardrobe",
       "w": 1.0,
       "d": 0.6,
       "h": 2.05,
@@ -1032,7 +1032,7 @@
     },
     "chest_drawers": {
       "name": "Chest of drawers",
-      "model": "proc:chest_drawers",
+      "model": "hh_chest_drawers",
       "w": 0.9,
       "d": 0.5,
       "h": 0.94,
@@ -1044,7 +1044,7 @@
     },
     "bedside_table": {
       "name": "Bedside table",
-      "model": "proc:bedside_table",
+      "model": "hh_bedside_table",
       "w": 0.45,
       "d": 0.4,
       "h": 0.55,
@@ -1055,7 +1055,7 @@
     },
     "pillow_stack": {
       "name": "Pillow stack",
-      "model": "proc:pillow_stack",
+      "model": "hh_pillow_stack",
       "w": 0.5,
       "d": 0.36,
       "h": 0.36,
@@ -1065,7 +1065,7 @@
     },
     "alarm_clock": {
       "name": "Alarm clock",
-      "model": "proc:alarm_clock",
+      "model": "hh_alarm_clock",
       "w": 0.14,
       "d": 0.08,
       "h": 0.2,
@@ -1075,7 +1075,7 @@
     },
     "standing_mirror": {
       "name": "Standing mirror",
-      "model": "proc:standing_mirror",
+      "model": "hh_standing_mirror",
       "w": 0.5,
       "d": 0.3,
       "h": 1.55,
@@ -1087,7 +1087,7 @@
     },
     "bedroom_rug": {
       "name": "Bedroom rug",
-      "model": "proc:bedroom_rug",
+      "model": "hh_bedroom_rug",
       "w": 1.4,
       "d": 1.0,
       "h": 0.04,
@@ -1098,7 +1098,7 @@
     },
     "sofa": {
       "name": "Sofa",
-      "model": "proc:sofa",
+      "model": "hh_sofa",
       "w": 1.8,
       "d": 0.85,
       "h": 0.9,
@@ -1111,7 +1111,7 @@
     },
     "armchair": {
       "name": "Armchair",
-      "model": "proc:armchair",
+      "model": "hh_armchair",
       "w": 0.9,
       "d": 0.85,
       "h": 0.9,
@@ -1123,7 +1123,7 @@
     },
     "coffee_table": {
       "name": "Coffee table",
-      "model": "proc:coffee_table",
+      "model": "hh_coffee_table",
       "w": 1.0,
       "d": 0.55,
       "h": 0.46,
@@ -1135,7 +1135,7 @@
     },
     "television": {
       "name": "Television",
-      "model": "proc:television",
+      "model": "hh_television",
       "w": 1.1,
       "d": 0.2,
       "h": 0.64,
@@ -1146,7 +1146,7 @@
     },
     "tv_stand": {
       "name": "TV stand",
-      "model": "proc:tv_stand",
+      "model": "hh_tv_stand",
       "w": 1.3,
       "d": 0.45,
       "h": 0.49,
@@ -1158,7 +1158,7 @@
     },
     "floor_lamp": {
       "name": "Floor lamp",
-      "model": "proc:floor_lamp",
+      "model": "hh_floor_lamp",
       "w": 0.44,
       "d": 0.44,
       "h": 1.78,
@@ -1170,7 +1170,7 @@
     },
     "piano": {
       "name": "Upright piano",
-      "model": "proc:piano",
+      "model": "hh_piano",
       "w": 1.4,
       "d": 0.8,
       "h": 1.1,
@@ -1183,7 +1183,7 @@
     },
     "magazine_rack": {
       "name": "Magazine rack",
-      "model": "proc:magazine_rack",
+      "model": "hh_magazine_rack",
       "w": 0.4,
       "d": 0.25,
       "h": 0.38,
@@ -1193,7 +1193,7 @@
     },
     "side_table": {
       "name": "Side table",
-      "model": "proc:side_table",
+      "model": "hh_side_table",
       "w": 0.5,
       "d": 0.5,
       "h": 0.52,
@@ -1204,7 +1204,7 @@
     },
     "old_suitcase": {
       "name": "Old suitcase",
-      "model": "proc:old_suitcase",
+      "model": "hh_old_suitcase",
       "w": 0.6,
       "d": 0.4,
       "h": 0.22,
@@ -1214,7 +1214,7 @@
     },
     "travel_trunk": {
       "name": "Travel trunk",
-      "model": "proc:travel_trunk",
+      "model": "hh_travel_trunk",
       "w": 0.92,
       "d": 0.52,
       "h": 0.56,
@@ -1226,7 +1226,7 @@
     },
     "rocking_horse": {
       "name": "Rocking horse",
-      "model": "proc:rocking_horse",
+      "model": "hh_rocking_horse",
       "w": 0.9,
       "d": 0.3,
       "h": 0.7,
@@ -1239,7 +1239,7 @@
     },
     "christmas_box": {
       "name": "Christmas box",
-      "model": "proc:christmas_box",
+      "model": "hh_christmas_box",
       "w": 0.52,
       "d": 0.42,
       "h": 0.5,
@@ -1249,7 +1249,7 @@
     },
     "old_mirror": {
       "name": "Old mirror",
-      "model": "proc:old_mirror",
+      "model": "hh_old_mirror",
       "w": 0.7,
       "d": 0.05,
       "h": 0.9,
@@ -1260,7 +1260,7 @@
     },
     "dressmaker_dummy": {
       "name": "Dressmaker's dummy",
-      "model": "proc:dressmaker_dummy",
+      "model": "hh_dressmaker_dummy",
       "w": 0.36,
       "d": 0.36,
       "h": 1.3,
@@ -1271,7 +1271,7 @@
     },
     "telescope": {
       "name": "Telescope",
-      "model": "proc:telescope",
+      "model": "hh_telescope",
       "w": 0.5,
       "d": 0.5,
       "h": 1.4,
@@ -1283,7 +1283,7 @@
     },
     "record_box": {
       "name": "Box of records",
-      "model": "proc:record_box",
+      "model": "hh_record_box",
       "w": 0.36,
       "d": 0.34,
       "h": 0.34,
@@ -1293,7 +1293,7 @@
     },
     "lawnmower": {
       "name": "Lawnmower",
-      "model": "proc:lawnmower",
+      "model": "hh_lawnmower",
       "w": 0.5,
       "d": 1.2,
       "h": 0.95,
@@ -1306,7 +1306,7 @@
     },
     "bicycle_home": {
       "name": "Bicycle",
-      "model": "proc:bicycle",
+      "model": "hh_bicycle_home",
       "w": 1.6,
       "d": 0.3,
       "h": 0.95,
@@ -1318,7 +1318,7 @@
     },
     "watering_can": {
       "name": "Watering can",
-      "model": "proc:watering_can",
+      "model": "hh_watering_can",
       "w": 0.4,
       "d": 0.24,
       "h": 0.4,
@@ -1328,7 +1328,7 @@
     },
     "flower_pots": {
       "name": "Flower pots",
-      "model": "proc:flower_pots",
+      "model": "hh_flower_pots",
       "w": 0.2,
       "d": 0.2,
       "h": 0.4,
@@ -1339,7 +1339,7 @@
     },
     "garden_chair": {
       "name": "Garden chair",
-      "model": "proc:garden_chair",
+      "model": "hh_garden_chair",
       "w": 0.5,
       "d": 0.5,
       "h": 0.9,
@@ -1350,7 +1350,7 @@
     },
     "wheelbarrow": {
       "name": "Wheelbarrow",
-      "model": "proc:wheelbarrow",
+      "model": "hh_wheelbarrow",
       "w": 0.6,
       "d": 1.2,
       "h": 0.6,
@@ -1362,7 +1362,7 @@
     },
     "paint_tins": {
       "name": "Paint tins",
-      "model": "proc:paint_tins",
+      "model": "hh_paint_tins",
       "w": 0.4,
       "d": 0.3,
       "h": 0.34,
@@ -1372,7 +1372,7 @@
     },
     "ladder": {
       "name": "Ladder",
-      "model": "proc:ladder",
+      "model": "hh_ladder",
       "w": 0.44,
       "d": 0.1,
       "h": 2.4,
@@ -1383,7 +1383,7 @@
     },
     "rake": {
       "name": "Rake",
-      "model": "proc:rake",
+      "model": "hh_rake",
       "w": 0.4,
       "d": 0.12,
       "h": 1.5,
@@ -1393,7 +1393,7 @@
     },
     "hose_reel": {
       "name": "Hose reel",
-      "model": "proc:hose_reel",
+      "model": "hh_hose_reel",
       "w": 0.3,
       "d": 0.46,
       "h": 0.5,

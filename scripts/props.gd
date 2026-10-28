@@ -335,7 +335,8 @@ static func make(spec: String) -> Node3D:
 		ensure_box_collision(node)
 		if "box" in spec:
 			restyle_box(node)
-	cap_prop_materials(node, 2)
+	# Blender-built household pieces keep their own few colours.
+	cap_prop_materials(node, 5 if spec.begins_with("hh_") else 2)
 	polish(node)
 	return node
 
