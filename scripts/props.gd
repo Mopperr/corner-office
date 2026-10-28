@@ -109,6 +109,85 @@ static func mat(color: Color) -> StandardMaterial3D:
 	return material
 
 
+# The team's seamless textures (assets/textures/tex_<name>.png): floors,
+# walls, cardboard, cloth and stone. Triplanar, so any box or cylinder
+# takes one without UVs; the tint multiplies, so the palette still holds.
+static var _tex_cache: Dictionary = {}
+
+
+static func has_texture(name: String) -> bool:
+	return ResourceLoader.exists("res://assets/textures/tex_%s.png" % name)
+
+
+static func tex_mat(name: String, tint: Color = Color.WHITE, scale := 1.0, rough := 0.92) -> StandardMaterial3D:
+	var key := "%s|%s|%.2f|%.2f" % [name, tint.to_html(false), scale, rough]
+	if _tex_cache.has(key):
+		return _tex_cache[key]
+	var material := mat(tint)
+	material.roughness = rough
+	var path := "res://assets/textures/tex_%s.png" % name
+	if ResourceLoader.exists(path):
+		material.albedo_texture = load(path)
+		material.uv1_triplanar = true
+		material.uv1_scale = Vector3(scale, scale, scale)
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	_tex_cache[key] = material
+	return material
+
+
+# Which texture a household part takes, by what the Blender build named it.
+const PART_TEXTURES := {
+	"cushion": "fabric_linen", "throw_cushion": "velvet", "pillow": "fabric_linen", "mattress": "fabric_linen",
+	"duvet": "fabric_linen", "towel": "fabric_linen", "saddle": "leather", "strap": "leather", "trunk": "leather",
+	"rug": "rug_kilim", "mat": "rug_kilim", "top": "oak_floor", "splashback": "kitchen_tile",
+	"tray": "brushed_steel", "box": "cardboard", "soil": "concrete",
+}
+# Upholstered pieces: their base, back, arms and seat are cloth.
+const SOFT_PIECES := ["sofa", "armchair", "garden_chair", "rocking_horse"]
+# Appliances: the body and door take steel rather than paint.
+const STEEL_BODIES := ["fridge_home", "cooker", "microwave", "toaster"]
+
+
+static func dress_household(root: Node, item_id: String) -> void:
+	# Cloth on the soft parts, stone on the counters, steel on the white goods.
+	if root == null or not has_texture("fabric_linen"):
+		return
+	for mesh_instance in _mesh_instances(root):
+		var part := mesh_instance.name.to_lower().rstrip("0123456789._")
+		var tex := str(PART_TEXTURES.get(part, ""))
+		if (part == "body" or part == "door") and item_id in STEEL_BODIES:
+			tex = "brushed_steel"
+		if part in ["base", "back", "arm", "seat"] and item_id in SOFT_PIECES:
+			tex = "fabric_linen"
+		if tex == "" or mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var base: Material = mesh_instance.mesh.surface_get_material(i)
+			if not (base is StandardMaterial3D):
+				continue
+			var tint: Color = (base as StandardMaterial3D).albedo_color
+			# The texture carries the shade; the part's colour tints it lightly.
+			var textured := tex_mat(tex, Color.WHITE.lerp(tint, 0.55), 1.6, 0.9)
+			keep_material(mesh_instance, i, textured)
+
+
+static func dress_box(root: Node) -> void:
+	# Kraft cardboard on every box face.
+	if root == null or not has_texture("cardboard"):
+		return
+	for mesh_instance in _mesh_instances(root):
+		if mesh_instance.mesh == null:
+			continue
+		for i in mesh_instance.mesh.get_surface_count():
+			var base: Material = mesh_instance.mesh.surface_get_material(i)
+			if not (base is StandardMaterial3D):
+				continue
+			var tint: Color = (base as StandardMaterial3D).albedo_color
+			if tint.get_luminance() < 0.25:
+				continue
+			keep_material(mesh_instance, i, tex_mat("cardboard", Color.WHITE.lerp(tint, 0.6), 1.2, 0.9))
+
+
 static func material_count(root: Node) -> int:
 	var ids := {}
 	for mesh_instance in _mesh_instances(root):
@@ -335,8 +414,11 @@ static func make(spec: String) -> Node3D:
 		ensure_box_collision(node)
 		if "box" in spec:
 			restyle_box(node)
+			dress_box(node)
+		if spec.begins_with("hh_"):
+			dress_household(node, spec.trim_prefix("hh_"))
 	# Blender-built household pieces keep their own few colours.
-	cap_prop_materials(node, 5 if spec.begins_with("hh_") else 2)
+	cap_prop_materials(node, 7 if spec.begins_with("hh_") else 2)
 	polish(node)
 	return node
 

@@ -196,6 +196,14 @@
  "audio": {
   "truck_idle_db": -10,
   "quiet_boost_db": 6,
+  "trim_db": {
+   "sfx_crockery_crack": -7,
+   "sfx_angry_mutter": -9,
+   "sfx_gasp_small": -5,
+   "sfx_shove_grunt": -3,
+   "sfx_body_fall": -2,
+   "sfx_letter_open": -4
+  },
   "quiet_sfx": [
    "sfx_box_fold",
    "sfx_box_open",

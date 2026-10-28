@@ -2383,7 +2383,7 @@ func _note_handled() -> void:
 	var level := GameState.note_handled()
 	if level >= 0:
 		_toast("Handling level %d. Steadier hands." % level, "Dana")
-		AudioDirector.play_sfx("sfx_success_chime")
+		AudioDirector.play_sfx("sfx_level_up_hands")
 
 
 func _auto_finish() -> void:
@@ -2505,8 +2505,8 @@ func _pack_finish() -> void:
 
 func _break_piece(item: Dictionary, at: Vector3) -> void:
 	var label := str(item.get("name", "piece"))
-	AudioDirector.play_sfx("sfx_l07_glass_clink")
-	AudioDirector.play_sfx("sfx_trade_loss_thud", true)
+	AudioDirector.play_sfx("sfx_glass_smash" if bool(item.get("fragile", false)) else "sfx_crockery_crack", true)
+	AudioDirector.play_sfx("sfx_gasp_small")
 	_shards(at)
 	if player != null and is_instance_valid(player):
 		_act(player, "flinch", 1.3)
@@ -2515,6 +2515,7 @@ func _break_piece(item: Dictionary, at: Vector3) -> void:
 	if party == null or not is_instance_valid(party):
 		return
 	party.react("broken", {"item": label.to_lower()}, true)
+	AudioDirector.play_sfx("sfx_angry_mutter", true)
 	party.temper += 1
 	if party.temper >= GameState.temper_limit() and not bool(GameState.job.get("attacked", false)):
 		_owner_attack()
@@ -2576,7 +2577,7 @@ func _owner_shove(who: Node3D) -> void:
 	who.look_at(player.position, Vector3.UP)
 	who.rotate_y(PI)
 	_act(who, "shove", 1.6)
-	AudioDirector.play_sfx("sfx_invalid_placement")
+	AudioDirector.play_sfx("sfx_shove_grunt")
 	get_tree().create_timer(0.45).timeout.connect(_dana_down)
 	get_tree().create_timer(2.0).timeout.connect(_owner_return.bind(who))
 
@@ -2602,7 +2603,7 @@ func _dana_down() -> void:
 		return
 	player.set_meta("down", true)
 	player.set_meta("action", "")
-	AudioDirector.play_sfx("sfx_trade_loss_thud")
+	AudioDirector.play_sfx("sfx_body_fall")
 	_dust(player.position)
 	_toast("Hey! HEY. There are witnesses, you know.", "Dana")
 	get_tree().create_timer(2.2).timeout.connect(func():
@@ -2624,6 +2625,7 @@ func _open_sue_card() -> void:
 	if old != null:
 		layer.remove_child(old)
 		old.free()
+	AudioDirector.play_sfx("sfx_gavel")
 	var card := PanelContainer.new()
 	card.name = "SueCard"
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.NIGHT))
@@ -2689,10 +2691,11 @@ func _open_sue_card() -> void:
 		if result.has("error"):
 			_toast(str(result["error"]), "Dana")
 		elif bool(result.get("countered", false)):
+			AudioDirector.play_sfx("sfx_letter_open")
 			AudioDirector.play_sfx("sfx_trade_loss_thud")
 			_toast("Counter-sued. Fraud, they said. $%d and two rep stars gone. There's a letter." % int(result.get("penalty", 0)), "Dana")
 		else:
-			AudioDirector.play_sfx("sfx_tip_jar_coin")
+			AudioDirector.play_sfx("sfx_coins_award")
 			_toast("Small claims says $%d. Lovely." % int(result.get("amount", 0)), "Dana")
 		close.call()
 	)

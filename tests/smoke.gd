@@ -344,6 +344,7 @@ func _ready() -> void:
 	failures.append_array(await _party_checks())
 	failures.append_array(await _life_checks())
 	failures.append_array(_handling_checks())
+	failures.append_array(_texture_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -2513,6 +2514,67 @@ func _party_checks() -> Array:
 	_bury(play)
 	GameState.job = {}
 	GameState.mode = "office"
+	return found
+
+
+func _texture_checks() -> Array:
+	# The team's textures: all eighteen load, a textured material carries
+	# one triplanar, a house floor and wall wear them, a box is cardboard,
+	# a sofa's cushions are cloth, and the new sounds exist.
+	var found: Array = []
+	var Props = load("res://scripts/props.gd")
+	for name in ["oak_floor", "pine_planks", "terrazzo", "kitchen_tile", "bathroom_tile", "carpet_wool", "rug_kilim", "fabric_linen", "velvet", "leather", "marble", "brick_painted", "plaster", "wallpaper_floral", "wallpaper_stripe", "cardboard", "brushed_steel", "concrete"]:
+		if not Props.has_texture(name):
+			found.append("texture %s missing" % name)
+	var oak: StandardMaterial3D = Props.tex_mat("oak_floor")
+	if oak.albedo_texture == null or not oak.uv1_triplanar:
+		found.append("tex_mat gives no triplanar texture")
+	if Props.tex_mat("oak_floor") != oak:
+		found.append("tex_mat is not cached")
+	var box: Node3D = Props.make("box_closed")
+	var kraft := false
+	for mesh_instance in box.find_children("*", "MeshInstance3D", true, false):
+		for i in (mesh_instance as MeshInstance3D).mesh.get_surface_count():
+			var m: Material = (mesh_instance as MeshInstance3D).mesh.surface_get_material(i)
+			if m is StandardMaterial3D and (m as StandardMaterial3D).albedo_texture != null:
+				kraft = true
+	if not kraft:
+		found.append("a closed box has no cardboard")
+	box.free()
+	var sofa: Node3D = Props.make("hh_sofa")
+	var cloth := 0
+	for mesh_instance in sofa.find_children("*", "MeshInstance3D", true, false):
+		if str(mesh_instance.name).begins_with("cushion") or str(mesh_instance.name).begins_with("back"):
+			var m: Material = (mesh_instance as MeshInstance3D).mesh.surface_get_material(0)
+			if m is StandardMaterial3D and (m as StandardMaterial3D).albedo_texture != null:
+				cloth += 1
+	if cloth == 0:
+		found.append("the sofa's cushions are not cloth")
+	sofa.free()
+	var Homes = load("res://scripts/homes.gd")
+	var venue: Dictionary = Homes.venue_for(str((Homes.all().keys())[0]))
+	var holder := Node3D.new()
+	add_child(holder)
+	var interior: Node3D = Homes.build(holder, venue, 0, Color("8E8276"), Color("7A5C40"), Color("8E8276"), true)
+	var floor_tex := false
+	var wall_tex := false
+	for child in interior.get_children():
+		if str(child.name).begins_with("RoomFloor_") and (child as MeshInstance3D).material_override is StandardMaterial3D and ((child as MeshInstance3D).material_override as StandardMaterial3D).albedo_texture != null:
+			floor_tex = true
+		if str(child.name).begins_with("InnerWall_"):
+			var body := child.get_child(0) as MeshInstance3D
+			if body and body.material_override is StandardMaterial3D and (body.material_override as StandardMaterial3D).albedo_texture != null:
+				wall_tex = true
+	if not floor_tex:
+		found.append("house room floors carry no texture")
+	if not wall_tex:
+		found.append("house inner walls carry no plaster")
+	holder.queue_free()
+	for sfx in ["sfx_glass_smash", "sfx_crockery_crack", "sfx_shove_grunt", "sfx_body_fall", "sfx_gasp_small", "sfx_angry_mutter", "sfx_gavel", "sfx_letter_open", "sfx_coins_award", "sfx_level_up_hands"]:
+		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % sfx):
+			found.append("team sound %s missing" % sfx)
+	if Tuning.audio_gain("sfx_crockery_crack") > -5.0:
+		found.append("the crack is not trimmed")
 	return found
 
 

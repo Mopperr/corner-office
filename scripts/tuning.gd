@@ -90,6 +90,11 @@ static func office_def(id: String) -> Dictionary:
 
 
 static func audio_gain(sfx_name: String) -> float:
+	# A named trim first (the team's sounds are all peak-normalised, so the
+	# quiet ones need turning down), then the quiet and boosted lists.
+	var trims: Dictionary = get_value("audio.trim_db", {})
+	if trims.has(sfx_name):
+		return float(trims[sfx_name])
 	var quiet: Array = get_value("audio.quiet_sfx", [])
 	if sfx_name in quiet:
 		return float(get_value("audio.quiet_boost_db", 6))

@@ -22,6 +22,12 @@ const KIND_TAG := {
 	"bathroom": "bathroom", "bedroom": "bedroom", "loft": "loft", "boxroom": "loft", "shed": "shed",
 }
 # Floor tint per kind, blended into the house's floor colour.
+# The floor each kind of room gets, from the team's textures.
+const KIND_FLOOR := {
+	"hall": "oak_floor", "landing": "carpet_wool", "lounge": "oak_floor", "study": "oak_floor", "kitchen": "kitchen_tile",
+	"dining": "oak_floor", "utility": "concrete", "bathroom": "bathroom_tile", "bedroom": "carpet_wool", "loft": "pine_planks",
+	"boxroom": "pine_planks", "shed": "concrete",
+}
 const KIND_TINT := {
 	"hall": "D9C9A8", "landing": "D9C9A8", "lounge": "C98F7A", "study": "B9A27E", "kitchen": "DCD3B6",
 	"dining": "C9B18F", "utility": "C9C9C0", "bathroom": "BFD6DA", "bedroom": "C7B6D6", "loft": "A99784",
@@ -261,6 +267,10 @@ static func build(parent: Node3D, venue: Dictionary, index: int, wall_color: Col
 		var rd := float(room.get("d", 2))
 		var tint := floor_color.lerp(Color(str(KIND_TINT.get(room_kind, "D9C9A8"))), 0.42)
 		var pad := Props.mesh_box(Vector3(rw - 0.16, 0.012, rd - 0.16), tint)
+		var floor_tex := str(KIND_FLOOR.get(room_kind, "oak_floor"))
+		if Props.has_texture(floor_tex):
+			# The texture carries the pattern; the room tint only warms it.
+			pad.material_override = Props.tex_mat(floor_tex, Color.WHITE.lerp(tint, 0.3), 0.9 if floor_tex in ["oak_floor", "pine_planks"] else 1.4)
 		pad.name = "RoomFloor_" + str(room.get("id", ""))
 		pad.position = Vector3(rx + rw * 0.5, 0.018, rz + rd * 0.5)
 		root.add_child(pad)
@@ -288,6 +298,8 @@ static func build(parent: Node3D, venue: Dictionary, index: int, wall_color: Col
 			piece.position = Vector3(mid, 0, float(wall["fixed"])) if along_x else Vector3(float(wall["fixed"]), 0, mid)
 			piece.rotation.y = 0.0 if along_x else PI * 0.5
 			var body := Props.mesh_box(Vector3(length, WALL_H, WALL_T), wall_color)
+			if Props.has_texture("plaster"):
+				body.material_override = Props.tex_mat("plaster", wall_color.lightened(0.12), 1.2)
 			body.position = Vector3(0, WALL_H * 0.5, 0)
 			piece.add_child(body)
 			var cap := Props.mesh_box(Vector3(length + 0.04, 0.04, WALL_T + 0.08), trim_color)
