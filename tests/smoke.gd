@@ -2564,8 +2564,45 @@ func _life_checks() -> Array:
 	GameState.total_earned = 999000
 	var mails := GameState.inbox.size()
 	GameState.add_money(2000, true)
-	if not Life.millionaire() or GameState.inbox.size() != mails + 1 or float(Life.progress().get("share", 0.0)) < 1.0:
+	if not Life.millionaire() or GameState.inbox.size() != mails + 1 or str(Life.progress().get("id", "")) != "ten_million":
 		found.append("the million did not land (%s)" % Life.progress())
+	# After the million: the empire ladder opens, rents and funds earn at night,
+	# Grayline's offer stands at a hundred million, the billion is the end.
+	if Life.empire().size() < 8:
+		found.append("only %d empire rungs" % Life.empire().size())
+	GameState.money = 5000000
+	GameState.life = Life.fresh()
+	if not Life.buy("depot2").has("error"):
+		found.append("bought a depot before the million")
+	GameState.total_earned = 999999
+	GameState.add_money(10, true)
+	if not Life.millionaire() or Life.buy("depot2").has("error") or Life.trucks() != 11:
+		found.append("the second depot did not open after the million (%s)" % Life.blocker(Life.rung("depot2")))
+	if Life.buy("fund").has("error") or absf(Life.yield_rate() - 0.01) > 0.0001:
+		found.append("the fund has no yield")
+	GameState.money = 1000000
+	var night2: Dictionary = Life.nightly(100)
+	if int(night2.get("grown", 0)) != 10000 or int(night2.get("truck_pay", 0)) < 1000:
+		found.append("empire night wrong: %s" % night2)
+	GameState.total_earned = 99999999
+	GameState.add_money(10, true)
+	if not Life.buyout_open():
+		found.append("no offer at a hundred million")
+	GameState.money = 0
+	var sale: Dictionary = Life.take_buyout()
+	if sale.has("error") or GameState.money != 250000000 or not Life.sold_up() or Life.trucks() != 1 or Life.blocker(Life.rung("tower")) != "sold to Grayline":
+		found.append("the buy-out went wrong: %s trucks %d" % [sale, Life.trucks()])
+	GameState.life = Life.fresh()
+	GameState.total_earned = 999999999
+	GameState.add_money(10, true)
+	if not Life.billionaire() or str(Life.progress().get("name", "")) != "Beyond the million":
+		found.append("the billion did not land (%s)" % Life.progress())
+	GameState.life = Life.fresh()
+	GameState.total_earned = 0
+	GameState.money = 5000
+	Life.buy("dog")
+	GameState.total_earned = 999000
+	GameState.add_money(2000, true)
 	# Save and load keep the ladder.
 	SaveManager.save_game()
 	GameState.life = {}

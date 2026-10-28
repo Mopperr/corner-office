@@ -28,8 +28,49 @@ Each extra truck brings in $140 (more with Rep), each extra counter
 brings in 50% of what the yard took that day (at least $40 counts),
 and Pickle eats $4. The night card lists it all.
 
-## Milestones
+## The first milestones
 
 - **The first million** at $1,000,000 earned: A million dollars earned, one box at a time. Marge writes.
 
-After the million the late game opens (see the road to a billion, coming).
+
+## After the million: the road to a billion
+
+The first million opens a second ladder on the Life page. The costs run from
+a million to four hundred million, so this is the long game; what carries
+you is the fund (the jar grows by a share every night) and the rents and
+contracts that pay flat sums.
+
+| Rung | Cost | Needs | What it does |
+| --- | --- | --- | --- |
+| A depot in Harbourmouth | $1,200,000 | the first million | Ten more trucks on the road every night. |
+| The Corner Office fund | $2,000,000 | the first million | The jar grows by 1% every night. |
+| The Harbour Road units | $2,500,000 | A depot in Harbourmouth | Rent comes in instead of going out: $3,000 a night. |
+| Fifty trucks | $6,000,000 | A depot in Harbourmouth | Thirty more runs a night. |
+| Dilys goes further | $10,000,000 | The Corner Office fund | The jar grows by 2% every night. |
+| Corner Office, county-wide | $15,000,000 | The Harbour Road units | Twenty more counters earning every night. |
+| The rail yard contract | $40,000,000 | Fifty trucks | $40,000 a night from the railway. |
+| The bank charter | $50,000,000 | Dilys goes further | The jar grows by 3% every night. |
+| The Corner Office tower | $120,000,000 | Corner Office, county-wide, The rail yard contract | $150,000 a night from the tenants, and the whole town knows the name. |
+| Every town on the map | $400,000,000 | The Corner Office tower, The bank charter | $500,000 a night, and the last stretch to the billion. |
+
+## Nights after the million
+
+One thing can happen a night:
+
+- 5%: The tax office looked at the books and took 2% of the jar for the trouble.
+- 6%: Brightway Removals undercut three of the runs tonight.
+- 3%: The Harbourmouth drivers struck for a day. Mei settled it with a kettle.
+- 6%: A museum paid $25,000 to move one very old chair very slowly.
+
+## Milestones
+
+- **The first million** at $1,000,000 earned: A million dollars earned, one box at a time.
+- **Ten million** at $10,000,000 earned: Ten million earned. Marge frames the first invoice.
+- **A hundred million** at $100,000,000 earned: Grayline, who let Dana go, offer to buy the lot.
+- **The billion** at $1,000,000,000 earned: A billion dollars earned, starting from a garage and a borrowed truck.
+
+At a hundred million Grayline, who let Dana go on day one, offer to buy the
+lot for $250,000,000. Taking it puts the money in the jar and ends the empire:
+the trucks, counters, rents and funds are theirs, Pickle and the house stay.
+Refusing it keeps the road open to the billion, which is the end of the story
+and the start of Dana doing one small job a week, by hand.

@@ -36,8 +36,26 @@ static func rungs() -> Array:
 	return load_data().get("rungs", [])
 
 
+static func empire() -> Array:
+	# The ladder past the first million: depots, funds, property, the tower.
+	return load_data().get("empire", [])
+
+
+static func all_rungs() -> Array:
+	var out: Array = rungs().duplicate()
+	out.append_array(empire())
+	return out
+
+
+static func is_empire(id: String) -> bool:
+	for row in empire():
+		if str(row.get("id", "")) == id:
+			return true
+	return false
+
+
 static func rung(id: String) -> Dictionary:
-	for row in rungs():
+	for row in all_rungs():
 		if str(row.get("id", "")) == id:
 			return row
 	return {}
@@ -56,6 +74,10 @@ static func blocker(row: Dictionary) -> String:
 	var id := str(row.get("id", ""))
 	if bought(id):
 		return "yours"
+	if sold_up():
+		return "sold to Grayline"
+	if is_empire(id) and not millionaire():
+		return "needs the first million"
 	for need in row.get("needs", []):
 		if not bought(str(need)):
 			return "needs %s" % str(rung(str(need)).get("name", need))
@@ -82,7 +104,10 @@ static func next_rung() -> Dictionary:
 	# The cheapest rung still to buy whose other requirements are met, else the cheapest left.
 	var best: Dictionary = {}
 	var fallback: Dictionary = {}
-	for row in rungs():
+	var pool: Array = rungs()
+	if millionaire():
+		pool = all_rungs()
+	for row in pool:
 		if bought(str(row.get("id", ""))):
 			continue
 		if fallback.is_empty() or int(row.get("cost", 0)) < int(fallback.get("cost", 0)):
@@ -137,10 +162,49 @@ static func _log(line: String) -> void:
 
 static func _sum(key: String) -> float:
 	var total := 0.0
-	for row in rungs():
+	if sold_up():
+		# Grayline owns the lot now; only the dog and the house are still Dana's.
+		for row in rungs():
+			if bought(str(row.get("id", ""))) and not row.has("trucks") and not row.has("shops") and not row.has("board_jobs"):
+				total += float(row.get(key, 0))
+		return total
+	for row in all_rungs():
 		if bought(str(row.get("id", ""))):
 			total += float(row.get(key, 0))
 	return total
+
+
+static func yield_rate() -> float:
+	return _sum("yield")
+
+
+static func income() -> int:
+	return int(_sum("income"))
+
+
+static func sold_up() -> bool:
+	return (state().get("milestones", {}) as Dictionary).has("sold")
+
+
+static func buyout_open() -> bool:
+	return (state().get("milestones", {}) as Dictionary).has("hundred_million") and not sold_up()
+
+
+static func take_buyout() -> Dictionary:
+	# Grayline's cheque: the company goes, the jar jumps, the empire stops earning.
+	if not buyout_open():
+		return {"error": "Nobody is offering."}
+	var cfg := load_data()
+	var price := int((cfg.get("buyout", {}) as Dictionary).get("price", 250000000))
+	var s := state()
+	var done: Dictionary = s.get("milestones", {})
+	done["sold"] = GameState.day
+	s["milestones"] = done
+	GameState.add_money(price, true)
+	_mail((cfg.get("buyout", {}) as Dictionary).get("mail", {}), "life_sold")
+	_log("Sold Corner Office to Grayline for $%d." % price)
+	GameState.bump_stat("sold_up")
+	return {"price": price}
 
 
 static func tip_mult() -> float:
@@ -191,12 +255,43 @@ static func nightly(shop_earned: int) -> Dictionary:
 	var floor_take := int(cfg.get("shop_floor", 40))
 	var shop_pay := int(round(float(counters) * share * float(maxi(shop_earned, floor_take))))
 	var food := upkeep()
-	var net := truck_pay + shop_pay - food
-	if truck_pay > 0 or shop_pay > 0:
-		GameState.add_money(truck_pay + shop_pay, true)
+	# Past the million: rents and contracts, the fund's growth, and the odd bad night.
+	var flat := income()
+	var grown := int(round(float(maxi(GameState.money, 0)) * yield_rate()))
+	var event: Dictionary = {}
+	if millionaire() and not sold_up():
+		event = _roll_event(run_pay * rep_lift)
+		truck_pay = maxi(0, truck_pay + int(event.get("truck_delta", 0)))
+	var event_cash := int(event.get("cash", 0))
+	var net := truck_pay + shop_pay + flat + grown + event_cash - food
+	if truck_pay + shop_pay + flat + grown > 0:
+		GameState.add_money(truck_pay + shop_pay + flat + grown, true)
+	if event_cash > 0:
+		GameState.add_money(event_cash, true)
+	elif event_cash < 0:
+		GameState.add_money(event_cash, false)
 	if food > 0:
 		GameState.add_money(-food, false)
-	return {"trucks": runs, "truck_pay": truck_pay, "shops": counters, "shop_pay": shop_pay, "upkeep": food, "net": net}
+	return {"trucks": runs, "truck_pay": truck_pay, "shops": counters, "shop_pay": shop_pay, "upkeep": food, "income": flat, "grown": grown, "event": str(event.get("line", "")), "event_cash": event_cash, "net": net}
+
+
+static func _roll_event(run_value: float) -> Dictionary:
+	# One thing can happen a night: an audit, a rival, a strike, a windfall.
+	var roll := GameState.rng.randf()
+	var acc := 0.0
+	for row in load_data().get("events", []):
+		acc += float(row.get("chance", 0.0))
+		if roll < acc:
+			var out := {"id": str(row.get("id", "")), "line": str(row.get("line", ""))}
+			if row.has("jar"):
+				out["cash"] = int(round(float(GameState.money) * float(row["jar"])))
+			if row.has("income"):
+				out["cash"] = int(row["income"])
+			if row.has("runs"):
+				out["truck_delta"] = int(round(float(int(row["runs"])) * run_value))
+			GameState.bump_stat("empire_" + str(row.get("id", "")))
+			return out
+	return {}
 
 
 static func check_milestones(before: int, after: int) -> void:
@@ -205,7 +300,9 @@ static func check_milestones(before: int, after: int) -> void:
 	for row in load_data().get("milestones", []):
 		var id := str(row.get("id", ""))
 		var at := int(row.get("at", 0))
-		if done.has(id) or not (before < at and after >= at):
+		# Anything passed and not yet marked lands now, in order, even when one
+		# night's income clears two of them at once.
+		if done.has(id) or after < at:
 			continue
 		done[id] = GameState.day
 		s["milestones"] = done
@@ -217,6 +314,10 @@ static func check_milestones(before: int, after: int) -> void:
 
 static func millionaire() -> bool:
 	return (state().get("milestones", {}) as Dictionary).has("million")
+
+
+static func billionaire() -> bool:
+	return (state().get("milestones", {}) as Dictionary).has("billion")
 
 
 static func progress() -> Dictionary:

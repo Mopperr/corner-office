@@ -219,9 +219,234 @@
     "subject": "A million",
     "body": "Dana,\n\nA million. From a garage that smelled of diesel.\n\nMy first partner said the first million is the hard one. He was wrong about most things. We'll see about that.\n\n— Mile Marker"
    }
+  },
+  {
+   "id": "ten_million",
+   "at": 10000000,
+   "name": "Ten million",
+   "blurb": "Ten million earned. Marge frames the first invoice.",
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "Ten",
+    "body": "Ten million. I framed your first invoice. It was for $100 and you spelled 'receipt' wrong.\n\n— Mile Marker"
+   }
+  },
+  {
+   "id": "hundred_million",
+   "at": 100000000,
+   "name": "A hundred million",
+   "blurb": "Grayline, who let Dana go, offer to buy the lot.",
+   "mail": {
+    "from": "Grayline Logistics",
+    "subject": "An offer",
+    "body": "Ms Reyes,\n\nGrayline would like to acquire Corner Office in full for $250,000,000. The offer stands for as long as you like. We note you once worked for us. We note it with some embarrassment.\n\nGrayline Logistics"
+   }
+  },
+  {
+   "id": "billion",
+   "at": 1000000000,
+   "name": "The billion",
+   "blurb": "A billion dollars earned, starting from a garage and a borrowed truck.",
+   "mail": {
+    "from": "Dana Reyes",
+    "subject": "A note to myself",
+    "body": "Day one: $120, a garage, and a truck I didn't own.\n\nToday: a billion. Pickle is asleep under the desk. Sam says dinner's at seven.\n\nI think I'll do a job tomorrow. A small one. By hand.\n\nDana"
+   }
   }
  ],
  "run_pay": 140,
  "shop_share": 0.5,
- "shop_floor": 40
+ "shop_floor": 40,
+ "empire": [
+  {
+   "id": "depot2",
+   "name": "A depot in Harbourmouth",
+   "cost": 1200000,
+   "blurb": "The second yard, forty miles down the coast, with Mei running it and a sign in the same lettering.",
+   "effect": "Ten more trucks on the road every night.",
+   "trucks": 10,
+   "mail": {
+    "from": "Mei Tanaka",
+    "subject": "Harbourmouth",
+    "body": "Dana,\n\nThe yard's open. The drivers are young and the vans are new, so I have put a dent in one myself, for luck.\n\nMei"
+   }
+  },
+  {
+   "id": "fund",
+   "name": "The Corner Office fund",
+   "cost": 2000000,
+   "blurb": "Marge's accountant, a woman called Dilys who does not blink, puts the jar to work.",
+   "effect": "The jar grows by 1% every night.",
+   "yield": 0.01,
+   "mail": {
+    "from": "Dilys Pryce",
+    "subject": "Your money, working",
+    "body": "Ms Reyes,\n\nI have placed the funds. You will see the number move at night. Do not watch it. People who watch it ring me.\n\nD. Pryce"
+   }
+  },
+  {
+   "id": "property",
+   "name": "The Harbour Road units",
+   "cost": 2500000,
+   "needs": [
+    "depot2"
+   ],
+   "blurb": "Hollis Property sells you the row your first shops rent. The lunch was good.",
+   "effect": "Rent comes in instead of going out: $3,000 a night.",
+   "income": 3000,
+   "mail": {
+    "from": "Hollis Property",
+    "subject": "Keys, and a confession",
+    "body": "Ms Reyes,\n\nThe deeds are yours. We confess we always liked the lettering.\n\n— Hollis Property, tenants"
+   }
+  },
+  {
+   "id": "fleet50",
+   "name": "Fifty trucks",
+   "cost": 6000000,
+   "needs": [
+    "depot2"
+   ],
+   "blurb": "A fleet with a fleet manager, a paint shop, and a Christmas party that needs a hall.",
+   "effect": "Thirty more runs a night.",
+   "trucks": 30,
+   "mail": {
+    "from": "Ray Dunbar",
+    "subject": "Fifty",
+    "body": "Boss. Fifty vans. I counted them twice because I didn't believe it the first time.\n\nI still drive the dented one.\n\nRay"
+   }
+  },
+  {
+   "id": "hedge",
+   "name": "Dilys goes further",
+   "cost": 10000000,
+   "needs": [
+    "fund"
+   ],
+   "blurb": "A second fund, a lawyer, and a letter from the bank with your name spelled right.",
+   "effect": "The jar grows by 2% every night.",
+   "yield": 0.01,
+   "mail": {
+    "from": "Dilys Pryce",
+    "subject": "Further",
+    "body": "Ms Reyes,\n\nWe are, as they say, in the market now. I have bought you a coat for the meetings. It is grey. Wear it.\n\nD. Pryce"
+   }
+  },
+  {
+   "id": "county",
+   "name": "Corner Office, county-wide",
+   "cost": 15000000,
+   "needs": [
+    "property"
+   ],
+   "blurb": "Twenty counters in twenty towns, and a training kitchen where the yard used to be.",
+   "effect": "Twenty more counters earning every night.",
+   "shops": 20,
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "The county",
+    "body": "Twenty towns. I drove to four of them today for the coffee. It was consistent, which is a kind of compliment.\n\n— Mile Marker"
+   }
+  },
+  {
+   "id": "rail",
+   "name": "The rail yard contract",
+   "cost": 40000000,
+   "needs": [
+    "fleet50"
+   ],
+   "blurb": "Every freight container off the night train, moved by morning, forever.",
+   "effect": "$40,000 a night from the railway.",
+   "income": 40000,
+   "mail": {
+    "from": "Northern Rail Freight",
+    "subject": "Contract 7719",
+    "body": "Ms Reyes,\n\nThe first train is at 02:10. It will not wait. Neither will the second.\n\nFreight Operations"
+   }
+  },
+  {
+   "id": "charter",
+   "name": "The bank charter",
+   "cost": 50000000,
+   "needs": [
+    "hedge"
+   ],
+   "blurb": "Corner Office Savings. Dilys runs it. The coat is navy now.",
+   "effect": "The jar grows by 3% every night.",
+   "yield": 0.01,
+   "mail": {
+    "from": "Dilys Pryce",
+    "subject": "A bank",
+    "body": "Ms Reyes,\n\nWe are a bank. I have never written that sentence before. Please stop keeping cash in a jar.\n\nD. Pryce"
+   }
+  },
+  {
+   "id": "tower",
+   "name": "The Corner Office tower",
+   "cost": 120000000,
+   "needs": [
+    "county",
+    "rail"
+   ],
+   "blurb": "Thirty floors on Harbour Road with the garage preserved in the lobby, oil stain and all.",
+   "effect": "$150,000 a night from the tenants, and the whole town knows the name.",
+   "income": 150000,
+   "mail": {
+    "from": "Sam Achterberg",
+    "subject": "The lobby",
+    "body": "They kept the garage. The actual garage. Pickle found the oil stain in about four seconds.\n\nCome home. Lasagne.\n\nSam"
+   }
+  },
+  {
+   "id": "national",
+   "name": "Every town on the map",
+   "cost": 400000000,
+   "needs": [
+    "tower",
+    "charter"
+   ],
+   "blurb": "A Corner Office in every town that has a map. Dana still takes one job a week herself, in the dented van.",
+   "effect": "$500,000 a night, and the last stretch to the billion.",
+   "income": 500000,
+   "mail": {
+    "from": "Marge \"Mile Marker\" Holloway",
+    "subject": "Every town",
+    "body": "I am retired. I am very retired. I have a map on the wall with a pin for every one.\n\nThere are a lot of pins, Dana.\n\n— Mile Marker"
+   }
+  }
+ ],
+ "buyout": {
+  "price": 250000000,
+  "mail": {
+   "from": "Grayline Logistics",
+   "subject": "Completion",
+   "body": "Ms Reyes,\n\nThe funds have cleared. The fleet, the counters, the tower and the name are Grayline's. We will keep the lettering.\n\nYou are welcome back any time, in any capacity.\n\nGrayline Logistics"
+  }
+ },
+ "events": [
+  {
+   "id": "audit",
+   "chance": 0.05,
+   "jar": -0.02,
+   "line": "The tax office looked at the books and took 2% of the jar for the trouble."
+  },
+  {
+   "id": "rival",
+   "chance": 0.06,
+   "runs": -3,
+   "line": "Brightway Removals undercut three of the runs tonight."
+  },
+  {
+   "id": "strike",
+   "chance": 0.03,
+   "runs": -6,
+   "line": "The Harbourmouth drivers struck for a day. Mei settled it with a kettle."
+  },
+  {
+   "id": "windfall",
+   "chance": 0.06,
+   "income": 25000,
+   "line": "A museum paid $25,000 to move one very old chair very slowly."
+  }
+ ]
 }

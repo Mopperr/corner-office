@@ -488,9 +488,37 @@ func _life() -> void:
 		pet_note = "   ·   Pickle: $%d a day" % Life.upkeep()
 	var fleet := UIKit.label("Trucks %d   ·   Counters %d   ·   Tips +%d%%   ·   Jobs on the board +%d%s" % [Life.trucks(), Life.shops(), int(round((Life.tip_mult() - 1.0) * 100.0)), Life.board_bonus(), pet_note], 22, UIKit.DARK, "small", false)
 	head_col.add_child(fleet)
+	if Life.billionaire():
+		head_col.add_child(UIKit.label("A billionaire, since day %d. From a garage and a borrowed truck." % int((Life.state().get("milestones", {}) as Dictionary).get("billion", 0)), 24, UIKit.TERRA, "small", false))
+	elif Life.sold_up():
+		head_col.add_child(UIKit.label("Sold to Grayline on day %d. The dented van is still in the drive." % int((Life.state().get("milestones", {}) as Dictionary).get("sold", 0)), 24, UIKit.TERRA, "small", false))
+	elif Life.millionaire():
+		var empire_line := "A millionaire, since day %d. The town is small. The map is not." % int((Life.state().get("milestones", {}) as Dictionary).get("million", 0))
+		if Life.income() > 0 or Life.yield_rate() > 0.0:
+			empire_line += "   Rents and contracts $%s a night, the jar grows %d%%." % [_commas(Life.income()), int(round(Life.yield_rate() * 100.0))]
+		head_col.add_child(UIKit.label(empire_line, 24, UIKit.TERRA, "small", false))
+	if Life.buyout_open():
+		var offer := UIKit.button("Take Grayline's $250,000,000", UIKit.NIGHT)
+		offer.name = "LifeBuyout"
+		offer.custom_minimum_size = Vector2(420, 52)
+		offer.pressed.connect(func():
+			var result: Dictionary = Life.take_buyout()
+			if result.has("error"):
+				return
+			AudioDirector.play_sfx("sfx_cash_gain")
+			SaveManager.save_game()
+			GameState.emit_signal("toast_requested", "Sold. Grayline keep the lettering. Pickle keeps the van.")
+			_show_page()
+		)
+		head_col.add_child(offer)
+	var ladder: Array = Life.rungs()
 	if Life.millionaire():
-		head_col.add_child(UIKit.label("A millionaire, since day %d. The town is small. The map is not." % int((Life.state().get("milestones", {}) as Dictionary).get("million", 0)), 24, UIKit.TERRA, "small", false))
-	for row in Life.rungs():
+		ladder = Life.all_rungs()
+	var empire_started := false
+	for row in ladder:
+		if not empire_started and Life.is_empire(str(row.get("id", ""))):
+			empire_started = true
+			column.add_child(UIKit.label("After the million: the road to a billion", 28, UIKit.DARK, "title", false))
 		var id := str(row.get("id", ""))
 		var owned: bool = Life.bought(id)
 		var why: String = Life.blocker(row)
@@ -873,6 +901,12 @@ func _show_day_card(summary: Dictionary) -> void:
 		rows.append("%d other truck%s ran today and brought in $%d." % [int(life_night.get("trucks", 0)), "" if int(life_night.get("trucks", 0)) == 1 else "s", int(life_night.get("truck_pay", 0))])
 	if int(life_night.get("shop_pay", 0)) > 0:
 		rows.append("The other counter%s took $%d." % ["" if int(life_night.get("shops", 0)) == 1 else "s", int(life_night.get("shop_pay", 0))])
+	if int(life_night.get("income", 0)) > 0:
+		rows.append("Rents and contracts brought in $%s." % _commas(int(life_night.get("income", 0))))
+	if int(life_night.get("grown", 0)) > 0:
+		rows.append("Dilys's funds grew the jar by $%s." % _commas(int(life_night.get("grown", 0))))
+	if str(life_night.get("event", "")) != "":
+		rows.append(str(life_night.get("event", "")))
 	if int(life_night.get("upkeep", 0)) > 0:
 		rows.append("Pickle ate $%d of it." % int(life_night.get("upkeep", 0)))
 	if int(summary.get("rent", 0)) > 0:
