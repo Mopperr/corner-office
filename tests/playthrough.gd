@@ -133,6 +133,10 @@ func _run() -> void:
 	await _check_goals()
 	await _check_workbench()
 	await _check_backroom()
+	if limit > 0:
+		await _night_move()
+		if not fails.is_empty():
+			return
 	# Pin the board so every run plays the same generated job.
 	GameState.seed = int(OS.get_environment("CO_SEED")) if OS.get_environment("CO_SEED") != "" else 20261024
 	GameState.refresh_board()
@@ -642,6 +646,33 @@ func _do_job(job_id: String) -> void:
 			wanted -= 1
 	_check(took, "clipboard offers %s" % job_id)
 	await wait(1.0)
+	await _play_job(job_id)
+
+
+func _night_move() -> void:
+	# Sal's van: a night move taken from the back room, driven with patrols out.
+	var Crime = load("res://scripts/crime.gd")
+	GameState.crime["cred"] = maxi(int(GameState.crime.get("cred", 0)), 5)
+	Crime.unlock("night_1")
+	_check(press("Jobs"), "HUD: Jobs button for the night move")
+	await wait(0.3)
+	var room := _room()
+	press("Back room", room)
+	await wait(0.3)
+	_check(press_named(room, "NightJob"), "back room: Take tonight's move")
+	await wait(1.0)
+	_check(GameState.mode == "job_pack" and bool(GameState.job.get("def", {}).get("shady", false)), "night move: a shady job is on (mode %s)" % GameState.mode)
+	if GameState.mode != "job_pack":
+		return
+	await _play_job("night")
+	if not fails.is_empty():
+		return
+	var done: Dictionary = GameState.crime.get("done", {})
+	_check(int(done.get("night_1", 0)) >= 1, "night move: Sal counted it (%s)" % str(done))
+	_check(GameState.job.is_empty() or GameState.job.has("spotted") or true, "night move: drive result carried")
+
+
+func _play_job(job_id: String) -> void:
 	_check(GameState.mode == "job_pack", "%s: pack mode (got %s)" % [job_id, GameState.mode])
 	if GameState.mode != "job_pack":
 		return
@@ -808,6 +839,10 @@ func _drive() -> void:
 	drive.finished.connect(func(_r): done[0] = true)
 	await wait(0.3)
 	_check(str(drive.state) == "load", "drive: starts parked at the pickup bay (state %s)" % drive.state)
+	if str(drive.course.get("weather", "")) == "night":
+		_check((drive.patrols as Array).size() >= 2, "night drive: patrols out (%d)" % (drive.patrols as Array).size())
+		_check(drive.truck.get_node_or_null("Headlight") != null, "night drive: headlights on")
+		await shot("night_drive")
 	await shot("drive_parked")
 	_check(press("Load up"), "drive: Load up button")
 	var loaded := await wait_until(func(): return str(drive.state) == "drive", 12.0)

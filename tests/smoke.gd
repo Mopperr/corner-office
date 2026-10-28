@@ -1396,6 +1396,30 @@ func _qa_regressions() -> Array:
 	if GameState.rent_due_in() != 4:
 		found.append("rent due in %d" % GameState.rent_due_in())
 	GameState.rent_owed = 0
+	# A night drive: patrols with light bars, headlights, and a watching patrol spots a speeding truck.
+	GameState.generated_drives["smoke_night"] = {"id": "smoke_night", "title": "Night run", "weather": "night", "pickup": "garage", "dropoff": "cafe", "hazards": [], "length_m": 200}
+	GameState.job = {"def": {"id": "night_smoke", "venue": "cafe", "drive": "smoke_night"}, "items": [], "boxes": []}
+	var night_drive: Node = load("res://scripts/drive_course.gd").new()
+	add_child(night_drive)
+	if (night_drive.patrols as Array).size() < 2:
+		found.append("night patrols %d" % (night_drive.patrols as Array).size())
+	if night_drive.truck.get_node_or_null("Headlight") == null:
+		found.append("no headlights at night")
+	if night_drive.spot_label == null:
+		found.append("no patrol meter")
+	if not (night_drive.patrols as Array).is_empty():
+		var patrol: Dictionary = night_drive.patrols[0]
+		patrol["heading"] = 0.0
+		patrol["pos"] = night_drive.call("_art_center") - Vector2(120, 0)
+		night_drive.speed = 999.0
+		for i in 60:
+			night_drive.call("_patrols", 0.05)
+		if int(night_drive.spotted) < 1:
+			found.append("patrol never spotted a speeding truck")
+		night_drive.speed = 0.0
+	night_drive.free()
+	GameState.job = {}
+	GameState.generated_drives.erase("smoke_night")
 	# The drive wants the truck backed into the bay: nose-first is not parked.
 	var course_node = load("res://scripts/drive_course.gd").new()
 	course_node.dropoff = {"bay": Rect2(0, 0, 180, 60)}
