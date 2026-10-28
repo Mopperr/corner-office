@@ -661,12 +661,16 @@ static func _commas(n: int) -> String:
 
 
 func _listings() -> void:
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(12, 12)
+	scroll.size = Vector2(_body_w() - 24.0, _body_h() - 24.0)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(scroll)
 	var column := VBoxContainer.new()
-	column.position = Vector2(12, 12)
 	column.add_theme_constant_override("separation", 10)
-	var list_w := _body_w() - 24.0
+	var list_w := scroll.size.x - 20.0
 	column.custom_minimum_size = Vector2(list_w, 0)
-	body.add_child(column)
+	scroll.add_child(column)
 	column.add_child(UIKit.label("Every office in town, and what each one asks of you before the keys change hands.", 24, UIKit.WOOD, "small", false))
 	for office in Tuning.get_value("offices", []):
 		var id := str(office.get("id", ""))

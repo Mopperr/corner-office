@@ -199,13 +199,23 @@ static func icon_button(icon_path: String, caption: String) -> Button:
 
 static func icon_button_select(btn: Button, on: bool) -> void:
 	# The open page's icon stays lit: a mustard rim and a lighter face.
+	# Lit means a mustard face with dark type, so it reads apart from the
+	# focus ring, which is a mustard rim on the dark face.
 	var solid := Color("1B2A24")
 	if on:
-		btn.add_theme_stylebox_override("normal", style(solid.lightened(0.16), 10, 4, MUSTARD))
-		btn.add_theme_color_override("font_color", MUSTARD)
+		btn.add_theme_stylebox_override("normal", style(MUSTARD, 10, 3, DARK))
+		btn.add_theme_stylebox_override("hover", style(MUSTARD.lightened(0.08), 10, 3, DARK))
+		btn.add_theme_stylebox_override("focus", style(MUSTARD.lightened(0.08), 10, 4, CREAM_CARD))
+		btn.add_theme_color_override("font_color", DARK)
+		btn.add_theme_color_override("font_hover_color", DARK)
+		btn.add_theme_color_override("font_focus_color", DARK)
 	else:
 		btn.add_theme_stylebox_override("normal", style(solid, 10, 2, BLUE))
+		btn.add_theme_stylebox_override("hover", style(solid.lightened(0.12), 10, 3, CREAM_CARD))
+		btn.add_theme_stylebox_override("focus", style(solid.lightened(0.16), 10, 4, MUSTARD))
 		btn.add_theme_color_override("font_color", CREAM_CARD)
+		btn.add_theme_color_override("font_hover_color", MUSTARD)
+		btn.add_theme_color_override("font_focus_color", MUSTARD)
 
 
 static func font_px(size: int) -> int:
