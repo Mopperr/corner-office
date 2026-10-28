@@ -171,6 +171,24 @@ static func dress_household(root: Node, item_id: String) -> void:
 			keep_material(mesh_instance, i, textured)
 
 
+# Floor pieces with a usable top: tables, desks, counters, cabinets and the
+# like, by family or by name, at a height a small thing can sit on.
+const SURFACE_FAMILIES := ["desk_v", "coffee_table_v", "side_table_v", "sideboard", "kitchen_trolley", "low_cabinet", "dressing_stool", "drinks_trolley", "footstool", "ottoman", "office_trolley", "school_desk", "crate_stack", "trunk_v", "toy_box", "planter_box"]
+
+
+static func is_surface(id: String, def: Dictionary) -> bool:
+	var h := float(def.get("h", 0.0))
+	if h < 0.3 or h > 1.1 or str(def.get("mount", "floor")) != "floor":
+		return false
+	if str(def.get("family", "")) in SURFACE_FAMILIES:
+		return true
+	var text := (id + " " + str(def.get("name", ""))).to_lower()
+	for word in ["table", "desk", "counter", "cabinet", "sideboard", "dresser", "chest", "bench", "trolley", "stand", "unit", "workbench", "plinth"]:
+		if word in text:
+			return true
+	return false
+
+
 static func dress_box(root: Node) -> void:
 	# Kraft cardboard on every box face.
 	if root == null or not has_texture("cardboard"):

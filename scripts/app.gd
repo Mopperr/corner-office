@@ -19,6 +19,18 @@ func _ready() -> void:
 	overlay = Node.new()
 	overlay.name = "Overlay"
 	overlay_layer.add_child(overlay)
+	# The fader sits over everything: every scene change comes up from dark.
+	var fade_layer := CanvasLayer.new()
+	fade_layer.name = "FadeLayer"
+	fade_layer.layer = 40
+	add_child(fade_layer)
+	fader = ColorRect.new()
+	fader.name = "Fader"
+	fader.color = UIKit.NIGHT
+	fader.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fader.modulate = Color(1, 1, 1, 0)
+	fade_layer.add_child(fader)
+	UIKit.fill(fader, 0, 0, 0, 0)
 	if GameState.mode == "menu" or (GameState.office_items.is_empty() and GameState.job.is_empty() and GameState.mode != "results"):
 		show_menu()
 	else:
@@ -27,9 +39,22 @@ func _ready() -> void:
 		GameState.office_changed.connect(_on_office_changed)
 
 
+var fader: ColorRect
+
+
+func _fade_up(seconds := 0.35) -> void:
+	# Dark to clear, no clicks blocked.
+	if fader == null or not is_instance_valid(fader):
+		return
+	fader.modulate = Color(1, 1, 1, 1)
+	var tw := fader.create_tween()
+	tw.tween_property(fader, "modulate", Color(1, 1, 1, 0), seconds).set_trans(Tween.TRANS_SINE)
+
+
 func show_menu() -> void:
 	GameState.set_mode("menu")
 	_clear(view_root)
+	_fade_up()
 	AudioDirector.stop_all_loops()
 	var room := preload("res://scripts/menu_room.gd").new()
 	view_root.add_child(room)
@@ -70,7 +95,10 @@ func _on_office_changed(_id: String) -> void:
 
 
 func show_play() -> void:
+	if OS.get_environment("CO_DEBUG") != "":
+		print("  app.show_play (mode %s)" % GameState.mode)
 	_clear(view_root)
+	_fade_up()
 	var room := preload("res://scripts/diorama.gd").new()
 	room.open_computer.connect(_open_computer)
 	room.open_map.connect(_open_map)
@@ -85,6 +113,7 @@ func _start_drive() -> void:
 	GameState.set_mode("drive")
 	SaveManager.save_game()
 	_clear(view_root)
+	_fade_up(0.5)
 	var drive := preload("res://scripts/drive_course.gd").new()
 	drive.finished.connect(_on_drive_finished)
 	view_root.add_child(drive)
@@ -106,7 +135,10 @@ func _on_drive_finished(result: Dictionary) -> void:
 
 
 func show_results() -> void:
+	if OS.get_environment("CO_DEBUG") != "":
+		print("  app.show_results (mode %s, payout %s)" % [GameState.mode, GameState.payout.get("title", "")])
 	_clear(view_root)
+	_fade_up(0.3)
 	var results := preload("res://scripts/results_ui.gd").new()
 	results.closed.connect(func():
 		show_play()

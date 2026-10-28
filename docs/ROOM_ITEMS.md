@@ -3,7 +3,7 @@
 The household catalogue for home moves. Every item has a room, a mount
 (floor, small = sits on things, hang = wall), and a box rule:
 
-- **box**: goes in a moving box with up to four other pieces.
+- **box**: goes in a moving box with up to five other pieces (`pack.per_box` in `data/tuning.json`).
 - **no box**: too big for a box. It is wrapped in a blanket and goes on the
   truck as it is, taking one pad (heavy pieces take a floor pad).
 

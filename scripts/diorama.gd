@@ -10,6 +10,7 @@ const Tuning = preload("res://scripts/tuning.gd")
 const Catalog = preload("res://scripts/catalog.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
 const Props = preload("res://scripts/props.gd")
+const Extras = preload("res://scripts/extras.gd")
 const Controls = preload("res://scripts/control_map.gd")
 const StackGoals = preload("res://scripts/stack_goals.gd")
 const ShopLayout = preload("res://scripts/shop_layout.gd")
@@ -61,8 +62,8 @@ var cat_stretching := false
 var stretch_in := 4.0
 var toast: Label
 var toast_time := 0.0
-var floor_slots := 4
-var slot_count := 8
+var floor_slots := int(Tuning.get_value("truck.floor_slots", 4))
+var slot_count := int(Tuning.get_value("truck.slots", 8))
 var carried: Dictionary = {}
 var delivery_root: Node3D
 var visitor_wait := 5.0
@@ -123,6 +124,8 @@ func _ready() -> void:
 		carried[int(box_id)] = true
 	_refresh_items()
 	_build_hud()
+	if GameState.mode == "job_unpack" and not GameState.job.is_empty() and not bool(GameState.job.get("event_done", false)):
+		get_tree().create_timer(float(Tuning.get_value("play.event_delay", 22))).timeout.connect(_job_event.bind(""))
 	UIKit.show_level_beat(self, GameState.present_current_slice_level())
 	if garage_door:
 		var tw := create_tween()
@@ -220,6 +223,8 @@ func _venue_id() -> String:
 			return str(GameState.job.get("def", {}).get("venue", "cafe"))
 		"truck":
 			return "garage"
+		"hospital":
+			return "hospital"
 		_:
 			return GameState.office_id if ItemDB.venues().has(GameState.office_id) else "garage"
 
@@ -237,6 +242,9 @@ func _build_venue() -> void:
 	if GameState.mode == "truck":
 		_build_truck_stage()
 		return
+	if GameState.mode == "hospital":
+		_build_ward()
+		return
 	_build_shell()
 	_theme_lights()
 	_spawn_player()
@@ -245,6 +253,7 @@ func _build_venue() -> void:
 	_frame_camera()
 	_dress()
 	_dress_clutter()
+	_spawn_unload_truck()
 	Outdoors.build(self, venue)
 	_sync_yard_shop()
 	_spawn_street()
@@ -332,10 +341,24 @@ func _frame_camera() -> void:
 	# The look-at leans a little toward the camera, so the near edge of the
 	# floor clears the hint bar at the bottom of the screen.
 	var center := origin + Vector3(width * 0.5 + 0.4, 0.9, depth * 0.5 + 0.4)
+	var spread := 1.12
+	if GameState.mode == "job_unpack" and _boxes_on_truck() > 0:
+		# The truck stands on the road past the door: pull back and lean that
+		# way so its bed, and every box still in it, is on screen.
+		center.z -= 1.8
+		spread = 1.34
 	cam.attributes = null
-	cam.size = maxf(width, depth) * 1.12 * view_zoom
+	cam.size = maxf(width, depth) * spread * view_zoom
 	cam.position = center + Vector3(8.2, 9.0, 8.0).rotated(Vector3.UP, view_quadrant * PI * 0.5)
 	cam.look_at(center, Vector3.UP)
+
+
+func _boxes_on_truck() -> int:
+	var count := 0
+	for box in GameState.job.get("boxes", []):
+		if bool(box.get("sealed", false)) and not bool(carried.get(int(box.get("id", -1)), false)):
+			count += 1
+	return count
 
 
 func _side_of(along_x: bool, fixed: float) -> String:
@@ -536,7 +559,10 @@ func _fill_run(a: float, b: float, fixed: float, along_x: bool, hidden: bool, wi
 		var center := cursor + length * 0.5
 		var use_window := windows and bool(venue.get("windows", false)) and length >= 2.0 and not window_used and not hidden
 		var scene_name := _piece("window") if use_window else (_piece("wall2") if length >= 2.0 else _piece("wall1"))
-		if use_window:
+		# The cut-away walls have a window too, where it cannot be seen: it is
+		# the one an owner throws you through, so the fall lands in view.
+		var ghost_window := hidden and bool(venue.get("windows", false)) and length >= 2.0 and not window_used
+		if use_window or ghost_window:
 			window_used = true
 		var node := Props.model(scene_name)
 		if node:
@@ -548,6 +574,8 @@ func _fill_run(a: float, b: float, fixed: float, along_x: bool, hidden: bool, wi
 			node.visible = not hidden
 			if hidden:
 				node.add_to_group("cutaway_shell")
+			if use_window or ghost_window:
+				node.set_meta("window_spot", true)
 			node.set_meta("shell_side", _side_of(along_x, fixed))
 			Props.restyle_architecture(node, _wall_color(), _trim_color())
 			Props.prepare(node)
@@ -707,8 +735,9 @@ func _dress_clutter() -> void:
 		spots.append({"pos": Vector3(x0 + 0.04, 1.2 + rng.randf() * 0.3, cz), "rot": 90.0, "kind": "hang"})
 		cz += 0.9
 	spots.shuffle()
-	var want_floor := clampi(3 + int(w * d / 14.0), 3, 7)
-	var want_hang := clampi(2 + int(w / 4.0), 2, 4)
+	var want_floor := clampi(5 + int(w * d / 9.0), 5, 11)
+	var want_hang := clampi(3 + int(w / 3.0), 3, 6)
+	var small_pool: Array = ItemDB.room_pool(tags, ["small"])
 	var placed := 0
 	var hung := 0
 	var n := 0
@@ -758,6 +787,24 @@ func _dress_clutter() -> void:
 		node.name = "Clutter_%d" % n
 		node.set_meta("clutter", true)
 		node.set_meta("item_id", pick)
+		if not on_wall and Props.is_surface(pick, def) and not small_pool.is_empty():
+			# A thing or two on top: a mug on the desk, a plant on the sideboard.
+			var top := float(def.get("h", 0.5))
+			for k in rng.randi_range(1, 2):
+				var small_id := str(small_pool[rng.randi_range(0, small_pool.size() - 1)])
+				var small_def: Dictionary = ItemDB.get_item(small_id)
+				if float(small_def.get("w", 0)) > float(def.get("w", 1)) * 0.5 or float(small_def.get("h", 0)) > 0.5:
+					continue
+				var small := Props.make(str(small_def.get("model", "")))
+				if small == null:
+					continue
+				var along := (float(k) - 0.5) * float(def.get("w", 1)) * 0.4
+				small.position = Vector3(along if rot == 0.0 else 0.0, top, 0.0 if rot == 0.0 else along)
+				small.rotation.y = rng.randf_range(-0.4, 0.4)
+				small.name = "ClutterTop_%d_%d" % [n, k]
+				small.set_meta("clutter", true)
+				small.set_meta("item_id", small_id)
+				node.add_child(small)
 		Props.prepare(node)
 		add_child(node)
 		taken.append(box)
@@ -923,6 +970,55 @@ func _fade_beam(node: Node, alpha: float) -> void:
 		mesh_instance.material_override = faded
 
 
+func _ramp_top() -> Vector3:
+	return truck_root.to_global(Vector3(BED_TAIL_X + 0.05, BED_FLOOR_Y, 0.0)) if truck_root else Vector3(-2.2, 0.0, 0.0)
+
+
+func _ramp_foot() -> Vector3:
+	return truck_root.to_global(Vector3(BED_TAIL_X - 2.1, 0.0, 0.0)) if truck_root else Vector3(-4.3, 0.0, 0.0)
+
+
+func _build_ramp(parent: Node3D, top: Vector3, foot: Vector3, name := "Ramp") -> Node3D:
+	# A plank ramp from the bed's sill down to the ground, with cleats.
+	var root := Node3D.new()
+	root.name = name
+	parent.add_child(root)
+	var run := foot - top
+	var length := run.length()
+	var mid := (top + foot) * 0.5
+	var plank := Props.mesh_box(Vector3(length, 0.06, 0.9), UIKit.WOOD)
+	plank.material_override = Props.tex_mat("pine_planks", UIKit.WOOD.lightened(0.15), 1.5) if Props.has_texture("pine_planks") else Props.mat(UIKit.WOOD)
+	plank.position = mid
+	plank.rotation.y = atan2(-run.z, -run.x)
+	plank.rotation.z = -atan2(run.y, Vector2(run.x, run.z).length()) * (1.0 if run.x < 0.0 else -1.0)
+	root.add_child(plank)
+	var cleats := int(length / 0.4)
+	for i in cleats:
+		var t := (float(i) + 0.5) / float(cleats)
+		var cleat := Props.mesh_box(Vector3(0.05, 0.03, 0.86), UIKit.WOOD.darkened(0.35))
+		cleat.position = top.lerp(foot, t) + Vector3(0, 0.045, 0)
+		cleat.rotation.y = plank.rotation.y
+		cleat.rotation.z = plank.rotation.z
+		root.add_child(cleat)
+	return root
+
+
+var player_path: Array = []
+
+
+func _walk_path(points: Array, then: Callable) -> void:
+	# Dana follows the points in order, up and down included; the callback
+	# fires at the last one.
+	if player == null or not is_instance_valid(player):
+		if then.is_valid():
+			then.call()
+		return
+	player_path = points.duplicate()
+	player_on_arrive = then
+	player_target = player_path.pop_front()
+	player_moving = true
+
+
 func _build_truck_stage() -> void:
 	venue = {"id": "street", "name": "Corner Movers", "x": -2, "z": -2, "w": 8, "d": 6, "open_w": 2, "music": "music_office_build"}
 	var yard := Outdoors.build(self, venue)
@@ -943,6 +1039,9 @@ func _build_truck_stage() -> void:
 				var dir := -1.0 if decal_name.ends_with("L") else 1.0
 				decal.position.z += dir * float(Tuning.get_value("logo_decal_nudge_m", 0.012))
 		_sync_cargo()
+		_build_ramp(self, _ramp_top() + Vector3(0, -0.02, 0), _ramp_foot())
+	if player == null or not is_instance_valid(player):
+		_spawn_player()
 	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
 	cam.size = 6.2
 	# From behind and above, so the open door shows every pad in the bed.
@@ -1131,6 +1230,7 @@ func _process(delta: float) -> void:
 	_tick_cars(delta)
 	_tick_bubbles(delta)
 	_tick_player(delta)
+	_tick_ward(delta)
 	if _goal_pip > 0.0:
 		_goal_pip = maxf(0.0, _goal_pip - delta)
 		if _goal_pip <= 0.0:
@@ -1585,6 +1685,22 @@ func _paint_ghost(valid: bool) -> void:
 			Props.keep_material(mesh_instance, i, dup)
 
 
+func _input(event: InputEvent) -> void:
+	# Debug only: who stands between a press and the room.
+	if OS.get_environment("CO_DEBUG") == "" or backdrop:
+		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var at: Vector2 = get_viewport().get_mouse_position()
+		var under: Array = []
+		for node in get_tree().root.find_children("*", "Control", true, false):
+			var control := node as Control
+			if control == null or not control.is_visible_in_tree() or control.mouse_filter == Control.MOUSE_FILTER_IGNORE:
+				continue
+			if control.get_global_rect().has_point(at):
+				under.append("%s(%s)" % [control.name, control.get_class()])
+		print("  press at %s: focus=%s under=%s" % [at, get_viewport().gui_get_focus_owner(), under])
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if backdrop:
 		return
@@ -1617,6 +1733,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			zoom_view(-0.1 if up else 0.1)
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if OS.get_environment("CO_DEBUG") != "":
+			print("  mouse press reached the room: pending=%s moving=%s held=%s" % [unload_pending, player_moving, held_uid])
 		_click()
 
 
@@ -2010,6 +2128,38 @@ func _pack_click(uid: String) -> void:
 	_refresh_hud_buttons()
 
 
+func _auto_load() -> void:
+	# Dana loads the lot in the right order: wrapped pieces and heavy boxes
+	# on the floor at the front, the heaviest next, the lightest on top.
+	if truck_pending:
+		return
+	var order := GameState.auto_load_order()
+	if order.is_empty():
+		return
+	var box_id := int(order[0])
+	var open := GameState.open_slots()
+	var target := -1
+	for slot in open:
+		if GameState.load_box_into(box_id, int(slot), floor_slots) == "":
+			target = int(slot)
+			GameState.job_box(box_id)["slot"] = -1
+			break
+	if target < 0:
+		_toast("No place for box %d yet." % (box_id + 1))
+		return
+	selected_box = box_id
+	_truck_click("slot:%d" % target)
+	# Keep going once she is back down the ramp.
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.create_timer(0.2).timeout
+	while is_inside_tree() and truck_pending:
+		await tree.create_timer(0.15).timeout
+	if is_inside_tree() and GameState.mode == "truck" and not GameState.auto_load_order().is_empty():
+		_auto_load()
+
+
 func _truck_click(uid: String) -> void:
 	if not uid.begins_with("slot:"):
 		return
@@ -2029,7 +2179,8 @@ func _truck_click(uid: String) -> void:
 			return
 		_toast("Pick a sealed box first.")
 		return
-	var err := GameState.load_box_into(selected_box, slot, floor_slots)
+	var loaded_id := selected_box
+	var err := GameState.load_box_into(loaded_id, slot, floor_slots)
 	if err != "":
 		_toast(err)
 		AudioDirector.play_sfx("sfx_invalid_placement")
@@ -2037,24 +2188,28 @@ func _truck_click(uid: String) -> void:
 	selected_box = -1
 	_refresh_hud_buttons()
 	_sync_pile()
-	# Dana carries it from the pile to the bed; the box lands on the pad when she gets there.
+	var warning := GameState.crush_warning(loaded_id)
+	# Dana carries it from the pile, up the ramp and into the bed; the box
+	# lands on its place when she gets there, and she comes back down.
 	if player != null and is_instance_valid(player) and truck_root != null:
 		truck_pending = true
 		player_carrying = true
 		var local := _slot_pos(slot)
-		var bed := truck_root.to_global(Vector3(local.x - 1.35, 0.0, local.z))
-		player_target = bed
-		player_moving = true
-		player_on_arrive = func():
+		var in_bed := truck_root.to_global(Vector3(local.x + 0.1, BED_FLOOR_Y, local.z))
+		_walk_path([_ramp_foot(), _ramp_top(), in_bed], func():
 			truck_pending = false
 			player_carrying = false
 			AudioDirector.play_sfx("sfx_box_set_down", true)
 			_refresh_items()
 			_sync_cargo()
 			_refresh_hud_buttons()
-			player_target = Vector3(1.6, 0.0, -0.9)
-			player_moving = true
+			if warning != "":
+				_toast(warning, "Dana")
+			_walk_path([_ramp_top(), _ramp_foot(), Vector3(1.6, 0.0, -0.9)], Callable())
+		)
 		return
+	if warning != "":
+		_toast(warning, "Dana")
 	AudioDirector.play_sfx("sfx_box_set_down", true)
 	_refresh_items()
 	_sync_cargo()
@@ -2069,22 +2224,13 @@ func _unpack_click(uid: String) -> void:
 		_open_owner_card(uid)
 		return
 	if uid.begins_with("boxcarry:"):
-		var box_id := int(uid.trim_prefix("boxcarry:"))
-		carried[box_id] = true
-		if str(GameState.job_box(box_id).get("big", "")) != "":
-			# A wrapped piece: the blanket comes off and it stands where the box row would be.
-			var big := GameState.job_item(str(GameState.job_box(box_id)["big"]))
-			_loosen(big, box_id, 0)
-			AudioDirector.play_sfx("sfx_paper_rustle")
-		var saved: Array = GameState.job.get("carried", [])
-		if not saved.has(box_id):
-			saved.append(box_id)
-		GameState.job["carried"] = saved
-		SaveManager.save_game()
-		AudioDirector.play_sfx("sfx_footstep_office")
-		AudioDirector.play_sfx("sfx_box_set_down", true)
-		_refresh_items()
-		_refresh_hud_buttons()
+		_carry_in(int(uid.trim_prefix("boxcarry:")))
+		return
+	if uid == "unloadtruck":
+		_carry_next()
+		return
+	if uid == "stray":
+		_stray_found()
 		return
 	if uid.begins_with("boxopen:"):
 		var open_id := int(uid.trim_prefix("boxopen:"))
@@ -2108,6 +2254,265 @@ func _unpack_click(uid: String) -> void:
 			_take_to_hand(item, "job")
 		return
 	_try_place_held()
+
+
+func _unload_top() -> Vector3:
+	return unload_truck.to_global(Vector3(BED_TAIL_X + 0.05, BED_FLOOR_Y, 0.0)) if unload_truck else _door_world()
+
+
+func _unload_foot() -> Vector3:
+	return _door_world() + Vector3(0, 0, -0.7)
+
+
+func _spawn_unload_truck() -> void:
+	# At the new place the truck stands on the road with its tail to the
+	# door and a ramp down to the step; the boxes come off it one by one.
+	unload_truck = null
+	if GameState.mode != "job_unpack" or backdrop or venue.is_empty():
+		return
+	var truck := Props.model("mover_truck")
+	if truck == null:
+		return
+	unload_truck = truck
+	truck.name = "UnloadTruck"
+	var door := _door_world()
+	truck.position = Vector3(door.x, 0.0, door.z - 4.6)
+	truck.rotation.y = PI * 0.5
+	var back := truck.find_child("BackDoor", true, false) as Node3D
+	if back:
+		back.rotation.y = deg_to_rad(float(Tuning.get_value("truck_door_open_deg", 105)))
+	var cargo := truck.find_child("CargoBoxes", true, false) as Node3D
+	if cargo:
+		cargo.visible = false
+	# The body itself is clickable: a tap on the truck brings the next box
+	# that can come off, for when the one you want is hidden behind the wall.
+	truck.set_meta("uid", "unloadtruck")
+	var cab := Node3D.new()
+	cab.name = "CabPicker"
+	cab.position = Vector3(1.1, 0, 0)
+	truck.add_child(cab)
+	Props.add_picker(cab, Vector3(2.0, 2.0, 2.2))
+	add_child(truck)
+	_build_ramp(self, _unload_top() + Vector3(0, -0.02, 0), _unload_foot(), "UnloadRamp")
+
+
+# --- something happens mid-job ---
+# Once a job, a while into the unpack: the client puts the kettle on, or a
+# box by the door turns out not to be theirs.
+
+func _job_event(kind := "") -> void:
+	if GameState.mode != "job_unpack" or GameState.job.is_empty() or bool(GameState.job.get("event_done", false)) or backdrop:
+		return
+	if kind == "":
+		var seed_text := str(GameState.job.get("def", {}).get("id", "")) + ":event"
+		kind = "tea" if hash(seed_text) % 2 == 0 else "stray"
+	GameState.job["event_done"] = true
+	GameState.job["event"] = kind
+	if kind == "stray":
+		var box := Node3D.new()
+		box.name = "StrayBox"
+		var door := _door_world()
+		box.position = Vector3(door.x + 1.3, 0.0, door.z + 0.7)
+		box.set_meta("uid", "stray")
+		box.add_child(Props.make("box_closed"))
+		var tag := Label3D.new()
+		tag.text = "NOT OURS?"
+		tag.font = UIKit.title_font()
+		tag.font_size = 40
+		tag.pixel_size = 0.004
+		tag.modulate = UIKit.NIGHT
+		tag.outline_size = 8
+		tag.outline_modulate = UIKit.CREAM_CARD
+		tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		tag.position = Vector3(0, 0.75, 0)
+		box.add_child(tag)
+		Props.add_picker(box, Vector3(0.5, 0.45, 0.45))
+		items_root.add_child(box)
+		nodes_by_uid["stray"] = box
+		_toast("That box by the door. That isn't one of ours.", "Dana")
+		AudioDirector.play_sfx("sfx_notification_soft")
+		return
+	_tea_card()
+
+
+func _stray_found() -> void:
+	var node: Node = nodes_by_uid.get("stray")
+	if node != null and is_instance_valid(node):
+		node.queue_free()
+	nodes_by_uid.erase("stray")
+	var pay := int(Tuning.get_value("play.stray_box_pay", 15))
+	GameState.add_money(pay, true)
+	GameState.bump_stat("stray_boxes")
+	AudioDirector.play_sfx("sfx_coins_award")
+	_toast("Next door's. They gave me $%d for walking it round." % pay, "Dana")
+	_refresh_hud_buttons()
+
+
+func _tea_card() -> void:
+	var layer := _hud_layer()
+	if layer == null:
+		return
+	var old := layer.get_node_or_null("TeaCard")
+	if old != null:
+		layer.remove_child(old)
+		old.free()
+	var client := str(GameState.job.get("def", {}).get("client", "The client"))
+	var card := PanelContainer.new()
+	card.name = "TeaCard"
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.SAGE))
+	layer.add_child(card)
+	UIKit.pin_top_right(card, -470, 96, -16, 96)
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 16)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	margin.add_child(column)
+	column.add_child(UIKit.ribbon("The kettle's on", UIKit.SAGE, 28))
+	var line := UIKit.label("%s: \"Cup of tea? You look like you could do with one.\" Five minutes with a mug and they'll take one more slip in good part." % client, 25, UIKit.DARK, "small")
+	line.custom_minimum_size = Vector2(420, 0)
+	column.add_child(line)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	column.add_child(row)
+	var yes := UIKit.button("Yes please", UIKit.SAGE)
+	yes.name = "TeaYes"
+	yes.custom_minimum_size = Vector2(200, 52)
+	yes.pressed.connect(func():
+		if party != null and is_instance_valid(party):
+			party.temper = maxi(0, party.temper - 1)
+			party.react("talk", {}, true)
+		GameState.job["tea"] = true
+		GameState.bump_stat("teas")
+		AudioDirector.play_sfx("sfx_l07_glass_clink")
+		_toast("Milk, one sugar. Right. Back to it.", "Dana")
+		if is_instance_valid(card):
+			layer.remove_child(card)
+			card.queue_free()
+	)
+	row.add_child(yes)
+	var no := UIKit.button("Not now", UIKit.WOOD)
+	no.name = "TeaNo"
+	no.custom_minimum_size = Vector2(200, 52)
+	no.pressed.connect(func():
+		_toast("Thanks, but I'd rather get this done.", "Dana")
+		if is_instance_valid(card):
+			layer.remove_child(card)
+			card.queue_free()
+	)
+	row.add_child(no)
+	UIKit.link_focus([yes, no])
+	UIKit.pop_in(card)
+	AudioDirector.play_sfx("sfx_notification_soft")
+
+
+func _carry_next() -> void:
+	# The next box that can come off the truck: top layer and door end first.
+	if unload_pending:
+		_toast("One at a time. She's on the ramp.")
+		return
+	for id in GameState.unload_order():
+		var slot := int(GameState.job_box(int(id)).get("slot", -1))
+		if slot < 0 or GameState.slot_can_unload(slot) == "":
+			_carry_in(int(id))
+			return
+	_toast("The truck is empty.")
+
+
+func _carry_in(box_id: int) -> void:
+	# One box off the truck: the one on top and nearest the door first.
+	if OS.get_environment("CO_DEBUG") != "":
+		print("  carry_in %d: pending=%s slot=%s" % [box_id, unload_pending, GameState.job_box(box_id).get("slot", "?")])
+	if unload_pending:
+		_toast("One at a time. She's on the ramp.")
+		if OS.get_environment("CO_DEBUG") != "":
+			print("  carry_in %d refused: pending" % box_id)
+		return
+	var box := GameState.job_box(box_id)
+	var slot := int(box.get("slot", -1))
+	if slot >= 0:
+		var why := GameState.slot_can_unload(slot)
+		if why != "":
+			_toast(why)
+			AudioDirector.play_sfx("sfx_invalid_placement")
+			if OS.get_environment("CO_DEBUG") != "":
+				var cell: Dictionary = GameState.slot_cell(slot)
+				print("  carry_in %d refused: %s (slot %d cell %s, carried %s)" % [box_id, why, slot, cell, GameState.job.get("carried", [])])
+			return
+	if player == null or not is_instance_valid(player) or unload_truck == null or slot < 0:
+		_finish_carry_in(box_id)
+		return
+	unload_pending = true
+	var in_bed := unload_truck.to_global(_slot_pos(slot) + Vector3(0.1, 0, 0))
+	in_bed.y = BED_FLOOR_Y
+	var node: Node = nodes_by_uid.get("boxcarry:%d" % box_id)
+	_walk_path([_door_world() + Vector3(0, 0, 0.6), _unload_foot(), _unload_top(), in_bed], func():
+		player_carrying = true
+		AudioDirector.play_sfx("sfx_item_pick_up")
+		if node != null and is_instance_valid(node):
+			node.visible = false
+		var spot := _open_box_spot(box_id)
+		_walk_path([_unload_top(), _unload_foot(), _door_world() + Vector3(0, 0, 0.6), Vector3(spot.x - 0.5, 0.0, spot.z + 0.4)], func():
+			player_carrying = false
+			unload_pending = false
+			_finish_carry_in(box_id)
+		)
+	)
+
+
+func _finish_carry_in(box_id: int) -> void:
+	# The box is in: it stands in the row by the door, a wrapped piece unwraps.
+	# Its place in the bed is free now, so the boxes under and behind it can come off.
+	carried[box_id] = true
+	var box_rec := GameState.job_box(box_id)
+	if not box_rec.is_empty() and int(box_rec.get("slot", -1)) >= 0:
+		box_rec["bed_slot"] = int(box_rec["slot"])
+		box_rec["slot"] = -1
+	if str(GameState.job_box(box_id).get("big", "")) != "":
+		# A wrapped piece: the blanket comes off and it stands where the box row would be.
+		var big := GameState.job_item(str(GameState.job_box(box_id)["big"]))
+		_loosen(big, box_id, 0)
+		AudioDirector.play_sfx("sfx_paper_rustle")
+	var saved: Array = GameState.job.get("carried", [])
+	if not saved.has(box_id):
+		saved.append(box_id)
+	GameState.job["carried"] = saved
+	SaveManager.save_game()
+	AudioDirector.play_sfx("sfx_footstep_office")
+	AudioDirector.play_sfx("sfx_box_set_down", true)
+	_refresh_items()
+	_refresh_hud_buttons()
+	if _boxes_on_truck() == 0:
+		# The last box is in: the camera settles back on the room.
+		_frame_camera()
+
+
+func _auto_unload() -> void:
+	# Dana brings the lot in, in the order the stack allows.
+	if unload_pending:
+		return
+	var order := GameState.unload_order()
+	var next := -1
+	for id in order:
+		if not bool(carried.get(int(id), false)):
+			next = int(id)
+			break
+	if next < 0:
+		return
+	_carry_in(next)
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.create_timer(0.2).timeout
+	while is_inside_tree() and unload_pending:
+		await tree.create_timer(0.15).timeout
+	if is_inside_tree() and GameState.mode == "job_unpack":
+		for id in GameState.unload_order():
+			if not bool(carried.get(int(id), false)):
+				_auto_unload()
+				return
+	_refresh_hud_buttons()
 
 
 func _open_carried_box(box_id: int) -> void:
@@ -2204,7 +2609,7 @@ func _open_box_modal(box_id: int) -> void:
 	)
 	foot.add_child(tip)
 	var auto := UIKit.button("Put it all away for me", UIKit.SAGE)
-	auto.disabled = auto_busy
+	auto.disabled = auto_busy or GameState.no_helper()
 	auto.custom_minimum_size = Vector2(320, 56)
 	auto.pressed.connect(func():
 		panel.queue_free()
@@ -2222,6 +2627,7 @@ func _open_box_modal(box_id: int) -> void:
 	focus_buttons.append(tip)
 	focus_buttons.append(auto)
 	UIKit.link_focus(focus_buttons)
+	UIKit.pop_in(panel)
 	AudioDirector.play_sfx("sfx_paper_rustle")
 
 
@@ -2247,6 +2653,8 @@ func _box_row(item: Dictionary, box_id: int, width: float) -> PanelContainer:
 	name.clip_text = true
 	text.add_child(name)
 	var bits: Array = []
+	if bool(item.get("heirloom", false)):
+		bits.append("THE HEIRLOOM")
 	for flag in ["fragile", "heavy", "bulky"]:
 		if bool(item.get(flag, false)):
 			bits.append(flag)
@@ -2597,7 +3005,7 @@ func _auto_pack_drop(step: Dictionary) -> void:
 	selected_box = box_id
 	var broke := _auto_roll_break(item)
 	AudioDirector.play_sfx("sfx_box_set_down", true)
-	if GameState.box_item_count(box_id) >= 5:
+	if GameState.box_item_count(box_id) >= GameState.per_box():
 		GameState.seal_box(box_id)
 		AudioDirector.play_sfx("sfx_tape_rip", true)
 	_refresh_items()
@@ -2640,9 +3048,20 @@ func _break_piece(item: Dictionary, at: Vector3) -> void:
 	_refresh_hud_buttons()
 	if party == null or not is_instance_valid(party):
 		return
-	party.react("broken", {"item": label.to_lower()}, true)
+	# The script climbs with the temper: a wince, a warning, a last word.
+	var stage := "broken"
+	if party.temper >= GameState.temper_limit() - 1:
+		stage = "broken_last"
+	elif party.temper >= 1:
+		stage = "broken_warn"
+	if party.react(stage, {"item": label.to_lower()}, true) == "" and stage != "broken":
+		party.react("broken", {"item": label.to_lower()}, true)
 	AudioDirector.play_sfx("sfx_angry_mutter", true)
 	party.temper += 1
+	if party.temper == 1:
+		get_tree().create_timer(1.6).timeout.connect(func(): _toast("Sorry! Sorry. That's on me.", "Dana"))
+	elif party.temper == GameState.temper_limit() - 1:
+		get_tree().create_timer(1.6).timeout.connect(func(): _toast("Okay. Okay. Slower. I've got this.", "Dana"))
 	if party.temper >= GameState.temper_limit() and not bool(GameState.job.get("attacked", false)):
 		_owner_attack()
 
@@ -2669,9 +3088,14 @@ func _shards(at: Vector3) -> void:
 	get_tree().create_timer(3.0).timeout.connect(root.queue_free)
 
 
-func _owner_attack() -> void:
+func _owner_attack(force_throw := false) -> void:
 	# The owner has had enough: over to Dana, two hands, and down she goes.
+	# With a window in the room, half the time it is worse than that.
 	if party == null or not is_instance_valid(party) or player == null or not is_instance_valid(player):
+		return
+	if bool(GameState.job.get("def", {}).get("payback", false)):
+		# The payback job: they glare from the door and keep their hands to themselves.
+		_toast("%s looks at the floor and says nothing." % GameState.job.get("def", {}).get("client", "The client"))
 		return
 	var who: Node3D = party.speaker("attack")
 	for person in party.members:
@@ -2682,6 +3106,8 @@ func _owner_attack() -> void:
 		return
 	GameState.job["attacked"] = true
 	GameState.bump_stat("attacked")
+	if OS.get_environment("CO_DEBUG") != "":
+		print("  owner attack: temper %d, force %s" % [party.temper, force_throw])
 	auto_hold = true
 	party.react("attack", {}, true, str(who.get_meta("uid", "")))
 	var to := player.position - who.position
@@ -2689,6 +3115,9 @@ func _owner_attack() -> void:
 	var stand := player.position - to.normalized() * 0.7
 	var seconds := maxf(0.4, to.length() / 2.2)
 	who.set_meta("walking", true)
+	var exit := _window_exit()
+	var throw := not exit.is_empty() and not GameState.has_grudge() and (force_throw or GameState.rng.randf() < GameState.throw_chance())
+	who.set_meta("throw", throw)
 	var tw := create_tween()
 	tw.tween_property(who, "position", stand, seconds).set_trans(Tween.TRANS_SINE)
 	tw.tween_callback(_owner_shove.bind(who))
@@ -2702,10 +3131,152 @@ func _owner_shove(who: Node3D) -> void:
 	who.set_meta("walking", false)
 	who.look_at(player.position, Vector3.UP)
 	who.rotate_y(PI)
+	if GameState.has_grudge():
+		_grudge_paid(who)
+		return
 	_act(who, "shove", 1.6)
 	AudioDirector.play_sfx("sfx_shove_grunt")
+	if bool(who.get_meta("throw", false)):
+		_owner_throw(who)
+		return
 	get_tree().create_timer(0.45).timeout.connect(_dana_down)
 	get_tree().create_timer(2.0).timeout.connect(_owner_return.bind(who))
+
+
+func _grudge_paid(who: Node3D) -> void:
+	# You planned for this in the ward: a step aside, and the owner is the
+	# one on the floor. The grudge is spent and the claim is doubled.
+	var old: Dictionary = GameState.settle_grudge()
+	_act(player, "shove", 1.4)
+	AudioDirector.play_sfx("sfx_shove_grunt")
+	get_tree().create_timer(0.4).timeout.connect(func():
+		if is_instance_valid(who):
+			who.set_meta("down", true)
+			AudioDirector.play_sfx("sfx_body_fall")
+			_dust(who.position)
+		_toast("Not this time. I've had %s nights to think about %s." % [GameState.hospital.get("total", "four") if not GameState.hospital.is_empty() else "four", old.get("client", "people like you")], "Dana")
+	)
+	get_tree().create_timer(2.6).timeout.connect(func():
+		if is_instance_valid(who):
+			who.set_meta("down", false)
+			_owner_return(who)
+		_open_sue_card()
+	)
+
+
+func _window_exit() -> Dictionary:
+	# The nearest window to the player, with the way out through it: a
+	# standing spot just inside, the sill, and where she lands outside.
+	if player == null or not is_instance_valid(player):
+		return {}
+	var best: Node3D = null
+	var best_d := 1.0e9
+	for child in get_children():
+		if not (child is Node3D) or not child.has_meta("window_spot"):
+			continue
+		var d := (child as Node3D).position.distance_to(player.position)
+		# The cut-away walls face the camera: through one of those, the
+		# fall lands in full view instead of behind the house.
+		if not (child as Node3D).visible:
+			d -= 3.0
+		if d < best_d:
+			best_d = d
+			best = child
+	if best == null:
+		return {}
+	var normal := Vector3(0, 0, -1)
+	match str(best.get_meta("shell_side", "N")):
+		"S":
+			normal = Vector3(0, 0, 1)
+		"W":
+			normal = Vector3(-1, 0, 0)
+		"E":
+			normal = Vector3(1, 0, 0)
+	var at := best.position
+	return {"inside": at - normal * 0.7, "sill": at + Vector3(0, 0.95, 0), "outside": at + normal * 2.3, "node": best}
+
+
+func _owner_throw(who: Node3D) -> void:
+	# Both hands, a run at the window, and out she goes. Glass, a dust
+	# cloud on the pavement, and the job ends right there.
+	var exit := _window_exit()
+	if exit.is_empty():
+		get_tree().create_timer(0.45).timeout.connect(_dana_down)
+		get_tree().create_timer(2.0).timeout.connect(_owner_return.bind(who))
+		return
+	thrown_pending = true
+	player_moving = false
+	player_path.clear()
+	player.set_meta("carry", false)
+	if party != null and is_instance_valid(party):
+		party.react("throw", {}, true, str(who.get_meta("uid", "")))
+	var inside: Vector3 = exit["inside"]
+	var run := maxf(0.5, player.position.distance_to(inside) / 2.6)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(player, "position", inside, run).set_trans(Tween.TRANS_SINE)
+	if is_instance_valid(who):
+		who.set_meta("walking", true)
+		tw.tween_property(who, "position", inside - (inside - who.position).normalized() * 0.6, run).set_trans(Tween.TRANS_SINE)
+	tw.chain().tween_callback(func():
+		if is_instance_valid(who):
+			who.set_meta("walking", false)
+			_act(who, "shove", 1.2)
+		_fly_out(exit)
+	)
+
+
+var thrown_pending := false
+
+
+func _fly_out(exit: Dictionary) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	var node: Node3D = exit.get("node")
+	var sill: Vector3 = exit["sill"]
+	var outside: Vector3 = exit["outside"]
+	var start := player.position
+	var up := 1.5 + 0.8 * float(home_floor)
+	AudioDirector.play_sfx("sfx_glass_smash")
+	AudioDirector.play_sfx("sfx_empty_room_whoosh")
+	_shards(sill - Vector3(0, 0.6, 0))
+	if node != null and is_instance_valid(node):
+		node.visible = false
+	var tw := create_tween()
+	tw.tween_method(func(t: float):
+		if player == null or not is_instance_valid(player):
+			return
+		var flat := start.lerp(outside, t)
+		var lift := sin(t * PI) * up + maxf(0.0, 0.6 - t) * 0.0
+		player.position = Vector3(flat.x, lift * (1.0 - t * 0.3) + (1.0 - t) * 0.0, flat.z)
+		player.rotation.x = -t * TAU * (0.6 + 0.3 * float(home_floor))
+	, 0.0, 1.0, 0.95 + 0.25 * float(home_floor)).set_trans(Tween.TRANS_LINEAR)
+	tw.tween_callback(func():
+		if player == null or not is_instance_valid(player):
+			return
+		player.rotation.x = 0.0
+		player.position = Vector3(outside.x, 0.0, outside.z)
+		player.set_meta("down", true)
+		player.set_meta("action", "")
+		AudioDirector.play_sfx("sfx_body_fall")
+		_dust(player.position)
+		if home_floor > 0:
+			_toast("That was the UPSTAIRS window.", "Dana")
+		else:
+			_toast("...ow. Okay. Ow.", "Dana")
+	)
+	tw.tween_interval(2.1)
+	tw.tween_callback(_to_hospital)
+
+
+func _to_hospital() -> void:
+	# The job ends on the pavement. Results, then the ward.
+	if GameState.job.is_empty() or GameState.mode != "job_unpack" and GameState.mode != "job_pack":
+		return
+	GameState.thrown_out(home_floor)
+	SaveManager.save_game()
+	AudioDirector.play_sfx("sfx_job_complete")
+	emit_signal("request_results")
 
 
 func _owner_return(who: Node3D) -> void:
@@ -2827,6 +3398,7 @@ func _open_sue_card() -> void:
 		close.call()
 	)
 	foot.add_child(sue)
+	UIKit.pop_in(card)
 
 
 func _place_office_all() -> void:
@@ -3271,26 +3843,45 @@ var player_start: Vector3 = Vector3.ZERO
 var player_on_arrive: Callable = Callable()
 var player_carrying := false
 var truck_pending := false
+var unload_pending := false
+var unload_truck: Node3D
 var arrive_from: Dictionary = {}
 const PLAYER_SPEED := 2.4
+
+
+# Who is on screen: each of the five in their own clothes and build.
+const PLAYER_LOOKS := {
+	"dana": {"top": UIKit.TERRA, "hair": Color("2B2622"), "trousers": Color("3E3A4F"), "style": {"head": "ponytail", "torso": "tee"}, "scarf": true},
+	"sol": {"top": Color("4F8A8B"), "hair": Color("1E1B19"), "trousers": Color("3E3A4F"), "skin": Color("A8693F"), "style": {"head": "short", "torso": "jacket"}},
+	"hank": {"top": Color("6B4A3A"), "hair": Color("C9CED3"), "trousers": Color("4A5A6A"), "skin": Color("D9A880"), "kind": "tall", "style": {"head": "cap", "torso": "shirt"}},
+	"milo": {"top": Color("E6B655"), "hair": Color("2B2018"), "trousers": Color("5A4A3A"), "skin": Color("E0A678"), "kind": "short", "style": {"head": "curly", "torso": "tee"}},
+	"bea": {"top": Color("8FA882"), "hair": Color("A0471D"), "trousers": Color("6B4A3A"), "skin": Color("F2CDB0"), "style": {"head": "bun", "torso": "apron"}},
+}
 
 
 func _spawn_player() -> void:
 	if player != null and is_instance_valid(player):
 		player.queue_free()
 	player = null
-	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack", "truck"]):
+	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack", "truck", "hospital"]):
 		return
-	player = Figure.build(UIKit.TERRA, Color("2B2622"), "adult", Color("3E3A4F"), Figure.SKIN, {"head": "ponytail", "torso": "tee"})
+	var look: Dictionary = PLAYER_LOOKS.get(GameState.character, PLAYER_LOOKS["dana"])
+	player = Figure.build(look["top"], look["hair"], str(look.get("kind", "adult")), look["trousers"], look.get("skin", Figure.SKIN), look["style"])
 	player.name = "Player"
-	var scarf := Props.mesh_cylinder(0.22, 0.06, UIKit.MUSTARD)
-	scarf.position = Vector3(0, 1.02, 0)
-	player.get_node("Figure").add_child(scarf)
+	if bool(look.get("scarf", false)):
+		var scarf := Props.mesh_cylinder(0.22, 0.06, UIKit.MUSTARD)
+		scarf.position = Vector3(0, 1.02, 0)
+		player.get_node("Figure").add_child(scarf)
 	var door := _door_world()
 	player.position = door + Vector3(0.6, 0.0, 1.3)
 	if GameState.mode == "truck":
 		player.position = Vector3(1.6, 0.0, -0.9)
 	player.rotation.y = PI
+	if GameState.mode == "hospital":
+		# Flat on the bed, head to the wall, feet to the camera.
+		player.position = _ward_bed_spot() + Vector3(0, WARD_BED_TOP, 0.15)
+		player.rotation.y = 0.0
+		player.set_meta("down", true)
 	player_start = player.position
 	player_target = player.position
 	player_moving = false
@@ -3319,10 +3910,15 @@ func _tick_player(delta: float) -> void:
 	player.set_meta("carry", held_uid != "" or (selected_box >= 0 and GameState.mode == "job_pack") or player_carrying)
 	if player_moving:
 		var to := player_target - player.position
-		to.y = 0.0
-		var step := PLAYER_SPEED * delta * (4.0 if auto_busy and auto_fast else 1.0)
+		if player_path.is_empty() and absf(to.y) < 0.3:
+			to.y = 0.0
+		var step := PLAYER_SPEED * delta * (4.0 if auto_fast and (auto_busy or truck_pending or unload_pending) else 1.0)
 		if to.length() <= step:
 			player.position = player_target
+			if not player_path.is_empty():
+				# On to the next point of the path: no pause, no pose.
+				player_target = player_path.pop_front()
+				return
 			player_moving = false
 			_act(player, "reach", 0.7)
 			AudioDirector.play_sfx("sfx_footstep_office")
@@ -3481,7 +4077,7 @@ func _spawn_owner_items() -> void:
 		var def := ItemDB.get_item(str(rec.get("item_id", "")))
 		var root := Node3D.new()
 		root.name = "Owner_" + str(rec.get("uid", "")).replace(":", "_")
-		root.position = Vector3(float(rec.get("x", 0)), 0.0, float(rec.get("z", 0)))
+		root.position = Vector3(float(rec.get("x", 0)), float(rec.get("y", 0.0)), float(rec.get("z", 0)))
 		root.rotation.y = deg_to_rad(float(rec.get("rot", 0)))
 		root.set_meta("uid", str(rec.get("uid", "")))
 		root.set_meta("owner_item", true)
@@ -3883,6 +4479,8 @@ func _spawn_truck_slots() -> void:
 		pad.set_meta("slot", i)
 		var color := UIKit.MUSTARD if i < floor_slots else UIKit.BLUE
 		var marker := Props.mesh_box(Vector3(0.42, 0.04, 0.36), color)
+		# Only the places a box can go next show a pad; the rest wait their turn.
+		marker.visible = GameState.slot_open(i) == ""
 		pad.add_child(marker)
 		Props.add_picker(pad, Vector3(0.46, 0.3, 0.4))
 		if truck_root:
@@ -3923,24 +4521,47 @@ func _spawn_carry_boxes() -> void:
 			continue
 		if not bool(box.get("sealed", false)):
 			continue
+		if _is_home() and home_floor != 0:
+			continue
+		# Still on the truck: in its place in the bed, stacked as it was loaded.
 		var node := Node3D.new()
-		node.position = Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) - 0.2, 0.2, 1.0 + index * 0.55)
+		var slot := int(box.get("slot", -1))
+		if unload_truck != null and slot >= 0:
+			node.position = unload_truck.to_global(_slot_pos(slot)) + Vector3(0, 0.2, 0)
+			node.rotation.y = unload_truck.rotation.y
+		else:
+			node.position = Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) - 0.2, 0.2, 1.0 + index * 0.55)
 		node.set_meta("uid", "boxcarry:%d" % int(box.get("id", 0)))
+		node.set_meta("slot", slot)
 		var damaged := int(GameState.job.get("condition", 100)) < int(Tuning.get_value("damage.mesh_swap_below", 70))
-		node.add_child(Props.make("box_closed_damaged" if damaged else "box_closed"))
+		if str(box.get("big", "")) != "":
+			var big := GameState.job_item(str(box["big"]))
+			var piece := Props.make(str(ItemDB.get_item(str(big.get("item_id", ""))).get("model", "box_closed")))
+			piece.scale = Vector3(0.45, 0.45, 0.45)
+			piece.position = Vector3(0, -0.18, 0)
+			node.add_child(piece)
+			var blanket := Props.mesh_box(Vector3(0.4, 0.06, 0.34), UIKit.BLUE)
+			blanket.position = Vector3(0, -0.17, 0)
+			node.add_child(blanket)
+		else:
+			node.add_child(Props.make("box_closed_damaged" if damaged else "box_closed"))
 		Props.add_picker(node, Vector3(0.5, 0.45, 0.45))
 		items_root.add_child(node)
 		index += 1
 
 
+const BED_FLOOR_Y := 0.76
+const BED_FRONT_X := -0.7
+const BED_ROW_STEP := 0.55
+const BED_LAYER_STEP := 0.38
+const BED_TAIL_X := -2.25
+
+
 func _slot_pos(i: int) -> Vector3:
-	var col := i % 2
-	var row := int(i / 2) % 2
-	var layer := 0 if i < floor_slots else 1
-	if i >= floor_slots:
-		col = (i - floor_slots) % 2
-		row = int((i - floor_slots) / 2)
-	return Vector3(-1.25 + float(row) * 0.55, 0.78 + float(layer) * 0.42, -0.32 + float(col) * 0.64)
+	# The bed grid in the truck's own frame: row 0 against the front wall,
+	# rows stepping back to the door, layers stacking to the ceiling.
+	var cell: Dictionary = GameState.slot_cell(i)
+	return Vector3(BED_FRONT_X - float(cell["row"]) * BED_ROW_STEP, BED_FLOOR_Y + 0.02 + float(cell["layer"]) * BED_LAYER_STEP, -0.32 + float(cell["col"]) * 0.64)
 
 
 func _build_hud() -> void:
@@ -4069,6 +4690,9 @@ func _refresh_hud_buttons() -> void:
 			layer.remove_child(child)
 			child.queue_free()
 	var y := 100.0
+	if GameState.mode == "hospital":
+		_ward_card(layer)
+		return
 	if GameState.mode == "office" or GameState.mode == "job_unpack":
 		var snap_label := "Grid snap on" if SaveManager.snap_to_grid else "Free place"
 		_act_button(layer, snap_label, Vector2(16, y), _toggle_snap)
@@ -4139,7 +4763,8 @@ func _refresh_hud_buttons() -> void:
 		_act_button(layer, "Add padding", Vector2(1060, 158), func(): _pad_selected())
 		_act_button(layer, "Seal box", Vector2(1060, 216), func(): _seal_selected())
 		if not GameState.all_sealed() and not auto_busy:
-			_act_button(layer, "Pack the rest for me", Vector2(1060, 290), _pack_rest)
+			if not GameState.no_helper():
+				_act_button(layer, "Pack the rest for me", Vector2(1060, 290), _pack_rest)
 		if GameState.all_sealed():
 			_act_button(layer, "Load the truck", Vector2(1060, 290), func():
 				GameState.set_mode("truck")
@@ -4151,6 +4776,8 @@ func _refresh_hud_buttons() -> void:
 		_truck_list(layer)
 		if GameState.all_loaded():
 			_act_button(layer, "Drive", Vector2(1060, 100), _begin_drive)
+		elif not truck_pending and not GameState.auto_load_order().is_empty() and not GameState.no_helper():
+			_act_button(layer, "Load it all for me", Vector2(1060, 100), _auto_load)
 	if GameState.mode == "job_unpack":
 		_unpack_actions(layer)
 
@@ -4160,8 +4787,17 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 	for box in GameState.job.get("boxes", []):
 		if bool(box.get("sealed", false)) and not bool(carried.get(int(box.get("id", -1)), false)):
 			all_in = false
-	var y := 100.0
-	if bool(GameState.job.get("def", {}).get("mystery", false)) and not bool(GameState.job.get("mystery_sorted", false)):
+	# While boxes are still on the truck it fills the top-right of the view,
+	# so the unloading button lives in the left column under the goals card;
+	# the right column is for the room once the truck is empty.
+	var on_truck := _boxes_on_truck()
+	# The right column starts under the truck while boxes are still on it.
+	var y := 500.0 if on_truck > 0 else 100.0
+	if on_truck > 0 and not unload_pending and not auto_busy and not GameState.no_helper():
+		_act_button(layer, "Unload it all for me", Vector2(16, 440), _auto_unload)
+	# Mending and the mystery parts wait until the truck is empty: those
+	# buttons would sit over the bed and take the clicks meant for the boxes.
+	if on_truck == 0 and bool(GameState.job.get("def", {}).get("mystery", false)) and not bool(GameState.job.get("mystery_sorted", false)):
 		_act_button(layer, "Sort mystery parts", Vector2(980, y), func():
 			GameState.sort_mystery()
 			AudioDirector.play_sfx("sfx_paper_rustle")
@@ -4172,10 +4808,10 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 		)
 		y += 58
 	for item in GameState.job.get("items", []):
-		if int(item.get("damage", 0)) > 0:
+		if int(item.get("damage", 0)) > 0 and on_truck == 0:
 			var uid := str(item.get("uid", ""))
 			var level := int(item.get("damage", 0))
-			var taps := Tuning.repair_taps(level)
+			var taps := GameState.repair_taps_for(level)
 			var cost := int(round(float(JobDB.base_pay(GameState.job.get("def", {}))) * (0.05 if level == 1 else 0.10)))
 			_act_button(layer, mend_caption(str(item.get("name", "item")), taps), Vector2(860, y), func():
 				var done := GameState.tap_repair(uid)
@@ -4198,11 +4834,18 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 			ready = false
 		if str(item.get("state", "")) in ["boxed", "loose"] and bool(carried.get(int(item.get("box", -1)), false)):
 			waiting += 1
+	# The mend and mystery buttons keep the right column (y so far); the
+	# box helpers go left while the truck still has boxes on it.
+	var column_x := 16.0 if on_truck > 0 else 860.0
+	if on_truck > 0:
+		y = 498.0
+	elif y < 100.0:
+		y = 100.0
 	if _stackable_count() >= 2:
-		_act_button(layer, "Stack the boxes", Vector2(860, y), _stack_boxes)
+		_act_button(layer, "Stack the boxes", Vector2(column_x, y), _stack_boxes)
 		y += 52
-	if waiting > 0 and not auto_busy:
-		_act_button(layer, "Unpack it all for me", Vector2(860, y), func():
+	if waiting > 0 and not auto_busy and not GameState.no_helper() and (on_truck == 0 or not _is_home()):
+		_act_button(layer, "Unpack it all for me", Vector2(column_x, y), func():
 			var ids: Array = []
 			for box in GameState.job.get("boxes", []):
 				var id := int(box.get("id", 0))
@@ -4296,9 +4939,10 @@ func _truck_list(layer: CanvasLayer) -> void:
 			continue
 		var id := int(box.get("id", 0))
 		var heavy := GameState.box_has_heavy(id)
-		var text := "Box %d%s" % [id + 1, " · heavy" if heavy else ""]
+		var kg := GameState.box_weight(id)
+		var text := "Box %d · %d kg%s" % [id + 1, int(round(kg)), " · heavy" if heavy else ""]
 		if str(box.get("big", "")) != "":
-			text = "%s%s" % [GameState.job_item(str(box["big"])).get("name", "Big piece"), " · heavy" if heavy else ""]
+			text = "%s · %d kg%s" % [GameState.job_item(str(box["big"])).get("name", "Big piece"), int(round(kg)), " · heavy" if heavy else ""]
 		if int(box.get("slot", -1)) >= 0:
 			text += " loaded"
 		var capture := id
@@ -4350,6 +4994,15 @@ func _open_jobs(tab := "jobs") -> void:
 	back_tab.custom_minimum_size = Vector2(190, 52)
 	back_tab.pressed.connect(_open_jobs.bind("backroom"))
 	panel.add_child(back_tab)
+	var grudge_tab: Button = null
+	if GameState.has_grudge():
+		grudge_tab = UIKit.button("Payback", UIKit.TERRA if tab == "payback" else UIKit.LOSS)
+		grudge_tab.name = "PaybackTab"
+		grudge_tab.position = Vector2(584, 80)
+		grudge_tab.size = Vector2(170, 52)
+		grudge_tab.custom_minimum_size = Vector2(170, 52)
+		grudge_tab.pressed.connect(_open_jobs.bind("payback"))
+		panel.add_child(grudge_tab)
 	var scroll := ScrollContainer.new()
 	scroll.name = "Rows"
 	scroll.position = Vector2(24, 144)
@@ -4364,9 +5017,14 @@ func _open_jobs(tab := "jobs") -> void:
 		_fill_goals(rows, card_size.x - 72)
 	elif tab == "backroom":
 		_fill_backroom(rows, card_size.x - 72)
+	elif tab == "payback" and GameState.has_grudge():
+		_fill_payback(rows, card_size.x - 72)
 	else:
 		_fill_jobs(rows, card_size.x - 72)
+	UIKit.pop_in(panel)
 	var focus_buttons: Array = [close, jobs_tab, goals_tab, back_tab]
+	if grudge_tab != null:
+		focus_buttons.append(grudge_tab)
 	for child in rows.get_children():
 		for kid in child.get_children():
 			if kid is Button:
@@ -4440,6 +5098,11 @@ func _job_card(decorated: Dictionary, width: float, from_board: bool) -> PanelCo
 	var pay_label := UIKit.label("$%d base" % pay, 24, UIKit.SAGE, "small", false)
 	pay_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	head.add_child(pay_label)
+	for mod_id in decorated.get("modifiers", []):
+		var mod_tag := UIKit.label(Extras.modifier_name(str(mod_id)), 24, UIKit.NIGHT, "small", false)
+		mod_tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		mod_tag.tooltip_text = Extras.modifier_blurb(str(mod_id))
+		head.add_child(mod_tag)
 	var twist := str(decorated.get("twist", ""))
 	if from_board and twist != "" and twist != "plain":
 		var tag := UIKit.label(twist.capitalize(), 24, UIKit.TERRA, "small", false)
@@ -4450,6 +5113,15 @@ func _job_card(decorated: Dictionary, width: float, from_board: bool) -> PanelCo
 	var brief := UIKit.label(str(decorated.get("brief", "")), 24, UIKit.DARK, "small")
 	brief.custom_minimum_size = Vector2(width - 300.0, 0)
 	text.add_child(brief)
+	for mod_id in decorated.get("modifiers", []):
+		var mod_line := UIKit.label("%s: %s" % [Extras.modifier_name(str(mod_id)), Extras.modifier_blurb(str(mod_id))], 24, UIKit.NIGHT, "small")
+		mod_line.custom_minimum_size = Vector2(width - 300.0, 0)
+		text.add_child(mod_line)
+	var wish: Dictionary = decorated.get("wish", {})
+	if not wish.is_empty():
+		var wish_line := UIKit.label("They ask: \"%s\" ($%d if you do)" % [wish.get("text", ""), int(Tuning.get_value("play.wish_tip", 20))], 24, UIKit.SAGE, "small")
+		wish_line.custom_minimum_size = Vector2(width - 300.0, 0)
+		text.add_child(wish_line)
 	var note := UIKit.label("Marge: %s" % decorated.get("mentor_note", ""), 24, UIKit.BLUE, "small")
 	note.custom_minimum_size = Vector2(width - 300.0, 0)
 	text.add_child(note)
@@ -4685,6 +5357,62 @@ func _crime_card(row: Dictionary, width: float) -> PanelContainer:
 	return card
 
 
+func _fill_payback(rows: VBoxContainer, width: float) -> void:
+	# The grudge, and what to do with it: six moves, one shot each.
+	var g: Dictionary = GameState.grudge
+	var intro := PanelContainer.new()
+	intro.add_theme_stylebox_override("panel", UIKit.style(Color("F3E6E3"), 14, 3, UIKit.LOSS))
+	intro.custom_minimum_size = Vector2(width, 0)
+	rows.add_child(intro)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	intro.add_child(col)
+	var title := UIKit.label("%s put you through %s on day %d." % [g.get("client", "Someone"), "an upstairs window" if int(g.get("floor", 0)) > 0 else "a ground-floor window", int(g.get("day", 1))], 28, UIKit.DARK, "title", false)
+	col.add_child(title)
+	var blurb := UIKit.label("You planned this from a hospital bed. On site, the next owner who raises a hand goes down instead of you, and the claim is doubled. Off site, pick a move. Most of them close the matter.", 24, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(width - 40, 0)
+	col.add_child(blurb)
+	for move in GameState.payback_moves():
+		rows.add_child(_payback_card(move, width))
+
+
+func _payback_card(move: Dictionary, width: float) -> PanelContainer:
+	var card := PanelContainer.new()
+	var open := bool(move.get("open", false))
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD if open else Color("ECE6DC"), 14, 3, UIKit.LOSS if open else Color("C9C1B3")))
+	card.custom_minimum_size = Vector2(width, 0)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	card.add_child(row)
+	var text := VBoxContainer.new()
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text.add_theme_constant_override("separation", 4)
+	row.add_child(text)
+	var cost := int(move.get("cost", 0))
+	text.add_child(UIKit.label("%s%s" % [str(move.get("name", "")), ("  ·  $%d" % cost) if cost > 0 else ""], 28, UIKit.DARK if open else Color("9A9388"), "title", false))
+	var blurb := UIKit.label(str(move.get("blurb", "")), 24, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(width - 260, 0)
+	text.add_child(blurb)
+	var go := UIKit.button("Done" if bool(move.get("done", false)) else "Do it", UIKit.LOSS if open else UIKit.WOOD)
+	go.name = "Payback_" + str(move.get("id", ""))
+	go.disabled = not open
+	go.custom_minimum_size = Vector2(170, 56)
+	go.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var id := str(move.get("id", ""))
+	go.pressed.connect(func():
+		var result: Dictionary = GameState.do_payback(id)
+		if result.has("error"):
+			_toast(str(result["error"]), "Dana")
+			return
+		AudioDirector.play_sfx("sfx_gavel" if id in ["invoice", "review"] else "sfx_coins_award")
+		_toast(str(result.get("said", "")), "Dana")
+		SaveManager.save_game()
+		_open_jobs("payback" if GameState.has_grudge() else "jobs")
+	)
+	row.add_child(go)
+	return card
+
+
 func _fill_goals(rows: VBoxContainer, width: float) -> void:
 	var open_rows: Array = []
 	var done_rows: Array = []
@@ -4822,11 +5550,13 @@ func _mode_objective() -> String:
 			for item in GameState.job.get("items", []):
 				if str(item.get("state", "")) == "loose":
 					left += 1
-			return "Pack %d pieces" % GameState.job.get("items", []).size() if left == GameState.job.get("items", []).size() else "%d piece%s left to box" % [left, "" if left == 1 else "s"]
+			return "Step 1 of 4 · " + ("Pack %d pieces" % GameState.job.get("items", []).size() if left == GameState.job.get("items", []).size() else "%d piece%s left to box" % [left, "" if left == 1 else "s"])
 		"truck":
-			return "Load the truck"
+			return "Step 2 of 4 · Load the truck"
 		"job_unpack":
-			return "Unpack and place"
+			return "Step 4 of 4 · Unpack and place"
+		"hospital":
+			return "Get better"
 	return ""
 
 
@@ -4844,6 +5574,8 @@ func _mode_chips() -> Array:
 			return [["Click", "pad"], ["Click", "take back"]]
 		"job_unpack":
 			return [["Click", "carry, open"], ["R", "rotate"], ["Q E", "turn view"]]
+		"hospital":
+			return [["Esc", "pause"]]
 	return []
 
 
@@ -4874,7 +5606,7 @@ func _mode_hint() -> String:
 	var money := "$%d" % GameState.money
 	var rep := "Rep %d" % GameState.rep_rank()
 	var today := GameState.money - int(GameState.day_log.get("money_start", GameState.money))
-	var ledger := "today %s$%d" % ["+" if today >= 0 else "−", absi(today)]
+	var ledger := "today %s$%d   earned $%s" % ["+" if today >= 0 else "−", absi(today), UIKit.commas(GameState.total_earned)]
 	var head := "%s   %s\n%s   %s" % [venue.get("name", "Office"), money, ledger, rep]
 	if status:
 		if GameState.mode == "office" and GameState.office_phase == "live":
@@ -4894,6 +5626,8 @@ func _mode_hint() -> String:
 			return "Pick things up and set them on the floor or on each other. The wheel zooms, or turns what you hold." + extra
 		"job_pack":
 			return "Fragile likes padding. Heavy rides alone, on the bottom. New box when one is full."
+		"hospital":
+			return "Every sleep is a day gone and the bill is paid. Forgive them, or plan what you'll do when you're out."
 		"truck":
 			return "Pick a box, then a pad in the bed. Mustard pads are the floor, and heavy goes there."
 		"job_unpack":
@@ -5082,11 +5816,13 @@ func _add_goal_ring(root: Node3D, pose: Dictionary) -> void:
 func _toast(message: String, who := "Dana") -> void:
 	if toast == null:
 		return
+	if who == "Dana":
+		who = GameState.first_name()
 	if toast_name:
 		toast_name.text = who
 		var face := toast_name.get_parent().get_parent().get_node_or_null("ToastFace")
 		var dana_face := toast_name.get_parent().get_parent().get_node_or_null("ToastPortrait")
-		var painted := who == "Dana" and dana_face != null and dana_face is TextureRect
+		var painted := who == GameState.first_name() and GameState.character == "dana" and dana_face != null and dana_face is TextureRect
 		if dana_face:
 			dana_face.visible = painted
 		if face:
@@ -5098,6 +5834,8 @@ func _toast(message: String, who := "Dana") -> void:
 	toast.text = message
 	toast.visible = true
 	if toast_bar:
+		if not toast_bar.visible:
+			UIKit.slide_in(toast_bar)
 		toast_bar.visible = true
 	toast_time = 3.4
 
@@ -5738,6 +6476,307 @@ func _bubble(node: Node3D, text: String, seconds := 4.0) -> void:
 	node.add_child(dot)
 
 
+# --- St. Bridget's, Ward 3 ---
+# Where a fall from a window ends: a bed by the window, two neighbours
+# behind curtains, a drip stand, a cabinet, and a visitor who sits with you.
+# Dana lies there, cries a little, thinks a lot, and decides what comes next.
+
+const WARD_BED_TOP := 0.52
+var ward_tear_in := 1.2
+var ward_think_in := 2.0
+var ward_visitor: Node3D
+
+const WARD_CRY := [
+	"*sniff* I was only doing my job.",
+	"Out the WINDOW. Who does that to a person?",
+	"The nurse says no lifting for a week. A week!",
+	"I can still hear the glass.",
+	"{client}'s face. I keep seeing it.",
+	"The jar. The rent. Marge. *sniff*",
+	"I packed their glasses in bubble wrap. BUBBLE WRAP.",
+]
+const WARD_REVENGE := [
+	"{client}'s new address is on the clipboard.",
+	"Next time an owner raises a hand, I won't be the one on the floor.",
+	"Sal said he knows a guy. I said I'd think about it.",
+	"Something of theirs is going to go missing. Something they love.",
+	"Small claims. Doubled. Every receipt in a folder.",
+	"I am going to get so, so good at this. Out of spite.",
+]
+const WARD_FORGIVE := [
+	"They were scared for their things. I'd be scared too.",
+	"Flowers came. Carnations. It's a start.",
+	"Let it go. Let it go. Let it go.",
+	"A cracked rib heals. A grudge doesn't.",
+	"I'll pack the glasses better next time. For me, not for them.",
+	"Marge says a calm mover gets the repeat work. Marge is usually right.",
+]
+
+
+func _ward_bed_spot() -> Vector3:
+	return Vector3(float(venue.get("x", 0)) + 1.9, 0.0, float(venue.get("z", 0)) + 2.3)
+
+
+func _build_ward() -> void:
+	venue = {"id": "hospital", "name": "St. Bridget's, Ward 3", "x": -4, "z": -3, "w": 8, "d": 6, "open_w": 2, "opening": "door", "windows": true, "theme": "hospital", "music": "music_act1_home"}
+	theme = Catalog.theme("hospital")
+	home_floor = 0
+	var x := float(venue["x"])
+	var z := float(venue["z"])
+	_build_rect(x, z, float(venue["w"]), float(venue["d"]), true)
+	_theme_lights()
+	var ward := Node3D.new()
+	ward.name = "Ward"
+	add_child(ward)
+	var lino := Props.mesh_box(Vector3(7.6, 0.012, 5.6), Color("C8D7C6"))
+	lino.position = Vector3(x + 4.0, 0.006, z + 3.0)
+	ward.add_child(lino)
+	# Three beds along the back wall; the window is over the first.
+	for i in 3:
+		var at := _ward_bed_spot() + Vector3(2.4 * float(i), 0.0, 0.0)
+		var bed := _ward_bed(i == 0)
+		bed.name = "PlayerBed" if i == 0 else "Bed_%d" % i
+		bed.position = at
+		ward.add_child(bed)
+		if i > 0:
+			# A neighbour under the blanket, and a curtain half drawn between the beds.
+			var hump := Props.mesh_box(Vector3(0.5, 0.22, 1.1), Color("DCE7F0"))
+			hump.position = Vector3(0, WARD_BED_TOP, 0.2)
+			bed.add_child(hump)
+			var rail := Props.mesh_cylinder(0.015, 1.7, Color("9AA7A5"))
+			rail.rotation.z = PI * 0.5
+			rail.position = Vector3(at.x - 1.2, 2.15, at.z + 0.1)
+			ward.add_child(rail)
+			var curtain := Props.mesh_box(Vector3(0.04, 1.6, 1.4), Color("BFD6C9"))
+			curtain.position = Vector3(at.x - 1.2, 0.55, at.z - 0.35)
+			ward.add_child(curtain)
+	# Bedside: a cabinet with a water jug, a drip stand, a chair for the visitor.
+	var bed_at := _ward_bed_spot()
+	var cabinet := Props.mesh_box(Vector3(0.46, 0.62, 0.44), Color("E9E4D8"))
+	cabinet.name = "Cabinet"
+	cabinet.position = Vector3(bed_at.x + 0.78, 0.0, bed_at.z - 0.5)
+	ward.add_child(cabinet)
+	var jug := Props.mesh_cylinder(0.07, 0.18, Color("CFE3EE"))
+	jug.position = Vector3(bed_at.x + 0.7, 0.62, bed_at.z - 0.55)
+	ward.add_child(jug)
+	if str(GameState.hospital.get("choice", "")) == "forgive":
+		var vase := Props.mesh_cylinder(0.05, 0.2, Color("8FA5A0"))
+		vase.name = "Flowers"
+		vase.position = Vector3(bed_at.x + 0.88, 0.62, bed_at.z - 0.4)
+		ward.add_child(vase)
+		for k in 5:
+			var bloom := Props.mesh_cylinder(0.045, 0.03, Color("E98BA2") if k % 2 == 0 else Color("F6D6DE"))
+			bloom.position = Vector3(bed_at.x + 0.88 + cos(float(k) * 1.26) * 0.06, 0.86, bed_at.z - 0.4 + sin(float(k) * 1.26) * 0.06)
+			ward.add_child(bloom)
+	var pole := Props.mesh_cylinder(0.014, 1.75, Color("9AA7A5"))
+	pole.name = "DripStand"
+	pole.position = Vector3(bed_at.x - 0.62, 0.0, bed_at.z - 0.75)
+	ward.add_child(pole)
+	var foot := Props.mesh_cylinder(0.16, 0.03, Color("7F8C8A"))
+	foot.position = pole.position
+	ward.add_child(foot)
+	var bag := Props.mesh_box(Vector3(0.12, 0.2, 0.05), Color("EAF2F7"))
+	bag.position = Vector3(bed_at.x - 0.62, 1.55, bed_at.z - 0.75)
+	ward.add_child(bag)
+	var chair := Props.mesh_box(Vector3(0.46, 0.46, 0.46), Color("B7C5BC"))
+	chair.name = "Chair"
+	chair.position = Vector3(bed_at.x - 0.85, 0.0, bed_at.z + 0.65)
+	ward.add_child(chair)
+	var back := Props.mesh_box(Vector3(0.46, 0.5, 0.06), Color("B7C5BC"))
+	back.position = Vector3(bed_at.x - 1.06, 0.46, bed_at.z + 0.65)
+	back.rotation.y = PI * 0.5
+	ward.add_child(back)
+	# The clock on the back wall, and the ward sign by the door.
+	var clock := Props.mesh_cylinder(0.22, 0.03, Color("F4F1EA"))
+	clock.rotation.x = PI * 0.5
+	clock.position = Vector3(x + 5.6, 2.25, z + 0.06)
+	ward.add_child(clock)
+	var hand := Props.mesh_box(Vector3(0.02, 0.16, 0.01), UIKit.DARK)
+	hand.position = Vector3(x + 5.6, 2.25, z + 0.09)
+	ward.add_child(hand)
+	var sign := Label3D.new()
+	sign.name = "WardSign"
+	sign.text = "WARD 3"
+	sign.font = UIKit.title_font()
+	sign.font_size = 64
+	sign.pixel_size = 0.004
+	sign.modulate = Color("5B7470")
+	sign.position = Vector3(x + 2.2, 2.3, z + 0.06)
+	ward.add_child(sign)
+	# Marge, in the chair, for the first night; after that, an empty chair.
+	if int(GameState.hospital.get("days", 0)) == int(GameState.hospital.get("total", 0)):
+		ward_visitor = Figure.build(UIKit.WOOD, Color("6E5B4E"), "elder", Color("4A4A5A"))
+		ward_visitor.name = "Visitor"
+		ward_visitor.position = Vector3(bed_at.x - 0.9, 0.0, bed_at.z + 1.35)
+		ward_visitor.rotation.y = -PI * 0.75
+		ward.add_child(ward_visitor)
+	_spawn_player()
+	_frame_camera()
+
+
+func _ward_bed(with_blanket: bool) -> Node3D:
+	var bed := Node3D.new()
+	var frame := Props.mesh_box(Vector3(0.95, 0.42, 2.0), Color("E6E9EC"))
+	frame.position = Vector3(0, 0.05, 0)
+	bed.add_child(frame)
+	var mattress := Props.mesh_box(Vector3(0.9, 0.1, 1.95), Color("F6F4EE"))
+	mattress.position = Vector3(0, 0.42, 0)
+	bed.add_child(mattress)
+	var pillow := Props.mesh_box(Vector3(0.6, 0.1, 0.36), Color("FFFFFF"))
+	pillow.position = Vector3(0, WARD_BED_TOP, -0.75)
+	bed.add_child(pillow)
+	var head := Props.mesh_box(Vector3(0.98, 0.8, 0.06), Color("B9C9C4"))
+	head.position = Vector3(0, 0.1, -1.02)
+	bed.add_child(head)
+	var tail := Props.mesh_box(Vector3(0.98, 0.55, 0.06), Color("B9C9C4"))
+	tail.position = Vector3(0, 0.1, 1.02)
+	bed.add_child(tail)
+	for leg_x in [-0.42, 0.42]:
+		for leg_z in [-0.9, 0.9]:
+			var leg := Props.mesh_cylinder(0.025, 0.1, Color("7F8C8A"))
+			leg.position = Vector3(leg_x, 0.0, leg_z)
+			bed.add_child(leg)
+	if with_blanket:
+		var blanket := Props.mesh_box(Vector3(0.92, 0.07, 1.15), Color("9EC3D8"))
+		blanket.position = Vector3(0, WARD_BED_TOP + 0.08, 0.35)
+		bed.add_child(blanket)
+	return bed
+
+
+func _tick_ward(delta: float) -> void:
+	if GameState.mode != "hospital" or player == null or not is_instance_valid(player):
+		return
+	if ward_visitor != null and is_instance_valid(ward_visitor):
+		_animate_person(ward_visitor, player_time, false, delta)
+	var choice := str(GameState.hospital.get("choice", ""))
+	var crying := choice == "" or int(GameState.hospital.get("days", 0)) == int(GameState.hospital.get("total", 0))
+	ward_tear_in -= delta
+	if crying and ward_tear_in <= 0.0:
+		ward_tear_in = randf_range(0.9, 1.6)
+		_ward_tear()
+	ward_think_in -= delta
+	if ward_think_in <= 0.0:
+		ward_think_in = randf_range(5.0, 7.5)
+		var pool: Array = WARD_CRY
+		if choice == "revenge":
+			pool = WARD_REVENGE
+		elif choice == "forgive":
+			pool = WARD_FORGIVE
+		var line := str(pool[randi() % pool.size()]).replace("{client}", str(GameState.hospital.get("client", "the client")))
+		_bubble(player, line, 4.5)
+
+
+func _ward_tear() -> void:
+	# A tear from the pillow end, rolling off to the sheet.
+	var tear := Props.mesh_cylinder(0.022, 0.035, Color("9FD0F0"))
+	tear.name = "Tear"
+	var head := player.position + Vector3(randf_range(-0.12, 0.12), 0.3, -0.62)
+	tear.position = head
+	add_child(tear)
+	var tw := create_tween()
+	tw.tween_property(tear, "position", head + Vector3(0.14 if head.x > player.position.x else -0.14, -0.08, 0.05), 0.55).set_ease(Tween.EASE_IN)
+	tw.tween_property(tear, "scale", Vector3(0.2, 0.2, 0.2), 0.25)
+	tw.tween_callback(tear.queue_free)
+
+
+func _ward_card(layer: CanvasLayer) -> void:
+	# The chart at the foot of the bed: the injury, the nights, the bill,
+	# and the choice. Then the nights, one at a time.
+	var old := layer.get_node_or_null("HospitalCard")
+	if old != null:
+		layer.remove_child(old)
+		old.free()
+	var card := PanelContainer.new()
+	card.name = "HospitalCard"
+	card.set_meta("act_button", true)
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, Color("8FA5A0")))
+	layer.add_child(card)
+	UIKit.pin_top_right(card, -470, 96, -16, 96)
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 16)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 8)
+	margin.add_child(column)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	column.add_child(head)
+	head.add_child(UIKit.ribbon("Patient chart", Color("8FA5A0"), 28))
+	var who := UIKit.label(GameState.player_name(), 28, UIKit.DARK, "title", false)
+	who.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(who)
+	var h: Dictionary = GameState.hospital
+	var days := int(h.get("days", 1))
+	var total := int(h.get("total", 1))
+	var night := total - days + 1
+	var injury := UIKit.label("Fall from %s: %s." % [h.get("window", "a window"), h.get("injury", "bruises")], 25, UIKit.DARK, "small")
+	injury.custom_minimum_size = Vector2(420, 0)
+	column.add_child(injury)
+	var stay := UIKit.label("Night %d of %d.  Bill $%d%s." % [night, total, int(h.get("bill", 0)), ", $%d paid back" % int(h.get("refund", 0)) if int(h.get("refund", 0)) > 0 else ""], 25, UIKit.WOOD, "small")
+	stay.custom_minimum_size = Vector2(420, 0)
+	column.add_child(stay)
+	var choice := str(h.get("choice", ""))
+	var buttons: Array = []
+	if choice == "":
+		var ask := UIKit.label("Lying here, what do you do with it?", 25, UIKit.DARK, "small")
+		ask.custom_minimum_size = Vector2(420, 0)
+		column.add_child(ask)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		column.add_child(row)
+		var forgive := UIKit.button("Forgive them", UIKit.SAGE)
+		forgive.name = "HospitalForgive"
+		forgive.custom_minimum_size = Vector2(200, 52)
+		forgive.pressed.connect(_ward_choose.bind("forgive"))
+		row.add_child(forgive)
+		var revenge := UIKit.button("Plan revenge", UIKit.NIGHT)
+		revenge.name = "HospitalRevenge"
+		revenge.custom_minimum_size = Vector2(200, 52)
+		revenge.pressed.connect(_ward_choose.bind("revenge"))
+		row.add_child(revenge)
+		buttons.append(forgive)
+		buttons.append(revenge)
+	else:
+		var said := "Forgiven. A star for grace, half the bill back, and a thicker skin." if choice == "forgive" else "A grudge. The next owner who raises a hand finds you ready, and the claim is doubled."
+		var mind := UIKit.label(said, 25, UIKit.SAGE if choice == "forgive" else UIKit.NIGHT, "small")
+		mind.custom_minimum_size = Vector2(420, 0)
+		column.add_child(mind)
+	var sleep := UIKit.button("Sleep it off" if days > 1 else "Sleep, then home", Color("8FA5A0"), UIKit.DARK)
+	sleep.name = "HospitalSleep"
+	sleep.custom_minimum_size = Vector2(420, 52)
+	sleep.pressed.connect(_ward_sleep)
+	column.add_child(sleep)
+	buttons.append(sleep)
+	UIKit.link_focus(buttons)
+	UIKit.pop_in(card)
+
+
+func _ward_choose(choice: String) -> void:
+	var result: Dictionary = GameState.choose_recovery(choice)
+	if result.has("error"):
+		_toast(str(result["error"]), "Dana")
+		return
+	if choice == "forgive":
+		AudioDirector.play_sfx("sfx_coins_award")
+		_toast("Okay. Okay. I forgive them. Mostly.", "Dana")
+	else:
+		AudioDirector.play_sfx("sfx_gavel")
+		_toast("Right. I'm going to remember this.", "Dana")
+	ward_think_in = 0.6
+	SaveManager.save_game()
+	emit_signal("request_rebuild")
+
+
+func _ward_sleep() -> void:
+	AudioDirector.play_sfx("sfx_notification_soft")
+	var home := GameState.hospital_sleep()
+	SaveManager.save_game()
+	if home:
+		_toast("Discharged. Mind the windows, they said.", "Dana")
+	emit_signal("request_rebuild")
+
+
 func _tick_bubbles(delta: float) -> void:
 	for label in get_tree().get_nodes_in_group("thought_bubbles"):
 		pass
@@ -5840,7 +6879,7 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	# Four times in ten it is one of the regulars, in their own clothes, with
 	# their own name on the till and their own voice.
 	var regular := ""
-	if Regulars.available() and regular_rng.randf() < 0.4:
+	if Regulars.available() and regular_rng.randf() < (0.6 if GameState.perk("cafe_regular") else 0.4):
 		var here: Array = []
 		for entry in customers:
 			if str(entry.get("regular", "")) != "":

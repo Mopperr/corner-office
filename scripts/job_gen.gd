@@ -1,5 +1,6 @@
 extends RefCounted
 const Homes = preload("res://scripts/homes.gd")
+const Extras = preload("res://scripts/extras.gd")
 # Generates the day's job board: who is moving, where, what they own, which
 # twist the job carries, and a route through the town to drive. Everything
 # is seeded from the save's seed and the day, so a board is the same after a
@@ -37,13 +38,24 @@ const HOME_MAX_BIG := 4
 # The truck takes eight boxes or wrapped pieces. A piece too big for a box
 # takes a place of its own, a bulky or heavy one a box of its own, and five
 # ordinary pieces share a box; a recipe keeps within that with a box spare.
-const TRUCK_SLOTS := 8.0
+static func truck_slots() -> float:
+	return float(Tuning.get_value("truck.slots", 8))
 
 
 static func slots_for(def: Dictionary, count: int) -> float:
 	if bool(def.get("nobox", false)) or bool(def.get("bulky", false)) or bool(def.get("heavy", false)):
 		return float(count)
-	return 0.2 * float(count)
+	return float(count) / float(Tuning.get_value("pack.per_box", 5))
+
+
+static func recipe_floor_need(recipe: Array) -> int:
+	# Pieces that must ride on the floor layer: wrapped ones and heavy boxes.
+	var need := 0
+	for group in recipe:
+		var def: Dictionary = ItemDB.get_item(str(group.get("item", "")))
+		if bool(def.get("nobox", false)) or bool(def.get("heavy", false)):
+			need += int(group.get("count", 1))
+	return need
 
 
 static func recipe_slots(recipe: Array) -> float:
@@ -141,8 +153,8 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 				twist = "plain"
 			else:
 				venue = "park"
-		var size := 8 + rng.randi_range(0, 6) + mini(jobs_done, 8)
-		size = clampi(size, 8, 22)
+		var size := int(Tuning.get_value("jobs.size_min", 18)) + rng.randi_range(0, int(Tuning.get_value("jobs.size_span", 10))) + mini(jobs_done * int(Tuning.get_value("jobs.size_per_done", 1)), int(Tuning.get_value("jobs.size_done_cap", 12)))
+		size = clampi(size, 8, 48)
 		var recipe := _recipe_home(rng, size, twist, home) if is_home else _recipe(rng, size, twist)
 		var drive := _drive(rng, drive_id, twist)
 		drives[drive_id] = drive
@@ -168,6 +180,8 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 			"twist": twist,
 			"day": day,
 		}
+		job["modifiers"] = Extras.roll_modifiers(rng, is_home)
+		job["wish"] = Extras.roll_wish(rng, is_home)
 		if twist == "cat":
 			job["cat"] = true
 		if twist == "mystery":
@@ -244,6 +258,8 @@ static func _recipe_home(rng: RandomNumberGenerator, size: int, twist: String, h
 	var big := 0
 	var guard := 0
 	var slots := 0.0
+	var floor_need := 0
+	var floor_cap := int(Tuning.get_value("truck.floor_slots", 4)) - 1
 	while total < size and guard < 120 and not pool.is_empty():
 		guard += 1
 		var item := str(pool[rng.randi_range(0, pool.size() - 1)])
@@ -260,8 +276,13 @@ static func _recipe_home(rng: RandomNumberGenerator, size: int, twist: String, h
 		var cap := 2 if item in ["kitchen_chair", "pillow_stack", "flower_pots", "paint_tins", "garden_chair", "bedside_table"] else 1
 		var count := clampi(rng.randi_range(1, cap), 1, size - total)
 		# Room on the truck, with a box to spare for the twist pieces.
-		if slots + slots_for(def, count) > TRUCK_SLOTS - 1.4:
+		if slots + slots_for(def, count) > truck_slots() - 1.4:
 			continue
+		var on_floor := bool(def.get("nobox", false)) or bool(def.get("heavy", false))
+		if on_floor and floor_need + count > floor_cap:
+			continue
+		if on_floor:
+			floor_need += count
 		if bool(def.get("nobox", false)):
 			big += 1
 		slots += slots_for(def, count)

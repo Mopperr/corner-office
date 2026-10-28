@@ -72,7 +72,7 @@ static func line(pool_mood: String, event: String, seed: int, fills: Dictionary 
 	var text := str(pool[absi(seed) % pool.size()])
 	for key in fills.keys():
 		text = text.replace("{%s}" % key, str(fills[key]))
-	text = text.replace("{name}", str(fills.get("name", "Dana")))
+	text = text.replace("{name}", str(fills.get("name", GameState.first_name())))
 	return text
 
 
@@ -94,7 +94,7 @@ static func finish_line(def: Dictionary, condition: int, rooms_right: int, rooms
 	elif condition < 60 or share < 0.4:
 		event = "finish_bad"
 	var who := str(def.get("client", "The client"))
-	var said := line(mood_for(def), event, hash(str(def.get("id", "")) + event), {"name": "Dana"})
+	var said := line(mood_for(def), event, hash(str(def.get("id", "")) + event), {"name": GameState.first_name()})
 	if said == "":
 		return ""
 	return "%s: \"%s\"" % [who, said]

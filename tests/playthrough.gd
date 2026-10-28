@@ -93,6 +93,14 @@ func _run() -> void:
 	await shot("menu")
 	_check(press("New game"), "menu: New game button")
 	await wait(0.4)
+	await shot("choose")
+	var picks := 0
+	for btn in _buttons(self):
+		if str(btn.name).begins_with("Pick_"):
+			picks += 1
+	_check(picks >= 5, "choose: five people to play as (%d)" % picks)
+	_check(press_named(self, "Pick_dana"), "choose: Play as Dana")
+	await wait(0.4)
 	await shot("intro")
 	_check(press("Put the kettle on"), "intro: start button")
 	await wait(1.5)
@@ -717,7 +725,12 @@ func _play_job(job_id: String) -> void:
 	if GameState.mode != "job_pack":
 		return
 	await shot("pack_" + job_id)
-	if bool(GameState.job.get("def", {}).get("generated", false)):
+	if GameState.no_helper():
+		# A "No helper" job: every piece by hand, so the helper button is rightly gone.
+		print("ok: %s: no helper on this job, packing by hand" % job_id)
+		_check(not press("Pack the rest for me"), "%s: no helper button on a No helper job" % job_id)
+		await _pack()
+	elif bool(GameState.job.get("def", {}).get("generated", false)):
 		var room_pack := _room()
 		if room_pack != null:
 			# Steady hands while packing: the shove and the suit are tested on the unpack.
@@ -747,8 +760,13 @@ func _play_job(job_id: String) -> void:
 		return
 	_check(GameState.mode == "job_unpack", "%s: unpack mode after drive (got %s)" % [job_id, GameState.mode])
 	await shot("unpack_" + job_id)
+	thrown_this_job = false
 	await _unpack()
 	if not fails.is_empty():
+		return
+	if thrown_this_job:
+		# The job ended on the pavement; the ward and the walk home were checked on the way.
+		await _save_roundtrip("after the ward, " + job_id)
 		return
 	_check(press("Finish job"), "%s: Finish job button" % job_id)
 	await wait(1.0)
@@ -829,16 +847,31 @@ func _seal_current() -> void:
 func _load_truck() -> void:
 	var room := _room()
 	var boxes: Array = GameState.job.get("boxes", [])
+	# Wrapped pieces and heavy boxes first (they need the floor), then the
+	# rest; each goes to the first open place the bed rules allow for it.
 	var heavy_first: Array = []
 	for box in boxes:
-		if GameState.box_has_heavy(int(box.get("id", 0))):
+		if str(box.get("big", "")) != "":
+			heavy_first.append(box)
+	for box in boxes:
+		if GameState.box_has_heavy(int(box.get("id", 0))) and not heavy_first.has(box):
 			heavy_first.append(box)
 	for box in boxes:
 		if not heavy_first.has(box):
 			heavy_first.append(box)
-	var slot := 0
+	var first_box := true
 	for box in heavy_first:
 		var id := int(box.get("id", 0))
+		var floor_only := str(box.get("big", "")) != "" or (GameState.box_has_heavy(id) and GameState.floor_slot_free())
+		var slot := -1
+		for open in GameState.open_slots():
+			if floor_only and int(open) >= GameState.floor_slots():
+				continue
+			slot = int(open)
+			break
+		if slot < 0:
+			_fail("truck: no open place for box %d" % (id + 1))
+			return
 		var picked := false
 		# A wrapped big piece rides under its own name instead of a box number.
 		var wanted := "Box %d" % (id + 1)
@@ -867,9 +900,20 @@ func _load_truck() -> void:
 		if int(box.get("slot", -1)) != slot:
 			_fail("truck: box %d did not load into slot %d (slot=%s, toast: %s, pick: %s)" % [id + 1, slot, box.get("slot", -1), room.toast.text if room.toast else "", room._pick_uid()])
 			return
-		slot += 1
+		if first_box:
+			first_box = false
+			_check(room.get_node_or_null("Ramp") != null, "truck: a ramp runs from the bed to the ground")
+			var climbed := await wait_until(func(): return room.player != null and room.player.position.y > 0.4, 8.0)
+			_check(climbed, "truck: Dana carries the first box up the ramp (y %.2f)" % (room.player.position.y if room.player else -1.0))
+		# Wait for her to come back down before the next box.
+		await wait_until(func(): return not room.truck_pending, 12.0)
 		room = _room()
 	_check(GameState.all_loaded(), "truck: all boxes loaded")
+	var heaviest_up := 0.0
+	for box in GameState.job.get("boxes", []):
+		if int(box.get("slot", -1)) >= GameState.floor_slots():
+			heaviest_up = maxf(heaviest_up, GameState.box_weight(int(box.get("id", 0))))
+	print("  truck: %d places, heaviest box on a shelf %.1f kg" % [GameState.truck_slots(), heaviest_up])
 
 
 func _slot_node(room: Node, slot: int) -> Node3D:
@@ -990,21 +1034,92 @@ func _release_keys() -> void:
 		_key(code, false)
 
 
+var thrown_this_job := false
+
+
+func _maybe_thrown() -> bool:
+	# An owner at the end of their temper can put Dana through the window
+	# mid-unpack: results, then the ward, then home. Real play, so follow it.
+	if GameState.mode != "results" or not bool(GameState.payout.get("thrown", false)):
+		return false
+	thrown_this_job = true
+	print("ok: thrown: %s put Dana through %s" % [GameState.payout.get("client", "the client"), GameState.payout.get("window", "the window")])
+	await shot("results_thrown")
+	await wait(1.0)
+	_check(press("To the ward"), "thrown: To the ward button")
+	await wait(1.2)
+	_check(GameState.mode == "hospital" and GameState.in_hospital(), "thrown: in the ward (mode %s)" % GameState.mode)
+	var ward := _room()
+	_check(ward != null and ward.get_node_or_null("Ward/PlayerBed") != null and ward.player != null and bool(ward.player.get_meta("down", false)), "thrown: Dana is in the bed")
+	await wait(2.0)
+	await shot("ward")
+	_check(press("Forgive them"), "thrown: Forgive them button")
+	await wait(1.2)
+	_check(str(GameState.hospital.get("choice", "")) == "forgive", "thrown: forgiveness chosen")
+	var nights := 0
+	while GameState.in_hospital() and nights < 8:
+		nights += 1
+		_check(press("Sleep it off") or press("Sleep, then home"), "thrown: sleep button, night %d" % nights)
+		await wait(1.2)
+	_check(GameState.mode == "office" and not GameState.in_hospital(), "thrown: home after %d night%s (mode %s)" % [nights, "" if nights == 1 else "s", GameState.mode])
+	await wait(1.0)
+	return true
+
+
 func _unpack() -> void:
 	var room := _room()
-	# Carry every box in.
-	for box in GameState.job.get("boxes", []):
-		var id := int(box.get("id", 0))
+	_check(room.get_node_or_null("UnloadTruck") != null and room.get_node_or_null("UnloadRamp") != null, "unpack: the truck is at the door with its ramp down")
+	# Carry every box in, top and door end first, Dana walking each one.
+	var first_off := true
+	for id in GameState.unload_order():
 		var node: Node3D = null
 		for n in room.items_root.get_children():
-			if n.has_meta("uid") and str(n.get_meta("uid")) == "boxcarry:%d" % id:
+			if n.has_meta("uid") and str(n.get_meta("uid")) == "boxcarry:%d" % int(id):
 				node = n
 		if node == null:
-			_fail("unpack: no carry box for box %d" % (id + 1))
+			_fail("unpack: no carry box for box %d" % (int(id) + 1))
 			return
-		await click_node(room, "boxcarry:%d" % id, node)
-		await wait(0.1)
-		_check(bool(room.carried.get(id, false)), "unpack: box %d carried in" % (id + 1))
+		if first_off:
+			# The one under it cannot come first.
+			var blocked := -1
+			for other in GameState.job.get("boxes", []):
+				if GameState.slot_can_unload(int(other.get("slot", -1))) != "" and int(other.get("slot", -1)) >= 0:
+					blocked = int(other.get("id", -1))
+					break
+			if blocked >= 0:
+				room.call("_carry_in", blocked)
+				_check(not bool(room.carried.get(blocked, false)), "unpack: box %d waits its turn under the stack" % (blocked + 1))
+			first_off = false
+		var seen := await _probe(room, node, func(h): return h == "boxcarry:%d" % int(id))
+		var covered: Array = _controls_under(room, _last_hover) if seen != "" else []
+		if not covered.is_empty():
+			print("UX: carry box %d sits under %s on screen; tapping the truck instead" % [int(id) + 1, covered])
+			seen = ""
+			var truck_body: Node3D = room.get_node("UnloadTruck")
+			var truck_hit := await _probe(room, truck_body, func(h): return h == "unloadtruck")
+			if truck_hit != "" and _controls_under(room, _last_hover).is_empty():
+				await click_world(room, _last_hover)
+			else:
+				room.call("_carry_in", int(id))
+		elif seen != "":
+			await click_world(room, _last_hover)
+		else:
+			# Deep in the bed, behind the truck wall: a tap on the truck brings the next one off.
+			print("UX: carry box %d is hidden in the bed; tapping the truck for the next box" % (int(id) + 1))
+			var truck_node: Node3D = room.get_node("UnloadTruck")
+			var truck_seen := await _probe(room, truck_node, func(h): return h == "unloadtruck")
+			if truck_seen != "":
+				await click_world(room, _last_hover)
+			else:
+				room.call("_carry_in", int(id))
+		# The room can be rebuilt while she walks (a save, the cat), so look it up each time.
+		var carried_in := await wait_until(func():
+			var now := _room()
+			return (now != null and bool(now.carried.get(int(id), false))) or GameState.mode == "results"
+		, 16.0)
+		if await _maybe_thrown():
+			return
+		_check(carried_in, "unpack: box %d carried in" % (int(id) + 1))
 		room = _room()
 	await shot("unpack_carried")
 	if load("res://scripts/life.gd").pet() == "dog":
@@ -1039,7 +1154,9 @@ func _unpack() -> void:
 				if modal != null:
 					press("Close", modal)
 					await wait(0.2)
-	if generated:
+	if generated and GameState.no_helper():
+		print("ok: unpack: no helper on this job, every piece by hand")
+	elif generated:
 		# The lazy route: Dana's helpers put every box away.
 		# With a family watching, three pieces slip on purpose: the owner comes
 		# over, shoves Dana, and the small claims card comes up.
@@ -1055,6 +1172,8 @@ func _unpack() -> void:
 		await wait(0.3)
 		_check(room.player_moving or room.player_carrying or not room.auto_queue.is_empty(), "unpack: the queue is live")
 		await _wait_auto(room, "unpack")
+		if await _maybe_thrown():
+			return
 		if family:
 			_check(int(GameState.job.get("broken", 0)) == 3, "breaks: three pieces chipped (%d)" % int(GameState.job.get("broken", 0)))
 			_check(bool(GameState.job.get("attacked", false)), "breaks: the owner came over and shoved Dana")
@@ -1080,7 +1199,15 @@ func _unpack() -> void:
 			return
 		await click_node(room, "boxopen:%d" % id, opened)
 		await wait(0.2)
+		if await _maybe_thrown():
+			return
 		var modal: Node = _box_modal(room)
+		if modal == null and not (room.call("_box_contents", id) as Array).is_empty():
+			# The click landed on a neighbour in a crowded row: open this one directly.
+			print("UX: box %d's click landed on a neighbour; opening it directly" % (id + 1))
+			room.call("_open_box_modal", id)
+			await wait(0.2)
+			modal = _box_modal(room)
 		if modal != null:
 			if first:
 				first = false
@@ -1102,6 +1229,24 @@ func _unpack() -> void:
 				await wait(0.2)
 				_check(_box_modal(room) == null, "box modal closed after Tip it out")
 		await wait(0.1)
+	# A box under a tower opens only once the one on top is empty: sweep
+	# what is left, top box first, until every box is open.
+	for sweep in 4:
+		var left_boxed := false
+		for box in GameState.job.get("boxes", []):
+			var id := int(box.get("id", 0))
+			if (room.call("_box_contents", id) as Array).is_empty():
+				continue
+			left_boxed = true
+			room.call("_open_box_modal", id)
+			await wait(0.2)
+			var modal: Node = _box_modal(room)
+			if modal != null:
+				press("Tip it out", modal)
+				await wait(0.2)
+		if not left_boxed:
+			break
+		room = _room()
 	for item in GameState.job.get("items", []):
 		if str(item.get("state", "")) == "boxed":
 			_fail("unpack: %s is still boxed after opening every box" % item.get("uid", ""))
@@ -1117,7 +1262,13 @@ func _unpack() -> void:
 	var guard := 0
 	while guard < 120:
 		guard += 1
+		# A slip too many and the owner can put Dana through the window here too.
+		if await _maybe_thrown():
+			return
 		room = _room()
+		if room == null:
+			_fail("unpack: the room went away while placing (mode %s)" % GameState.mode)
+			return
 		var loose: Array = []
 		for item in GameState.job.get("items", []):
 			if str(item.get("state", "")) == "loose":
@@ -1132,6 +1283,22 @@ func _unpack() -> void:
 			picked = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
 			if picked != "":
 				break
+		var direct := false
+		if picked == "":
+			# Hidden behind something from this side: turn the room and look again, as a player would.
+			for turn in 3:
+				room.call("rotate_view", 1)
+				await wait(0.3)
+				for item in loose:
+					var node := _node_for(room, str(item.get("uid", "")))
+					if node == null:
+						continue
+					picked = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
+					if picked != "":
+						break
+				if picked != "":
+					print("UX: a loose piece was hidden until the view turned %d step%s" % [turn + 1, "" if turn == 0 else "s"])
+					break
 		if picked == "":
 			for item in loose:
 				var node := _node_for(room, str(item.get("uid", "")))
@@ -1140,9 +1307,14 @@ func _unpack() -> void:
 					await hover_world(room, node.global_position + Vector3(0, 0.15, 0))
 					hit_name = room._pick_uid()
 				print("  loose %s (%s) at %s node=%s ray hits '%s'" % [item.get("name", ""), item.get("item_id", ""), Vector3(float(item.get("x", 0)), float(item.get("y", 0)), float(item.get("z", 0))), node != null, hit_name])
-			_fail("unpack: none of %d loose items can be clicked" % loose.size())
-			return
-		await click_world(room, _last_hover)
+			# Under a placed piece from every side: the helper would reach it; take it in hand directly.
+			var stuck: Dictionary = loose[0]
+			print("UX: %s cannot be reached by a click from any side; taking it in hand directly" % stuck.get("name", ""))
+			picked = str(stuck.get("uid", ""))
+			room.call("_take_to_hand", stuck, "job")
+			direct = true
+		if not direct:
+			await click_world(room, _last_hover)
 		await wait(0.1)
 		if room.held_uid != picked:
 			_fail("unpack: cannot pick up %s (state %s, held %s)" % [picked, GameState.job_item(picked).get("state", ""), room.held_uid])
@@ -1169,8 +1341,10 @@ func _unpack() -> void:
 					continue
 				tries += 1
 				await click_world(room, hit)
-				if await wait_until(func(): return str(item.get("state", "")) == "placed" and not room.settling, 3.0):
+				if await wait_until(func(): return str(item.get("state", "")) == "placed" and (not is_instance_valid(room) or not room.settling), 3.0):
 					target = hit
+					break
+				if GameState.mode == "results":
 					break
 				if tries >= 12:
 					break
@@ -1182,10 +1356,14 @@ func _unpack() -> void:
 			_fail("unpack: no valid spot for %s (mount %s)" % [picked, mount])
 			return
 		await click_world(room, target)
-		var ok := await wait_until(func(): return str(item.get("state", "")) == "placed" and not room.settling, 8.0)
+		var ok := await wait_until(func(): return str(item.get("state", "")) == "placed" and (not is_instance_valid(room) or not room.settling), 8.0)
 		if not ok:
+			if await _maybe_thrown():
+				return
 			_fail("unpack: %s never settled (state %s)" % [picked, item.get("state", "")])
 			return
+	if await _maybe_thrown():
+		return
 	# Repairs.
 	for item in GameState.job.get("items", []):
 		var taps := 0
@@ -1381,6 +1559,21 @@ func press(text: String, under: Node = null) -> bool:
 	return false
 
 
+func _controls_under(room: Node, world: Vector3) -> Array:
+	# Any clickable Control sitting over this world point on screen: a
+	# button there would take the press before the room sees it.
+	var cam: Camera3D = room.cam
+	var at: Vector2 = cam.unproject_position(world)
+	var out: Array = []
+	for node in get_tree().root.find_children("*", "Control", true, false):
+		var control := node as Control
+		if control == null or not control.is_visible_in_tree() or control.mouse_filter == Control.MOUSE_FILTER_IGNORE:
+			continue
+		if control.get_global_rect().has_point(at):
+			out.append("%s(%s)" % [control.name if not str(control.name).begins_with("@") else control.get_class(), (control as Button).text if control is Button else ""])
+	return out
+
+
 func click_node(room: Node, uid: String, node: Node3D) -> void:
 	# Probe a few heights so the ray lands on the object's body, then click.
 	var hit := await _probe(room, node, func(h): return h == uid)
@@ -1420,7 +1613,10 @@ func click_world(room: Node, world: Vector3) -> void:
 	await wait(0.05)
 	if OS.get_environment("CO_DEBUG") != "":
 		var hovered := get_viewport().gui_get_hovered_control()
-		print("  click %s -> screen %s hovered=%s pick=%s settling=%s mouse=%s" % [world, screen, hovered.name if hovered else "none", room._pick_uid(), room.settling, get_viewport().get_mouse_position()])
+		var kids: Array = []
+		for kid in app.view_root.get_children():
+			kids.append(kid.name)
+		print("  click %s -> screen %s hovered=%s pick=%s settling=%s pending=%s mode=%s view=%s" % [world, screen, hovered.name if hovered else "none", room._pick_uid() if is_instance_valid(room) else "gone", room.settling if is_instance_valid(room) else "?", room.get("unload_pending") if is_instance_valid(room) else "?", GameState.mode, kids])
 
 
 func wait(sec: float) -> void:

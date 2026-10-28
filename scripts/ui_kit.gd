@@ -405,7 +405,7 @@ const DANA_PORTRAITS := "res://assets/characters/dana/portraits/"
 
 
 static func has_portrait() -> bool:
-	return ResourceLoader.exists(DANA_PORTRAITS + "icons/dana_portrait_circle_128.png")
+	return GameState.character == "dana" and ResourceLoader.exists(DANA_PORTRAITS + "icons/dana_portrait_circle_128.png")
 
 
 static func portrait(size := 44, expression := "") -> Control:
@@ -414,8 +414,8 @@ static func portrait(size := 44, expression := "") -> Control:
 	var path := DANA_PORTRAITS + ("icons/dana_portrait_circle_128.png" if size <= 72 else "icons/dana_portrait_circle_256.png")
 	if expression != "":
 		path = DANA_PORTRAITS + "expressions/dana_portrait_%s.png" % expression
-	if not ResourceLoader.exists(path):
-		return avatar("D", TERRA, size)
+	if not has_portrait() or not ResourceLoader.exists(path):
+		return avatar(GameState.first_name().left(1), TERRA, size)
 	var pic := TextureRect.new()
 	pic.name = "Portrait"
 	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -426,6 +426,58 @@ static func portrait(size := 44, expression := "") -> Control:
 	pic.size = Vector2(size, size)
 	pic.set_meta("expression", expression)
 	return pic
+
+
+static func pop_in(control: Control, seconds := 0.18) -> void:
+	# A card arrives: it fades up and settles from a touch smaller, so
+	# nothing on screen just appears. Safe on anything; it only animates.
+	if control == null or not is_instance_valid(control):
+		return
+	control.modulate = Color(1, 1, 1, 0)
+	var tree := control.get_tree()
+	if tree == null:
+		control.modulate = Color.WHITE
+		return
+	await tree.process_frame
+	if not is_instance_valid(control) or not control.is_inside_tree():
+		return
+	control.pivot_offset = control.size * 0.5
+	control.scale = Vector2(0.965, 0.965)
+	var tw := control.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(control, "modulate", Color.WHITE, seconds).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(control, "scale", Vector2.ONE, seconds).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+static func slide_in(control: Control, from_y := -14.0, seconds := 0.22) -> void:
+	# A bar or toast drops into place from a little above.
+	if control == null or not is_instance_valid(control):
+		return
+	var tree := control.get_tree()
+	if tree == null:
+		return
+	control.modulate = Color(1, 1, 1, 0)
+	await tree.process_frame
+	if not is_instance_valid(control) or not control.is_inside_tree():
+		return
+	var rest := control.position
+	control.position = rest + Vector2(0, from_y)
+	var tw := control.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(control, "position", rest, seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(control, "modulate", Color.WHITE, seconds)
+
+
+static func commas(n: int) -> String:
+	var text := str(absi(n))
+	var out := ""
+	var count := 0
+	for i in range(text.length() - 1, -1, -1):
+		out = text[i] + out
+		count += 1
+		if count % 3 == 0 and i > 0:
+			out = "," + out
+	return ("-" if n < 0 else "") + out
 
 
 static func avatar(initial: String, color: Color, size := 44) -> Panel:

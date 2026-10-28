@@ -53,7 +53,10 @@ func _run() -> void:
 				for child in room.get_children():
 					if bool(child.get_meta("clutter", false)):
 						clutter += 1
-				_check(clutter >= 2, "%s: clutter from the catalogue (%d)" % [venue_id, clutter])
+				var tops := 0
+				for child in room.find_children("ClutterTop_*", "", true, false):
+					tops += 1
+				_check(clutter >= 2, "%s: clutter from the catalogue (%d, %d on top)" % [venue_id, clutter, tops])
 			_check(room.get_node_or_null("Outdoors") != null, "%s: outdoors" % venue_id)
 			_check((room.get("street") as Array).size() >= 4, "%s: passers-by" % venue_id)
 		)

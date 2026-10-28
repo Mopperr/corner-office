@@ -35,16 +35,21 @@ func _ready() -> void:
 	var cat := JobDB.get_job("job_catcafe")
 	if JobDB.base_pay(cat) != 120:
 		failures.append("cat pay")
-	if JobDB.build_job_items(cat).size() != 18:
+	var cat_extra := int(Tuning.get_value("jobs.authored_extra", 0))
+	if JobDB.build_job_items(cat).size() != 18 + cat_extra:
 		failures.append("cat count %d" % JobDB.build_job_items(cat).size())
 	var train := JobDB.get_job("job_train")
-	if JobDB.build_job_items(train).size() != 24:
+	if JobDB.build_job_items(train).size() != 24 + cat_extra:
 		failures.append("train count %d" % JobDB.build_job_items(train).size())
 	if not str(cat.get("brief", "")).contains("Biscuit") and not str(cat.get("brief", "")).contains("box"):
 		failures.append("brief missing")
 	GameState.new_game("dana")
-	if GameState.money != 120 or GameState.office_items.size() != 12:
-		failures.append("new game %d %d" % [GameState.money, GameState.office_items.size()])
+	var own_start := 0
+	for rec in GameState.office_items:
+		if str(rec.get("uid", "")).begins_with("start_"):
+			own_start += 1
+	if GameState.money != 120 or GameState.office_items.size() - own_start != 12 or own_start < 2:
+		failures.append("new game %d %d (%d of her own)" % [GameState.money, GameState.office_items.size(), own_start])
 	var mug := GameState.find_office_item("mug")
 	var notes := GameState.find_office_item("notes")
 	if mug.is_empty() or notes.is_empty():
@@ -347,6 +352,10 @@ func _ready() -> void:
 	failures.append_array(_texture_checks())
 	failures.append_array(_catalog_checks())
 	failures.append_array(_characters_checks())
+	failures.append_array(_player_checks())
+	failures.append_array(await _hospital_checks())
+	failures.append_array(await _books_checks())
+	failures.append_array(await _play_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -1926,7 +1935,7 @@ func _menu_audit() -> Array:
 		["1920x1080", Vector2i(1920, 1080)],
 		["deck", Vector2i(1920, 1200)],
 	]
-	var screens: Array = ["home", "settings", "remap", "intro", "pause", "level", "results", "market", "map", "hud", "drive"]
+	var screens: Array = ["home", "settings", "remap", "intro", "choose", "pause", "level", "results", "market", "books", "map", "hud", "drive"]
 	for screen in screens:
 		for spec in sizes:
 			var view: Dictionary = _audit_open(str(screen), str(spec[0]), spec[1])
@@ -1957,7 +1966,7 @@ func _audit_open(screen: String, tag: String, size: Vector2i) -> Dictionary:
 	var root: Node = null
 	var center_name := ""
 	var center_x_only := false
-	if screen == "home" or screen == "settings" or screen == "remap" or screen == "intro":
+	if screen == "home" or screen == "settings" or screen == "remap" or screen == "intro" or screen == "choose":
 		var menu: Control = load("res://scripts/menu_ui.gd").new()
 		vp.add_child(menu)
 		menu.layout_mode = 0
@@ -1972,6 +1981,9 @@ func _audit_open(screen: String, tag: String, size: Vector2i) -> Dictionary:
 		elif screen == "remap":
 			menu.call("_controls")
 			center_name = "RemapCard"
+		elif screen == "choose":
+			menu.call("_choose")
+			center_name = "ChooseCard"
 		else:
 			menu.call("_intro", "dana")
 			center_name = "Intro"
@@ -2001,13 +2013,15 @@ func _audit_open(screen: String, tag: String, size: Vector2i) -> Dictionary:
 		results.call("_center_card")
 		root = results
 		center_name = "Card"
-	elif screen == "market":
+	elif screen == "market" or screen == "books":
 		GameState.buyer_offer = {"name": "Nia", "item": "plant_fern", "price": 22, "line": "I'll take the fern."}
 		var computer: Control = load("res://scripts/computer_ui.gd").new()
 		vp.add_child(computer)
 		computer.layout_mode = 0
 		computer.position = Vector2.ZERO
 		computer.size = view_size
+		if screen == "books":
+			computer.page = "books"
 		computer.call("_build")
 		root = computer
 		center_name = "Bezel"
@@ -2407,7 +2421,7 @@ func _party_checks() -> Array:
 	var found: Array = []
 	var Party = load("res://scripts/client_party.gd")
 	var pools: Dictionary = Party.load_data()
-	var events := ["greet", "idle", "placed", "placed_good", "wrong_room", "scuff", "tipped", "stacked", "cat", "caught", "talk", "slow", "finish_good", "finish_ok", "finish_bad"]
+	var events := ["greet", "idle", "placed", "placed_good", "wrong_room", "scuff", "tipped", "stacked", "cat", "caught", "talk", "slow", "finish_good", "finish_ok", "finish_bad", "broken", "broken_warn", "broken_last", "attack", "throw"]
 	for mood in Party.MOODS:
 		for event in events:
 			if (((pools.get("moods", {}) as Dictionary).get(mood, {}) as Dictionary).get(event, []) as Array).is_empty():
@@ -2523,6 +2537,253 @@ func _party_checks() -> Array:
 	_bury(play)
 	GameState.job = {}
 	GameState.mode = "office"
+	return found
+
+
+func _player_checks() -> Array:
+	# Five people can play: each with a name, a perk that does something, a
+	# start of their own, and their own name in the lines and toasts.
+	var found: Array = []
+	var people: Array = GameState.playable_characters()
+	if people.size() < 5 or str(people[0].get("id", "")) != "dana":
+		found.append("playable characters: %d, first %s" % [people.size(), people[0].get("id", "?") if people.size() > 0 else "none"])
+	GameState.new_game("hank")
+	if GameState.first_name() != "Hank" or GameState.money != 100 or not GameState.perk("road_legs") or GameState.perk("spreadsheet_brain"):
+		found.append("Hank's start: %s $%d perk %s" % [GameState.first_name(), GameState.money, GameState.perk_name()])
+	var own := 0
+	for rec in GameState.office_items:
+		if str(rec.get("uid", "")).begins_with("start_"):
+			own += 1
+	if own < 2:
+		found.append("Hank's own things did not come to the garage (%d)" % own)
+	var welcomed := false
+	for mail in GameState.inbox:
+		if "Hank" in str(mail.get("body", "")) or str(mail.get("id", "")).begins_with("welcome"):
+			welcomed = true
+	if not welcomed:
+		found.append("no welcome mail for Hank")
+	var Party = load("res://scripts/client_party.gd")
+	var greet: String = Party.line("warm", "greet", 2)
+	if "Dana" in greet:
+		found.append("the client still says Dana to Hank: %s" % greet)
+	if UIKit.has_portrait():
+		found.append("Hank wears Dana's portrait")
+	GameState.new_game("bea")
+	if GameState.repair_taps_for(2) != 1 or not GameState.perk("handmade_touch"):
+		found.append("Bea's hands do not mend in one tap")
+	GameState.new_game("sol")
+	if not GameState.job_available(JobDB.get_job("job_catcafe")):
+		found.append("Sol's cat cafe job is not open from the start")
+	GameState.new_game("milo")
+	if GameState.generated_jobs.size() < 3:
+		found.append("Milo's board has only %d jobs" % GameState.generated_jobs.size())
+	GameState.new_game("dana")
+	if GameState.first_name() != "Dana" or GameState.money != 120 or not GameState.perk("spreadsheet_brain") or GameState.repair_taps_for(2) == 1:
+		found.append("Dana's start changed")
+	return found
+
+
+func _hospital_checks() -> Array:
+	# Out the window: the job ends with part pay and a bill, the ward holds
+	# you for nights by the floor you fell from, forgiving pays back and
+	# calms the next owners, a grudge doubles the next claim. The ward is a
+	# real room with a bed, and the throw itself plays out and ends in results.
+	var found: Array = []
+	var JobGen = load("res://scripts/job_gen.gd")
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	var made: Dictionary = JobGen.board(3, 1, 1, 2, 3)
+	var job: Dictionary = made["jobs"][0]
+	for candidate in made["jobs"]:
+		if (candidate.get("party", []) as Array).size() >= 2:
+			job = candidate
+	GameState.generated_jobs = [job]
+	GameState.generated_drives = made["drives"]
+	GameState.start_job(str(job["id"]))
+	var items: Array = GameState.job.get("items", [])
+	for i in mini(4, items.size()):
+		items[i]["state"] = "placed"
+	var jar := GameState.money
+	var pay: Dictionary = GameState.thrown_out(1)
+	var terms: Dictionary = GameState.fall_terms(1)
+	if not bool(pay.get("thrown", false)) or GameState.mode != "results" or not GameState.job.is_empty():
+		found.append("thrown out: mode %s, job empty %s" % [GameState.mode, GameState.job.is_empty()])
+	if GameState.hospital.get("days", 0) != terms["days"] or int(terms["days"]) <= int(GameState.fall_terms(0)["days"]):
+		found.append("upstairs stay %s, wanted %s and longer than downstairs" % [GameState.hospital.get("days", 0), terms["days"]])
+	if GameState.money != jar + int(pay.get("base", 0)) - int(terms["bill"]) or int(pay.get("base", 0)) <= 0:
+		found.append("thrown pay: jar %d from %d, part %d, bill %d" % [GameState.money, jar, pay.get("base", 0), terms["bill"]])
+	if not GameState.in_hospital():
+		found.append("not in hospital after the fall")
+	var stars := GameState.rep_stars
+	var before := GameState.money
+	var chosen: Dictionary = GameState.choose_recovery("forgive")
+	if chosen.has("error") or GameState.rep_stars != stars + 1 or GameState.money <= before or int(GameState.stats.get("forgiven", 0)) != 1:
+		found.append("forgive: %s stars %d→%d money %d→%d" % [chosen.get("error", ""), stars, GameState.rep_stars, before, GameState.money])
+	if not GameState.choose_recovery("revenge").has("error"):
+		found.append("decided twice")
+	if GameState.temper_limit() != int(Tuning.get_value("handling.temper", 3)) + 1:
+		found.append("forgiving did not calm the next owner: %d" % GameState.temper_limit())
+	var nights := 0
+	while GameState.in_hospital() and nights < 10:
+		GameState.hospital_sleep()
+		nights += 1
+	if nights != int(terms["days"]) or GameState.mode != "office" or not GameState.hospital.is_empty():
+		found.append("ward nights %d (wanted %s), then mode %s" % [nights, terms["days"], GameState.mode])
+	var mails := 0
+	for mail in GameState.inbox:
+		var id := str(mail.get("id", ""))
+		if id.begins_with("ward_") or id.begins_with("flowers_") or id.begins_with("discharged_"):
+			mails += 1
+	if mails != 3:
+		found.append("ward letters %d of 3" % mails)
+	SaveManager.save_game()
+	# The grudge: ground floor, revenge, and the next shove is answered with a doubled claim.
+	# (Each night in the ward refreshes the board, so the job goes back on it.)
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	if GameState.job.is_empty():
+		found.append("could not start the job again for the grudge")
+	GameState.thrown_out(0)
+	if int(GameState.hospital.get("days", 0)) != int(GameState.fall_terms(0)["days"]):
+		found.append("ground-floor stay %s" % GameState.hospital.get("days", 0))
+	GameState.choose_recovery("revenge")
+	if not GameState.has_grudge():
+		found.append("no grudge after choosing revenge")
+	SaveManager.save_game()
+	GameState.grudge = {}
+	GameState.hospital = {}
+	if not SaveManager.load_game() or not GameState.has_grudge() or not GameState.in_hospital():
+		found.append("ward and grudge did not survive a save")
+	while GameState.in_hospital():
+		GameState.hospital_sleep()
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	GameState.settle_grudge()
+	if GameState.has_grudge() or not bool(GameState.job.get("payback", false)):
+		found.append("the grudge did not settle")
+	var claim: Dictionary = GameState.sue_owner()
+	if int(claim.get("amount", 0)) < int(Tuning.get_value("handling.sue_min", 1000)) * int(Tuning.get_value("hospital.payback_mult", 2)):
+		found.append("payback claim %d not doubled" % int(claim.get("amount", 0)))
+	# The payback moves from the clipboard: six of them, each one shot; the
+	# review takes a star, the invoice costs its fee, moving them again
+	# posts a doubled job that outlives the board and settles when done.
+	GameState.job = {}
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	GameState.thrown_out(0)
+	GameState.choose_recovery("revenge")
+	while GameState.in_hospital():
+		GameState.hospital_sleep()
+	if GameState.payback_moves().size() != 6:
+		found.append("payback moves %d" % GameState.payback_moves().size())
+	var rep_before := GameState.rep_stars
+	var review: Dictionary = GameState.do_payback("review")
+	if review.has("error") or GameState.rep_stars != rep_before + 1 or GameState.has_grudge():
+		found.append("review move: %s rep %d→%d grudge %s" % [review.get("error", ""), rep_before, GameState.rep_stars, GameState.has_grudge()])
+	if not GameState.do_payback("egg").has("error"):
+		found.append("a settled grudge still took a move")
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	GameState.thrown_out(1)
+	GameState.choose_recovery("revenge")
+	while GameState.in_hospital():
+		GameState.hospital_sleep()
+	GameState.money = 500
+	var again: Dictionary = GameState.do_payback("move_again")
+	if again.has("error") or bool(again.get("settled", true)) or not GameState.has_grudge():
+		found.append("move again: %s settled %s" % [again.get("error", ""), again.get("settled", "?")])
+	var posted: Dictionary = {}
+	for row in GameState.generated_jobs:
+		if bool(row.get("payback", false)):
+			posted = row
+	if posted.is_empty():
+		found.append("no payback job on the board")
+	else:
+		GameState.refresh_board()
+		var still := false
+		for row in GameState.generated_jobs:
+			if str(row.get("id", "")) == str(posted.get("id", "")):
+				still = true
+		if not still:
+			found.append("the payback job fell off the board overnight")
+		if JobDB.base_pay(posted) < JobDB.base_pay(job) * 2:
+			found.append("payback job pays %d, the move paid %d" % [JobDB.base_pay(posted), JobDB.base_pay(job)])
+		GameState.start_job(str(posted["id"]))
+		for item in GameState.job.get("items", []):
+			item["state"] = "placed"
+		for rec in GameState.job.get("owner_items", []):
+			if bool(rec.get("pocketable", true)):
+				GameState.pocket_owner_item(str(rec.get("uid", "")))
+		if bool(GameState.job.get("caught_pocketing", false)):
+			found.append("seen pocketing on the payback job")
+		var done_pay: Dictionary = GameState.finish_job()
+		if not bool(done_pay.get("payback_job", false)) or GameState.has_grudge():
+			found.append("finishing the payback job did not close the grudge")
+	if not GameState.do_payback("parcel").has("error"):
+		found.append("payback after the grudge closed")
+	# The ward as a room: the bed, the chart, the choice, and a night.
+	GameState.job = {}
+	GameState.hospital = {"days": 2, "total": 2, "bill": 140, "floor": 0, "client": "The Okafors", "job_title": "a job", "choice": "", "injury": "a cracked rib", "window": "a ground-floor window", "refund": 0}
+	GameState.set_mode("hospital")
+	var ward: Node = RoomLib.new()
+	add_child(ward)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if ward.get_node_or_null("Ward/PlayerBed") == null or ward.get_node_or_null("Ward/Visitor") == null or ward.get_node_or_null("Ward/DripStand") == null:
+		found.append("ward furniture missing")
+	if ward.player == null or not bool(ward.player.get_meta("down", false)) or ward.player.position.y < 0.4:
+		found.append("Dana is not lying in the bed")
+	var hud: Node = ward.get_node_or_null("HUD")
+	if hud == null or hud.get_node_or_null("HospitalCard") == null or hud.find_child("HospitalForgive", true, false) == null or hud.find_child("HospitalRevenge", true, false) == null:
+		found.append("no patient chart with the choice")
+	var windows := 0
+	for child in ward.get_children():
+		if child.has_meta("window_spot"):
+			windows += 1
+	if windows == 0:
+		found.append("the ward has no window")
+	await get_tree().create_timer(2.6).timeout
+	if ward.player.get_node_or_null("Thought") == null and ward.find_child("Tear", false, false) == null:
+		found.append("no tears or thoughts in the ward")
+	ward.call("_ward_choose", "revenge")
+	await get_tree().process_frame
+	if str(GameState.hospital.get("choice", "")) != "revenge":
+		found.append("the chart button did not decide")
+	_bury(ward)
+	# The throw itself: an owner at the end of their temper, a window in the
+	# room, and the job ends on the pavement.
+	GameState.grudge = {}
+	GameState.hospital = {}
+	GameState.set_mode("office")
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	for box in GameState.job.get("boxes", []):
+		box["sealed"] = true
+	GameState.set_mode("job_unpack")
+	var play: Node = RoomLib.new()
+	add_child(play)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var flag := {"ended": false}
+	play.request_results.connect(func(): flag["ended"] = true)
+	if play.party == null or play.party.members.is_empty():
+		found.append("no owner to do the throwing")
+	elif (play.call("_window_exit") as Dictionary).is_empty():
+		found.append("no window to be thrown through at %s" % play.venue.get("id", "?"))
+	else:
+		play.call("_owner_attack", true)
+		var waited := 0.0
+		while not bool(flag["ended"]) and waited < 9.0:
+			await get_tree().create_timer(0.25).timeout
+			waited += 0.25
+		if not bool(flag["ended"]):
+			found.append("the throw never ended in results (mode %s, thrown %s)" % [GameState.mode, play.thrown_pending])
+		elif not bool(GameState.payout.get("thrown", false)) or not GameState.in_hospital():
+			found.append("thrown but no ward: payout %s hospital %s" % [GameState.payout.get("title", ""), GameState.hospital])
+		elif play.player == null or play.call("_in_room_world", play.player.position.x, play.player.position.z):
+			found.append("Dana landed inside the room")
+	_bury(play)
+	GameState.new_game("dana")
 	return found
 
 
@@ -2671,10 +2932,82 @@ func _catalog_checks() -> Array:
 	for seed in range(1, 60):
 		for candidate in JobGen.board(seed, 1 + seed % 5, seed % 3, seed % 7, 3)["jobs"]:
 			recipes += 1
-			if JobGen.recipe_slots(candidate.get("recipe", [])) > 8.0:
+			if JobGen.recipe_slots(candidate.get("recipe", [])) > JobGen.truck_slots():
 				over += 1
 	if over > 0:
 		found.append("%d of %d board recipes overflow the truck" % [over, recipes])
+	# Full moves: the truck takes ten places, six to a box, a board job has at
+	# least eighteen pieces, and an authored job carries the place's extras.
+	if GameState.truck_slots() < 10 or GameState.floor_slots() < 6 or GameState.per_box() < 6:
+		found.append("truck %d/%d, %d a box" % [GameState.truck_slots(), GameState.floor_slots(), GameState.per_box()])
+	var smallest := 999
+	for candidate in JobGen.board(4, 1, 0, 0, 3)["jobs"]:
+		var count := 0
+		for group in candidate.get("recipe", []):
+			count += int(group.get("count", 1))
+		smallest = mini(smallest, count)
+	if smallest < 18:
+		found.append("a first-day board job has only %d pieces" % smallest)
+	var cafe_items: Array = JobDB.build_job_items(JobDB.get_job("job_catcafe"))
+	var cafe_extra := 0
+	for item in cafe_items:
+		if ItemDB.catalog_items.has(str(item.get("item_id", ""))):
+			cafe_extra += 1
+	if cafe_items.size() < 28 or cafe_extra < 10:
+		found.append("the cat cafe move has %d pieces, %d from the catalogue" % [cafe_items.size(), cafe_extra])
+	if JobGen.recipe_slots(JobDB.get_job("job_catcafe").get("recipe", [])) + float(cafe_extra) / float(GameState.per_box()) > JobGen.truck_slots():
+		found.append("the cat cafe move overflows the truck")
+	# The bed grid: fill from the front corner, nothing on nothing, heavy and
+	# wrapped on the floor; weights add up; a loaded box is crushed on the drive.
+	GameState.job = {"def": {"id": "bed_test", "venue": "cafe"}, "items": [
+		{"uid": "g0", "item_id": "cafe_mug", "name": "Glass", "state": "boxed", "box": 0, "damage": 0, "fragile": true, "weight": 0.5},
+		{"uid": "g1", "item_id": "cafe_mug", "name": "Glass 2", "state": "boxed", "box": 0, "damage": 0, "fragile": true, "weight": 0.5},
+		{"uid": "h0", "item_id": "tool_box", "name": "Anvil", "state": "boxed", "box": 1, "damage": 0, "weight": 30.0},
+		{"uid": "l0", "item_id": "cushion", "name": "Cushion", "state": "boxed", "box": 2, "damage": 0, "weight": 1.0},
+	], "boxes": [
+		{"id": 0, "sealed": true, "padded": false, "slot": -1}, {"id": 1, "sealed": true, "padded": false, "slot": -1}, {"id": 2, "sealed": true, "padded": false, "slot": -1},
+	], "next_box": 3, "condition": 100, "carried": []}
+	if GameState.open_slots() != [0, 1]:
+		found.append("open places at the start: %s" % str(GameState.open_slots()))
+	if GameState.load_box_into(0, 6) == "" or GameState.load_box_into(0, 2) == "":
+		found.append("a box went on nothing or behind an empty row")
+	if GameState.load_box_into(0, 0) != "":
+		found.append("the first box would not go in the front corner")
+	if not (GameState.open_slots().has(2) and GameState.open_slots().has(6)):
+		found.append("after the corner, the row behind and the layer above do not open: %s" % str(GameState.open_slots()))
+	if absf(GameState.box_weight(1) - 30.0) > 0.01 or absf(GameState.box_weight(0) - 1.0) > 0.01:
+		found.append("box weights %.1f %.1f" % [GameState.box_weight(0), GameState.box_weight(1)])
+	if GameState.load_box_into(1, 6) != "":
+		found.append("the anvil box would not stack on the glass: %s" % GameState.load_box_into(1, 6))
+	if GameState.load_above(0) < 29.0 or GameState.crush_warning(1) == "":
+		found.append("no load counted on the glass box (%.1f)" % GameState.load_above(0))
+	if GameState.slot_can_unload(0) == "" or GameState.slot_can_unload(6) != "":
+		found.append("unload order wrong: bottom %s / top %s" % [GameState.slot_can_unload(0), GameState.slot_can_unload(6)])
+	if GameState.unload_order() != [1, 0]:
+		found.append("unload order %s" % str(GameState.unload_order()))
+	GameState.apply_drive_result({"condition": 90})
+	var glass_hurt := int(GameState.job_item("g0").get("damage", 0)) + int(GameState.job_item("g1").get("damage", 0))
+	if glass_hurt == 0 or not bool(GameState.job_item("g0").get("crushed", false)):
+		found.append("the glass under 30 kg came through a smooth drive untouched")
+	if int(GameState.job_item("l0").get("damage", 0)) != 0:
+		found.append("the cushion on the floor was hurt on a smooth drive")
+	if absf(ItemDB.weight(ItemDB.get_item("cafe_mug"))) > 2.0 or ItemDB.weight(ItemDB.get_item("sofa")) < 40.0:
+		found.append("weights off: mug %.1f sofa %.1f" % [ItemDB.weight(ItemDB.get_item("cafe_mug")), ItemDB.weight(ItemDB.get_item("sofa"))])
+	var floor_over := 0
+	for seed in range(1, 40):
+		for candidate in JobGen.board(seed, 2 + seed % 4, seed % 3, seed % 9, 3)["jobs"]:
+			if JobGen.recipe_floor_need(candidate.get("recipe", [])) > GameState.floor_slots():
+				floor_over += 1
+	if floor_over > 0:
+		found.append("%d recipes need more floor places than the truck has" % floor_over)
+	# Something of the family's sits on one of their tables.
+	var on_top := 0
+	for home_id in ["detached_a", "villa_a", "terrace_a", "semi_b"]:
+		for rec in Homes.owner_layout(Homes.venue_for(home_id), 5):
+			if float(rec.get("y", 0.0)) > 0.2:
+				on_top += 1
+	if on_top == 0:
+		found.append("nothing of the family's sits on a table")
 	if not FileAccess.file_exists("res://docs/ITEMS.md") or not FileAccess.file_exists("res://tools/check_items.py"):
 		found.append("catalogue docs or checker missing")
 	# The hook for the team's Blender models: nothing yet, so the primitives build.
@@ -2816,6 +3149,250 @@ func _handling_checks() -> Array:
 			letter = true
 	if countered > 0 and not letter:
 		found.append("no solicitor's letter after a counter-suit")
+	return found
+
+
+func _play_checks() -> Array:
+	# The replay layer: modifiers roll onto the board and lift the pay, a
+	# fragile lot makes every piece fragile, the heirloom is named, no
+	# helper hides the helpers, the wish and the streak pay at the end,
+	# the league table moves overnight and settles weekly, gear changes a
+	# rule each, the journal fills, and a mid-job event plays in the room.
+	var found: Array = []
+	var Extras = load("res://scripts/extras.gd")
+	var JobGen = load("res://scripts/job_gen.gd")
+	if Extras.gear_list().size() != 6 or Extras.achievement_list().size() < 30:
+		found.append("gear %d, journal %d" % [Extras.gear_list().size(), Extras.achievement_list().size()])
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	var with_mods := 0
+	var with_wish := 0
+	for day in range(1, 13):
+		var made: Dictionary = JobGen.board(7, day, 1, 2, 3)
+		for job in made["jobs"]:
+			if not (job.get("modifiers", []) as Array).is_empty():
+				with_mods += 1
+				if JobDB.base_pay(job) <= int(job.get("narrative_base", 0)) and Extras.job_mult(job) > 1.0:
+					found.append("modifiers did not lift the pay of %s" % job.get("id", "?"))
+			if not (job.get("wish", {}) as Dictionary).is_empty():
+				with_wish += 1
+	if with_mods < 8 or with_wish < 8:
+		found.append("over 36 board jobs only %d had modifiers and %d a wish" % [with_mods, with_wish])
+	var made: Dictionary = JobGen.board(3, 1, 1, 2, 3)
+	var job: Dictionary = made["jobs"][0]
+	job["modifiers"] = ["fragile_lot", "no_helper", "heirloom", "nosy", "rush"]
+	job["wish"] = {"id": "no_drops", "text": "Please don't drop anything."}
+	GameState.generated_jobs = [job]
+	GameState.generated_drives = made["drives"]
+	GameState.start_job(str(job["id"]))
+	var boxable := 0
+	var fragile := 0
+	for item in GameState.job.get("items", []):
+		if not bool(item.get("nobox", false)):
+			boxable += 1
+			if bool(item.get("fragile", false)):
+				fragile += 1
+	if fragile != boxable or boxable == 0:
+		found.append("fragile lot: %d of %d fragile" % [fragile, boxable])
+	if str(GameState.job.get("heirloom", "")) == "" or GameState.job_item(str(GameState.job.get("heirloom", ""))).is_empty():
+		found.append("no heirloom named")
+	if not GameState.no_helper():
+		found.append("no helper not read from the job")
+	for item in GameState.job.get("items", []):
+		item["state"] = "placed"
+	GameState.job["drive_time"] = 5.0
+	GameState.job["condition"] = 100
+	var pay: Dictionary = GameState.finish_job()
+	var expect_extra := int(Tuning.get_value("play.heirloom_bonus", 60)) + int(Tuning.get_value("play.nosy_bonus", 25)) + int(Tuning.get_value("play.wish_tip", 20))
+	if int(pay.get("extras", 0)) != expect_extra or not bool((pay.get("rush", {}) as Dictionary).get("made", false)) or not bool((pay.get("wish", {}) as Dictionary).get("met", false)):
+		found.append("modifier payout %s, wanted %d: rush %s wish %s heirloom %s" % [pay.get("extras", "?"), expect_extra, pay.get("rush", {}), pay.get("wish", {}), pay.get("heirloom", {})])
+	if GameState.streak != 1 or int(pay.get("league_points", 0)) < 3:
+		found.append("streak %d, league points %s" % [GameState.streak, pay.get("league_points", "?")])
+	if not Extras.unlocked("first_job") or not Extras.unlocked("wish") or not Extras.unlocked("heirloom") or not Extras.unlocked("rush"):
+		found.append("journal missed the first job: %s" % str(GameState.achievements))
+	# A second clean job: the streak pays; a slow rush loses its bonus.
+	GameState.generated_jobs = [job]
+	job["modifiers"] = ["rush"]
+	job["wish"] = {}
+	GameState.start_job(str(job["id"]))
+	for item in GameState.job.get("items", []):
+		item["state"] = "placed"
+	GameState.job["drive_time"] = 9999.0
+	GameState.job["condition"] = 100
+	var pay2: Dictionary = GameState.finish_job()
+	if GameState.streak != 2 or int((pay2.get("streak", {}) as Dictionary).get("amount", 0)) != 2 * int(Tuning.get_value("play.streak_per", 5)):
+		found.append("second clean job streak %d: %s" % [GameState.streak, pay2.get("streak", {})])
+	if bool((pay2.get("rush", {}) as Dictionary).get("made", true)) or int(pay2.get("rush_off", 0)) <= 0:
+		found.append("slow rush kept its bonus: %s" % pay2.get("rush", {}))
+	# The league: rivals move overnight, the table settles on the seventh night with a letter.
+	var rivals_before: Dictionary = (GameState.league.get("rivals", {}) as Dictionary).duplicate()
+	GameState.day = 5
+	GameState.advance_day()
+	var moved := false
+	for name in rivals_before.keys():
+		if int(GameState.league["rivals"][name]) != int(rivals_before[name]):
+			moved = true
+	GameState.advance_day()
+	var settled := false
+	for mail in GameState.inbox:
+		if str(mail.get("id", "")).begins_with("league_w"):
+			settled = true
+	if not moved or not settled or int(GameState.league.get("week", 1)) != 2 or Extras.standings().size() != 4:
+		found.append("league night: moved %s settled %s week %s" % [moved, settled, GameState.league.get("week", "?")])
+	# Gear, one rule each.
+	GameState.money = 1000
+	var plain_box := GameState.per_box()
+	var plain_break: float = GameState.break_chance({"fragile": false})
+	var plain_line: float = Extras.crush_threshold()
+	for id in ["tape_gun", "gloves", "racks", "dolly", "blankets", "charm"]:
+		if Extras.buy_gear(id).has("error"):
+			found.append("could not buy %s" % id)
+	if GameState.per_box() != plain_box + 2 or GameState.break_chance({"fragile": false}) >= plain_break or Extras.crush_threshold() != plain_line + 8.0 or Extras.load_mult() != 0.8 or Extras.wrap_mult() != 0.6:
+		found.append("gear rules: box %d→%d break %.3f→%.3f line %.0f→%.0f" % [plain_box, GameState.per_box(), plain_break, GameState.break_chance({"fragile": false}), plain_line, Extras.crush_threshold()])
+	if not Extras.buy_gear("dolly").has("error"):
+		found.append("bought the dolly twice")
+	Extras.check_achievements()
+	if not Extras.unlocked("kitted"):
+		found.append("the journal missed the full kit")
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	var first_item: Dictionary = GameState.job.get("items", [])[0]
+	if GameState.roll_break(first_item, 0.99) or not bool(GameState.job.get("charm_used", false)):
+		found.append("the charm did not catch the first slip")
+	if not GameState.roll_break(first_item, 0.99):
+		found.append("the charm caught a second slip")
+	SaveManager.save_game()
+	GameState.gear = []
+	GameState.streak = 0
+	if not SaveManager.load_game() or GameState.gear.size() != 6 or GameState.streak != 2 or GameState.achievements.size() < 5:
+		found.append("the replay layer did not survive a save: gear %d streak %d journal %d" % [GameState.gear.size(), GameState.streak, GameState.achievements.size()])
+	# Mid-job: the kettle, and a box that isn't theirs.
+	GameState.generated_jobs = [job]
+	GameState.start_job(str(job["id"]))
+	for box in GameState.job.get("boxes", []):
+		box["sealed"] = true
+	GameState.set_mode("job_unpack")
+	var play: Node = RoomLib.new()
+	add_child(play)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	play.call("_job_event", "tea")
+	await get_tree().process_frame
+	var hud: Node = play.get_node_or_null("HUD")
+	if hud == null or hud.find_child("TeaYes", true, false) == null:
+		found.append("no tea card")
+	else:
+		var temper_before: int = play.party.temper if play.party else 0
+		play.party.temper = 2
+		(hud.find_child("TeaYes", true, false) as Button).pressed.emit()
+		if play.party.temper != 1 or not bool(GameState.job.get("tea", false)):
+			found.append("the tea did not calm anyone (temper %d from %d)" % [play.party.temper, temper_before])
+	GameState.job["event_done"] = false
+	var jar := GameState.money
+	play.call("_job_event", "stray")
+	await get_tree().process_frame
+	if play.get_node_or_null("Items/StrayBox") == null:
+		found.append("no stray box by the door")
+	else:
+		play.call("_unpack_click", "stray")
+		if GameState.money != jar + int(Tuning.get_value("play.stray_box_pay", 15)):
+			found.append("the stray box paid %d" % (GameState.money - jar))
+	var computer: Control = load("res://scripts/computer_ui.gd").new()
+	add_child(computer)
+	for sheet in ["gear", "journal", "record", "ledger"]:
+		computer.page = "books"
+		computer.books_tab = sheet
+		computer.call("_show_page")
+		await get_tree().process_frame
+		if computer.find_child("Books_" + sheet, true, false) == null:
+			found.append("Books sheet %s did not build" % sheet)
+		if sheet == "gear" and computer.find_child("Gear_dolly", true, false) == null:
+			found.append("gear sheet empty")
+		if sheet == "journal" and computer.find_child("JournalPanel", true, false) == null:
+			found.append("journal sheet empty")
+	_bury(computer)
+	_bury(play)
+	GameState.new_game("dana")
+	return found
+
+
+func _books_checks() -> Array:
+	# The books: twenty tips, three accountants; an honest one paid in full
+	# finds savings and never skims, a greedy one paid short does, the jar
+	# only says sundries until the audit names them, firing gets half back;
+	# an unpaid wage sends them off; the ledger adds the days up and the
+	# Books page builds with the ledger, the record and the accountant.
+	var found: Array = []
+	var Books = load("res://scripts/books.gd")
+	if Books.tips().size() < 20:
+		found.append("only %d tips" % Books.tips().size())
+	if Books.candidates().size() != 3:
+		found.append("%d accountants" % Books.candidates().size())
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	GameState.money = 2000
+	var hired: Dictionary = Books.hire("priya", 45)
+	if hired.has("error") or not Books.hired() or Books.mood() != "happy":
+		found.append("hiring Priya: %s mood %s" % [hired.get("error", ""), Books.mood()])
+	GameState.day_log["job_pay"] = 300
+	var jar := GameState.money
+	var night: Dictionary = Books.nightly(GameState.day_summary(GameState.day))
+	if int(night.get("saved", 0)) <= 0 or int(night.get("sundries", 0)) != 0 or GameState.money != jar - 45 + int(night.get("saved", 0)):
+		found.append("Priya's night: %s jar %d from %d" % [night, GameState.money, jar])
+	var clean: Dictionary = Books.audit()
+	if not bool(clean.get("clean", false)):
+		found.append("Priya's books not clean: %s" % clean)
+	Books.fire()
+	if Books.hired():
+		found.append("Priya would not go")
+	var short: Dictionary = Books.hire("len", 5)
+	if short.has("error") or Books.mood() == "happy":
+		found.append("hiring Len short: %s mood %s" % [short.get("error", ""), Books.mood()])
+	var skimmed := 0
+	for i in 40:
+		GameState.day_log["job_pay"] = 100
+		var n: Dictionary = Books.nightly(GameState.day_summary(GameState.day))
+		skimmed += int(n.get("sundries", 0))
+		if bool(n.get("left", false)):
+			found.append("Len left while the jar was full")
+			break
+	if skimmed <= 0 or int(GameState.accountant.get("skimmed", 0)) != skimmed or int(GameState.stats.get("skimmed_total", 0)) != skimmed:
+		found.append("Len skimmed %d (record %s)" % [skimmed, GameState.accountant.get("skimmed", "?")])
+	var money_before := GameState.money
+	var caught: Dictionary = Books.audit()
+	if bool(caught.get("clean", true)) or int(caught.get("taken", 0)) != skimmed or Books.mood() != "caught" or GameState.money != money_before - Books.audit_cost():
+		found.append("the audit missed Len: %s" % caught)
+	var got_back := int(Books.fire().get("back", 0))
+	if got_back != skimmed / 2 or Books.hired():
+		found.append("firing Len returned %d of %d" % [got_back, skimmed])
+	Books.hire("ferdy", 60)
+	GameState.money = 10
+	var gone: Dictionary = Books.nightly(GameState.day_summary(GameState.day))
+	if not bool(gone.get("left", false)) or Books.hired():
+		found.append("Ferdy stayed without a wage")
+	SaveManager.save_game()
+	GameState.money = 500
+	Books.hire("priya", 50)
+	GameState.day_log["job_pay"] = 120
+	GameState.day_log["jobs"] = 1
+	GameState.advance_day()
+	if int(GameState.ledger.get("job_pay", 0)) != 120 or int(GameState.ledger.get("days", 0)) != 1 or GameState.ledger_days.size() != 1 or int(GameState.ledger.get("wages", 0)) != 50:
+		found.append("ledger after a day: %s" % GameState.ledger)
+	SaveManager.save_game()
+	GameState.ledger = {}
+	GameState.accountant = {}
+	if not SaveManager.load_game() or not Books.hired() or int(GameState.ledger.get("days", 0)) != 1:
+		found.append("the books did not survive a save")
+	var computer: Control = load("res://scripts/computer_ui.gd").new()
+	add_child(computer)
+	computer.page = "books"
+	computer.books_tab = "staff"
+	computer.call("_show_page")
+	await get_tree().process_frame
+	if computer.find_child("AccountantPanel", true, false) == null or computer.find_child("AuditBooks", true, false) == null or computer.find_child("Books_ledger", true, false) == null:
+		found.append("the Books page is missing its panels")
+	_bury(computer)
+	GameState.new_game("dana")
 	return found
 
 
@@ -3144,7 +3721,7 @@ func _review_fixes() -> Array:
 		],
 		"boxes": [
 			{"id": 0, "padded": false, "slot": 0},
-			{"id": 1, "padded": false, "slot": 5},
+			{"id": 1, "padded": false, "slot": GameState.floor_slots() + 1},
 		],
 	}
 	GameState._assign_damage()

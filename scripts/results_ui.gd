@@ -28,6 +28,19 @@ func _ready() -> void:
 		_center_card()
 		_reveal()
 		return
+	if bool(pay.get("thrown", false)):
+		lines = [
+			"%s put you through %s." % [pay.get("client", "The client"), pay.get("window", "the window")],
+			"Placed before the fall  %d/%d  +$%d" % [int(pay.get("placed", 0)), int(pay.get("total_items", 0)), int(pay.get("base", 0))],
+			"St. Bridget's, %d night%s  −$%d" % [int(pay.get("days", 1)), "" if int(pay.get("days", 1)) == 1 else "s", int(pay.get("hospital_bill", 0))],
+			"The nurse says: %s." % pay.get("injury", "rest"),
+			"The ward is quiet. Think about what comes next.",
+			"Jar: $%d." % GameState.money,
+		]
+		_build()
+		_center_card()
+		_reveal()
+		return
 	lines = [
 		"Base pay  $%d" % int(pay.get("base", 0)),
 		"Box tip  $%d" % int(pay.get("box_tip", 0)),
@@ -53,6 +66,8 @@ func _ready() -> void:
 			lines.append("Not quite: %s." % ", ".join(wrong.slice(0, 2)))
 	if int(pay.get("caught_cut", 0)) > 0:
 		lines.append("Seen pocketing  −$%d and a rep star" % int(pay.get("caught_cut", 0)))
+	if int(pay.get("crushed", 0)) > 0:
+		lines.append("Crushed under the load  %d piece%s" % [int(pay.get("crushed", 0)), "" if int(pay.get("crushed", 0)) == 1 else "s"])
 	if int(pay.get("broken", 0)) > 0:
 		lines.append("Dropped  %d piece%s" % [int(pay.get("broken", 0)), "" if int(pay.get("broken", 0)) == 1 else "s"])
 	if int(pay.get("sue_won", 0)) > 0:
@@ -63,6 +78,25 @@ func _ready() -> void:
 		lines.append("Shoved over, let it go")
 	elif int(pay.get("pocketed", 0)) > 0:
 		lines.append("In the bag  %d piece%s, about $%d to Sal" % [int(pay.get("pocketed", 0)), "" if int(pay.get("pocketed", 0)) == 1 else "s", int(pay.get("loot_value", 0))])
+	var rush: Dictionary = pay.get("rush", {})
+	if not rush.is_empty():
+		lines.append("Rush job, %ds of %ds: made it" % [int(rush.get("took", 0)), int(rush.get("budget", 0))] if bool(rush.get("made", false)) else "Rush job, %ds of %ds: too slow  −$%d" % [int(rush.get("took", 0)), int(rush.get("budget", 0)), int(pay.get("rush_off", 0))])
+	var heirloom: Dictionary = pay.get("heirloom", {})
+	if not heirloom.is_empty():
+		lines.append(("The %s arrived whole  +$%d" if bool(heirloom.get("whole", false)) else "The %s came marked  −$%d and a rep star") % [str(heirloom.get("name", "heirloom")).to_lower(), int(heirloom.get("amount", 0))])
+	var nosy: Dictionary = pay.get("nosy", {})
+	if not nosy.is_empty():
+		lines.append("The neighbour saw nothing to report  +$%d" % int(nosy.get("amount", 0)) if bool(nosy.get("clean", false)) else "The neighbour saw you at the bag")
+	var wish: Dictionary = pay.get("wish", {})
+	if not wish.is_empty():
+		lines.append(("As asked  +$%d" % int(wish.get("amount", 0))) if bool(wish.get("met", false)) else "They asked: \"%s\" Not this time." % wish.get("text", ""))
+	var streak: Dictionary = pay.get("streak", {})
+	if int(streak.get("count", 0)) >= 2:
+		lines.append("Clean run ×%d  +$%d" % [int(streak.get("count", 0)), int(streak.get("amount", 0))])
+	elif bool(streak.get("broken", false)):
+		lines.append("The clean run ends here.")
+	if int(pay.get("league_points", 0)) > 0:
+		lines.append("Movers' League  +%d points" % int(pay.get("league_points", 0)))
 	if int(pay.get("life_extra", 0)) > 0:
 		lines.append("Your own people  +$%d" % int(pay.get("life_extra", 0)))
 	if int(pay.get("split_loss", 0)) > 0:
@@ -102,7 +136,7 @@ func _ready() -> void:
 		lines.append("%s finds the scuff, shrugs, and puts the kettle on." % client)
 	else:
 		lines.append("%s says 'well' in a way that means several things." % client)
-	lines.append("Jobs done: %d.  Jar: $%d." % [GameState.jobs_done, GameState.money])
+	lines.append("Jobs done: %d.  Jar: $%d.  Earned so far: $%s." % [GameState.jobs_done, GameState.money, UIKit.commas(GameState.total_earned)])
 	_build()
 	_center_card()
 	_reveal()
@@ -187,19 +221,21 @@ func _build() -> void:
 		row.name = "Line%d" % i
 		card.add_child(row)
 		y += step if not is_story else 64
-	var btn := UIKit.button("Back to the office", UIKit.SAGE)
+	var to_ward := GameState.in_hospital()
+	var btn := UIKit.button("To the ward" if to_ward else "Back to the office", UIKit.NIGHT if to_ward else UIKit.SAGE)
 	btn.position = Vector2(250, 604)
 	btn.size = Vector2(360, 56)
 	btn.custom_minimum_size = Vector2(360, 56)
 	btn.pressed.connect(func():
 		GameState.job = {}
 		GameState.payout = {}
-		GameState.set_mode("office")
+		GameState.set_mode("hospital" if GameState.in_hospital() else "office")
 		SaveManager.save_game()
 		emit_signal("closed")
 	)
 	card.add_child(btn)
 	UIKit.link_focus([btn])
+	UIKit.pop_in(card, 0.26)
 
 
 func _reveal() -> void:

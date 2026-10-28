@@ -15,6 +15,22 @@
   "mood": "FFB36B",
   "mood_energy": 0.25
  },
+ "hospital": {
+  "name": "Ward",
+  "wall": "D9E4DC",
+  "floor": "B9C9B6",
+  "trim": "8FA5A0",
+  "sun": "F2F6FF",
+  "sun_energy": 0.7,
+  "fill": "C9D8E6",
+  "fill_energy": 0.2,
+  "ambient": "E6EEF2",
+  "ambient_energy": 0.3,
+  "key": "FFFFFF",
+  "key_energy": 1.2,
+  "mood": "A9D1E8",
+  "mood_energy": 0.2
+ },
  "garage": {
   "name": "Late light",
   "wall": "9A8C7E",

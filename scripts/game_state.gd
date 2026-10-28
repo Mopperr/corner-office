@@ -66,6 +66,8 @@ const Crime = preload("res://scripts/crime.gd")
 const JobGen = preload("res://scripts/job_gen.gd")
 const Homes = preload("res://scripts/homes.gd")
 const Life = preload("res://scripts/life.gd")
+const Books = preload("res://scripts/books.gd")
+const Extras = preload("res://scripts/extras.gd")
 var freebie_day := -1
 var forest_serial := 0
 var latched_goals: Dictionary = {}
@@ -118,6 +120,15 @@ func new_game(who: String) -> void:
 	shop_hand_served = 0
 	seed = int(rng.randi())
 	stats = {}
+	hospital = {}
+	grudge = {}
+	accountant = {}
+	ledger = {}
+	ledger_days = []
+	gear = []
+	streak = 0
+	league = Extras.league_fresh()
+	achievements = []
 	contracts_done = {}
 	day_log = _fresh_day_log()
 	shop_tier = "stand"
@@ -134,6 +145,7 @@ func new_game(who: String) -> void:
 		copy["state"] = "placed"
 		copy["damage"] = 0
 		office_items.append(copy)
+	_character_start()
 	_seed_market()
 	_roll_buyer()
 	fire_trigger("game_start")
@@ -374,6 +386,102 @@ func _arc_data() -> Dictionary:
 	return _arcs
 
 
+# ------------------------------------------------------------ the player
+# Five people can run Corner Office (data/narrative/player_characters.json
+# and data/content.json "characters"): each with a look, a start, a perk
+# that does something, and their own name in everyone's mouth.
+
+const PERKS := {"dana": "spreadsheet_brain", "hank": "road_legs", "milo": "campus_buzz", "bea": "handmade_touch", "sol": "cafe_regular"}
+
+
+func player_record() -> Dictionary:
+	for who in _player_characters():
+		if str(who.get("id", "")).trim_prefix("pc_") == character:
+			return who
+	return {}
+
+
+func player_name() -> String:
+	var rec := player_record()
+	if not rec.is_empty():
+		return str(rec.get("name", "Dana Reyes"))
+	for who in ItemDB.characters:
+		if str(who.get("id", "")) == character:
+			return str(who.get("name", "Dana Reyes"))
+	return "Dana Reyes"
+
+
+func first_name() -> String:
+	var full := player_name()
+	var bits := full.split(" ")
+	return str(bits[0]) if bits.size() > 0 else full
+
+
+func perk(id: String) -> bool:
+	return str(PERKS.get(character, "")) == id
+
+
+func perk_name() -> String:
+	return str((player_record().get("perk", {}) as Dictionary).get("name", ""))
+
+
+func repair_taps_for(level: int) -> int:
+	# Bea's hands: one tap mends what takes others two or three.
+	if perk("handmade_touch"):
+		return 1
+	return Tuning.repair_taps(level)
+
+
+func playable_characters() -> Array:
+	# Every character with a record: the slice one first.
+	var out: Array = []
+	for who in _player_characters():
+		var id := str(who.get("id", "")).trim_prefix("pc_")
+		var money_start := int(Tuning.get_value("starter_money." + id, 120))
+		out.append({"id": id, "name": str(who.get("name", id)), "pitch": str(who.get("pitch", "")), "backstory": str(who.get("backstory", "")), "perk": str((who.get("perk", {}) as Dictionary).get("name", "")), "perk_desc": str((who.get("perk", {}) as Dictionary).get("desc", "")), "money": money_start, "space": str((who.get("starting_space", {}) as Dictionary).get("name", "Garage Startup"))})
+	out.sort_custom(func(a, b): return (str(a["id"]) == "dana") and str(b["id"]) != "dana")
+	return out
+
+
+func _character_start() -> void:
+	# Their own things on the desk and the floor of the garage, and Marge's welcome.
+	var rec := player_record()
+	if rec.is_empty():
+		return
+	var n := 0
+	for entry in rec.get("starting_items", []):
+		var id := str(entry.get("id", ""))
+		if id == "" or ItemDB.get_item(id).is_empty() or not ItemDB.content_items.has(id):
+			continue
+		var def := ItemDB.get_item(id)
+		var mount := str(def.get("mount", "floor"))
+		var copy := {"uid": "start_%s" % id, "item": id, "state": "placed", "damage": 0, "rot": 0.0}
+		if mount == "small":
+			copy["x"] = 2.9 + float(n) * 0.12
+			copy["y"] = 0.76
+			copy["z"] = 4.3 + float(n) * 0.08
+		elif mount == "hang":
+			copy["x"] = 0.0
+			copy["y"] = 1.3
+			copy["z"] = 3.0 + float(n) * 0.9
+			copy["wall"] = "west"
+			copy["rot"] = 90.0
+		else:
+			copy["x"] = 1.0 + float(n) * 0.8
+			copy["y"] = 0.0
+			copy["z"] = 2.2
+		var dup := false
+		for existing in office_items:
+			if str(existing.get("item", "")) == id:
+				dup = true
+		if not dup:
+			office_items.append(copy)
+		n += 1
+	var mail: Dictionary = rec.get("welcome_email", {})
+	if not mail.is_empty() and character != slice_character_id():
+		inbox.append({"id": str(mail.get("id", "welcome_" + character)), "from": str(mail.get("from", "Marge")), "subject": str(mail.get("subject", "Welcome")), "body": str(mail.get("body", "")), "read": false})
+
+
 func slice_character_id() -> String:
 	for who in _player_characters():
 		if str(who.get("phase", "")) != "slice":
@@ -451,6 +559,8 @@ func unread_count() -> int:
 
 func job_available(job: Dictionary) -> bool:
 	var rule := str(job.get("unlock", ""))
+	if perk("cafe_regular") and str(job.get("id", "")) == "job_catcafe":
+		return not jobs_cleared.has("job_catcafe")
 	if bool(job.get("generated", false)) and jobs_cleared.has(str(job.get("id", ""))):
 		return false
 	if rule == "tutorial_done":
@@ -464,7 +574,7 @@ func job_available(job: Dictionary) -> bool:
 
 func refresh_board() -> void:
 	# A fresh board every day: three generated moves beside the story jobs.
-	var count := 2 + mini(jobs_done / 2, 2) + Life.board_bonus()
+	var count := 2 + mini(jobs_done / 2, 2) + Life.board_bonus() + (1 if perk("campus_buzz") else 0)
 	var made: Dictionary = JobGen.board(seed, day, rep_rank(), jobs_done, count)
 	generated_jobs = made.get("jobs", [])
 	# Keep the drives of jobs still in progress or on the old board for a day.
@@ -475,6 +585,7 @@ func refresh_board() -> void:
 	for key in made.get("drives", {}).keys():
 		keep[key] = made["drives"][key]
 	generated_drives = keep
+	_post_payback_job()
 
 
 func day_phase() -> String:
@@ -513,6 +624,7 @@ func break_chance(item: Dictionary) -> float:
 	var chance := maxf(float(Tuning.get_value("handling.break_floor", 0.02)), float(Tuning.get_value("handling.break_base", 0.18)) - float(Tuning.get_value("handling.break_step", 0.035)) * float(level))
 	if bool(item.get("fragile", false)):
 		chance *= float(Tuning.get_value("handling.fragile_mult", 2.0))
+	chance *= Extras.break_mult()
 	return clampf(chance, 0.0, 1.0)
 
 
@@ -524,15 +636,343 @@ func roll_break(item: Dictionary, bias := 0.0) -> bool:
 	var chance := break_chance(item) + bias
 	if chance <= 0.0 or rng.randf() >= chance:
 		return false
+	if bias < 1.0 and Extras.charm_catches(job):
+		emit_signal("toast_requested", "The brass duck swung. Caught it.")
+		return false
 	item["damage"] = maxi(int(item.get("damage", 0)), 2)
 	job["broken"] = int(job.get("broken", 0)) + 1
+	job["drops"] = int(job.get("drops", 0)) + 1
 	bump_stat("broken")
 	emit_signal("box_damaged", str(item.get("uid", "")), 2)
 	return true
 
 
 func temper_limit() -> int:
-	return int(Tuning.get_value("handling.temper", 3))
+	# Word gets round that you let things go: every owner takes one more
+	# break before they come at you, up to a cap.
+	var calm := mini(int(stats.get("forgiven", 0)), int(Tuning.get_value("hospital.forgive_temper_cap", 2)))
+	return int(Tuning.get_value("handling.temper", 3)) + calm
+
+
+# --- The window, the fall, the ward ---
+# The worst an owner can do is put you through the window. Downstairs it
+# is a cracked rib and two days in St. Bridget's; from upstairs, a broken
+# leg and four. In the ward you cry, you sleep, and you decide: plan to get
+# even, or forgive them.
+
+var hospital: Dictionary = {}
+var grudge: Dictionary = {}
+
+# The books: the accountant on the payroll, the all-time ledger, and the
+# last seven day summaries for the Books page.
+var accountant: Dictionary = {}
+var ledger: Dictionary = {}
+var ledger_days: Array = []
+
+# The replay layer: gear kept for good, the clean-run streak, the Movers'
+# League table, and the journal of achievements (`scripts/extras.gd`).
+var gear: Array = []
+var streak := 0
+var league: Dictionary = {}
+var achievements: Array = []
+
+
+func no_helper() -> bool:
+	return Extras.has_mod(job.get("def", {}), "no_helper")
+
+
+func fold_ledger(summary: Dictionary) -> void:
+	for key in ["jobs", "job_pay", "shop_earned", "shop_visitors", "served_by_hand", "trade_profit", "decor", "rent"]:
+		ledger[key] = int(ledger.get(key, 0)) + int(summary.get(key, 0))
+	var books: Dictionary = summary.get("books", {})
+	ledger["wages"] = int(ledger.get("wages", 0)) + int(books.get("wage", 0))
+	ledger["saved"] = int(ledger.get("saved", 0)) + int(books.get("saved", 0))
+	ledger["sundries"] = int(ledger.get("sundries", 0)) + int(books.get("sundries", 0))
+	var life_night: Dictionary = summary.get("life", {})
+	ledger["fleet"] = int(ledger.get("fleet", 0)) + int(life_night.get("truck_pay", 0)) + int(life_night.get("shop_pay", 0)) + int(life_night.get("income", 0)) + int(life_night.get("grown", 0))
+	ledger["upkeep"] = int(ledger.get("upkeep", 0)) + int(life_night.get("upkeep", 0))
+	ledger["days"] = int(ledger.get("days", 0)) + 1
+	var kept := summary.duplicate(true)
+	kept.erase("goals")
+	ledger_days.append(kept)
+	while ledger_days.size() > 7:
+		ledger_days.pop_front()
+
+
+func throw_chance() -> float:
+	return float(Tuning.get_value("hospital.throw_chance", 0.5))
+
+
+func fall_terms(floor: int) -> Dictionary:
+	var up := floor > 0
+	return {
+		"floor": floor,
+		"days": int(Tuning.get_value("hospital.upper_days" if up else "hospital.ground_days", 4 if up else 2)),
+		"bill": int(Tuning.get_value("hospital.upper_bill" if up else "hospital.ground_bill", 360 if up else 140)),
+		"injury": "a broken leg, two cracked ribs and a week of hospital mush" if up else "a cracked rib, a black eye and a badly bruised ego",
+		"window": "an upstairs window" if up else "a ground-floor window",
+	}
+
+
+func in_hospital() -> bool:
+	return not hospital.is_empty() and int(hospital.get("days", 0)) > 0
+
+
+func thrown_out(floor: int) -> Dictionary:
+	# Out the window: the job ends where it stands. Half pay for what was
+	# placed, the bill comes off the jar, and the next days are the ward's.
+	var def: Dictionary = job.get("def", {})
+	var terms := fall_terms(floor)
+	job["attacked"] = true
+	job["thrown"] = true
+	bump_stat("thrown")
+	if floor > 0:
+		bump_stat("thrown_upstairs")
+	var placed := 0
+	var items: Array = job.get("items", [])
+	for item in items:
+		if str(item.get("state", "")) == "placed":
+			placed += 1
+	var part := int(float(JobDB.base_pay(def)) * float(placed) / float(maxi(1, items.size())) * float(Tuning.get_value("hospital.part_pay", 0.5)))
+	if part > 0:
+		add_money(part, true)
+	var bill := int(terms["bill"])
+	add_money(-bill, false)
+	var client := str(def.get("client", "The client"))
+	var kept_def: Dictionary = def.duplicate(true)
+	kept_def.erase("items")
+	hospital = {
+		"days": int(terms["days"]), "total": int(terms["days"]), "bill": bill, "floor": floor, "client": client,
+		"job_title": str(def.get("title", "the job")), "choice": "", "injury": str(terms["injury"]), "window": str(terms["window"]),
+		"placed": placed, "total_items": items.size(), "refund": 0, "day_in": day,
+		"def": kept_def, "drive": generated_drives.get(str(def.get("drive", "")), {}),
+	}
+	inbox.append({
+		"id": "ward_d%d" % day, "from": "Marge Holloway", "subject": "I heard. Don't move.",
+		"body": "%s put you through %s on %s. The nurse says %s. I've told the board you're off for %d days. The bill is $%d and no, the client isn't paying it.\n\nRest. Cry if you need to. Then decide what kind of mover you want to be.\n\n— Marge" % [client, terms["window"], def.get("title", "the job"), terms["injury"], terms["days"], bill],
+		"read": false,
+	})
+	emit_signal("emails_changed")
+	payout = {
+		"thrown": true, "attacked": true, "title": "Out the window", "job_title": str(def.get("title", "the job")), "client": client,
+		"base": part, "hospital_bill": bill, "floor": floor, "injury": str(terms["injury"]), "window": str(terms["window"]),
+		"days": int(terms["days"]), "placed": placed, "total_items": items.size(),
+		"stars": 0, "total": part - bill, "box_tip": 0, "net_tips": 0, "bonuses": 0, "split_loss": 0, "cut": 0,
+	}
+	job = {}
+	set_mode("results")
+	return payout
+
+
+func choose_recovery(choice: String) -> Dictionary:
+	# In the ward, the decision: forgive them, and they send flowers and half
+	# the bill, and you grow a thicker skin; or hold a grudge, and the next
+	# owner who raises a hand finds you ready, with a doubled claim.
+	if hospital.is_empty():
+		return {"error": "You are not in the ward."}
+	if str(hospital.get("choice", "")) != "":
+		return {"error": "You already decided."}
+	if not (choice in ["forgive", "revenge"]):
+		return {"error": "Forgive or revenge."}
+	hospital["choice"] = choice
+	var client := str(hospital.get("client", "the client"))
+	if choice == "forgive":
+		rep_stars += 1
+		emit_signal("rep_changed", rep_rank(), rep_stars)
+		bump_stat("forgiven")
+		var refund := int(float(hospital.get("bill", 0)) * float(Tuning.get_value("hospital.forgive_refund", 0.5)))
+		hospital["refund"] = refund
+		if refund > 0:
+			add_money(refund, true)
+		inbox.append({
+			"id": "flowers_d%d" % day, "from": client, "subject": "I am so sorry",
+			"body": "There is no excuse for what I did. The carnations are from all of us. I've paid $%d toward the ward; it's not enough and I know it. If you'll still take our business, we'd be glad of it.\n\n— %s" % [refund, client],
+			"read": false,
+		})
+	else:
+		grudge = {
+			"client": client, "job_title": str(hospital.get("job_title", "")), "day": day, "floor": int(hospital.get("floor", 0)),
+			"bill": int(hospital.get("bill", 0)), "def": hospital.get("def", {}), "drive": hospital.get("drive", {}), "done": [],
+		}
+		bump_stat("grudges")
+		inbox.append({
+			"id": "grudge_d%d" % day, "from": "Sal", "subject": "heard you went flying",
+			"body": "Word is %s put you out a window. Terrible thing. I know their new street, if that's useful. Either way: next time a client raises a hand, don't be the one who ends up on the floor.\n\n— S" % client,
+			"read": false,
+		})
+	emit_signal("emails_changed")
+	return hospital
+
+
+func hospital_sleep() -> bool:
+	# A night in the ward is a day gone. Back at the garage when the days run out.
+	if hospital.is_empty():
+		return true
+	advance_day()
+	hospital["days"] = int(hospital.get("days", 1)) - 1
+	if int(hospital["days"]) > 0:
+		return false
+	var days := int(hospital.get("total", 1))
+	inbox.append({
+		"id": "discharged_d%d" % day, "from": "St. Bridget's", "subject": "Discharge note",
+		"body": "%d night%s on Ward 3 after a fall from %s. No lifting above the shoulder for a week, and we both know you'll ignore that.\n\nMind the windows." % [days, "" if days == 1 else "s", str(hospital.get("window", "a window"))],
+		"read": false,
+	})
+	emit_signal("emails_changed")
+	hospital = {}
+	set_mode("office")
+	return true
+
+
+func has_grudge() -> bool:
+	return not grudge.is_empty()
+
+
+func job_step() -> Dictionary:
+	# Where a job is, in four steps: pack, load, drive, unpack.
+	match mode:
+		"job_pack":
+			return {"n": 1, "of": 4, "name": "Pack"}
+		"truck":
+			return {"n": 2, "of": 4, "name": "Load"}
+		"drive":
+			return {"n": 3, "of": 4, "name": "Drive"}
+		"job_unpack":
+			return {"n": 4, "of": 4, "name": "Unpack"}
+	return {}
+
+
+# --- Payback ---
+# What a grudge can do, from the clipboard. Each move is one shot; most of
+# them settle the matter, and the payback job settles it when it is done.
+# Standing your ground on site stays on for as long as the grudge is open.
+
+func payback_moves() -> Array:
+	if not has_grudge():
+		return []
+	var client := str(grudge.get("client", "them"))
+	var done: Array = grudge.get("done", [])
+	var out: Array = [
+		{"id": "egg", "name": "Egg the house", "cost": 0, "blurb": "A dozen eggs, a dark street and %s's new front door. Street cred, a little heat, and a chance of being seen, which costs a rep star." % client},
+		{"id": "invoice", "name": "The invoice", "cost": int(Tuning.get_value("hospital.invoice_cost", 40)), "blurb": "Hale & Pruett send %s a bill for the window and the ward ($%d). Some people pay. Some write back." % [client, int(grudge.get("bill", 0))]},
+		{"id": "review", "name": "Write them up", "cost": 0, "blurb": "The whole story on the town board, with the X-ray. The town takes your side: a rep star, and %s's name is mud." % client},
+		{"id": "parcel", "name": "Sal's parcel", "cost": int(Tuning.get_value("hospital.parcel_cost", 60)), "blurb": "A box arrives at %s's. It is full of glitter. It is very, very full of glitter. Sal's people talk about it for weeks." % client},
+		{"id": "move_again", "name": "Move them again", "cost": 0, "blurb": "%s need moving again and nobody else will take it. Twice the pay, they stay by the door, and nothing that goes in your bag is noticed." % client},
+		{"id": "forgive_late", "name": "Let it go after all", "cost": 0, "blurb": "Put the folder in a drawer. A rep star for grace, and a thicker skin for the next one."},
+	]
+	for move in out:
+		move["done"] = done.has(str(move["id"]))
+		move["open"] = not bool(move["done"]) and money >= int(move["cost"])
+	return out
+
+
+func do_payback(id: String) -> Dictionary:
+	if not has_grudge():
+		return {"error": "No grudge to settle."}
+	var done: Array = grudge.get("done", [])
+	if done.has(id):
+		return {"error": "Done already."}
+	var client := str(grudge.get("client", "them"))
+	var said := ""
+	var settled := true
+	match id:
+		"egg":
+			var seen := rng.randf() < float(Tuning.get_value("hospital.egg_seen", 0.3))
+			Crime.bump_heat(2 if seen else 1)
+			Crime.state()["cred"] = Crime.cred() + 1
+			bump_stat("egged")
+			if seen:
+				rep_stars = maxi(0, rep_stars - 1)
+				emit_signal("rep_changed", rep_rank(), rep_stars)
+				said = "Twelve eggs, a clean throw, and %s's neighbour on the step with a phone. A rep star gone, but the door looked lovely." % client
+			else:
+				said = "Twelve eggs on %s's new front door in the dark. Nobody saw. Sal heard, though." % client
+		"invoice":
+			var cost := int(Tuning.get_value("hospital.invoice_cost", 40))
+			if money < cost:
+				return {"error": "The solicitor wants $%d up front." % cost}
+			add_money(-cost, false)
+			var bill := int(grudge.get("bill", 0))
+			if rng.randf() < float(Tuning.get_value("hospital.invoice_pays", 0.55)):
+				add_money(bill, true)
+				bump_stat("invoice_paid")
+				said = "A cheque for $%d by return of post, and not one word with it. The ward is paid for." % bill
+				inbox.append({"id": "invoice_d%d" % day, "from": "Hale & Pruett, solicitors", "subject": "Re: %s, settled" % client, "body": "Our letter of the 3rd was answered with a cheque for $%d and no comment. We suggest you let that be the end of it.\n\nOur fee has been deducted." % bill, "read": false})
+			else:
+				said = "%s's reply ran to three pages and the word 'provoked' four times. No cheque. The $%d is gone." % [client, cost]
+				inbox.append({"id": "invoice_d%d" % day, "from": "Hale & Pruett, solicitors", "subject": "Re: %s, declined" % client, "body": "Our letter was answered at length. The gist is that you were, in their words, provoked, and that they will see us in court. We do not advise that.\n\nOur fee is enclosed." % [], "read": false})
+			emit_signal("emails_changed")
+		"review":
+			rep_stars += 1
+			emit_signal("rep_changed", rep_rank(), rep_stars)
+			bump_stat("reviewed")
+			said = "The whole story on the town board, X-ray and all. Three hundred likes by lunch. %s's name is mud and you got a rep star for telling it straight." % client
+		"parcel":
+			var cost := int(Tuning.get_value("hospital.parcel_cost", 60))
+			if money < cost:
+				return {"error": "Sal wants $%d for the parcel." % cost}
+			add_money(-cost, false)
+			Crime.bump_heat(1)
+			Crime.state()["cred"] = Crime.cred() + 2
+			bump_stat("glittered")
+			said = "The parcel went Tuesday. Sal says %s opened it in the lounge. He says there is glitter in the grout. He says it will be there when they sell." % client
+			inbox.append({"id": "parcel_d%d" % day, "from": "Sal", "subject": "re: the parcel", "body": "Delivered. Opened in the front room, I'm told, with the windows shut. You can't hoover glitter, it just moves house. Two cred for style.\n\n— S", "read": false})
+			emit_signal("emails_changed")
+		"move_again":
+			var def: Dictionary = (grudge.get("def", {}) as Dictionary).duplicate(true)
+			if def.is_empty():
+				return {"error": "No address for them."}
+			def["id"] = "payback_%d" % day
+			def["generated"] = true
+			def["payback"] = true
+			def["unlock"] = "tutorial_done"
+			def["title"] = "Payback: %s again" % client
+			def["narrative_base"] = int(float(JobDB.base_pay(def)) * float(Tuning.get_value("hospital.move_again_mult", 2)))
+			def.erase("base_key")
+			def["brief"] = "%s need moving again and every other firm said no. Twice the money. They'll stay by the door and keep their hands to themselves, and they won't be watching your bag." % client
+			def["mentor_note"] = "Marge: 'Take the money. Be the bigger person, or don't. Your call.'"
+			grudge["posted_job"] = def
+			if not (grudge.get("drive", {}) as Dictionary).is_empty():
+				generated_drives[str(def.get("drive", ""))] = grudge["drive"]
+			_post_payback_job()
+			settled = false
+			said = "On the board: %s, again, at twice the money. Nobody else would take it." % client
+		"forgive_late":
+			rep_stars += 1
+			emit_signal("rep_changed", rep_rank(), rep_stars)
+			bump_stat("forgiven")
+			said = "The folder goes in the drawer. It was a window. You've had worse Tuesdays."
+		_:
+			return {"error": "No such move."}
+	done.append(id)
+	grudge["done"] = done
+	if settled:
+		grudge = {}
+	return {"said": said, "settled": settled}
+
+
+func _post_payback_job() -> void:
+	# The payback job stays on the board through the daily refresh until it is done.
+	var def: Dictionary = grudge.get("posted_job", {})
+	if def.is_empty() or jobs_cleared.has(str(def.get("id", ""))):
+		return
+	for row in generated_jobs:
+		if str(row.get("id", "")) == str(def.get("id", "")):
+			return
+	generated_jobs.push_front(def.duplicate(true))
+	if not (grudge.get("drive", {}) as Dictionary).is_empty():
+		generated_drives[str(def.get("drive", ""))] = grudge["drive"]
+
+
+func settle_grudge() -> Dictionary:
+	# The owner came at you again and this time you were ready: they go
+	# down, the grudge is spent, and the claim that follows is doubled.
+	var old := grudge.duplicate(true)
+	grudge = {}
+	job["attacked"] = true
+	job["payback"] = true
+	bump_stat("payback")
+	return old
 
 
 func sue_owner() -> Dictionary:
@@ -545,6 +985,8 @@ func sue_owner() -> Dictionary:
 		return {"error": "Already filed."}
 	var suits := int(stats.get("lawsuits", 0))
 	var amount := rng.randi_range(int(Tuning.get_value("handling.sue_min", 1000)), int(Tuning.get_value("handling.sue_max", 2000)))
+	if bool(job.get("payback", false)):
+		amount *= int(Tuning.get_value("hospital.payback_mult", 2))
 	var chance := minf(float(Tuning.get_value("handling.counter_cap", 0.85)), float(Tuning.get_value("handling.counter_step", 0.25)) * float(suits))
 	var countered := suits > 0 and rng.randf() < chance
 	job["sued"] = true
@@ -653,6 +1095,7 @@ func start_job(id: String) -> void:
 		"pocketed": [],
 		"caught_pocketing": false,
 	}
+	Extras.on_job_start(job)
 	var place: Dictionary = ItemDB.venues().get(str(def.get("venue", "")), {})
 	if Homes.is_home(place):
 		job["owner_items"] = Homes.owner_layout(place, hash("%s:%d" % [id, seed]))
@@ -804,16 +1247,200 @@ func open_cat(box_id: int) -> bool:
 	return true
 
 
-func load_box_into(box_id: int, slot: int, floor_slots: int) -> String:
+# ------------------------------------------------------------- the bed
+# The truck bed is a grid of places: columns across, rows from the front
+# wall to the door, layers to the ceiling. Slot index = layer * (rows *
+# cols) + row * cols + col. It fills from the front corner outward and up,
+# and empties from the door and the top down. Every piece has a weight; a
+# box carries the sum; on the drive a box with too much on top is crushed.
+
+func truck_slots() -> int:
+	return int(Tuning.get_value("truck.slots", 8))
+
+
+func truck_cols() -> int:
+	return int(Tuning.get_value("truck.cols", 2))
+
+
+func truck_rows() -> int:
+	return int(Tuning.get_value("truck.rows", 2))
+
+
+func truck_layers() -> int:
+	return int(Tuning.get_value("truck.layers", 2))
+
+
+func floor_slots() -> int:
+	return int(Tuning.get_value("truck.floor_slots", 4))
+
+
+func per_box() -> int:
+	return int(Tuning.get_value("pack.per_box", 5)) + Extras.per_box_extra()
+
+
+func slot_cell(slot: int) -> Dictionary:
+	var per_layer := truck_rows() * truck_cols()
+	var layer := int(slot / per_layer)
+	var rest := slot - layer * per_layer
+	return {"layer": layer, "row": int(rest / truck_cols()), "col": rest % truck_cols()}
+
+
+func slot_at(layer: int, row: int, col: int) -> int:
+	if layer < 0 or row < 0 or col < 0 or layer >= truck_layers() or row >= truck_rows() or col >= truck_cols():
+		return -1
+	return layer * truck_rows() * truck_cols() + row * truck_cols() + col
+
+
+func box_in_slot(slot: int) -> Dictionary:
+	# No place is no box: a box waiting to be loaded, or already carried
+	# in, has slot -1, and so does the cell above the top layer.
+	if slot < 0:
+		return {}
+	for box in job.get("boxes", []):
+		if int(box.get("slot", -1)) == slot:
+			return box
+	return {}
+
+
+func slot_open(slot: int) -> String:
+	# Why a box cannot go here, or "" when it can: the place is taken, there
+	# is nothing under it, the row in front is not filled yet, or a wrapped
+	# piece sits below (nothing stacks on a sofa).
+	if slot < 0 or slot >= truck_slots():
+		return "No such place."
+	if slot_taken(slot):
+		return "Something's already sitting there."
+	var cell := slot_cell(slot)
+	if int(cell["layer"]) > 0:
+		var below := box_in_slot(slot_at(int(cell["layer"]) - 1, int(cell["row"]), int(cell["col"])))
+		if below.is_empty():
+			return "Nothing to stand that on yet. Fill the floor first."
+		if str(below.get("big", "")) != "":
+			return "Nothing goes on top of a wrapped piece."
+	if int(cell["row"]) > 0:
+		var ahead := box_in_slot(slot_at(int(cell["layer"]), int(cell["row"]) - 1, int(cell["col"])))
+		if ahead.is_empty():
+			return "Front first: fill from the wall by the cab."
+	return ""
+
+
+func slot_can_unload(slot: int) -> String:
+	# Why a box cannot come off yet: something on top, or a box in the way
+	# toward the door.
+	var cell := slot_cell(slot)
+	var above := box_in_slot(slot_at(int(cell["layer"]) + 1, int(cell["row"]), int(cell["col"])))
+	if not above.is_empty():
+		return "The box on top of it first."
+	var toward_door := box_in_slot(slot_at(int(cell["layer"]), int(cell["row"]) + 1, int(cell["col"])))
+	if not toward_door.is_empty():
+		return "The one nearer the door first."
+	return ""
+
+
+func open_slots() -> Array:
+	var out: Array = []
+	for i in truck_slots():
+		if slot_open(i) == "":
+			out.append(i)
+	return out
+
+
+func box_weight(box_id: int) -> float:
+	var total := 0.0
+	for item in job.get("items", []):
+		if int(item.get("box", -1)) == box_id:
+			total += float(item.get("weight", 1.0))
+	return snappedf(total, 0.1)
+
+
+func load_above(box_id: int) -> float:
+	# The kilos stacked on this box: every box in the layers above its place.
+	var box := job_box(box_id)
+	var slot := int(box.get("slot", -1))
+	if slot < 0:
+		return 0.0
+	var cell := slot_cell(slot)
+	var total := 0.0
+	for layer in range(int(cell["layer"]) + 1, truck_layers()):
+		var other := box_in_slot(slot_at(layer, int(cell["row"]), int(cell["col"])))
+		if other.is_empty():
+			break
+		total += box_weight(int(other.get("id", -1)))
+	return snappedf(total, 0.1)
+
+
+func load_box_into(box_id: int, slot: int, _floor_slots: int = -1) -> String:
 	var box := job_box(box_id)
 	if box.is_empty() or not bool(box.get("sealed", false)):
 		return "Seal it first."
-	if slot_taken(slot):
-		return "Something's already sitting there."
-	if box_has_heavy(box_id) and slot >= floor_slots:
-		return "The espresso machine is happier on the bottom."
+	var why := slot_open(slot)
+	if why != "":
+		return why
+	if str(box.get("big", "")) != "" and slot >= floor_slots():
+		return "That one rides on the floor."
+	if box_has_heavy(box_id) and slot >= floor_slots() and floor_slot_free():
+		# A heavy box takes the floor while there is floor to take; once it is
+		# full it rides up top and crushes whatever is under it.
+		return "The heavy box is happier on the bottom."
 	box["slot"] = slot
 	return ""
+
+
+func floor_slot_free() -> bool:
+	for i in floor_slots():
+		if slot_open(i) == "":
+			return true
+	return false
+
+
+func crush_warning(box_id: int) -> String:
+	# A word when a box has just been put on something it will flatten.
+	var box := job_box(box_id)
+	var slot := int(box.get("slot", -1))
+	var cell := slot_cell(slot)
+	if slot < 0 or int(cell["layer"]) == 0:
+		return ""
+	var below := box_in_slot(slot_at(int(cell["layer"]) - 1, int(cell["row"]), int(cell["col"])))
+	if below.is_empty():
+		return ""
+	var on_it := load_above(int(below.get("id", -1)))
+	if on_it <= float(Tuning.get_value("weight.crush_threshold_kg", 18)):
+		return ""
+	var fragile := box_needs_padding(int(below.get("id", -1)))
+	return "%d kg on top of box %d%s. That will tell on the road." % [int(round(on_it)), int(below.get("id", 0)) + 1, ", and that one has glass in it" if fragile else ""]
+
+
+func auto_load_order() -> Array:
+	# Wrapped pieces and heavy boxes first on the floor, then the heaviest
+	# boxes, lightest last on top: each to the first open place that takes it.
+	var waiting: Array = []
+	for box in job.get("boxes", []):
+		if bool(box.get("sealed", false)) and int(box.get("slot", -1)) < 0:
+			waiting.append(box)
+	waiting.sort_custom(func(a, b):
+		var fa := 2 if str(a.get("big", "")) != "" else (1 if box_has_heavy(int(a.get("id", -1))) else 0)
+		var fb := 2 if str(b.get("big", "")) != "" else (1 if box_has_heavy(int(b.get("id", -1))) else 0)
+		if fa != fb:
+			return fa > fb
+		return box_weight(int(a.get("id", -1))) > box_weight(int(b.get("id", -1)))
+	)
+	var out: Array = []
+	for box in waiting:
+		out.append(int(box.get("id", -1)))
+	return out
+
+
+func unload_order() -> Array:
+	# Boxes still on the truck, the ones that can come off first.
+	var loaded: Array = []
+	for box in job.get("boxes", []):
+		if int(box.get("slot", -1)) >= 0:
+			loaded.append(box)
+	loaded.sort_custom(func(a, b): return int(a.get("slot", -1)) > int(b.get("slot", -1)))
+	var out: Array = []
+	for box in loaded:
+		out.append(int(box.get("id", -1)))
+	return out
 
 
 func slot_taken(slot: int) -> bool:
@@ -839,13 +1466,14 @@ func all_loaded() -> bool:
 
 func heavy_respected() -> bool:
 	for box in job.get("boxes", []):
-		if box_has_heavy(int(box.get("id", -1))) and int(box.get("slot", -1)) >= 4:
+		if box_has_heavy(int(box.get("id", -1))) and int(box.get("slot", -1)) >= floor_slots():
 			return false
 	return true
 
 
 func apply_drive_result(result: Dictionary) -> void:
 	job["condition"] = clampi(int(result.get("condition", 100)), 0, 100)
+	job["drive_time"] = float(result.get("time", 0.0))
 	job["alley"] = bool(result.get("alley", false))
 	job["duck_friend"] = bool(result.get("duck_friend", false))
 	job["near_miss"] = bool(result.get("near_miss", false))
@@ -886,6 +1514,16 @@ func _assign_damage() -> void:
 		item2["damage"] = 1
 		emit_signal("box_damaged", item2["uid"], 1)
 		scuffed -= 1
+	# Crushed pieces take their own hurt from the weight on them, smooth
+	# drive or not: scuffed past the first band, chipped past the third.
+	for entry in order:
+		var item3 := job_item(str(entry["uid"]))
+		if not bool(item3.get("crushed", false)):
+			continue
+		var level := _severity(float(entry["stress"]))
+		if level > int(item3.get("damage", 0)):
+			item3["damage"] = level
+			emit_signal("box_damaged", item3["uid"], level)
 
 
 func _item_stress(item: Dictionary, base_stress: float) -> float:
@@ -895,6 +1533,16 @@ func _item_stress(item: Dictionary, base_stress: float) -> float:
 		stress *= float(Tuning.get_value("box_condition.padding_multiplier", 0.5))
 	if bool(item.get("heavy", false)) and _box_on_bottom(box):
 		stress *= float(Tuning.get_value("box_condition.heavy_bottom_multiplier", 0.75))
+	if bool(item.get("nobox", false)) and Extras.gear_has("blankets"):
+		stress *= Extras.wrap_mult()
+	# Crushed: the kilos on top of the box past what cardboard takes.
+	var over := load_above(int(box.get("id", -1))) * Extras.load_mult() - Extras.crush_threshold()
+	if over > 0.0:
+		var per_kg := float(Tuning.get_value("weight.crush_per_kg", 0.04))
+		if bool(item.get("fragile", false)):
+			per_kg *= float(Tuning.get_value("weight.fragile_crush_mult", 1.5))
+		stress = maxf(stress, 8.0) * (1.0 + over * per_kg)
+		item["crushed"] = true
 	return stress
 
 
@@ -902,7 +1550,7 @@ func _box_on_bottom(box: Dictionary) -> bool:
 	if box.is_empty():
 		return false
 	var slot := int(box.get("slot", -1))
-	return slot >= 0 and slot < 4
+	return slot >= 0 and slot < floor_slots()
 
 
 func _stress_budget(stress: float) -> Vector2:
@@ -929,7 +1577,7 @@ func tap_repair(uid: String) -> bool:
 	if level <= 0:
 		return false
 	item["taps"] = int(item.get("taps", 0)) + 1
-	if int(item["taps"]) >= Tuning.repair_taps(level):
+	if int(item["taps"]) >= repair_taps_for(level):
 		item["damage"] = 0
 		item["taps"] = 0
 		return true
@@ -1061,6 +1709,11 @@ func finish_job() -> Dictionary:
 	payout["loot_value"] = loot_value
 	payout["caught_pocketing"] = bool(job.get("caught_pocketing", false))
 	payout["broken"] = int(job.get("broken", 0))
+	var crushed := 0
+	for item in job.get("items", []):
+		if bool(item.get("crushed", false)) and int(item.get("damage", 0)) > 0:
+			crushed += 1
+	payout["crushed"] = crushed
 	payout["attacked"] = bool(job.get("attacked", false))
 	payout["sue_won"] = int(job.get("sue_won", 0))
 	payout["counter_sued"] = int(job.get("counter_sued", 0))
@@ -1081,7 +1734,9 @@ func finish_job() -> Dictionary:
 		rep_stars = maxi(0, rep_stars - 1)
 	stars = mini(3, stars)
 	payout["stars"] = stars
-	var net_pay := int(payout.get("base", 0)) + int(payout.get("net_tips", 0)) + int(payout.get("shortcut", 0))
+	var extras := Extras.settle(job, payout)
+	payout["total"] = int(payout.get("total", 0)) + extras
+	var net_pay := int(payout.get("base", 0)) + int(payout.get("net_tips", 0)) + int(payout.get("shortcut", 0)) + extras
 	# Dana's own life pays back: Pickle at the door, Sam's lunches, a rested first job.
 	var life_mult := Life.tip_mult() - 1.0
 	if int(day_log.get("jobs", 0)) == 0:
@@ -1094,6 +1749,10 @@ func finish_job() -> Dictionary:
 	rep_stars += stars
 	jobs_done += 1
 	jobs_cleared[str(job.get("id", ""))] = true
+	if bool(def.get("payback", false)):
+		bump_stat("payback_jobs")
+		payout["payback_job"] = true
+		grudge = {}
 	if int(job.get("condition", 0)) >= 90:
 		stats["smooth_rides"] = int(stats.get("smooth_rides", 0)) + 1
 	if bool(job.get("cat_opened", false)):
@@ -1102,6 +1761,7 @@ func finish_job() -> Dictionary:
 		stats["alley_runs"] = int(stats.get("alley_runs", 0)) + 1
 	if bool(def.get("generated", false)) and not bool(def.get("shady", false)):
 		stats["board_jobs"] = int(stats.get("board_jobs", 0)) + 1
+	Extras.check_achievements()
 	var venue_key := "venue_%s" % str(def.get("venue", ""))
 	stats[venue_key] = int(stats.get(venue_key, 0)) + 1
 	Crime.on_job_finished(def)
@@ -1152,7 +1812,11 @@ func pocket_owner_item(uid: String) -> Dictionary:
 		Crime.add_loot(entry)
 		Crime.bump_heat(heat)
 		var chance := float(Tuning.get_value("crime.pocket_notice", 0.2)) + float(Tuning.get_value("crime.pocket_notice_step", 0.15)) * float(pocketed.size() - 1)
-		var noticed := rng.randf() < clampf(chance, 0.0, 0.8)
+		if Extras.has_mod(job.get("def", {}), "nosy"):
+			chance += float(Tuning.get_value("play.nosy_notice", 0.4))
+		var noticed := rng.randf() < clampf(chance, 0.0, 0.95)
+		if bool(job.get("def", {}).get("payback", false)):
+			noticed = false
 		if noticed:
 			job["caught_pocketing"] = true
 		bump_stat("pocketed")
@@ -1246,6 +1910,11 @@ func advance_day() -> void:
 	Crime.new_day()
 	_charge_rent(summary)
 	summary["life"] = Life.nightly(earned)
+	summary["books"] = Books.nightly(summary)
+	summary["tip"] = Books.tip_for(day)
+	Extras.league_nightly(summary)
+	fold_ledger(summary)
+	Extras.check_achievements()
 	Crime.maybe_nudge(summary)
 	if not generated_jobs.is_empty():
 		summary["next_job"] = str(generated_jobs[0].get("title", ""))
@@ -1295,6 +1964,7 @@ func try_pay_rent() -> bool:
 	money -= rent_owed
 	day_log["rent"] = int(day_log.get("rent", 0)) + rent_owed
 	rent_owed = 0
+	bump_stat("rent_paid")
 	emit_signal("money_changed", money)
 	return true
 
@@ -1920,6 +2590,15 @@ func to_dict() -> Dictionary:
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
 		"latched_goals": latched_goals.duplicate(true),
+		"hospital": hospital.duplicate(true),
+		"grudge": grudge.duplicate(true),
+		"accountant": accountant.duplicate(true),
+		"ledger": ledger.duplicate(true),
+		"ledger_days": ledger_days.duplicate(true),
+		"gear": gear.duplicate(),
+		"streak": streak,
+		"league": league.duplicate(true),
+		"achievements": achievements.duplicate(),
 	}
 
 
@@ -1993,5 +2672,16 @@ func from_dict(raw: Dictionary) -> void:
 	forest_serial = int(raw.get("forest_serial", 0))
 	latched_goals = raw.get("latched_goals", {})
 	goal_marked = {}
+	hospital = raw.get("hospital", {}).duplicate(true) if raw.has("hospital") else {}
+	grudge = raw.get("grudge", {}).duplicate(true) if raw.has("grudge") else {}
+	accountant = raw.get("accountant", {}).duplicate(true) if raw.has("accountant") else {}
+	ledger = raw.get("ledger", {}).duplicate(true) if raw.has("ledger") else {}
+	ledger_days = raw.get("ledger_days", []).duplicate(true) if raw.has("ledger_days") else []
+	gear = raw.get("gear", []).duplicate() if raw.has("gear") else []
+	streak = int(raw.get("streak", 0))
+	league = raw.get("league", {}).duplicate(true) if raw.has("league") else Extras.league_fresh()
+	if league.is_empty():
+		league = Extras.league_fresh()
+	achievements = raw.get("achievements", []).duplicate() if raw.has("achievements") else []
 	emit_signal("money_changed", money)
 	emit_signal("emails_changed")

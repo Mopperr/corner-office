@@ -434,7 +434,7 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 				var extra: Array = ItemDB.room_pool([tag], ["floor"])
 				var picks := 0
 				var guard := 0
-				while picks < 4 and guard < 24 and not extra.is_empty():
+				while picks < 6 and guard < 36 and not extra.is_empty():
 					guard += 1
 					var id := str(extra[rng.randi_range(0, extra.size() - 1)])
 					var edef: Dictionary = ItemDB.get_item(id)
@@ -448,15 +448,15 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 			var rz := oz + float(room.get("z", 0))
 			var rw := float(room.get("w", 2))
 			var rd := float(room.get("d", 2))
-			var want := mini(pool.size(), 3 + (1 if rw * rd > 11.0 else 0) + (1 if rw * rd > 16.0 else 0))
+			var want := mini(pool.size(), 4 + (1 if rw * rd > 11.0 else 0) + (1 if rw * rd > 16.0 else 0) + (1 if rw * rd > 22.0 else 0))
 			# Slots along the back wall (min z), the left wall (min x) and the
 			# right wall: the sides the camera looks into, and the one it looks past.
 			var slots: Array = []
-			for f in [0.18, 0.4, 0.62, 0.84]:
+			for f in [0.14, 0.32, 0.5, 0.68, 0.86]:
 				slots.append({"x": rx + rw * f, "z": rz, "rot": 0.0, "side": "back"})
-			for f in [0.3, 0.6, 0.85]:
+			for f in [0.25, 0.5, 0.75, 0.92]:
 				slots.append({"x": rx, "z": rz + rd * f, "rot": 90.0, "side": "left"})
-			for f in [0.35, 0.7]:
+			for f in [0.3, 0.55, 0.8]:
 				slots.append({"x": rx + rw, "z": rz + rd * f, "rot": 270.0, "side": "right"})
 			var placed := 0
 			var k := 0
@@ -498,6 +498,19 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 						"x": pos.x, "y": 0.0, "z": pos.z, "rot": rot, "floor": index, "room": str(room.get("id", "")),
 						"state": "placed", "value": value_of(def), "pocketable": pocketable(def),
 					})
+					if Props.is_surface(item_id, def) and tag != "":
+						# Something small of theirs on top, worth a pocket.
+						var smalls: Array = ItemDB.room_pool([tag], ["small"])
+						if not smalls.is_empty():
+							var small_id := str(smalls[rng.randi_range(0, smalls.size() - 1)])
+							var sdef: Dictionary = ItemDB.get_item(small_id)
+							if float(sdef.get("w", 0)) <= w * 0.5 and float(sdef.get("h", 0)) <= 0.5:
+								n += 1
+								out.append({
+									"uid": "owner:%d" % n, "item_id": small_id, "name": str(sdef.get("name", small_id)),
+									"x": pos.x, "y": float(def.get("h", 0.5)), "z": pos.z, "rot": rot, "floor": index, "room": str(room.get("id", "")),
+									"state": "placed", "value": value_of(sdef), "pocketable": pocketable(sdef), "on": "owner:%d" % (n - 1),
+								})
 					n += 1
 					placed += 1
 					found = true

@@ -1,5 +1,7 @@
 extends Node
 
+const Tuning = preload("res://scripts/tuning.gd")
+
 var narrative_items: Dictionary = {}
 var content_items: Dictionary = {}
 # The big catalogue (data/items/*.json): generated families plus whatever
@@ -60,6 +62,17 @@ func _load_catalog() -> void:
 			def["catalog"] = file_name.trim_suffix(".json")
 			catalog_items[id] = def
 			content_items[id] = def
+
+
+func weight(def: Dictionary) -> float:
+	# Kilos from the piece's size at a furniture density, heavy pieces more.
+	var vol := float(def.get("w", 0.3)) * float(def.get("d", 0.3)) * float(def.get("h", 0.3))
+	var kg := vol * float(Tuning.get_value("weight.density", 60))
+	if bool(def.get("heavy", false)):
+		kg *= float(Tuning.get_value("weight.heavy_mult", 2.5))
+	if def.has("weight"):
+		kg = float(def["weight"])
+	return snappedf(clampf(kg, float(Tuning.get_value("weight.min_kg", 0.4)), float(Tuning.get_value("weight.max_kg", 140))), 0.1)
 
 
 func room_pool(tags: Array, mounts: Array = []) -> Array:

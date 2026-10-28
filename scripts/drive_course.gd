@@ -2283,6 +2283,8 @@ func _apply_hit(kind: String, amount: int, cooldown := 0) -> void:
 		return
 	if cooldown > 0:
 		hazard_cd[kind] = now
+	if GameState.perk("road_legs"):
+		amount = maxi(1, amount - 1)
 	condition = maxi(0, condition - amount)
 	shake = 0.25
 	if kind == "cone":

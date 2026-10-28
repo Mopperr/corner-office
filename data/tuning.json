@@ -105,6 +105,35 @@
   "room_match": 3,
   "caught_cut": 0.25
  },
+ "truck": {
+  "_about": "The bed is a grid: two columns across, three rows from the front wall to the door, three layers to the ceiling. It fills from the front corner outward and upward, and empties the other way. Heavy boxes and wrapped pieces ride on the floor layer.",
+  "slots": 18,
+  "floor_slots": 6,
+  "cols": 2,
+  "rows": 3,
+  "layers": 3
+ },
+ "weight": {
+  "_about": "Every piece weighs what its size says at this density, heavy ones more. A box carries the sum. On the drive, a box with more than crush_threshold_kg on top of it takes extra stress per kilo over, fragile pieces most.",
+  "density": 60,
+  "heavy_mult": 2.5,
+  "min_kg": 0.4,
+  "max_kg": 140,
+  "crush_threshold_kg": 18,
+  "crush_per_kg": 0.04,
+  "fragile_crush_mult": 1.5
+ },
+ "pack": {
+  "per_box": 6
+ },
+ "jobs": {
+  "_about": "How many pieces a move has: a base, a random span, and more as jobs are done; authored jobs get extra catalogue pieces for the place.",
+  "size_min": 18,
+  "size_span": 10,
+  "size_per_done": 1,
+  "size_done_cap": 12,
+  "authored_extra": 12
+ },
  "handling": {
   "_about": "Dana's hands. Every piece packed or unpacked counts toward a level; the helper breaks fewer things as it climbs. Fragile pieces break twice as often. The temper is how many breaks an owner takes before they come at you.",
   "per_level": 12,
@@ -275,6 +304,43 @@
   "traffic_cars": 10,
   "traffic_mps": 2.4,
   "walkers": 16
+ },
+ "play": {
+  "_about": "The replay layer: job modifiers (rush pays +35% only if the drive beats length x seconds_per_m + grace seconds; heirloom whole pays, marked costs and a star; a clean job with a nosy neighbour pays), the client's wish tip, the clean-run streak (per job in a row, capped), the Movers' League (points a star, rivals' daily points, the week, the leader's pay bonus), and the mid-job event delay.",
+  "rush_seconds_per_m": 0.5,
+  "rush_grace": 25,
+  "heirloom_bonus": 60,
+  "heirloom_loss": 60,
+  "nosy_bonus": 25,
+  "nosy_notice": 0.4,
+  "wish_tip": 20,
+  "tidy_score": 60,
+  "streak_per": 5,
+  "streak_cap": 10,
+  "points_per_star": 3,
+  "rival_min": 2,
+  "rival_max": 6,
+  "league_week": 7,
+  "leader_bonus": 0.10,
+  "event_delay": 22,
+  "stray_box_pay": 15
+ },
+ "hospital": {
+  "_about": "The worst an owner can do: through the window. A ground-floor fall is days in a ward and a bill; from upstairs it is longer and dearer. throw_chance is the share of attacks that go to the window when the room has one. Forgiving pays half the bill back and makes every owner after that one break more patient (capped). A grudge doubles the next small-claims win.",
+  "ground_days": 2,
+  "upper_days": 4,
+  "ground_bill": 140,
+  "upper_bill": 360,
+  "throw_chance": 0.5,
+  "forgive_refund": 0.5,
+  "forgive_temper_cap": 2,
+  "payback_mult": 2,
+  "part_pay": 0.5,
+  "egg_seen": 0.3,
+  "invoice_pays": 0.55,
+  "invoice_cost": 40,
+  "parcel_cost": 60,
+  "move_again_mult": 2
  },
  "rent": {
   "every_days": 5,

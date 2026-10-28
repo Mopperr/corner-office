@@ -1,5 +1,8 @@
 extends Control
 
+const Books = preload("res://scripts/books.gd")
+const Extras = preload("res://scripts/extras.gd")
+
 const UIKit = preload("res://scripts/ui_kit.gd")
 const Tuning = preload("res://scripts/tuning.gd")
 
@@ -49,6 +52,7 @@ func _build() -> void:
 	bezel.add_theme_stylebox_override("panel", UIKit.style(Color("E4D3B4"), 28, 8, UIKit.DARK))
 	add_child(bezel)
 	UIKit.fill(bezel, 16, 16, 16, 16)
+	UIKit.pop_in(bezel, 0.22)
 	var screen := Panel.new()
 	screen.name = "Screen"
 	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -95,6 +99,7 @@ func _build() -> void:
 	_icon(icons, "Email", "res://assets/ui/icons/icon_email.png", "email")
 	_icon(icons, "Listings", "res://assets/ui/icons/icon_listings.png", "listings")
 	_icon(icons, "Life", "res://assets/ui/icons/icon_email.png", "life")
+	_icon(icons, "Books", "res://assets/ui/icons/icon_market.png", "books")
 	body = Panel.new()
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 12))
@@ -103,13 +108,25 @@ func _build() -> void:
 	body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	body.offset_left = 16
 	body.offset_top = 188
-	body.offset_right = -16
+	# In a wide window the sidebar's column is its own: the page body stops
+	# short of it, so no page ever runs under the cards.
+	body.offset_right = -16 - (SIDEBAR_W + 12 if _sidebar_fits() else 0)
 	body.offset_bottom = -16
 	_show_page()
 
 
+const SIDEBAR_W := 456.0
+
+
+func _sidebar_fits() -> bool:
+	var view := get_viewport_rect().size
+	return view.x >= 1800.0
+
+
 func _icon(row: HBoxContainer, caption: String, path: String, id: String) -> Button:
 	var btn := UIKit.icon_button(path, caption)
+	# The bar fills the row: every icon takes an equal share of the width.
+	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if id == "email" and GameState.unread_count() > 0:
 		btn.text = "%s (%d)" % [caption, GameState.unread_count()]
 	btn.pressed.connect(func():
@@ -136,6 +153,8 @@ func _show_page() -> void:
 			_listings()
 		"life":
 			_life()
+		"books":
+			_books(books_tab)
 		"forest":
 			body.add_child(preload("res://scripts/forest_page.gd").new())
 		"manager":
@@ -213,7 +232,9 @@ func _market() -> void:
 	var yesterday := ""
 	if series.size() >= 2:
 		yesterday = "Yesterday $%d" % int(round(float(series[series.size() - 2])))
-	var ylbl := UIKit.label("Dana's note: %s    You have %d" % [yesterday, int(GameState.goods.get(selected, 0))], 28, UIKit.BLUE)
+	if not GameState.perk("spreadsheet_brain"):
+		yesterday = ""
+	var ylbl := UIKit.label("%s's note: %s    You have %d" % [GameState.first_name(), yesterday if yesterday != "" else "no head for prices", int(GameState.goods.get(selected, 0))], 28, UIKit.BLUE)
 	ylbl.position = Vector2(440, 240)
 	ylbl.size = Vector2(760, 44)
 	ylbl.custom_minimum_size = Vector2(480, 44)
@@ -433,13 +454,20 @@ func _email() -> void:
 func _life() -> void:
 	# What Dana is earning for: the next milestone, and the ladder of her own things.
 	var Life = load("res://scripts/life.gd")
-	# The ladder sits left of the sidebar's column of cards.
-	var wide := 870.0
+	# The ladder fills the page: the sidebar has its own column.
+	var view := get_viewport_rect().size
+	if view.x < 8.0:
+		view = Vector2(1280, 800)
+	var wide := view.x - 104.0 - (SIDEBAR_W + 12.0 if _sidebar_fits() else 0.0) - 44.0
 	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(12, 12)
-	scroll.size = Vector2(wide + 20.0, 530)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(scroll)
+	scroll.layout_mode = 1
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.offset_left = 12
+	scroll.offset_top = 12
+	scroll.offset_right = -12
+	scroll.offset_bottom = -12
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 10)
 	column.custom_minimum_size = Vector2(wide, 0)
@@ -683,20 +711,22 @@ func _refresh_money() -> void:
 func _sidebar() -> void:
 	# The right-hand column only exists in a wide window; the pages fit the
 	# small one on their own. Ads, Marge's tip, the weather, a price mover.
-	var view := get_viewport_rect().size
-	if view.x < 1600.0:
+	if not _sidebar_fits():
 		return
+	var old := body.get_parent().get_node_or_null("DeskSide")
+	if old != null:
+		old.queue_free()
 	var side := VBoxContainer.new()
 	side.name = "DeskSide"
 	side.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	side.add_theme_constant_override("separation", 14)
-	body.add_child(side)
+	body.get_parent().add_child(side)
 	side.layout_mode = 1
 	side.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
-	side.offset_left = -470
-	side.offset_right = -14
-	side.offset_top = 12
-	side.offset_bottom = -12
+	side.offset_left = -16 - SIDEBAR_W
+	side.offset_right = -16
+	side.offset_top = 188
+	side.offset_bottom = -16
 	var day := GameState.day
 	var ads: Array = [
 		["TropicalForest", "Lightning deal, no rush. %s" % _deal_name(), "Order from the Forest page. It waits for you.", UIKit.SAGE, "box"],
@@ -711,15 +741,7 @@ func _sidebar() -> void:
 	else:
 		# The ad's slot goes to what Dana is saving for, so the column still fits.
 		side.add_child(_side_card("Next up", "%s, $%s" % [str(next_rung.get("name", "")), _commas(int(next_rung.get("cost", 0)))], str(next_rung.get("effect", "")), UIKit.TERRA, "note"))
-	var tips: Array = [
-		"Heavy on the bottom, fragile in padding, and the rest sorts itself.",
-		"Buy what's cheap today and sleep on it. Prices move overnight.",
-		"The alley is quicker. The alley is bumpier. Pick one.",
-		"A plant and a lamp raise the vibe more than a second beanbag.",
-		"Goals pay cash and Rep. The clipboard keeps the list.",
-		"If a box meows, open it before the drive.",
-	]
-	side.add_child(_side_card("Marge's tip", str(tips[day % tips.size()]), "", UIKit.WOOD, "note"))
+	side.add_child(_side_card("Marge's tip", Books.tip_for(day), "", UIKit.WOOD, "note"))
 
 	var weather := "clear"
 	for job in GameState.generated_jobs:
@@ -756,6 +778,356 @@ func _price_mover() -> Dictionary:
 		if best.is_empty() or absf(change) > absf(float(best.get("change", 0.0))):
 			best = {"name": good.get("name", id), "change": change, "before": before, "now": now}
 	return best
+
+
+var books_tab := "ledger"
+
+
+func _books(sub := "ledger") -> void:
+	# The books in three sheets: the ledger (today, this week, all time), the
+	# record, and the accountant: hire one, set the wage, audit, fire.
+	books_tab = sub
+	# The sheets take the whole page: the width up to the sidebar's column,
+	# the height to the bottom of the screen.
+	var view := get_viewport_rect().size
+	if view.x < 8.0:
+		view = Vector2(1280, 800)
+	# The body is the screen less the bezel and the icon bar; the sidebar's
+	# column takes 484 of it in a wide window.
+	var body_w := view.x - 104.0 - (SIDEBAR_W + 12.0 if _sidebar_fits() else 0.0)
+	var wide := body_w - 24.0
+	var column := VBoxContainer.new()
+	column.name = "BooksScroll"
+	column.add_theme_constant_override("separation", 10)
+	body.add_child(column)
+	column.layout_mode = 1
+	column.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	column.offset_left = 12
+	column.offset_top = 12
+	column.offset_right = -12
+	column.offset_bottom = -12
+	var tall := view.y >= 900.0
+	var tabs := HBoxContainer.new()
+	tabs.add_theme_constant_override("separation", 8)
+	column.add_child(tabs)
+	for pair in [["ledger", "Ledger"], ["record", "The record"], ["staff", "The accountant"], ["gear", "Gear"], ["journal", "Journal"]]:
+		var tab_btn := UIKit.button(str(pair[1]), UIKit.TERRA if str(pair[0]) == sub else UIKit.WOOD)
+		tab_btn.name = "Books_" + str(pair[0])
+		tab_btn.custom_minimum_size = Vector2(150, 50)
+		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var which := str(pair[0])
+		tab_btn.pressed.connect(func():
+			books_tab = which
+			_show_page()
+		)
+		tabs.add_child(tab_btn)
+	if sub == "staff":
+		var staff := _accountant_panel(wide)
+		staff.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		column.add_child(staff)
+		return
+	if sub == "record":
+		var record := _record_panel(wide)
+		record.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		column.add_child(record)
+		return
+	if sub == "gear":
+		column.add_child(_gear_panel(wide))
+		return
+	if sub == "journal":
+		column.add_child(_journal_panel(wide))
+		return
+	var today := GameState.money - int(GameState.day_log.get("money_start", GameState.money))
+	var week_pay := 0
+	var week_shop := 0
+	var week_trade := 0
+	var week_jobs := 0
+	for day_row in GameState.ledger_days:
+		week_pay += int(day_row.get("job_pay", 0))
+		week_shop += int(day_row.get("shop_earned", 0))
+		week_trade += int(day_row.get("trade_profit", 0))
+		week_jobs += int(day_row.get("jobs", 0))
+	var L: Dictionary = GameState.ledger
+	var ledger_rows: Array = [
+		["", "Today", "Last 7 days", "All time"],
+		["Jobs done", str(int(GameState.day_log.get("jobs", 0))), str(week_jobs), str(GameState.jobs_done)],
+		["Job pay", "$%d" % int(GameState.day_log.get("job_pay", 0)), "$%s" % _commas(week_pay), "$%s" % _commas(int(L.get("job_pay", 0)))],
+		["Shop takings", "$%d" % GameState.shop_today, "$%s" % _commas(week_shop), "$%s" % _commas(int(L.get("shop_earned", 0)))],
+		["Trading", "$%d" % int(GameState.day_log.get("trade_profit", 0)), "$%s" % _commas(week_trade), "$%s" % _commas(int(L.get("trade_profit", 0)))],
+		["Rent, wages", "", "", "$%s, $%s" % [_commas(int(L.get("rent", 0))), _commas(int(L.get("wages", 0)))]],
+		["Found, sundries", "", "", "$%s, $%s" % [_commas(int(L.get("saved", 0))), _commas(int(L.get("sundries", 0)))]],
+		["Jar", "%s$%d" % ["+" if today >= 0 else "−", absi(today)], "", "$%s now, $%s earned" % [_commas(GameState.money), _commas(GameState.total_earned)]],
+	]
+	column.add_child(_books_panel("Ledger", UIKit.SAGE, ledger_rows, wide))
+	# The week, a day a row, fills the rest of the sheet.
+	var days: Array = [["", "Jobs", "Job pay", "Shop", "Trading", "Rent", "Books"]]
+	var recent: Array = GameState.ledger_days.duplicate()
+	recent.reverse()
+	# Five days fit under the ledger at 1080; seven from 1200 up.
+	while recent.size() > (7 if view.y >= 1200.0 else 5):
+		recent.pop_back()
+	for day_row in recent:
+		var books_row: Dictionary = day_row.get("books", {})
+		var books_text := ""
+		if not books_row.is_empty():
+			books_text = "−$%d wage" % int(books_row.get("wage", 0))
+			if int(books_row.get("saved", 0)) > 0:
+				books_text += ", +$%d found" % int(books_row.get("saved", 0))
+			if int(books_row.get("sundries", 0)) > 0:
+				books_text += ", sundries $%d" % int(books_row.get("sundries", 0))
+		days.append(["Day %d" % int(day_row.get("day", 0)), str(int(day_row.get("jobs", 0))), "$%d" % int(day_row.get("job_pay", 0)), "$%d" % int(day_row.get("shop_earned", 0)), "$%d" % int(day_row.get("trade_profit", 0)), "$%d" % int(day_row.get("rent", 0)), books_text])
+	if days.size() == 1:
+		days.append(["No day closed yet", "", "", "", "", "", "Press Next day on the Market page and the week fills in here."])
+	if tall:
+		var week_panel := _books_panel("The week, day by day", UIKit.WOOD, days, wide)
+		week_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		column.add_child(week_panel)
+
+
+func _record_panel(wide: float) -> PanelContainer:
+	var S: Dictionary = GameState.stats
+	var hands := GameState.handling_level()
+	var record_rows: Array = [
+		["Hands", "level %d, %d pieces handled, %d dropped" % [hands, int(S.get("handled", 0)), int(S.get("broken", 0))]],
+		["Rep", "%d star%s, rank %d" % [GameState.rep_stars, "" if GameState.rep_stars == 1 else "s", GameState.rep_rank()]],
+		["Owners", "%d shove%s, %d thrown out, %d claim%s won, %d counter-sued" % [int(S.get("attacked", 0)), "" if int(S.get("attacked", 0)) == 1 else "s", int(S.get("thrown", 0)), int(S.get("sue_won", 0)), "" if int(S.get("sue_won", 0)) == 1 else "s", int(S.get("counter_sued", 0))]],
+		["Grace", "%d forgiven, %d grudge%s, %d paid back" % [int(S.get("forgiven", 0)), int(S.get("grudges", 0)), "" if int(S.get("grudges", 0)) == 1 else "s", int(S.get("payback", 0)) + int(S.get("payback_jobs", 0))]],
+		["Shop", "%d served by hand, %d perfect makes, %d asks granted" % [int(S.get("served_by_hand", 0)), int(S.get("perfect_makes", 0)), int(S.get("asks_granted", 0))]],
+		["Bench", "%d made, %d sold, %d masterpiece%s" % [int(S.get("crafts_made", 0)), int(S.get("crafts_sold", 0)), int(S.get("masterpieces", 0)), "" if int(S.get("masterpieces", 0)) == 1 else "s"]],
+		["Road", "%d busted, %d raid%s, %d pocketed" % [int(S.get("busted", 0)), int(S.get("raids", 0)), "" if int(S.get("raids", 0)) == 1 else "s", int(S.get("pocketed", 0))]],
+	]
+	record_rows.append(["Streak", "%d clean job%s in a row now, best %d" % [GameState.streak, "" if GameState.streak == 1 else "s", int(S.get("best_streak", 0))]])
+	var table: Array = Extras.standings()
+	var league_text: Array = []
+	for i in table.size():
+		league_text.append("%d. %s %d" % [i + 1, table[i].get("name", ""), int(table[i].get("points", 0))])
+	record_rows.append(["League", "week %d:  %s%s" % [int(GameState.league.get("week", 1)), "  ·  ".join(league_text), "  ·  top this week, +10% on board jobs" if bool(GameState.league.get("leader", false)) else ""]])
+	record_rows.append(["Journal", "%d of %d entries" % [GameState.achievements.size(), Extras.achievement_list().size()]])
+	record_rows.append(["Tip", Books.tip_for(GameState.day)])
+	return _books_panel("The record", UIKit.TERRA, record_rows, wide)
+
+
+func _gear_panel(wide: float) -> PanelContainer:
+	# Kit bought once and kept: one rule each.
+	var panel := PanelContainer.new()
+	panel.name = "GearPanel"
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var box := UIKit.style(Color("F7F1E4"), 10, 3, UIKit.BLUE)
+	box.shadow_size = 0
+	box.content_margin_left = 16
+	box.content_margin_right = 16
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	panel.add_theme_stylebox_override("panel", box)
+	panel.custom_minimum_size = Vector2(wide, 0)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	panel.add_child(col)
+	col.add_child(UIKit.label("Gear  ·  %d of %d" % [GameState.gear.size(), Extras.gear_list().size()], 28, UIKit.BLUE, "title", false))
+	for row in Extras.gear_list():
+		var id := str(row.get("id", ""))
+		var owned := Extras.gear_has(id)
+		var line := HBoxContainer.new()
+		line.add_theme_constant_override("separation", 12)
+		col.add_child(line)
+		var text := VBoxContainer.new()
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text.add_theme_constant_override("separation", 2)
+		line.add_child(text)
+		text.add_child(UIKit.label("%s%s  ·  %s" % ["✓ " if owned else "", row.get("name", id), row.get("effect", "")], 24, UIKit.DARK if owned else UIKit.WOOD, "title", false))
+		var blurb := UIKit.label(str(row.get("blurb", "")), 24, UIKit.DARK, "small")
+		blurb.custom_minimum_size = Vector2(wide - 260, 0)
+		text.add_child(blurb)
+		var buy := UIKit.button("Yours" if owned else "Buy $%d" % int(row.get("cost", 0)), UIKit.SAGE if owned else UIKit.BLUE)
+		buy.name = "Gear_" + id
+		buy.disabled = owned
+		buy.custom_minimum_size = Vector2(170, 52)
+		buy.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		buy.pressed.connect(func():
+			var result: Dictionary = Extras.buy_gear(id)
+			AudioDirector.play_sfx("sfx_coins_award" if not result.has("error") else "sfx_invalid_placement")
+			GameState.emit_signal("toast_requested", str(result.get("error", result.get("said", ""))))
+			Extras.check_achievements()
+			SaveManager.save_game()
+			_show_page()
+			_refresh_money()
+		)
+		line.add_child(buy)
+	return panel
+
+
+func _journal_panel(wide: float) -> PanelContainer:
+	# The journal: every entry, the ones earned in ink.
+	var panel := PanelContainer.new()
+	panel.name = "JournalPanel"
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var box := UIKit.style(Color("F7F1E4"), 10, 3, UIKit.MUSTARD)
+	box.shadow_size = 0
+	box.content_margin_left = 16
+	box.content_margin_right = 16
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	panel.add_theme_stylebox_override("panel", box)
+	panel.custom_minimum_size = Vector2(wide, 0)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 4)
+	panel.add_child(col)
+	col.add_child(UIKit.label("Journal  ·  %d of %d" % [GameState.achievements.size(), Extras.achievement_list().size()], 28, UIKit.MUSTARD, "title", false))
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 24)
+	grid.add_theme_constant_override("v_separation", 0)
+	col.add_child(grid)
+	for row in Extras.achievement_list():
+		var done := Extras.unlocked(str(row.get("id", "")))
+		var cell := UIKit.label("%s %s: %s" % ["✓" if done else "·", row.get("name", ""), row.get("blurb", "")], 22, UIKit.DARK if done else Color("9A9388"), "small", false)
+		cell.clip_text = true
+		cell.custom_minimum_size = Vector2((wide - 60.0) * 0.5, 0)
+		grid.add_child(cell)
+	return panel
+
+
+func _books_panel(title: String, accent: Color, table: Array, wide: float) -> PanelContainer:
+	var panel := PanelContainer.new()
+	var box := UIKit.style(Color("F7F1E4"), 10, 3, accent)
+	box.shadow_size = 0
+	box.content_margin_left = 16
+	box.content_margin_right = 16
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	panel.add_theme_stylebox_override("panel", box)
+	panel.custom_minimum_size = Vector2(wide, 0)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 4)
+	panel.add_child(col)
+	col.add_child(UIKit.label(title, 28, accent, "title", false))
+	var grid := GridContainer.new()
+	grid.columns = (table[0] as Array).size() if not table.is_empty() else 2
+	grid.add_theme_constant_override("h_separation", 18)
+	grid.add_theme_constant_override("v_separation", 0)
+	col.add_child(grid)
+	# Columns share the panel's width and never push past it: a two-column
+	# sheet wraps its text, a wider table clips.
+	var inner := wide - 40.0 - 18.0 * float(grid.columns - 1)
+	for row in table:
+		for i in (row as Array).size():
+			var wrap := grid.columns == 2 and i == 1
+			var cell := UIKit.label(str(row[i]), 24, UIKit.DARK if i > 0 else UIKit.WOOD, "small", wrap)
+			if grid.columns == 2:
+				cell.custom_minimum_size = Vector2(110 if i == 0 else inner - 110.0, 0)
+			elif grid.columns == 4:
+				cell.custom_minimum_size = Vector2(200.0 if i == 0 else (inner - 200.0) / 3.0, 0)
+			else:
+				# The week: a narrow day column, even middles, and the last column (the books) twice a share.
+				var share := (inner - 130.0) / float(grid.columns)
+				cell.custom_minimum_size = Vector2(130.0 if i == 0 else (share * 2.0 if i == grid.columns - 1 else share), 0)
+			if not wrap:
+				cell.clip_text = true
+			grid.add_child(cell)
+	return panel
+
+
+func _accountant_panel(wide: float) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.name = "AccountantPanel"
+	var box := UIKit.style(Color("F7F1E4"), 10, 3, UIKit.NIGHT)
+	box.shadow_size = 0
+	box.content_margin_left = 16
+	box.content_margin_right = 16
+	box.content_margin_top = 10
+	box.content_margin_bottom = 10
+	panel.add_theme_stylebox_override("panel", box)
+	panel.custom_minimum_size = Vector2(wide, 0)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	panel.add_child(col)
+	col.add_child(UIKit.label("The accountant", 28, UIKit.NIGHT, "title", false))
+	if Books.hired():
+		var acc: Dictionary = GameState.accountant
+		var head := UIKit.label("%s, $%d a night (asks $%d). Since day %d: $%s found, wage paid %d night%s." % [acc.get("name", ""), int(acc.get("wage", 0)), int(acc.get("ask", 0)), int(acc.get("hired_day", 1)), _commas(int(acc.get("saved", 0))), int(acc.get("nights", 0)), "" if int(acc.get("nights", 0)) == 1 else "s"], 24, UIKit.DARK, "small")
+		head.custom_minimum_size = Vector2(wide - 40, 0)
+		col.add_child(head)
+		var mood := Books.mood()
+		var said := UIKit.label("\"%s\"" % Books.mood_line(), 24, UIKit.LOSS if mood == "caught" else (UIKit.SAGE if mood == "happy" else UIKit.WOOD), "small")
+		said.custom_minimum_size = Vector2(wide - 40, 0)
+		col.add_child(said)
+		if bool(acc.get("caught", false)):
+			col.add_child(UIKit.label("The audit found $%d of 'sundries' in their hand. Fire them and half comes back, or raise the wage and hope." % int(acc.get("skimmed", 0)), 24, UIKit.LOSS, "small", false))
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		col.add_child(row)
+		var less := UIKit.button("Pay $5 less", UIKit.WOOD)
+		less.name = "WageLess"
+		less.custom_minimum_size = Vector2(180, 52)
+		less.pressed.connect(func():
+			Books.set_wage(int(GameState.accountant.get("wage", 0)) - 5)
+			SaveManager.save_game()
+			_show_page()
+		)
+		row.add_child(less)
+		var more := UIKit.button("Pay $5 more", UIKit.SAGE)
+		more.name = "WageMore"
+		more.custom_minimum_size = Vector2(180, 52)
+		more.pressed.connect(func():
+			Books.set_wage(int(GameState.accountant.get("wage", 0)) + 5)
+			SaveManager.save_game()
+			_show_page()
+		)
+		row.add_child(more)
+		var audit := UIKit.button("Audit ($%d)" % Books.audit_cost(), UIKit.NIGHT)
+		audit.name = "AuditBooks"
+		audit.custom_minimum_size = Vector2(170, 52)
+		audit.pressed.connect(func():
+			var result: Dictionary = Books.audit()
+			AudioDirector.play_sfx("sfx_paper_rustle")
+			GameState.emit_signal("toast_requested", str(result.get("error", result.get("said", ""))))
+			SaveManager.save_game()
+			_show_page()
+			_refresh_money()
+		)
+		row.add_child(audit)
+		var fire := UIKit.button("Fire", UIKit.LOSS)
+		fire.name = "FireAccountant"
+		fire.custom_minimum_size = Vector2(120, 52)
+		fire.pressed.connect(func():
+			var result: Dictionary = Books.fire()
+			GameState.emit_signal("toast_requested", str(result.get("error", result.get("said", ""))))
+			SaveManager.save_game()
+			_show_page()
+			_refresh_money()
+		)
+		row.add_child(fire)
+		return panel
+	var intro := UIKit.label("Nobody keeps the books. An accountant costs a wage every night and finds savings on the day's takings. Pay what they ask. Pay less and some of them help themselves; you'll see 'sundries' until you audit.", 24, UIKit.DARK, "small")
+	intro.custom_minimum_size = Vector2(wide - 40, 0)
+	col.add_child(intro)
+	for cand in Books.candidates():
+		var card := HBoxContainer.new()
+		card.add_theme_constant_override("separation", 12)
+		col.add_child(card)
+		var text := VBoxContainer.new()
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text.add_theme_constant_override("separation", 2)
+		card.add_child(text)
+		text.add_child(UIKit.label("%s  ·  asks $%d a night" % [cand.get("name", ""), int(cand.get("ask", 0))], 24, UIKit.DARK, "title", false))
+		var pitch := UIKit.label(str(cand.get("pitch", "")), 24, UIKit.WOOD, "small")
+		pitch.custom_minimum_size = Vector2(wide - 260, 0)
+		text.add_child(pitch)
+		var hire := UIKit.button("Hire", UIKit.NIGHT)
+		hire.name = "Hire_" + str(cand.get("id", ""))
+		hire.custom_minimum_size = Vector2(150, 52)
+		hire.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		var id := str(cand.get("id", ""))
+		var ask := int(cand.get("ask", 30))
+		hire.pressed.connect(func():
+			var result: Dictionary = Books.hire(id, ask)
+			AudioDirector.play_sfx("sfx_notification_soft")
+			GameState.emit_signal("toast_requested", str(result.get("error", result.get("said", ""))))
+			SaveManager.save_game()
+			_show_page()
+		)
+		card.add_child(hire)
+	return panel
 
 
 func _side_card(title: String, headline: String, text: String, accent: Color, picture: String) -> PanelContainer:
@@ -909,6 +1281,19 @@ func _show_day_card(summary: Dictionary) -> void:
 		rows.append(str(life_night.get("event", "")))
 	if int(life_night.get("upkeep", 0)) > 0:
 		rows.append("Pickle ate $%d of it." % int(life_night.get("upkeep", 0)))
+	var books: Dictionary = summary.get("books", {})
+	if not books.is_empty():
+		if bool(books.get("left", false)):
+			rows.append("%s wasn't paid and walked out%s." % [books.get("name", "The accountant"), (" with $%d" % int(books.get("parting", 0))) if int(books.get("parting", 0)) > 0 else ""])
+		else:
+			var kept := "%s kept the books for $%d" % [books.get("name", "The accountant"), int(books.get("wage", 0))]
+			if int(books.get("saved", 0)) > 0:
+				kept += " and found $%d in savings" % int(books.get("saved", 0))
+			rows.append(kept + ".")
+			if bool(books.get("raise", false)):
+				rows.append("%s mentioned a raise. Twice." % books.get("name", ""))
+		if int(books.get("sundries", 0)) > 0:
+			rows.append("Sundries  −$%d." % int(books.get("sundries", 0)))
 	if int(summary.get("rent", 0)) > 0:
 		if int(summary.get("rent_owed", 0)) > 0:
 			rows.append("Rent of $%d came due and the jar was short: $%d owed, the shop is shut until it's paid." % [int(summary.get("rent", 0)), int(summary.get("rent_owed", 0))])
@@ -918,6 +1303,8 @@ func _show_day_card(summary: Dictionary) -> void:
 		rows.append("Rent still owed: $%d. The shop stays shut." % int(summary.get("rent_owed", 0)))
 	else:
 		rows.append("Rent due in %d day%s: $%d." % [GameState.rent_due_in(), "" if GameState.rent_due_in() == 1 else "s", GameState.rent_amount()])
+	if str(summary.get("tip", "")) != "":
+		rows.append("Marge's tip: %s" % summary.get("tip", ""))
 	for row in rows:
 		var line := UIKit.label(str(row), 24, UIKit.DARK, "small")
 		line.custom_minimum_size = Vector2(700, 0)
