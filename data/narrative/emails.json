@@ -103,5 +103,19 @@
   "subject": "ur a legend",
   "body": "plants alive. amps alive. me alive.\n\nyou're invited to our next gig. it's in a laundromat.\n\n- juno",
   "trigger": "job_juno_complete"
+ },
+ {
+  "id": "job_train",
+  "from": "Grandpa Ellis",
+  "subject": "A few small trains",
+  "body": "Hello there.\n\nPriya tells me you found her cat in a box. That's the kind of mover I need.\n\nI'm retiring the shop. Hundreds of tiny trains, one big layout board. My neighbor Delbert will help. Mostly by talking.\n\nAccept whenever suits you.\n\nAll aboard,\nGrandpa Ellis",
+  "trigger": "job_catcafe_complete"
+ },
+ {
+  "id": "ty_train",
+  "from": "Grandpa Ellis",
+  "subject": "Every set together",
+  "body": "Not one caboose went missing.\n\nThe little conductor is yours. Give him a spot on your shelf. He's been waiting for a new route.\n\nDelbert says hello. And that my cuckoo clock runs fast. It doesn't.\n\n- Ellis",
+  "trigger": "job_train_complete"
  }
 ]
