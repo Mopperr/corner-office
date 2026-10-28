@@ -1,0 +1,8235 @@
+{
+ "items": {
+  "bed_bunk_ladder": {
+   "name": "Bunk ladder",
+   "model": "proc:bed_bunk_ladder",
+   "w": 0.44,
+   "d": 0.08,
+   "h": 1.5,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Five rungs between you and the top bunk's sense of superiority.",
+   "nobox": true
+  },
+  "bed_dressing_screen": {
+   "name": "Dressing screen",
+   "model": "proc:bed_dressing_screen",
+   "w": 1.4,
+   "d": 0.5,
+   "h": 1.7,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "For changing behind, or for hiding the ironing.",
+   "nobox": true
+  },
+  "bed_quilt_rack": {
+   "name": "Quilt rack",
+   "model": "proc:bed_quilt_rack",
+   "w": 0.72,
+   "d": 0.36,
+   "h": 0.86,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Displays the good quilt. The good quilt is not for using.",
+   "nobox": true
+  },
+  "bed_dressing_table": {
+   "name": "Dressing table",
+   "model": "proc:bed_dressing_table",
+   "w": 1.0,
+   "d": 0.45,
+   "h": 1.45,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Where the morning is negotiated.",
+   "nobox": true,
+   "heavy": true
+  },
+  "bed_valet_stand": {
+   "name": "Valet stand",
+   "model": "proc:bed_valet_stand",
+   "w": 0.46,
+   "d": 0.4,
+   "h": 1.15,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Holds tomorrow's suit with more patience than you."
+  },
+  "bed_trouser_press": {
+   "name": "Trouser press",
+   "model": "proc:bed_trouser_press",
+   "w": 0.42,
+   "d": 0.08,
+   "h": 1.05,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "A creased trouser is a statement. This is the counter-argument.",
+   "nobox": true
+  },
+  "bed_ironing_board": {
+   "name": "Ironing board",
+   "model": "proc:bed_ironing_board",
+   "w": 1.2,
+   "d": 0.38,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Comes out for interviews and funerals.",
+   "nobox": true,
+   "bulky": true
+  },
+  "bed_clothes_airer": {
+   "name": "Clothes airer",
+   "model": "proc:bed_clothes_airer",
+   "w": 1.1,
+   "d": 0.56,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Indoor drying season runs September to June.",
+   "nobox": true
+  },
+  "bed_end_bench": {
+   "name": "End-of-bed bench",
+   "model": "proc:bed_end_bench",
+   "w": 1.2,
+   "d": 0.4,
+   "h": 0.48,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "For clothes that are not clean, not dirty, and not going anywhere.",
+   "nobox": true
+  },
+  "bed_headboard": {
+   "name": "Spare headboard",
+   "model": "proc:bed_headboard",
+   "w": 1.4,
+   "d": 0.1,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "From a bed that left in a previous move. Optimistic.",
+   "nobox": true,
+   "bulky": true
+  },
+  "bed_rolled_futon": {
+   "name": "Rolled futon",
+   "model": "proc:bed_rolled_futon",
+   "w": 0.9,
+   "d": 0.4,
+   "h": 0.4,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "A guest bed, provided the guest is flexible.",
+   "bulky": true
+  },
+  "bed_moses_basket": {
+   "name": "Moses basket on a stand",
+   "model": "proc:bed_moses_basket",
+   "w": 0.85,
+   "d": 0.42,
+   "h": 0.9,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Outgrown in eleven weeks. Kept for eleven years.",
+   "fragile": true,
+   "nobox": true
+  },
+  "bed_changing_table": {
+   "name": "Changing table",
+   "model": "proc:bed_changing_table",
+   "w": 0.8,
+   "d": 0.5,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "The busiest surface in the house for about two years.",
+   "nobox": true
+  },
+  "bed_playpen": {
+   "name": "Playpen",
+   "model": "proc:bed_playpen",
+   "w": 1.0,
+   "d": 1.0,
+   "h": 0.7,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Contains one toddler, briefly.",
+   "nobox": true,
+   "bulky": true
+  },
+  "bed_baby_walker": {
+   "name": "Baby walker",
+   "model": "proc:bed_baby_walker",
+   "w": 0.65,
+   "d": 0.65,
+   "h": 0.5,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Top speed one skirting board per minute.",
+   "bulky": true
+  },
+  "bed_childs_table": {
+   "name": "Child's table and stools",
+   "model": "proc:bed_childs_table",
+   "w": 1.05,
+   "d": 0.55,
+   "h": 0.53,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Everything at knee height, including the arguments.",
+   "nobox": true
+  },
+  "bed_play_tent": {
+   "name": "Play tent",
+   "model": "proc:bed_play_tent",
+   "w": 1.1,
+   "d": 1.1,
+   "h": 1.55,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Admission by password. The password changes hourly.",
+   "bulky": true
+  },
+  "bed_ladder_shelf": {
+   "name": "Ladder shelf",
+   "model": "proc:bed_ladder_shelf",
+   "w": 0.6,
+   "d": 0.4,
+   "h": 1.7,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Leans against the wall like it pays rent.",
+   "nobox": true
+  },
+  "bed_cube_storage": {
+   "name": "Cube storage unit",
+   "model": "proc:bed_cube_storage",
+   "w": 0.78,
+   "d": 0.39,
+   "h": 0.78,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Four cubes, four systems, no system.",
+   "nobox": true,
+   "heavy": true
+  },
+  "bed_underbed_drawer": {
+   "name": "Under-bed drawer",
+   "model": "proc:bed_underbed_drawer",
+   "w": 1.0,
+   "d": 0.6,
+   "h": 0.18,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Home of the summer duvet and one lost sock a year.",
+   "nobox": true
+  },
+  "bed_upright_vacuum": {
+   "name": "Upright vacuum",
+   "model": "proc:bed_upright_vacuum",
+   "w": 0.32,
+   "d": 0.32,
+   "h": 1.12,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Picks up everything except the mood.",
+   "nobox": true
+  },
+  "bed_dehumidifier": {
+   "name": "Dehumidifier",
+   "model": "proc:bed_dehumidifier",
+   "w": 0.35,
+   "d": 0.26,
+   "h": 0.55,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Fills a bucket a day. Nobody admits where from.",
+   "heavy": true
+  },
+  "bed_tower_fan": {
+   "name": "Tower fan",
+   "model": "proc:bed_tower_fan",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 1.05,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Oscillates between helpful and noisy.",
+   "nobox": true
+  },
+  "bed_washstand": {
+   "name": "Washstand with jug and bowl",
+   "model": "proc:bed_washstand",
+   "w": 0.8,
+   "d": 0.45,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "From before taps. Still waiting for them.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true
+  },
+  "bed_toy_kitchen": {
+   "name": "Toy kitchen",
+   "model": "proc:bed_toy_kitchen",
+   "w": 0.8,
+   "d": 0.32,
+   "h": 0.9,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Serves plastic croissants with total commitment.",
+   "nobox": true
+  },
+  "bed_hobby_horse": {
+   "name": "Hobby horse",
+   "model": "proc:bed_hobby_horse",
+   "w": 0.34,
+   "d": 0.12,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "bedroom",
+   "flavor": "Goes anywhere, eats nothing, refuses every fence."
+  },
+  "bed_chamber_pot": {
+   "name": "Chamber pot",
+   "model": "proc:bed_chamber_pot",
+   "w": 0.26,
+   "d": 0.22,
+   "h": 0.15,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "From the house's pre-plumbing years. Now holds pot-pourri, officially.",
+   "fragile": true
+  },
+  "bed_breakfast_tray": {
+   "name": "Breakfast-in-bed tray",
+   "model": "proc:bed_breakfast_tray",
+   "w": 0.55,
+   "d": 0.35,
+   "h": 0.3,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Crumbs in the bed are the price of luxury.",
+   "fragile": true
+  },
+  "bed_reading_pillow": {
+   "name": "Reading pillow",
+   "model": "proc:bed_reading_pillow",
+   "w": 0.62,
+   "d": 0.46,
+   "h": 0.52,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Turns a bed into an armchair and a book into a nap.",
+   "bulky": true
+  },
+  "bed_hot_water_bottle": {
+   "name": "Hot water bottle",
+   "model": "proc:bed_hot_water_bottle",
+   "w": 0.22,
+   "d": 0.07,
+   "h": 0.34,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Better company than most at two in the morning."
+  },
+  "bed_night_light": {
+   "name": "Night-light",
+   "model": "proc:bed_night_light",
+   "w": 0.1,
+   "d": 0.1,
+   "h": 0.12,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Keeps the monsters honest.",
+   "fragile": true
+  },
+  "bed_lava_lamp": {
+   "name": "Lava lamp",
+   "model": "proc:bed_lava_lamp",
+   "w": 0.12,
+   "d": 0.12,
+   "h": 0.38,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Has been warming up since about 1974.",
+   "fragile": true
+  },
+  "bed_music_box": {
+   "name": "Music box",
+   "model": "proc:bed_music_box",
+   "w": 0.15,
+   "d": 0.12,
+   "h": 0.15,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Plays half a waltz, then thinks better of it.",
+   "fragile": true
+  },
+  "bed_piggy_bank": {
+   "name": "Piggy bank",
+   "model": "proc:bed_piggy_bank",
+   "w": 0.22,
+   "d": 0.1,
+   "h": 0.14,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Currently holding two buttons and a promise.",
+   "fragile": true
+  },
+  "bed_perfume_tray": {
+   "name": "Perfume tray",
+   "model": "proc:bed_perfume_tray",
+   "w": 0.26,
+   "d": 0.16,
+   "h": 0.15,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Each bottle a different decade of good intentions.",
+   "fragile": true
+  },
+  "bed_hand_mirror_set": {
+   "name": "Hand mirror and brush",
+   "model": "proc:bed_hand_mirror_set",
+   "w": 0.3,
+   "d": 0.18,
+   "h": 0.04,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Silver-backed in theory. Inherited, definitely.",
+   "fragile": true
+  },
+  "bed_vanity_case": {
+   "name": "Vanity case",
+   "model": "proc:bed_vanity_case",
+   "w": 0.3,
+   "d": 0.21,
+   "h": 0.24,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Packed for a weekend in 1968 and never quite unpacked."
+  },
+  "bed_watch_winder": {
+   "name": "Watch winder",
+   "model": "proc:bed_watch_winder",
+   "w": 0.16,
+   "d": 0.19,
+   "h": 0.16,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Keeps a watch running for someone who never wears it.",
+   "fragile": true
+  },
+  "bed_headphone_stand": {
+   "name": "Headphone stand",
+   "model": "proc:bed_headphone_stand",
+   "w": 0.17,
+   "d": 0.12,
+   "h": 0.3,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Displays the headphones that cost more than the speakers.",
+   "fragile": true
+  },
+  "bed_stacking_rings": {
+   "name": "Stacking rings",
+   "model": "proc:bed_stacking_rings",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.2,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Teaches order. The order is mostly ignored."
+  },
+  "bed_block_tub": {
+   "name": "Tub of building bricks",
+   "model": "proc:bed_block_tub",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.28,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Eleven hundred bricks, all in the instructions-optional range."
+  },
+  "bed_xylophone": {
+   "name": "Toy xylophone",
+   "model": "proc:bed_xylophone",
+   "w": 0.36,
+   "d": 0.18,
+   "h": 0.07,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Knows one tune and plays it relentlessly.",
+   "fragile": true
+  },
+  "bed_spinning_top": {
+   "name": "Spinning top",
+   "model": "proc:bed_spinning_top",
+   "w": 0.12,
+   "d": 0.12,
+   "h": 0.16,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Hums when it spins. Sulks when it stops."
+  },
+  "bed_pull_along_dog": {
+   "name": "Pull-along dog",
+   "model": "proc:bed_pull_along_dog",
+   "w": 0.4,
+   "d": 0.12,
+   "h": 0.17,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Follows obediently, unlike the real thing."
+  },
+  "bed_baby_monitor": {
+   "name": "Baby monitor",
+   "model": "proc:bed_baby_monitor",
+   "w": 0.18,
+   "d": 0.1,
+   "h": 0.15,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Broadcasts snoring to the next room in high fidelity.",
+   "fragile": true
+  },
+  "bed_nappy_caddy": {
+   "name": "Nappy caddy",
+   "model": "proc:bed_nappy_caddy",
+   "w": 0.36,
+   "d": 0.24,
+   "h": 0.24,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Organised in a way that survives no actual emergency."
+  },
+  "bed_tissue_box": {
+   "name": "Box of tissues",
+   "model": "proc:bed_tissue_box",
+   "w": 0.24,
+   "d": 0.125,
+   "h": 0.13,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Every cold in the household, catalogued."
+  },
+  "bed_bedside_carafe": {
+   "name": "Bedside carafe",
+   "model": "proc:bed_bedside_carafe",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.26,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Holds stale water and the moral high ground.",
+   "fragile": true
+  },
+  "bed_roller_tin": {
+   "name": "Tin of hair rollers",
+   "model": "proc:bed_roller_tin",
+   "w": 0.22,
+   "d": 0.16,
+   "h": 0.11,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Overnight curls at the cost of overnight sleep."
+  },
+  "bed_lock_diary": {
+   "name": "Diary with a lock",
+   "model": "proc:bed_lock_diary",
+   "w": 0.18,
+   "d": 0.12,
+   "h": 0.04,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "The lock is decorative. The secrets are not."
+  },
+  "bed_star_projector": {
+   "name": "Star projector",
+   "model": "proc:bed_star_projector",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.14,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Puts the night sky on the ceiling, with fewer clouds.",
+   "fragile": true
+  },
+  "bed_pyjama_case": {
+   "name": "Pyjama case",
+   "model": "proc:bed_pyjama_case",
+   "w": 0.48,
+   "d": 0.2,
+   "h": 0.2,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Guards the pyjamas with a face of total devotion."
+  },
+  "bed_wig_stand": {
+   "name": "Wig stand",
+   "model": "proc:bed_wig_stand",
+   "w": 0.22,
+   "d": 0.22,
+   "h": 0.38,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Wears the hats nobody else will.",
+   "fragile": true
+  },
+  "bed_humidifier": {
+   "name": "Humidifier",
+   "model": "proc:bed_humidifier",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 0.3,
+   "mount": "small",
+   "room": "bedroom",
+   "flavor": "Adds moisture to the air and a puddle to the shelf.",
+   "fragile": true
+  },
+  "bed_nursery_mobile": {
+   "name": "Nursery mobile",
+   "model": "proc:bed_nursery_mobile",
+   "w": 0.4,
+   "d": 0.4,
+   "h": 0.62,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Turns gently above a baby who would rather be held.",
+   "fragile": true
+  },
+  "bed_bed_warmer": {
+   "name": "Warming pan",
+   "model": "proc:bed_bed_warmer",
+   "w": 0.25,
+   "d": 0.06,
+   "h": 1.1,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Hot coals in the bed. The Victorians had nerve."
+  },
+  "bed_tie_rack": {
+   "name": "Tie rack",
+   "model": "proc:bed_tie_rack",
+   "w": 0.4,
+   "d": 0.06,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Seven ties. The one in the middle does all the work."
+  },
+  "bed_dream_catcher": {
+   "name": "Dream catcher",
+   "model": "proc:bed_dream_catcher",
+   "w": 0.25,
+   "d": 0.04,
+   "h": 0.55,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Catches dreams. Releases them by about eleven.",
+   "fragile": true
+  },
+  "bed_curtain_pole": {
+   "name": "Curtain pole and curtains",
+   "model": "proc:bed_curtain_pole",
+   "w": 1.6,
+   "d": 0.12,
+   "h": 1.4,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Closes about ninety per cent of the way. The rest is morning.",
+   "bulky": true
+  },
+  "bed_picture_ledge": {
+   "name": "Picture ledge",
+   "model": "proc:bed_picture_ledge",
+   "w": 0.8,
+   "d": 0.1,
+   "h": 0.32,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "For the photos you love and the one you are obliged to display.",
+   "fragile": true
+  },
+  "bed_bunting": {
+   "name": "Bunting",
+   "model": "proc:bed_bunting",
+   "w": 1.2,
+   "d": 0.03,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Left up after a birthday and promoted to decor."
+  },
+  "bed_height_chart": {
+   "name": "Height chart",
+   "model": "proc:bed_height_chart",
+   "w": 0.3,
+   "d": 0.02,
+   "h": 1.6,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Pencil marks of everyone who stood still long enough."
+  },
+  "bed_dressing_gown": {
+   "name": "Dressing gown on a hook",
+   "model": "proc:bed_dressing_gown",
+   "w": 0.6,
+   "d": 0.15,
+   "h": 1.3,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Worn twenty minutes a day, hung up for the rest."
+  },
+  "bed_peg_rail": {
+   "name": "Peg rail",
+   "model": "proc:bed_peg_rail",
+   "w": 1.0,
+   "d": 0.16,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Shaker discipline, overruled by a tote bag."
+  },
+  "bed_mosquito_net": {
+   "name": "Mosquito net canopy",
+   "model": "proc:bed_mosquito_net",
+   "w": 0.9,
+   "d": 0.9,
+   "h": 1.8,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Keeps out the midges and lets in a sense of adventure.",
+   "bulky": true
+  },
+  "bed_suit_carrier": {
+   "name": "Suit carrier",
+   "model": "proc:bed_suit_carrier",
+   "w": 0.6,
+   "d": 0.08,
+   "h": 1.15,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Protects the wedding suit through a wedding-free decade."
+  },
+  "bed_medal_hanger": {
+   "name": "Medal hanger",
+   "model": "proc:bed_medal_hanger",
+   "w": 0.5,
+   "d": 0.06,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "bedroom",
+   "flavor": "Five parkruns and a fun run that wasn't."
+  }
+ },
+ "props": {
+  "bed_bunk_ladder": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.5,
+     0.04
+    ],
+    "p": [
+     -0.19,
+     0.75,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.5,
+     0.04
+    ],
+    "p": [
+     0.19,
+     0.75,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.25,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.55,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.85,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.34
+    ],
+    "p": [
+     0.0,
+     1.15,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.03,
+     0.08
+    ],
+    "p": [
+     -0.19,
+     1.47,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.03,
+     0.08
+    ],
+    "p": [
+     0.19,
+     1.47,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bed_dressing_screen": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     1.6,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.85,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     1.6,
+     0.03
+    ],
+    "p": [
+     0.4225,
+     0.85,
+     0.1079
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     -0.5,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     1.6,
+     0.03
+    ],
+    "p": [
+     -0.4225,
+     0.85,
+     0.1079
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.5,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.37,
+     1.3,
+     0.036
+    ],
+    "p": [
+     0.0,
+     0.9,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.37,
+     1.3,
+     0.036
+    ],
+    "p": [
+     0.4225,
+     0.9,
+     0.1079
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.0,
+     -0.5,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.37,
+     1.3,
+     0.036
+    ],
+    "p": [
+     -0.4225,
+     0.9,
+     0.1079
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.0,
+     0.5,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.45,
+     0.07
+    ],
+    "p": [
+     0.05,
+     1.42,
+     0.0
+    ],
+    "c": "6E4B6E"
+   }
+  ],
+  "bed_quilt_rack": [
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.857
+    ],
+    "p": [
+     -0.33,
+     0.425,
+     0.01
+    ],
+    "c": "C68B59",
+    "r": [
+     0.3328,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.857
+    ],
+    "p": [
+     0.33,
+     0.425,
+     0.01
+    ],
+    "c": "C68B59",
+    "r": [
+     0.3328,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.4415
+    ],
+    "p": [
+     -0.33,
+     0.235,
+     -0.1
+    ],
+    "c": "C68B59",
+    "r": [
+     0.2285,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.4415
+    ],
+    "p": [
+     0.33,
+     0.235,
+     -0.1
+    ],
+    "c": "C68B59",
+    "r": [
+     0.2285,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.64
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.1
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.64
+    ],
+    "p": [
+     0.0,
+     0.55,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.64
+    ],
+    "p": [
+     0.0,
+     0.8,
+     -0.11
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.4,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.37,
+     0.03
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.03,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.82,
+     -0.07
+    ],
+    "c": "8FA882"
+   }
+  ],
+  "bed_dressing_table": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.45
+    ],
+    "p": [
+     0.0,
+     0.74,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.72,
+     0.04
+    ],
+    "p": [
+     -0.46,
+     0.36,
+     -0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.72,
+     0.04
+    ],
+    "p": [
+     -0.46,
+     0.36,
+     0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.72,
+     0.04
+    ],
+    "p": [
+     0.46,
+     0.36,
+     -0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.72,
+     0.04
+    ],
+    "p": [
+     0.46,
+     0.36,
+     0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.1,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.66,
+     0.205
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.65,
+     0.03
+    ],
+    "p": [
+     0.0,
+     1.1,
+     -0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.52,
+     0.57,
+     0.035
+    ],
+    "p": [
+     0.0,
+     1.1,
+     -0.19
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.08
+    ],
+    "p": [
+     0.35,
+     0.8,
+     0.05
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.3,
+     0.79,
+     0.08
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_valet_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.03,
+     0.35
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     1.05
+    ],
+    "p": [
+     0.0,
+     0.555,
+     -0.05
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.05,
+     0.06
+    ],
+    "p": [
+     0.0,
+     1.1,
+     -0.05
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.4,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.88,
+     -0.05
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.62,
+     0.05
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.22,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.51,
+     0.07
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.42,
+     0.12
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "bed_trouser_press": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     1.0,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.52,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.8,
+     0.065
+    ],
+    "p": [
+     0.0,
+     0.56,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.08
+    ],
+    "p": [
+     -0.15,
+     0.01,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0.15,
+     0.01,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.12,
+     0.93,
+     0.034
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.06,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "3E3A4F"
+   }
+  ],
+  "bed_ironing_board": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.36
+    ],
+    "p": [
+     0.0,
+     0.875,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.16,
+     0.01,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.895,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.08,
+     0.1
+    ],
+    "p": [
+     0.45,
+     0.94,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.0323
+    ],
+    "p": [
+     -0.05,
+     0.44,
+     -0.14
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.6202,
+     1.5708,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.0323
+    ],
+    "p": [
+     -0.05,
+     0.44,
+     0.14
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.6202,
+     1.5708,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.0323
+    ],
+    "p": [
+     -0.05,
+     0.44,
+     -0.14
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.6202,
+     -1.5708,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.0323
+    ],
+    "p": [
+     -0.05,
+     0.44,
+     0.14
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.6202,
+     -1.5708,
+     0.0
+    ]
+   }
+  ],
+  "bed_clothes_airer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.9849
+    ],
+    "p": [
+     -0.52,
+     0.495,
+     -0.13
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.2671,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.9849
+    ],
+    "p": [
+     -0.52,
+     0.495,
+     0.13
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.2671,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.9849
+    ],
+    "p": [
+     0.52,
+     0.495,
+     -0.13
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.2671,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.9849
+    ],
+    "p": [
+     0.52,
+     0.495,
+     0.13
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.2671,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     1.04
+    ],
+    "p": [
+     0.0,
+     0.6,
+     0.16
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     1.04
+    ],
+    "p": [
+     0.0,
+     0.6,
+     -0.16
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     1.04
+    ],
+    "p": [
+     0.0,
+     0.96,
+     0.0
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.3,
+     0.02
+    ],
+    "p": [
+     -0.2,
+     0.45,
+     0.17
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.3,
+     0.02
+    ],
+    "p": [
+     0.25,
+     0.45,
+     -0.17
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.16,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.52,
+     0.17
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bed_end_bench": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.465,
+     -0.13
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.465,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.465,
+     0.13
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.45,
+     0.05
+    ],
+    "p": [
+     -0.55,
+     0.225,
+     -0.16
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.45,
+     0.05
+    ],
+    "p": [
+     -0.55,
+     0.225,
+     0.16
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.45,
+     0.05
+    ],
+    "p": [
+     0.55,
+     0.225,
+     -0.16
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.45,
+     0.05
+    ],
+    "p": [
+     0.55,
+     0.225,
+     0.16
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.05,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.12,
+     0.0
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "bed_headboard": [
+   {
+    "t": "box",
+    "s": [
+     1.36,
+     0.7,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.8,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     1.36
+    ],
+    "p": [
+     0.0,
+     1.17,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.5,
+     0.05
+    ],
+    "p": [
+     -0.6,
+     0.25,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.5,
+     0.05
+    ],
+    "p": [
+     0.6,
+     0.25,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.3,
+     0.95,
+     0.035
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.3,
+     0.95,
+     0.035
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.3,
+     0.65,
+     0.035
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.3,
+     0.65,
+     0.035
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.8,
+     0.035
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "bed_rolled_futon": [
+   {
+    "t": "cyl",
+    "s": [
+     0.19,
+     0.84
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.195,
+     0.04
+    ],
+    "p": [
+     -0.25,
+     0.2,
+     0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.195,
+     0.04
+    ],
+    "p": [
+     0.25,
+     0.2,
+     0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.02
+    ],
+    "p": [
+     -0.425,
+     0.2,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.02
+    ],
+    "p": [
+     0.425,
+     0.2,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "bed_moses_basket": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.6407
+    ],
+    "p": [
+     -0.32,
+     0.285,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.5967,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.6407
+    ],
+    "p": [
+     0.32,
+     0.285,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.5967,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.6407
+    ],
+    "p": [
+     -0.32,
+     0.285,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.5967,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.6407
+    ],
+    "p": [
+     0.32,
+     0.285,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.5967,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.22,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.66,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.72,
+     0.04,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.755,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.12,
+     0.38
+    ],
+    "p": [
+     -0.27,
+     0.83,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.03,
+     0.32
+    ],
+    "p": [
+     0.12,
+     0.775,
+     0.0
+    ],
+    "c": "E8B4A8"
+   }
+  ],
+  "bed_changing_table": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.5
+    ],
+    "p": [
+     0.0,
+     0.875,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.05,
+     0.42
+    ],
+    "p": [
+     0.0,
+     0.915,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.1,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.94,
+     -0.24
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.1,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.94,
+     0.24
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.86,
+     0.04
+    ],
+    "p": [
+     -0.38,
+     0.43,
+     -0.23
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.86,
+     0.04
+    ],
+    "p": [
+     -0.38,
+     0.43,
+     0.23
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.86,
+     0.04
+    ],
+    "p": [
+     0.38,
+     0.43,
+     -0.23
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.86,
+     0.04
+    ],
+    "p": [
+     0.38,
+     0.43,
+     0.23
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.02,
+     0.46
+    ],
+    "p": [
+     0.0,
+     0.25,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.12,
+     0.25
+    ],
+    "p": [
+     -0.15,
+     0.32,
+     0.0
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bed_playpen": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.68,
+     -0.48
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.68,
+     0.48
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     1.0
+    ],
+    "p": [
+     -0.48,
+     0.68,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     1.0
+    ],
+    "p": [
+     0.48,
+     0.68,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.68
+    ],
+    "p": [
+     -0.475,
+     0.34,
+     -0.475
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.68
+    ],
+    "p": [
+     -0.475,
+     0.34,
+     0.475
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.68
+    ],
+    "p": [
+     0.475,
+     0.34,
+     -0.475
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.68
+    ],
+    "p": [
+     0.475,
+     0.34,
+     0.475
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.92,
+     0.04,
+     0.92
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.2,
+     0.1,
+     0.1
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.92,
+     0.5,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.35,
+     -0.475
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.5,
+     0.92
+    ],
+    "p": [
+     -0.475,
+     0.35,
+     0.0
+    ],
+    "c": "BFD6DA"
+   }
+  ],
+  "bed_baby_walker": [
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.2,
+     0.03,
+     -0.2
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.2,
+     0.03,
+     0.2
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.2,
+     0.03,
+     -0.2
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.2,
+     0.03,
+     0.2
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.26,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.33,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.3106
+    ],
+    "p": [
+     0.21,
+     0.275,
+     0.0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.0644,
+     -1.5708,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.3106
+    ],
+    "p": [
+     -0.21,
+     0.275,
+     0.0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.0644,
+     1.5708,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.3106
+    ],
+    "p": [
+     0.0,
+     0.275,
+     0.21
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.0644,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.3106
+    ],
+    "p": [
+     0.0,
+     0.275,
+     -0.21
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.0644,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.15,
+     0.475,
+     0.1
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bed_childs_table": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.03,
+     0.5
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.485
+    ],
+    "p": [
+     -0.24,
+     0.2425,
+     -0.21
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.485
+    ],
+    "p": [
+     -0.24,
+     0.2425,
+     0.21
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.485
+    ],
+    "p": [
+     0.24,
+     0.2425,
+     -0.21
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.485
+    ],
+    "p": [
+     0.24,
+     0.2425,
+     0.21
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.03
+    ],
+    "p": [
+     -0.4,
+     0.28,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.265
+    ],
+    "p": [
+     -0.4,
+     0.1325,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.03
+    ],
+    "p": [
+     0.4,
+     0.28,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.265
+    ],
+    "p": [
+     0.4,
+     0.1325,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.01,
+     0.15
+    ],
+    "p": [
+     0.05,
+     0.52,
+     0.05
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bed_play_tent": [
+   {
+    "t": "cyl",
+    "s": [
+     0.48,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.38,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.28,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.75,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.3
+    ],
+    "p": [
+     0.0,
+     1.05,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.2
+    ],
+    "p": [
+     0.0,
+     1.3,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.2867
+    ],
+    "p": [
+     -0.115,
+     1.41,
+     -0.115
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.6961,
+     -2.3562,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.2867
+    ],
+    "p": [
+     -0.115,
+     1.41,
+     0.115
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.6961,
+     -0.7854,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.2867
+    ],
+    "p": [
+     0.115,
+     1.41,
+     -0.115
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.6961,
+     2.3562,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.2867
+    ],
+    "p": [
+     0.115,
+     1.41,
+     0.115
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.6961,
+     0.7854,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.5,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.47
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_ladder_shelf": [
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     1.6945
+    ],
+    "p": [
+     -0.27,
+     0.85,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.202,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     1.6945
+    ],
+    "p": [
+     0.27,
+     0.85,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.202,
+     3.1416,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.52,
+     0.02,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.02
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.52,
+     0.02,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.8,
+     -0.05
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.52,
+     0.02,
+     0.18
+    ],
+    "p": [
+     0.0,
+     1.25,
+     -0.1
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.2,
+     0.15
+    ],
+    "p": [
+     -0.1,
+     0.46,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.1
+    ],
+    "p": [
+     0.1,
+     0.86,
+     -0.05
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0.1,
+     0.97,
+     -0.05
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "bed_cube_storage": [
+   {
+    "t": "box",
+    "s": [
+     0.78,
+     0.03,
+     0.39
+    ],
+    "p": [
+     0.0,
+     0.765,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.78,
+     0.03,
+     0.39
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.39
+    ],
+    "p": [
+     -0.375,
+     0.39,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.39
+    ],
+    "p": [
+     0.375,
+     0.39,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.39
+    ],
+    "p": [
+     0.0,
+     0.39,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.72,
+     0.03,
+     0.39
+    ],
+    "p": [
+     0.0,
+     0.39,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.72,
+     0.72,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.39,
+     -0.19
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.32,
+     0.33
+    ],
+    "p": [
+     -0.19,
+     0.2,
+     0.01
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.32,
+     0.33
+    ],
+    "p": [
+     0.19,
+     0.2,
+     0.01
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.32,
+     0.33
+    ],
+    "p": [
+     0.19,
+     0.585,
+     0.01
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bed_underbed_drawer": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.02,
+     0.6
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.45,
+     0.015,
+     -0.27
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.45,
+     0.015,
+     0.27
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.45,
+     0.015,
+     -0.27
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.45,
+     0.015,
+     0.27
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.15,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.105,
+     0.28
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.15,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.105,
+     -0.28
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.15,
+     0.54
+    ],
+    "p": [
+     -0.49,
+     0.105,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.15,
+     0.54
+    ],
+    "p": [
+     0.49,
+     0.105,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.06,
+     0.3
+    ],
+    "p": [
+     -0.15,
+     0.08,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.295
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "bed_upright_vacuum": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.08,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.05
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.5,
+     0.15
+    ],
+    "p": [
+     0.0,
+     0.4,
+     -0.04
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.25
+    ],
+    "p": [
+     0.0,
+     0.42,
+     0.07
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.46
+    ],
+    "p": [
+     0.0,
+     0.88,
+     -0.06
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     1.095,
+     -0.06
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.03
+    ],
+    "p": [
+     -0.12,
+     0.05,
+     -0.1
+    ],
+    "c": "2B2622",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.03
+    ],
+    "p": [
+     0.12,
+     0.05,
+     -0.1
+    ],
+    "c": "2B2622",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.72,
+     -0.13
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_dehumidifier": [
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.5,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.02,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.53,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.125
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.125
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.54,
+     -0.08
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     -0.15,
+     0.01,
+     -0.1
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     -0.15,
+     0.01,
+     0.1
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.15,
+     0.01,
+     -0.1
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.15,
+     0.01,
+     0.1
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_tower_fan": [
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.95,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.515,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.75,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.075
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.02,
+     0.1
+    ],
+    "p": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.03,
+     1.02,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_washstand": [
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.72,
+     0.42
+    ],
+    "p": [
+     0.0,
+     0.37,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.04,
+     0.45
+    ],
+    "p": [
+     0.0,
+     0.75,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.18,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.86,
+     -0.21
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.81,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.2
+    ],
+    "p": [
+     0.05,
+     0.87,
+     0.03
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.135,
+     0.94,
+     0.03
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.5,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.37,
+     0.215
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.06,
+     0.37,
+     0.21
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.06,
+     0.37,
+     0.21
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_toy_kitchen": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.55,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.275,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.32
+    ],
+    "p": [
+     0.0,
+     0.565,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.3,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.73,
+     -0.15
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.01
+    ],
+    "p": [
+     -0.25,
+     0.585,
+     0.02
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.01
+    ],
+    "p": [
+     -0.08,
+     0.585,
+     0.02
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.25,
+     0.01
+    ],
+    "p": [
+     -0.18,
+     0.28,
+     0.155
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.1
+    ],
+    "p": [
+     0.22,
+     0.63,
+     -0.11
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.02,
+     0.16
+    ],
+    "p": [
+     0.22,
+     0.575,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.84,
+     -0.11
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.875,
+     -0.11
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bed_hobby_horse": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.8
+    ],
+    "p": [
+     0.0,
+     0.4,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.12,
+     0.07
+    ],
+    "p": [
+     0.04,
+     0.86,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.065
+    ],
+    "p": [
+     0.12,
+     0.82,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.12,
+     0.03
+    ],
+    "p": [
+     -0.045,
+     0.9,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.94,
+     0.02
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.07,
+     0.89,
+     0.036
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bed_chamber_pot": [
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.13
+    ],
+    "p": [
+     0.0,
+     0.065,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.125,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.07,
+     0.02
+    ],
+    "p": [
+     0.11,
+     0.08,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.088,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.135,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.102,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "E8B4A8"
+   }
+  ],
+  "bed_breakfast_tray": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.02,
+     0.35
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.04,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.24,
+     0.1675
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.04,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.24,
+     -0.1675
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.2,
+     0.02
+    ],
+    "p": [
+     -0.24,
+     0.1,
+     -0.14
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.2,
+     0.02
+    ],
+    "p": [
+     -0.24,
+     0.1,
+     0.14
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0.24,
+     0.1,
+     -0.14
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0.24,
+     0.1,
+     0.14
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.008
+    ],
+    "p": [
+     0.15,
+     0.224,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0.15,
+     0.25,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.015
+    ],
+    "p": [
+     -0.08,
+     0.2275,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.015,
+     0.08
+    ],
+    "p": [
+     -0.08,
+     0.2425,
+     0.0
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "bed_reading_pillow": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.42,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.28,
+     -0.1
+    ],
+    "c": "C9A070",
+    "r": [
+     -0.25,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.34
+    ],
+    "p": [
+     -0.21,
+     0.13,
+     0.04
+    ],
+    "c": "C9A070",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.34
+    ],
+    "p": [
+     0.21,
+     0.13,
+     0.04
+    ],
+    "c": "C9A070",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.1,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.05
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.495,
+     -0.15
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "bed_hot_water_bottle": [
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.26,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.21,
+     0.22,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.12,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.275,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.315,
+     0.0
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bed_night_light": [
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.07,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.045,
+     -0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.005
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.035,
+     0.105,
+     0.01
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.02,
+     0.006
+    ],
+    "p": [
+     -0.012,
+     0.01,
+     -0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.02,
+     0.006
+    ],
+    "p": [
+     0.012,
+     0.01,
+     -0.02
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bed_lava_lamp": [
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.038,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.041
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.042
+    ],
+    "p": [
+     0.0,
+     0.26,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.34,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bed_music_box": [
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.06,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.01
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.005,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.0625,
+     0.01
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.08,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.1,
+     -0.045
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.2,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.06,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.1,
+     -0.043
+    ],
+    "c": "BFD6DA",
+    "r": [
+     -0.2,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.02
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.02
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.005,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.0725,
+     0.03,
+     0.01
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_piggy_bank": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     -0.06,
+     0.07,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0.06,
+     0.07,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.07,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     -0.035,
+     0.015,
+     -0.025
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     -0.035,
+     0.015,
+     0.025
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.035,
+     0.015,
+     -0.025
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.035,
+     0.015,
+     0.025
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.025,
+     0.01
+    ],
+    "p": [
+     0.05,
+     0.125,
+     0.02
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.025,
+     0.01
+    ],
+    "p": [
+     0.05,
+     0.125,
+     -0.02
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.004,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.12,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_perfume_tray": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.01,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.005,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.08
+    ],
+    "p": [
+     -0.07,
+     0.05,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.07,
+     0.1,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.09,
+     0.03
+    ],
+    "p": [
+     0.02,
+     0.055,
+     -0.02
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.02
+    ],
+    "p": [
+     0.02,
+     0.11,
+     -0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.11
+    ],
+    "p": [
+     0.09,
+     0.065,
+     0.03
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.09,
+     0.132,
+     0.03
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_hand_mirror_set": [
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.012
+    ],
+    "p": [
+     -0.08,
+     0.006,
+     -0.03
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.013
+    ],
+    "p": [
+     -0.08,
+     0.0075,
+     -0.03
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.012,
+     0.024
+    ],
+    "p": [
+     0.025,
+     0.006,
+     -0.03
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.018,
+     0.045
+    ],
+    "p": [
+     -0.02,
+     0.009,
+     0.045
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.012,
+     0.035
+    ],
+    "p": [
+     -0.035,
+     0.024,
+     0.045
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.016,
+     0.02
+    ],
+    "p": [
+     0.09,
+     0.008,
+     0.045
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bed_vanity_case": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.18,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.195,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.02,
+     0.015
+    ],
+    "p": [
+     -0.06,
+     0.22,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.02,
+     0.015
+    ],
+    "p": [
+     0.06,
+     0.22,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.2325,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.025,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.102
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_watch_winder": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.16,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.085,
+     0.085
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.085,
+     0.082
+    ],
+    "c": "E7DCC6",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.085,
+     0.091
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bed_headphone_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.02,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.285,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.08,
+     0.07
+    ],
+    "p": [
+     -0.0725,
+     0.23,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.08,
+     0.07
+    ],
+    "p": [
+     0.0725,
+     0.23,
+     0.0
+    ],
+    "c": "3E3A4F"
+   }
+  ],
+  "bed_stacking_rings": [
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.17
+    ],
+    "p": [
+     0.0,
+     0.105,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.065,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.095,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.125,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.18,
+     0.0
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bed_block_tub": [
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.22,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.06
+    ],
+    "p": [
+     -0.07,
+     0.25,
+     -0.06
+    ],
+    "c": "E6B655",
+    "r": [
+     0.0,
+     0.4,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0.06,
+     0.24,
+     0.05
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0.0,
+     -0.3,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.05
+    ],
+    "p": [
+     0.07,
+     0.245,
+     -0.07
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.03
+    ],
+    "p": [
+     -0.05,
+     0.24,
+     0.07
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.0,
+     0.9,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.225,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_xylophone": [
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.02,
+     -0.06
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.06
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.13
+    ],
+    "p": [
+     -0.135,
+     0.036,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.12
+    ],
+    "p": [
+     -0.081,
+     0.036,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.11
+    ],
+    "p": [
+     -0.027,
+     0.036,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.1
+    ],
+    "p": [
+     0.027,
+     0.036,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.09
+    ],
+    "p": [
+     0.081,
+     0.036,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.08
+    ],
+    "p": [
+     0.135,
+     0.036,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.055,
+     0.075
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.07,
+     0.055,
+     0.075
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bed_spinning_top": [
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.058,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.135,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_pull_along_dog": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.06,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.05
+    ],
+    "p": [
+     0.1,
+     0.11,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.085,
+     0.145,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.13,
+     0.11,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.015
+    ],
+    "p": [
+     -0.05,
+     0.025,
+     -0.035
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.015
+    ],
+    "p": [
+     -0.05,
+     0.025,
+     0.035
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.015
+    ],
+    "p": [
+     0.05,
+     0.025,
+     -0.035
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.015
+    ],
+    "p": [
+     0.05,
+     0.025,
+     0.035
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.05
+    ],
+    "p": [
+     -0.095,
+     0.11,
+     0.0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.0,
+     0.0,
+     0.6
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.07
+    ],
+    "p": [
+     0.165,
+     0.11,
+     0.0
+    ],
+    "c": "B6453F",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "bed_baby_monitor": [
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.015
+    ],
+    "p": [
+     -0.04,
+     0.0075,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.04
+    ],
+    "p": [
+     -0.04,
+     0.035,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.04,
+     0.085,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.01
+    ],
+    "p": [
+     -0.04,
+     0.085,
+     0.035
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.1,
+     0.025
+    ],
+    "p": [
+     0.055,
+     0.05,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.045,
+     0.04,
+     0.004
+    ],
+    "p": [
+     0.055,
+     0.07,
+     0.0145
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.03
+    ],
+    "p": [
+     0.075,
+     0.115,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bed_nappy_caddy": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.02,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.16,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.1125
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.16,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.1,
+     -0.1125
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.16,
+     0.21
+    ],
+    "p": [
+     -0.1725,
+     0.1,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.16,
+     0.21
+    ],
+    "p": [
+     0.1725,
+     0.1,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.06,
+     0.015
+    ],
+    "p": [
+     -0.06,
+     0.2,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.06,
+     0.015
+    ],
+    "p": [
+     0.06,
+     0.2,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.225,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.13,
+     0.2
+    ],
+    "p": [
+     -0.08,
+     0.085,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0.1,
+     0.12,
+     0.0
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "bed_tissue_box": [
+   {
+    "t": "box",
+    "s": [
+     0.23,
+     0.09,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.045,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.01,
+     0.122
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.004,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.091,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.03,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.105,
+     0.0
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.0,
+     0.0,
+     0.2
+    ]
+   }
+  ],
+  "bed_bedside_carafe": [
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.003,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.066,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.032,
+     0.065
+    ],
+    "p": [
+     0.0,
+     0.2275,
+     0.0
+    ],
+    "c": "BFD6DA"
+   }
+  ],
+  "bed_roller_tin": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.07,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.035,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.07
+    ],
+    "p": [
+     -0.06,
+     0.085,
+     -0.045
+    ],
+    "c": "E6B655",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.07
+    ],
+    "p": [
+     -0.06,
+     0.085,
+     0.0
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.07
+    ],
+    "p": [
+     -0.06,
+     0.085,
+     0.045
+    ],
+    "c": "B6453F",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.07
+    ],
+    "p": [
+     0.04,
+     0.085,
+     -0.03
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.07
+    ],
+    "p": [
+     0.04,
+     0.085,
+     0.03
+    ],
+    "c": "8FA882",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "bed_lock_diary": [
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.025,
+     0.11
+    ],
+    "p": [
+     0.0,
+     0.0125,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.135,
+     0.02,
+     0.105
+    ],
+    "p": [
+     0.004,
+     0.0125,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.02
+    ],
+    "p": [
+     0.07,
+     0.0125,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.006
+    ],
+    "p": [
+     0.08,
+     0.0125,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.004,
+     0.01
+    ],
+    "p": [
+     -0.02,
+     0.027,
+     0.03
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_star_projector": [
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.055
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.042,
+     0.113,
+     0.013
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.0183,
+     0.113,
+     0.04
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     -0.0395,
+     0.113,
+     -0.0195
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.0125,
+     0.113,
+     -0.0422
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bed_pyjama_case": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.26
+    ],
+    "p": [
+     -0.02,
+     0.09,
+     0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0.15,
+     0.12,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.07,
+     0.02
+    ],
+    "p": [
+     0.15,
+     0.1,
+     0.075
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.07,
+     0.02
+    ],
+    "p": [
+     0.15,
+     0.1,
+     -0.075
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.215,
+     0.12,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.09,
+     0.03,
+     -0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.09,
+     0.03,
+     0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.03,
+     -0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.03,
+     0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.006,
+     0.01
+    ],
+    "p": [
+     -0.02,
+     0.17,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bed_wig_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.09
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.092
+    ],
+    "p": [
+     0.0,
+     0.225,
+     -0.012
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.325,
+     0.0
+    ],
+    "c": "3E3A4F"
+   }
+  ],
+  "bed_humidifier": [
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.091,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.255,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.285,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bed_nursery_mobile": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.57,
+     -0.19
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.19
+    ],
+    "p": [
+     0.0,
+     0.58,
+     -0.095
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.54,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.008,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.12
+    ],
+    "p": [
+     0.14,
+     0.44,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.12
+    ],
+    "p": [
+     -0.14,
+     0.44,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.14
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.44,
+     -0.14
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.14,
+     0.345,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.14,
+     0.345,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.345,
+     0.14
+    ],
+    "c": "BFD6DA"
+   }
+  ],
+  "bed_bed_warmer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.78
+    ],
+    "p": [
+     0.0,
+     0.69,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.052
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "D9765F",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.28,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.01
+    ],
+    "p": [
+     0.0,
+     1.08,
+     0.0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bed_tie_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.06,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.37,
+     -0.0225
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.36
+    ],
+    "p": [
+     0.0,
+     0.34,
+     0.01
+    ],
+    "c": "C9A24E",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.01
+    ],
+    "p": [
+     -0.12,
+     0.19,
+     0.01
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.01
+    ],
+    "p": [
+     -0.04,
+     0.19,
+     0.01
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.01
+    ],
+    "p": [
+     0.04,
+     0.19,
+     0.01
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.01
+    ],
+    "p": [
+     0.12,
+     0.19,
+     0.01
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bed_dream_catcher": [
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0.0
+    ],
+    "c": "C9A070",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0.0
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.1
+    ],
+    "p": [
+     -0.07,
+     0.29,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.1
+    ],
+    "p": [
+     0.07,
+     0.29,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.12,
+     0.004
+    ],
+    "p": [
+     -0.07,
+     0.18,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.18,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0.07,
+     0.18,
+     0.0
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "bed_curtain_pole": [
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     1.5
+    ],
+    "p": [
+     0.0,
+     1.36,
+     0.02
+    ],
+    "c": "C9A24E",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.77,
+     1.36,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.77,
+     1.36,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.08
+    ],
+    "p": [
+     -0.6,
+     1.36,
+     -0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0.6,
+     1.36,
+     -0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     1.3,
+     0.04
+    ],
+    "p": [
+     -0.5,
+     0.68,
+     0.02
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     1.3,
+     0.04
+    ],
+    "p": [
+     0.5,
+     0.68,
+     0.02
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.41,
+     0.04,
+     0.045
+    ],
+    "p": [
+     -0.5,
+     0.6,
+     0.02
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.41,
+     0.04,
+     0.045
+    ],
+    "p": [
+     0.5,
+     0.6,
+     0.02
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bed_picture_ledge": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.02,
+     0.09
+    ],
+    "p": [
+     0.0,
+     0.01,
+     -0.005
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.044
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.25,
+     0.015
+    ],
+    "p": [
+     -0.25,
+     0.145,
+     -0.03
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.1,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.2,
+     0.017
+    ],
+    "p": [
+     -0.25,
+     0.145,
+     -0.03
+    ],
+    "c": "E6B655",
+    "r": [
+     -0.1,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.2,
+     0.015
+    ],
+    "p": [
+     0.02,
+     0.12,
+     -0.015
+    ],
+    "c": "C68B59",
+    "r": [
+     -0.1,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.11,
+     0.15,
+     0.017
+    ],
+    "p": [
+     0.02,
+     0.12,
+     -0.015
+    ],
+    "c": "4F8A8B",
+    "r": [
+     -0.1,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.14,
+     0.005
+    ],
+    "p": [
+     0.25,
+     0.09,
+     0.0
+    ],
+    "c": "F4F1EA",
+    "r": [
+     -0.12,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bed_bunting": [
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     1.18
+    ],
+    "p": [
+     0.0,
+     0.28,
+     0.0
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     -0.5,
+     0.24,
+     0.0
+    ],
+    "c": "B6453F",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     -0.3333,
+     0.24,
+     0.0
+    ],
+    "c": "E6B655",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     -0.1667,
+     0.24,
+     0.0
+    ],
+    "c": "8FA882",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     0.0,
+     0.24,
+     0.0
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     0.1667,
+     0.24,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     0.3333,
+     0.24,
+     0.0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.005
+    ],
+    "p": [
+     0.5,
+     0.24,
+     0.0
+    ],
+    "c": "6E4B6E",
+    "r": [
+     0.0,
+     0.0,
+     0.785
+    ]
+   }
+  ],
+  "bed_height_chart": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     1.5,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.8,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.5,
+     0.014
+    ],
+    "p": [
+     -0.12,
+     0.8,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.008,
+     0.016
+    ],
+    "p": [
+     -0.05,
+     0.6,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.008,
+     0.016
+    ],
+    "p": [
+     -0.05,
+     0.85,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.008,
+     0.016
+    ],
+    "p": [
+     -0.05,
+     1.0,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.008,
+     0.016
+    ],
+    "p": [
+     -0.05,
+     1.1,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.016
+    ],
+    "p": [
+     0.06,
+     1.42,
+     0.0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bed_dressing_gown": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.1,
+     0.01
+    ],
+    "p": [
+     0.0,
+     1.25,
+     -0.07
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.08
+    ],
+    "p": [
+     0.0,
+     1.25,
+     -0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     1.0,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.7,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.12,
+     0.11
+    ],
+    "p": [
+     0.0,
+     1.15,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.6,
+     0.11
+    ],
+    "p": [
+     -0.24,
+     0.85,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.6,
+     0.11
+    ],
+    "p": [
+     0.24,
+     0.85,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.51,
+     0.05,
+     0.11
+    ],
+    "p": [
+     0.0,
+     0.7,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.12,
+     0.105
+    ],
+    "p": [
+     0.13,
+     0.52,
+     0.0
+    ],
+    "c": "6E4B6E"
+   }
+  ],
+  "bed_peg_rail": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.34,
+     -0.07
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.08
+    ],
+    "p": [
+     -0.4,
+     0.34,
+     -0.02
+    ],
+    "c": "D9B98A",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.08
+    ],
+    "p": [
+     -0.15,
+     0.34,
+     -0.02
+    ],
+    "c": "D9B98A",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.08
+    ],
+    "p": [
+     0.15,
+     0.34,
+     -0.02
+    ],
+    "c": "D9B98A",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.08
+    ],
+    "p": [
+     0.4,
+     0.34,
+     -0.02
+    ],
+    "c": "D9B98A",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.3,
+     0.03
+    ],
+    "p": [
+     -0.15,
+     0.17,
+     -0.03
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.15,
+     0.25,
+     -0.01
+    ],
+    "c": "C9A070",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.05
+    ],
+    "p": [
+     0.15,
+     0.25,
+     0.02
+    ],
+    "c": "C9A070",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bed_mosquito_net": [
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.05
+    ],
+    "p": [
+     0.0,
+     1.775,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.15
+    ],
+    "p": [
+     0.0,
+     1.68,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.1
+    ],
+    "p": [
+     0.0,
+     1.56,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.32,
+     0.4
+    ],
+    "p": [
+     0.0,
+     1.3,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.38,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.9,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.43,
+     0.7
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bed_suit_carrier": [
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.06
+    ],
+    "p": [
+     0.0,
+     1.12,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     1.08,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.58,
+     1.0,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.56,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.95,
+     0.072
+    ],
+    "p": [
+     0.0,
+     0.56,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.12,
+     0.072
+    ],
+    "p": [
+     0.12,
+     0.95,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.075
+    ],
+    "p": [
+     0.0,
+     0.3,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bed_medal_hanger": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.08,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.35,
+     -0.025
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.15,
+     0.005
+    ],
+    "p": [
+     -0.15,
+     0.23,
+     -0.015
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.15,
+     0.005
+    ],
+    "p": [
+     -0.05,
+     0.23,
+     -0.015
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.15,
+     0.005
+    ],
+    "p": [
+     0.05,
+     0.23,
+     -0.015
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.15,
+     0.005
+    ],
+    "p": [
+     0.15,
+     0.23,
+     -0.015
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.006
+    ],
+    "p": [
+     -0.15,
+     0.14,
+     -0.015
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.006
+    ],
+    "p": [
+     -0.05,
+     0.14,
+     -0.015
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.006
+    ],
+    "p": [
+     0.05,
+     0.14,
+     -0.015
+    ],
+    "c": "C9A070",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.006
+    ],
+    "p": [
+     0.15,
+     0.14,
+     -0.015
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ]
+ }
+}

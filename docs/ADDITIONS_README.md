@@ -177,4 +177,26 @@ All made by a seeded procedural Python generator (numpy, scipy, Pillow): periodi
 - `assets/audio/stings/music_courtroom_sting.ogg`: the 5.4 s dry, slightly comic "here comes the judge" sting (C major, 100 BPM, OGG Vorbis 44.1 kHz stereo). It's in the new `stings/` folder, not `music/`, so the smoke test's music-loop rule doesn't apply to it. It's a one-shot meant to be played by a sting player, and nothing references it yet, so it's silent until wired in. Made from an original MIDI composition rendered with FluidR3_GM soundfont samples. Licence: original composition; the instrument samples are **MIT-licensed (FluidR3_GM by Frank Wen), not CC0**. Nobody has listened to it yet.
 - `assets/audio/credits_team_additions.md`: the FluidR3_GM credit with the full MIT licence text, copied verbatim. It's a new file because `assets/audio/credits.md` already exists on Claude's branch and was left unedited. Licence: original text (credit notice) plus the quoted MIT licence.
 
+## Team catalogue items (branch `team/items-for-pr21`)
+
+480 new catalogue pieces in seven new files under `data/items/`, each in the existing
+`{"items": {...}, "props": {...}}` format, with `proc:<id>` models built from 4-12
+box/cylinder/sphere parts in palette colours only:
+
+- `data/items/team_kitchen.json`: 73 items (`kit_` ids)
+- `data/items/team_bathroom.json`: 72 items (`bth_` ids)
+- `data/items/team_bedroom.json`: 67 items (`bed_` ids)
+- `data/items/team_living.json`: 58 items (`liv_` ids)
+- `data/items/team_loft.json`: 66 items (`loft_` ids)
+- `data/items/team_shed.json`: 74 items (`shed_` ids)
+- `data/items/team_office.json`: 70 items (`off_` ids)
+
+How they were made: AI agents wrote the part recipes and ran them through a small procedural
+generator in Python, kept outside the repo. The generator computes each piece's w/d/h from
+its parts, sets the fragile/nobox/heavy/bulky flags and checks ids, palette and flavour text.
+Every model, name and flavour line is original; nothing was copied from other games or asset packs.
+Each piece appears once: copies of the same object across rooms were removed, as were pieces
+too close to existing catalogue items.
+All files pass `tools/check_items.py`, and `tests/run_smoke.sh` prints SMOKE_OK.
+
 Created by Andrew's Helpers (Grok Bots)

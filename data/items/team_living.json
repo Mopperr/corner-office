@@ -1,0 +1,8067 @@
+{
+ "items": {
+  "liv_record_cabinet": {
+   "name": "Record cabinet",
+   "model": "proc:liv_record_cabinet",
+   "w": 1.1,
+   "d": 0.42,
+   "h": 0.62,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Alphabetised once, in 1987, and never since.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_telephone_seat": {
+   "name": "Telephone seat",
+   "model": "proc:liv_telephone_seat",
+   "w": 0.9,
+   "d": 0.4,
+   "h": 0.83,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Built for long calls to an aunt. Still smells faintly of them.",
+   "bulky": true
+  },
+  "liv_hall_bench": {
+   "name": "Hall bench, lift-top",
+   "model": "proc:liv_hall_bench",
+   "w": 1.0,
+   "d": 0.4,
+   "h": 0.5,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Open it and you will find every glove, but never two that match.",
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_jukebox": {
+   "name": "Jukebox",
+   "model": "proc:liv_jukebox",
+   "w": 0.8,
+   "d": 0.61,
+   "h": 1.5,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Plays B-sides only. Someone fiddled with it.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_arcade_cabinet": {
+   "name": "Arcade cabinet",
+   "model": "proc:liv_arcade_cabinet",
+   "w": 0.65,
+   "d": 0.8,
+   "h": 1.75,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "The high score is from a previous owner and has not been beaten.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_chaise_longue": {
+   "name": "Chaise longue",
+   "model": "proc:liv_chaise_longue",
+   "w": 1.7,
+   "d": 0.65,
+   "h": 0.8,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "For fainting on, or for the cat, which is the same thing.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_nest_of_tables": {
+   "name": "Nest of tables",
+   "model": "proc:liv_nest_of_tables",
+   "w": 0.55,
+   "d": 0.46,
+   "h": 0.5,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Three tables, used one at a time, for forty years.",
+   "bulky": true
+  },
+  "liv_card_table": {
+   "name": "Card table, folding",
+   "model": "proc:liv_card_table",
+   "w": 0.76,
+   "d": 0.76,
+   "h": 0.73,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "The baize has a cigarette burn exactly where the trumps go.",
+   "bulky": true
+  },
+  "liv_writing_bureau": {
+   "name": "Writing bureau",
+   "model": "proc:liv_writing_bureau",
+   "w": 0.76,
+   "d": 0.48,
+   "h": 1.04,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "The key is lost, so the gas bills are safe in there forever.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_longcase_clock": {
+   "name": "Longcase clock",
+   "model": "proc:liv_longcase_clock",
+   "w": 0.5,
+   "d": 0.29,
+   "h": 2.05,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Strikes thirteen at midnight. Nobody has the heart to fix it.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_pedestal_fan": {
+   "name": "Pedestal fan",
+   "model": "proc:liv_pedestal_fan",
+   "w": 0.42,
+   "d": 0.4,
+   "h": 1.27,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Three speeds: breeze, gale, and the papers are off the table.",
+   "bulky": true
+  },
+  "liv_radiogram": {
+   "name": "Radiogram",
+   "model": "proc:liv_radiogram",
+   "w": 1.2,
+   "d": 0.46,
+   "h": 0.78,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Takes a minute to warm up, like most things in the house.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_revolving_bookcase": {
+   "name": "Revolving bookcase",
+   "model": "proc:liv_revolving_bookcase",
+   "w": 0.5,
+   "d": 0.5,
+   "h": 0.83,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Give it a spin and the book you wanted goes round the back.",
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_plant_stand": {
+   "name": "Plant stand, wrought iron",
+   "model": "proc:liv_plant_stand",
+   "w": 0.4,
+   "d": 0.4,
+   "h": 0.9,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Bought for the plants. Now holds the post."
+  },
+  "liv_piano_stool": {
+   "name": "Piano stool",
+   "model": "proc:liv_piano_stool",
+   "w": 0.56,
+   "d": 0.37,
+   "h": 0.5,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "The lid hides grade three sheet music and a fossilised toffee."
+  },
+  "liv_cello_case": {
+   "name": "Cello in a hard case",
+   "model": "proc:liv_cello_case",
+   "w": 0.44,
+   "d": 0.31,
+   "h": 1.32,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Gets its own seat on the train, and the better one.",
+   "fragile": true,
+   "bulky": true
+  },
+  "liv_dog_basket": {
+   "name": "Dog basket, wicker",
+   "model": "proc:liv_dog_basket",
+   "w": 0.72,
+   "d": 0.54,
+   "h": 0.3,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "The dog prefers the sofa. The basket is for show.",
+   "bulky": true
+  },
+  "liv_fireguard": {
+   "name": "Fireguard, mesh",
+   "model": "proc:liv_fireguard",
+   "w": 0.8,
+   "d": 0.25,
+   "h": 0.61,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Keeps the sparks in and the toast out."
+  },
+  "liv_coal_scuttle": {
+   "name": "Coal scuttle",
+   "model": "proc:liv_coal_scuttle",
+   "w": 0.3,
+   "d": 0.48,
+   "h": 0.41,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "No coal in it since the Clean Air Act. Kindling and a lighter now.",
+   "heavy": true
+  },
+  "liv_wood_stove": {
+   "name": "Wood-burning stove",
+   "model": "proc:liv_wood_stove",
+   "w": 0.5,
+   "d": 0.45,
+   "h": 1.01,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Heats one armchair to perfection and the rest of the room not at all.",
+   "nobox": true,
+   "heavy": true
+  },
+  "liv_cocktail_cabinet": {
+   "name": "Cocktail cabinet",
+   "model": "proc:liv_cocktail_cabinet",
+   "w": 0.8,
+   "d": 0.47,
+   "h": 1.23,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Opens to a mirror, a light and a bottle of advocaat from 1979.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_harp": {
+   "name": "Harp",
+   "model": "proc:liv_harp",
+   "w": 0.4,
+   "d": 1.0,
+   "h": 1.82,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Forty-seven strings, all slightly out, all the time.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_plaster_bust": {
+   "name": "Plaster bust on a plinth",
+   "model": "proc:liv_plaster_bust",
+   "w": 0.38,
+   "d": 0.38,
+   "h": 1.52,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Nobody knows who he is. He has seen everything.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true
+  },
+  "liv_egg_chair": {
+   "name": "Hanging egg chair",
+   "model": "proc:liv_egg_chair",
+   "w": 1.0,
+   "d": 1.0,
+   "h": 1.93,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Sways gently. Bad news for anyone holding tea.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "liv_blanket_ladder": {
+   "name": "Blanket ladder",
+   "model": "proc:liv_blanket_ladder",
+   "w": 0.48,
+   "d": 0.23,
+   "h": 1.6,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Not for climbing. It has been tested.",
+   "bulky": true
+  },
+  "liv_draught_excluder": {
+   "name": "Draught excluder, sausage dog",
+   "model": "proc:liv_draught_excluder",
+   "w": 1.01,
+   "d": 0.15,
+   "h": 0.16,
+   "mount": "floor",
+   "room": "living",
+   "flavor": "Guards the door. Has never once barked."
+  },
+  "liv_terrarium": {
+   "name": "Terrarium",
+   "model": "proc:liv_terrarium",
+   "w": 0.3,
+   "d": 0.2,
+   "h": 0.27,
+   "mount": "small",
+   "room": "living",
+   "flavor": "A tiny world that needs watering once a month and never is.",
+   "fragile": true
+  },
+  "liv_carriage_clock": {
+   "name": "Carriage clock",
+   "model": "proc:liv_carriage_clock",
+   "w": 0.1,
+   "d": 0.09,
+   "h": 0.155,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Presented for thirty years of service. It has done ten.",
+   "fragile": true
+  },
+  "liv_snow_globe": {
+   "name": "Snow globe",
+   "model": "proc:liv_snow_globe",
+   "w": 0.11,
+   "d": 0.12,
+   "h": 0.14,
+   "mount": "small",
+   "room": "living",
+   "flavor": "A souvenir of Skegness, where it does not snow.",
+   "fragile": true
+  },
+  "liv_hourglass": {
+   "name": "Hourglass",
+   "model": "proc:liv_hourglass",
+   "w": 0.1,
+   "d": 0.1,
+   "h": 0.2,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Three minutes exactly, for eggs nobody boils any more.",
+   "fragile": true
+  },
+  "liv_decanter_set": {
+   "name": "Decanter and tumblers",
+   "model": "proc:liv_decanter_set",
+   "w": 0.3,
+   "d": 0.15,
+   "h": 0.28,
+   "mount": "small",
+   "room": "living",
+   "flavor": "The sherry has been there since the wedding. Which wedding is unclear.",
+   "fragile": true
+  },
+  "liv_humidor": {
+   "name": "Cigar humidor",
+   "model": "proc:liv_humidor",
+   "w": 0.28,
+   "d": 0.22,
+   "h": 0.135,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Holds two cigars, both left over from a christening."
+  },
+  "liv_jigsaw_board": {
+   "name": "Jigsaw in progress",
+   "model": "proc:liv_jigsaw_board",
+   "w": 0.7,
+   "d": 0.5,
+   "h": 0.04,
+   "mount": "small",
+   "room": "living",
+   "flavor": "A thousand pieces, nine hundred and ninety-eight present."
+  },
+  "liv_hifi_stack": {
+   "name": "Hi-fi separates",
+   "model": "proc:liv_hifi_stack",
+   "w": 0.43,
+   "d": 0.34,
+   "h": 0.36,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Every component a different brand, and every one important.",
+   "fragile": true,
+   "heavy": true
+  },
+  "liv_video_recorder": {
+   "name": "Video recorder",
+   "model": "proc:liv_video_recorder",
+   "w": 0.36,
+   "d": 0.29,
+   "h": 0.12,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Flashes 12:00 and will until the end of time.",
+   "fragile": true
+  },
+  "liv_remote_caddy": {
+   "name": "Remote control caddy",
+   "model": "proc:liv_remote_caddy",
+   "w": 0.18,
+   "d": 0.1,
+   "h": 0.16,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Four remotes. One of them works the telly."
+  },
+  "liv_photo_frames": {
+   "name": "Photo frames, mantelpiece trio",
+   "model": "proc:liv_photo_frames",
+   "w": 0.44,
+   "d": 0.1,
+   "h": 0.23,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Weddings, graduations and a dog that has since passed on.",
+   "fragile": true
+  },
+  "liv_brass_elephant": {
+   "name": "Brass elephant",
+   "model": "proc:liv_brass_elephant",
+   "w": 0.25,
+   "d": 0.12,
+   "h": 0.15,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Brought back from somewhere by someone. Very heavy for its size."
+  },
+  "liv_china_dogs": {
+   "name": "China dogs, mantelpiece pair",
+   "model": "proc:liv_china_dogs",
+   "w": 0.34,
+   "d": 0.1,
+   "h": 0.22,
+   "mount": "small",
+   "room": "living",
+   "flavor": "They face each other and have not spoken in years.",
+   "fragile": true
+  },
+  "liv_ice_bucket": {
+   "name": "Ice bucket and tongs",
+   "model": "proc:liv_ice_bucket",
+   "w": 0.18,
+   "d": 0.17,
+   "h": 0.26,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Comes out at Christmas. The ice comes out of a bag."
+  },
+  "liv_soda_siphon": {
+   "name": "Soda siphon",
+   "model": "proc:liv_soda_siphon",
+   "w": 0.1,
+   "d": 0.16,
+   "h": 0.32,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Squirts sideways if you press it with any conviction.",
+   "fragile": true
+  },
+  "liv_cocktail_shaker": {
+   "name": "Cocktail shaker set",
+   "model": "proc:liv_cocktail_shaker",
+   "w": 0.33,
+   "d": 0.12,
+   "h": 0.22,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Shaken once, for a party in 1983. Still slightly sticky."
+  },
+  "liv_bookends": {
+   "name": "Bookends with books",
+   "model": "proc:liv_bookends",
+   "w": 0.43,
+   "d": 0.14,
+   "h": 0.23,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Six books held firmly in place, unread, with great dignity."
+  },
+  "liv_glass_cloche": {
+   "name": "Glass cloche with stuffed bird",
+   "model": "proc:liv_glass_cloche",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 0.33,
+   "mount": "small",
+   "room": "living",
+   "flavor": "A robin, under glass, judging you since 1911.",
+   "fragile": true
+  },
+  "liv_hamster_cage": {
+   "name": "Hamster cage",
+   "model": "proc:liv_hamster_cage",
+   "w": 0.5,
+   "d": 0.32,
+   "h": 0.33,
+   "mount": "small",
+   "room": "living",
+   "flavor": "The hamster sleeps all day and runs a marathon at three in the morning."
+  },
+  "liv_dinner_gong": {
+   "name": "Dinner gong",
+   "model": "proc:liv_dinner_gong",
+   "w": 0.35,
+   "d": 0.15,
+   "h": 0.45,
+   "mount": "small",
+   "room": "living",
+   "flavor": "Struck once a year, for the turkey. The dog leaves the room.",
+   "fragile": true
+  },
+  "liv_barometer": {
+   "name": "Banjo barometer",
+   "model": "proc:liv_barometer",
+   "w": 0.24,
+   "d": 0.07,
+   "h": 0.94,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Has pointed at Change since anyone can remember.",
+   "fragile": true
+  },
+  "liv_macrame_hanger": {
+   "name": "Macram\u00e9 plant hanger",
+   "model": "proc:liv_macrame_hanger",
+   "w": 0.24,
+   "d": 0.24,
+   "h": 0.92,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Knotted at an evening class, along with a lot of opinions.",
+   "fragile": true
+  },
+  "liv_wall_hanging": {
+   "name": "Wall hanging, woven",
+   "model": "proc:liv_wall_hanging",
+   "w": 0.74,
+   "d": 0.04,
+   "h": 1.1,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Covers the damp patch beautifully."
+  },
+  "liv_plate_rack": {
+   "name": "Display plates on a rack",
+   "model": "proc:liv_plate_rack",
+   "w": 0.6,
+   "d": 0.1,
+   "h": 0.35,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Royal occasions, commemorated in blue and white, never eaten off.",
+   "fragile": true
+  },
+  "liv_cuckoo_clock": {
+   "name": "Cuckoo clock",
+   "model": "proc:liv_cuckoo_clock",
+   "w": 0.3,
+   "d": 0.17,
+   "h": 0.92,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "The bird comes out on the hour and looks disappointed.",
+   "fragile": true
+  },
+  "liv_letter_rack": {
+   "name": "Wall letter rack",
+   "model": "proc:liv_letter_rack",
+   "w": 0.3,
+   "d": 0.08,
+   "h": 0.25,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Bills at the back, postcards at the front, wisdom nowhere."
+  },
+  "liv_butterfly_case": {
+   "name": "Butterfly display case",
+   "model": "proc:liv_butterfly_case",
+   "w": 0.4,
+   "d": 0.06,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Pinned by a great-uncle who also collected grudges.",
+   "fragile": true
+  },
+  "liv_wall_sconce": {
+   "name": "Wall sconce",
+   "model": "proc:liv_wall_sconce",
+   "w": 0.15,
+   "d": 0.21,
+   "h": 0.36,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Sheds a warm light on the picture hook it replaced.",
+   "fragile": true
+  },
+  "liv_flying_ducks": {
+   "name": "Flying ducks, set of three",
+   "model": "proc:liv_flying_ducks",
+   "w": 0.86,
+   "d": 0.08,
+   "h": 0.55,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Heading for the coving and taking their time about it.",
+   "fragile": true
+  },
+  "liv_medal_frame": {
+   "name": "Framed medals",
+   "model": "proc:liv_medal_frame",
+   "w": 0.3,
+   "d": 0.045,
+   "h": 0.36,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Never discussed at dinner. Polished every November.",
+   "fragile": true
+  },
+  "liv_door_chime": {
+   "name": "Door chime",
+   "model": "proc:liv_door_chime",
+   "w": 0.26,
+   "d": 0.07,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Ding dong, then the long wait while someone finds their slippers.",
+   "fragile": true
+  },
+  "liv_wreath": {
+   "name": "Door wreath",
+   "model": "proc:liv_wreath",
+   "w": 0.4,
+   "d": 0.13,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "living",
+   "flavor": "Up in December, down in March, after a reminder.",
+   "fragile": true
+  }
+ },
+ "props": {
+  "liv_record_cabinet": [
+   {
+    "t": "box",
+    "s": [
+     1.1,
+     0.03,
+     0.42
+    ],
+    "p": [
+     0,
+     0.605,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.1,
+     0.03,
+     0.42
+    ],
+    "p": [
+     0,
+     0.135,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.44,
+     0.42
+    ],
+    "p": [
+     -0.535,
+     0.37,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.44,
+     0.42
+    ],
+    "p": [
+     0.535,
+     0.37,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.04,
+     0.44,
+     0.02
+    ],
+    "p": [
+     0,
+     0.37,
+     -0.2
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.31,
+     0.34
+    ],
+    "p": [
+     -0.35,
+     0.305,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.31,
+     0.34
+    ],
+    "p": [
+     0,
+     0.305,
+     0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.31,
+     0.34
+    ],
+    "p": [
+     0.35,
+     0.305,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.12
+    ],
+    "p": [
+     -0.5,
+     0.06,
+     -0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.12
+    ],
+    "p": [
+     -0.5,
+     0.06,
+     0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.12
+    ],
+    "p": [
+     0.5,
+     0.06,
+     -0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.12
+    ],
+    "p": [
+     0.5,
+     0.06,
+     0.17
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_telephone_seat": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.08,
+     0.38
+    ],
+    "p": [
+     -0.2,
+     0.46,
+     0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.47,
+     0.04,
+     0.4
+    ],
+    "p": [
+     -0.2,
+     0.4,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.03,
+     0.38
+    ],
+    "p": [
+     0.25,
+     0.715,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.36
+    ],
+    "p": [
+     0.25,
+     0.3,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.07,
+     0.15
+    ],
+    "p": [
+     0.25,
+     0.765,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.19
+    ],
+    "p": [
+     0.25,
+     0.81,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.4
+    ],
+    "p": [
+     -0.42,
+     0.2,
+     -0.17
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.4
+    ],
+    "p": [
+     -0.42,
+     0.2,
+     0.17
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.7
+    ],
+    "p": [
+     0.06,
+     0.35,
+     -0.17
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.7
+    ],
+    "p": [
+     0.06,
+     0.35,
+     0.17
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.7
+    ],
+    "p": [
+     0.43,
+     0.35,
+     -0.17
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.7
+    ],
+    "p": [
+     0.43,
+     0.35,
+     0.17
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "liv_hall_bench": [
+   {
+    "t": "box",
+    "s": [
+     0.96,
+     0.06,
+     0.34
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.36,
+     0.38
+    ],
+    "p": [
+     0,
+     0.24,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.03,
+     0.38
+    ],
+    "p": [
+     0,
+     0.435,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.94,
+     0.05,
+     0.34
+    ],
+    "p": [
+     0,
+     0.475,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.24,
+     0.01
+    ],
+    "p": [
+     -0.24,
+     0.24,
+     0.195
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.24,
+     0.01
+    ],
+    "p": [
+     0.24,
+     0.24,
+     0.195
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "liv_jukebox": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.9,
+     0.6
+    ],
+    "p": [
+     0,
+     0.45,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.4,
+     0.58
+    ],
+    "p": [
+     0,
+     1.1,
+     0
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.02
+    ],
+    "p": [
+     0,
+     1.1,
+     0.28
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.01
+    ],
+    "p": [
+     0,
+     1.05,
+     0.292
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.4,
+     0.02
+    ],
+    "p": [
+     0,
+     0.45,
+     0.295
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.9,
+     0.02
+    ],
+    "p": [
+     -0.33,
+     0.45,
+     0.295
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.9,
+     0.02
+    ],
+    "p": [
+     0.33,
+     0.45,
+     0.295
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0,
+     0.8,
+     0.295
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "liv_arcade_cabinet": [
+   {
+    "t": "box",
+    "s": [
+     0.65,
+     1.75,
+     0.6
+    ],
+    "p": [
+     0,
+     0.875,
+     -0.1
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.08,
+     0.25
+    ],
+    "p": [
+     0,
+     0.95,
+     0.275
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.4,
+     0.02
+    ],
+    "p": [
+     0,
+     1.3,
+     0.21
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.15,
+     0.03
+    ],
+    "p": [
+     0,
+     1.62,
+     0.215
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.06
+    ],
+    "p": [
+     -0.15,
+     1.02,
+     0.3
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.15,
+     1.055,
+     0.3
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.08,
+     0.995,
+     0.3
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.15,
+     0.995,
+     0.3
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.25,
+     0.02
+    ],
+    "p": [
+     0,
+     0.5,
+     0.21
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "liv_chaise_longue": [
+   {
+    "t": "box",
+    "s": [
+     1.65,
+     0.06,
+     0.62
+    ],
+    "p": [
+     0,
+     0.17,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.6,
+     0.2,
+     0.6
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.6
+    ],
+    "p": [
+     -0.7,
+     0.66,
+     0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.3,
+     0.6
+    ],
+    "p": [
+     -0.7,
+     0.5,
+     0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.3,
+     0.1
+    ],
+    "p": [
+     -0.35,
+     0.55,
+     -0.25
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.5
+    ],
+    "p": [
+     -0.45,
+     0.47,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.14
+    ],
+    "p": [
+     -0.78,
+     0.07,
+     -0.27
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.14
+    ],
+    "p": [
+     -0.78,
+     0.07,
+     0.27
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.14
+    ],
+    "p": [
+     0.78,
+     0.07,
+     -0.27
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.14
+    ],
+    "p": [
+     0.78,
+     0.07,
+     0.27
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_nest_of_tables": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.025,
+     0.4
+    ],
+    "p": [
+     0,
+     0.4875,
+     -0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.475,
+     0.38
+    ],
+    "p": [
+     -0.26,
+     0.2375,
+     -0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.475,
+     0.38
+    ],
+    "p": [
+     0.26,
+     0.2375,
+     -0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.47,
+     0.025,
+     0.36
+    ],
+    "p": [
+     0,
+     0.4175,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.405,
+     0.34
+    ],
+    "p": [
+     -0.22,
+     0.2025,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.405,
+     0.34
+    ],
+    "p": [
+     0.22,
+     0.2025,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.39,
+     0.025,
+     0.32
+    ],
+    "p": [
+     0,
+     0.3475,
+     0.03
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.335,
+     0.3
+    ],
+    "p": [
+     -0.18,
+     0.1675,
+     0.03
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.335,
+     0.3
+    ],
+    "p": [
+     0.18,
+     0.1675,
+     0.03
+    ],
+    "c": "D9B98A"
+   }
+  ],
+  "liv_card_table": [
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.025,
+     0.76
+    ],
+    "p": [
+     0,
+     0.7075,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.006,
+     0.7
+    ],
+    "p": [
+     0,
+     0.723,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.004,
+     0.09
+    ],
+    "p": [
+     0.1,
+     0.728,
+     0.05
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0.4,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.004,
+     0.09
+    ],
+    "p": [
+     -0.15,
+     0.728,
+     -0.1
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0,
+     -0.3,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.695
+    ],
+    "p": [
+     -0.34,
+     0.3475,
+     -0.34
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.695
+    ],
+    "p": [
+     -0.34,
+     0.3475,
+     0.34
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.695
+    ],
+    "p": [
+     0.34,
+     0.3475,
+     -0.34
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.695
+    ],
+    "p": [
+     0.34,
+     0.3475,
+     0.34
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_writing_bureau": [
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.72,
+     0.46
+    ],
+    "p": [
+     0,
+     0.41,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.26,
+     0.26
+    ],
+    "p": [
+     0,
+     0.9,
+     -0.1
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.36,
+     0.03
+    ],
+    "p": [
+     0,
+     0.9,
+     0.09
+    ],
+    "c": "C68B59",
+    "r": [
+     -0.785,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.18,
+     0.01
+    ],
+    "p": [
+     0,
+     0.18,
+     0.235
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.18,
+     0.01
+    ],
+    "p": [
+     0,
+     0.4,
+     0.235
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.18,
+     0.01
+    ],
+    "p": [
+     0,
+     0.62,
+     0.235
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.85,
+     0.17
+    ],
+    "c": "C9A24E",
+    "r": [
+     -0.785,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.05
+    ],
+    "p": [
+     -0.34,
+     0.025,
+     -0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.05
+    ],
+    "p": [
+     -0.34,
+     0.025,
+     0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.05
+    ],
+    "p": [
+     0.34,
+     0.025,
+     -0.19
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.05
+    ],
+    "p": [
+     0.34,
+     0.025,
+     0.19
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_longcase_clock": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.3,
+     0.28
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     1.1,
+     0.22
+    ],
+    "p": [
+     0,
+     0.85,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.5,
+     0.26
+    ],
+    "p": [
+     0,
+     1.65,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.15,
+     0.28
+    ],
+    "p": [
+     0,
+     1.975,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.01
+    ],
+    "p": [
+     0,
+     1.65,
+     0.135
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.1,
+     0.005
+    ],
+    "p": [
+     0,
+     1.69,
+     0.142
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.5,
+     0.01
+    ],
+    "p": [
+     0,
+     0.9,
+     0.113
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.01
+    ],
+    "p": [
+     0,
+     0.75,
+     0.12
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.2,
+     2.02,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.2,
+     2.02,
+     0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "liv_pedestal_fan": [
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.04
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.95
+    ],
+    "p": [
+     0,
+     0.5,
+     -0.04
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.12
+    ],
+    "p": [
+     0,
+     1.05,
+     -0.1
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.01
+    ],
+    "p": [
+     0,
+     1.05,
+     -0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.17,
+     0.005
+    ],
+    "p": [
+     0,
+     1.14,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.17,
+     0.005
+    ],
+    "p": [
+     0.078,
+     1.005,
+     0
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0,
+     2.09
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.17,
+     0.005
+    ],
+    "p": [
+     -0.078,
+     1.005,
+     0
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0,
+     -2.09
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.02
+    ],
+    "p": [
+     0,
+     1.05,
+     0.015
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.1,
+     0.05,
+     0.08
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "liv_radiogram": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.6,
+     0.42
+    ],
+    "p": [
+     0,
+     0.48,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.4,
+     0.01
+    ],
+    "p": [
+     -0.32,
+     0.46,
+     0.21
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.3,
+     0.6,
+     0.21
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.02
+    ],
+    "p": [
+     0.2,
+     0.42,
+     0.215
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.02
+    ],
+    "p": [
+     0.4,
+     0.42,
+     0.215
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.01,
+     0.42
+    ],
+    "p": [
+     0,
+     0.72,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     -0.55,
+     0.09,
+     -0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     -0.55,
+     0.09,
+     0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     0.55,
+     0.09,
+     -0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     0.55,
+     0.09,
+     0.17
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_revolving_bookcase": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.5
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.1
+    ],
+    "p": [
+     0,
+     0.09,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.03,
+     0.48
+    ],
+    "p": [
+     0,
+     0.155,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.3,
+     0.44
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.03,
+     0.48
+    ],
+    "p": [
+     0,
+     0.485,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.3,
+     0.44
+    ],
+    "p": [
+     0,
+     0.65,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.5
+    ],
+    "p": [
+     0,
+     0.815,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.66,
+     0.03
+    ],
+    "p": [
+     -0.225,
+     0.5,
+     -0.225
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.66,
+     0.03
+    ],
+    "p": [
+     -0.225,
+     0.5,
+     0.225
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.66,
+     0.03
+    ],
+    "p": [
+     0.225,
+     0.5,
+     -0.225
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.66,
+     0.03
+    ],
+    "p": [
+     0.225,
+     0.5,
+     0.225
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_plant_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.03
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.87
+    ],
+    "p": [
+     0,
+     0.45,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.02
+    ],
+    "p": [
+     -0.08,
+     0.3,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.01,
+     0.015
+    ],
+    "p": [
+     -0.04,
+     0.3,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.02
+    ],
+    "p": [
+     0.08,
+     0.58,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.01,
+     0.015
+    ],
+    "p": [
+     0.04,
+     0.58,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.02
+    ],
+    "p": [
+     0,
+     0.875,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_piano_stool": [
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.08,
+     0.36
+    ],
+    "p": [
+     0,
+     0.46,
+     0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.06,
+     0.36
+    ],
+    "p": [
+     0,
+     0.39,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.01,
+     0.25
+    ],
+    "p": [
+     0,
+     0.425,
+     0.06
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.36
+    ],
+    "p": [
+     -0.24,
+     0.18,
+     -0.14
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.36
+    ],
+    "p": [
+     -0.24,
+     0.18,
+     0.14
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.36
+    ],
+    "p": [
+     0.24,
+     0.18,
+     -0.14
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.36
+    ],
+    "p": [
+     0.24,
+     0.18,
+     0.14
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_cello_case": [
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     0.28
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.26
+    ],
+    "p": [
+     0,
+     0.64,
+     0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.24
+    ],
+    "p": [
+     0,
+     0.48,
+     0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.5,
+     0.18
+    ],
+    "p": [
+     0,
+     1.0,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.18
+    ],
+    "p": [
+     0,
+     1.24,
+     0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.9,
+     0.1
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.02
+    ],
+    "p": [
+     -0.1,
+     0.5,
+     0.145
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.5,
+     0.145
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_dog_basket": [
+   {
+    "t": "box",
+    "s": [
+     0.72,
+     0.3,
+     0.05
+    ],
+    "p": [
+     0,
+     0.15,
+     -0.245
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.24,
+     0.5
+    ],
+    "p": [
+     -0.335,
+     0.12,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.24,
+     0.5
+    ],
+    "p": [
+     0.335,
+     0.12,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.12,
+     0.05
+    ],
+    "p": [
+     0,
+     0.06,
+     0.245
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.72,
+     0.04,
+     0.54
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.08,
+     0.44
+    ],
+    "p": [
+     0,
+     0.08,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.032
+    ],
+    "p": [
+     0.15,
+     0.152,
+     0.1
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "liv_fireguard": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.55,
+     0.015
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.55,
+     0.015
+    ],
+    "p": [
+     -0.308,
+     0.3,
+     0.056
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0.6,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.55,
+     0.015
+    ],
+    "p": [
+     0.308,
+     0.3,
+     0.056
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     -0.6,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.45
+    ],
+    "p": [
+     0,
+     0.575,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.225,
+     0.585,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.225,
+     0.585,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.12
+    ],
+    "p": [
+     -0.2,
+     0.0125,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.12
+    ],
+    "p": [
+     0.2,
+     0.0125,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_coal_scuttle": [
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.04
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.3
+    ],
+    "p": [
+     0,
+     0.19,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.12,
+     0.15
+    ],
+    "p": [
+     0,
+     0.3,
+     0.14
+    ],
+    "c": "1E1B19",
+    "r": [
+     -0.5,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.4,
+     -0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.08,
+     0.02
+    ],
+    "p": [
+     -0.1,
+     0.36,
+     -0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.36,
+     -0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.03,
+     0.34,
+     0.05
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.04,
+     0.345,
+     0.08
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "liv_wood_stove": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.48,
+     0.38
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.28,
+     0.02
+    ],
+    "p": [
+     0,
+     0.32,
+     0.2
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.18,
+     0.01
+    ],
+    "p": [
+     0,
+     0.33,
+     0.212
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.4
+    ],
+    "p": [
+     0,
+     0.575,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.42
+    ],
+    "p": [
+     0,
+     0.8,
+     -0.05
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.13,
+     0.32,
+     0.215
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.04
+    ],
+    "p": [
+     -0.21,
+     0.04,
+     -0.15
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.04
+    ],
+    "p": [
+     -0.21,
+     0.04,
+     0.15
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0.21,
+     0.04,
+     -0.15
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0.21,
+     0.04,
+     0.15
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_cocktail_cabinet": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.7,
+     0.42
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.39,
+     0.68,
+     0.01
+    ],
+    "p": [
+     -0.198,
+     0.88,
+     0.215
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.39,
+     0.68,
+     0.01
+    ],
+    "p": [
+     0.198,
+     0.88,
+     0.215
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.1,
+     0.015
+    ],
+    "p": [
+     -0.03,
+     0.88,
+     0.227
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.1,
+     0.015
+    ],
+    "p": [
+     0.03,
+     0.88,
+     0.227
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.02,
+     0.38
+    ],
+    "p": [
+     0,
+     0.2,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.53
+    ],
+    "p": [
+     -0.36,
+     0.265,
+     -0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.53
+    ],
+    "p": [
+     -0.36,
+     0.265,
+     0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.53
+    ],
+    "p": [
+     0.36,
+     0.265,
+     -0.17
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.53
+    ],
+    "p": [
+     0.36,
+     0.265,
+     0.17
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_harp": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.12,
+     0.55
+    ],
+    "p": [
+     0,
+     0.06,
+     0.1
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     1.62
+    ],
+    "p": [
+     0,
+     0.93,
+     0.4
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     1.57,
+     0.2
+    ],
+    "p": [
+     0,
+     0.835,
+     -0.075
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.427,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.12,
+     0.82
+    ],
+    "p": [
+     0,
+     1.68,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     -0.175,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0,
+     1.76,
+     0.4
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.005,
+     1.485,
+     0.005
+    ],
+    "p": [
+     0,
+     0.9725,
+     0.2
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.005,
+     1.2475,
+     0.005
+    ],
+    "p": [
+     0,
+     1.0737,
+     0.1
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.005,
+     0.8912,
+     0.005
+    ],
+    "p": [
+     0,
+     1.2256,
+     -0.05
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.005,
+     0.535,
+     0.005
+    ],
+    "p": [
+     0,
+     1.3775,
+     -0.2
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0,
+     0.01,
+     0.4
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_plaster_bust": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.05,
+     0.38
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     1.0,
+     0.3
+    ],
+    "p": [
+     0,
+     0.55,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.05,
+     0.38
+    ],
+    "p": [
+     0,
+     1.075,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.04
+    ],
+    "p": [
+     0,
+     1.12,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.14,
+     0.16
+    ],
+    "p": [
+     0,
+     1.21,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.1
+    ],
+    "p": [
+     0,
+     1.3,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.1
+    ],
+    "p": [
+     0,
+     1.42,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0,
+     1.41,
+     0.1
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "liv_egg_chair": [
+   {
+    "t": "cyl",
+    "s": [
+     0.5,
+     0.05
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.875,
+     0.05
+    ],
+    "p": [
+     0,
+     0.96,
+     -0.45
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.45
+    ],
+    "p": [
+     0,
+     1.9,
+     -0.25
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.5
+    ],
+    "p": [
+     0,
+     1.62,
+     -0.05
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.42
+    ],
+    "p": [
+     0,
+     0.95,
+     -0.05
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.32
+    ],
+    "p": [
+     0,
+     0.85,
+     0.15
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.1
+    ],
+    "p": [
+     0.12,
+     0.95,
+     0.25
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "liv_blanket_ladder": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.6,
+     0.03
+    ],
+    "p": [
+     -0.22,
+     0.8,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.6,
+     0.03
+    ],
+    "p": [
+     0.22,
+     0.8,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.44
+    ],
+    "p": [
+     0,
+     0.3,
+     0.0603
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.44
+    ],
+    "p": [
+     0,
+     0.7,
+     0.0121
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.44
+    ],
+    "p": [
+     0,
+     1.1,
+     -0.0362
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.44
+    ],
+    "p": [
+     0,
+     1.45,
+     -0.0784
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.35,
+     0.06
+    ],
+    "p": [
+     0,
+     0.97,
+     -0.03
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.22,
+     0.05
+    ],
+    "p": [
+     0,
+     0.6,
+     0.01
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "liv_draught_excluder": [
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.75
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.065
+    ],
+    "p": [
+     0.4,
+     0.085,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.46,
+     0.07,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.02
+    ],
+    "p": [
+     0.39,
+     0.1,
+     0.062
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.02
+    ],
+    "p": [
+     0.39,
+     0.1,
+     -0.062
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.493,
+     0.075,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.08
+    ],
+    "p": [
+     -0.4,
+     0.1,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     0.8
+    ]
+   }
+  ],
+  "liv_terrarium": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.04,
+     0.16
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     -0.06,
+     0.09,
+     -0.02
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.06,
+     0.08,
+     -0.03
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.02,
+     0.075,
+     0.04
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.22,
+     0.005
+    ],
+    "p": [
+     0,
+     0.14,
+     0.09
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.22,
+     0.01
+    ],
+    "p": [
+     -0.14,
+     0.14,
+     0.09
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.22,
+     0.01
+    ],
+    "p": [
+     0.14,
+     0.14,
+     0.09
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.015,
+     0.2
+    ],
+    "p": [
+     0,
+     0.2575,
+     0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "liv_carriage_clock": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.015,
+     0.08
+    ],
+    "p": [
+     0,
+     0.0075,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.1,
+     0.07
+    ],
+    "p": [
+     0,
+     0.065,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.005
+    ],
+    "p": [
+     0,
+     0.07,
+     0.036
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.015,
+     0.08
+    ],
+    "p": [
+     0,
+     0.1225,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.008,
+     0.01
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.02,
+     0.008
+    ],
+    "p": [
+     -0.03,
+     0.14,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.02,
+     0.008
+    ],
+    "p": [
+     0.03,
+     0.14,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.003,
+     0.025,
+     0.002
+    ],
+    "p": [
+     0,
+     0.08,
+     0.04
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_snow_globe": [
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.04
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0,
+     0.09,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.01
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.068,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.034,
+     0.006,
+     0.028
+    ],
+    "p": [
+     0,
+     0.084,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.015,
+     0.005
+    ],
+    "p": [
+     0,
+     0.02,
+     0.055
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "liv_hourglass": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.015
+    ],
+    "p": [
+     0,
+     0.0075,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.015
+    ],
+    "p": [
+     0,
+     0.1925,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0,
+     0.14,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.04,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.17
+    ],
+    "p": [
+     0.04,
+     0.1,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.17
+    ],
+    "p": [
+     -0.0198,
+     0.1,
+     0.0347
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.17
+    ],
+    "p": [
+     -0.02,
+     0.1,
+     -0.0347
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_decanter_set": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.01,
+     0.15
+    ],
+    "p": [
+     0,
+     0.005,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.15
+    ],
+    "p": [
+     -0.05,
+     0.085,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     -0.05,
+     0.16,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     -0.05,
+     0.21,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.022
+    ],
+    "p": [
+     -0.05,
+     0.252,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.08
+    ],
+    "p": [
+     0.09,
+     0.05,
+     -0.035
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.08
+    ],
+    "p": [
+     0.085,
+     0.05,
+     0.04
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.031,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.025,
+     -0.035
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "liv_humidor": [
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.1,
+     0.2
+    ],
+    "p": [
+     0,
+     0.058,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.02,
+     0.2
+    ],
+    "p": [
+     0,
+     0.118,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.003,
+     0.1
+    ],
+    "p": [
+     0,
+     0.1295,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.004
+    ],
+    "p": [
+     0.07,
+     0.13,
+     0.04
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.1,
+     0.103
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.008,
+     0.02
+    ],
+    "p": [
+     -0.12,
+     0.004,
+     -0.08
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.008,
+     0.02
+    ],
+    "p": [
+     -0.12,
+     0.004,
+     0.08
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.008,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.004,
+     -0.08
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.008,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.004,
+     0.08
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_jigsaw_board": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.01,
+     0.5
+    ],
+    "p": [
+     0,
+     0.005,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.006,
+     0.3
+    ],
+    "p": [
+     -0.1,
+     0.013,
+     -0.05
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.006,
+     0.1
+    ],
+    "p": [
+     -0.175,
+     0.013,
+     0.16
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.005,
+     0.03
+    ],
+    "p": [
+     0.15,
+     0.0125,
+     0.1
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0.4,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.005,
+     0.03
+    ],
+    "p": [
+     0.2,
+     0.0125,
+     -0.05
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     -0.7,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.005,
+     0.03
+    ],
+    "p": [
+     0.05,
+     0.0125,
+     0.2
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     1.1,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.03,
+     0.18
+    ],
+    "p": [
+     0.2,
+     0.025,
+     -0.13
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "liv_hifi_stack": [
+   {
+    "t": "box",
+    "s": [
+     0.43,
+     0.11,
+     0.3
+    ],
+    "p": [
+     0,
+     0.055,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.43,
+     0.08,
+     0.3
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.43,
+     0.11,
+     0.3
+    ],
+    "p": [
+     0,
+     0.245,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.43,
+     0.06,
+     0.3
+    ],
+    "p": [
+     0,
+     0.33,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.03,
+     0.005
+    ],
+    "p": [
+     0,
+     0.15,
+     0.1525
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.055,
+     0.16
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.07,
+     0.005
+    ],
+    "p": [
+     -0.08,
+     0.245,
+     0.1525
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.01,
+     0.005
+    ],
+    "p": [
+     -0.05,
+     0.33,
+     0.1525
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "liv_video_recorder": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.09,
+     0.28
+    ],
+    "p": [
+     0,
+     0.045,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.02,
+     0.005
+    ],
+    "p": [
+     -0.04,
+     0.06,
+     0.1425
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.005
+    ],
+    "p": [
+     0.12,
+     0.06,
+     0.1425
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.005
+    ],
+    "p": [
+     0.08,
+     0.025,
+     0.1425
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.005
+    ],
+    "p": [
+     0.11,
+     0.025,
+     0.1425
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.005
+    ],
+    "p": [
+     0.14,
+     0.025,
+     0.1425
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.19,
+     0.025,
+     0.1
+    ],
+    "p": [
+     0,
+     0.1025,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.004,
+     0.06
+    ],
+    "p": [
+     0,
+     0.117,
+     0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "liv_remote_caddy": [
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.01,
+     0.1
+    ],
+    "p": [
+     0,
+     0.005,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0,
+     0.06,
+     -0.045
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.08,
+     0.01
+    ],
+    "p": [
+     0,
+     0.04,
+     0.045
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.1,
+     0.09
+    ],
+    "p": [
+     -0.085,
+     0.05,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.1,
+     0.09
+    ],
+    "p": [
+     0.085,
+     0.05,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.045,
+     0.14,
+     0.02
+    ],
+    "p": [
+     -0.05,
+     0.08,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.045,
+     0.12,
+     0.02
+    ],
+    "p": [
+     0,
+     0.07,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.045,
+     0.15,
+     0.02
+    ],
+    "p": [
+     0.05,
+     0.085,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "liv_photo_frames": [
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.18,
+     0.015
+    ],
+    "p": [
+     -0.15,
+     0.089,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.15,
+     0.004
+    ],
+    "p": [
+     -0.15,
+     0.0902,
+     0.0079
+    ],
+    "c": "4A6FA5",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.22,
+     0.015
+    ],
+    "p": [
+     0,
+     0.1088,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.19,
+     0.004
+    ],
+    "p": [
+     0,
+     0.11,
+     0.0079
+    ],
+    "c": "8FA882",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.15,
+     0.015
+    ],
+    "p": [
+     0.15,
+     0.0742,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0.15,
+     0.0754,
+     0.0079
+    ],
+    "c": "E8B4A8",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   }
+  ],
+  "liv_brass_elephant": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.12
+    ],
+    "p": [
+     0,
+     0.09,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.075,
+     0.11,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.07
+    ],
+    "p": [
+     0.105,
+     0.07,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     0.2
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.05,
+     0.04
+    ],
+    "p": [
+     0.06,
+     0.11,
+     0.04
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.05,
+     0.04
+    ],
+    "p": [
+     0.06,
+     0.11,
+     -0.04
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.03
+    ],
+    "p": [
+     -0.065,
+     0.08,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     0.6
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     -0.04,
+     0.025,
+     -0.025
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     -0.04,
+     0.025,
+     0.025
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     0.04,
+     0.025,
+     -0.025
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     0.04,
+     0.025,
+     0.025
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "liv_china_dogs": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.02,
+     0.09
+    ],
+    "p": [
+     -0.12,
+     0.01,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.12
+    ],
+    "p": [
+     -0.12,
+     0.08,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.038
+    ],
+    "p": [
+     -0.12,
+     0.175,
+     0.005
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.05,
+     0.025
+    ],
+    "p": [
+     -0.155,
+     0.165,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.05,
+     0.025
+    ],
+    "p": [
+     -0.085,
+     0.165,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.02,
+     0.09
+    ],
+    "p": [
+     0.12,
+     0.01,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.12
+    ],
+    "p": [
+     0.12,
+     0.08,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.038
+    ],
+    "p": [
+     0.12,
+     0.175,
+     0.005
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.05,
+     0.025
+    ],
+    "p": [
+     0.085,
+     0.165,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.05,
+     0.025
+    ],
+    "p": [
+     0.155,
+     0.165,
+     0
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "liv_ice_bucket": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.17
+    ],
+    "p": [
+     0,
+     0.085,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.085,
+     0.015
+    ],
+    "p": [
+     0,
+     0.17,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     -0.03,
+     0.175,
+     0.01
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.03,
+     0.18,
+     -0.02
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.022
+    ],
+    "p": [
+     0.0,
+     0.178,
+     0.035
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.03,
+     0.03
+    ],
+    "p": [
+     -0.085,
+     0.14,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.085,
+     0.14,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.04,
+     0.2,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   }
+  ],
+  "liv_soda_siphon": [
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.22
+    ],
+    "p": [
+     0,
+     0.11,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.06
+    ],
+    "p": [
+     0,
+     0.25,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.015,
+     0.06
+    ],
+    "p": [
+     0,
+     0.25,
+     0.045
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.07
+    ],
+    "p": [
+     0,
+     0.29,
+     0.02
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0,
+     0.28,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "liv_cocktail_shaker": [
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.15
+    ],
+    "p": [
+     0,
+     0.075,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.032,
+     0.04
+    ],
+    "p": [
+     0,
+     0.17,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.03
+    ],
+    "p": [
+     0,
+     0.205,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.015,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.045,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.004,
+     0.006
+    ],
+    "p": [
+     -0.02,
+     0.003,
+     0.045
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.14
+    ],
+    "p": [
+     -0.09,
+     0.012,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "liv_bookends": [
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.18,
+     0.12
+    ],
+    "p": [
+     -0.19,
+     0.09,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.18,
+     0.12
+    ],
+    "p": [
+     0.19,
+     0.09,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     -0.19,
+     0.205,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.19,
+     0.205,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.21,
+     0.14
+    ],
+    "p": [
+     -0.145,
+     0.105,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.18,
+     0.14
+    ],
+    "p": [
+     -0.087,
+     0.09,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.2,
+     0.14
+    ],
+    "p": [
+     -0.029,
+     0.1,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.16,
+     0.14
+    ],
+    "p": [
+     0.029,
+     0.08,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.22,
+     0.14
+    ],
+    "p": [
+     0.087,
+     0.11,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.19,
+     0.14
+    ],
+    "p": [
+     0.145,
+     0.095,
+     0
+    ],
+    "c": "6E4B6E"
+   }
+  ],
+  "liv_glass_cloche": [
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.03
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.2
+    ],
+    "p": [
+     0,
+     0.13,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     0,
+     0.23,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0,
+     0.315,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.08
+    ],
+    "p": [
+     0,
+     0.07,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.03,
+     0.15,
+     0
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "liv_hamster_cage": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.1,
+     0.32
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.01,
+     0.3
+    ],
+    "p": [
+     0,
+     0.325,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.03
+    ],
+    "p": [
+     0.13,
+     0.19,
+     0
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.07,
+     0.08
+    ],
+    "p": [
+     -0.12,
+     0.135,
+     0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0,
+     0.13,
+     0.03
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.02,
+     0.28
+    ],
+    "p": [
+     0,
+     0.105,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.1
+    ],
+    "p": [
+     -0.2,
+     0.22,
+     -0.13
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.22,
+     0.01
+    ],
+    "p": [
+     -0.235,
+     0.21,
+     -0.145
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.22,
+     0.01
+    ],
+    "p": [
+     -0.235,
+     0.21,
+     0.145
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.22,
+     0.01
+    ],
+    "p": [
+     0.235,
+     0.21,
+     -0.145
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.22,
+     0.01
+    ],
+    "p": [
+     0.235,
+     0.21,
+     0.145
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "liv_dinner_gong": [
+   {
+    "t": "box",
+    "s": [
+     0.35,
+     0.03,
+     0.15
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.42,
+     0.03
+    ],
+    "p": [
+     -0.15,
+     0.24,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.42,
+     0.03
+    ],
+    "p": [
+     0.15,
+     0.24,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.33,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.435,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.22,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.015
+    ],
+    "p": [
+     0,
+     0.22,
+     0.01
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.066,
+     0.004
+    ],
+    "p": [
+     -0.06,
+     0.372,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.066,
+     0.004
+    ],
+    "p": [
+     0.06,
+     0.372,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.036,
+     0.05
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.045,
+     0.05
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "liv_barometer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.04
+    ],
+    "p": [
+     0,
+     0.25,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.55,
+     0.04
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0,
+     0.91,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.01
+    ],
+    "p": [
+     0,
+     0.25,
+     0.02
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.008
+    ],
+    "p": [
+     0,
+     0.25,
+     0.025
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.08,
+     0.003
+    ],
+    "p": [
+     0.015,
+     0.28,
+     0.03
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     -0.4
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.3,
+     0.004
+    ],
+    "p": [
+     0,
+     0.6,
+     0.022
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.25,
+     0.003
+    ],
+    "p": [
+     0,
+     0.6,
+     0.0255
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.006
+    ],
+    "p": [
+     0,
+     0.82,
+     0.022
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "liv_macrame_hanger": [
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.58,
+     0.006
+    ],
+    "p": [
+     0.05,
+     0.585,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     0.17
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.58,
+     0.006
+    ],
+    "p": [
+     -0.05,
+     0.585,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     -0.17
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.58,
+     0.006
+    ],
+    "p": [
+     0,
+     0.585,
+     -0.05
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.17,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.58,
+     0.006
+    ],
+    "p": [
+     0,
+     0.585,
+     0.05
+    ],
+    "c": "EAE6DC",
+    "r": [
+     -0.17,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.14
+    ],
+    "p": [
+     0,
+     0.22,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.11
+    ],
+    "p": [
+     0,
+     0.33,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.15,
+     0.04
+    ],
+    "p": [
+     0,
+     0.075,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.25
+    ],
+    "p": [
+     0.09,
+     0.2,
+     0.03
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.2
+    ],
+    "p": [
+     -0.09,
+     0.22,
+     -0.02
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "liv_wall_hanging": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.7
+    ],
+    "p": [
+     0,
+     1.08,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.35,
+     1.08,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.35,
+     1.08,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.9,
+     0.01
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.85,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.35,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.1,
+     0.008
+    ],
+    "p": [
+     0,
+     0.1,
+     0
+    ],
+    "c": "E7DCC6"
+   }
+  ],
+  "liv_plate_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.3,
+     0.02
+    ],
+    "p": [
+     0,
+     0.2,
+     -0.04
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.085,
+     0.035
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0,
+     0.315,
+     -0.025
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.012
+    ],
+    "p": [
+     -0.19,
+     0.16,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.37,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.004
+    ],
+    "p": [
+     -0.19,
+     0.1616,
+     0.0078
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.37,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.012
+    ],
+    "p": [
+     0,
+     0.16,
+     0
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.37,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.004
+    ],
+    "p": [
+     0,
+     0.1616,
+     0.0078
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.37,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.012
+    ],
+    "p": [
+     0.19,
+     0.16,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.37,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.004
+    ],
+    "p": [
+     0.19,
+     0.1616,
+     0.0078
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.37,
+     0,
+     0
+    ]
+   }
+  ],
+  "liv_cuckoo_clock": [
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.28,
+     0.14
+    ],
+    "p": [
+     0,
+     0.68,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.17,
+     0.015,
+     0.16
+    ],
+    "p": [
+     -0.065,
+     0.86,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     0.6
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.17,
+     0.015,
+     0.16
+    ],
+    "p": [
+     0.065,
+     0.86,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.6
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.008
+    ],
+    "p": [
+     0,
+     0.66,
+     0.074
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.045,
+     0.003
+    ],
+    "p": [
+     0,
+     0.68,
+     0.08
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.006
+    ],
+    "p": [
+     0,
+     0.77,
+     0.073
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.2,
+     0.004
+    ],
+    "p": [
+     0,
+     0.44,
+     0.05
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.006
+    ],
+    "p": [
+     0,
+     0.34,
+     0.05
+    ],
+    "c": "6B4A3A",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.39,
+     0.004
+    ],
+    "p": [
+     -0.05,
+     0.345,
+     0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.39,
+     0.004
+    ],
+    "p": [
+     0.05,
+     0.345,
+     0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.1
+    ],
+    "p": [
+     -0.05,
+     0.1,
+     0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.1
+    ],
+    "p": [
+     0.05,
+     0.1,
+     0.03
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "liv_letter_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.22,
+     0.015
+    ],
+    "p": [
+     0,
+     0.11,
+     -0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.08,
+     0.01
+    ],
+    "p": [
+     0,
+     0.05,
+     0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.01,
+     0.07
+    ],
+    "p": [
+     0,
+     0.005,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.12,
+     0.004
+    ],
+    "p": [
+     -0.02,
+     0.1,
+     0.015
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.11,
+     0.004
+    ],
+    "p": [
+     0.03,
+     0.095,
+     0.005
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.13,
+     0.004
+    ],
+    "p": [
+     0,
+     0.1,
+     -0.015
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.235,
+     -0.03
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "liv_butterfly_case": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.3,
+     0.04
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.26,
+     0.005
+    ],
+    "p": [
+     0,
+     0.15,
+     0.021
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.003
+    ],
+    "p": [
+     -0.118,
+     0.2,
+     0.025
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.003
+    ],
+    "p": [
+     -0.082,
+     0.2,
+     0.025
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0,
+     -0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.03,
+     0.004
+    ],
+    "p": [
+     -0.1,
+     0.2,
+     0.027
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.003
+    ],
+    "p": [
+     0.082,
+     0.2,
+     0.025
+    ],
+    "c": "E6B655",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.003
+    ],
+    "p": [
+     0.118,
+     0.2,
+     0.025
+    ],
+    "c": "E6B655",
+    "r": [
+     0,
+     0,
+     -0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.03,
+     0.004
+    ],
+    "p": [
+     0.1,
+     0.2,
+     0.027
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.003
+    ],
+    "p": [
+     -0.018,
+     0.09,
+     0.025
+    ],
+    "c": "D9765F",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.003
+    ],
+    "p": [
+     0.018,
+     0.09,
+     0.025
+    ],
+    "c": "D9765F",
+    "r": [
+     0,
+     0,
+     -0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.006,
+     0.03,
+     0.004
+    ],
+    "p": [
+     0,
+     0.09,
+     0.027
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "liv_wall_sconce": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.015
+    ],
+    "p": [
+     0,
+     0.15,
+     -0.09
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.015,
+     0.12
+    ],
+    "p": [
+     0,
+     0.15,
+     -0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.06
+    ],
+    "p": [
+     0,
+     0.18,
+     0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.02
+    ],
+    "p": [
+     0,
+     0.21,
+     0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.12
+    ],
+    "p": [
+     0,
+     0.28,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.072,
+     0.01
+    ],
+    "p": [
+     0,
+     0.225,
+     0.03
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0,
+     0.348,
+     0.03
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "liv_flying_ducks": [
+   {
+    "t": "cyl",
+    "s": [
+     0.024,
+     0.104
+    ],
+    "p": [
+     -0.3,
+     0.15,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     -1.1
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.2465,
+     0.1772,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.032,
+     0.01
+    ],
+    "p": [
+     -0.31,
+     0.16,
+     0.025
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.13
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     -1.1
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.0668,
+     0.334,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.04,
+     0.01
+    ],
+    "p": [
+     -0.01,
+     0.31,
+     0.025
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.156
+    ],
+    "p": [
+     0.3,
+     0.45,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     -1.1
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.3802,
+     0.4908,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.048,
+     0.01
+    ],
+    "p": [
+     0.29,
+     0.46,
+     0.025
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   }
+  ],
+  "liv_medal_frame": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.36,
+     0.03
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.32,
+     0.005
+    ],
+    "p": [
+     0,
+     0.18,
+     0.016
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.03,
+     0.003
+    ],
+    "p": [
+     0,
+     0.06,
+     0.0195
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.07,
+     0.003
+    ],
+    "p": [
+     -0.07,
+     0.23,
+     0.0195
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.004
+    ],
+    "p": [
+     -0.07,
+     0.17,
+     0.02
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.07,
+     0.003
+    ],
+    "p": [
+     0,
+     0.23,
+     0.0195
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.004
+    ],
+    "p": [
+     0,
+     0.17,
+     0.02
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.07,
+     0.003
+    ],
+    "p": [
+     0.07,
+     0.23,
+     0.0195
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.004
+    ],
+    "p": [
+     0.07,
+     0.17,
+     0.02
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "liv_door_chime": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.35,
+     0.02
+    ],
+    "p": [
+     0,
+     0.225,
+     -0.025
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.08,
+     0.05
+    ],
+    "p": [
+     0,
+     0.36,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.25
+    ],
+    "p": [
+     -0.05,
+     0.195,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.22
+    ],
+    "p": [
+     0,
+     0.21,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.19
+    ],
+    "p": [
+     0.05,
+     0.225,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.01
+    ],
+    "p": [
+     0.08,
+     0.36,
+     0.03
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "liv_wreath": [
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.14,
+     0.2,
+     0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.099,
+     0.299,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.34,
+     0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     -0.099,
+     0.299,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     -0.14,
+     0.2,
+     0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     -0.099,
+     0.101,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     -0.0,
+     0.06,
+     0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.099,
+     0.101,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.05,
+     0.02
+    ],
+    "p": [
+     0,
+     0.06,
+     0.045
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.1,
+     0.1,
+     0.05
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     -0.11,
+     0.26,
+     0.05
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.04,
+     0.01
+    ],
+    "p": [
+     0,
+     0.38,
+     -0.03
+    ],
+    "c": "B6453F"
+   }
+  ]
+ }
+}

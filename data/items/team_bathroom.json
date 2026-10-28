@@ -1,0 +1,7215 @@
+{
+ "items": {
+  "bth_shaving_kit": {
+   "name": "Shaving brush and razor stand",
+   "model": "proc:bth_shaving_kit",
+   "w": 0.14,
+   "d": 0.1,
+   "h": 0.18,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "A badger brush older than the man using it.",
+   "family": "bth_shaving_kit",
+   "variant": "plain"
+  },
+  "bth_bath_toys": {
+   "name": "Bath toys in a net",
+   "model": "proc:bth_bath_toys",
+   "w": 0.24,
+   "d": 0.16,
+   "h": 0.2,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "A boat, a whale and a sponge of uncertain origin.",
+   "family": "bth_bath_toys",
+   "variant": "plain"
+  },
+  "bth_shower_stool": {
+   "name": "Shower stool",
+   "model": "proc:bth_shower_stool",
+   "w": 0.38,
+   "d": 0.32,
+   "h": 0.46,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Teak, slatted and slowly going grey.",
+   "family": "bth_shower_stool",
+   "variant": "plain"
+  },
+  "bth_potty": {
+   "name": "Potty",
+   "model": "proc:bth_potty",
+   "w": 0.3,
+   "d": 0.26,
+   "h": 0.2,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Celebrated loudly, once. Since retired with honours.",
+   "family": "bth_potty",
+   "variant": "plain"
+  },
+  "bth_child_step": {
+   "name": "Children's step",
+   "model": "proc:bth_child_step",
+   "w": 0.4,
+   "d": 0.28,
+   "h": 0.22,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "So small hands can reach the tap and soak the floor.",
+   "family": "bth_child_step",
+   "variant": "plain"
+  },
+  "bth_baby_bath": {
+   "name": "Baby bath",
+   "model": "proc:bth_baby_bath",
+   "w": 0.8,
+   "d": 0.5,
+   "h": 0.26,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Used for six months, kept for sixteen years.",
+   "family": "bth_baby_bath",
+   "variant": "plain"
+  },
+  "bth_nappy_bin": {
+   "name": "Nappy bin",
+   "model": "proc:bth_nappy_bin",
+   "w": 0.26,
+   "d": 0.28,
+   "h": 0.54,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Locks in smells, allegedly. Lies.",
+   "family": "bth_nappy_bin",
+   "variant": "plain"
+  },
+  "bth_toothbrush_charger": {
+   "name": "Electric toothbrush on charger",
+   "model": "proc:bth_toothbrush_charger",
+   "w": 0.08,
+   "d": 0.08,
+   "h": 0.26,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Two minutes, buzzing, then a sulky pulse.",
+   "family": "bth_toothbrush_charger",
+   "variant": "plain"
+  },
+  "bth_water_flosser": {
+   "name": "Water flosser",
+   "model": "proc:bth_water_flosser",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.31,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Sprays the mirror more than the teeth.",
+   "family": "bth_water_flosser",
+   "variant": "plain"
+  },
+  "bth_hair_straighteners": {
+   "name": "Hair straighteners",
+   "model": "proc:bth_hair_straighteners",
+   "w": 0.42,
+   "d": 0.13,
+   "h": 0.055,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Left on, said nobody, while driving away.",
+   "family": "bth_hair_straighteners",
+   "variant": "plain"
+  },
+  "bth_makeup_bag": {
+   "name": "Makeup bag",
+   "model": "proc:bth_makeup_bag",
+   "w": 0.225,
+   "d": 0.12,
+   "h": 0.18,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "A lipstick from 2009 lives in the lining.",
+   "family": "bth_makeup_bag",
+   "variant": "plain"
+  },
+  "bth_shaving_mirror": {
+   "name": "Shaving mirror on a stand",
+   "model": "proc:bth_shaving_mirror",
+   "w": 0.22,
+   "d": 0.12,
+   "h": 0.34,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Magnifies each pore with grim enthusiasm.",
+   "family": "bth_shaving_mirror",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_plunger": {
+   "name": "Plunger",
+   "model": "proc:bth_plunger",
+   "w": 0.14,
+   "d": 0.14,
+   "h": 0.59,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Owned by every house, admitted to by none.",
+   "family": "bth_plunger",
+   "variant": "plain"
+  },
+  "bth_toilet_brush": {
+   "name": "Toilet brush in a pot",
+   "model": "proc:bth_toilet_brush",
+   "w": 0.12,
+   "d": 0.12,
+   "h": 0.42,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Avoided by eye, and by everyone.",
+   "family": "bth_toilet_brush",
+   "variant": "plain"
+  },
+  "bth_bath_bombs": {
+   "name": "Bowl of bath bombs",
+   "model": "proc:bth_bath_bombs",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 0.135,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Fizzing glitter that the plughole will remember.",
+   "family": "bth_bath_bombs",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_nail_kit": {
+   "name": "Manicure set",
+   "model": "proc:bth_nail_kit",
+   "w": 0.18,
+   "d": 0.14,
+   "h": 0.09,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Every tool, and nobody knows what two of them do.",
+   "family": "bth_nail_kit",
+   "variant": "plain"
+  },
+  "bth_pill_organiser": {
+   "name": "Weekly pill organiser",
+   "model": "proc:bth_pill_organiser",
+   "w": 0.24,
+   "d": 0.06,
+   "h": 0.05,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Tuesday is empty, but was it taken.",
+   "family": "bth_pill_organiser",
+   "variant": "plain"
+  },
+  "bth_foot_spa": {
+   "name": "Foot spa",
+   "model": "proc:bth_foot_spa",
+   "w": 0.48,
+   "d": 0.4,
+   "h": 0.2,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Bubbling beautifully at nobody since Christmas.",
+   "family": "bth_foot_spa",
+   "variant": "plain"
+  },
+  "bth_linen_cupboard": {
+   "name": "Linen cupboard",
+   "model": "proc:bth_linen_cupboard",
+   "w": 0.62,
+   "d": 0.505,
+   "h": 1.6,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Sheets folded by one person, ruined by the rest.",
+   "family": "bth_linen_cupboard",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "bth_cleaning_caddy": {
+   "name": "Cleaning caddy",
+   "model": "proc:bth_cleaning_caddy",
+   "w": 0.36,
+   "d": 0.2,
+   "h": 0.32,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Bleach, cloths and a sponge best not asked about.",
+   "family": "bth_cleaning_caddy",
+   "variant": "plain"
+  },
+  "bth_mop_bucket": {
+   "name": "Mop and bucket",
+   "model": "proc:bth_mop_bucket",
+   "w": 0.42,
+   "d": 0.34,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "The mop gets washed less than the floor.",
+   "family": "bth_mop_bucket",
+   "variant": "plain",
+   "nobox": true
+  },
+  "bth_cork_stool": {
+   "name": "Cork stool",
+   "model": "proc:bth_cork_stool",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.445,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Warm to sit on, smells faintly of wine.",
+   "family": "bth_cork_stool",
+   "variant": "plain"
+  },
+  "bth_mouthwash": {
+   "name": "Mouthwash and cups",
+   "model": "proc:bth_mouthwash",
+   "w": 0.14,
+   "d": 0.1,
+   "h": 0.25,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Burns like a punishment, minty as a promise.",
+   "family": "bth_mouthwash",
+   "variant": "plain"
+  },
+  "bth_shower_radio": {
+   "name": "Shower radio",
+   "model": "proc:bth_shower_radio",
+   "w": 0.16,
+   "d": 0.125,
+   "h": 0.18,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Plays the news through a fog of steam.",
+   "family": "bth_shower_radio",
+   "variant": "plain"
+  },
+  "bth_bath_thermometer": {
+   "name": "Floating bath thermometer",
+   "model": "proc:bth_bath_thermometer",
+   "w": 0.19,
+   "d": 0.09,
+   "h": 0.1,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Says lovely. The baby disagrees.",
+   "family": "bth_bath_thermometer",
+   "variant": "plain"
+  },
+  "bth_loo_roll_stand": {
+   "name": "Toilet roll stand",
+   "model": "proc:bth_loo_roll_stand",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 0.62,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Holds four rolls and, often, none.",
+   "family": "bth_loo_roll_stand",
+   "variant": "plain"
+  },
+  "bth_reed_diffuser": {
+   "name": "Reed diffuser",
+   "model": "proc:bth_reed_diffuser",
+   "w": 0.1,
+   "d": 0.1,
+   "h": 0.3,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Smells of sea breeze, in a room with no window.",
+   "family": "bth_reed_diffuser",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_hairbrush_comb": {
+   "name": "Hairbrush and comb",
+   "model": "proc:bth_hairbrush_comb",
+   "w": 0.26,
+   "d": 0.1,
+   "h": 0.05,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Full of hair. Whose, nobody will say.",
+   "family": "bth_hairbrush_comb",
+   "variant": "plain"
+  },
+  "bth_hair_clippers": {
+   "name": "Hair clippers in a case",
+   "model": "proc:bth_hair_clippers",
+   "w": 0.32,
+   "d": 0.22,
+   "h": 0.1,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Lockdown haircuts, never spoken of.",
+   "family": "bth_hair_clippers",
+   "variant": "plain"
+  },
+  "bth_laundry_sorter": {
+   "name": "Three-bag laundry sorter",
+   "model": "proc:bth_laundry_sorter",
+   "w": 0.9,
+   "d": 0.4,
+   "h": 0.86,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Whites, darks, and a third bag of mysteries.",
+   "family": "bth_laundry_sorter",
+   "variant": "plain"
+  },
+  "bth_box_of_tiles": {
+   "name": "Box of spare tiles",
+   "model": "proc:bth_box_of_tiles",
+   "w": 0.34,
+   "d": 0.24,
+   "h": 0.14,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Kept since 1998 in case one ever cracks.",
+   "family": "bth_box_of_tiles",
+   "variant": "plain",
+   "heavy": true
+  },
+  "bth_toilet_frame": {
+   "name": "Toilet safety frame",
+   "model": "proc:bth_toilet_frame",
+   "w": 0.62,
+   "d": 0.5,
+   "h": 0.75,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Borrowed from the hospital and never returned.",
+   "family": "bth_toilet_frame",
+   "variant": "plain",
+   "nobox": true
+  },
+  "bth_bath_board": {
+   "name": "Bath board",
+   "model": "proc:bth_bath_board",
+   "w": 0.7,
+   "d": 0.3,
+   "h": 0.06,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Spans the bath like a tiny bridge for soap.",
+   "family": "bth_bath_board",
+   "variant": "plain"
+  },
+  "bth_wash_bag": {
+   "name": "Wash bag",
+   "model": "proc:bth_wash_bag",
+   "w": 0.29,
+   "d": 0.14,
+   "h": 0.175,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Packed for a weekend, unpacked in a fortnight.",
+   "family": "bth_wash_bag",
+   "variant": "plain"
+  },
+  "bth_heated_rollers": {
+   "name": "Heated rollers",
+   "model": "proc:bth_heated_rollers",
+   "w": 0.32,
+   "d": 0.22,
+   "h": 0.12,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "A sixties beehive, waiting in a plastic case.",
+   "family": "bth_heated_rollers",
+   "variant": "plain"
+  },
+  "bth_electric_shaver": {
+   "name": "Electric shaver on its stand",
+   "model": "proc:bth_electric_shaver",
+   "w": 0.1,
+   "d": 0.1,
+   "h": 0.2,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Rotary heads, and a beard it never quite finishes.",
+   "family": "bth_electric_shaver",
+   "variant": "plain"
+  },
+  "bth_talc_tin": {
+   "name": "Tin of talc",
+   "model": "proc:bth_talc_tin",
+   "w": 0.08,
+   "d": 0.065,
+   "h": 0.18,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Pre-war lavender, and a cloud with every shake.",
+   "family": "bth_talc_tin",
+   "variant": "plain"
+  },
+  "bth_back_brush": {
+   "name": "Long-handled back brush",
+   "model": "proc:bth_back_brush",
+   "w": 0.53,
+   "d": 0.1,
+   "h": 0.08,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Reaches the bit between the shoulders. Victory.",
+   "family": "bth_back_brush",
+   "variant": "plain"
+  },
+  "bth_shower_curtain": {
+   "name": "Folded shower curtain",
+   "model": "proc:bth_shower_curtain",
+   "w": 0.36,
+   "d": 0.26,
+   "h": 0.14,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "New, unopened, for the one gone mouldy.",
+   "family": "bth_shower_curtain",
+   "variant": "plain"
+  },
+  "bth_loo_seat": {
+   "name": "Spare toilet seat",
+   "model": "proc:bth_loo_seat",
+   "w": 0.4,
+   "d": 0.44,
+   "h": 0.1,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Soft-close, and slams anyway.",
+   "family": "bth_loo_seat",
+   "variant": "plain"
+  },
+  "bth_spare_shower_head": {
+   "name": "Boxed shower head",
+   "model": "proc:bth_spare_shower_head",
+   "w": 0.31,
+   "d": 0.125,
+   "h": 0.1,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Rainforest setting. The pressure says drizzle.",
+   "family": "bth_spare_shower_head",
+   "variant": "plain"
+  },
+  "bth_snorkel_set": {
+   "name": "Mask and snorkel",
+   "model": "proc:bth_snorkel_set",
+   "w": 0.24,
+   "d": 0.12,
+   "h": 0.3,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Tested in the bath, saved for a holiday.",
+   "family": "bth_snorkel_set",
+   "variant": "plain"
+  },
+  "bth_bubble_bath_trio": {
+   "name": "Bubble bath bottles",
+   "model": "proc:bth_bubble_bath_trio",
+   "w": 0.28,
+   "d": 0.08,
+   "h": 0.24,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Gift set. Unopened. Re-gifted next year.",
+   "family": "bth_bubble_bath_trio",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_lighthouse": {
+   "name": "Lighthouse ornament",
+   "model": "proc:bth_lighthouse",
+   "w": 0.1,
+   "d": 0.1,
+   "h": 0.32,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "A seaside souvenir that faces the wrong way.",
+   "family": "bth_lighthouse",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_laundry_powder": {
+   "name": "Box of washing powder",
+   "model": "proc:bth_laundry_powder",
+   "w": 0.24,
+   "d": 0.16,
+   "h": 0.3,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Big box, little scoop, lost scoop.",
+   "family": "bth_laundry_powder",
+   "variant": "plain"
+  },
+  "bth_bath_pillow": {
+   "name": "Bath pillow",
+   "model": "proc:bth_bath_pillow",
+   "w": 0.32,
+   "d": 0.14,
+   "h": 0.22,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Suckers that let go at the best moment.",
+   "family": "bth_bath_pillow",
+   "variant": "plain"
+  },
+  "bth_drawer_unit": {
+   "name": "Rolling bathroom drawers",
+   "model": "proc:bth_drawer_unit",
+   "w": 0.32,
+   "d": 0.405,
+   "h": 0.82,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Three drawers of plasters and old hair bands.",
+   "family": "bth_drawer_unit",
+   "variant": "plain"
+  },
+  "bth_cotton_bud_pot": {
+   "name": "Cotton bud and pad jars",
+   "model": "proc:bth_cotton_bud_pot",
+   "w": 0.18,
+   "d": 0.08,
+   "h": 0.13,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Labels unnecessary, used anyway.",
+   "family": "bth_cotton_bud_pot",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_seashell_dish": {
+   "name": "Seashell dish",
+   "model": "proc:bth_seashell_dish",
+   "w": 0.18,
+   "d": 0.16,
+   "h": 0.06,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Holds earrings, a ring and a mystery screw.",
+   "family": "bth_seashell_dish",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_loofah_hook": {
+   "name": "Loofah on a hook",
+   "model": "proc:bth_loofah_hook",
+   "w": 0.12,
+   "d": 0.145,
+   "h": 0.32,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Dried to a crisp, then soaked, forever.",
+   "family": "bth_loofah_hook",
+   "variant": "plain"
+  },
+  "bth_extractor_fan": {
+   "name": "Extractor fan",
+   "model": "proc:bth_extractor_fan",
+   "w": 0.2,
+   "d": 0.08,
+   "h": 0.2,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Whirrs for twenty minutes after you leave.",
+   "family": "bth_extractor_fan",
+   "variant": "plain"
+  },
+  "bth_sponge_net": {
+   "name": "Hanging sponge net",
+   "model": "proc:bth_sponge_net",
+   "w": 0.2,
+   "d": 0.18,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Sponges in a net, smelling quietly of pond.",
+   "family": "bth_sponge_net",
+   "variant": "plain"
+  },
+  "bth_squeegee": {
+   "name": "Shower squeegee",
+   "model": "proc:bth_squeegee",
+   "w": 0.26,
+   "d": 0.07,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Bought in a burst of zeal, used twice.",
+   "family": "bth_squeegee",
+   "variant": "plain"
+  },
+  "bth_towel_ring": {
+   "name": "Towel ring with hand towel",
+   "model": "proc:bth_towel_ring",
+   "w": 0.22,
+   "d": 0.115,
+   "h": 0.405,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "The hand towel nobody dries their hands on.",
+   "family": "bth_towel_ring",
+   "variant": "plain"
+  },
+  "bth_hanging_plant": {
+   "name": "Hanging spider plant",
+   "model": "proc:bth_hanging_plant",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.6,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Thrives on steam, ignores all advice.",
+   "family": "bth_hanging_plant",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_over_door_hooks": {
+   "name": "Over-door hooks",
+   "model": "proc:bth_over_door_hooks",
+   "w": 0.42,
+   "d": 0.08,
+   "h": 0.31,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Holds four towels. Nine are hung on it.",
+   "family": "bth_over_door_hooks",
+   "variant": "plain"
+  },
+  "bth_grab_rail": {
+   "name": "Grab rail",
+   "model": "proc:bth_grab_rail",
+   "w": 0.52,
+   "d": 0.155,
+   "h": 0.12,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Fitted after the incident. Nobody mentions the incident.",
+   "family": "bth_grab_rail",
+   "variant": "plain"
+  },
+  "bth_nail_varnish_rack": {
+   "name": "Nail varnish rack",
+   "model": "proc:bth_nail_varnish_rack",
+   "w": 0.36,
+   "d": 0.15,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Forty shades of red and one green mistake.",
+   "family": "bth_nail_varnish_rack",
+   "variant": "plain"
+  },
+  "bth_wall_boiler": {
+   "name": "Combi boiler",
+   "model": "proc:bth_wall_boiler",
+   "w": 0.42,
+   "d": 0.36,
+   "h": 0.72,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Hums, clicks, and goes out on Christmas Eve.",
+   "family": "bth_wall_boiler",
+   "variant": "plain",
+   "heavy": true
+  },
+  "bth_pocket_organiser": {
+   "name": "Hanging pocket organiser",
+   "model": "proc:bth_pocket_organiser",
+   "w": 0.4,
+   "d": 0.07,
+   "h": 0.7,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "A pocket for everything, and everything elsewhere.",
+   "family": "bth_pocket_organiser",
+   "variant": "plain"
+  },
+  "bth_shower_timer": {
+   "name": "Shower timer",
+   "model": "proc:bth_shower_timer",
+   "w": 0.1,
+   "d": 0.065,
+   "h": 0.165,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Four minutes of sand, ignored at minute two.",
+   "family": "bth_shower_timer",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_vanity_unit": {
+   "name": "Vanity basin unit",
+   "model": "proc:bth_vanity_unit",
+   "w": 0.62,
+   "d": 0.47,
+   "h": 0.92,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "A basin on a cupboard full of half-used bottles.",
+   "family": "bth_vanity_unit",
+   "variant": "plain",
+   "heavy": true
+  },
+  "bth_shower_tray": {
+   "name": "Boxed shower tray",
+   "model": "proc:bth_shower_tray",
+   "w": 0.92,
+   "d": 0.12,
+   "h": 0.92,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Bought for the refit, now propping up the refit.",
+   "family": "bth_shower_tray",
+   "variant": "plain",
+   "heavy": true
+  },
+  "bth_hot_water_tank": {
+   "name": "Lagged hot water cylinder",
+   "model": "proc:bth_hot_water_tank",
+   "w": 0.805,
+   "d": 0.5,
+   "h": 1.21,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Wrapped in a red jacket like a nervous swimmer.",
+   "family": "bth_hot_water_tank",
+   "variant": "plain",
+   "nobox": true,
+   "heavy": true
+  },
+  "bth_bidet": {
+   "name": "Spare bidet",
+   "model": "proc:bth_bidet",
+   "w": 0.4,
+   "d": 0.56,
+   "h": 0.445,
+   "mount": "floor",
+   "room": "bathroom",
+   "flavor": "Fitted in 1974, unexplained ever since.",
+   "family": "bth_bidet",
+   "variant": "plain",
+   "fragile": true,
+   "heavy": true
+  },
+  "bth_denture_pot": {
+   "name": "Denture pot",
+   "model": "proc:bth_denture_pot",
+   "w": 0.14,
+   "d": 0.08,
+   "h": 0.1,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Smiles at you from the shelf at night.",
+   "family": "bth_denture_pot",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_bath_salts": {
+   "name": "Jar of bath salts",
+   "model": "proc:bth_bath_salts",
+   "w": 0.175,
+   "d": 0.14,
+   "h": 0.215,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Dead Sea, apparently. Bought in a lay-by.",
+   "family": "bth_bath_salts",
+   "variant": "plain",
+   "fragile": true
+  },
+  "bth_contact_lens_kit": {
+   "name": "Contact lens kit",
+   "model": "proc:bth_contact_lens_kit",
+   "w": 0.16,
+   "d": 0.1,
+   "h": 0.14,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "Solution, case and a lens lost somewhere in the sink.",
+   "family": "bth_contact_lens_kit",
+   "variant": "plain"
+  },
+  "bth_pumice_dish": {
+   "name": "Pumice stone on a dish",
+   "model": "proc:bth_pumice_dish",
+   "w": 0.16,
+   "d": 0.14,
+   "h": 0.07,
+   "mount": "small",
+   "room": "bathroom",
+   "flavor": "For the heels. The heels are winning.",
+   "family": "bth_pumice_dish",
+   "variant": "plain"
+  },
+  "bth_toothpaste_dispenser": {
+   "name": "Wall toothpaste dispenser",
+   "model": "proc:bth_toothpaste_dispenser",
+   "w": 0.14,
+   "d": 0.105,
+   "h": 0.24,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Squeezes perfectly, then never again.",
+   "family": "bth_toothpaste_dispenser",
+   "variant": "plain"
+  },
+  "bth_shower_riser": {
+   "name": "Shower riser rail",
+   "model": "proc:bth_shower_riser",
+   "w": 0.18,
+   "d": 0.24,
+   "h": 1.0,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Slides up for one, down for the other, every time.",
+   "family": "bth_shower_riser",
+   "variant": "plain"
+  },
+  "bth_roller_blind": {
+   "name": "Roller blind",
+   "model": "proc:bth_roller_blind",
+   "w": 0.705,
+   "d": 0.09,
+   "h": 0.6,
+   "mount": "hang",
+   "room": "bathroom",
+   "flavor": "Stuck halfway, at exactly the wrong height.",
+   "family": "bth_roller_blind",
+   "variant": "plain"
+  }
+ },
+ "props": {
+  "bth_shaving_kit": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.006,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.008,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.04
+    ],
+    "p": [
+     -0.03,
+     0.135,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.03,
+     0.16,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.007,
+     0.05
+    ],
+    "p": [
+     0.03,
+     0.09,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.008,
+     0.012
+    ],
+    "p": [
+     0.03,
+     0.065,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_bath_toys": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.12,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.05
+    ],
+    "p": [
+     -0.05,
+     0.13,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.06,
+     0.008
+    ],
+    "p": [
+     -0.05,
+     0.17,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.003
+    ],
+    "p": [
+     -0.035,
+     0.18,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.06,
+     0.14,
+     0.01
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.1,
+     0.15,
+     0.01
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.02,
+     0.125,
+     -0.04
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bth_shower_stool": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.44,
+     -0.11
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.44,
+     -0.035
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.035
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.11
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.43,
+     0.035
+    ],
+    "p": [
+     -0.14,
+     0.215,
+     -0.11
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.43,
+     0.035
+    ],
+    "p": [
+     -0.14,
+     0.215,
+     0.11
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.43,
+     0.035
+    ],
+    "p": [
+     0.14,
+     0.215,
+     -0.11
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.43,
+     0.035
+    ],
+    "p": [
+     0.14,
+     0.215,
+     0.11
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.11
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.15,
+     -0.11
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "bth_potty": [
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.09
+    ],
+    "p": [
+     0.0,
+     0.075,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.115,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.08,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.14,
+     -0.08
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.005
+    ],
+    "p": [
+     0.0,
+     0.142,
+     0.01
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.11,
+     0.12,
+     0.0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bth_child_step": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.03,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.19,
+     0.24
+    ],
+    "p": [
+     0.16,
+     0.095,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.19,
+     0.24
+    ],
+    "p": [
+     -0.16,
+     0.095,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.004,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.217,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.12
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.1
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "bth_baby_bath": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.04,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.2,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.22
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.2,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.13,
+     -0.22
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.2,
+     0.44
+    ],
+    "p": [
+     0.37,
+     0.13,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.2,
+     0.44
+    ],
+    "p": [
+     -0.37,
+     0.13,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.08,
+     0.38
+    ],
+    "p": [
+     -0.25,
+     0.07,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.2,
+     0.06,
+     0.1
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "bth_nappy_bin": [
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.125,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.46,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.12
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.3,
+     0.12
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_toothbrush_charger": [
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.016,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.245,
+     0.006
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.007
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.017
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_water_flosser": [
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.08,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.056,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.205,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.18
+    ],
+    "p": [
+     0.045,
+     0.17,
+     0.05
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.06,
+     0.004
+    ],
+    "p": [
+     0.045,
+     0.28,
+     0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.06
+    ],
+    "c": "4F8A8B",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_hair_straighteners": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.022,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.011,
+     -0.014
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.022,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.034,
+     -0.014
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.004,
+     0.026
+    ],
+    "p": [
+     0.08,
+     0.023,
+     -0.014
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.1
+    ],
+    "p": [
+     -0.17,
+     0.02,
+     0.02
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0.0,
+     0.6
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.006
+    ],
+    "p": [
+     -0.06,
+     0.047,
+     -0.014
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bth_makeup_bag": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.1,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.03,
+     0.006
+    ],
+    "p": [
+     0.09,
+     0.14,
+     0.006
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.05
+    ],
+    "p": [
+     -0.05,
+     0.15,
+     0.02
+    ],
+    "c": "B6453F",
+    "r": [
+     0.0,
+     0.0,
+     0.4
+    ]
+   }
+  ],
+  "bth_shaving_mirror": [
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.0075,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.012
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.2,
+     -0.012
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_plunger": [
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.064
+    ],
+    "p": [
+     0.0,
+     0.066,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.48
+    ],
+    "p": [
+     0.0,
+     0.33,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.018
+    ],
+    "p": [
+     0.0,
+     0.57,
+     0.0
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "bth_toilet_brush": [
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.057,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.18,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.4,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.012,
+     0.0
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_bath_bombs": [
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.035,
+     0.07,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.035,
+     0.07,
+     0.01
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.075,
+     -0.04
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.04
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.105,
+     0.0
+    ],
+    "c": "8FA882"
+   }
+  ],
+  "bth_nail_kit": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.006,
+     0.09
+    ],
+    "p": [
+     0.0,
+     0.023,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.004,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.028,
+     -0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.028,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.004,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.028,
+     0.02
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.08,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.05,
+     -0.05
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.4,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_pill_organiser": [
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.025,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.0125,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     -0.102,
+     0.028,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     -0.068,
+     0.028,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     -0.034,
+     0.028,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     0.0,
+     0.028,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     0.034,
+     0.028,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     0.068,
+     0.028,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.028,
+     0.006,
+     0.042
+    ],
+    "p": [
+     0.102,
+     0.028,
+     0.0
+    ],
+    "c": "E8B4A8"
+   }
+  ],
+  "bth_foot_spa": [
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.06,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.1,
+     0.36
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.006,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.163,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.08,
+     0.17,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.08,
+     0.17,
+     -0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.165
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "bth_linen_cupboard": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     1.56,
+     0.42
+    ],
+    "p": [
+     0.0,
+     0.78,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.44
+    ],
+    "p": [
+     0.0,
+     1.58,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.29,
+     1.4,
+     0.02
+    ],
+    "p": [
+     0.148,
+     0.82,
+     0.22
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.29,
+     1.4,
+     0.02
+    ],
+    "p": [
+     -0.148,
+     0.82,
+     0.22
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.5,
+     0.004
+    ],
+    "p": [
+     0.148,
+     0.82,
+     0.232
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.5,
+     0.004
+    ],
+    "p": [
+     -0.148,
+     0.82,
+     0.232
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.02,
+     0.8,
+     0.24
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.02,
+     0.8,
+     0.24
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_cleaning_caddy": [
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.1,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.18,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.215,
+     0.0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.2
+    ],
+    "p": [
+     -0.09,
+     0.15,
+     0.02
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.03
+    ],
+    "p": [
+     -0.09,
+     0.27,
+     0.02
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.17
+    ],
+    "p": [
+     0.08,
+     0.135,
+     -0.02
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0.1,
+     0.11,
+     0.06
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "bth_mop_bucket": [
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.152,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.28,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.012,
+     0.32
+    ],
+    "p": [
+     0.0,
+     0.33,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.95
+    ],
+    "p": [
+     0.05,
+     0.6,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0.0,
+     0.0,
+     -0.08
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0.03,
+     0.25,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.08
+    ],
+    "p": [
+     0.12,
+     0.2,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "bth_cork_stool": [
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.44
+    ],
+    "p": [
+     0.0,
+     0.22,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.142,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.142,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.33,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.442,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.004
+    ],
+    "p": [
+     0.06,
+     0.442,
+     0.04
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "bth_mouthwash": [
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.17,
+     0.05
+    ],
+    "p": [
+     -0.02,
+     0.085,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     -0.02,
+     0.195,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.026,
+     0.03
+    ],
+    "p": [
+     -0.02,
+     0.235,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.004
+    ],
+    "p": [
+     -0.02,
+     0.1,
+     0.027
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.04
+    ],
+    "p": [
+     0.04,
+     0.02,
+     0.02
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_shower_radio": [
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.05
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.01,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.145,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.04,
+     0.12,
+     0.04
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.165,
+     -0.04
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_bath_thermometer": [
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.012
+    ],
+    "p": [
+     -0.06,
+     0.05,
+     0.0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.0,
+     0.0,
+     0.5
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.05,
+     0.004
+    ],
+    "p": [
+     0.005,
+     0.045,
+     0.04
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.035,
+     0.002
+    ],
+    "p": [
+     0.005,
+     0.045,
+     0.043
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.006
+    ],
+    "p": [
+     0.03,
+     0.055,
+     0.025
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.082,
+     0.0
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "bth_loo_roll_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.0075,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.56
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.18,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.04,
+     0.5,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.585,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_reed_diffuser": [
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.09
+    ],
+    "p": [
+     0.0,
+     0.045,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.039,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.2,
+     0.004
+    ],
+    "p": [
+     0.015,
+     0.2,
+     0.0
+    ],
+    "c": "2B2622",
+    "r": [
+     0.0,
+     0.0,
+     -0.15
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.2,
+     0.004
+    ],
+    "p": [
+     -0.015,
+     0.2,
+     0.0
+    ],
+    "c": "2B2622",
+    "r": [
+     0.0,
+     0.0,
+     0.15
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.2,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.015
+    ],
+    "c": "2B2622",
+    "r": [
+     0.15,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_hairbrush_comb": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.02,
+     0.07
+    ],
+    "p": [
+     -0.04,
+     0.01,
+     0.0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.018,
+     0.026
+    ],
+    "p": [
+     0.07,
+     0.01,
+     -0.01
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.02,
+     0.06
+    ],
+    "p": [
+     -0.04,
+     0.03,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.004,
+     0.03
+    ],
+    "p": [
+     0.02,
+     0.004,
+     0.035
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.01,
+     0.008
+    ],
+    "p": [
+     0.02,
+     0.009,
+     0.026
+    ],
+    "c": "3E3A4F"
+   }
+  ],
+  "bth_hair_clippers": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.05,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.008,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.054,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.035,
+     0.045
+    ],
+    "p": [
+     -0.05,
+     0.075,
+     0.03
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0.03,
+     0.074,
+     0.03
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.08,
+     0.068,
+     -0.04
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.11,
+     0.068,
+     0.04
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "bth_laundry_sorter": [
+   {
+    "t": "box",
+    "s": [
+     0.88,
+     0.02,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.82,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.82,
+     0.02
+    ],
+    "p": [
+     0.43,
+     0.42,
+     0.18
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.82,
+     0.02
+    ],
+    "p": [
+     -0.43,
+     0.42,
+     0.18
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.82,
+     0.02
+    ],
+    "p": [
+     0.43,
+     0.42,
+     -0.18
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.82,
+     0.02
+    ],
+    "p": [
+     -0.43,
+     0.42,
+     -0.18
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.27,
+     0.55,
+     0.34
+    ],
+    "p": [
+     -0.29,
+     0.53,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.27,
+     0.55,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.53,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.27,
+     0.55,
+     0.34
+    ],
+    "p": [
+     0.29,
+     0.53,
+     0.0
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_box_of_tiles": [
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.1,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.01,
+     0.15
+    ],
+    "p": [
+     -0.06,
+     0.105,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.01,
+     0.15
+    ],
+    "p": [
+     0.06,
+     0.115,
+     0.01
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.2,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.003
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.111
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.322,
+     0.02,
+     0.222
+    ],
+    "p": [
+     0.0,
+     0.02,
+     0.0
+    ],
+    "c": "E7DCC6"
+   }
+  ],
+  "bth_toilet_frame": [
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.03
+    ],
+    "p": [
+     0.28,
+     0.36,
+     0.2
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.03
+    ],
+    "p": [
+     -0.28,
+     0.36,
+     0.2
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.03
+    ],
+    "p": [
+     0.28,
+     0.36,
+     -0.2
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.72,
+     0.03
+    ],
+    "p": [
+     -0.28,
+     0.36,
+     -0.2
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.44
+    ],
+    "p": [
+     0.28,
+     0.72,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.44
+    ],
+    "p": [
+     -0.28,
+     0.72,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.4,
+     -0.2
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.03
+    ],
+    "p": [
+     0.28,
+     0.015,
+     0.2
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.03
+    ],
+    "p": [
+     0.28,
+     0.015,
+     -0.2
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "bth_bath_board": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.02,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0.3,
+     0.015,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.2
+    ],
+    "p": [
+     -0.3,
+     0.015,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.2
+    ],
+    "p": [
+     -0.12,
+     0.051,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.051,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.2
+    ],
+    "p": [
+     0.12,
+     0.051,
+     0.0
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "bth_wash_bag": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.12,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.26
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.0,
+     0.165,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.012
+    ],
+    "p": [
+     0.13,
+     0.08,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.003
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.061
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "bth_heated_rollers": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.06,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.004,
+     0.2
+    ],
+    "p": [
+     0.0,
+     0.062,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     -0.1,
+     0.088,
+     -0.05
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     -0.1,
+     0.088,
+     0.05
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     -0.035,
+     0.088,
+     -0.05
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     -0.035,
+     0.088,
+     0.05
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     0.035,
+     0.088,
+     -0.05
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     0.035,
+     0.088,
+     0.05
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     0.1,
+     0.088,
+     -0.05
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.05
+    ],
+    "p": [
+     0.1,
+     0.088,
+     0.05
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.12,
+     0.03,
+     0.1
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "bth_electric_shaver": [
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.13,
+     0.035
+    ],
+    "p": [
+     0.0,
+     0.095,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.006
+    ],
+    "p": [
+     -0.02,
+     0.188,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.006
+    ],
+    "p": [
+     0.02,
+     0.188,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.188,
+     0.012
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.018
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_talc_tin": [
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.15,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.075,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.025
+    ],
+    "p": [
+     0.0,
+     0.162,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.072,
+     0.05,
+     0.042
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.02
+    ],
+    "c": "E8B4A8"
+   }
+  ],
+  "bth_back_brush": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.36
+    ],
+    "p": [
+     0.07,
+     0.015,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.06
+    ],
+    "p": [
+     -0.17,
+     0.02,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.11,
+     0.022,
+     0.05
+    ],
+    "p": [
+     -0.17,
+     0.047,
+     0.0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.014
+    ],
+    "p": [
+     0.25,
+     0.015,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.02
+    ],
+    "p": [
+     0.24,
+     0.035,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bth_shower_curtain": [
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.025,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.0125,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.025,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.0375,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.025,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.0625,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.025,
+     0.24
+    ],
+    "p": [
+     0.0,
+     0.0875,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.006
+    ],
+    "p": [
+     -0.1,
+     0.104,
+     0.05
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.104,
+     0.05
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.006
+    ],
+    "p": [
+     0.1,
+     0.104,
+     0.05
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_loo_seat": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.0125,
+     0.16
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.36
+    ],
+    "p": [
+     0.15,
+     0.0125,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.36
+    ],
+    "p": [
+     -0.15,
+     0.0125,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.025,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.0125,
+     -0.16
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.42
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.065,
+     -0.2
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_spare_shower_head": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.08,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.31,
+     0.02,
+     0.121
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.01
+    ],
+    "p": [
+     -0.07,
+     0.08,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.16
+    ],
+    "p": [
+     0.06,
+     0.085,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.003
+    ],
+    "p": [
+     0.05,
+     0.04,
+     0.061
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "bth_snorkel_set": [
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.08,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.06,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.032
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.04,
+     -0.02
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.24
+    ],
+    "p": [
+     0.1,
+     0.16,
+     -0.02
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.03
+    ],
+    "p": [
+     0.1,
+     0.03,
+     0.0
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_bubble_bath_trio": [
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.16
+    ],
+    "p": [
+     -0.08,
+     0.1,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     -0.08,
+     0.19,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.14
+    ],
+    "p": [
+     0.08,
+     0.09,
+     0.0
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.08,
+     0.17,
+     0.0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "bth_lighthouse": [
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.015,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.065,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.032,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.135,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.205,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.26,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.024
+    ],
+    "p": [
+     0.0,
+     0.285,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bth_laundry_powder": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.26,
+     0.14
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.222,
+     0.06,
+     0.142
+    ],
+    "p": [
+     0.0,
+     0.2,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.275,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.003
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.071
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.03
+    ],
+    "p": [
+     0.08,
+     0.275,
+     0.02
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_bath_pillow": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.12,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.031,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.008
+    ],
+    "p": [
+     -0.1,
+     0.06,
+     -0.034
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.008
+    ],
+    "p": [
+     0.1,
+     0.06,
+     -0.034
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "bth_drawer_unit": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.72,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.42,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.2,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.67,
+     0.195
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.2,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.44,
+     0.195
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.2,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.21,
+     0.195
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.38
+    ],
+    "p": [
+     0.0,
+     0.795,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     -0.1,
+     0.03,
+     -0.13
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     -0.1,
+     0.03,
+     0.13
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.1,
+     0.03,
+     -0.13
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.1,
+     0.03,
+     0.13
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "bth_cotton_bud_pot": [
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.1
+    ],
+    "p": [
+     -0.045,
+     0.05,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.015
+    ],
+    "p": [
+     -0.045,
+     0.107,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.034,
+     0.06
+    ],
+    "p": [
+     -0.045,
+     0.04,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.08
+    ],
+    "p": [
+     0.045,
+     0.04,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.015
+    ],
+    "p": [
+     0.045,
+     0.087,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.05
+    ],
+    "p": [
+     0.045,
+     0.035,
+     0.0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bth_seashell_dish": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.01,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.024,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0.0,
+     0.4,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.024,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0.0,
+     -0.4,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.024,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.008
+    ],
+    "p": [
+     0.03,
+     0.035,
+     0.02
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.004
+    ],
+    "p": [
+     -0.03,
+     0.033,
+     -0.02
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_loofah_hook": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.29,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.06,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.23,
+     0.032
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.18
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.035
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.036,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.035
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bth_extractor_fan": [
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.2,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.025
+    ],
+    "c": "8E8276",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.008,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.032
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.008,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.032
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.008,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0.032
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.008,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.12,
+     0.032
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.008,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.032
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_sponge_net": [
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.38,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.1,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.32,
+     0.02
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.22
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.02
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     -0.025,
+     0.22,
+     0.02
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.025,
+     0.14,
+     0.02
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     -0.02,
+     0.08,
+     0.02
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "bth_squeegee": [
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.25,
+     0.015
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.18,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.025
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.04,
+     0.025
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.02,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.012,
+     0.025
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "bth_towel_ring": [
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.37,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.03
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.04
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.26,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.04
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.02,
+     0.032
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.04
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_hanging_plant": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.15
+    ],
+    "p": [
+     0.0,
+     0.585,
+     -0.07
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.25,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.27,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.11
+    ],
+    "p": [
+     0.0,
+     0.36,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0.1,
+     0.25,
+     0.06
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     -0.1,
+     0.22,
+     -0.06
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.05,
+     0.15,
+     -0.08
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "bth_over_door_hooks": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.24,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0.16,
+     0.28,
+     -0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.04
+    ],
+    "p": [
+     -0.16,
+     0.28,
+     -0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.24,
+     0.02
+    ],
+    "p": [
+     -0.12,
+     0.12,
+     0.025
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.24,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.12,
+     0.025
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.03
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "bth_grab_rail": [
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.22,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.02
+    ],
+    "p": [
+     -0.22,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.22,
+     0.06,
+     0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     -0.22,
+     0.06,
+     0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.46
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.06
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   }
+  ],
+  "bth_nail_varnish_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.3,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.012,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.04
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.012,
+     0.07
+    ],
+    "p": [
+     0.0,
+     0.18,
+     0.04
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     -0.14,
+     0.09,
+     0.045
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     -0.07,
+     0.09,
+     0.045
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.09,
+     0.045
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     0.07,
+     0.09,
+     0.045
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     0.14,
+     0.09,
+     0.045
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     -0.105,
+     0.21,
+     0.045
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.05
+    ],
+    "p": [
+     -0.035,
+     0.21,
+     0.045
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_wall_boiler": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.66,
+     0.32
+    ],
+    "p": [
+     0.0,
+     0.39,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.1,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.162
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.13,
+     0.166
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.012
+    ],
+    "p": [
+     0.12,
+     0.13,
+     0.168
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.012
+    ],
+    "p": [
+     -0.12,
+     0.13,
+     0.168
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     -0.1,
+     0.03,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.1,
+     0.03,
+     0.0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_pocket_organiser": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.66,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.33,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.01
+    ],
+    "p": [
+     0.14,
+     0.68,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.01
+    ],
+    "p": [
+     -0.14,
+     0.68,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     -0.09,
+     0.12,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     -0.09,
+     0.32,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     -0.09,
+     0.52,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.12,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.32,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     0.09,
+     0.52,
+     0.02
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "bth_shower_timer": [
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.15,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.012
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.016
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.015
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.016
+    ],
+    "p": [
+     0.0,
+     0.05,
+     0.015
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.012,
+     0.015
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_vanity_unit": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.78,
+     0.44
+    ],
+    "p": [
+     0.0,
+     0.39,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.06,
+     0.46
+    ],
+    "p": [
+     0.0,
+     0.81,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.82,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.29,
+     0.66,
+     0.02
+    ],
+    "p": [
+     0.148,
+     0.4,
+     0.225
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.29,
+     0.66,
+     0.02
+    ],
+    "p": [
+     -0.148,
+     0.4,
+     0.225
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.88,
+     -0.17
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.91,
+     -0.13
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_shower_tray": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.9,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.45,
+     -0.01
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.86,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.04
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.45,
+     0.052
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.8,
+     0.032
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.05,
+     0.1
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "bth_hot_water_tank": [
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     1.0
+    ],
+    "p": [
+     0.0,
+     0.55,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.2
+    ],
+    "p": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.223,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.35,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.223,
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.75,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     0.05,
+     1.12,
+     0.0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.2
+    ],
+    "p": [
+     0.3,
+     0.2,
+     0.0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.05,
+     0.4
+    ],
+    "p": [
+     0.0,
+     0.025,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bth_bidet": [
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.3,
+     0.3
+    ],
+    "p": [
+     0.0,
+     0.15,
+     -0.04
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.19,
+     0.12
+    ],
+    "p": [
+     0.0,
+     0.34,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.402,
+     0.03
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.12,
+     0.08
+    ],
+    "p": [
+     0.0,
+     0.34,
+     -0.2
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     0.04,
+     0.42,
+     -0.2
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.05
+    ],
+    "p": [
+     -0.04,
+     0.42,
+     -0.2
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_denture_pot": [
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.06
+    ],
+    "p": [
+     -0.02,
+     0.03,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.04,
+     0.01,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.02,
+     0.04
+    ],
+    "p": [
+     -0.02,
+     0.07,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.045,
+     0.012,
+     0.012
+    ],
+    "p": [
+     -0.02,
+     0.083,
+     0.012
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.025,
+     0.003
+    ],
+    "p": [
+     -0.02,
+     0.03,
+     0.036
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_bath_salts": [
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.15
+    ],
+    "p": [
+     0.0,
+     0.075,
+     0.0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.058,
+     0.11
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.062,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.16,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.003
+    ],
+    "p": [
+     0.0,
+     0.08,
+     0.061
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.06,
+     0.18,
+     0.0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.0,
+     0.0,
+     0.6
+    ]
+   }
+  ],
+  "bth_contact_lens_kit": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.12,
+     0.04
+    ],
+    "p": [
+     -0.04,
+     0.06,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.02
+    ],
+    "p": [
+     -0.04,
+     0.13,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.003
+    ],
+    "p": [
+     -0.04,
+     0.06,
+     0.021
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.05,
+     0.006,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.01
+    ],
+    "p": [
+     0.035,
+     0.017,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.01
+    ],
+    "p": [
+     0.065,
+     0.017,
+     0.0
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "bth_pumice_dish": [
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.015
+    ],
+    "p": [
+     0.0,
+     0.0075,
+     0.0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.017,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.038,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.006
+    ],
+    "p": [
+     0.02,
+     0.06,
+     0.01
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.006
+    ],
+    "p": [
+     -0.02,
+     0.06,
+     -0.01
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "bth_toothpaste_dispenser": [
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.22,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.11,
+     0.06,
+     0.006
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.028
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.03,
+     0.03
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.17,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.011,
+     0.04
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "bth_shower_riser": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.9
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.04
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.94,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.05,
+     0.04
+    ],
+    "p": [
+     0.0,
+     0.7,
+     0.05
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.73,
+     0.08
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.8,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.6
+    ],
+    "p": [
+     0.04,
+     0.4,
+     0.06
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "bth_roller_blind": [
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.7
+    ],
+    "p": [
+     0.0,
+     0.56,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.0,
+     0.0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.66,
+     0.4,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.34,
+     0.03
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.66,
+     0.02,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.14,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.4,
+     0.004
+    ],
+    "p": [
+     0.3,
+     0.32,
+     0.035
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.3,
+     0.115,
+     0.035
+    ],
+    "c": "EAE6DC"
+   }
+  ]
+ }
+}
