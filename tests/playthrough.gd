@@ -716,6 +716,10 @@ func _night_move() -> void:
 	if not fails.is_empty():
 		return
 	var done: Dictionary = GameState.crime.get("done", {})
+	if thrown_this_job:
+		# The move ended on the pavement; Sal pays for finished work only.
+		_check(int(done.get("night_1", 0)) == 0, "night move: Sal does not count a move that ended in the ward (%s)" % str(done))
+		return
 	_check(int(done.get("night_1", 0)) >= 1, "night move: Sal counted it (%s)" % str(done))
 	_check(GameState.job.is_empty() or GameState.job.has("spotted") or true, "night move: drive result carried")
 
