@@ -1,0 +1,32 @@
+{
+ "id": "steve",
+ "name": "Steve",
+ "glb": "steve.glb",
+ "height_m": 1.76,
+ "seat_height_m": 0.468,
+ "hip_height_m": 0.836,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Steve_StaplerHolster",
+   "bone": "Hips"
+  }
+ ],
+ "tris": 83468
+}

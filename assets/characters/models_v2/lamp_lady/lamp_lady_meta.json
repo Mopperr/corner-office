@@ -1,0 +1,32 @@
+{
+ "id": "lamp_lady",
+ "name": "Lorna",
+ "glb": "lamp_lady.glb",
+ "height_m": 1.64,
+ "seat_height_m": 0.433,
+ "hip_height_m": 0.771,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Lorna_Tote",
+   "bone": "RightShoulder"
+  }
+ ],
+ "tris": 82292
+}
