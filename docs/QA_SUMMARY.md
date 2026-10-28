@@ -41,8 +41,18 @@ feel, not missing systems.
 10. CI-only: the raid smoke check could see the jar go up when a fence sale and a goal reward outweighed the fine.
 11. The HUD status line wrapped and clipped once the ledger was added; it is two short lines now.
 12. "Unpack it all for me" sat on top of the Pause button.
+13. Stale action buttons showed as duplicate Mend rows for a frame; right-pinned buttons spilled past the screen edge on long captions.
+14. Tipped-out pieces could land inside café furniture, under a placed piece, or in a far corner hidden behind a tall piece, where they could not be clicked.
+15. The pack phase borrowed the unpack goal ("Set the small plant on the counter") as its objective.
 
 ## Closed since the first pass
+
+- Make it by hand: a recipe card for every order, with a tray, slips and a perfect-make bonus.
+- Box towers: Stack the boxes piles carried boxes in threes; the top box opens.
+- Twelve new items in the job pool, each with a line of its own in the box card.
+- Solid traffic on the drive: the truck follows the car ahead and cannot phase through one.
+- Packing reads as packing: boxes in a row by the back wall, open or sealed, with counts; click one to use it.
+- The Room score card says what the score is for and only shows while placing.
 
 - Bakery loft: ceiling beams gone, skylight glow and a painted picture rail instead.
 - Till: the whole board, grouped by rung, in a scrolling column.
