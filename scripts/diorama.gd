@@ -2694,7 +2694,7 @@ func _spawn_player() -> void:
 	player = null
 	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack", "truck"]):
 		return
-	player = Figure.build(UIKit.TERRA, Color("2B2622"), "adult", Color("3E3A4F"))
+	player = Figure.build(UIKit.TERRA, Color("2B2622"), "adult", Color("3E3A4F"), Figure.SKIN, {"head": "ponytail", "torso": "tee"})
 	player.name = "Player"
 	var scarf := Props.mesh_cylinder(0.22, 0.06, UIKit.MUSTARD)
 	scarf.position = Vector3(0, 1.02, 0)

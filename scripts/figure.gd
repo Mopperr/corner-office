@@ -19,7 +19,39 @@ const KINDS := {
 }
 
 
-static func build(color: Color, hair: Color = Color("4A3626"), kind := "adult", trousers: Color = Color("3E3A4F"), skin: Color = SKIN) -> Node3D:
+const HEADS := ["short", "bob", "ponytail", "bun", "bald", "curly", "cap"]
+const TORSOS := ["tee", "shirt", "jacket", "apron"]
+
+
+static func pick_style(kind: String, seed: int) -> Dictionary:
+	# A head and a top to suit: kids in caps and curls, elders in buns or bald.
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed
+	var heads: Array = HEADS
+	var tops: Array = TORSOS
+	match kind:
+		"kid":
+			heads = ["cap", "curly", "short", "bob"]
+			tops = ["tee", "tee", "shirt"]
+		"elder":
+			heads = ["bun", "bald", "short"]
+			tops = ["shirt", "jacket"]
+	return {"head": str(heads[rng.randi() % heads.size()]), "torso": str(tops[rng.randi() % tops.size()])}
+
+
+static func _part_model(name: String, colors: Dictionary) -> Node3D:
+	# A Blender-built part, recoloured by what each mesh is named for.
+	var node := Props.model(name)
+	if node == null:
+		return null
+	for mesh_instance in node.find_children("*", "MeshInstance3D", true, false):
+		var role := str(mesh_instance.name).split("_")[0].to_lower()
+		if colors.has(role):
+			mesh_instance.material_override = Props.mat(colors[role])
+	return node
+
+
+static func build(color: Color, hair: Color = Color("4A3626"), kind := "adult", trousers: Color = Color("3E3A4F"), skin: Color = SKIN, style: Dictionary = {}) -> Node3D:
 	var person := Node3D.new()
 	var spec: Dictionary = KINDS.get(kind, KINDS["adult"])
 	var figure := Node3D.new()
@@ -27,6 +59,15 @@ static func build(color: Color, hair: Color = Color("4A3626"), kind := "adult", 
 	figure.scale = Vector3.ONE * float(spec["scale"])
 	person.add_child(figure)
 	person.set_meta("kind", kind)
+	if style.is_empty():
+		style = pick_style(kind, hash("%s:%s:%s" % [color.to_html(), hair.to_html(), kind]))
+	var colors := {
+		"skin": skin, "cloth": color, "cloth2": color.darkened(0.18), "trouser": trousers, "trouser2": trousers.darkened(0.12),
+		"hair": hair, "shoe": Color("2B2622"), "eye": Color("2B2622"), "mouth": skin.darkened(0.3), "accent": Color("E6B655") if kind != "kid" else Color("7FA3B8"),
+	}
+	if ResourceLoader.exists("res://assets/models/fig_thigh.glb"):
+		_build_modelled(person, figure, spec, style, colors)
+		return person
 	# Hips and legs.
 	var hips := Node3D.new()
 	hips.name = "Hips"
@@ -120,6 +161,63 @@ static func build(color: Color, hair: Color = Color("4A3626"), kind := "adult", 
 		carry_collision.free()
 	figure.add_child(carry)
 	return person
+
+
+static func _build_modelled(person: Node3D, figure: Node3D, spec: Dictionary, style: Dictionary, colors: Dictionary) -> void:
+	# The same rig as below, dressed in the Blender-built parts.
+	var hips := Node3D.new()
+	hips.name = "Hips"
+	hips.position = Vector3(0, 0.55, 0)
+	figure.add_child(hips)
+	var belt := Props.mesh_box(Vector3(0.3, 0.1, 0.22), colors["trouser"])
+	hips.add_child(belt)
+	for side in [-1.0, 1.0]:
+		var thigh := Node3D.new()
+		thigh.name = "ThighL" if side < 0.0 else "ThighR"
+		thigh.position = Vector3(side * 0.09, -0.03, 0)
+		hips.add_child(thigh)
+		thigh.add_child(_part_model("fig_thigh", colors))
+		var shin := Node3D.new()
+		shin.name = "ShinL" if side < 0.0 else "ShinR"
+		shin.position = Vector3(0, -0.28, 0)
+		thigh.add_child(shin)
+		shin.add_child(_part_model("fig_shin", colors))
+	var torso := Node3D.new()
+	torso.name = "Torso"
+	torso.position = Vector3(0, 0.55, 0)
+	torso.rotation.x = float(spec["lean"])
+	figure.add_child(torso)
+	torso.add_child(_part_model("fig_torso_" + str(style.get("torso", "tee")), colors))
+	var head := Node3D.new()
+	head.name = "Head"
+	head.position = Vector3(0, 1.18, 0)
+	head.scale = Vector3.ONE * float(spec["head"])
+	figure.add_child(head)
+	var face := _part_model("fig_head_" + str(style.get("head", "short")), colors)
+	if face == null:
+		face = _part_model("fig_head_short", colors)
+	head.add_child(face)
+	for side in [-1.0, 1.0]:
+		var arm := Node3D.new()
+		arm.name = "ArmL" if side < 0.0 else "ArmR"
+		arm.position = Vector3(side * 0.24, 0.98, 0)
+		figure.add_child(arm)
+		arm.add_child(_part_model("fig_upper_arm", colors))
+		var fore := Node3D.new()
+		fore.name = "ForeL" if side < 0.0 else "ForeR"
+		fore.position = Vector3(0, -0.24, 0)
+		arm.add_child(fore)
+		fore.add_child(_part_model("fig_fore_arm", colors))
+	var carry := Props.make("box_closed")
+	carry.name = "Carry"
+	carry.scale = Vector3(0.7, 0.7, 0.7)
+	carry.position = Vector3(0, 0.62, 0.3)
+	carry.visible = false
+	var carry_collision := carry.get_node_or_null("PropCollision")
+	if carry_collision:
+		carry_collision.free()
+	figure.add_child(carry)
+	person.set_meta("style", style)
 
 
 static func part(node: Node3D, path: String) -> Node3D:

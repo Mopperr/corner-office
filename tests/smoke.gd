@@ -1213,6 +1213,28 @@ func _qa_regressions() -> Array:
 			found.append("rig part %s" % path)
 	if absf((rig.get_node("Figure") as Node3D).scale.x - 0.68) > 0.001:
 		found.append("kid scale")
+	# The Blender-built parts dress the rig, recoloured per person: a face with
+	# eyes, a sage top, and a head and top picked to suit a kid.
+	for part_name in ["fig_thigh", "fig_shin", "fig_upper_arm", "fig_fore_arm", "fig_torso_tee", "fig_head_cap", "fig_head_bun"]:
+		if not ResourceLoader.exists("res://assets/models/%s.glb" % part_name):
+			found.append("figure part %s missing" % part_name)
+	var eyes := 0
+	var sage_cloth := 0
+	for mesh_instance in rig.find_children("*", "MeshInstance3D", true, false):
+		var mesh_name := str(mesh_instance.name).to_lower()
+		if mesh_name.begins_with("eye"):
+			eyes += 1
+		if mesh_name.begins_with("cloth_") and mesh_instance.material_override is StandardMaterial3D and (mesh_instance.material_override as StandardMaterial3D).albedo_color.is_equal_approx(UIKit.SAGE):
+			sage_cloth += 1
+	if eyes < 2 or sage_cloth < 1:
+		found.append("rig not dressed in the modelled parts (eyes %d, sage cloth %d)" % [eyes, sage_cloth])
+	var kid_style: Dictionary = rig.get_meta("style", {})
+	if not (str(kid_style.get("head", "")) in ["cap", "curly", "short", "bob"]):
+		found.append("kid got a %s head" % kid_style.get("head", "?"))
+	var elder_rig: Node3D = Figure.build(UIKit.BLUE, Color("C9C2B5"), "elder")
+	if not (str(elder_rig.get_meta("style", {}).get("head", "")) in ["bun", "bald", "short"]):
+		found.append("elder got a %s head" % elder_rig.get_meta("style", {}).get("head", "?"))
+	elder_rig.free()
 	rig.position = Vector3(1, 0, 1)
 	Figure.animate(rig, 0.3, true, 0.1)
 	for i in 12:
@@ -2641,8 +2663,14 @@ func _town_checks() -> Array:
 	var drive: Node = load("res://scripts/drive_course.gd").new()
 	add_child(drive)
 	var town = drive.city
-	if town.parks.size() < 2:
+	if town.parks.size() < 3:
 		found.append("town has %d parks" % town.parks.size())
+	if drive.world.find_children("Playground", "", true, false).is_empty():
+		found.append("no playground on a green")
+	if drive.world.find_children("Setback", "", true, false).is_empty():
+		found.append("no stepped-back tall buildings")
+	if drive.minimap == null or drive.minimap.get_parent().custom_minimum_size.x > 0.0 and drive.minimap.get_parent().custom_minimum_size.x < 400.0:
+		found.append("minimap card did not grow")
 	var house_blocks := 0
 	for entry in town.buildings:
 		if str(entry.get("kind", "")) == "houses":

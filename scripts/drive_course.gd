@@ -675,6 +675,15 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 	_multimesh(Vector3(1.3, 1.6, 0.08), trim, frames)
 	_multimesh(Vector3(1.05, 1.35, 0.08), glass_color, panes)
 	_multimesh(Vector3(1.5, 0.08, 0.22), trim.darkened(0.1), sills)
+	# The tall ones step back at the top, with a terrace and a hedge round it.
+	if floors >= 4 and rng.randf() < 0.5:
+		var top := _slab(Vector3(footprint.x * 0.7, floor_h, footprint.z * 0.7), center + Vector3(0, height, 0), color.lightened(0.06))
+		top.name = "Setback"
+		_slab(Vector3(footprint.x * 0.7 + 0.3, 0.3, footprint.z * 0.7 + 0.3), center + Vector3(0, height + floor_h - 0.3, 0), trim)
+		for corner in [Vector3(-1, 0, -1), Vector3(1, 0, -1), Vector3(-1, 0, 1), Vector3(1, 0, 1)]:
+			Outdoors._bush(world, center + Vector3(corner.x * (footprint.x * 0.5 - 0.5), height, corner.z * (footprint.z * 0.5 - 0.5)), 0.4)
+		height += floor_h
+		center = center
 	# Roof: a parapet with clutter, or a gable.
 	if rng.randf() < 0.35:
 		var roof := MeshInstance3D.new()
@@ -792,22 +801,57 @@ func _build_green(rect: Rect2) -> void:
 	var d := rect.size.y / PX
 	_slab(Vector3(w - 1.0, 0.02, 1.6), center, Color("C9B99A"), green)
 	_slab(Vector3(1.6, 0.02, d - 1.0), center, Color("C9B99A"), green)
-	var stand := Node3D.new()
-	stand.name = "Bandstand"
-	stand.position = center
-	green.add_child(stand)
-	var base := Props.mesh_cylinder(2.6, 0.4, Color("D9D2C4"))
-	stand.add_child(base)
-	for i in 6:
-		var post := Props.mesh_cylinder(0.08, 2.8, Color("F4ECDD"))
-		post.position = Vector3(cos(i * PI / 3.0) * 2.1, 0.4, sin(i * PI / 3.0) * 2.1)
-		stand.add_child(post)
-	var roof := Outdoors._cone(3.0, 1.4, Color("6B8E7A"))
-	roof.position = Vector3(0, 3.2, 0)
-	stand.add_child(roof)
-	var finial := Props.mesh_cylinder(0.06, 0.6, Color("E6B655"))
-	finial.position = Vector3(0, 4.6, 0)
-	stand.add_child(finial)
+	# Alternate greens get a playground instead of the bandstand.
+	var playground := int(round((rect.position.y - city.road) / (city.block.y + city.road))) % 2 == 1
+	if not playground:
+		var stand := Node3D.new()
+		stand.name = "Bandstand"
+		stand.position = center
+		green.add_child(stand)
+		var base := Props.mesh_cylinder(2.6, 0.4, Color("D9D2C4"))
+		stand.add_child(base)
+		for i in 6:
+			var post := Props.mesh_cylinder(0.08, 2.8, Color("F4ECDD"))
+			post.position = Vector3(cos(i * PI / 3.0) * 2.1, 0.4, sin(i * PI / 3.0) * 2.1)
+			stand.add_child(post)
+		var roof := Outdoors._cone(3.0, 1.4, Color("6B8E7A"))
+		roof.position = Vector3(0, 3.2, 0)
+		stand.add_child(roof)
+		var finial := Props.mesh_cylinder(0.06, 0.6, Color("E6B655"))
+		finial.position = Vector3(0, 4.6, 0)
+		stand.add_child(finial)
+	else:
+		# Swings, a slide and a sandpit.
+		var play := Node3D.new()
+		play.name = "Playground"
+		play.position = center
+		green.add_child(play)
+		var sand := Outdoors._disc(2.4, Color("E3D2A8"))
+		sand.position = Vector3(0, 0.02, 0)
+		play.add_child(sand)
+		for x in [-2.0, 2.0]:
+			var post := Props.mesh_cylinder(0.06, 2.4, Color("D9765F"))
+			post.position = Vector3(x, 0, -3.0)
+			play.add_child(post)
+		var bar := Props.mesh_cylinder(0.05, 4.2, Color("D9765F"))
+		bar.rotation.z = PI * 0.5
+		bar.position = Vector3(0, 2.4, -3.0)
+		play.add_child(bar)
+		for x in [-0.8, 0.8]:
+			for dx in [-0.2, 0.2]:
+				var rope := Props.mesh_cylinder(0.015, 1.7, Color("4E4A48"))
+				rope.position = Vector3(x + dx, 0.6, -3.0)
+				play.add_child(rope)
+			var seat := Props.mesh_box(Vector3(0.5, 0.05, 0.2), Color("4E4A48"))
+			seat.position = Vector3(x, 0.6, -3.0)
+			play.add_child(seat)
+		var ladder_side := Props.mesh_box(Vector3(0.6, 2.0, 0.1), Color("7FA3B8"))
+		ladder_side.position = Vector3(3.0, 1.0, 1.2)
+		play.add_child(ladder_side)
+		var slide := Props.mesh_box(Vector3(0.6, 0.08, 3.2), Color("E6B655"))
+		slide.position = Vector3(3.0, 1.0, 2.9)
+		slide.rotation.x = 0.55
+		play.add_child(slide)
 	var park_rng := RandomNumberGenerator.new()
 	park_rng.seed = 11
 	for corner in [Vector3(-1, 0, -1), Vector3(1, 0, -1), Vector3(-1, 0, 1), Vector3(1, 0, 1)]:
@@ -1321,7 +1365,7 @@ func _hud() -> void:
 	radio_button.custom_minimum_size = Vector2(300, 52)
 	radio_button.pressed.connect(_radio_next)
 	hud_root.add_child(radio_button)
-	UIKit.pin_top_right(radio_button, -332, 396, -16, 448)
+	UIKit.pin_top_right(radio_button, -332, 476, -16, 528)
 	radio_button.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	UIKit.link_focus([radio_button])
 	# Minimap under the title: the whole town, the route, the truck.
@@ -1330,7 +1374,7 @@ func _hud() -> void:
 	map_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	map_card.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 16))
 	hud_root.add_child(map_card)
-	UIKit.pin_top_right(map_card, -376, 96, -16, 376)
+	UIKit.pin_top_right(map_card, -456, 96, -16, 456)
 	minimap = Control.new()
 	minimap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	map_card.add_child(minimap)
@@ -2367,14 +2411,36 @@ func _draw_minimap() -> void:
 	var bounds: Rect2 = city.bounds
 	var k := minf(size.x / bounds.size.x, size.y / bounds.size.y)
 	var offset := (size - bounds.size * k) * 0.5
-	# Tarmac under everything, blocks on top, so the roads read as roads.
+	# Tarmac under everything, then each block with its pavement edge, so the
+	# roads read as roads: parks green with trees, streets of houses as rows
+	# of little roofs, the town blocks as their buildings.
 	var night := str(course.get("weather", "clear")) == "night"
 	minimap.draw_rect(Rect2(offset, bounds.size * k), Color("5E5A5C") if night else Color("8E8A86"))
+	var map_rng := RandomNumberGenerator.new()
+	map_rng.seed = 7
 	for c in city.cols:
 		for r in city.rows:
 			var rect: Rect2 = city.block_rect(c, r)
-			var box := Rect2(offset + rect.position * k + Vector2(1, 1), rect.size * k - Vector2(2, 2))
-			minimap.draw_rect(box, Color("B9D4A4") if city.is_park(Vector2i(c, r)) else Color("E9E1CF"))
+			var box := Rect2(offset + rect.position * k, rect.size * k)
+			var kind: String = city.block_kind(Vector2i(c, r))
+			minimap.draw_rect(box, Color("D9D2C4"))
+			var inner := box.grow(-maxf(1.5, city.sidewalk * k * 0.6))
+			if kind == "park" or kind == "green":
+				minimap.draw_rect(inner, Color("A9CB92"))
+				for i in 7:
+					var tree := inner.position + Vector2(map_rng.randf(), map_rng.randf()) * inner.size
+					minimap.draw_circle(tree, 2.4, Color("6E9F5A"))
+			elif kind == "houses":
+				minimap.draw_rect(inner, Color("DCE6CB"))
+				var along_x := inner.size.x >= inner.size.y
+				var n := 5
+				for i in n:
+					var t := (float(i) + 0.5) / float(n)
+					for side in [0.28, 0.72]:
+						var at := inner.position + (Vector2(t, side) if along_x else Vector2(side, t)) * inner.size
+						minimap.draw_rect(Rect2(at - Vector2(3, 3), Vector2(6, 6)), Color("C9A27E"))
+			else:
+				minimap.draw_rect(inner, Color("E9E1CF"))
 	# Lane lines down the middle of every road.
 	var dash := Color("F6EEDC", 0.8)
 	for c in range(city.cols - 1):
@@ -2393,15 +2459,30 @@ func _draw_minimap() -> void:
 		while xx < offset.x + bounds.size.x * k:
 			minimap.draw_line(Vector2(xx, yy), Vector2(xx + 5.0, yy), dash, 1.0)
 			xx += 10.0
-	# Buildings in their own colours, with the two that matter picked out.
+	# Buildings in their own colours; the house parcels already drew as gardens.
 	for entry in city.buildings:
+		if str(entry.get("kind", "town")) == "houses":
+			continue
 		var brect: Rect2 = entry.get("rect", Rect2())
 		var bcol: Color = entry.get("color", Color("CFC3AE"))
-		minimap.draw_rect(Rect2(offset + brect.position * k, brect.size * k), bcol.darkened(0.08))
+		minimap.draw_rect(Rect2(offset + brect.position * k, brect.size * k).grow(-1.0), bcol.darkened(0.08))
 	var water: Dictionary = city.pond()
 	minimap.draw_circle(offset + (water.get("center", Vector2.ZERO) as Vector2) * k, float(water.get("radius", 100)) * k, Color("9FC4D6"))
 	for cut in city.alleys:
 		minimap.draw_rect(Rect2(offset + (cut as Rect2).position * k, (cut as Rect2).size * k), Color("8E6E5A"))
+	# The shops and places as small dots, home as a house.
+	var small_font := UIKit.body_bold()
+	for id in city.places.keys():
+		var place: Dictionary = city.places[id]
+		var door: Vector2 = offset + (place.get("door", Vector2.ZERO) as Vector2) * k
+		if str(id) == "garage":
+			minimap.draw_colored_polygon(PackedVector2Array([door + Vector2(0, -7), door + Vector2(6, -1), door + Vector2(6, 5), door + Vector2(-6, 5), door + Vector2(-6, -1)]), UIKit.TERRA)
+			minimap.draw_string(small_font, door + Vector2(8, 4), "HOME", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, UIKit.DARK)
+		else:
+			minimap.draw_circle(door, 2.2, Color(UIKit.WOOD, 0.9))
+	for shop in city.shops:
+		var sdoor: Vector2 = offset + ((shop as Dictionary).get("door", Vector2.ZERO) as Vector2) * k
+		minimap.draw_circle(sdoor, 1.8, Color(UIKit.BLUE, 0.8))
 	# The route as a dotted line from where the truck is.
 	if route.size() > 1 and state == "drive":
 		var points := PackedVector2Array()
@@ -2439,8 +2520,21 @@ func _draw_minimap() -> void:
 	minimap.draw_line(drop_at, drop_at + Vector2(0, -16), UIKit.DARK, 2.0)
 	minimap.draw_colored_polygon(PackedVector2Array([drop_at + Vector2(0, -16), drop_at + Vector2(12, -12), drop_at + Vector2(0, -8)]), UIKit.GREEN)
 	var font := UIKit.body_bold()
-	minimap.draw_string(font, pick_at + Vector2(8, 5), "LOAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, UIKit.DARK)
-	minimap.draw_string(font, drop_at + Vector2(8, 5), "DROP", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, UIKit.DARK)
+	var pick_name := str(pickup.get("name", "Load")).split(" ")[0]
+	var drop_name := str(dropoff.get("name", "Drop")).split(" ")[0]
+	minimap.draw_string(font, pick_at + Vector2(8, 5), "LOAD · %s" % pick_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, UIKit.DARK)
+	minimap.draw_string(font, drop_at + Vector2(8, 5), "DROP · %s" % drop_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, UIKit.DARK)
+	# The next turn on the route, ringed.
+	if route.size() > 1 and state == "drive" and route_index < route.size():
+		var turn: Vector2 = offset + route[route_index] * k
+		minimap.draw_arc(turn, 6.0, 0.0, TAU, 20, UIKit.TERRA, 2.0, true)
+	# A scale bar: fifty metres.
+	var bar_len := 50.0 * PX * k
+	var bar_at := offset + Vector2(6.0, bounds.size.y * k - 8.0)
+	minimap.draw_line(bar_at, bar_at + Vector2(bar_len, 0), UIKit.DARK, 2.0)
+	minimap.draw_line(bar_at, bar_at + Vector2(0, -4), UIKit.DARK, 2.0)
+	minimap.draw_line(bar_at + Vector2(bar_len, 0), bar_at + Vector2(bar_len, -4), UIKit.DARK, 2.0)
+	minimap.draw_string(font, bar_at + Vector2(bar_len + 4, 3), "50 m", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, UIKit.DARK)
 	# The truck as a wedge pointing where it faces, with a soft shadow.
 	var at := offset + pos * k
 	var fwd := Vector2.RIGHT.rotated(heading)
