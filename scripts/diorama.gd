@@ -2984,7 +2984,10 @@ func _auto_pack_drop(step: Dictionary) -> void:
 		return
 	item["state"] = "loose"
 	var uid := str(step["uid"])
-	var box_id := GameState.ensure_open_box()
+	# A hefty piece wants a box of its own: it gets a fresh one, taped at
+	# once, and the box Dana was filling stays open for the next small thing.
+	var own_box := bool(item.get("bulky", false)) or bool(item.get("heavy", false))
+	var box_id := GameState.make_box() if own_box else GameState.ensure_open_box()
 	if GameState.job.get("boxes", []).size() > slot_count:
 		auto_missed += 1
 		_refresh_items()
@@ -3005,7 +3008,7 @@ func _auto_pack_drop(step: Dictionary) -> void:
 	selected_box = box_id
 	var broke := _auto_roll_break(item)
 	AudioDirector.play_sfx("sfx_box_set_down", true)
-	if GameState.box_item_count(box_id) >= GameState.per_box():
+	if own_box or GameState.box_item_count(box_id) >= GameState.per_box():
 		GameState.seal_box(box_id)
 		AudioDirector.play_sfx("sfx_tape_rip", true)
 	_refresh_items()
