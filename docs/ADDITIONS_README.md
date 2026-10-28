@@ -172,4 +172,9 @@ All made by a seeded procedural Python generator (numpy, scipy, Pillow): periodi
 - `tex_brushed_steel.png`: warm blue-grey brushed steel. Made procedurally (Python). Licence: original, CC0.
 - `tex_concrete.png`: warm grey concrete with pores and specks. Made procedurally (Python). Licence: original, CC0.
 
+## Third batch (add-only): courtroom sting + credits
+
+- `assets/audio/stings/music_courtroom_sting.ogg`: the 5.4 s dry, slightly comic "here comes the judge" sting (C major, 100 BPM, OGG Vorbis 44.1 kHz stereo). It's in the new `stings/` folder, not `music/`, so the smoke test's music-loop rule doesn't apply to it. It's a one-shot meant to be played by a sting player, and nothing references it yet, so it's silent until wired in. Made from an original MIDI composition rendered with FluidR3_GM soundfont samples. Licence: original composition; the instrument samples are **MIT-licensed (FluidR3_GM by Frank Wen), not CC0**. Nobody has listened to it yet.
+- `assets/audio/credits_team_additions.md`: the FluidR3_GM credit with the full MIT licence text, copied verbatim. It's a new file because `assets/audio/credits.md` already exists on Claude's branch and was left unedited. Licence: original text (credit notice) plus the quoted MIT licence.
+
 Created by Andrew's Helpers (Grok Bots)
