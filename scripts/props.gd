@@ -420,6 +420,10 @@ static func model(name: String) -> Node3D:
 	return packed.instantiate() as Node3D
 
 
+# Copper is off the palette (Boss decision, 28 Oct 2026): it tints as brass.
+const COLOURWAY_ALIAS := {"B87333": "C9A24E", "A67B4C": "C9A070"}
+
+
 static func catalog_model(id: String) -> Node3D:
 	# A Blender model for a catalogue family, when the team has made one:
 	# hh_cat_<family>_<variant>.glb, then hh_cat_<family>.glb, scaled for
@@ -442,14 +446,23 @@ static func catalog_model(id: String) -> Node3D:
 			node.scale = Vector3(k, k, k)
 		var way := str(def.get("way_hex", ""))
 		if way != "":
+			# The colour way lands on the team's `way` material (any mesh), and
+			# on any mesh named way_* from the older convention.
+			var tint := Color(COLOURWAY_ALIAS.get(way.to_upper(), way))
 			for mesh_instance in _mesh_instances(node):
-				if not str(mesh_instance.name).to_lower().begins_with("way_") or mesh_instance.mesh == null:
+				if mesh_instance.mesh == null:
 					continue
+				var by_name := str(mesh_instance.name).to_lower().begins_with("way_")
 				for i in mesh_instance.mesh.get_surface_count():
 					var base: Material = mesh_instance.mesh.surface_get_material(i)
-					var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D if base is StandardMaterial3D else mat(Color(way))
-					std.albedo_color = Color(way)
+					if not by_name and (base == null or str(base.resource_name).to_lower() != "way"):
+						continue
+					var std := (base as StandardMaterial3D).duplicate() as StandardMaterial3D if base is StandardMaterial3D else mat(tint)
+					std.albedo_color = tint
 					keep_material(mesh_instance, i, std)
+		# The team's part names (cushion, seat, top, towel...) take the same
+		# textures as the household pieces.
+		dress_household(node, fam)
 		node.set_meta("catalog_model", name)
 		return node
 	return null
@@ -1426,6 +1439,53 @@ static func _z_half(bounds: AABB) -> float:
 	var z0 := bounds.position.z
 	var z1 := z0 + bounds.size.z
 	return maxf(absf(z0), absf(z1))
+
+
+# --- The team's character models v2 ---
+# One skinned body on a humanoid rig with idle, walk and sit clips, for Dana
+# and the shop's regulars (assets/characters/models_v2/<id>/). The model is
+# wrapped in a person node with a "Figure" child, the same shape as the
+# code-built rig, so the rest of the room treats both alike.
+
+static func v2_character_path(id: String) -> String:
+	var file := "dana_matched" if id == "dana" else id
+	return "res://assets/characters/models_v2/%s/%s.glb" % [id, file]
+
+
+static func has_v2_character(id: String) -> bool:
+	return ResourceLoader.exists(v2_character_path(id))
+
+
+static func v2_character(id: String) -> Node3D:
+	if not has_v2_character(id):
+		return null
+	var scene := load(v2_character_path(id)) as PackedScene
+	if scene == null:
+		return null
+	var person := Node3D.new()
+	var figure := scene.instantiate() as Node3D
+	if figure == null:
+		return null
+	figure.name = "Figure"
+	# The models face +Z; the room's people face -Z when their yaw is 0.
+	figure.rotation.y = PI
+	person.add_child(figure)
+	person.set_meta("v2", true)
+	person.set_meta("v2_id", id)
+	play_clip(figure, "idle", true)
+	return person
+
+
+static func v2_play(person: Node3D, clip: String) -> void:
+	# Switch the clip only when it changes, so a loop is not restarted every frame.
+	if person == null or not is_instance_valid(person):
+		return
+	if str(person.get_meta("v2_clip", "")) == clip:
+		return
+	person.set_meta("v2_clip", clip)
+	var figure := person.get_node_or_null("Figure")
+	if figure != null:
+		play_clip(figure, clip, true)
 
 
 static func play_clip(root: Node, clip: String, looping: bool) -> void:

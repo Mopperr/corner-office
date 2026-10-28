@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dqpa750anx8l4"
+
+[deps]
+
+files=["res://docs/furniture_families/families.batch.translation", "res://docs/furniture_families/families.family.translation", "res://docs/furniture_families/families.display.translation", "res://docs/furniture_families/families.room.translation", "res://docs/furniture_families/families.mount.translation", "res://docs/furniture_families/families.typical.translation", "res://docs/furniture_families/families.typical.translation", "res://docs/furniture_families/families.typical.translation", "res://docs/furniture_families/families.variants.translation", "res://docs/furniture_families/families.parts.translation", "res://docs/furniture_families/families.flags.translation", "res://docs/furniture_families/families.new.translation", "res://docs/furniture_families/families.existing.translation", "res://docs/furniture_families/families.visibility.translation", "res://docs/furniture_families/families.vis.translation", "res://docs/furniture_families/families.vis.translation", "res://docs/furniture_families/families.vis.translation", "res://docs/furniture_families/families.variant.translation", "res://docs/furniture_families/families.colourways.translation", "res://docs/furniture_families/families.example.translation", "res://docs/furniture_families/families.shape.translation"]
+
+source_file="res://docs/furniture_families/families.csv"
+dest_files=["res://docs/furniture_families/families.batch.translation", "res://docs/furniture_families/families.family.translation", "res://docs/furniture_families/families.display.translation", "res://docs/furniture_families/families.room.translation", "res://docs/furniture_families/families.mount.translation", "res://docs/furniture_families/families.typical.translation", "res://docs/furniture_families/families.typical.translation", "res://docs/furniture_families/families.typical.translation", "res://docs/furniture_families/families.variants.translation", "res://docs/furniture_families/families.parts.translation", "res://docs/furniture_families/families.flags.translation", "res://docs/furniture_families/families.new.translation", "res://docs/furniture_families/families.existing.translation", "res://docs/furniture_families/families.visibility.translation", "res://docs/furniture_families/families.vis.translation", "res://docs/furniture_families/families.vis.translation", "res://docs/furniture_families/families.vis.translation", "res://docs/furniture_families/families.variant.translation", "res://docs/furniture_families/families.colourways.translation", "res://docs/furniture_families/families.example.translation", "res://docs/furniture_families/families.shape.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

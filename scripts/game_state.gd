@@ -1318,10 +1318,22 @@ func slot_open(slot: int) -> String:
 		if str(below.get("big", "")) != "":
 			return "Nothing goes on top of a wrapped piece."
 	if int(cell["row"]) > 0:
-		var ahead := box_in_slot(slot_at(int(cell["layer"]), int(cell["row"]) - 1, int(cell["col"])))
-		if ahead.is_empty():
+		var ahead_slot := slot_at(int(cell["layer"]), int(cell["row"]) - 1, int(cell["col"]))
+		var ahead := box_in_slot(ahead_slot)
+		if ahead.is_empty() and not _slot_dead(ahead_slot):
 			return "Front first: fill from the wall by the cab."
 	return ""
+
+
+func _slot_dead(slot: int) -> bool:
+	# A place nothing can ever take: above a wrapped piece (nothing stacks
+	# on a sofa), on any layer. The row behind it need not wait for it.
+	var cell := slot_cell(slot)
+	for layer in range(int(cell["layer"]) - 1, -1, -1):
+		var under := box_in_slot(slot_at(layer, int(cell["row"]), int(cell["col"])))
+		if not under.is_empty() and str(under.get("big", "")) != "":
+			return true
+	return false
 
 
 func slot_can_unload(slot: int) -> String:

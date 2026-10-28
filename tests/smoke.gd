@@ -356,6 +356,7 @@ func _ready() -> void:
 	failures.append_array(await _hospital_checks())
 	failures.append_array(await _books_checks())
 	failures.append_array(await _play_checks())
+	failures.append_array(await _team_bundle_checks())
 	failures.append_array(await _town_checks())
 	AudioDirector.release_audio()
 	var leaked := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
@@ -3010,9 +3011,12 @@ func _catalog_checks() -> Array:
 		found.append("nothing of the family's sits on a table")
 	if not FileAccess.file_exists("res://docs/ITEMS.md") or not FileAccess.file_exists("res://tools/check_items.py"):
 		found.append("catalogue docs or checker missing")
-	# The hook for the team's Blender models: nothing yet, so the primitives build.
-	if Props.catalog_model("mug_mustard") != null:
-		found.append("a catalogue model loaded with no file")
+	# The hook for the team's Blender models: the mug family has one now.
+	var mug_model: Node3D = Props.catalog_model("mug_mustard")
+	if mug_model == null:
+		found.append("the mug's family model did not load")
+	else:
+		mug_model.free()
 	var mug: Node3D = Props.make("proc:mug_mustard")
 	if mug == null or mug.get_child_count() < 3 or not str((ItemDB.catalog_items["mug_mustard"] as Dictionary).get("way_hex", "")).length() == 6:
 		found.append("mug_mustard does not build from its primitives with a way_hex")
@@ -3312,6 +3316,125 @@ func _play_checks() -> Array:
 			found.append("journal sheet empty")
 	_bury(computer)
 	_bury(play)
+	GameState.new_game("dana")
+	return found
+
+
+func _team_bundle_checks() -> Array:
+	# The 28 Oct team bundles: 202 furniture family models load for their
+	# catalogue pieces with the colour way on the `way` material (copper as
+	# brass), the v2 character models load with their clips and stand in
+	# for Dana and the regulars, the eight skin tones, the kid size tiers,
+	# the seated hook, and the bed rule that lets a row load behind a sofa.
+	var found: Array = []
+	var Figure = load("res://scripts/figure.gd")
+	var glbs := 0
+	for file in DirAccess.get_files_at("res://assets/models"):
+		if str(file).begins_with("hh_cat_") and str(file).ends_with(".glb"):
+			glbs += 1
+	if glbs < 202:
+		found.append("only %d family models" % glbs)
+	var covered := 0
+	var tinted := 0
+	var sampled := 0
+	for id in ItemDB.catalog_items.keys():
+		var def: Dictionary = ItemDB.catalog_items[id]
+		if not ResourceLoader.exists("res://assets/models/hh_cat_%s.glb" % def.get("family", "")):
+			continue
+		covered += 1
+		if sampled >= 12:
+			continue
+		sampled += 1
+		var node: Node3D = Props.make("proc:" + str(id))
+		if node == null or not node.has_meta("catalog_model"):
+			found.append("%s did not take its family model" % id)
+			continue
+		var want := Color(str(Props.COLOURWAY_ALIAS.get(str(def.get("way_hex", "")).to_upper(), def.get("way_hex", "FFFFFF"))))
+		for mesh_instance in node.find_children("*", "MeshInstance3D", true, false):
+			for i in (mesh_instance as MeshInstance3D).mesh.get_surface_count():
+				var m: Material = (mesh_instance as MeshInstance3D).get_active_material(i)
+				if m is StandardMaterial3D and (m as StandardMaterial3D).albedo_color.is_equal_approx(want):
+					tinted += 1
+		node.free()
+	if covered < 1200:
+		found.append("family models cover only %d catalogue pieces" % covered)
+	if tinted < sampled:
+		found.append("colour way tinted on %d of %d sampled models" % [tinted, sampled])
+	if Props.COLOURWAY_ALIAS.get("B87333", "") != "C9A24E":
+		found.append("copper is not aliased to brass")
+	for id in ["dana", "steve", "lamp_lady", "keyclackr", "dottie", "theo", "pippa", "rocco", "wren"]:
+		if not Props.has_v2_character(id):
+			found.append("no v2 model for %s" % id)
+			continue
+		var person: Node3D = Props.v2_character(id)
+		var ap := person.find_child("AnimationPlayer", true, false) as AnimationPlayer
+		if person == null or ap == null or not ap.has_animation("walk") or not ap.has_animation("idle") or not ap.has_animation("sit"):
+			found.append("v2 %s has no idle/walk/sit" % id)
+		if person != null:
+			person.free()
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	GameState.set_mode("office")
+	var room: Node = RoomLib.new()
+	add_child(room)
+	await get_tree().process_frame
+	if room.player == null or not bool(room.player.get_meta("v2", false)):
+		found.append("Dana does not wear the team's v2 model")
+	else:
+		room.call("_animate_person", room.player, 1.0, true, 0.016)
+		if str(room.player.get_meta("v2_clip", "")) != "walk":
+			found.append("v2 Dana does not walk on the move")
+	_bury(room)
+	GameState.new_game("hank")
+	GameState.set_mode("office")
+	var room2: Node = RoomLib.new()
+	add_child(room2)
+	await get_tree().process_frame
+	if room2.player == null or bool(room2.player.get_meta("v2", false)):
+		found.append("Hank should keep the code rig")
+	_bury(room2)
+	if Figure.SKIN_TONES.size() != 8 or str(Figure.SKIN_TONES[4]) != "B27243" or not Figure.skin_tone(8).is_equal_approx(Color("553629")) or not Figure.skin_tone(0).is_equal_approx(Figure.SKIN):
+		found.append("skin tones: %s" % str(Figure.SKIN_TONES))
+	var toned: Node3D = Figure.build_person({"kind": "adult", "skin_index": 6}, Color.WHITE, Color.BLACK, Color.BLACK)
+	var skin_hits := 0
+	for mesh_instance in toned.find_children("*", "MeshInstance3D", true, false):
+		var role := str(mesh_instance.name).split("_")[0].to_lower()
+		var m := (mesh_instance as MeshInstance3D).material_override as StandardMaterial3D
+		if role == "skin" and m != null and m.albedo_color.is_equal_approx(Color("8D5A3B")):
+			skin_hits += 1
+	if skin_hits == 0:
+		found.append("skin_index did not reach the skin meshes")
+	var cloth := toned.find_child("Torso", true, false)
+	if cloth is MeshInstance3D and (cloth as MeshInstance3D).material_override is StandardMaterial3D and ((cloth as MeshInstance3D).material_override as StandardMaterial3D).albedo_color.is_equal_approx(Color("8D5A3B")):
+		found.append("skin tone leaked onto the clothes")
+	toned.free()
+	if Figure.kid_tier(5) != "kid_k1" or Figure.kid_tier(8) != "kid_k2" or Figure.kid_tier(11) != "kid_k3":
+		found.append("kid tiers by age")
+	var k1: float = float(Figure.KINDS["kid_k1"]["scale"]) * Figure.ADULT_HEIGHT
+	var k3: float = float(Figure.KINDS["kid_k3"]["scale"]) * Figure.ADULT_HEIGHT
+	if absf(k1 - 1.05) > 0.06 or absf(k3 - 1.45) > 0.06 or Figure.seat_height("kid_k2") >= Figure.seat_height("adult"):
+		found.append("kid heights K1 %.2f K3 %.2f" % [k1, k3])
+	var finn: Node3D = Figure.build_person({"kind": "kid", "age": 11, "seated": true, "seat_height": 0.45}, Color.WHITE, Color.BLACK, Color.BLACK)
+	if not bool(finn.get_meta("seated", false)) or absf(float(finn.get_meta("seat_height", 0.0)) - 0.45) > 0.001 or str(finn.get_meta("kind", "")) != "kid_k3":
+		found.append("seated hook: %s %s %s" % [finn.get_meta("seated", false), finn.get_meta("seat_height", 0.0), finn.get_meta("kind", "")])
+	finn.free()
+	# The bed: three wrapped pieces across the front of the floor must not block the rows behind them on the layers above.
+	GameState.job = {"boxes": [], "items": []}
+	for i in 11:
+		GameState.job["boxes"].append({"id": i, "sealed": true, "slot": -1, "big": "sofa" if i < 3 else ""})
+	var placed := 0
+	for i in 11:
+		var slot := -1
+		for open in GameState.open_slots():
+			if i < 3 and int(open) >= GameState.floor_slots():
+				continue
+			slot = int(open)
+			break
+		if slot >= 0 and GameState.load_box_into(i, slot) == "":
+			placed += 1
+	if placed != 11:
+		found.append("bed with three sofas took %d of 11 boxes" % placed)
+	GameState.job = {}
 	GameState.new_game("dana")
 	return found
 

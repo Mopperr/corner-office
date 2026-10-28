@@ -120,20 +120,27 @@ func setup(owner: Node, def: Dictionary, door: Vector3, inward: Vector3) -> void
 		var color := Color(str(palette[(rng.randi() + n) % palette.size()]))
 		var hair := Color(str(hairs[rng.randi() % hairs.size()]))
 		var trousers: Color = [Color("3E3A4F"), Color("5A4A3A"), Color("4A5A6A"), Color("6B4A3A")][rng.randi() % 4]
-		var figure_kind := str(kind)
+		# A party entry is a kind ("adult", "kid", "elder") or a person record
+		# ({"kind", "age", "skin_index", "seated"...}); a tone is dealt per
+		# person when the record has none.
+		var record: Dictionary = kind.duplicate() if kind is Dictionary else {"kind": str(kind)}
+		var figure_kind := str(record.get("kind", "adult"))
 		if figure_kind == "adult":
 			figure_kind = ["adult", "short", "tall"][rng.randi() % 3]
-		var person := Figure.build(color, hair, figure_kind, trousers)
+		record["kind"] = figure_kind
+		if not record.has("skin_index"):
+			record["skin_index"] = 1 + rng.randi() % Figure.SKIN_TONES.size()
+		var person := Figure.build_person(record, color, hair, trousers)
 		person.name = "Client%d" % n
 		person.set_meta("uid", "client:%d" % n)
-		person.set_meta("kid", str(kind) == "kid")
+		person.set_meta("kid", Figure.is_kid_kind(figure_kind))
 		# A loose cluster just inside the door, to either side of it: out of the
 		# box row and the spill behind it, facing the room.
 		var side := -1.0 if n % 2 == 0 else 1.0
 		var offset := Vector3(side * (1.5 + 0.6 * float(n / 2)), 0.0, 0.8 + 0.4 * float(n % 2))
 		person.position = door + inward * offset.z + Vector3(offset.x, 0, 0)
 		# A body the click ray can land on, like a customer's.
-		Props.add_picker(person, Vector3(0.6, 1.5 * (0.68 if str(kind) == "kid" else 1.0), 0.6))
+		Props.add_picker(person, Vector3(0.6, 1.5 * float((Figure.KINDS.get(figure_kind, Figure.KINDS["adult"]) as Dictionary).get("scale", 1.0)), 0.6))
 		add_child(person)
 		# In the tree first: look_at needs a world transform.
 		person.look_at(person.position + inward, Vector3.UP)

@@ -10,13 +10,73 @@ const UIKit = preload("res://scripts/ui_kit.gd")
 const Props = preload("res://scripts/props.gd")
 
 const SKIN := Color("E7C9A8")
+# The eight approved skin tones (Andrew, 28 Oct 2026), used unchanged and
+# assigned per person, never by name or role. 1 to 8; four sit off the
+# furniture palette on purpose.
+const SKIN_TONES := ["E7C9A8", "D9B98A", "C9A070", "C68B59", "B27243", "8D5A3B", "6B4A3A", "553629"]
+# The adult figure is about 1.70 m; kids come in three size tiers by age:
+# K1 (4 to 6) about 1.05 m, K2 (7 to 9) about 1.28 m, K3 (10 to 12) about
+# 1.45 m. Seat and hip heights scale with the figure.
+const ADULT_HEIGHT := 1.70
 const KINDS := {
 	"adult": {"scale": 1.0, "head": 1.0, "lean": 0.0},
 	"short": {"scale": 0.9, "head": 1.05, "lean": 0.0},
 	"tall": {"scale": 1.08, "head": 0.95, "lean": 0.0},
 	"kid": {"scale": 0.68, "head": 1.3, "lean": 0.0},
+	"kid_k1": {"scale": 0.62, "head": 1.35, "lean": 0.0},
+	"kid_k2": {"scale": 0.75, "head": 1.25, "lean": 0.0},
+	"kid_k3": {"scale": 0.85, "head": 1.15, "lean": 0.0},
 	"elder": {"scale": 0.95, "head": 1.0, "lean": 0.18},
 }
+const SEAT_HEIGHT := 0.47
+const HIP_HEIGHT := 0.85
+
+
+static func skin_tone(index: int) -> Color:
+	# skin_index 1 to 8 on a person record; anything else is the default tone.
+	if index >= 1 and index <= SKIN_TONES.size():
+		return Color(str(SKIN_TONES[index - 1]))
+	return SKIN
+
+
+static func kid_tier(age: int) -> String:
+	if age <= 6:
+		return "kid_k1"
+	if age <= 9:
+		return "kid_k2"
+	return "kid_k3"
+
+
+static func is_kid_kind(kind: String) -> bool:
+	return kind.begins_with("kid")
+
+
+static func seat_height(kind: String) -> float:
+	return SEAT_HEIGHT * float((KINDS.get(kind, KINDS["adult"]) as Dictionary).get("scale", 1.0))
+
+
+static func hip_height(kind: String) -> float:
+	return HIP_HEIGHT * float((KINDS.get(kind, KINDS["adult"]) as Dictionary).get("scale", 1.0))
+
+
+static func build_person(record: Dictionary, color: Color, hair: Color, trousers: Color) -> Node3D:
+	# A person from a record: kind (or a kid's age for the size tier),
+	# skin_index for the tone, and seated for someone who stays in a chair
+	# (Finn's wheelchair: a seat height and seated clips in place of a walk;
+	# the chair model and the seated clips are not built yet, so this is the
+	# hook only).
+	var kind := str(record.get("kind", "adult"))
+	if kind == "kid" and record.has("age"):
+		kind = kid_tier(int(record.get("age", 8)))
+	var person := build(color, hair, kind, trousers, skin_tone(int(record.get("skin_index", 0))), record.get("style", {}))
+	person.set_meta("kind", kind)
+	person.set_meta("seat_height", seat_height(kind))
+	person.set_meta("hip_height", hip_height(kind))
+	if bool(record.get("seated", false)):
+		person.set_meta("seated", true)
+		person.set_meta("sitting", true)
+		person.set_meta("seat_height", float(record.get("seat_height", 0.45)))
+	return person
 
 
 const HEADS := ["short", "bob", "ponytail", "bun", "bald", "curly", "cap"]

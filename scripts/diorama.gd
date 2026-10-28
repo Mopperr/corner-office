@@ -3866,9 +3866,12 @@ func _spawn_player() -> void:
 	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack", "truck", "hospital"]):
 		return
 	var look: Dictionary = PLAYER_LOOKS.get(GameState.character, PLAYER_LOOKS["dana"])
-	player = Figure.build(look["top"], look["hair"], str(look.get("kind", "adult")), look["trousers"], look.get("skin", Figure.SKIN), look["style"])
+	# The team's model when there is one for this character; the code rig otherwise.
+	player = Props.v2_character(GameState.character)
+	if player == null:
+		player = Figure.build(look["top"], look["hair"], str(look.get("kind", "adult")), look["trousers"], look.get("skin", Figure.SKIN), look["style"])
 	player.name = "Player"
-	if bool(look.get("scarf", false)):
+	if bool(look.get("scarf", false)) and not bool(player.get_meta("v2", false)):
 		var scarf := Props.mesh_cylinder(0.22, 0.06, UIKit.MUSTARD)
 		scarf.position = Vector3(0, 1.02, 0)
 		player.get_node("Figure").add_child(scarf)
@@ -6888,7 +6891,9 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	var person: Node3D
 	if regular != "":
 		var look := Regulars.colours(regular)
-		person = Figure.build(look["top"], look["hair"], Regulars.kind(regular), look["trousers"], look["skin"])
+		person = Props.v2_character(regular)
+		if person == null:
+			person = Figure.build(look["top"], look["hair"], Regulars.kind(regular), look["trousers"], look["skin"])
 		var who_was: Dictionary = order.get("who", {})
 		var named := who_was.duplicate()
 		named["name"] = Regulars.full_name(regular)
@@ -6964,7 +6969,7 @@ func _make_person(color: Color, hair: Color = Color("4A3626"), kind := "") -> No
 	if kind == "":
 		kind = PERSON_KINDS[randi() % PERSON_KINDS.size()]
 	var trousers: Color = [Color("3E3A4F"), Color("5A4A3A"), Color("4A5A6A"), Color("6B4A3A")][randi() % 4]
-	return Figure.build(color, hair, kind, trousers)
+	return Figure.build(color, hair, kind, trousers, Figure.skin_tone(1 + randi() % Figure.SKIN_TONES.size()))
 
 
 func _act(node: Node3D, action: String, seconds: float) -> void:
@@ -6979,6 +6984,22 @@ func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> voi
 	# Walking: a bob and a swing of the arms. Standing: a slow sway and a glance around.
 	var figure := node.get_node_or_null("Figure") as Node3D
 	if figure == null:
+		return
+	if bool(node.get_meta("v2", false)):
+		# The team's rig plays its own clips: walk on the move, sit when
+		# sat, idle otherwise; a fall still tips the whole figure over.
+		if bool(node.get_meta("down", false)):
+			figure.rotation.x = lerpf(figure.rotation.x, -1.45, minf(1.0, delta * 6.0))
+			figure.position.y = lerpf(figure.position.y, 0.12, minf(1.0, delta * 6.0))
+			return
+		if figure.rotation.x != 0.0:
+			figure.rotation.x = lerpf(figure.rotation.x, 0.0, minf(1.0, delta * 5.0))
+			figure.position.y = lerpf(figure.position.y, 0.0, minf(1.0, delta * 5.0))
+			if absf(figure.rotation.x) < 0.01:
+				figure.rotation.x = 0.0
+				figure.position.y = 0.0
+		var sat := bool(node.get_meta("sit", false)) or bool(node.get_meta("sitting", false))
+		Props.v2_play(node, "walk" if walking else ("sit" if sat else "idle"))
 		return
 	var action := str(node.get_meta("action", ""))
 	if action != "" and Time.get_ticks_msec() / 1000.0 < float(node.get_meta("action_until", 0.0)):
