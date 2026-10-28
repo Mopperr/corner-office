@@ -1274,22 +1274,30 @@ func _home_floors(room: Node) -> void:
 		room = _room()
 	_check(room.home_floor == 0, "home: back downstairs (floor %d)" % room.home_floor)
 	# Something of theirs: open the card and leave it.
-	var owner_uid := ""
+	var candidates: Array = []
 	for rec in GameState.job.get("owner_items", []):
 		if int(rec.get("floor", 0)) == 0 and bool(rec.get("pocketable", false)):
-			owner_uid = str(rec["uid"])
-			break
-	if owner_uid != "":
-		var owner_node := _node_for(room, owner_uid)
-		if owner_node != null:
+			candidates.append(str(rec["uid"]))
+	if not candidates.is_empty():
+		var card: Node = null
+		var tried := 0
+		for owner_uid in candidates:
+			var owner_node := _node_for(room, owner_uid)
+			if owner_node == null:
+				continue
+			tried += 1
 			await click_node(room, owner_uid, owner_node)
 			await wait(0.2)
-			var card: Node = room.call("_hud_layer").get_node_or_null("OwnerCard")
-			_check(card != null, "home: the family's piece opens its card")
+			card = room.call("_hud_layer").get_node_or_null("OwnerCard")
 			if card != null:
-				await shot("home_owner_card")
-				_check(press("Leave it", card), "home: Leave it")
-				await wait(0.1)
+				break
+			if tried >= 4:
+				break
+		_check(card != null, "home: the family's piece opens its card (tried %d of %d)" % [tried, candidates.size()])
+		if card != null:
+			await shot("home_owner_card")
+			_check(press("Leave it", card), "home: Leave it")
+			await wait(0.1)
 
 
 # ---------------------------------------------------------------- loft

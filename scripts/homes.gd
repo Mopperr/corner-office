@@ -438,7 +438,7 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 					guard += 1
 					var id := str(extra[rng.randi_range(0, extra.size() - 1)])
 					var edef: Dictionary = ItemDB.get_item(id)
-					if float(edef.get("w", 0.0)) > 1.3 or float(edef.get("d", 0.0)) > 0.9 or pool.has(id):
+					if float(edef.get("w", 0.0)) > 1.3 or float(edef.get("d", 0.0)) > 0.9 or float(edef.get("h", 0.0)) < 0.3 or pool.has(id):
 						continue
 					pool.append(id)
 					picks += 1
