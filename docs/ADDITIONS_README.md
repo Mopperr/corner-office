@@ -129,4 +129,47 @@ On a fresh clone of 5feefc9 with these additions, the box ran Godot 4.7.2 headle
 - sfx_whip_topping.wav
 - sfx_xray_lightbox_hum.wav
 
+## Second batch (add-only): 10 SFX, 18 textures
+
+Added on top of bd0bb2d. No `.gd`, `.json`, `.tscn`, `.import` or existing asset file was touched; Godot creates the `.import` files on first import. Nothing here is referenced by code yet, so every file is silent/unused until wired in.
+
+**Honest notes:**
+- Nothing in this batch has been listened to or looked at in-game by a human yet. Checks were technical only (sample rate, channels, bit depth, duration, peak, leading silence, PNG size, seam match).
+- `sfx_shove_grunt`, `sfx_gasp_small` and `sfx_angry_mutter` are synthetic formant-synthesis vocal-like sounds, not recordings of people. They may sound a bit robotic.
+- `music_courtroom_sting.ogg` (5.4 s, requested for assets/audio/music/) is **held back from this commit**: `tests/smoke.gd` requires every `.ogg` in assets/audio/music/ to have `loop=true` in its `.import`, and a one-shot sting must not loop (and `.import` files must not be hand-made here), so adding it fails the smoke test (`music loop music_courtroom_sting.ogg`). It is available separately; note its instrument samples are FluidR3_GM (MIT), **not CC0**.
+- SFX are peak-normalised to -3 dBFS as specced, so loudness varies (about -12.6 to -24.5 LUFS); expect per-sound volume trims in-engine.
+
+### sfx (assets/audio/sfx/, 16-bit 44.1 kHz mono WAV, peak -3 dBFS, no leading silence)
+- `sfx_glass_smash.wav`: 0.98 s: a small ceramic/glass piece breaking on a wooden floor. Made by procedural synthesis (numpy/scipy: floor thump, ceramic ring, shard resonances, bounces). Licence: original, CC0.
+- `sfx_crockery_crack.wav`: 0.33 s: a single quieter crack for a chipped piece (peak-normalised like the rest, so turn it down in-engine). Made by procedural synthesis. Licence: original, CC0.
+- `sfx_shove_grunt.wav`: 0.55 s: angry wordless effort grunt. Made by SYNTHETIC formant synthesis (Klatt-style voice synth), not a recording of a person. Licence: original, CC0.
+- `sfx_body_fall.wav`: 1.04 s: a person landing on their back on a floor, soft thud and cloth rustle. Made by procedural synthesis. Licence: original, CC0.
+- `sfx_gasp_small.wav`: 0.44 s: short surprised gasp. Made by SYNTHETIC formant synthesis, not a recording of a person. Licence: original, CC0.
+- `sfx_angry_mutter.wav`: 2.60 s: wordless grumbling, no real language. Made by SYNTHETIC formant synthesis (random babble syllables), not a recording of a person. Licence: original, CC0.
+- `sfx_gavel.wav`: 0.39 s: one gavel strike on a sound block. Made by procedural synthesis. Licence: original, CC0.
+- `sfx_letter_open.wav`: 0.82 s: an envelope tearing open. Made by procedural synthesis (paper-fibre crackle grains). Licence: original, CC0.
+- `sfx_coins_award.wav`: 1.66 s: short pleasant pour of coins. Made by procedural synthesis (inharmonic metal partials). Licence: original, CC0.
+- `sfx_level_up_hands.wav`: 0.95 s: warm two-note chime, G5 then C6. Made by procedural additive bell synthesis. Licence: original, CC0.
+
+### textures (new folder assets/textures/, 512x512 RGB PNG, seamless/tileable)
+All made by a seeded procedural Python generator (numpy, scipy, Pillow): periodic noise, wrap-mode blurs, grids and vector shapes, in the `scripts/ui_kit.gd` palette desaturated 15%. No photographs, no image generator, no text or logos.
+- `tex_oak_floor.png`: warm oak strip floor, staggered joints. Made procedurally (Python). Licence: original, CC0.
+- `tex_pine_planks.png`: pale pine boards with soft knots. Made procedurally (Python). Licence: original, CC0.
+- `tex_terrazzo.png`: cream terrazzo with palette chips. Made procedurally (Python). Licence: original, CC0.
+- `tex_kitchen_tile.png`: sage subway tile, cream grout. Made procedurally (Python). Licence: original, CC0.
+- `tex_bathroom_tile.png`: pale blue square tile. Made procedurally (Python). Licence: original, CC0.
+- `tex_carpet_wool.png`: sage-grey wool loop carpet. Made procedurally (Python). Licence: original, CC0.
+- `tex_rug_kilim.png`: kilim weave, stepped diamonds and zigzag bands. Made procedurally (Python). Licence: original, CC0.
+- `tex_fabric_linen.png`: oatmeal linen plain weave. Made procedurally (Python). Licence: original, CC0.
+- `tex_velvet.png`: muted terracotta-rose velvet. Made procedurally (Python). Licence: original, CC0.
+- `tex_leather.png`: brown pebbled leather. Made procedurally (Python). Licence: original, CC0.
+- `tex_marble.png`: cream marble with sage-grey veins. Made procedurally (Python). Licence: original, CC0.
+- `tex_brick_painted.png`: cream-painted brick with worn terracotta patches. Made procedurally (Python). Licence: original, CC0.
+- `tex_plaster.png`: cream hand-troweled plaster. Made procedurally (Python). Licence: original, CC0.
+- `tex_wallpaper_floral.png`: sage floral wallpaper, terracotta and cream flowers. Made procedurally (Python). Licence: original, CC0.
+- `tex_wallpaper_stripe.png`: cream wallpaper with sage bands and terracotta pinstripe. Made procedurally (Python). Licence: original, CC0.
+- `tex_cardboard.png`: kraft cardboard with faint corrugation. Made procedurally (Python). Licence: original, CC0.
+- `tex_brushed_steel.png`: warm blue-grey brushed steel. Made procedurally (Python). Licence: original, CC0.
+- `tex_concrete.png`: warm grey concrete with pores and specks. Made procedurally (Python). Licence: original, CC0.
+
 Created by Andrew's Helpers (Grok Bots)
