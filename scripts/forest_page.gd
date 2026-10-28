@@ -52,8 +52,10 @@ func _build() -> void:
 	add_child(go)
 	var deal := UIKit.label(_deal_line(), 24, UIKit.TERRA, "small")
 	deal.position = Vector2(712, 4)
-	deal.size = Vector2(494, 72)
+	deal.size = Vector2(maxf(494.0, size.x - 724.0), 72)
+	deal.custom_minimum_size = Vector2(0, 72)
 	deal.max_lines_visible = 2
+	deal.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	add_child(deal)
 	var y := 80.0
 	for cat in Catalog.categories():
@@ -64,8 +66,11 @@ func _build() -> void:
 		btn.size = Vector2(240, 56)
 		btn.custom_minimum_size = Vector2(240, 56)
 		btn.disabled = not open
+		btn.clip_text = true
 		if not open:
-			btn.text = "%s  · later" % str(cat.get("name", id))
+			# A short name on the locked aisles, so the tag fits the button.
+			var short := str(cat.get("name", id)).split(" & ")[0].split(" ")[0]
+			btn.text = "%s · later" % short
 		btn.pressed.connect(_pick_category.bind(id))
 		add_child(btn)
 		y += 62
@@ -92,7 +97,7 @@ func _deal_line() -> String:
 		names.append(Catalog.display_name(str(id)))
 	if names.is_empty():
 		return "Today's deal is taking a nap."
-	return "Lightning deal, no rush: %s. It simply waits until tomorrow." % ", ".join(names)
+	return "Today's deal, no rush: %s." % ", ".join(names)
 
 
 func _list() -> void:

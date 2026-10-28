@@ -799,7 +799,8 @@ func _sidebar() -> void:
 		if not drive.is_empty():
 			weather = str(drive.get("weather", "clear"))
 			break
-	side.add_child(_side_card("Weather", "Rain on the board today." if weather == "rain" else "Clear skies for the drives.", "Rain makes stops longer. Brake early." if weather == "rain" else "A good day for the alley.", UIKit.BLUE, "rain" if weather == "rain" else "sun"))
+	# The weather is one line, so the three cards with copy get a third.
+	side.add_child(_side_card("Weather", "Rain today. Brake early." if weather == "rain" else "Clear skies. A good day for the alley.", "", UIKit.BLUE, "rain" if weather == "rain" else "sun"))
 	var mover := _price_mover()
 	if not mover.is_empty():
 		side.add_child(_side_card("Market", "%s %s %d%%" % [mover.get("name", ""), "up" if float(mover.get("change", 0.0)) > 0.0 else "down", absi(int(round(float(mover.get("change", 0.0)) * 100.0)))], "Yesterday $%d, today $%d." % [int(mover.get("before", 0)), int(mover.get("now", 0))], UIKit.SAGE if float(mover.get("change", 0.0)) > 0.0 else UIKit.LOSS, "chart"))
@@ -1180,7 +1181,7 @@ func _accountant_panel(wide: float) -> PanelContainer:
 	return panel
 
 
-func _side_card(title: String, headline: String, text: String, accent: Color, picture: String) -> PanelContainer:
+func _side_card(title: String, headline: String, text: String, accent: Color, picture: String, lines := 3) -> PanelContainer:
 	var card := PanelContainer.new()
 	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var box := UIKit.style(Color("F7F1E4"), 12, 3, accent)
@@ -1209,11 +1210,13 @@ func _side_card(title: String, headline: String, text: String, accent: Color, pi
 	var head := UIKit.label(headline, 24, UIKit.DARK, "small")
 	head.custom_minimum_size = Vector2(330, 0)
 	head.max_lines_visible = 2
+	head.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	col.add_child(head)
 	if text != "":
 		var line := UIKit.label(text, 24, UIKit.WOOD, "small")
 		line.custom_minimum_size = Vector2(330, 0)
-		line.max_lines_visible = 2
+		line.max_lines_visible = lines
+		line.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		col.add_child(line)
 	return card
 

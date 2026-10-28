@@ -155,16 +155,8 @@ func _choose() -> void:
 		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_theme_constant_override("separation", 14)
 		tile.add_child(row)
-		var face: Control
-		if id == "dana" and ResourceLoader.exists("res://assets/characters/dana/portraits/icons/dana_portrait_circle_128.png"):
-			face = TextureRect.new()
-			face.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			(face as TextureRect).texture = load("res://assets/characters/dana/portraits/icons/dana_portrait_circle_128.png")
-			(face as TextureRect).expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			(face as TextureRect).stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			face.custom_minimum_size = Vector2(56, 56)
-		else:
-			face = UIKit.avatar(str(who["name"]).left(1), fills.get(id, UIKit.TERRA), 56)
+		# Every row gets the same initial on a disc, Dana included.
+		var face: Control = UIKit.avatar(str(who["name"]).left(1), fills.get(id, UIKit.TERRA), 56)
 		face.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		row.add_child(face)
 		var who_col := VBoxContainer.new()
