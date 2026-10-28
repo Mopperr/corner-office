@@ -106,6 +106,8 @@ func _run() -> void:
 	_check(GameState.office_phase == "live", "garage tutorial finished (phase %s)" % GameState.office_phase)
 	if GameState.office_phase != "live":
 		return
+	_check(room.player != null and is_instance_valid(room.player), "a player figure is on screen")
+	_check(room.player != null and room.player.position.distance_to(room.player_start) > 0.5, "the player walked to the clicks")
 	# Going live opens the clipboard with the first job on it.
 	await wait(0.3)
 	var room_live := _room()

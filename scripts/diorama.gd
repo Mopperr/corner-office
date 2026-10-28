@@ -237,6 +237,7 @@ func _build_venue() -> void:
 		return
 	_build_shell()
 	_theme_lights()
+	_spawn_player()
 	_ensure_stack_room()
 	_frame_camera()
 	_dress()
@@ -902,6 +903,7 @@ func _process(delta: float) -> void:
 	_tick_browser(delta)
 	_tick_cars(delta)
 	_tick_bubbles(delta)
+	_tick_player(delta)
 	if _goal_pip > 0.0:
 		_goal_pip = maxf(0.0, _goal_pip - delta)
 		if _goal_pip <= 0.0:
@@ -1404,6 +1406,9 @@ func _click() -> void:
 			print("  click swallowed: settling=%s over_ui=%s hovered=%s" % [settling, _over_ui(), get_viewport().gui_get_hovered_control()])
 		return
 	var item_uid := _pick_uid()
+	var aim = _aim_point()
+	if aim is Vector3:
+		_player_go(aim)
 	if item_uid.begins_with("delivery:") and GameState.mode == "office" and GameState.office_phase == "live":
 		_delivery_click(item_uid.trim_prefix("delivery:"))
 		return
@@ -2444,6 +2449,72 @@ func _wall_points() -> Array:
 		cursor += 1.5
 	points.append({"kind": "hang", "x": x + 1.4, "y": 1.2, "z": z, "rot": 0.0, "normal": Vector3(0, 0, 1)})
 	return points
+
+
+# ---------------------------------------------------------------- the player
+# Dana is on screen: she walks to whatever you click and does the thing.
+# Click-to-act stays as it is; she is the body that goes with it.
+
+var player: Node3D
+var player_target: Vector3 = Vector3.ZERO
+var player_moving := false
+var player_time := 0.0
+var player_start: Vector3 = Vector3.ZERO
+const PLAYER_SPEED := 2.4
+
+
+func _spawn_player() -> void:
+	if player != null and is_instance_valid(player):
+		player.queue_free()
+	player = null
+	if backdrop or not (GameState.mode in ["office", "job_pack", "job_unpack"]):
+		return
+	player = Figure.build(UIKit.TERRA, Color("2B2622"), "adult", Color("3E3A4F"))
+	player.name = "Player"
+	var scarf := Props.mesh_cylinder(0.22, 0.06, UIKit.MUSTARD)
+	scarf.position = Vector3(0, 1.02, 0)
+	player.get_node("Figure").add_child(scarf)
+	var door := _door_world()
+	player.position = door + Vector3(0.6, 0.0, 1.3)
+	player.rotation.y = PI
+	player_start = player.position
+	player_target = player.position
+	player_moving = false
+	add_child(player)
+
+
+func _player_go(at: Vector3) -> void:
+	# Stand just behind the spot (away from the camera) so Dana never hides what you clicked.
+	if player == null or not is_instance_valid(player):
+		return
+	var spot := Vector3(at.x - 0.55, 0.0, at.z - 0.55)
+	var x0 := float(venue.get("x", 0))
+	var z0 := float(venue.get("z", 0))
+	spot.x = clampf(spot.x, x0 + 0.4, x0 + float(venue.get("w", 6)) - 0.4)
+	spot.z = clampf(spot.z, z0 + 0.4, z0 + float(venue.get("d", 8)) - 0.4)
+	player_target = spot
+	player_moving = player.position.distance_to(spot) > 0.15
+	if not player_moving:
+		_act(player, "reach", 0.7)
+
+
+func _tick_player(delta: float) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	player_time += delta
+	player.set_meta("carry", held_uid != "" or selected_box >= 0 and GameState.mode == "job_pack")
+	if player_moving:
+		var to := player_target - player.position
+		to.y = 0.0
+		var step := PLAYER_SPEED * delta
+		if to.length() <= step:
+			player.position = player_target
+			player_moving = false
+			_act(player, "reach", 0.7)
+			AudioDirector.play_sfx("sfx_footstep_office")
+		else:
+			player.position += to.normalized() * step
+	_animate_person(player, player_time, player_moving, delta)
 
 
 func _in_room_world(px: float, pz: float) -> bool:
@@ -4230,6 +4301,7 @@ func _tick_browser(delta: float) -> void:
 	if stage == "busy":
 		browser["timer"] = float(browser.get("timer", 0.0)) - delta
 		var figure := node.get_node_or_null("Figure") as Node3D
+		node.set_meta("sit", str(browser.get("kind", "")) == "sit")
 		if figure and str(browser.get("kind", "")) != "sit":
 			var head := figure.get_node_or_null("Head") as Node3D
 			if head:
@@ -4591,36 +4663,16 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	AudioDirector.play_sfx("sfx_l02_door_wind_chime")
 
 
-func _make_person(color: Color, hair: Color = Color("4A3626")) -> Node3D:
-	# A simple figure: legs, body, head, two arms, under a "Figure" node that
-	# the walk cycle bobs and sways without fighting the tween on the root.
-	var person := Node3D.new()
-	var figure := Node3D.new()
-	figure.name = "Figure"
-	person.add_child(figure)
-	var legs := Props.mesh_cylinder(0.14, 0.5, Color("3E3A4F"))
-	figure.add_child(legs)
-	var body := Props.mesh_cylinder(0.2, 0.5, color)
-	body.position.y = 0.5
-	figure.add_child(body)
-	var head := MeshInstance3D.new()
-	var sphere := SphereMesh.new()
-	sphere.radius = 0.15
-	sphere.height = 0.3
-	head.mesh = sphere
-	head.material_override = Props.mat(Color("E7C9A8"))
-	head.position.y = 1.18
-	head.name = "Head"
-	figure.add_child(head)
-	var cap := Props.mesh_cylinder(0.15, 0.08, hair)
-	cap.position.y = 1.26
-	figure.add_child(cap)
-	for side in [-1.0, 1.0]:
-		var arm := Props.mesh_cylinder(0.05, 0.42, color.darkened(0.12))
-		arm.name = "ArmL" if side < 0.0 else "ArmR"
-		arm.position = Vector3(side * 0.24, 0.56, 0.0)
-		figure.add_child(arm)
-	return person
+const PERSON_KINDS := ["adult", "adult", "short", "tall", "kid", "elder"]
+
+
+func _make_person(color: Color, hair: Color = Color("4A3626"), kind := "") -> Node3D:
+	# A jointed figure (see figure.gd). Without a kind, one is picked so a
+	# crowd has tall, short, young and old in it.
+	if kind == "":
+		kind = PERSON_KINDS[randi() % PERSON_KINDS.size()]
+	var trousers: Color = [Color("3E3A4F"), Color("5A4A3A"), Color("4A5A6A"), Color("6B4A3A")][randi() % 4]
+	return Figure.build(color, hair, kind, trousers)
 
 
 func _act(node: Node3D, action: String, seconds: float) -> void:
@@ -4667,6 +4719,14 @@ func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> voi
 			"point":
 				if arm_r:
 					arm_r.rotation.x = -1.4
+			"reach":
+				# Bending down to pick up or set down: both arms forward and low, a little stoop.
+				if arm_r and arm_l:
+					arm_r.rotation.x = -0.9
+					arm_l.rotation.x = -0.9
+				var torso := figure.get_node_or_null("Torso") as Node3D
+				if torso:
+					torso.rotation.x = 0.35 + sin(t * 6.0) * 0.05
 			"clap":
 				if arm_r and arm_l:
 					var beat := absf(sin(t * 10.0))
@@ -4677,31 +4737,8 @@ func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> voi
 		return
 	elif action != "":
 		node.set_meta("action", "")
-		for name in ["ArmL", "ArmR", "Head"]:
-			var part := figure.get_node_or_null(name) as Node3D
-			if part:
-				part.rotation = Vector3.ZERO
-				if name == "Head":
-					part.position.y = 1.18
-	if walking:
-		figure.position.y = absf(sin(t * 9.0)) * 0.06
-		figure.rotation.z = sin(t * 9.0) * 0.04
-		figure.rotation.y = 0.0
-		var swing := sin(t * 9.0) * 0.5
-		var arm_l := figure.get_node_or_null("ArmL") as Node3D
-		var arm_r := figure.get_node_or_null("ArmR") as Node3D
-		if arm_l:
-			arm_l.rotation.x = swing
-		if arm_r:
-			arm_r.rotation.x = -swing
-	else:
-		figure.position.y = sin(t * 1.6) * 0.01
-		figure.rotation.z = 0.0
-		figure.rotation.y = sin(t * 0.9) * 0.25
-		for name in ["ArmL", "ArmR"]:
-			var arm := figure.get_node_or_null(name) as Node3D
-			if arm:
-				arm.rotation.x = lerpf(arm.rotation.x, 0.0, minf(1.0, delta * 6.0))
+		Figure.reset_pose(node)
+	Figure.animate(node, t, walking, delta)
 
 
 func _tick_customer(entry: Dictionary, delta: float) -> void:

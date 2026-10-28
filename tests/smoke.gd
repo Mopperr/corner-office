@@ -1201,6 +1201,41 @@ func _qa_regressions() -> Array:
 			prop.free()
 	if kinds.size() < 18:
 		found.append("dish props share too much (%d kinds)" % kinds.size())
+	# The jointed rig: legs that swing on a walk, a sit that lowers the hips, a player who walks to clicks.
+	var rig: Node3D = Figure.build(UIKit.SAGE, Color("4A3626"), "kid")
+	play.add_child(rig)
+	for path in ["Figure/Hips/ThighL/ShinL", "Figure/Hips/ThighR/ShinR", "Figure/ArmL/ForeL", "Figure/ArmR/ForeR", "Figure/Torso", "Figure/Head", "Figure/Carry"]:
+		if rig.get_node_or_null(path) == null:
+			found.append("rig part %s" % path)
+	if absf((rig.get_node("Figure") as Node3D).scale.x - 0.68) > 0.001:
+		found.append("kid scale")
+	rig.position = Vector3(1, 0, 1)
+	Figure.animate(rig, 0.3, true, 0.1)
+	for i in 12:
+		rig.position += Vector3(0.1, 0, 0)
+		Figure.animate(rig, 0.3 + float(i) * 0.1, true, 0.1)
+	rig.position += Vector3(0.1, 0, 0)
+	Figure.animate(rig, 0.17, true, 0.1)
+	var thigh := rig.get_node("Figure/Hips/ThighL") as Node3D
+	if absf(thigh.rotation.x) < 0.05:
+		found.append("walk does not swing the legs")
+	if absf(rig.rotation.y - PI * 0.5) > 0.4:
+		found.append("walker does not face the way it moves (%s)" % rig.rotation.y)
+	rig.set_meta("sit", true)
+	for i in 40:
+		Figure.animate(rig, float(i) * 0.05, false, 0.05)
+	if (rig.get_node("Figure/Hips") as Node3D).position.y > 0.45:
+		found.append("sit does not lower the hips")
+	rig.free()
+	if play.player == null or not is_instance_valid(play.player):
+		found.append("no player on screen")
+	else:
+		var before_pos: Vector3 = play.player.position
+		play.call("_player_go", Vector3(3.0, 0.0, 3.0))
+		for i in 60:
+			play.call("_tick_player", 0.05)
+		if play.player.position.distance_to(Vector3(2.45, 0.0, 2.45)) > 0.1 or play.player.position.distance_to(before_pos) < 0.5:
+			found.append("player did not walk to the click (%s)" % play.player.position)
 	# Characters hold a short pose on request and drop it when it ends.
 	var poser: Node3D = play.call("_make_person", UIKit.BLUE)
 	play.add_child(poser)
