@@ -106,8 +106,9 @@ func _run() -> void:
 	_check(GameState.office_phase == "live", "garage tutorial finished (phase %s)" % GameState.office_phase)
 	if GameState.office_phase != "live":
 		return
-	_check(room.player != null and is_instance_valid(room.player), "a player figure is on screen")
-	_check(room.player != null and room.player.position.distance_to(room.player_start) > 0.5, "the player walked to the clicks")
+	var room_p := _room()
+	_check(room_p != null and room_p.player != null and is_instance_valid(room_p.player), "a player figure is on screen")
+	_check(room_p != null and room_p.player != null and room_p.player.position.distance_to(room_p.player_start) > 0.5, "the player walked to the clicks")
 	# Going live opens the clipboard with the first job on it.
 	await wait(0.3)
 	var room_live := _room()
@@ -210,6 +211,13 @@ func _check_backroom() -> void:
 			btn.pressed.emit()
 			fenced = true
 			break
+	await wait(0.3)
+	# Sal names a price: push once, then take it.
+	_check(_any_button(room, "HagglePush"), "back room: Sal makes an offer")
+	await shot("haggle")
+	press_named(room, "HagglePush")
+	await wait(0.2)
+	_check(press_named(room, "HaggleTake"), "back room: took Sal's price")
 	await wait(0.3)
 	_check(fenced and GameState.money > money_before, "back room: fenced a good (%d -> %d)" % [money_before, GameState.money])
 	await shot("backroom_fenced")

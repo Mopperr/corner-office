@@ -1299,6 +1299,103 @@ func _qa_regressions() -> Array:
 	GameState.mode = "office"
 	GameState.job = {}
 	play.call("_refresh_items")
+	# Haggling: a push moves the price, three pushes lose Sal, taking it pays.
+	var Crime = load("res://scripts/crime.gd")
+	var Workshop = load("res://scripts/workshop.gd")
+	GameState.crime = Crime.fresh()
+	Crime.unlock("fence_1")
+	var hag_good := str(ItemDB.trade_goods()[0].get("id", ""))
+	GameState.goods[hag_good] = 3
+	var hag_offer: Dictionary = Crime.fence_offer(hag_good, 1)
+	var start_price := int(hag_offer.get("offer", 0))
+	if start_price <= 0:
+		found.append("no offer")
+	Crime.haggle_push(hag_offer)
+	if int(hag_offer.get("offer", 0)) == start_price:
+		found.append("push did not move the price")
+	var walked_offer: Dictionary = Crime.fence_offer(hag_good, 1)
+	for i in 3:
+		Crime.haggle_push(walked_offer)
+	if not bool(walked_offer.get("walked", false)) or not Crime.fence_accept(walked_offer).has("error"):
+		found.append("third push should lose Sal")
+	var hag_money := GameState.money
+	var hag_taken: Dictionary = Crime.fence_accept(hag_offer)
+	if hag_taken.has("error") or GameState.money != hag_money + int(hag_offer.get("offer", 0)):
+		found.append("accept pay %s" % str(hag_taken))
+	# Knock-offs can be caught: over many rolls both outcomes happen.
+	GameState.crime["cred"] = 10
+	Crime.unlock("knock_1")
+	var ko_recipe := str(Workshop.recipes()[0].get("id", ""))
+	var ko_caught := 0
+	var ko_sold := 0
+	for i in 40:
+		var made: Dictionary = Workshop.state().get("made", {})
+		made[ko_recipe] = [{"quality": 70}]
+		Workshop.state()["made"] = made
+		var ko: Dictionary = Crime.knockoff(ko_recipe)
+		if bool(ko.get("caught", false)):
+			ko_caught += 1
+		elif not ko.has("error"):
+			ko_sold += 1
+	if ko_caught == 0 or ko_sold == 0:
+		found.append("knock-off outcomes caught %d sold %d" % [ko_caught, ko_sold])
+	# Lie low and a friend on the force.
+	GameState.crime = Crime.fresh()
+	GameState.crime["heat"] = 7
+	GameState.crime["visits"] = 1
+	GameState.crime["cred"] = 20
+	GameState.money = 500
+	Crime.unlock("cover_1")
+	Crime.unlock("cover_2")
+	if Crime.lie_low().has("error") or Crime.heat() != 3 or GameState.money != 470:
+		found.append("lie low heat %d money %d" % [Crime.heat(), GameState.money])
+	if not Crime.lie_low().has("error"):
+		found.append("lie low twice a day")
+	if Crime.bribe().has("error") or int(GameState.crime.get("visits", 0)) != 0 or GameState.money != 350:
+		found.append("bribe visits %d money %d" % [int(GameState.crime.get("visits", 0)), GameState.money])
+	# Patrol heat from a night drive; Sal's story mails arrive with cred.
+	GameState.crime = Crime.fresh()
+	GameState.crime["cred"] = 3
+	var kept_mail: Array = []
+	for mail in GameState.inbox:
+		if not str(mail.get("id", "")).begins_with("sal_story"):
+			kept_mail.append(mail)
+	GameState.inbox = kept_mail
+	Crime.story_check()
+	var story_mails := 0
+	for mail in GameState.inbox:
+		if str(mail.get("id", "")).begins_with("sal_story"):
+			story_mails += 1
+	if story_mails != 1:
+		found.append("story mails %d" % story_mails)
+	Crime.on_drive({"spotted": 2})
+	if Crime.heat() != 6:
+		found.append("patrol heat %d" % Crime.heat())
+	# Rent: nothing in the grace days, then every few days; unpaid rent shuts the shop.
+	GameState.rent_owed = 0
+	GameState.day = 4
+	GameState.money = 10
+	var rent_summary := {}
+	GameState.call("_charge_rent", rent_summary)
+	if GameState.rent_owed != 0:
+		found.append("rent in the grace period")
+	GameState.day = 5
+	GameState.call("_charge_rent", rent_summary)
+	if GameState.rent_owed != GameState.rent_amount() or int(rent_summary.get("rent", 0)) != GameState.rent_amount():
+		found.append("rent not charged on day 5 (%d)" % GameState.rent_owed)
+	GameState.office_items.append({"uid": "smoke_counter3", "item": "coffee_machine", "state": "placed", "x": 2, "y": 0.76, "z": 4, "rot": 0})
+	if GameState.shop_accepting():
+		found.append("shop open with rent owed")
+	GameState.add_money(500, true)
+	if GameState.rent_owed != 0 or not GameState.shop_accepting():
+		found.append("rent not settled when money came in")
+	GameState.day = 6
+	GameState.call("_charge_rent", rent_summary)
+	if GameState.rent_owed != 0:
+		found.append("rent charged on the wrong day")
+	if GameState.rent_due_in() != 4:
+		found.append("rent due in %d" % GameState.rent_due_in())
+	GameState.rent_owed = 0
 	# The drive wants the truck backed into the bay: nose-first is not parked.
 	var course_node = load("res://scripts/drive_course.gd").new()
 	course_node.dropoff = {"bay": Rect2(0, 0, 180, 60)}

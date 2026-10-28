@@ -57,6 +57,7 @@ var stats: Dictionary = {}
 var contracts_done: Dictionary = {}
 var day_log: Dictionary = {}
 var shop_tier := "stand"
+var rent_owed := 0
 var workshop: Dictionary = {}
 var crime: Dictionary = {}
 const Workshop = preload("res://scripts/workshop.gd")
@@ -147,6 +148,8 @@ func add_money(amount: int, earned: bool) -> void:
 		_credit_net(amount)
 	else:
 		emit_signal("money_changed", money)
+	if amount > 0 and rent_owed > 0 and try_pay_rent():
+		emit_signal("toast_requested", "Rent settled. The shop can open again.")
 	_check_unlock_email()
 
 
@@ -735,6 +738,9 @@ func apply_drive_result(result: Dictionary) -> void:
 	job["duck_friend"] = bool(result.get("duck_friend", false))
 	job["near_miss"] = bool(result.get("near_miss", false))
 	job["honks"] = int(result.get("honks", 0))
+	job["spotted"] = int(result.get("spotted", 0))
+	if int(job.get("spotted", 0)) > 0:
+		Crime.on_drive(result)
 	_assign_damage()
 
 
@@ -1033,11 +1039,58 @@ func advance_day() -> void:
 	shop_visitors_today = 0
 	refresh_board()
 	Crime.new_day()
+	_charge_rent(summary)
 	Crime.maybe_nudge(summary)
 	if not generated_jobs.is_empty():
 		summary["next_job"] = str(generated_jobs[0].get("title", ""))
 	day_log = _fresh_day_log()
 	emit_signal("day_ended", summary)
+
+
+func rent_amount() -> int:
+	return int(Tuning.get_value("rent.base", 80)) + shop_tier_rank() * int(Tuning.get_value("rent.per_tier", 60))
+
+
+func rent_due_in() -> int:
+	# Days until the next rent day.
+	var every := maxi(1, int(Tuning.get_value("rent.every_days", 5)))
+	var grace := int(Tuning.get_value("rent.grace_days", 4))
+	if day <= grace:
+		return grace + 1 - day
+	return every - ((day - grace - 1) % every)
+
+
+func _charge_rent(summary: Dictionary) -> void:
+	# Rent comes due every few days after a grace period at the start. Unpaid
+	# rent closes the shop until it is settled, and the landlord writes.
+	var every := maxi(1, int(Tuning.get_value("rent.every_days", 5)))
+	var grace := int(Tuning.get_value("rent.grace_days", 4))
+	if day <= grace or (day - grace - 1) % every != 0:
+		summary["rent_owed"] = rent_owed
+		return
+	var amount := rent_amount()
+	rent_owed += amount
+	summary["rent"] = amount
+	try_pay_rent()
+	summary["rent_owed"] = rent_owed
+	if rent_owed > 0:
+		inbox.append({"id": "rent_d%d" % day, "from": "Hollis Property", "subject": "Rent overdue", "body": "Rent of $%d for the garage was due today and the account is short. The shop stays shut until it is settled.\n\nWe like you. We also like being paid.\n\n— Hollis Property" % amount, "read": false})
+		emit_signal("emails_changed")
+		emit_signal("toast_requested", "Rent is overdue: $%d. The shop stays shut until it's paid." % rent_owed)
+	else:
+		emit_signal("toast_requested", "Rent paid: $%d." % amount)
+
+
+func try_pay_rent() -> bool:
+	if rent_owed <= 0:
+		return true
+	if money < rent_owed:
+		return false
+	money -= rent_owed
+	day_log["rent"] = int(day_log.get("rent", 0)) + rent_owed
+	rent_owed = 0
+	emit_signal("money_changed", money)
+	return true
 
 
 func price_of(id: String) -> int:
@@ -1431,7 +1484,7 @@ func shop_open() -> bool:
 
 
 func shop_accepting() -> bool:
-	return shop_open() and not shop_closed and not Crime.raided_today()
+	return shop_open() and not shop_closed and not Crime.raided_today() and rent_owed <= 0
 
 
 func shop_dishes() -> Array:
@@ -1655,6 +1708,7 @@ func to_dict() -> Dictionary:
 		"shop_tier": shop_tier,
 		"workshop": workshop.duplicate(true),
 		"crime": crime.duplicate(true),
+		"rent_owed": rent_owed,
 		"freebie_day": freebie_day,
 		"forest_serial": forest_serial,
 		"latched_goals": latched_goals.duplicate(true),
@@ -1719,6 +1773,7 @@ func from_dict(raw: Dictionary) -> void:
 	if workshop.is_empty():
 		workshop = Workshop.fresh()
 	crime = raw.get("crime", {}).duplicate(true) if raw.has("crime") else Crime.fresh()
+	rent_owed = int(raw.get("rent_owed", 0))
 	if crime.is_empty():
 		crime = Crime.fresh()
 	if generated_jobs.is_empty():

@@ -3448,14 +3448,11 @@ func _crime_card(row: Dictionary, width: float) -> PanelContainer:
 			sell.custom_minimum_size = Vector2(240, 52)
 			sell.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 			sell.pressed.connect(func():
-				var result: Dictionary = Crime.fence(good_id, count)
-				if result.has("error"):
-					_toast(str(result["error"]), "Sal")
+				var offer: Dictionary = Crime.fence_offer(good_id, count)
+				if offer.has("error"):
+					_toast(str(offer["error"]), "Sal")
 					return
-				AudioDirector.play_sfx("sfx_cash_gain")
-				SaveManager.save_game()
-				_open_jobs("backroom")
-				_toast("$%d, cash. Heat %d." % [int(result.get("pay", 0)), Crime.heat()], "Sal")
+				_open_haggle(offer)
 			)
 			line.add_child(sell)
 			break
@@ -3463,6 +3460,38 @@ func _crime_card(row: Dictionary, width: float) -> PanelContainer:
 			text.add_child(UIKit.label("Buy a trade good at the market first.", 24, UIKit.BLUE, "small", false))
 	elif action == "fence_graded":
 		text.add_child(UIKit.label("Restored and mint goods on the workbench's Fix up tab can go to Sal instead.", 24, UIKit.BLUE, "small", false))
+	elif action == "lie_low":
+		var low := UIKit.button("Close up early", UIKit.NIGHT)
+		low.name = "LieLow"
+		low.custom_minimum_size = Vector2(240, 52)
+		low.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		low.pressed.connect(func():
+			var result: Dictionary = Crime.lie_low()
+			if result.has("error"):
+				_toast(str(result["error"]), "Sal")
+				return
+			AudioDirector.play_sfx("sfx_l01_garage_door_roll")
+			SaveManager.save_game()
+			_open_jobs("backroom")
+			_toast("Shutters down. Heat %d." % Crime.heat(), "Sal")
+		)
+		line.add_child(low)
+	elif action == "bribe":
+		var word := UIKit.button("A quiet word ($%d)" % int(row.get("cost", 120)), UIKit.NIGHT)
+		word.name = "Bribe"
+		word.custom_minimum_size = Vector2(280, 52)
+		word.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		word.pressed.connect(func():
+			var result: Dictionary = Crime.bribe()
+			if result.has("error"):
+				_toast(str(result["error"]), "Sal")
+				return
+			AudioDirector.play_sfx("sfx_cash_gain")
+			SaveManager.save_game()
+			_open_jobs("backroom")
+			_toast("A file went missing. Visits on record: %d." % int(result.get("visits", 0)), "Sal")
+		)
+		line.add_child(word)
 	elif action == "night_job":
 		if Crime.night_job_available():
 			var go := UIKit.button("Take tonight's move", UIKit.TERRA)
@@ -3496,6 +3525,12 @@ func _crime_card(row: Dictionary, width: float) -> PanelContainer:
 				var result: Dictionary = Crime.knockoff(recipe_id)
 				if result.has("error"):
 					_toast(str(result["error"]), "Sal")
+					return
+				if bool(result.get("caught", false)):
+					AudioDirector.play_sfx("sfx_invalid_placement")
+					SaveManager.save_game()
+					_open_jobs("backroom")
+					_toast(str(result.get("line", "Caught.")), "Marge")
 					return
 				AudioDirector.play_sfx("sfx_cash_gain")
 				SaveManager.save_game()
@@ -4839,6 +4874,87 @@ func _answer_ask(uid: String, said_yes: bool, card: Node) -> void:
 			GameState.bump_stat("asks_granted")
 		_open_make(uid)
 		return
+
+
+func _open_haggle(offer: Dictionary) -> void:
+	# Sal names a price. Take it, or push your luck.
+	var layer := _hud_layer()
+	var old := layer.get_node_or_null("HaggleCard")
+	if old != null:
+		layer.remove_child(old)
+		old.free()
+	var card := PanelContainer.new()
+	card.name = "HaggleCard"
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.NIGHT))
+	layer.add_child(card)
+	card.layout_mode = 1
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	card.offset_left = -380
+	card.offset_right = 380
+	card.offset_top = -120
+	card.offset_bottom = 120
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 18)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	margin.add_child(column)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 12)
+	column.add_child(head)
+	head.add_child(UIKit.avatar("S", UIKit.NIGHT, 40))
+	var title := UIKit.label("Sal: \"$%d for %d x %s.\"" % [int(offer.get("offer", 0)), int(offer.get("count", 1)), ItemDB.display_name(str(offer.get("item", "")))], 28, UIKit.DARK, "title", false)
+	title.name = "HaggleTitle"
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.custom_minimum_size = Vector2(640, 40)
+	head.add_child(title)
+	var line := UIKit.label(str(offer.get("line", "")), 26, UIKit.BLUE, "small")
+	line.name = "HaggleLine"
+	line.custom_minimum_size = Vector2(700, 0)
+	column.add_child(line)
+	var buttons := HBoxContainer.new()
+	buttons.add_theme_constant_override("separation", 12)
+	column.add_child(buttons)
+	var take := UIKit.button("Take it", UIKit.SAGE)
+	take.name = "HaggleTake"
+	take.custom_minimum_size = Vector2(220, 56)
+	take.pressed.connect(func():
+		var result: Dictionary = Crime.fence_accept(offer)
+		card.queue_free()
+		if result.has("error"):
+			_toast(str(result["error"]), "Sal")
+			return
+		AudioDirector.play_sfx("sfx_cash_gain")
+		SaveManager.save_game()
+		_open_jobs("backroom")
+		_toast("$%d, cash. Heat %d." % [int(result.get("pay", 0)), Crime.heat()], "Sal")
+	)
+	buttons.add_child(take)
+	var push := UIKit.button("Push for more", UIKit.TERRA)
+	push.name = "HagglePush"
+	push.custom_minimum_size = Vector2(260, 56)
+	push.pressed.connect(func():
+		Crime.haggle_push(offer)
+		if bool(offer.get("walked", false)):
+			card.queue_free()
+			SaveManager.save_game()
+			_open_jobs("backroom")
+			_toast(str(offer.get("line", "No deal.")), "Sal")
+			return
+		title.text = "Sal: \"$%d for %d x %s.\"" % [int(offer.get("offer", 0)), int(offer.get("count", 1)), ItemDB.display_name(str(offer.get("item", "")))]
+		line.text = str(offer.get("line", ""))
+		AudioDirector.play_sfx("sfx_ui_click")
+	)
+	buttons.add_child(push)
+	var leave := UIKit.button("Walk away", UIKit.WOOD)
+	leave.name = "HaggleLeave"
+	leave.custom_minimum_size = Vector2(200, 56)
+	leave.pressed.connect(func(): card.queue_free())
+	buttons.add_child(leave)
+	UIKit.link_focus([take, push, leave])
 
 
 func _open_make(uid: String) -> void:

@@ -13,6 +13,7 @@ extends Node3D
 
 const Tuning = preload("res://scripts/tuning.gd")
 const UIKit = preload("res://scripts/ui_kit.gd")
+const Crime = preload("res://scripts/crime.gd")
 const Controls = preload("res://scripts/control_map.gd")
 const City = preload("res://scripts/city.gd")
 const Props = preload("res://scripts/props.gd")
@@ -82,6 +83,12 @@ var cars: Array = []
 var walkers: Array = []
 var wave_t := 0.0
 var at_dropoff := false
+var patrols: Array = []
+var spotted := 0
+var spot_meter := 0.0
+var spot_cool := 0.0
+var patrol_flash := 0.0
+var spot_label: Label
 var backed_in := false
 var in_bay := false
 var reverse_beep := 0.0
@@ -215,7 +222,12 @@ func _lights() -> void:
 	environment.background_mode = Environment.BG_SKY
 	var sky := Sky.new()
 	var sky_material := ProceduralSkyMaterial.new()
-	if weather == "rain":
+	if weather == "night":
+		sky_material.sky_top_color = Color("0E1424")
+		sky_material.sky_horizon_color = Color("2A3350")
+		sky_material.ground_bottom_color = Color("101218")
+		sky_material.ground_horizon_color = Color("23262E")
+	elif weather == "rain":
 		sky_material.sky_top_color = Color("6C7384")
 		sky_material.sky_horizon_color = Color("A5A7B0")
 		sky_material.ground_bottom_color = Color("4F4B4E")
@@ -230,6 +242,11 @@ func _lights() -> void:
 	environment.fog_enabled = true
 	environment.fog_light_color = Color("C9D3DA") if weather != "rain" else Color("8E919B")
 	environment.fog_density = 0.004 if weather != "rain" else 0.011
+	if weather == "night":
+		environment.fog_light_color = Color("141A2A")
+		environment.fog_density = 0.009
+		environment.ambient_light_color = Color("3A4466")
+		environment.ambient_light_energy = 0.35
 	env.environment = environment
 	add_child(env)
 	var sun := DirectionalLight3D.new()
@@ -237,6 +254,10 @@ func _lights() -> void:
 	sun.rotation_degrees = Vector3(-55, 40, 0)
 	sun.light_color = Color("FFE3C0") if weather != "rain" else Color("C9CCD6")
 	sun.light_energy = 0.95 if weather != "rain" else 0.6
+	if weather == "night":
+		# Moonlight: low, blue, and the headlights do the rest.
+		sun.light_color = Color("8FA3D6")
+		sun.light_energy = 0.22
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 90.0
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
@@ -827,6 +848,26 @@ func _build_truck() -> void:
 	add_child(truck)
 	truck.position = to_world(pos)
 	truck.rotation.y = -heading
+	if str(course.get("weather", "clear")) == "night":
+		for side in [-0.6, 0.6]:
+			var beam := SpotLight3D.new()
+			beam.name = "Headlight"
+			beam.position = Vector3(2.3, 0.9, side)
+			beam.rotation_degrees = Vector3(-6, -90, 0)
+			beam.light_color = Color("FFF1C9")
+			beam.light_energy = 3.2
+			beam.spot_range = 26.0
+			beam.spot_angle = 28.0
+			beam.shadow_enabled = false
+			truck.add_child(beam)
+			var lamp := Props.mesh_box(Vector3(0.08, 0.18, 0.26), Color("FFF6DC"))
+			var glow := Props.mat(Color("FFF6DC"))
+			glow.emission_enabled = true
+			glow.emission = Color("FFF1C9")
+			glow.emission_energy_multiplier = 3.0
+			lamp.material_override = glow
+			lamp.position = Vector3(2.3, 0.75, side)
+			truck.add_child(lamp)
 	# Reversing lights on the tail, lit while backing up.
 	for side in [-0.7, 0.7]:
 		var lamp := Props.mesh_box(Vector3(0.08, 0.14, 0.2), Color("FFF6DC"))
@@ -884,6 +925,38 @@ func _spawn_traffic() -> void:
 		node.position = to_world(start)
 		world.add_child(node)
 		cars.append({"loop": loop, "seg": seg, "pos": start, "speed": mps * rng.randf_range(0.8, 1.1), "cruise": mps, "node": node, "heading": 0.0, "horn": 0.0})
+	# Night moves: patrol cars with a light bar. They notice a truck that is
+	# fast, in the alley, or off the road in front of them.
+	if str(course.get("weather", "clear")) == "night":
+		var patrol_count := int(course.get("patrols", int((Crime.data.get("patrols", {}) as Dictionary).get("count", 2)))) if not Crime.data.is_empty() else int(course.get("patrols", 2))
+		for i in patrol_count:
+			var loop: PackedVector2Array = loops[(i * 3 + 1) % loops.size()]
+			var seg := (i * 2) % loop.size()
+			var start: Vector2 = loop[seg].lerp(loop[(seg + 1) % loop.size()], 0.4)
+			var node := _make_car(Color("2E3340"))
+			node.name = "Patrol"
+			var bar := Props.mesh_box(Vector3(0.9, 0.16, 0.5), Color("DD3344"))
+			bar.name = "LightBar"
+			var bar_glow := Props.mat(Color("DD3344"))
+			bar_glow.emission_enabled = true
+			bar_glow.emission = Color("FF3344")
+			bar_glow.emission_energy_multiplier = 2.5
+			bar.material_override = bar_glow
+			bar.position = Vector3(-0.2, 1.75, 0)
+			node.add_child(bar)
+			var bar_light := OmniLight3D.new()
+			bar_light.name = "BarLight"
+			bar_light.position = Vector3(-0.2, 2.2, 0)
+			bar_light.light_color = Color("FF3344")
+			bar_light.light_energy = 2.0
+			bar_light.omni_range = 9.0
+			bar_light.shadow_enabled = false
+			node.add_child(bar_light)
+			node.position = to_world(start)
+			world.add_child(node)
+			var car := {"loop": loop, "seg": seg, "pos": start, "speed": mps * 0.9, "cruise": mps * 0.9, "node": node, "heading": 0.0, "horn": 99999.0, "patrol": true}
+			cars.append(car)
+			patrols.append(car)
 
 
 func _build_route_marks() -> void:
@@ -968,6 +1041,12 @@ func _hud() -> void:
 	meter_label.position = Vector2(400, 16)
 	meter_label.custom_minimum_size = Vector2(120, 44)
 	card.add_child(meter_label)
+	if str(course.get("weather", "clear")) == "night":
+		spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
+		spot_label.name = "SpotLabel"
+		spot_label.position = Vector2(20, 118)
+		spot_label.custom_minimum_size = Vector2(500, 36)
+		card.add_child(spot_label)
 	var hint_bar := Panel.new()
 	hint_bar.name = "DriveHint"
 	hint_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1126,6 +1205,7 @@ func _process(delta: float) -> void:
 	else:
 		_drive(delta, weather)
 		honk_cool = maxf(0.0, honk_cool - delta)
+		_patrols(delta)
 		var reversing := speed < -3.0
 		for lamp in reverse_lights:
 			if is_instance_valid(lamp):
@@ -1339,6 +1419,55 @@ func _bounce(normal: Vector2, depth: float, kind: String) -> void:
 
 
 const FOLLOW_GAP := 92.0
+
+
+func _patrols(delta: float) -> void:
+	if patrols.is_empty():
+		return
+	patrol_flash += delta
+	var red := fmod(patrol_flash, 0.6) < 0.3
+	for car in patrols:
+		var node: Node3D = car["node"]
+		var bar := node.get_node_or_null("LightBar") as MeshInstance3D
+		var light := node.get_node_or_null("BarLight") as OmniLight3D
+		var tint := Color("FF3344") if red else Color("3B6CFF")
+		if bar and bar.material_override is StandardMaterial3D:
+			(bar.material_override as StandardMaterial3D).emission = tint
+		if light:
+			light.light_color = tint
+	spot_cool = maxf(0.0, spot_cool - delta)
+	var spec: Dictionary = Crime.data.get("patrols", {}) if not Crime.data.is_empty() else {}
+	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+	var naughty: bool = absf(speed) > max_speed * float(spec.get("speed_fraction", 0.72)) or (not city.on_road(pos) and not _in_bay(pos)) or _in_alley_now()
+	var watched := false
+	var truck_center := _art_center()
+	for car in patrols:
+		var dir := Vector2.RIGHT.rotated(float(car["heading"]))
+		var rel: Vector2 = truck_center - (car["pos"] as Vector2)
+		if rel.dot(dir) > 0.0 and rel.length() < 240.0 and absf(rel.cross(dir)) < 110.0:
+			watched = true
+	if watched and naughty and spot_cool <= 0.0:
+		spot_meter += delta
+		if spot_meter >= float(spec.get("spot_seconds", 2.0)):
+			spot_meter = 0.0
+			spot_cool = 4.0
+			spotted += 1
+			AudioDirector.play_sfx("sfx_truck_horn")
+			_apply_hit("patrol", int(Tuning.get_value("box_condition.collision", 10)) / 2, 1500)
+	else:
+		spot_meter = maxf(0.0, spot_meter - delta * 0.7)
+	if spot_label:
+		if watched:
+			spot_label.text = "Patrol watching  %d%%" % int(round(spot_meter / maxf(0.1, float(spec.get("spot_seconds", 2.0))) * 100.0))
+		else:
+			spot_label.text = "Spotted %d time%s" % [spotted, "" if spotted == 1 else "s"] if spotted > 0 else "Patrols out. Keep it slow near them."
+
+
+func _in_alley_now() -> bool:
+	for cut in city.alleys:
+		if (cut as Rect2).grow(-6).has_point(pos):
+			return true
+	return false
 
 
 func _lead_car(forward: Vector2) -> Dictionary:
@@ -1705,6 +1834,7 @@ func _complete() -> void:
 		"alley": alley,
 		"honks": honks,
 		"backed_in": backed_in,
+		"spotted": spotted,
 		"duck_friend": duck_friend and not near_miss and bool(GameState.job.get("def", {}).get("duck_friend", false)),
 		"near_miss": near_miss,
 		"time": time_alive,

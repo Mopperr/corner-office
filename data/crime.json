@@ -1,26 +1,244 @@
 {
-  "contact": { "name": "Sal", "intro": "Sal runs the lock-up behind the depot. Cash, no receipts, no questions. Marge would hate this.", "line_low": "Keep it quiet and we're fine.", "line_high": "You're warm, kid. Lie low a day." },
+  "contact": {
+    "name": "Sal",
+    "intro": "Sal runs the lock-up behind the depot. Cash, no receipts, no questions. Marge would hate this.",
+    "line_low": "Keep it quiet and we're fine.",
+    "line_high": "You're warm, kid. Lie low a day."
+  },
   "heat_decay": 2,
   "heat_visit": 10,
   "branches": [
-    { "id": "fence", "name": "Fencing", "blurb": "Goods go to Sal for more than the market pays. Nobody asks where they came from." },
-    { "id": "night", "name": "Night moves", "blurb": "Moves after dark for people who do not want a paper trail. Big pay, bigger heat." },
-    { "id": "knockoff", "name": "Knock-offs", "blurb": "Make it on the bench, sell it as the real thing." }
+    {
+      "id": "fence",
+      "name": "Fencing",
+      "blurb": "Goods go to Sal for more than the market pays. Nobody asks where they came from."
+    },
+    {
+      "id": "night",
+      "name": "Night moves",
+      "blurb": "Moves after dark for people who do not want a paper trail. Big pay, bigger heat."
+    },
+    {
+      "id": "knockoff",
+      "name": "Knock-offs",
+      "blurb": "Make it on the bench, sell it as the real thing."
+    },
+    {
+      "id": "cover",
+      "name": "Cover",
+      "blurb": "Ways to cool off when the heat climbs."
+    }
   ],
   "nodes": [
-    { "id": "fence_1", "branch": "fence", "tier": 1, "name": "Small fence", "blurb": "Sell one trade good to Sal at 1.5x.", "cred_cost": 0, "requires": "", "action": "fence", "mult": 1.5, "heat": 2, "cred": 1 },
-    { "id": "fence_2", "branch": "fence", "tier": 2, "name": "Bulk fence", "blurb": "Sell five at once at 1.8x.", "cred_cost": 3, "requires": "fence_1", "action": "fence_bulk", "mult": 1.8, "heat": 5, "cred": 3 },
-    { "id": "fence_3", "branch": "fence", "tier": 3, "name": "The good customer", "blurb": "Sal pays 2.4x for anything restored or mint.", "cred_cost": 8, "requires": "fence_2", "action": "fence_graded", "mult": 2.4, "heat": 6, "cred": 4 },
-    { "id": "night_1", "branch": "night", "tier": 1, "name": "After hours", "blurb": "Take a no-questions move at 1.6x pay. The route is dark.", "cred_cost": 2, "requires": "", "action": "night_job", "mult": 1.6, "heat": 4, "cred": 2 },
-    { "id": "night_2", "branch": "night", "tier": 2, "name": "Unmarked truck", "blurb": "Night moves pay 2.0x.", "cred_cost": 6, "requires": "night_1", "action": "night_job", "mult": 2.0, "heat": 6, "cred": 3 },
-    { "id": "night_3", "branch": "night", "tier": 3, "name": "The quiet route", "blurb": "Night moves pay 2.6x and the alley never costs heat.", "cred_cost": 12, "requires": "night_2", "action": "night_job", "mult": 2.6, "heat": 7, "cred": 5 },
-    { "id": "knock_1", "branch": "knockoff", "tier": 1, "name": "Close enough", "blurb": "Sell a made thing as the branded one at 1.7x.", "cred_cost": 2, "requires": "", "action": "knockoff", "mult": 1.7, "heat": 3, "cred": 2 },
-    { "id": "knock_2", "branch": "knockoff", "tier": 2, "name": "Convincing label", "blurb": "Knock-offs sell at 2.2x.", "cred_cost": 6, "requires": "knock_1", "action": "knockoff", "mult": 2.2, "heat": 5, "cred": 3 },
-    { "id": "knock_3", "branch": "knockoff", "tier": 3, "name": "Provenance", "blurb": "Knock-offs sell at 3.0x and come with a story.", "cred_cost": 12, "requires": "knock_2", "action": "knockoff", "mult": 3.0, "heat": 6, "cred": 5 }
+    {
+      "id": "fence_1",
+      "branch": "fence",
+      "tier": 1,
+      "name": "Small fence",
+      "blurb": "Sell one trade good to Sal at 1.5x.",
+      "cred_cost": 0,
+      "requires": "",
+      "action": "fence",
+      "mult": 1.5,
+      "heat": 2,
+      "cred": 1
+    },
+    {
+      "id": "fence_2",
+      "branch": "fence",
+      "tier": 2,
+      "name": "Bulk fence",
+      "blurb": "Sell five at once at 1.8x.",
+      "cred_cost": 3,
+      "requires": "fence_1",
+      "action": "fence_bulk",
+      "mult": 1.8,
+      "heat": 5,
+      "cred": 3
+    },
+    {
+      "id": "fence_3",
+      "branch": "fence",
+      "tier": 3,
+      "name": "The good customer",
+      "blurb": "Sal pays 2.4x for anything restored or mint.",
+      "cred_cost": 8,
+      "requires": "fence_2",
+      "action": "fence_graded",
+      "mult": 2.4,
+      "heat": 6,
+      "cred": 4
+    },
+    {
+      "id": "night_1",
+      "branch": "night",
+      "tier": 1,
+      "name": "After hours",
+      "blurb": "Take a no-questions move at 1.6x pay. The route is dark.",
+      "cred_cost": 2,
+      "requires": "",
+      "action": "night_job",
+      "mult": 1.6,
+      "heat": 4,
+      "cred": 2
+    },
+    {
+      "id": "night_2",
+      "branch": "night",
+      "tier": 2,
+      "name": "Unmarked truck",
+      "blurb": "Night moves pay 2.0x.",
+      "cred_cost": 6,
+      "requires": "night_1",
+      "action": "night_job",
+      "mult": 2.0,
+      "heat": 6,
+      "cred": 3
+    },
+    {
+      "id": "night_3",
+      "branch": "night",
+      "tier": 3,
+      "name": "The quiet route",
+      "blurb": "Night moves pay 2.6x and the alley never costs heat.",
+      "cred_cost": 12,
+      "requires": "night_2",
+      "action": "night_job",
+      "mult": 2.6,
+      "heat": 7,
+      "cred": 5
+    },
+    {
+      "id": "knock_1",
+      "branch": "knockoff",
+      "tier": 1,
+      "name": "Close enough",
+      "blurb": "Sell a made thing as the branded one at 1.7x.",
+      "cred_cost": 2,
+      "requires": "",
+      "action": "knockoff",
+      "mult": 1.7,
+      "heat": 3,
+      "cred": 2
+    },
+    {
+      "id": "knock_2",
+      "branch": "knockoff",
+      "tier": 2,
+      "name": "Convincing label",
+      "blurb": "Knock-offs sell at 2.2x.",
+      "cred_cost": 6,
+      "requires": "knock_1",
+      "action": "knockoff",
+      "mult": 2.2,
+      "heat": 5,
+      "cred": 3
+    },
+    {
+      "id": "knock_3",
+      "branch": "knockoff",
+      "tier": 3,
+      "name": "Provenance",
+      "blurb": "Knock-offs sell at 3.0x and come with a story.",
+      "cred_cost": 12,
+      "requires": "knock_2",
+      "action": "knockoff",
+      "mult": 3.0,
+      "heat": 6,
+      "cred": 5
+    },
+    {
+      "id": "cover_1",
+      "branch": "cover",
+      "tier": 1,
+      "name": "Lie low",
+      "blurb": "Close up early: heat drops by 4, the shop misses a day's custom ($30).",
+      "cred_cost": 0,
+      "requires": "",
+      "action": "lie_low",
+      "cost": 30,
+      "drop": 4,
+      "heat": 0,
+      "cred": 0
+    },
+    {
+      "id": "cover_2",
+      "branch": "cover",
+      "tier": 2,
+      "name": "A friend on the force",
+      "blurb": "$120 buys a quiet word: the last visit is forgotten.",
+      "cred_cost": 5,
+      "requires": "cover_1",
+      "action": "bribe",
+      "cost": 120,
+      "heat": 0,
+      "cred": 0
+    }
   ],
   "visits": [
     "A clipboard and a polite knock. Two trade goods confiscated and a fine.",
     "Someone in a grey coat asks about the lock-up. You pay to make them bored.",
     "Marge hears a rumour. She says nothing, which is worse. Rep slips."
-  ]
+  ],
+  "patrols": {
+    "count": 2,
+    "spot_seconds": 2.0,
+    "heat": 3,
+    "speed_fraction": 0.72
+  },
+  "haggle": {
+    "push_up": 0.15,
+    "push_down": 0.1,
+    "push_odds": 0.6,
+    "max_pushes": 2,
+    "lines_up": [
+      "Fine. Don't tell the others.",
+      "You drive a hard one. Done.",
+      "Alright, alright. For you."
+    ],
+    "lines_down": [
+      "Now you've annoyed me. Less.",
+      "Greedy. The price just went down.",
+      "Keep pushing and there's no price."
+    ],
+    "line_walk": "We're done here. Come back when you've learned manners.",
+    "line_open": "Cash, no receipt. Here's my number."
+  },
+  "knockoff": {
+    "base_catch": 0.32,
+    "tier_bonus": 0.08,
+    "heat_caught": 4,
+    "lines_caught": [
+      "Someone's cousin knew the real one. Word got round.",
+      "The label peeled. The buyer did not laugh.",
+      "Wrong font on the stamp. A collector noticed."
+    ]
+  },
+  "story": [
+    {
+      "cred": 3,
+      "id": "sal_story_1",
+      "subject": "You're alright",
+      "body": "Three deals and no fuss. That's rarer than you think.\n\nThere's a van with no plates behind the depot. Night work pays double and nobody counts the boxes.\n\n— S"
+    },
+    {
+      "cred": 8,
+      "id": "sal_story_2",
+      "subject": "Patrols",
+      "body": "They've put two cars on nights. Keep it under the limit near them and stay out of the alley when they're looking, or don't. Your call, your heat.\n\n— S"
+    },
+    {
+      "cred": 15,
+      "id": "sal_story_3",
+      "subject": "The big one",
+      "body": "A whole office, after dark, three times the money. One night only. Take it from the back room when you're ready, and bring the truck back clean.\n\n— S"
+    }
+  ],
+  "big_score": {
+    "cred": 15,
+    "mult": 3.2,
+    "heat": 12,
+    "title": "The big one",
+    "brief": "A whole office, lights off, by morning. Three times the money, every patrol in town awake."
+  }
 }

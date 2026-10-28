@@ -105,10 +105,13 @@ static func _earn(row: Dictionary) -> void:
 	done[id] = int(done.get(id, 0)) + 1
 	s["done"] = done
 	GameState.bump_stat("shady_deals")
+	story_check()
 	_maybe_visit()
 
 
-static func fence(item_id: String, count := 1) -> Dictionary:
+static func fence_offer(item_id: String, count := 1) -> Dictionary:
+	# Sal names a price. You can take it or push, twice; the third push loses him.
+	ensure()
 	var row := best_unlocked("fence")
 	if row.is_empty():
 		return {"error": "Sal doesn't know you yet."}
@@ -117,17 +120,131 @@ static func fence(item_id: String, count := 1) -> Dictionary:
 	if int(GameState.goods.get(item_id, 0)) < count:
 		return {"error": "You don't have %d of those." % count}
 	var mult := float(row.get("mult", 1.5))
-	var pay := 0
+	var each := int(round(float(GameState.sell_price_of(item_id)) * mult))
+	var haggle: Dictionary = data.get("haggle", {})
+	return {"item": item_id, "count": count, "node": str(row.get("id", "")), "offer": each * count, "start": each * count, "pushes": 0, "walked": false, "line": str(haggle.get("line_open", "Cash, no receipt."))}
+
+
+static func haggle_push(offer: Dictionary) -> Dictionary:
+	ensure()
+	var haggle: Dictionary = data.get("haggle", {})
+	if bool(offer.get("walked", false)):
+		return offer
+	var pushes := int(offer.get("pushes", 0)) + 1
+	offer["pushes"] = pushes
+	if pushes > int(haggle.get("max_pushes", 2)):
+		offer["walked"] = true
+		offer["line"] = str(haggle.get("line_walk", "We're done here."))
+		var s := state()
+		s["heat"] = heat() + 1
+		_log("Pushed Sal too far. No deal.")
+		return offer
+	var roll := GameState.rng.randf()
+	if roll < float(haggle.get("push_odds", 0.6)):
+		offer["offer"] = int(round(float(offer["offer"]) * (1.0 + float(haggle.get("push_up", 0.15)))))
+		var ups: Array = haggle.get("lines_up", ["Fine."])
+		offer["line"] = str(ups[(pushes - 1) % ups.size()])
+	else:
+		offer["offer"] = maxi(1, int(round(float(offer["offer"]) * (1.0 - float(haggle.get("push_down", 0.1))))))
+		var downs: Array = haggle.get("lines_down", ["Less."])
+		offer["line"] = str(downs[(pushes - 1) % downs.size()])
+	return offer
+
+
+static func fence_accept(offer: Dictionary) -> Dictionary:
+	if bool(offer.get("walked", false)):
+		return {"error": "Sal's gone. Try tomorrow."}
+	var item_id := str(offer.get("item", ""))
+	var count := int(offer.get("count", 1))
+	if int(GameState.goods.get(item_id, 0)) < count:
+		return {"error": "You don't have %d of those." % count}
+	var row := node(str(offer.get("node", "")))
+	var pay := int(offer.get("offer", 0))
+	var cost_total := 0
 	for i in count:
-		var cost := GameState._pop_cost(item_id)
+		cost_total += GameState._pop_cost(item_id)
 		GameState.goods[item_id] = int(GameState.goods.get(item_id, 0)) - 1
-		var gain := int(round(float(GameState.sell_price_of(item_id)) * mult))
-		pay += gain
-		GameState._credit_net(gain - cost)
+	GameState._credit_net(pay - cost_total)
 	GameState.add_money(pay, false)
 	_earn(row)
-	_log("Fenced %d x %s for $%d." % [count, ItemDB.display_name(item_id), pay])
+	_log("Fenced %d x %s for $%d%s." % [count, ItemDB.display_name(item_id), pay, " after a push" if int(offer.get("pushes", 0)) > 0 else ""])
 	return {"pay": pay}
+
+
+static func fence(item_id: String, count := 1) -> Dictionary:
+	# The one-shot: take Sal's first price.
+	var offer := fence_offer(item_id, count)
+	if offer.has("error"):
+		return offer
+	return fence_accept(offer)
+
+
+static func lie_low() -> Dictionary:
+	var row := node("cover_1")
+	if not unlocked("cover_1"):
+		return {"error": "Sal hasn't shown you how to disappear yet."}
+	var s := state()
+	if int(s.get("lay_low_day", -1)) == GameState.day:
+		return {"error": "You've already closed up today."}
+	var cost := int(row.get("cost", 30))
+	if GameState.money < cost:
+		return {"error": "Closing early costs $%d you don't have." % cost}
+	GameState.add_money(-cost, false)
+	s["heat"] = maxi(0, heat() - int(row.get("drop", 4)))
+	s["lay_low_day"] = GameState.day
+	_log("Closed up early. Heat down to %d." % heat())
+	return {"heat": heat()}
+
+
+static func bribe() -> Dictionary:
+	var row := node("cover_2")
+	if not unlocked("cover_2"):
+		return {"error": "You don't have a friend on the force yet."}
+	var s := state()
+	if int(s.get("visits", 0)) <= 0:
+		return {"error": "Nothing to forget. Save the money."}
+	var cost := int(row.get("cost", 120))
+	if GameState.money < cost:
+		return {"error": "A quiet word costs $%d." % cost}
+	GameState.add_money(-cost, false)
+	s["visits"] = int(s.get("visits", 0)) - 1
+	_log("A friend on the force lost a file. $%d." % cost)
+	return {"visits": int(s["visits"])}
+
+
+static func story_check() -> void:
+	# Sal writes as cred climbs: a van, the patrols, the big one.
+	ensure()
+	var s := state()
+	var sent: Array = s.get("story_sent", [])
+	for beat in data.get("story", []):
+		var id := str(beat.get("id", ""))
+		if sent.has(id) or cred() < int(beat.get("cred", 999)):
+			continue
+		sent.append(id)
+		GameState.inbox.append({"id": id, "from": "Sal", "subject": str(beat.get("subject", "")), "body": str(beat.get("body", "")), "read": false})
+		GameState.emit_signal("emails_changed")
+		GameState.emit_signal("toast_requested", "Sal wrote: %s." % beat.get("subject", ""))
+	s["story_sent"] = sent
+
+
+static func big_score_available() -> bool:
+	ensure()
+	var spec: Dictionary = data.get("big_score", {})
+	return cred() >= int(spec.get("cred", 15)) and not bool(state().get("big_done", false)) and night_job_available()
+
+
+static func on_drive(result: Dictionary) -> void:
+	# Patrols that spotted you on a night move add heat; the quiet route forgives the alley.
+	var spotted := int(result.get("spotted", 0))
+	if spotted <= 0:
+		return
+	ensure()
+	var per := int((data.get("patrols", {}) as Dictionary).get("heat", 3))
+	var s := state()
+	s["heat"] = heat() + spotted * per
+	_log("Spotted by a patrol %d time%s. Heat %d." % [spotted, "" if spotted == 1 else "s", heat()])
+	_maybe_visit()
 
 
 static func fence_graded(item_id: String, grade: String) -> Dictionary:
@@ -158,6 +275,21 @@ static func knockoff(recipe_id: String) -> Dictionary:
 		return {"error": "Make one first."}
 	var recipe: Dictionary = Workshop.recipe(recipe_id)
 	var entry: Dictionary = Workshop._take_made(recipe_id)
+	# The buyer might know the real thing: a better piece and a better label help.
+	var spec: Dictionary = data.get("knockoff", {})
+	var quality := int(entry.get("quality", 94))
+	var catch := float(spec.get("base_catch", 0.32)) - float(quality - 80) / 100.0 - float(int(row.get("tier", 1)) - 1) * float(spec.get("tier_bonus", 0.08))
+	catch = clampf(catch, 0.04, 0.5)
+	if GameState.rng.randf() < catch:
+		var lines: Array = spec.get("lines_caught", ["Caught."])
+		var line := str(lines[GameState.rng.randi() % lines.size()])
+		var s := state()
+		s["heat"] = heat() + int(spec.get("heat_caught", 4))
+		GameState.rep_stars = maxi(0, GameState.rep_stars - 1)
+		GameState.emit_signal("rep_changed", GameState.rep_rank(), GameState.rep_stars)
+		_log("%s No sale, heat %d." % [line, heat()])
+		_maybe_visit()
+		return {"caught": true, "line": line, "pay": 0}
 	var pay := int(round(float(recipe.get("sell", 10)) * float(row.get("mult", 1.7))))
 	GameState.add_money(pay, true)
 	_earn(row)
@@ -165,7 +297,7 @@ static func knockoff(recipe_id: String) -> Dictionary:
 	if int(row.get("tier", 1)) >= 3:
 		story += " It came with a story about a famous workshop. The buyer repeats it at dinner parties."
 	_log(story)
-	return {"pay": pay, "quality": int(entry.get("quality", 94))}
+	return {"pay": pay, "quality": int(entry.get("quality", 94)), "caught": false}
 
 
 static func night_job_available() -> bool:
@@ -189,14 +321,21 @@ static func take_night_job() -> String:
 	job["drive"] = "night_drive_d%d" % GameState.day
 	drive["id"] = job["drive"]
 	drive["title"] = "After dark, " + str(drive.get("title", ""))
-	drive["weather"] = "rain"
+	drive["weather"] = "night"
 	job["title"] = "No-questions move"
 	job["client"] = "A friend of Sal's"
 	job["brief"] = "Boxes already taped. Don't open them. %s" % job.get("brief", "")
-	job["mentor_note"] = "Sal: in, out, nobody counts the boxes."
+	job["mentor_note"] = "Sal: in, out, nobody counts the boxes. Patrols are out: keep it slow near them."
 	job["narrative_base"] = int(round(float(job.get("narrative_base", 120)) * float(row.get("mult", 1.6))))
 	job["shady"] = true
 	job["shady_node"] = str(row.get("id", ""))
+	var big: Dictionary = data.get("big_score", {})
+	if cred() >= int(big.get("cred", 15)) and not bool(state().get("big_done", false)):
+		job["title"] = str(big.get("title", "The big one"))
+		job["brief"] = str(big.get("brief", ""))
+		job["narrative_base"] = int(round(float(job.get("narrative_base", 120)) / float(row.get("mult", 1.6)) * float(big.get("mult", 3.2))))
+		job["big_score"] = true
+		drive["patrols"] = 4
 	job["cat"] = false
 	job["twist"] = "plain"
 	GameState.generated_jobs.append(job)
@@ -212,6 +351,16 @@ static func on_job_finished(def: Dictionary) -> void:
 		return
 	var row := node(str(def.get("shady_node", "")))
 	if row.is_empty():
+		return
+	if bool(def.get("big_score", false)):
+		var s := state()
+		s["big_done"] = true
+		s["heat"] = heat() + int((data.get("big_score", {}) as Dictionary).get("heat", 12))
+		GameState.bump_stat("big_score")
+		GameState.inbox.append({"id": "sal_square", "from": "Sal", "subject": "We're square", "body": "Clean, quiet, by morning. I won't forget it, and neither will they, so keep your head down a while.\n\n— S", "read": false})
+		GameState.emit_signal("emails_changed")
+		_log("The big one, done. Sal says we're square.")
+		_maybe_visit()
 		return
 	_earn(row)
 	_log("Night move done. Sal's friend didn't say thank you. That's the deal.")

@@ -236,5 +236,11 @@
     "traffic_cars": 10,
     "traffic_mps": 2.4,
     "walkers": 16
+  },
+  "rent": {
+    "every_days": 5,
+    "base": 80,
+    "per_tier": 60,
+    "grace_days": 4
   }
 }

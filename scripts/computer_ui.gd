@@ -721,6 +721,15 @@ func _show_day_card(summary: Dictionary) -> void:
 		rows.append("%d new piece%s of decor on the way." % [decor, "" if decor == 1 else "s"])
 	for goal in summary.get("goals", []):
 		rows.append("Goal done: %s." % goal)
+	if int(summary.get("rent", 0)) > 0:
+		if int(summary.get("rent_owed", 0)) > 0:
+			rows.append("Rent of $%d came due and the jar was short: $%d owed, the shop is shut until it's paid." % [int(summary.get("rent", 0)), int(summary.get("rent_owed", 0))])
+		else:
+			rows.append("Rent paid: $%d to Hollis Property." % int(summary.get("rent", 0)))
+	elif int(summary.get("rent_owed", 0)) > 0:
+		rows.append("Rent still owed: $%d. The shop stays shut." % int(summary.get("rent_owed", 0)))
+	else:
+		rows.append("Rent due in %d day%s: $%d." % [GameState.rent_due_in(), "" if GameState.rent_due_in() == 1 else "s", GameState.rent_amount()])
 	for row in rows:
 		var line := UIKit.label(str(row), 24, UIKit.DARK, "small")
 		line.custom_minimum_size = Vector2(700, 0)
