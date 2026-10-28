@@ -34,6 +34,23 @@ const CLIENTS: Array = [
 
 # What a house move carries, by the room it belongs in; big pieces are capped.
 const HOME_MAX_BIG := 4
+# The truck takes eight boxes or wrapped pieces. A piece too big for a box
+# takes a place of its own, a bulky or heavy one a box of its own, and five
+# ordinary pieces share a box; a recipe keeps within that with a box spare.
+const TRUCK_SLOTS := 8.0
+
+
+static func slots_for(def: Dictionary, count: int) -> float:
+	if bool(def.get("nobox", false)) or bool(def.get("bulky", false)) or bool(def.get("heavy", false)):
+		return float(count)
+	return 0.2 * float(count)
+
+
+static func recipe_slots(recipe: Array) -> float:
+	var total := 0.0
+	for group in recipe:
+		total += slots_for(ItemDB.get_item(str(group.get("item", ""))), int(group.get("count", 1)))
+	return total
 
 const TWISTS: Array = ["cat", "sets", "mystery", "ducks", "fragile", "heavy", "plain"]
 
@@ -226,7 +243,8 @@ static func _recipe_home(rng: RandomNumberGenerator, size: int, twist: String, h
 	var total := 0
 	var big := 0
 	var guard := 0
-	while total < size and guard < 80 and not pool.is_empty():
+	var slots := 0.0
+	while total < size and guard < 120 and not pool.is_empty():
 		guard += 1
 		var item := str(pool[rng.randi_range(0, pool.size() - 1)])
 		var def: Dictionary = ItemDB.get_item(item)
@@ -239,9 +257,14 @@ static func _recipe_home(rng: RandomNumberGenerator, size: int, twist: String, h
 		if bool(def.get("nobox", false)):
 			if big >= HOME_MAX_BIG:
 				continue
-			big += 1
 		var cap := 2 if item in ["kitchen_chair", "pillow_stack", "flower_pots", "paint_tins", "garden_chair", "bedside_table"] else 1
 		var count := clampi(rng.randi_range(1, cap), 1, size - total)
+		# Room on the truck, with a box to spare for the twist pieces.
+		if slots + slots_for(def, count) > TRUCK_SLOTS - 1.4:
+			continue
+		if bool(def.get("nobox", false)):
+			big += 1
+		slots += slots_for(def, count)
 		recipe.append({"item": item, "count": count})
 		total += count
 	# A few of the old favourites so the sets and twists still work.

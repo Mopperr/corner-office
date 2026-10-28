@@ -2604,6 +2604,17 @@ func _catalog_checks() -> Array:
 				catalog_in_jobs += 1
 	if catalog_in_jobs == 0:
 		found.append("no board job carries a catalogue piece")
+	# Every recipe fits the truck: eight boxes or wrapped pieces, with the
+	# helper's packing (own boxes for the bulky, five to a box otherwise).
+	var over := 0
+	var recipes := 0
+	for seed in range(1, 60):
+		for candidate in JobGen.board(seed, 1 + seed % 5, seed % 3, seed % 7, 3)["jobs"]:
+			recipes += 1
+			if JobGen.recipe_slots(candidate.get("recipe", [])) > 8.0:
+				over += 1
+	if over > 0:
+		found.append("%d of %d board recipes overflow the truck" % [over, recipes])
 	if not FileAccess.file_exists("res://docs/ITEMS.md") or not FileAccess.file_exists("res://tools/check_items.py"):
 		found.append("catalogue docs or checker missing")
 	return found
