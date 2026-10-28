@@ -14,6 +14,20 @@ func _ready() -> void:
 	resized.connect(_center_card)
 	AudioDirector.play_music("music_office_build")
 	var pay: Dictionary = GameState.payout
+	if bool(pay.get("busted", false)):
+		lines = [
+			"A patrol boxed the truck in on %s." % pay.get("job_title", "the job"),
+			"The boxes went in the van. No pay.",
+			"Fine  −$%d" % int(pay.get("fine", 0)),
+			"Rep star lost. A strike on the record.",
+			"Spotted %d time%s before they gave chase." % [int(pay.get("spotted", 0)), "" if int(pay.get("spotted", 0)) == 1 else "s"],
+			"Marge heard. Of course Marge heard." if not bool(pay.get("shady", false)) else "Sal won't call for a while.",
+			"Jar: $%d." % GameState.money,
+		]
+		_build()
+		_center_card()
+		_reveal()
+		return
 	lines = [
 		"Base pay  $%d" % int(pay.get("base", 0)),
 		"Box tip  $%d" % int(pay.get("box_tip", 0)),

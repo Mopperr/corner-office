@@ -869,6 +869,41 @@ func compute_payout(base: int, condition: int, bonuses: int, scuffed: int, chipp
 	}
 
 
+func bust_job(result: Dictionary) -> void:
+	# Boxed in by a patrol: the job is gone, there is a fine, a strike on
+	# the record, and Marge hears about it.
+	var def: Dictionary = job.get("def", {})
+	var fine := clampi(int(float(money) * 0.2), 60, 600)
+	add_money(-fine, false)
+	rep_stars = maxi(0, rep_stars - 1)
+	emit_signal("rep_changed", rep_rank(), rep_stars)
+	bump_stat("busted")
+	Crime.on_arrest(bool(def.get("shady", false)))
+	inbox.append({
+		"id": "busted_d%d" % day,
+		"from": "Marge Holloway",
+		"subject": "The truck came back on a flatbed",
+		"body": "A patrol boxed you in on %s. The boxes went in the van and so did a chunk of the jar: $%d.\n\n%s\n\n— Marge" % [def.get("title", "a job"), fine, "I don't want to know what was in those boxes." if bool(def.get("shady", false)) else "Slow down near the patrols. They're bored, and you're easy."],
+		"read": false,
+	})
+	emit_signal("emails_changed")
+	payout = {
+		"busted": true,
+		"title": "Busted",
+		"job_title": str(def.get("title", "the job")),
+		"fine": fine,
+		"shady": bool(def.get("shady", false)),
+		"spotted": int(result.get("spotted", 0)),
+		"stars": 0,
+		"total": -fine,
+		"base": 0,
+		"box_tip": 0,
+		"net_tips": 0,
+	}
+	job = {}
+	set_mode("results")
+
+
 func finish_job() -> Dictionary:
 	var def: Dictionary = job.get("def", {})
 	var base := JobDB.base_pay(def)

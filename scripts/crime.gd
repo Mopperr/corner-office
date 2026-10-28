@@ -392,6 +392,17 @@ static func maybe_nudge(summary: Dictionary) -> void:
 	GameState.emit_signal("toast_requested", "Sal left a note. The clipboard has a back room now.")
 
 
+static func on_arrest(shady: bool) -> void:
+	# Caught on the road: the heat is spent, and it counts as a visit.
+	ensure()
+	var s := state()
+	s["heat"] = 0
+	s["visits"] = int(s.get("visits", 0)) + 1
+	_log("Boxed in by a patrol%s. That's a strike." % (" on a night move" if shady else ""))
+	if int(s.get("visits", 0)) >= 3:
+		_raid()
+
+
 static func raided_today() -> bool:
 	return int(state().get("raided_until", -1)) > GameState.day
 

@@ -84,6 +84,14 @@ var walkers: Array = []
 var wave_t := 0.0
 var at_dropoff := false
 var patrols: Array = []
+var spin := 0.0
+var arrest_t := 0.0
+var siren_t := 0.0
+var busted := false
+const TRUCK_MASS := 2.6
+const CAR_MASS := 1.0
+const COP_MASS := 1.6
+const ARREST_SECONDS := 3.0
 var spotted := 0
 var spot_meter := 0.0
 var spot_cool := 0.0
@@ -924,11 +932,17 @@ func _spawn_traffic() -> void:
 		node.name = "Car"
 		node.position = to_world(start)
 		world.add_child(node)
-		cars.append({"loop": loop, "seg": seg, "pos": start, "speed": mps * rng.randf_range(0.8, 1.1), "cruise": mps, "node": node, "heading": 0.0, "horn": 0.0})
-	# Night moves: patrol cars with a light bar. They notice a truck that is
-	# fast, in the alley, or off the road in front of them.
+		cars.append({"loop": loop, "seg": seg, "pos": start, "speed": mps * rng.randf_range(0.8, 1.1), "cruise": mps, "node": node, "heading": 0.0, "horn": 0.0, "vel": Vector2.ZERO, "mode": "drive", "knock_t": 0.0, "spin": 0.0, "mass": CAR_MASS})
+	# Patrol cars with a light bar. They notice a truck that is fast, in the
+	# alley, or off the road in front of them. Every patrol is out at night;
+	# by day one cruises once the heat is up.
+	Crime.ensure()
+	var patrol_count := 0
 	if str(course.get("weather", "clear")) == "night":
-		var patrol_count := int(course.get("patrols", int((Crime.data.get("patrols", {}) as Dictionary).get("count", 2)))) if not Crime.data.is_empty() else int(course.get("patrols", 2))
+		patrol_count = int(course.get("patrols", int((Crime.data.get("patrols", {}) as Dictionary).get("count", 2))))
+	elif Crime.heat() >= 6:
+		patrol_count = 1
+	if patrol_count > 0:
 		for i in patrol_count:
 			var loop: PackedVector2Array = loops[(i * 3 + 1) % loops.size()]
 			var seg := (i * 2) % loop.size()
@@ -954,7 +968,7 @@ func _spawn_traffic() -> void:
 			node.add_child(bar_light)
 			node.position = to_world(start)
 			world.add_child(node)
-			var car := {"loop": loop, "seg": seg, "pos": start, "speed": mps * 0.9, "cruise": mps * 0.9, "node": node, "heading": 0.0, "horn": 99999.0, "patrol": true}
+			var car := {"loop": loop, "seg": seg, "pos": start, "speed": mps * 0.9, "cruise": mps * 0.9, "node": node, "heading": 0.0, "horn": 99999.0, "patrol": true, "vel": Vector2.ZERO, "mode": "drive", "knock_t": 0.0, "spin": 0.0, "mass": COP_MASS, "alert": 0, "escape_t": 0.0, "pursuit_t": 0.0, "pit_cool": 0.0}
 			cars.append(car)
 			patrols.append(car)
 
@@ -1373,6 +1387,9 @@ func _drive(delta: float, weather: String) -> void:
 	if absf(speed) > 10.0:
 		var sign := 1.0 if speed >= 0.0 else -1.0
 		heading += steer * turn * delta * clampf(absf(speed) / max_speed, 0.35, 1.0) * sign
+	if absf(spin) > 0.001:
+		heading += spin * delta
+		spin = move_toward(spin, 0.0, 4.5 * delta)
 	pos += vel * delta
 	_collide_buildings()
 	var inside: Rect2 = (city.bounds as Rect2).grow(-60.0)
@@ -1446,6 +1463,14 @@ func _patrols(delta: float) -> void:
 		var rel: Vector2 = truck_center - (car["pos"] as Vector2)
 		if rel.dot(dir) > 0.0 and rel.length() < 240.0 and absf(rel.cross(dir)) < 110.0:
 			watched = true
+	if spot_label == null and hud_root != null:
+		var card := hud_root.get_node_or_null("ConditionCard")
+		if card:
+			spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
+			spot_label.name = "SpotLabel"
+			spot_label.position = Vector2(20, 118)
+			spot_label.custom_minimum_size = Vector2(500, 36)
+			card.add_child(spot_label)
 	if watched and naughty and spot_cool <= 0.0:
 		spot_meter += delta
 		if spot_meter >= float(spec.get("spot_seconds", 2.0)):
@@ -1454,13 +1479,140 @@ func _patrols(delta: float) -> void:
 			spotted += 1
 			AudioDirector.play_sfx("sfx_truck_horn")
 			_apply_hit("patrol", int(Tuning.get_value("box_condition.collision", 10)) / 2, 1500)
+			# Twice is enough: the nearest watching patrol gives chase.
+			for car in patrols:
+				var dir := Vector2.RIGHT.rotated(float(car["heading"]))
+				var rel: Vector2 = truck_center - (car["pos"] as Vector2)
+				if rel.dot(dir) > 0.0 and rel.length() < 240.0 and absf(rel.cross(dir)) < 110.0:
+					car["alert"] = int(car.get("alert", 0)) + 1
+					if int(car["alert"]) >= (1 if int(course.get("patrols", 0)) >= 4 else 2) and str(car.get("mode", "")) != "pursuit":
+						_start_pursuit(car)
 	else:
 		spot_meter = maxf(0.0, spot_meter - delta * 0.7)
-	if spot_label:
+	var chasing := _pursuers().size() > 0
+	if spot_label and not chasing:
 		if watched:
 			spot_label.text = "Patrol watching  %d%%" % int(round(spot_meter / maxf(0.1, float(spec.get("spot_seconds", 2.0))) * 100.0))
 		else:
 			spot_label.text = "Spotted %d time%s" % [spotted, "" if spotted == 1 else "s"] if spotted > 0 else "Patrols out. Keep it slow near them."
+	_cops(delta)
+
+
+func _pursuers() -> Array:
+	var out: Array = []
+	for car in patrols:
+		if str(car.get("mode", "")) == "pursuit":
+			out.append(car)
+	return out
+
+
+func _start_pursuit(car: Dictionary) -> void:
+	car["mode"] = "pursuit"
+	car["pursuit_t"] = 0.0
+	car["escape_t"] = 0.0
+	car["pit_cool"] = 1.5
+	AudioDirector.play_sfx("sfx_truck_horn")
+	if spot_label:
+		spot_label.text = "PATROL IN PURSUIT. Don't stop."
+
+
+func _cops(delta: float) -> void:
+	# A patrol in pursuit chases the truck, lines up on a rear quarter and
+	# shoves it into a spin. Stop with one on your bumper and you are boxed
+	# in; keep ahead long enough and they lose you.
+	var chasers := _pursuers()
+	if chasers.is_empty():
+		arrest_t = 0.0
+		return
+	var truck_center := _art_center()
+	var forward := Vector2.RIGHT.rotated(heading)
+	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+	siren_t -= delta
+	if siren_t <= 0.0:
+		siren_t = 1.5
+		AudioDirector.play_sfx("sfx_truck_horn")
+	var nearest := INF
+	for car in chasers:
+		car["pursuit_t"] = float(car["pursuit_t"]) + delta
+		car["pit_cool"] = maxf(0.0, float(car["pit_cool"]) - delta)
+		var at: Vector2 = car["pos"]
+		var rel := truck_center - at
+		var dist := rel.length()
+		nearest = minf(nearest, dist)
+		# Aim behind the truck; when close and the truck is moving, aim for a rear quarter.
+		var goal := truck_center - forward * 40.0
+		var side_sign := 1.0 if rel.cross(forward) >= 0.0 else -1.0
+		var side := Vector2(-forward.y, forward.x) * side_sign
+		var pitting := dist < 150.0 and absf(speed) > 60.0 and float(car["pit_cool"]) <= 0.0
+		if pitting:
+			goal = truck_center - forward * 30.0 + side * 42.0
+		var want := (goal - at).angle()
+		var h := float(car["heading"])
+		car["heading"] = h + clampf(wrapf(want - h, -PI, PI), -2.6 * delta, 2.6 * delta)
+		var dir := Vector2.RIGHT.rotated(float(car["heading"]))
+		var chase_speed := max_speed * 1.08 if dist > 70.0 else maxf(absf(speed) * 0.95, 30.0)
+		var cv: Vector2 = car["vel"]
+		cv = cv.move_toward(dir * chase_speed, 420.0 * delta)
+		car["vel"] = cv
+		at += cv * delta
+		# Stay on the road: walls stop a patrol car too.
+		for entry in city.buildings:
+			var rect: Rect2 = entry.get("rect", Rect2())
+			if rect.grow(CAR_RADIUS).has_point(at):
+				var closest := Vector2(clampf(at.x, rect.position.x, rect.end.x), clampf(at.y, rect.position.y, rect.end.y))
+				var away := at - closest
+				if away.length() > 0.001:
+					at = closest + away.normalized() * CAR_RADIUS
+		car["pos"] = at
+		car["speed"] = cv.length()
+		var node: Node3D = car["node"]
+		node.position = to_world(at)
+		node.rotation.y = -float(car["heading"])
+		# The PIT: on the rear quarter at speed, shove the truck sideways.
+		if pitting and at.distance_to(goal) < 34.0:
+			car["pit_cool"] = 4.0
+			vel += side * -120.0
+			spin += -side_sign * 2.4
+			_apply_hit("patrol", 8, 500)
+			AudioDirector.play_sfx("sfx_cone_hit")
+		_collide_truck_car(car)
+		# Give up after a long chase, or once the truck is well away.
+		if dist > 900.0:
+			car["escape_t"] = float(car["escape_t"]) + delta
+		else:
+			car["escape_t"] = 0.0
+		if float(car["escape_t"]) > 6.0 or float(car["pursuit_t"]) > 60.0:
+			car["mode"] = "drive"
+			car["alert"] = 0
+			car["seg"] = _nearest_loop_vertex(car["loop"], at)
+			if spot_label:
+				spot_label.text = "Lost them."
+	# Boxed in: stopped with a patrol on the bumper.
+	if nearest < 130.0 and absf(speed) < 25.0 and vel.length() < 30.0:
+		arrest_t += delta
+		if spot_label:
+			spot_label.text = "Pull away! Boxed in %d" % int(ceil(ARREST_SECONDS - arrest_t))
+		if arrest_t >= ARREST_SECONDS:
+			_arrested()
+	else:
+		arrest_t = maxf(0.0, arrest_t - delta * 0.5)
+		if spot_label and not _pursuers().is_empty():
+			spot_label.text = "PATROL IN PURSUIT. Don't stop."
+
+
+func _arrested() -> void:
+	if not running or busted:
+		return
+	busted = true
+	running = false
+	state = "busted"
+	_set_action("")
+	if objective:
+		objective.text = "Busted"
+	if hint:
+		hint.text = "Boxed in. The boxes go in the van."
+	AudioDirector.play_sfx("sfx_truck_horn")
+	emit_signal("finished", {"busted": true, "condition": condition, "alley": alley, "honks": honks, "spotted": spotted, "backed_in": false, "duck_friend": false, "near_miss": near_miss, "time": 0.0})
 
 
 func _in_alley_now() -> bool:
@@ -1491,6 +1643,28 @@ func _lead_car(forward: Vector2) -> Dictionary:
 func _traffic(delta: float) -> void:
 	var truck_center := _art_center()
 	for car in cars:
+		var mode := str(car.get("mode", "drive"))
+		if mode == "pursuit":
+			continue
+		if mode == "knocked":
+			# Shoved: it slides and spins, then finds its way back to its lane.
+			var kv: Vector2 = car["vel"]
+			var kat: Vector2 = car["pos"]
+			kat += kv * delta
+			car["vel"] = kv * maxf(0.0, 1.0 - 2.2 * delta)
+			car["heading"] = float(car["heading"]) + float(car["spin"]) * delta
+			car["spin"] = float(car["spin"]) * maxf(0.0, 1.0 - 2.0 * delta)
+			car["knock_t"] = float(car["knock_t"]) - delta
+			car["pos"] = kat
+			car["speed"] = 0.0
+			var knode: Node3D = car["node"]
+			knode.position = to_world(kat)
+			knode.rotation.y = -float(car["heading"])
+			if float(car["knock_t"]) <= 0.0 and (car["vel"] as Vector2).length() < 25.0:
+				car["mode"] = "drive"
+				car["seg"] = _nearest_loop_vertex(car["loop"], kat)
+			_collide_truck_car(car)
+			continue
 		var loop: PackedVector2Array = car["loop"]
 		var seg: int = car["seg"]
 		var target: Vector2 = loop[(seg + 1) % loop.size()]
@@ -1519,24 +1693,94 @@ func _traffic(delta: float) -> void:
 		if at.distance_to(target) < 6.0:
 			car["seg"] = (seg + 1) % loop.size()
 		car["pos"] = at
+		car["vel"] = dir * float(car["speed"])
 		var node: Node3D = car["node"]
 		node.position = to_world(at)
 		node.rotation.y = -float(car["heading"])
-		# Cars are solid: the truck is pushed clear of the overlap and cannot
-		# drive into one. Only a real closing speed counts as a fender bender.
-		var min_dist := TRUCK_RADIUS + CAR_RADIUS - 8.0
-		var dist := at.distance_to(truck_center)
-		if dist < min_dist:
-			var normal := (truck_center - at).normalized() if dist > 0.001 else -dir
-			pos += normal * (min_dist - dist + 1.0)
-			var closing := -vel.dot(normal)
-			var car_vel := dir * float(car["speed"])
-			var relative := (vel - car_vel).dot(normal)
-			if relative < 0.0:
-				vel -= normal * relative
-			if closing > 1.0 * PX:
-				vel *= 0.5
-				_apply_hit("car", int(Tuning.get_value("box_condition.collision", 10)), 1200)
+		_collide_truck_car(car)
+	_collide_cars()
+
+
+func _nearest_loop_vertex(loop: PackedVector2Array, at: Vector2) -> int:
+	var best := 0
+	var best_d := INF
+	for i in loop.size():
+		var d := loop[i].distance_to(at)
+		if d < best_d:
+			best_d = d
+			best = i
+	# Head for the vertex after the nearest one, so the car rejoins moving forward.
+	return best
+
+
+func _collide_truck_car(car: Dictionary) -> void:
+	# Two bodies, momentum and a little bounce. The truck is heavy, so it
+	# shoves cars aside; a car hit hard slides, spins, and loses its lane.
+	var truck_center := _art_center()
+	var at: Vector2 = car["pos"]
+	var min_dist := TRUCK_RADIUS + CAR_RADIUS - 8.0
+	var dist := at.distance_to(truck_center)
+	if dist >= min_dist:
+		return
+	var normal := (truck_center - at).normalized() if dist > 0.001 else Vector2.RIGHT.rotated(heading)
+	var mt := TRUCK_MASS
+	var mc := float(car.get("mass", CAR_MASS))
+	var overlap := min_dist - dist + 1.0
+	pos += normal * overlap * (mc / (mt + mc))
+	car["pos"] = at - normal * overlap * (mt / (mt + mc))
+	var car_vel: Vector2 = car.get("vel", Vector2.ZERO)
+	var rel := (vel - car_vel).dot(normal)
+	if rel >= 0.0:
+		return
+	var e := 0.3
+	var j := -(1.0 + e) * rel / (1.0 / mt + 1.0 / mc)
+	vel += normal * (j / mt)
+	car["vel"] = car_vel - normal * (j / mc)
+	var side := (car["vel"] as Vector2).normalized().cross(normal)
+	if str(car.get("mode", "drive")) != "pursuit":
+		car["mode"] = "knocked"
+		car["knock_t"] = 1.4
+		car["spin"] = clampf(j / 160.0, 0.6, 3.2) * (1.0 if side >= 0.0 else -1.0)
+	else:
+		car["vel"] = (car["vel"] as Vector2) * 0.6
+	var closing := -rel
+	if closing > 0.9 * PX:
+		var amount := clampi(int(round(closing / PX * 2.5)), 4, 14)
+		_apply_hit("car", amount, 900)
+		spin += clampf(j / 420.0, -1.6, 1.6) * (1.0 if side >= 0.0 else -1.0)
+
+
+func _collide_cars() -> void:
+	# Cars keep out of each other too; a knocked car shoves the one it slides into.
+	for i in cars.size():
+		for k in range(i + 1, cars.size()):
+			var a: Dictionary = cars[i]
+			var b: Dictionary = cars[k]
+			var pa: Vector2 = a["pos"]
+			var pb: Vector2 = b["pos"]
+			var d := pa.distance_to(pb)
+			var min_d := CAR_RADIUS * 2.0 - 10.0
+			if d >= min_d or d < 0.001:
+				continue
+			var n := (pb - pa) / d
+			var push := (min_d - d) * 0.5
+			a["pos"] = pa - n * push
+			b["pos"] = pb + n * push
+			var a_knocked := str(a.get("mode", "")) == "knocked"
+			var b_knocked := str(b.get("mode", "")) == "knocked"
+			if a_knocked and not b_knocked and str(b.get("mode", "")) == "drive":
+				b["mode"] = "knocked"
+				b["knock_t"] = 1.0
+				b["vel"] = (a["vel"] as Vector2) * 0.5
+				b["spin"] = 0.8
+			elif b_knocked and not a_knocked and str(a.get("mode", "")) == "drive":
+				a["mode"] = "knocked"
+				a["knock_t"] = 1.0
+				a["vel"] = (b["vel"] as Vector2) * 0.5
+				a["spin"] = -0.8
+			for car in [a, b]:
+				var node: Node3D = car["node"]
+				node.position = to_world(car["pos"])
 
 
 func _check_alley() -> void:
@@ -1835,6 +2079,7 @@ func _complete() -> void:
 		"honks": honks,
 		"backed_in": backed_in,
 		"spotted": spotted,
+		"busted": false,
 		"duck_friend": duck_friend and not near_miss and bool(GameState.job.get("def", {}).get("duck_friend", false)),
 		"near_miss": near_miss,
 		"time": time_alive,

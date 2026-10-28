@@ -1417,7 +1417,44 @@ func _qa_regressions() -> Array:
 		if int(night_drive.spotted) < 1:
 			found.append("patrol never spotted a speeding truck")
 		night_drive.speed = 0.0
+	# Collisions carry momentum: a truck driving into a parked car shoves it and loses speed.
+	var bumped: Dictionary = night_drive.cars[0]
+	bumped["mode"] = "drive"
+	bumped["vel"] = Vector2.ZERO
+	bumped["speed"] = 0.0
+	night_drive.heading = 0.0
+	bumped["pos"] = night_drive.call("_art_center") + Vector2(60, 0)
+	night_drive.vel = Vector2(300, 0)
+	night_drive.call("_collide_truck_car", bumped)
+	if (bumped["vel"] as Vector2).x < 100.0 or str(bumped.get("mode", "")) != "knocked" or night_drive.vel.x >= 300.0:
+		found.append("collision did not shove the car (car %s truck %s mode %s)" % [bumped["vel"], night_drive.vel, bumped.get("mode", "")])
+	# Two spots start a pursuit; stopped with a patrol on the bumper, you get boxed in.
+	var bust_box: Dictionary = {}
+	night_drive.finished.connect(func(r): bust_box["r"] = r)
+	var cop: Dictionary = night_drive.patrols[0]
+	night_drive.call("_start_pursuit", cop)
+	if (night_drive.call("_pursuers") as Array).size() != 1:
+		found.append("pursuit did not start")
+	night_drive.vel = Vector2.ZERO
+	night_drive.speed = 0.0
+	cop["pos"] = night_drive.call("_art_center") - Vector2(60, 0)
+	cop["vel"] = Vector2.ZERO
+	for i in 80:
+		cop["pos"] = night_drive.call("_art_center") - Vector2(60, 0)
+		night_drive.call("_cops", 0.05)
+	if not bool(bust_box.get("r", {}).get("busted", false)) or not night_drive.busted:
+		found.append("boxed in but not busted (%s)" % str(bust_box))
 	night_drive.free()
+	# Busted: the job is gone, there is a fine, a strike, and a Busted results card.
+	GameState.job = {"def": {"id": "night_smoke", "title": "a night move", "shady": true, "venue": "cafe"}, "items": [], "boxes": []}
+	GameState.money = 400
+	GameState.crime = Crime.fresh()
+	GameState.crime["heat"] = 8
+	GameState.bust_job({"busted": true, "spotted": 2})
+	if GameState.money != 320 or not GameState.job.is_empty() or not bool(GameState.payout.get("busted", false)) or GameState.mode != "results" or Crime.heat() != 0 or int(GameState.crime.get("visits", 0)) != 1:
+		found.append("bust_job money %d mode %s heat %d visits %d" % [GameState.money, GameState.mode, Crime.heat(), int(GameState.crime.get("visits", 0))])
+	GameState.payout = {}
+	GameState.mode = "office"
 	GameState.job = {}
 	GameState.generated_drives.erase("smoke_night")
 	# The drive wants the truck backed into the bay: nose-first is not parked.

@@ -92,6 +92,11 @@ func _start_drive() -> void:
 
 
 func _on_drive_finished(result: Dictionary) -> void:
+	if bool(result.get("busted", false)):
+		GameState.bust_job(result)
+		SaveManager.save_game()
+		show_results()
+		return
 	GameState.apply_drive_result(result)
 	GameState.set_mode("job_unpack")
 	for box in GameState.job.get("boxes", []):
