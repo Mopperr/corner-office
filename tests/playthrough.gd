@@ -800,6 +800,13 @@ func _pack() -> void:
 				loose.append(item)
 		if loose.is_empty():
 			break
+		# Hefty pieces first, each into a box of its own, so no half-full box
+		# gets taped shut to make room for one.
+		loose.sort_custom(func(a, b):
+			var ha := bool(a.get("bulky", false)) or bool(a.get("heavy", false))
+			var hb := bool(b.get("bulky", false)) or bool(b.get("heavy", false))
+			return ha and not hb
+		)
 		var picked := ""
 		for item in loose:
 			var node := _node_for(room, str(item.get("uid", "")))

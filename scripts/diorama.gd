@@ -2242,6 +2242,12 @@ func _unpack_click(uid: String) -> void:
 				open_id = top_id
 		_open_box_modal(open_id)
 		return
+	if held_uid != "" and held_source == "job" and str(GameState.job_item(held_uid).get("state", "")) != "hand":
+		# The hand record went stale (the piece was set down by another path);
+		# an empty hand takes the next click rather than a ghost of the last one.
+		print("  stale hand: %s (state %s) cleared" % [held_uid, GameState.job_item(held_uid).get("state", "")])
+		held_uid = ""
+		held_source = ""
 	if held_uid == "":
 		var item := GameState.job_item(uid)
 		if item.is_empty():
