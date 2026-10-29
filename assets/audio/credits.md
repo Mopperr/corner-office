@@ -11,6 +11,12 @@ Regenerate: `cd src && python3 gen_music.py && python3 gen_sfx.py` (needs numpy,
 | music/music_driving_rain.ogg | Original, generated procedurally for Corner Office (src/gen_music.py) | Original work, owned by the project, commercial use OK |
 | music/music_main_menu.ogg | Original, generated procedurally for Corner Office (src/gen_music.py) | Original work, owned by the project, commercial use OK |
 | music/music_office_build.ogg | Original, generated procedurally for Corner Office (src/gen_music.py) | Original work, owned by the project, commercial use OK |
+| music/music_box_by_box.ogg | Original, composed and rendered in code for Corner Office (tools/gen_music.py) | Original work, owned by the project, commercial use OK |
+| music/music_kettle_on.ogg | Original, composed and rendered in code for Corner Office (tools/gen_music.py) | Original work, owned by the project, commercial use OK |
+| music/music_open_road.ogg | Original, composed and rendered in code for Corner Office (tools/gen_music.py) | Original work, owned by the project, commercial use OK |
+| music/music_rain_on_the_cab.ogg | Original, composed and rendered in code for Corner Office (tools/gen_music.py) | Original work, owned by the project, commercial use OK |
+| music/music_evening_shift.ogg | Original, composed and rendered in code for Corner Office (tools/gen_music.py) | Original work, owned by the project, commercial use OK |
+| music/music_two_more_boxes.ogg | Original, composed and rendered in code for Corner Office (tools/gen_music.py) | Original work, owned by the project, commercial use OK |
 | sfx/sfx_job_complete.wav | Original, generated procedurally (src/gen_extra.py) | Original work, owned by the project, commercial use OK |
 | music/music_rainy_office.ogg | Original, generated procedurally (src/gen_extra.py), 164.6 s seamless loop | Original work, owned by the project, commercial use OK |
 | sfx/sfx_box_set_down.wav | Original, generated procedurally for Corner Office (src/gen_sfx.py) | Original work, owned by the project, commercial use OK |

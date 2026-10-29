@@ -151,6 +151,24 @@ func play_sfx(sfx_name: String, pitch_rand := false) -> void:
 	player.play()
 
 
+func play_sfx_pitched(sfx_name: String, pitch: float, gain_db := 0.0) -> void:
+	# A one-shot at a set pitch: the placement chime climbs a step per good
+	# placement in a row, the way a combo should.
+	if _silent:
+		return
+	var stream := _load_stream("res://assets/audio/sfx/%s.wav" % sfx_name)
+	if stream == null:
+		return
+	var player := AudioStreamPlayer.new()
+	player.bus = SFX_BUS
+	player.stream = stream
+	player.volume_db = Tuning.audio_gain(sfx_name) + gain_db
+	player.pitch_scale = clampf(pitch, 0.5, 2.0)
+	add_child(player)
+	player.finished.connect(player.queue_free)
+	player.play()
+
+
 func start_loop(sfx_name: String) -> void:
 	if _silent:
 		return

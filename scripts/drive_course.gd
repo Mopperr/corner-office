@@ -193,7 +193,16 @@ func _ready() -> void:
 	var air := str(course.get("ambience", ""))
 	if air == "" and str(course.get("weather", "clear")) == "night":
 		air = "amb_l13_night_loop"
-	AudioDirector.play_bed(str(course.get("music", "music_driving")), air)
+	# The road has its own tunes: the wet drive its own, the night its own,
+	# and the clear days alternate between two.
+	var road_track := str(course.get("music", "music_driving"))
+	if weather == "rain":
+		road_track = "music_rain_on_the_cab"
+	elif weather == "night":
+		road_track = "music_evening_shift"
+	elif GameState.jobs_done % 2 == 0:
+		road_track = "music_open_road"
+	AudioDirector.play_bed(road_track, air)
 	_radio_apply(false)
 	if weather == "rain":
 		_make_rain()

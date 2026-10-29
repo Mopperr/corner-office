@@ -101,6 +101,7 @@ var goals_panel: Control
 var goals_column: VBoxContainer
 var _goals_key := ""
 var objective: Label
+var progress: ProgressBar
 var chips_slot: Control
 var _chips_key := ""
 var toast_name: Label
@@ -153,9 +154,23 @@ func _exit_tree() -> void:
 	AudioDirector.stop_level()
 
 
+# The project's own tracks (tools/gen_music.py), in rotation so a day at
+# the desk and a job on site do not loop the same tune every time.
+const OFFICE_TRACKS := ["music_kettle_on", "music_office_build", "music_two_more_boxes", "music_shop_stand"]
+const PACK_TRACKS := ["music_two_more_boxes", "music_box_by_box", "music_office_build"]
+const UNPACK_TRACKS := ["music_box_by_box", "music_two_more_boxes", "music_act2_morning"]
+
+
 func _music() -> void:
 	var track := str(venue.get("music", "music_office_build"))
 	var bed := str(venue.get("ambience", ""))
+	var shady := bool(GameState.job.get("def", {}).get("shady", false)) if not GameState.job.is_empty() else false
+	if GameState.mode == "office" and str(venue.get("id", "")) != "street":
+		track = str(OFFICE_TRACKS[GameState.day % OFFICE_TRACKS.size()])
+	elif GameState.mode == "job_pack" or GameState.mode == "truck":
+		track = "music_evening_shift" if shady else str(PACK_TRACKS[GameState.jobs_done % PACK_TRACKS.size()])
+	elif GameState.mode == "job_unpack":
+		track = "music_evening_shift" if shady else str(UNPACK_TRACKS[GameState.jobs_done % UNPACK_TRACKS.size()])
 	AudioDirector.play_bed(track, bed)
 	_level_cues()
 
@@ -2004,15 +2019,47 @@ func _commit_place(uid: String, source: String, on_wall: bool) -> void:
 
 func _after_place(source: String) -> void:
 	if source == "office" or source == "decor":
+		if source == "office" and _last_placed_uid != "":
+			_place_feedback(_last_placed_uid)
 		_maybe_live()
 	elif source == "job":
 		_unhide_loose()
+		if _last_placed_uid != "":
+			_place_feedback(_last_placed_uid)
 		_party_on_place()
 		_maybe_job_done()
 
 
+const ROOM_WORDS := {"living": "the lounge", "kitchen": "the kitchen", "bathroom": "the bathroom", "bedroom": "the bedroom", "loft": "the loft", "shed": "the shed", "office": "the office", "cafe": "the cafe"}
+
+
+func _where_it_lives(rec: Dictionary) -> String:
+	var def: Dictionary = ItemDB.get_item(str(rec.get("item_id", rec.get("item", ""))))
+	var parts: Array = []
+	var tag := str(rec.get("room", def.get("room", "")))
+	if tag != "" and _is_home() and Homes.has_tag(venue, tag):
+		parts.append(str(ROOM_WORDS.get(tag, "the " + tag)))
+	var mount := str(def.get("mount", "floor"))
+	if mount == "hang":
+		parts.append("on a wall")
+	elif mount == "wall_floor":
+		parts.append("against a wall")
+	elif mount == "small" or bool(def.get("sits", false)) or float(def.get("h", 0.3)) < 0.25 and float(def.get("w", 0.4)) < 0.45:
+		parts.append("up on something")
+	elif bool(def.get("heavy", false)):
+		parts.append("on the floor, mind your back")
+	if parts.is_empty():
+		return ""
+	return "The %s? %s." % [str(rec.get("name", "piece")).to_lower(), ", ".join(parts).capitalize()]
+
+
 func _take_to_hand(rec: Dictionary, source: String) -> void:
 	var uid := str(rec.get("uid", ""))
+	if source == "job" and not bool(rec.get("hinted", false)) and GameState.mode == "job_unpack":
+		rec["hinted"] = true
+		var where := _where_it_lives(rec)
+		if where != "":
+			_toast(where, "Dana")
 	_release_dependents(uid)
 	held_uid = uid
 	held_source = source
@@ -2085,6 +2132,8 @@ func _on_item_evaluated(id: String, result: Dictionary) -> void:
 	if id == _settle_uid:
 		settling = false
 		_settle_uid = ""
+		if GameState.mode == "job_unpack" or GameState.mode == "office":
+			_place_feedback(id)
 	_check_goals()
 	SaveManager.save_game()
 
@@ -2159,8 +2208,11 @@ func _pack_click(uid: String) -> void:
 		AudioDirector.play_sfx("sfx_l02_cup_clink")
 	elif packed == "mystery_part":
 		AudioDirector.play_sfx("sfx_l04_parts_rattle")
+	_hop_into_box(uid, box_id, Vector3(float(item.get("x", 0.0)), float(item.get("y", 0.0)) + 0.2, float(item.get("z", 0.0))))
 	_refresh_items()
 	_refresh_hud_buttons()
+	_box_bounce(box_id)
+	_pack_milestone()
 
 
 func _auto_load() -> void:
@@ -3058,6 +3110,9 @@ func _auto_pack_drop(step: Dictionary) -> void:
 	auto_handled += 1
 	_note_handled()
 	selected_box = box_id
+	# From Dana's hands into the box, the same hop a hand-packed piece makes.
+	if player != null and is_instance_valid(player):
+		_hop_into_box(uid, box_id, player.position + Vector3(0, 0.75, 0))
 	var broke := _auto_roll_break(item)
 	AudioDirector.play_sfx("sfx_box_set_down", true)
 	if own_box or GameState.box_item_count(box_id) >= GameState.per_box():
@@ -3067,6 +3122,176 @@ func _auto_pack_drop(step: Dictionary) -> void:
 	if broke:
 		_break_piece(item, _pack_box_spot(box_id) + Vector3(0, 0.3, 0))
 	_auto_after()
+
+
+func _hop_into_box(uid: String, box_id: int, from: Vector3) -> void:
+	# The piece does not vanish: a copy of it arcs from where it lay into
+	# the open box, shrinking as it goes, and the box gives a little bounce.
+	var rec := GameState.job_item(uid)
+	var def: Dictionary = ItemDB.get_item(str(rec.get("item_id", "")))
+	if def.is_empty():
+		return
+	var fly := Props.make(str(def.get("model", "box_closed")))
+	if fly == null:
+		return
+	var collision := fly.get_node_or_null("PropCollision")
+	if collision:
+		collision.free()
+	for picker in fly.find_children("*", "StaticBody3D", true, false):
+		picker.free()
+	var longest := maxf(0.2, maxf(float(def.get("w", 0.4)), maxf(float(def.get("h", 0.3)), float(def.get("d", 0.4)))))
+	var k := clampf(0.6 / longest, 0.3, 1.0)
+	fly.scale = Vector3(k, k, k)
+	fly.position = from
+	add_child(fly)
+	var to := _pack_box_spot(box_id) + Vector3(0, 0.3, 0)
+	var mid := from.lerp(to, 0.5) + Vector3(0, 0.7, 0)
+	var tw := create_tween()
+	tw.tween_property(fly, "position", mid, 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(fly, "position", to, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(fly, "scale", Vector3(0.12, 0.12, 0.12), 0.18)
+	tw.parallel().tween_property(fly, "rotation:y", fly.rotation.y + 1.2, 0.34)
+	tw.tween_callback(fly.queue_free)
+
+
+func _box_bounce(box_id: int) -> void:
+	var node: Node = nodes_by_uid.get("boxpack:%d" % box_id)
+	if node == null:
+		for child in items_root.get_children():
+			if child.has_meta("uid") and str(child.get_meta("uid")) == "boxpack:%d" % box_id:
+				node = child
+	if node is Node3D:
+		_squash(node)
+		_score_pop((node as Node3D).global_position + Vector3(0, 0.75, 0), "+1", UIKit.SAGE)
+
+
+func _score_pop(at: Vector3, text: String, color: Color) -> void:
+	# A little word that rises off the spot and fades: +1, Neat, Right room.
+	var label := Label3D.new()
+	label.text = text
+	label.font = UIKit.body_font()
+	label.font_size = 44
+	label.pixel_size = 0.004
+	label.outline_size = 10
+	label.outline_modulate = Color("FFFDF7")
+	label.modulate = color
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
+	label.render_priority = 4
+	label.position = at
+	add_child(label)
+	var tw := create_tween()
+	tw.tween_property(label, "position", at + Vector3(0, 0.55, 0), 0.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(label, "modulate:a", 0.0, 0.9).set_delay(0.35)
+	tw.tween_callback(label.queue_free)
+
+
+func _sparkle(at: Vector3, color: Color = UIKit.MUSTARD, amount := 18) -> void:
+	var bits := CPUParticles3D.new()
+	bits.position = at + Vector3(0, 0.12, 0)
+	bits.one_shot = true
+	bits.explosiveness = 1.0
+	bits.amount = amount
+	bits.lifetime = 0.7
+	bits.direction = Vector3(0, 1, 0)
+	bits.spread = 70.0
+	bits.initial_velocity_min = 0.9
+	bits.initial_velocity_max = 1.8
+	bits.gravity = Vector3(0, -2.5, 0)
+	bits.scale_amount_min = 0.5
+	bits.scale_amount_max = 1.0
+	bits.color = color
+	add_child(bits)
+	bits.emitting = true
+	get_tree().create_timer(1.4).timeout.connect(bits.queue_free)
+
+
+var place_combo := 0
+var pack_half_said := false
+
+
+func _pack_milestone() -> void:
+	# Halfway through the packing, a word from Dana; the bar in the hint
+	# card shows the rest.
+	var total: int = GameState.job.get("items", []).size()
+	var boxed := 0
+	for item in GameState.job.get("items", []):
+		if str(item.get("state", "")) == "boxed":
+			boxed += 1
+	if total >= 6 and boxed * 2 >= total and not pack_half_said:
+		pack_half_said = true
+		_toast("Half of it boxed. The room's starting to echo.", "Dana")
+
+
+func _placement_grade(uid: String) -> Dictionary:
+	# What made this placement a good one: the right room, up on a surface,
+	# flush to a wall, or snug beside another piece. Each is a reason to
+	# say so, and the more of them the better the word.
+	var rec := GameState.job_item(uid)
+	var source_job := not rec.is_empty()
+	if not source_job:
+		rec = GameState.find_office_item(uid)
+	if rec.is_empty():
+		return {"score": 0, "why": []}
+	var why: Array = []
+	var x := float(rec.get("x", 0.0))
+	var z := float(rec.get("z", 0.0))
+	if float(rec.get("y", 0.0)) > 0.05:
+		why.append("up on something")
+	var x0 := float(venue.get("x", 0))
+	var z0 := float(venue.get("z", 0))
+	var w := float(venue.get("w", 6))
+	var d := float(venue.get("d", 8))
+	var wall_gap := minf(minf(x - x0, x0 + w - x), minf(z - z0, z0 + d - z))
+	if str(rec.get("wall", "")) != "" or wall_gap < 0.55:
+		why.append("against the wall")
+	if source_job and _is_home():
+		var tag := str(rec.get("room", ""))
+		if tag != "" and Homes.has_tag(venue, tag):
+			var room := Homes.room_at(venue, int(rec.get("floor", 0)), x, z)
+			if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) == tag:
+				why.append("right room")
+			else:
+				return {"score": -1, "why": ["wrong room"]}
+	var records: Array = GameState.job.get("items", []) if source_job else GameState.office_items
+	for other in records:
+		if str(other.get("uid", "")) == uid or str(other.get("state", "")) != "placed":
+			continue
+		var gap := Vector2(x, z).distance_to(Vector2(float(other.get("x", 0.0)), float(other.get("z", 0.0))))
+		if gap < 0.9:
+			why.append("beside the %s" % str(other.get("name", "piece")).to_lower())
+			break
+	return {"score": why.size(), "why": why}
+
+
+func _place_feedback(uid: String) -> void:
+	# The reward for a careful placement: a rising chime, a word over the
+	# piece and a sparkle, the chime a step higher for every good one in a row.
+	var node: Node3D = nodes_by_uid.get(uid)
+	var at: Vector3 = node.global_position if node != null and is_instance_valid(node) else player.position
+	var grade := _placement_grade(uid)
+	var score := int(grade["score"])
+	if score < 0:
+		place_combo = 0
+		_score_pop(at + Vector3(0, 0.6, 0), "Wrong room", UIKit.LOSS)
+		if node != null and is_instance_valid(node):
+			_shake(node)
+		return
+	if score == 0:
+		place_combo = 0
+		return
+	place_combo += 1
+	var words := ["Neat", "Tidy", "Nice", "Snug", "Just so", "Lovely"]
+	var word := str(words[(place_combo - 1) % words.size()])
+	if score >= 2:
+		word += "!"
+	if place_combo >= 3:
+		word = "%s ×%d" % [word, place_combo]
+	_score_pop(at + Vector3(0, 0.6, 0), word, UIKit.MUSTARD if score < 2 else UIKit.TERRA)
+	_sparkle(at, UIKit.MUSTARD, 12 + 6 * mini(score, 3))
+	AudioDirector.play_sfx_pitched("sfx_l10_shelf_chime", 0.9 + 0.08 * float(mini(place_combo, 8)), -4.0)
+	if place_combo == 5:
+		_toast("Five in a row. That's a mover's eye.", "Dana")
 
 
 func _pack_finish() -> void:
@@ -4714,6 +4939,23 @@ func _build_hud() -> void:
 	objective.name = "Objective"
 	objective.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar_text.add_child(objective)
+	# How far through the step: a thin bar that fills as the boxes close
+	# and the pieces find their places.
+	progress = ProgressBar.new()
+	progress.name = "StepProgress"
+	progress.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress.custom_minimum_size = Vector2(0, 10)
+	progress.max_value = 1.0
+	progress.value = 0.0
+	progress.show_percentage = false
+	var track := UIKit.style(Color(UIKit.DARK, 0.1), 5)
+	track.shadow_size = 0
+	progress.add_theme_stylebox_override("background", track)
+	var fill := UIKit.style(UIKit.SAGE, 5)
+	fill.shadow_size = 0
+	progress.add_theme_stylebox_override("fill", fill)
+	progress.visible = false
+	bar_text.add_child(progress)
 	hint = UIKit.label("", 26, UIKit.DARK, "small")
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint.max_lines_visible = 2
@@ -5645,9 +5887,38 @@ func _hud_layer() -> CanvasLayer:
 	return null
 
 
+func _step_progress() -> float:
+	var items: Array = GameState.job.get("items", [])
+	if items.is_empty():
+		return -1.0
+	var done := 0
+	match GameState.mode:
+		"job_pack":
+			for item in items:
+				if str(item.get("state", "")) == "boxed":
+					done += 1
+		"job_unpack":
+			for item in items:
+				if str(item.get("state", "")) in ["placed", "settling"]:
+					done += 1
+		"truck":
+			for box in GameState.job.get("boxes", []):
+				if int(box.get("slot", -1)) >= 0:
+					done += 1
+			return float(done) / float(maxi(1, GameState.job.get("boxes", []).size()))
+		_:
+			return -1.0
+	return float(done) / float(items.size())
+
+
 func _hint_text() -> String:
 	var line := _mode_hint()
 	var goal := _goal_hint()
+	if progress != null and is_instance_valid(progress):
+		var frac := _step_progress()
+		progress.visible = frac >= 0.0
+		if frac >= 0.0:
+			progress.value = lerpf(progress.value, frac, 0.25)
 	if objective:
 		var next_objective := goal if goal != "" else _mode_objective()
 		if objective.text != next_objective:

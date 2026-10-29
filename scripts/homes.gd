@@ -434,7 +434,7 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 				var extra: Array = ItemDB.room_pool([tag], ["floor"])
 				var picks := 0
 				var guard := 0
-				while picks < 6 and guard < 36 and not extra.is_empty():
+				while picks < 10 and guard < 60 and not extra.is_empty():
 					guard += 1
 					var id := str(extra[rng.randi_range(0, extra.size() - 1)])
 					var edef: Dictionary = ItemDB.get_item(id)
@@ -448,7 +448,8 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 			var rz := oz + float(room.get("z", 0))
 			var rw := float(room.get("w", 2))
 			var rd := float(room.get("d", 2))
-			var want := mini(pool.size(), 4 + (1 if rw * rd > 11.0 else 0) + (1 if rw * rd > 16.0 else 0) + (1 if rw * rd > 22.0 else 0))
+			# A lived-in room: six pieces in a small one, up to nine in a big one.
+			var want := mini(pool.size(), 6 + (1 if rw * rd > 11.0 else 0) + (1 if rw * rd > 16.0 else 0) + (1 if rw * rd > 22.0 else 0))
 			# Slots along the back wall (min z), the left wall (min x) and the
 			# right wall: the sides the camera looks into, and the one it looks past.
 			var slots: Array = []
@@ -517,4 +518,25 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 					break
 				if not found:
 					continue
+			# Something on the walls too: a picture or two of theirs hung on
+			# the back wall, where the camera sees it.
+			if tag != "":
+				var hung: Array = ItemDB.room_pool([tag], ["hang"])
+				if hung.is_empty():
+					hung = ItemDB.room_pool(["living"], ["hang"])
+				if not hung.is_empty():
+					var how_many := 1 + (1 if rw > 3.2 else 0)
+					for h in how_many:
+						var hid := str(hung[rng.randi_range(0, hung.size() - 1)])
+						var hdef: Dictionary = ItemDB.get_item(hid)
+						if hdef.is_empty():
+							continue
+						var hx := rx + rw * (0.3 if h == 0 else 0.7)
+						var hz := rz + 0.12 + float(hdef.get("d", 0.1)) * 0.5
+						out.append({
+							"uid": "owner:%d" % n, "item_id": hid, "name": str(hdef.get("name", hid)),
+							"x": hx, "y": 1.25, "z": hz, "rot": 0.0, "floor": index, "room": str(room.get("id", "")),
+							"state": "placed", "value": value_of(hdef), "pocketable": pocketable(hdef), "wall": "hang",
+						})
+						n += 1
 	return out
