@@ -139,6 +139,7 @@ var objective: Label
 var chips_slot: Control
 var _chips_key := ""
 var distance_label: Label
+var speed_label: Label
 var meter_fill: StyleBoxFlat
 
 
@@ -181,7 +182,7 @@ func _ready() -> void:
 	_build_route_marks()
 	cam = Camera3D.new()
 	cam.name = "ChaseCamera"
-	cam.fov = 68.0
+	cam.fov = 62.0
 	cam.near = 0.2
 	cam.far = 260.0
 	add_child(cam)
@@ -308,15 +309,15 @@ func _lights() -> void:
 		sky_material.ground_bottom_color = Color("4F4B4E")
 		sky_material.ground_horizon_color = Color("8E8A8C")
 	else:
-		sky_material.sky_top_color = Color("8FBDE0")
-		sky_material.sky_horizon_color = Color("E6EEF2")
+		sky_material.sky_top_color = Color("79B4E6")
+		sky_material.sky_horizon_color = Color("EAF2F6")
 		sky_material.ground_bottom_color = Color("8FB573")
-		sky_material.ground_horizon_color = Color("C9C2B5")
+		sky_material.ground_horizon_color = Color("D2CBBE")
 	sky.sky_material = sky_material
 	environment.sky = sky
 	environment.fog_enabled = true
-	environment.fog_light_color = Color("C9D3DA") if weather != "rain" else Color("8E919B")
-	environment.fog_density = 0.004 if weather != "rain" else 0.011
+	environment.fog_light_color = Color("D7E3EA") if weather != "rain" else Color("9A9DA6")
+	environment.fog_density = 0.0025 if weather != "rain" else 0.009
 	if weather == "night":
 		environment.fog_light_color = Color("141A2A")
 		environment.fog_density = 0.009
@@ -327,8 +328,8 @@ func _lights() -> void:
 	var sun := DirectionalLight3D.new()
 	sun.name = "Sun"
 	sun.rotation_degrees = Vector3(-55, 40, 0)
-	sun.light_color = Color("FFE3C0") if weather != "rain" else Color("C9CCD6")
-	sun.light_energy = 0.95 if weather != "rain" else 0.6
+	sun.light_color = Color("FFE8CC") if weather != "rain" else Color("CFD2DA")
+	sun.light_energy = 1.2 if weather != "rain" else 0.72
 	if weather == "night":
 		# Moonlight: low, blue, and the headlights do the rest.
 		sun.light_color = Color("8FA3D6")
@@ -368,14 +369,19 @@ func _build_town() -> void:
 			var z := (r.position.y + r.size.y * 0.5) / PX
 			var x := (r.position.x + 40.0) / PX
 			while x < (r.end.x - 40.0) / PX:
-				_slab(Vector3(1.5, 0.01, 0.12), Vector3(x + 0.75, 0.0, z), LANE_LINE)
+				_slab(Vector3(1.6, 0.01, 0.18), Vector3(x + 0.8, 0.0, z), LANE_LINE)
 				x += 3.0
+			# Edge lines along the kerbs.
+			_slab(Vector3(r.size.x / PX, 0.01, 0.12), Vector3((r.position.x + r.size.x * 0.5) / PX, 0.0, (r.position.y + 14.0) / PX), Color(LANE_LINE, 0.8))
+			_slab(Vector3(r.size.x / PX, 0.01, 0.12), Vector3((r.position.x + r.size.x * 0.5) / PX, 0.0, (r.end.y - 14.0) / PX), Color(LANE_LINE, 0.8))
 		else:
 			var x2 := (r.position.x + r.size.x * 0.5) / PX
 			var z2 := (r.position.y + 40.0) / PX
 			while z2 < (r.end.y - 40.0) / PX:
-				_slab(Vector3(0.12, 0.01, 1.5), Vector3(x2, 0.0, z2 + 0.75), LANE_LINE)
+				_slab(Vector3(0.18, 0.01, 1.6), Vector3(x2, 0.0, z2 + 0.8), LANE_LINE)
 				z2 += 3.0
+			_slab(Vector3(0.12, 0.01, r.size.y / PX), Vector3((r.position.x + 14.0) / PX, 0.0, (r.position.y + r.size.y * 0.5) / PX), Color(LANE_LINE, 0.8))
+			_slab(Vector3(0.12, 0.01, r.size.y / PX), Vector3((r.end.x - 14.0) / PX, 0.0, (r.position.y + r.size.y * 0.5) / PX), Color(LANE_LINE, 0.8))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(str(course.get("id", "")) + "town")
 	for c in city.cols:
@@ -590,7 +596,7 @@ func _wave_nearby() -> void:
 			w["wave"] = 1.4
 
 
-const FACADES: Array = ["C9A27E", "B5705A", "E3D9C6", "9C8F85", "A8B5BE", "D6B894", "8E6E5A", "D8B4A0"]
+const FACADES: Array = ["E2B88F", "D98A6B", "F1E6D2", "C9B9A8", "B9CBD6", "E6CDA3", "B98C72", "EFC7B3", "A9C6A2", "F0D7A5"]
 
 
 func _build_building(entry: Dictionary, rng: RandomNumberGenerator) -> void:
@@ -1303,13 +1309,29 @@ func _build_route_marks() -> void:
 	for i in range(1, route.size()):
 		var a := route[i - 1]
 		var b := route[i]
-		var steps := int(a.distance_to(b) / 64.0)
+		var steps := int(a.distance_to(b) / 48.0)
 		for k in range(1, steps):
-			var dot := Outdoors._disc(0.22, Color(UIKit.TERRA, 0.9))
+			var dot := Outdoors._disc(0.3, Color(UIKit.TERRA, 0.95))
 			dot.position = to_world(a.lerp(b, float(k) / float(steps)), 0.03)
 			dot.set_meta("leg", i)
 			marks.add_child(dot)
 			route_dots.append(dot)
+	# A pillar of light over the bay at the far end, seen over the roofs.
+	var bay: Rect2 = dropoff.get("bay", Rect2())
+	if bay.size != Vector2.ZERO:
+		var beacon := Props.mesh_box(Vector3(0.7, 26.0, 0.7), UIKit.MUSTARD)
+		beacon.name = "Beacon"
+		var glow := beacon.material_override as StandardMaterial3D
+		glow.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		glow.albedo_color = Color(UIKit.MUSTARD, 0.35)
+		glow.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		glow.emission_enabled = true
+		glow.emission = UIKit.MUSTARD
+		glow.emission_energy_multiplier = 1.2
+		beacon.position = rect_center(bay, 13.0)
+		marks.add_child(beacon)
+		route_dots.append(beacon)
+		beacon.set_meta("leg", 999)
 
 
 func _make_rain() -> void:
@@ -1372,6 +1394,11 @@ func _hud() -> void:
 	meter_label.position = Vector2(400, 16)
 	meter_label.custom_minimum_size = Vector2(120, 44)
 	card.add_child(meter_label)
+	speed_label = UIKit.label("0 km/h", 28, UIKit.WOOD, "small", false)
+	speed_label.name = "SpeedLabel"
+	speed_label.position = Vector2(400, 70)
+	speed_label.custom_minimum_size = Vector2(150, 40)
+	card.add_child(speed_label)
 	if str(course.get("weather", "clear")) == "night":
 		spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
 		spot_label.name = "SpotLabel"
@@ -1492,12 +1519,14 @@ func _hint_text() -> String:
 			line = "Unloading at %s." % dest
 		_:
 			line = "Done."
+	if speed_label:
+		speed_label.text = "%d km/h" % int(round(absf(speed) / PX * 3.6 * 3.2))
 	if objective:
 		match state:
 			"load":
 				objective.text = "Load up at %s" % pickup.get("name", "the curb")
 			"drive":
-				objective.text = "Backed in" if at_dropoff else ("Back into the bay" if in_bay else "Deliver to %s" % dest)
+				objective.text = "Backed in" if at_dropoff else ("Back into the bay" if in_bay else "Deliver to %s%s" % [dest, _turn_cue()])
 			"unload":
 				objective.text = "Unloading"
 			_:
@@ -1506,6 +1535,29 @@ func _hint_text() -> String:
 	if weather == "rain" and state == "load":
 		line += " Rain makes the stop longer."
 	return line
+
+
+func _turn_cue() -> String:
+	# The next turn and how far off it is: "left in 24 m", "straight on",
+	# "the bay in 12 m". Read off the route ahead of the truck.
+	if route.size() < 2:
+		return ""
+	var idx := clampi(route_index, 1, route.size() - 1)
+	var node := route[idx]
+	var dist := pos.distance_to(node) / PX
+	if idx >= route.size() - 1:
+		return "  ·  the bay in %d m" % int(round(dist))
+	var dir1 := (node - pos).normalized()
+	var dir2 := (route[idx + 1] - node).normalized()
+	var cross := dir1.x * dir2.y - dir1.y * dir2.x
+	var word := "straight on"
+	if cross > 0.5:
+		word = "right"
+	elif cross < -0.5:
+		word = "left"
+	elif dir1.dot(dir2) < -0.5:
+		word = "turn around"
+	return "  ·  %s in %d m" % [word, int(round(dist))]
 
 
 func _sync_chips() -> void:
@@ -1608,23 +1660,28 @@ func _place_truck(delta: float) -> void:
 
 
 func _update_camera(delta: float) -> void:
+	# A chase camera low behind the cab, close enough that the truck fills
+	# a good part of the frame; it drops back and widens a little with speed
+	# and looks further up the road the faster you go.
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+	var pace := clampf(absf(speed) / max_speed, 0.0, 1.0)
 	var forward := _forward()
 	var truck_at := to_world(pos)
-	var back := 11.5 + 3.0 * clampf(absf(speed) / max_speed, 0.0, 1.0)
-	var goal := truck_at - forward * back + Vector3(0, 6.4, 0)
-	var look := truck_at + forward * (5.0 + 7.0 * clampf(speed / max_speed, -0.3, 1.0)) + Vector3(0, 1.0, 0)
-	var k := clampf(delta * 4.5, 0.0, 1.0)
+	var back := 7.6 + 2.4 * pace
+	var goal := truck_at - forward * back + Vector3(0, 3.3 + 0.6 * pace, 0)
+	var look := truck_at + forward * (4.0 + 7.0 * clampf(speed / max_speed, -0.3, 1.0)) + Vector3(0, 1.3, 0)
+	var k := clampf(delta * 5.0, 0.0, 1.0)
 	cam.position = cam.position.lerp(goal, k)
-	cam_look = cam_look.lerp(look, clampf(delta * 6.0, 0.0, 1.0))
+	cam_look = cam_look.lerp(look, clampf(delta * 6.5, 0.0, 1.0))
 	cam.look_at(cam_look, Vector3.UP)
+	cam.fov = lerpf(cam.fov, 62.0 + 10.0 * pace, clampf(delta * 3.0, 0.0, 1.0))
 
 
 func _snap_camera() -> void:
 	var forward := _forward()
 	var truck_at := to_world(pos)
-	cam.position = truck_at - forward * 11.5 + Vector3(0, 6.4, 0)
-	cam_look = truck_at + forward * 5.0 + Vector3(0, 1.0, 0)
+	cam.position = truck_at - forward * 7.6 + Vector3(0, 3.3, 0)
+	cam_look = truck_at + forward * 4.0 + Vector3(0, 1.3, 0)
 	cam.look_at(cam_look, Vector3.UP)
 
 
@@ -1725,6 +1782,13 @@ func _drive(delta: float, weather: String) -> void:
 	if absf(speed) > 10.0:
 		var sign := 1.0 if speed >= 0.0 else -1.0
 		heading += steer * turn * delta * clampf(absf(speed) / max_speed, 0.35, 1.0) * sign
+	if absf(steer) < 0.1 and speed > 10.0 and not off_road and not handbrake:
+		# Hands off the wheel on a straight: the truck eases square to the
+		# road, so a keyboard drive does not wander into the kerb.
+		var square: float = round(heading / (PI * 0.5)) * PI * 0.5
+		var diff: float = angle_difference(heading, square)
+		if absf(diff) < 0.4:
+			heading = lerp_angle(heading, square, clampf(delta * float(Tuning.get_value("drive.lane_assist", 2.4)), 0.0, 1.0))
 	if absf(spin) > 0.001:
 		heading += spin * delta
 		spin = move_toward(spin, 0.0, 4.5 * delta)
@@ -1765,8 +1829,8 @@ func _bounce(normal: Vector2, depth: float, kind: String) -> void:
 	var into := -vel.dot(normal)
 	pos += normal * (depth + 1.0)
 	if into > 0.0:
-		vel += normal * into * 1.3
-		vel *= 0.55
+		vel += normal * into * 1.2
+		vel *= 0.62
 		if into > 1.2 * PX:
 			_apply_hit(kind, int(Tuning.get_value("box_condition.collision", 10)), 600)
 			if kind == "pond":
