@@ -1,0 +1,7293 @@
+{
+ "items": {
+  "off_photocopier": {
+   "name": "Photocopier",
+   "model": "proc:off_photocopier",
+   "w": 0.9,
+   "d": 0.65,
+   "h": 1.15,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Jams on a Monday, purely as a matter of tradition.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_vending_machine": {
+   "name": "Vending machine",
+   "model": "proc:off_vending_machine",
+   "w": 0.9,
+   "d": 0.8,
+   "h": 1.8,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Takes your coins thoughtfully, then has a little think.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_server_rack": {
+   "name": "Server rack",
+   "model": "proc:off_server_rack",
+   "w": 0.6,
+   "d": 1.0,
+   "h": 2.0,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Hums quietly, like it knows something you don't.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_paper_guillotine": {
+   "name": "Paper guillotine",
+   "model": "proc:off_paper_guillotine",
+   "w": 0.45,
+   "d": 0.38,
+   "h": 0.12,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Everyone uses it with enormous, slightly theatrical care.",
+   "heavy": true
+  },
+  "off_label_maker": {
+   "name": "Label maker",
+   "model": "proc:off_label_maker",
+   "w": 0.1,
+   "d": 0.2,
+   "h": 0.06,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Somebody labelled the kettle 'kettle'. Fair enough."
+  },
+  "off_franking_machine": {
+   "name": "Franking machine",
+   "model": "proc:off_franking_machine",
+   "w": 0.42,
+   "d": 0.34,
+   "h": 0.26,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Older than the postcode it lives in, and twice as reliable.",
+   "heavy": true
+  },
+  "off_fax_machine": {
+   "name": "Fax machine",
+   "model": "proc:off_fax_machine",
+   "w": 0.36,
+   "d": 0.3,
+   "h": 0.16,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Last used in 2009 to confirm a sandwich order.",
+   "fragile": true
+  },
+  "off_laminator": {
+   "name": "Laminator",
+   "model": "proc:off_laminator",
+   "w": 0.45,
+   "d": 0.16,
+   "h": 0.1,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Warms up slowly, then laminates anything that stays still."
+  },
+  "off_binding_machine": {
+   "name": "Comb binder",
+   "model": "proc:off_binding_machine",
+   "w": 0.44,
+   "d": 0.38,
+   "h": 0.2,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Turns twelve loose pages into a Proper Report.",
+   "heavy": true
+  },
+  "off_paper_folder": {
+   "name": "Letter folder",
+   "model": "proc:off_paper_folder",
+   "w": 0.55,
+   "d": 0.36,
+   "h": 0.3,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Folds letters in three with a sort of quiet dignity."
+  },
+  "off_microfiche_reader": {
+   "name": "Microfiche reader",
+   "model": "proc:off_microfiche_reader",
+   "w": 0.45,
+   "d": 0.5,
+   "h": 0.55,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Shows you the 1974 accounts, in blue, if you lean in.",
+   "fragile": true,
+   "heavy": true
+  },
+  "off_dictaphone": {
+   "name": "Dictaphone",
+   "model": "proc:off_dictaphone",
+   "w": 0.06,
+   "d": 0.13,
+   "h": 0.03,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Contains forty minutes of someone saying 'memo to self'."
+  },
+  "off_switchboard": {
+   "name": "Telephone switchboard",
+   "model": "proc:off_switchboard",
+   "w": 0.9,
+   "d": 0.6,
+   "h": 1.3,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Put you through to Accounts, eventually, with a smile.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_teleprinter": {
+   "name": "Teleprinter",
+   "model": "proc:off_teleprinter",
+   "w": 0.7,
+   "d": 0.6,
+   "h": 1.05,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Chatters away to an office in Leeds. Nobody minds.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_network_switch": {
+   "name": "Network switch",
+   "model": "proc:off_network_switch",
+   "w": 0.44,
+   "d": 0.25,
+   "h": 0.05,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Blinks green to say all is well. It is mostly right."
+  },
+  "off_wifi_router": {
+   "name": "Wi-fi router",
+   "model": "proc:off_wifi_router",
+   "w": 0.22,
+   "d": 0.14,
+   "h": 0.2,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Switched off and on again more than any other object here.",
+   "fragile": true
+  },
+  "off_coin_counter": {
+   "name": "Coin counter",
+   "model": "proc:off_coin_counter",
+   "w": 0.26,
+   "d": 0.22,
+   "h": 0.2,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Sorts the tea fund into tidy little towers of shame.",
+   "heavy": true
+  },
+  "off_air_purifier": {
+   "name": "Air purifier",
+   "model": "proc:off_air_purifier",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.65,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Breathes in the smell of microwaved fish, quite heroically."
+  },
+  "off_reception_desk": {
+   "name": "Reception desk",
+   "model": "proc:off_reception_desk",
+   "w": 1.8,
+   "d": 0.82,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Where visitors wait politely while someone finds a pen.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_visitor_book": {
+   "name": "Visitor book",
+   "model": "proc:off_visitor_book",
+   "w": 0.36,
+   "d": 0.28,
+   "h": 0.05,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Signed in by Mickey Mouse twice a year, in very neat handwriting."
+  },
+  "off_desk_bell": {
+   "name": "Reception bell",
+   "model": "proc:off_desk_bell",
+   "w": 0.09,
+   "d": 0.09,
+   "h": 0.07,
+   "mount": "small",
+   "room": "office",
+   "flavor": "One ding is a question. Three dings is a complaint.",
+   "fragile": true
+  },
+  "off_ticket_dispenser": {
+   "name": "Take-a-number stand",
+   "model": "proc:off_ticket_dispenser",
+   "w": 0.36,
+   "d": 0.36,
+   "h": 1.3,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Number forty-two is always just popped out for a minute.",
+   "bulky": true
+  },
+  "off_queue_barrier": {
+   "name": "Queue barrier",
+   "model": "proc:off_queue_barrier",
+   "w": 1.4,
+   "d": 0.32,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "A rope that asks nicely and is, mostly, obeyed.",
+   "nobox": true,
+   "bulky": true
+  },
+  "off_waiting_bench": {
+   "name": "Waiting-room seats",
+   "model": "proc:off_waiting_bench",
+   "w": 1.6,
+   "d": 0.6,
+   "h": 0.82,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Three linked chairs. The middle one is nobody's first choice.",
+   "nobox": true,
+   "bulky": true
+  },
+  "off_leaflet_stand": {
+   "name": "Leaflet stand",
+   "model": "proc:off_leaflet_stand",
+   "w": 0.42,
+   "d": 0.36,
+   "h": 1.4,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Holds every leaflet the office has ever been sent.",
+   "bulky": true
+  },
+  "off_suggestion_box": {
+   "name": "Suggestion box",
+   "model": "proc:off_suggestion_box",
+   "w": 0.26,
+   "d": 0.2,
+   "h": 0.32,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Contains one suggestion: more biscuits. Noted."
+  },
+  "off_lost_property": {
+   "name": "Lost property crate",
+   "model": "proc:off_lost_property",
+   "w": 0.46,
+   "d": 0.34,
+   "h": 0.34,
+   "mount": "small",
+   "room": "office",
+   "flavor": "One glove, two umbrellas and a stapler nobody will admit to."
+  },
+  "off_cardboard_cutout": {
+   "name": "Cardboard cutout",
+   "model": "proc:off_cardboard_cutout",
+   "w": 0.55,
+   "d": 0.5,
+   "h": 1.75,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "A life-size Mr Pendleton, from the 1998 open day. He stayed.",
+   "nobox": true,
+   "bulky": true
+  },
+  "off_filing_carousel": {
+   "name": "Filing carousel",
+   "model": "proc:off_filing_carousel",
+   "w": 0.62,
+   "d": 0.62,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Spins round once and the file you want is round the back.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_cubicle_divider": {
+   "name": "Cubicle divider",
+   "model": "proc:off_cubicle_divider",
+   "w": 1.4,
+   "d": 0.06,
+   "h": 1.4,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Fabric-covered privacy, about as private as a duvet.",
+   "nobox": true,
+   "bulky": true
+  },
+  "off_drawer_pedestal": {
+   "name": "Drawer pedestal",
+   "model": "proc:off_drawer_pedestal",
+   "w": 0.42,
+   "d": 0.58,
+   "h": 0.62,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Bottom drawer: crisps, plasters and a tie for emergencies.",
+   "heavy": true
+  },
+  "off_plan_chest": {
+   "name": "Plan chest",
+   "model": "proc:off_plan_chest",
+   "w": 1.3,
+   "d": 0.98,
+   "h": 0.75,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Ten shallow drawers of drawings for buildings that were never built.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_tambour_cabinet": {
+   "name": "Tambour cabinet",
+   "model": "proc:off_tambour_cabinet",
+   "w": 1.0,
+   "d": 0.48,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "The shutter rolls up with a sound like a small round of applause.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_meeting_table": {
+   "name": "Round meeting table",
+   "model": "proc:off_meeting_table",
+   "w": 1.2,
+   "d": 1.2,
+   "h": 0.74,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Round, so nobody sits at the head. Somebody still does.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_stacking_chairs": {
+   "name": "Stacking chairs",
+   "model": "proc:off_stacking_chairs",
+   "w": 0.5,
+   "d": 0.56,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Four chairs that came for the AGM and never left.",
+   "nobox": true,
+   "bulky": true
+  },
+  "off_lectern": {
+   "name": "Lectern",
+   "model": "proc:off_lectern",
+   "w": 0.56,
+   "d": 0.46,
+   "h": 1.18,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Makes anyone standing behind it say 'right then' first.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "off_kick_stool": {
+   "name": "Kick stool",
+   "model": "proc:off_kick_stool",
+   "w": 0.42,
+   "d": 0.42,
+   "h": 0.42,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Rolls about until you stand on it, then holds its ground."
+  },
+  "off_footrest": {
+   "name": "Footrest",
+   "model": "proc:off_footrest",
+   "w": 0.46,
+   "d": 0.36,
+   "h": 0.16,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Rocks gently. Nobody has ever admitted to using it."
+  },
+  "off_sit_stand_converter": {
+   "name": "Sit-stand converter",
+   "model": "proc:off_sit_stand_converter",
+   "w": 0.8,
+   "d": 0.6,
+   "h": 0.42,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Raised once, with ceremony. Has been at sitting height since.",
+   "heavy": true,
+   "bulky": true
+  },
+  "off_confidential_bin": {
+   "name": "Confidential waste console",
+   "model": "proc:off_confidential_bin",
+   "w": 0.5,
+   "d": 0.52,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Locked, slotted and very slightly smug about it.",
+   "nobox": true,
+   "heavy": true
+  },
+  "off_newtons_cradle": {
+   "name": "Newton's cradle",
+   "model": "proc:off_newtons_cradle",
+   "w": 0.18,
+   "d": 0.12,
+   "h": 0.16,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Click, click, click, for exactly as long as the phone call.",
+   "fragile": true
+  },
+  "off_meeting_timer": {
+   "name": "Meeting hourglass",
+   "model": "proc:off_meeting_timer",
+   "w": 0.09,
+   "d": 0.09,
+   "h": 0.2,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Fifteen minutes of sand. The meeting takes forty.",
+   "fragile": true
+  },
+  "off_card_index": {
+   "name": "Card index box",
+   "model": "proc:off_card_index",
+   "w": 0.16,
+   "d": 0.36,
+   "h": 0.17,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Every client since 1981, alphabetical, apart from the Smiths."
+  },
+  "off_copier_paper_box": {
+   "name": "Box of copier paper",
+   "model": "proc:off_copier_paper_box",
+   "w": 0.43,
+   "d": 0.3,
+   "h": 0.28,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Five reams, and heavier than it has any right to be.",
+   "heavy": true
+  },
+  "off_cash_box": {
+   "name": "Petty cash tin",
+   "model": "proc:off_cash_box",
+   "w": 0.3,
+   "d": 0.24,
+   "h": 0.1,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Holds four pounds and a very detailed IOU.",
+   "heavy": true
+  },
+  "off_desk_blotter": {
+   "name": "Desk blotter",
+   "model": "proc:off_desk_blotter",
+   "w": 0.62,
+   "d": 0.42,
+   "h": 0.02,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Covered in doodles of boxes, which seems about right."
+  },
+  "off_stamp_carousel": {
+   "name": "Rubber stamp rack",
+   "model": "proc:off_stamp_carousel",
+   "w": 0.18,
+   "d": 0.18,
+   "h": 0.16,
+   "mount": "small",
+   "room": "office",
+   "flavor": "PAID, RECEIVED, URGENT and one that just says LOVELY."
+  },
+  "off_light_box": {
+   "name": "Tracing light box",
+   "model": "proc:off_light_box",
+   "w": 0.5,
+   "d": 0.4,
+   "h": 0.08,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Glows like a small, very serious sunrise.",
+   "fragile": true
+  },
+  "off_plan_tube": {
+   "name": "Drawing tube",
+   "model": "proc:off_plan_tube",
+   "w": 0.12,
+   "d": 0.12,
+   "h": 0.86,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Carried about like a telescope, which helps morale."
+  },
+  "off_megaphone": {
+   "name": "Fire warden's megaphone",
+   "model": "proc:off_megaphone",
+   "w": 0.22,
+   "d": 0.38,
+   "h": 0.24,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Used once a year to say 'this way, please', very calmly."
+  },
+  "off_tea_urn": {
+   "name": "Tea urn",
+   "model": "proc:off_tea_urn",
+   "w": 0.34,
+   "d": 0.34,
+   "h": 0.52,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Brought out for training days, and treated with reverence.",
+   "heavy": true
+  },
+  "off_mail_sort_rack": {
+   "name": "Pigeonhole rack",
+   "model": "proc:off_mail_sort_rack",
+   "w": 0.9,
+   "d": 0.32,
+   "h": 0.62,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Twelve pigeonholes, one each, plus 'Misc', which is full."
+  },
+  "off_key_cabinet": {
+   "name": "Key cabinet",
+   "model": "proc:off_key_cabinet",
+   "w": 0.36,
+   "d": 0.14,
+   "h": 0.46,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Every key is labelled. None of the labels match a door."
+  },
+  "off_fire_extinguisher": {
+   "name": "Fire extinguisher",
+   "model": "proc:off_fire_extinguisher",
+   "w": 0.24,
+   "d": 0.18,
+   "h": 0.66,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Checked every year by a man called Clive. Never needed.",
+   "heavy": true
+  },
+  "off_fire_blanket": {
+   "name": "Fire blanket",
+   "model": "proc:off_fire_blanket",
+   "w": 0.24,
+   "d": 0.07,
+   "h": 0.33,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Pull the tapes in an emergency. Or to check it's still there."
+  },
+  "off_first_aid_box": {
+   "name": "First aid box",
+   "model": "proc:off_first_aid_box",
+   "w": 0.36,
+   "d": 0.13,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Plasters, a sling and one very old packet of mints."
+  },
+  "off_tannoy": {
+   "name": "Tannoy speaker",
+   "model": "proc:off_tannoy",
+   "w": 0.28,
+   "d": 0.34,
+   "h": 0.28,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Says 'would the owner of a blue Volvo' about once a decade."
+  },
+  "off_clocking_in": {
+   "name": "Clocking-in machine",
+   "model": "proc:off_clocking_in",
+   "w": 0.36,
+   "d": 0.24,
+   "h": 0.6,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Ker-chunk. You are officially here. Have a biscuit."
+  },
+  "off_pneumatic_tube": {
+   "name": "Pneumatic tube station",
+   "model": "proc:off_pneumatic_tube",
+   "w": 0.32,
+   "d": 0.28,
+   "h": 0.8,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Whoosh, thunk. A memo arrives from three floors up."
+  },
+  "off_wall_planner": {
+   "name": "Year planner",
+   "model": "proc:off_wall_planner",
+   "w": 1.2,
+   "d": 0.03,
+   "h": 0.82,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Holidays in green, deadlines in red, birthdays in cake."
+  },
+  "off_award_plaque": {
+   "name": "Employee of the Month plaque",
+   "model": "proc:off_award_plaque",
+   "w": 0.26,
+   "d": 0.04,
+   "h": 0.32,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Brenda, eleven months running. The twelfth was a clerical error.",
+   "fragile": true
+  },
+  "off_staff_photo_board": {
+   "name": "Staff photo board",
+   "model": "proc:off_staff_photo_board",
+   "w": 0.9,
+   "d": 0.03,
+   "h": 0.62,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Everyone's photo, taken on the one day they forgot to smile."
+  },
+  "off_tea_boiler": {
+   "name": "Wall water boiler",
+   "model": "proc:off_tea_boiler",
+   "w": 0.38,
+   "d": 0.22,
+   "h": 0.52,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Gurgles to itself all morning, like a contented radiator.",
+   "heavy": true
+  },
+  "off_flip_chart": {
+   "name": "Flip chart",
+   "model": "proc:off_flip_chart",
+   "w": 0.7,
+   "d": 0.78,
+   "h": 1.85,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Page one says 'Ideas'. Page two is a drawing of a duck.",
+   "nobox": true,
+   "bulky": true
+  },
+  "off_sanitiser_stand": {
+   "name": "Hand gel station",
+   "model": "proc:off_sanitiser_stand",
+   "w": 0.32,
+   "d": 0.32,
+   "h": 1.3,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Dispenses one cold blob and a small sense of virtue."
+  },
+  "off_wet_floor_sign": {
+   "name": "Wet floor sign",
+   "model": "proc:off_wet_floor_sign",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.62,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Stands there being right, which is all anyone asks."
+  },
+  "off_ink_bottle_set": {
+   "name": "Fountain pen and ink set",
+   "model": "proc:off_ink_bottle_set",
+   "w": 0.22,
+   "d": 0.12,
+   "h": 0.08,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Kept for signing things that are Actually Important.",
+   "fragile": true
+  },
+  "off_ledger_book": {
+   "name": "Cheque book and ledger",
+   "model": "proc:off_ledger_book",
+   "w": 0.33,
+   "d": 0.24,
+   "h": 0.08,
+   "mount": "small",
+   "room": "office",
+   "flavor": "Balanced to the penny every Friday, then celebrated with a custard cream."
+  },
+  "off_biscuit_rota": {
+   "name": "Biscuit rota board",
+   "model": "proc:off_biscuit_rota",
+   "w": 0.4,
+   "d": 0.03,
+   "h": 0.55,
+   "mount": "hang",
+   "room": "office",
+   "flavor": "Whose turn it is to buy biscuits, settled in writing at last."
+  },
+  "off_postal_sack": {
+   "name": "Mail sack",
+   "model": "proc:off_postal_sack",
+   "w": 0.5,
+   "d": 0.46,
+   "h": 0.7,
+   "mount": "floor",
+   "room": "office",
+   "flavor": "Royal Mail delivered it full. It will leave full of something else.",
+   "bulky": true
+  }
+ },
+ "props": {
+  "off_photocopier": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.75,
+     0.646
+    ],
+    "p": [
+     0,
+     0.375,
+     -0.002
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.3,
+     0.62
+    ],
+    "p": [
+     0,
+     0.9,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.04,
+     0.45
+    ],
+    "p": [
+     -0.08,
+     1.07,
+     -0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.04,
+     0.14
+    ],
+    "p": [
+     0.3,
+     1.07,
+     0.22
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.03,
+     0.26
+    ],
+    "p": [
+     0.34,
+     1.065,
+     -0.14
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.3,
+     0.32
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.55,
+     0.32
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.4,
+     1.1,
+     0.25
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "off_vending_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     1.8,
+     0.58
+    ],
+    "p": [
+     0,
+     0.9,
+     -0.11
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     1.8,
+     0.22
+    ],
+    "p": [
+     0.34,
+     0.9,
+     0.29
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.8,
+     0.22
+    ],
+    "p": [
+     -0.43,
+     0.9,
+     0.29
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.64,
+     0.22,
+     0.22
+    ],
+    "p": [
+     -0.09,
+     1.69,
+     0.29
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.64,
+     0.5,
+     0.22
+    ],
+    "p": [
+     -0.09,
+     0.25,
+     0.29
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.02,
+     0.2
+    ],
+    "p": [
+     -0.09,
+     0.8,
+     0.28
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.02,
+     0.2
+    ],
+    "p": [
+     -0.09,
+     1.15,
+     0.28
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.12,
+     0.12
+    ],
+    "p": [
+     -0.09,
+     0.87,
+     0.24
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.12,
+     0.12
+    ],
+    "p": [
+     -0.09,
+     1.22,
+     0.24
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.4,
+     0.02
+    ],
+    "p": [
+     0.34,
+     1.15,
+     0.395
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.12,
+     0.02
+    ],
+    "p": [
+     -0.09,
+     0.22,
+     0.395
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.1,
+     0.02
+    ],
+    "p": [
+     -0.09,
+     1.69,
+     0.395
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "off_server_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     2.0,
+     0.96
+    ],
+    "p": [
+     0,
+     1.0,
+     -0.02
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.09,
+     0.03
+    ],
+    "p": [
+     0,
+     0.5,
+     0.475
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.09,
+     0.03
+    ],
+    "p": [
+     0,
+     0.8,
+     0.475
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.18,
+     0.03
+    ],
+    "p": [
+     0,
+     1.15,
+     0.475
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.09,
+     0.03
+    ],
+    "p": [
+     0,
+     1.5,
+     0.475
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0,
+     1.75,
+     0.475
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.2,
+     0.8,
+     0.495
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.2,
+     1.5,
+     0.495
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.2,
+     1.15,
+     0.495
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.6
+    ],
+    "p": [
+     -0.27,
+     1.0,
+     0.47
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "off_paper_guillotine": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.025,
+     0.38
+    ],
+    "p": [
+     0,
+     0.0125,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.003,
+     0.34
+    ],
+    "p": [
+     0.0,
+     0.026,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.015,
+     0.03
+    ],
+    "p": [
+     0,
+     0.035,
+     -0.17
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.012,
+     0.38
+    ],
+    "p": [
+     0.205,
+     0.035,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.02,
+     0.34
+    ],
+    "p": [
+     0.2,
+     0.06,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.08
+    ],
+    "p": [
+     0.2,
+     0.08,
+     0.14
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_label_maker": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.041,
+     0.2
+    ],
+    "p": [
+     0,
+     0.0205,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.09
+    ],
+    "p": [
+     0,
+     0.047,
+     0.04
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.012,
+     0.04
+    ],
+    "p": [
+     0,
+     0.051,
+     -0.06
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.02
+    ],
+    "p": [
+     0,
+     0.04,
+     -0.095
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.008,
+     0.02
+    ],
+    "p": [
+     0.03,
+     0.05,
+     -0.02
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "off_franking_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.14,
+     0.34
+    ],
+    "p": [
+     0,
+     0.07,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.1,
+     0.26
+    ],
+    "p": [
+     0.06,
+     0.19,
+     -0.02
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.02,
+     0.3
+    ],
+    "p": [
+     -0.14,
+     0.15,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.05,
+     0.02
+    ],
+    "p": [
+     0.08,
+     0.2,
+     0.115
+    ],
+    "c": "BFD6DA",
+    "r": [
+     -0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.16,
+     0.25,
+     0.08
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     -0.06,
+     0.16,
+     -0.12
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_fax_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.09,
+     0.3
+    ],
+    "p": [
+     0,
+     0.045,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.04,
+     0.12
+    ],
+    "p": [
+     0,
+     0.11,
+     -0.08
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.004,
+     0.1
+    ],
+    "p": [
+     0.08,
+     0.092,
+     0.07
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.03
+    ],
+    "p": [
+     -0.08,
+     0.092,
+     0.08
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.05,
+     0.16
+    ],
+    "p": [
+     -0.13,
+     0.11,
+     0.03
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.002,
+     0.08
+    ],
+    "p": [
+     0,
+     0.14,
+     -0.1
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.4,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_laminator": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.08,
+     0.156
+    ],
+    "p": [
+     0,
+     0.04,
+     0.002
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.01,
+     0.04
+    ],
+    "p": [
+     0,
+     0.085,
+     0.04
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.05,
+     -0.07
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.02
+    ],
+    "p": [
+     0.18,
+     0.085,
+     -0.03
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.02
+    ],
+    "p": [
+     0.14,
+     0.085,
+     -0.03
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "off_binding_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.08,
+     0.38
+    ],
+    "p": [
+     0,
+     0.04,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.03,
+     0.06
+    ],
+    "p": [
+     0,
+     0.095,
+     -0.12
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.02,
+     0.3
+    ],
+    "p": [
+     0.2,
+     0.13,
+     0.0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.35,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.2,
+     0.12,
+     0.15
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.004,
+     0.22
+    ],
+    "p": [
+     -0.03,
+     0.082,
+     0.06
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.28
+    ],
+    "p": [
+     -0.03,
+     0.1,
+     -0.06
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "off_paper_folder": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.16,
+     0.36
+    ],
+    "p": [
+     0,
+     0.08,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.3
+    ],
+    "p": [
+     -0.08,
+     0.22,
+     -0.02
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     0.35
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.12,
+     0.13,
+     0.17
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.003,
+     0.28
+    ],
+    "p": [
+     -0.08,
+     0.24,
+     -0.02
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0,
+     0,
+     0.35
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.2,
+     0.17,
+     0.1
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "off_microfiche_reader": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.12,
+     0.5
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.38,
+     0.12
+    ],
+    "p": [
+     0,
+     0.31,
+     -0.16
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.28,
+     0.01
+    ],
+    "p": [
+     0,
+     0.33,
+     -0.095
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.24
+    ],
+    "p": [
+     0,
+     0.13,
+     0.1
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.12
+    ],
+    "p": [
+     0,
+     0.2,
+     0.05
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.08,
+     0.24
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_dictaphone": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.025,
+     0.13
+    ],
+    "p": [
+     0,
+     0.0125,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.002,
+     0.025
+    ],
+    "p": [
+     0,
+     0.026,
+     0.02
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.003
+    ],
+    "p": [
+     0,
+     0.026,
+     -0.035
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.006,
+     0.012
+    ],
+    "p": [
+     -0.02,
+     0.026,
+     0.05
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.008,
+     0.006,
+     0.012
+    ],
+    "p": [
+     0.0,
+     0.026,
+     0.05
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "off_switchboard": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.75,
+     0.6
+    ],
+    "p": [
+     0,
+     0.375,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.5,
+     0.12
+    ],
+    "p": [
+     0,
+     1.0,
+     -0.22
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.78,
+     0.4,
+     0.01
+    ],
+    "p": [
+     0,
+     1.0,
+     -0.155
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.4
+    ],
+    "p": [
+     0,
+     0.765,
+     0.05
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.3
+    ],
+    "p": [
+     -0.2,
+     0.9,
+     -0.05
+    ],
+    "c": "B6453F",
+    "r": [
+     0.6,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.3
+    ],
+    "p": [
+     0.1,
+     0.9,
+     -0.05
+    ],
+    "c": "E6B655",
+    "r": [
+     0.6,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.79,
+     0.2
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.3,
+     0.82,
+     0.1
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "off_teleprinter": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.7,
+     0.6
+    ],
+    "p": [
+     0,
+     0.35,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.66,
+     0.22,
+     0.56
+    ],
+    "p": [
+     0,
+     0.81,
+     0
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0,
+     0.72,
+     0.2
+    ],
+    "c": "2B2622",
+    "r": [
+     0.2,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.4
+    ],
+    "p": [
+     0,
+     0.95,
+     -0.15
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.12,
+     0.003
+    ],
+    "p": [
+     0,
+     0.98,
+     -0.08
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.4,
+     0.3
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "off_network_switch": [
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.045,
+     0.25
+    ],
+    "p": [
+     0,
+     0.0225,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.015,
+     0.01
+    ],
+    "p": [
+     -0.02,
+     0.022,
+     0.122
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.004,
+     0.006
+    ],
+    "p": [
+     -0.03,
+     0.038,
+     0.124
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.006
+    ],
+    "p": [
+     0.19,
+     0.022,
+     0.124
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.003,
+     0.2
+    ],
+    "p": [
+     0,
+     0.047,
+     0
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "off_wifi_router": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.04,
+     0.14
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.004,
+     0.004
+    ],
+    "p": [
+     0,
+     0.025,
+     0.071
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.16
+    ],
+    "p": [
+     -0.08,
+     0.12,
+     -0.05
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.12,
+     -0.05
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.16
+    ],
+    "p": [
+     0.08,
+     0.12,
+     -0.05
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "off_coin_counter": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.096,
+     0.216
+    ],
+    "p": [
+     0,
+     0.052,
+     -0.002
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.08
+    ],
+    "p": [
+     0,
+     0.14,
+     -0.03
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0,
+     0.035,
+     0.085
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.004,
+     0.04
+    ],
+    "p": [
+     0.07,
+     0.1,
+     0.07
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.04
+    ],
+    "p": [
+     -0.07,
+     0.02,
+     0.1
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.03
+    ],
+    "p": [
+     -0.035,
+     0.015,
+     0.1
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "off_air_purifier": [
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.6
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.04
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.151,
+     0.35
+    ],
+    "p": [
+     0,
+     0.24,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.01
+    ],
+    "p": [
+     0,
+     0.645,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.5,
+     0.148
+    ],
+    "c": "8FA882"
+   }
+  ],
+  "off_reception_desk": [
+   {
+    "t": "box",
+    "s": [
+     1.8,
+     1.05,
+     0.08
+    ],
+    "p": [
+     0,
+     0.525,
+     0.36
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     1.05,
+     0.72
+    ],
+    "p": [
+     -0.86,
+     0.525,
+     -0.04
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     1.05,
+     0.72
+    ],
+    "p": [
+     0.86,
+     0.525,
+     -0.04
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.8,
+     0.04,
+     0.3
+    ],
+    "p": [
+     0,
+     1.08,
+     0.25
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.7,
+     0.03,
+     0.6
+    ],
+    "p": [
+     0,
+     0.74,
+     -0.08
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.6,
+     0.06,
+     0.01
+    ],
+    "p": [
+     0,
+     0.55,
+     0.405
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.3,
+     0.02
+    ],
+    "p": [
+     0.4,
+     0.92,
+     -0.25
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "off_visitor_book": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.02,
+     0.27
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.012,
+     0.242
+    ],
+    "p": [
+     0,
+     0.026,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.018,
+     0.25
+    ],
+    "p": [
+     0,
+     0.027,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.12
+    ],
+    "p": [
+     0.12,
+     0.037,
+     0.06
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0,
+     0.6,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.03
+    ],
+    "p": [
+     0.17,
+     0.03,
+     0.12
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "off_desk_bell": [
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.015
+    ],
+    "p": [
+     0,
+     0.0075,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.02
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.007
+    ],
+    "p": [
+     0,
+     0.066,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "off_ticket_dispenser": [
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.03
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     1.1
+    ],
+    "p": [
+     0,
+     0.58,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.14
+    ],
+    "p": [
+     0,
+     1.2,
+     0
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.004,
+     0.05
+    ],
+    "p": [
+     0,
+     1.13,
+     0.08
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0,
+     1.0,
+     0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "off_queue_barrier": [
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.026
+    ],
+    "p": [
+     -0.54,
+     0.017,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.026
+    ],
+    "p": [
+     0.54,
+     0.017,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.9
+    ],
+    "p": [
+     -0.54,
+     0.45,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.9
+    ],
+    "p": [
+     0.54,
+     0.45,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.54,
+     0.91,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.54,
+     0.91,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     1.06
+    ],
+    "p": [
+     0,
+     0.8,
+     0
+    ],
+    "c": "B6453F",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "off_waiting_bench": [
+   {
+    "t": "box",
+    "s": [
+     1.6,
+     0.05,
+     0.05
+    ],
+    "p": [
+     0,
+     0.35,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.35,
+     0.5
+    ],
+    "p": [
+     -0.6,
+     0.175,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.35,
+     0.5
+    ],
+    "p": [
+     0.6,
+     0.175,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.06,
+     0.46
+    ],
+    "p": [
+     -0.53,
+     0.42,
+     0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.06,
+     0.46
+    ],
+    "p": [
+     0,
+     0.42,
+     0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.06,
+     0.46
+    ],
+    "p": [
+     0.53,
+     0.42,
+     0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.36,
+     0.05
+    ],
+    "p": [
+     -0.53,
+     0.63,
+     -0.24
+    ],
+    "c": "4A6FA5",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.36,
+     0.05
+    ],
+    "p": [
+     0,
+     0.63,
+     -0.24
+    ],
+    "c": "4A6FA5",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.36,
+     0.05
+    ],
+    "p": [
+     0.53,
+     0.63,
+     -0.24
+    ],
+    "c": "4A6FA5",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_leaflet_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.03,
+     0.36
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     1.35,
+     0.04
+    ],
+    "p": [
+     0,
+     0.705,
+     -0.14
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.25,
+     0.01
+    ],
+    "p": [
+     0,
+     0.4,
+     -0.1
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.25,
+     0.01
+    ],
+    "p": [
+     0,
+     0.72,
+     -0.1
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.25,
+     0.01
+    ],
+    "p": [
+     0,
+     1.04,
+     -0.1
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0,
+     0.29,
+     -0.08
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0,
+     0.61,
+     -0.08
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0,
+     0.93,
+     -0.08
+    ],
+    "c": "BFD6DA"
+   }
+  ],
+  "off_suggestion_box": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.28,
+     0.2
+    ],
+    "p": [
+     0,
+     0.14,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.27,
+     0.02,
+     0.2
+    ],
+    "p": [
+     0,
+     0.29,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.006,
+     0.015
+    ],
+    "p": [
+     0,
+     0.302,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.18,
+     0.1
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.05,
+     0.003
+    ],
+    "p": [
+     0,
+     0.24,
+     0.1
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "off_lost_property": [
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.26,
+     0.34
+    ],
+    "p": [
+     0,
+     0.13,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.16
+    ],
+    "p": [
+     -0.06,
+     0.28,
+     0.04
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.08
+    ],
+    "p": [
+     0.12,
+     0.28,
+     -0.06
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.34
+    ],
+    "p": [
+     0.05,
+     0.28,
+     0.06
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0.4,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.05,
+     0.003
+    ],
+    "p": [
+     0,
+     0.18,
+     0.171
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "off_cardboard_cutout": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.75,
+     0.01
+    ],
+    "p": [
+     0,
+     0.42,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.62,
+     0.01
+    ],
+    "p": [
+     0,
+     1.15,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.25,
+     0.016
+    ],
+    "p": [
+     0,
+     1.32,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.012
+    ],
+    "p": [
+     0,
+     1.6,
+     0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.07,
+     0.013
+    ],
+    "p": [
+     0,
+     1.69,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     1.0,
+     0.005
+    ],
+    "p": [
+     0,
+     0.55,
+     -0.12
+    ],
+    "c": "C9A070",
+    "r": [
+     -0.24,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_filing_carousel": [
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.05
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     1.12
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.29,
+     0.02
+    ],
+    "p": [
+     0,
+     0.4,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.29,
+     0.02
+    ],
+    "p": [
+     0,
+     0.8,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.29,
+     0.02
+    ],
+    "p": [
+     0,
+     1.18,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.292,
+     0.06
+    ],
+    "p": [
+     0,
+     0.6,
+     0.18
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.3,
+     0.5
+    ],
+    "p": [
+     0.18,
+     0.6,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.292,
+     0.06
+    ],
+    "p": [
+     0,
+     0.98,
+     -0.18
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.3,
+     0.5
+    ],
+    "p": [
+     -0.18,
+     0.98,
+     0
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "off_cubicle_divider": [
+   {
+    "t": "box",
+    "s": [
+     1.36,
+     1.3,
+     0.042
+    ],
+    "p": [
+     0,
+     0.72,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.4,
+     0.036,
+     0.052
+    ],
+    "p": [
+     0,
+     1.378,
+     0.0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.036,
+     1.4,
+     0.06
+    ],
+    "p": [
+     -0.678,
+     0.7,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.036,
+     1.4,
+     0.06
+    ],
+    "p": [
+     0.678,
+     0.7,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.15,
+     0.004
+    ],
+    "p": [
+     0.3,
+     1.0,
+     0.027
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.1,
+     0.004
+    ],
+    "p": [
+     -0.2,
+     1.1,
+     0.027
+    ],
+    "c": "E8B4A8"
+   }
+  ],
+  "off_drawer_pedestal": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.56,
+     0.55
+    ],
+    "p": [
+     0,
+     0.33,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.14,
+     0.02
+    ],
+    "p": [
+     0,
+     0.53,
+     0.27
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.14,
+     0.02
+    ],
+    "p": [
+     0,
+     0.38,
+     0.27
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0,
+     0.18,
+     0.27
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0,
+     0.55,
+     0.285
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0,
+     0.4,
+     0.285
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.015,
+     0.02
+    ],
+    "p": [
+     0,
+     0.24,
+     0.285
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     -0.16,
+     0.025,
+     -0.225
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     -0.16,
+     0.025,
+     0.225
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.16,
+     0.025,
+     -0.225
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.16,
+     0.025,
+     0.225
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "off_plan_chest": [
+   {
+    "t": "box",
+    "s": [
+     1.3,
+     0.7,
+     0.95
+    ],
+    "p": [
+     0,
+     0.4,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.24,
+     0.05,
+     0.89
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.22,
+     0.004,
+     0.01
+    ],
+    "p": [
+     0,
+     0.15,
+     0.476
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.22,
+     0.004,
+     0.01
+    ],
+    "p": [
+     0,
+     0.27,
+     0.476
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.22,
+     0.004,
+     0.01
+    ],
+    "p": [
+     0,
+     0.39,
+     0.476
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.22,
+     0.004,
+     0.01
+    ],
+    "p": [
+     0,
+     0.51,
+     0.476
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.22,
+     0.004,
+     0.01
+    ],
+    "p": [
+     0,
+     0.63,
+     0.476
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.11,
+     0.48
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.23,
+     0.48
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.35,
+     0.48
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.47,
+     0.48
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "off_tambour_cabinet": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.96,
+     0.45
+    ],
+    "p": [
+     0,
+     0.52,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.88,
+     0.01
+    ],
+    "p": [
+     -0.24,
+     0.52,
+     0.226
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.88,
+     0.01
+    ],
+    "p": [
+     0.24,
+     0.52,
+     0.226
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.2,
+     0.02
+    ],
+    "p": [
+     -0.03,
+     0.55,
+     0.235
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0.03,
+     0.55,
+     0.235
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.96,
+     0.04,
+     0.42
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "off_meeting_table": [
+   {
+    "t": "cyl",
+    "s": [
+     0.6,
+     0.04
+    ],
+    "p": [
+     0,
+     0.72,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.68
+    ],
+    "p": [
+     0,
+     0.36,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.022,
+     0.08
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.8
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.016
+    ],
+    "p": [
+     0,
+     0.688,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "off_stacking_chairs": [
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.45,
+     0.02
+    ],
+    "p": [
+     -0.22,
+     0.225,
+     -0.24
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.45,
+     0.02
+    ],
+    "p": [
+     -0.22,
+     0.225,
+     0.24
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.45,
+     0.02
+    ],
+    "p": [
+     0.22,
+     0.225,
+     -0.24
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.45,
+     0.02
+    ],
+    "p": [
+     0.22,
+     0.225,
+     0.24
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.03,
+     0.44
+    ],
+    "p": [
+     0,
+     0.46,
+     0.01
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.03,
+     0.44
+    ],
+    "p": [
+     0,
+     0.53,
+     0.01
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.03,
+     0.44
+    ],
+    "p": [
+     0,
+     0.6,
+     0.01
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.03,
+     0.44
+    ],
+    "p": [
+     0,
+     0.67,
+     0.01
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.3,
+     0.03
+    ],
+    "p": [
+     0,
+     0.85,
+     -0.25
+    ],
+    "c": "4F8A8B",
+    "r": [
+     -0.1,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_lectern": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.04,
+     0.4
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     1.0,
+     0.24
+    ],
+    "p": [
+     0,
+     0.52,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.03,
+     0.42
+    ],
+    "p": [
+     0,
+     1.1,
+     0.0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0,
+     1.03,
+     0.2
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.05,
+     0.003
+    ],
+    "p": [
+     0,
+     0.8,
+     0.121
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "off_kick_stool": [
+   {
+    "t": "cyl",
+    "s": [
+     0.21,
+     0.04
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.19,
+     0.34
+    ],
+    "p": [
+     0,
+     0.21,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.04
+    ],
+    "p": [
+     0,
+     0.4,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.192,
+     0.02
+    ],
+    "p": [
+     0,
+     0.24,
+     0
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "off_footrest": [
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.03,
+     0.36
+    ],
+    "p": [
+     0,
+     0.11,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.004,
+     0.32
+    ],
+    "p": [
+     0,
+     0.13,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.3
+    ],
+    "p": [
+     -0.19,
+     0.04,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.08,
+     0.3
+    ],
+    "p": [
+     0.19,
+     0.04,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "off_sit_stand_converter": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.38
+    ],
+    "p": [
+     0,
+     0.4,
+     -0.08
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.02,
+     0.24
+    ],
+    "p": [
+     0,
+     0.22,
+     0.17
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.02,
+     0.5
+    ],
+    "p": [
+     0,
+     0.01,
+     -0.03
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.4,
+     0.04
+    ],
+    "p": [
+     -0.3,
+     0.2,
+     -0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.4,
+     0.04
+    ],
+    "p": [
+     0.3,
+     0.2,
+     -0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.4,
+     0.04
+    ],
+    "p": [
+     -0.3,
+     0.2,
+     -0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.4,
+     0.04
+    ],
+    "p": [
+     0.3,
+     0.2,
+     -0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.4,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_confidential_bin": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.92,
+     0.5
+    ],
+    "p": [
+     0,
+     0.46,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.5
+    ],
+    "p": [
+     0,
+     0.935,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.01,
+     0.03
+    ],
+    "p": [
+     0,
+     0.951,
+     0.05
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.012
+    ],
+    "p": [
+     0.15,
+     0.7,
+     0.252
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.84,
+     0.005
+    ],
+    "p": [
+     0,
+     0.46,
+     0.25
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.003
+    ],
+    "p": [
+     0,
+     0.8,
+     0.254
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "off_newtons_cradle": [
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.015,
+     0.12
+    ],
+    "p": [
+     0,
+     0.0075,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.15
+    ],
+    "p": [
+     -0.08,
+     0.08,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.15
+    ],
+    "p": [
+     0.08,
+     0.08,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.16
+    ],
+    "p": [
+     0,
+     0.155,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.048,
+     0.05,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.024,
+     0.05,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.024,
+     0.05,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.048,
+     0.05,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "off_meeting_timer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.015
+    ],
+    "p": [
+     0,
+     0.0075,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.015
+    ],
+    "p": [
+     0,
+     0.1925,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0,
+     0.055,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0,
+     0.145,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.02
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.17
+    ],
+    "p": [
+     0.04,
+     0.1,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.17
+    ],
+    "p": [
+     -0.04,
+     0.1,
+     0
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "off_card_index": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.36
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.02,
+     0.36
+    ],
+    "p": [
+     0,
+     0.13,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     -0.1,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.08,
+     0.3
+    ],
+    "p": [
+     0,
+     0.11,
+     0.01
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.005
+    ],
+    "p": [
+     0,
+     0.07,
+     0.181
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.09,
+     0.005
+    ],
+    "p": [
+     0.04,
+     0.12,
+     -0.05
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "off_copier_paper_box": [
+   {
+    "t": "box",
+    "s": [
+     0.43,
+     0.26,
+     0.292
+    ],
+    "p": [
+     0,
+     0.13,
+     0.0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.03,
+     0.3
+    ],
+    "p": [
+     0,
+     0.265,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.15,
+     0.06,
+     0.003
+    ],
+    "p": [
+     0,
+     0.13,
+     0.151
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.003
+    ],
+    "p": [
+     -0.15,
+     0.2,
+     0.151
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.003,
+     0.04,
+     0.12
+    ],
+    "p": [
+     0.216,
+     0.15,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "off_cash_box": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.07,
+     0.24
+    ],
+    "p": [
+     0,
+     0.035,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.31,
+     0.02,
+     0.245
+    ],
+    "p": [
+     0,
+     0.08,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.012,
+     0.03
+    ],
+    "p": [
+     0,
+     0.096,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.006
+    ],
+    "p": [
+     0,
+     0.06,
+     0.122
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "off_desk_blotter": [
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.008,
+     0.412
+    ],
+    "p": [
+     0,
+     0.004,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.004,
+     0.36
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.056,
+     0.01,
+     0.42
+    ],
+    "p": [
+     -0.278,
+     0.012,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.056,
+     0.01,
+     0.42
+    ],
+    "p": [
+     0.278,
+     0.012,
+     0
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "off_stamp_carousel": [
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.015
+    ],
+    "p": [
+     0,
+     0.0075,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.14
+    ],
+    "p": [
+     0,
+     0.08,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.012
+    ],
+    "p": [
+     0,
+     0.13,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.06,
+     0.095,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.095,
+     0.06
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     -0.06,
+     0.095,
+     0.0001
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.06
+    ],
+    "p": [
+     -0.0001,
+     0.095,
+     -0.06
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     0.06,
+     0.06,
+     0.0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.06,
+     0.06
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     -0.06,
+     0.06,
+     0.0001
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     -0.0001,
+     0.06,
+     -0.06
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "off_light_box": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.4
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.01,
+     0.34
+    ],
+    "p": [
+     0,
+     0.065,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.003,
+     0.22
+    ],
+    "p": [
+     0.02,
+     0.072,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.01,
+     0.02
+    ],
+    "p": [
+     0.22,
+     0.065,
+     0.18
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "off_plan_tube": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.78
+    ],
+    "p": [
+     0,
+     0.41,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.06
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.055,
+     0.06
+    ],
+    "p": [
+     0,
+     0.82,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.5,
+     0.02
+    ],
+    "p": [
+     0.056,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.08,
+     0.004
+    ],
+    "p": [
+     0,
+     0.45,
+     0.052
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "off_megaphone": [
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.14
+    ],
+    "p": [
+     0,
+     0.11,
+     0.1
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.12
+    ],
+    "p": [
+     0,
+     0.11,
+     -0.03
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.1
+    ],
+    "p": [
+     0,
+     0.11,
+     -0.13
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.1,
+     0.04
+    ],
+    "p": [
+     0,
+     0.05,
+     -0.06
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.005
+    ],
+    "p": [
+     0,
+     0.11,
+     0.17
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_tea_urn": [
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.4
+    ],
+    "p": [
+     0,
+     0.24,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.04
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.03
+    ],
+    "p": [
+     0,
+     0.455,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0,
+     0.48,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0,
+     0.09,
+     0.14
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.02,
+     0.03
+    ],
+    "p": [
+     0.14,
+     0.38,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.02,
+     0.03
+    ],
+    "p": [
+     -0.14,
+     0.38,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "off_mail_sort_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.892,
+     0.62,
+     0.016
+    ],
+    "p": [
+     0.0,
+     0.31,
+     -0.138
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.016,
+     0.3
+    ],
+    "p": [
+     0,
+     0.608,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.016,
+     0.3
+    ],
+    "p": [
+     0,
+     0.012,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.58,
+     0.3
+    ],
+    "p": [
+     -0.44,
+     0.31,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.58,
+     0.3
+    ],
+    "p": [
+     0.44,
+     0.31,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.58,
+     0.28
+    ],
+    "p": [
+     -0.215,
+     0.31,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.58,
+     0.28
+    ],
+    "p": [
+     0.0,
+     0.31,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.58,
+     0.28
+    ],
+    "p": [
+     0.215,
+     0.31,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.015,
+     0.272
+    ],
+    "p": [
+     0,
+     0.205,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.015,
+     0.272
+    ],
+    "p": [
+     0,
+     0.41,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.08,
+     0.2
+    ],
+    "p": [
+     -0.32,
+     0.06,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.05,
+     0.22
+    ],
+    "p": [
+     0.11,
+     0.24,
+     0.0
+    ],
+    "c": "E7DCC6"
+   }
+  ],
+  "off_key_cabinet": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.46,
+     0.08
+    ],
+    "p": [
+     0,
+     0.23,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.44,
+     0.01
+    ],
+    "p": [
+     0,
+     0.23,
+     0.045
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.06,
+     0.02
+    ],
+    "p": [
+     0.14,
+     0.23,
+     0.055
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.003
+    ],
+    "p": [
+     0,
+     0.38,
+     0.051
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.004,
+     0.004
+    ],
+    "p": [
+     -0.02,
+     0.15,
+     0.05
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "off_fire_extinguisher": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.5
+    ],
+    "p": [
+     0,
+     0.27,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     0,
+     0.5,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.04,
+     0.615,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     -0.2
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.3
+    ],
+    "p": [
+     0.06,
+     0.38,
+     0.0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.1,
+     0.003
+    ],
+    "p": [
+     0,
+     0.3,
+     0.081
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.082,
+     0.02
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "off_fire_blanket": [
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.27,
+     0.06
+    ],
+    "p": [
+     0,
+     0.135,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.08,
+     0.004
+    ],
+    "p": [
+     0,
+     0.17,
+     0.031
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.05,
+     0.01
+    ],
+    "p": [
+     -0.06,
+     0.29,
+     0.02
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.05,
+     0.01
+    ],
+    "p": [
+     0.06,
+     0.29,
+     0.02
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "off_first_aid_box": [
+   {
+    "t": "box",
+    "s": [
+     0.35,
+     0.29,
+     0.111
+    ],
+    "p": [
+     0,
+     0.145,
+     -0.0005
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0,
+     0.15,
+     0.062
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.15,
+     0.062
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.16,
+     0.15,
+     0.06
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.012,
+     0.12
+    ],
+    "p": [
+     0,
+     0.294,
+     0
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "off_tannoy": [
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.12,
+     0.04
+    ],
+    "p": [
+     0,
+     0.18,
+     -0.15
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.12
+    ],
+    "p": [
+     0,
+     0.18,
+     -0.07
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.16
+    ],
+    "p": [
+     0,
+     0.14,
+     0.06
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.01
+    ],
+    "p": [
+     0,
+     0.14,
+     0.14
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "off_clocking_in": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.38,
+     0.16
+    ],
+    "p": [
+     0,
+     0.4,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.02
+    ],
+    "p": [
+     0,
+     0.47,
+     0.085
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.07
+    ],
+    "p": [
+     0.02,
+     0.48,
+     0.096
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     -0.7
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.01,
+     0.06
+    ],
+    "p": [
+     0,
+     0.27,
+     0.08
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.2,
+     0.05
+    ],
+    "p": [
+     0,
+     0.1,
+     -0.06
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0,
+     0.13,
+     -0.034
+    ],
+    "c": "E7DCC6"
+   }
+  ],
+  "off_pneumatic_tube": [
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.4
+    ],
+    "p": [
+     0,
+     0.6,
+     -0.08
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.3,
+     0.2
+    ],
+    "p": [
+     0,
+     0.27,
+     -0.03
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.1,
+     0.08
+    ],
+    "p": [
+     0,
+     0.22,
+     0.1
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.16
+    ],
+    "p": [
+     0,
+     0.27,
+     0.06
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.04,
+     0.004
+    ],
+    "p": [
+     0,
+     0.38,
+     0.072
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.11,
+     0.38,
+     0.075
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "off_wall_planner": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.82,
+     0.01
+    ],
+    "p": [
+     0,
+     0.41,
+     -0.01
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.16,
+     0.06,
+     0.008
+    ],
+    "p": [
+     0,
+     0.76,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.03,
+     0.008
+    ],
+    "p": [
+     -0.35,
+     0.6,
+     0.0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.008
+    ],
+    "p": [
+     0.2,
+     0.45,
+     0.0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.008
+    ],
+    "p": [
+     0.4,
+     0.3,
+     0.0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.008
+    ],
+    "p": [
+     -0.1,
+     0.2,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.003,
+     0.68,
+     0.006
+    ],
+    "p": [
+     0,
+     0.36,
+     0.0
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "off_award_plaque": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.32,
+     0.02
+    ],
+    "p": [
+     0,
+     0.16,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.08,
+     0.004
+    ],
+    "p": [
+     0,
+     0.24,
+     0.012
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0,
+     0.11,
+     0.012
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.006
+    ],
+    "p": [
+     0,
+     0.11,
+     0.016
+    ],
+    "c": "3E3A4F"
+   }
+  ],
+  "off_staff_photo_board": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.62,
+     0.015
+    ],
+    "p": [
+     0,
+     0.31,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.84,
+     0.08,
+     0.004
+    ],
+    "p": [
+     0,
+     0.55,
+     0.009
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     -0.3,
+     0.38,
+     0.009
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     -0.1,
+     0.38,
+     0.009
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     0.1,
+     0.38,
+     0.009
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     0.3,
+     0.38,
+     0.009
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     -0.3,
+     0.15,
+     0.009
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     -0.1,
+     0.15,
+     0.009
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     0.1,
+     0.15,
+     0.009
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.14,
+     0.004
+    ],
+    "p": [
+     0.3,
+     0.15,
+     0.009
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "off_tea_boiler": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.42,
+     0.2
+    ],
+    "p": [
+     0,
+     0.31,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.1,
+     0.004
+    ],
+    "p": [
+     0,
+     0.4,
+     0.101
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     0.08,
+     0.08
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0.08,
+     0.13,
+     0.09
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.03,
+     0.16
+    ],
+    "p": [
+     0,
+     0.015,
+     0.02
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.01
+    ],
+    "p": [
+     0.14,
+     0.45,
+     0.1
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "off_flip_chart": [
+   {
+    "t": "box",
+    "s": [
+     0.68,
+     0.96,
+     0.02
+    ],
+    "p": [
+     0,
+     1.32,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.04,
+     0.05
+    ],
+    "p": [
+     0,
+     1.82,
+     0.03
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.64,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0,
+     0.82,
+     0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.4,
+     0.03
+    ],
+    "p": [
+     -0.28,
+     0.7,
+     0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.08,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.4,
+     0.03
+    ],
+    "p": [
+     0.28,
+     0.7,
+     0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.08,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.5,
+     0.03
+    ],
+    "p": [
+     0,
+     0.75,
+     -0.18
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.002
+    ],
+    "p": [
+     -0.1,
+     1.6,
+     0.042
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.02,
+     0.002
+    ],
+    "p": [
+     0.0,
+     1.5,
+     0.042
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "off_sanitiser_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.02,
+     0.32
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     1.0
+    ],
+    "p": [
+     0,
+     0.52,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.22,
+     0.1
+    ],
+    "p": [
+     0,
+     1.15,
+     0.02
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0,
+     1.03,
+     0.06
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.06,
+     0.003
+    ],
+    "p": [
+     0,
+     0.8,
+     0.026
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0,
+     0.9,
+     0.02
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "off_wet_floor_sign": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.6,
+     0.012
+    ],
+    "p": [
+     0,
+     0.3,
+     0.07
+    ],
+    "c": "E6B655",
+    "r": [
+     0.22,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.6,
+     0.012
+    ],
+    "p": [
+     0,
+     0.3,
+     -0.07
+    ],
+    "c": "E6B655",
+    "r": [
+     -0.22,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.12,
+     0.004
+    ],
+    "p": [
+     0,
+     0.36,
+     0.084
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.22,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "off_ink_bottle_set": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.02,
+     0.12
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.05
+    ],
+    "p": [
+     -0.06,
+     0.045,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.012
+    ],
+    "p": [
+     -0.06,
+     0.076,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.13
+    ],
+    "p": [
+     0.04,
+     0.03,
+     0.02
+    ],
+    "c": "3E3A4F",
+    "r": [
+     0,
+     0.2,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.004,
+     0.02
+    ],
+    "p": [
+     0.11,
+     0.03,
+     0.01
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "off_ledger_book": [
+   {
+    "t": "box",
+    "s": [
+     0.32,
+     0.042,
+     0.24
+    ],
+    "p": [
+     0,
+     0.029,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.31,
+     0.04,
+     0.23
+    ],
+    "p": [
+     0.003,
+     0.025,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.052,
+     0.236
+    ],
+    "p": [
+     -0.158,
+     0.026,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.011,
+     0.08
+    ],
+    "p": [
+     0.04,
+     0.0595,
+     0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.003,
+     0.24
+    ],
+    "p": [
+     0.12,
+     0.052,
+     0
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "off_biscuit_rota": [
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.55,
+     0.01
+    ],
+    "p": [
+     0,
+     0.275,
+     -0.01
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.06,
+     0.008
+    ],
+    "p": [
+     0,
+     0.52,
+     0.0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.02,
+     0.43,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.02,
+     0.36,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.02,
+     0.29,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.02,
+     0.22,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.02,
+     0.15,
+     0.0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.16,
+     0.43,
+     0.008
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.16,
+     0.36,
+     0.008
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.16,
+     0.29,
+     0.008
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.16,
+     0.22,
+     0.008
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     -0.16,
+     0.15,
+     0.008
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "off_postal_sack": [
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     0.5
+    ],
+    "p": [
+     0,
+     0.25,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.12
+    ],
+    "p": [
+     0,
+     0.56,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.08
+    ],
+    "p": [
+     0,
+     0.65,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.075,
+     0.016
+    ],
+    "p": [
+     0,
+     0.622,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.07,
+     0.004
+    ],
+    "p": [
+     0,
+     0.32,
+     0.22
+    ],
+    "c": "EAE6DC"
+   }
+  ]
+ }
+}

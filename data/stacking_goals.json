@@ -1,0 +1,158 @@
+{
+  "goals": [
+    {
+      "id": "stack_l1_notes_on_desk",
+      "level": "L1",
+      "venue": "garage",
+      "item": "sticky_note_stack",
+      "support": "desk",
+      "surface": "top",
+      "hint": "Park the sticky notes on the desk, next to the mug.",
+      "marker": "ghost",
+      "support_also": [
+        "desk_main"
+      ]
+    },
+    {
+      "id": "stack_l2_plant_on_counter",
+      "level": "L2",
+      "venue": "cafe",
+      "item": "cafe_plant",
+      "also": [
+        "plant_fern",
+        "cafe_fern",
+        "plant_small"
+      ],
+      "reject": [
+        "hanging_plant",
+        "espresso"
+      ],
+      "support": "cafe_counter",
+      "support_also": [
+        "counter"
+      ],
+      "hint": "Set the small plant on the counter. Keep it off the espresso.",
+      "marker": "ghost"
+    },
+    {
+      "id": "stack_l2_mug_on_rack_shelf",
+      "level": "L2",
+      "venue": "cafe",
+      "item": "cafe_mug",
+      "also": [
+        "starter_mug",
+        "mug_worlds_okayest"
+      ],
+      "support": "mug_rack",
+      "surface": "top",
+      "hint": "Mug on top of the rack.",
+      "marker": "ghost",
+      "show": "held",
+      "pip": 2.0
+    },
+    {
+      "id": "stack_l2_menu_chalk_cushion",
+      "level": "L2",
+      "venue": "cafe",
+      "item": "menu_board",
+      "support": "cushion",
+      "stack_count": 2,
+      "overhang": 0.25,
+      "hint": "Stand the chalk board on a stack of 2 cushions.",
+      "marker": "ghost"
+    },
+    {
+      "id": "stack_l6_plant_on_beam_nook",
+      "level": "L6",
+      "venue": "bakery",
+      "item": "plant_fern",
+      "also": [
+        "cafe_fern"
+      ],
+      "support": "shelf",
+      "support_also": [
+        "bookshelf_wood"
+      ],
+      "camera_side": true,
+      "hint": "Fern on the shelf under the picture rail (it clears!).",
+      "marker": "ghost"
+    },
+    {
+      "id": "stack_l6_pastry_on_radiator_shelf",
+      "level": "L6",
+      "venue": "bakery",
+      "item": "pastry_basket",
+      "support": "shelf",
+      "near": "radiator",
+      "near_m": 1.0,
+      "hint": "Set the shelf within 1.0 m of the radiator.",
+      "marker": "ring"
+    },
+    {
+      "id": "stack_l6_lamp_on_stair_nook",
+      "level": "L6",
+      "venue": "bakery",
+      "item": "desk_lamp",
+      "also": [
+        "lamp_moody",
+        "lamp_banker"
+      ],
+      "support": "stair_step",
+      "hint": "Set the lamp on the stair step.",
+      "marker": "ghost"
+    },
+    {
+      "id": "stack_l4_box_on_box_sorted",
+      "level": "L4",
+      "venue": "train",
+      "item": "box_closed",
+      "support": "box_closed",
+      "same_tag": true,
+      "complete_yaw": 15,
+      "hint": "Stack a box on a box with the same keep-together tag.",
+      "marker": "ghost",
+      "marker_yaw": 15
+    },
+    {
+      "id": "stack_l1sol_cushion_on_catbed",
+      "level": "L1",
+      "venue": "garage",
+      "character": "sol",
+      "item": "cushion",
+      "support": "cat_bed",
+      "latch": true,
+      "hint": "Set the cushion on the cat bed. Biscuit may borrow it. The goal stays done.",
+      "marker": "ghost"
+    },
+    {
+      "id": "mug_box_desk",
+      "level": "L1",
+      "venue": "garage",
+      "item": "starter_mug",
+      "also": [
+        "mug_worlds_okayest",
+        "cafe_mug"
+      ],
+      "support": "desk_main",
+      "hint": "The mug sits on the desk. A ghost marks the spot while you hold it.",
+      "marker": "ghost",
+      "show": "held",
+      "pip": 2.0
+    },
+    {
+      "id": "mug_box_table",
+      "level": "L6",
+      "venue": "bakery",
+      "item": "starter_mug",
+      "also": [
+        "mug_worlds_okayest",
+        "cafe_mug"
+      ],
+      "support": "desk_main",
+      "hint": "Set the mug on the table. The ghost stays up for a moment after you place it.",
+      "marker": "ghost",
+      "show": "held",
+      "pip": 2.0
+    }
+  ]
+}

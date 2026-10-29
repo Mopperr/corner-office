@@ -1,0 +1,24 @@
+v1: customers3d/steve.glb
+v2: customers3d/v2/steve/steve.glb
+v2 loads OK: meshes=['Icosphere', 'Steve_Body', 'Steve_StaplerHolster'] tris=83548 (v1 meshes=['Icosphere', 'Steve_Body', 'Steve_StaplerHolster'] tris=53622)
+[PASS] bone count 23 vs 23
+[PASS] bone names identical []
+[PASS] hierarchy identical 
+[PASS] rest pose identical max diff 0.00e+00 m
+[PASS] clip names identical ['idle_Steve_Skeleton', 'sit_Steve_Skeleton', 'walk_Steve_Skeleton'] vs ['idle_Steve_Skeleton', 'sit_Steve_Skeleton', 'walk_Steve_Skeleton']
+[PASS] clip idle_Steve_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip idle_Steve_Skeleton channel set 230/230 channels
+[PASS] clip idle_Steve_Skeleton key count + frame times 
+[PASS] clip idle_Steve_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip idle_Steve_Skeleton arm/hand key values changed on: none (max diff 0.000)
+[PASS] clip sit_Steve_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip sit_Steve_Skeleton channel set 230/230 channels
+[PASS] clip sit_Steve_Skeleton key count + frame times 
+[PASS] clip sit_Steve_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip sit_Steve_Skeleton arm/hand key values changed on: none (max diff 0.000)
+[PASS] clip walk_Steve_Skeleton frame range (0.0, 25.6) vs (0.0, 25.6)
+[PASS] clip walk_Steve_Skeleton channel set 230/230 channels
+[PASS] clip walk_Steve_Skeleton key count + frame times 
+[PASS] clip walk_Steve_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip walk_Steve_Skeleton arm/hand key values changed on: none (max diff 0.000)
+RESULT: ALL PASS

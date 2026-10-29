@@ -1,0 +1,358 @@
+{
+ "snap": {
+  "grid_m": 0.25,
+  "rotate_deg": 90,
+  "fine_rotate_deg": 15
+ },
+ "floor_y": 0.0,
+ "garage_door_open_y": 2.1,
+ "garage_slat_hide_y": 2.55,
+ "garage_slat_local_y": [
+  0.0,
+  0.3,
+  0.6,
+  0.9,
+  1.2,
+  1.5,
+  1.8,
+  2.1
+ ],
+ "shop_door_open_deg": -80,
+ "truck_door_open_deg": 105,
+ "wall_mount_offset_m": 0.12,
+ "logo_decal_nudge_m": 0.012,
+ "damage": {
+  "scuffed_pct_of_base": 0.05,
+  "chipped_pct_of_base": 0.1,
+  "cap_pct_of_base": 0.2,
+  "repair_taps": {
+   "1": 1,
+   "2": 3
+  },
+  "mesh_swap_below": 70,
+  "stress_bands": [
+   {
+    "below": 12,
+    "scuffed": 0,
+    "chipped": 0
+   },
+   {
+    "below": 32,
+    "scuffed": 1,
+    "chipped": 0
+   },
+   {
+    "below": 55,
+    "scuffed": 2,
+    "chipped": 0
+   },
+   {
+    "below": 999,
+    "scuffed": 2,
+    "chipped": 1
+   }
+  ]
+ },
+ "box_condition": {
+  "start": 100,
+  "bump_min": 3,
+  "bump_max": 8,
+  "collision": 10,
+  "hard_brake_min": 2,
+  "hard_brake_max": 4,
+  "padding_multiplier": 0.5,
+  "heavy_bottom_multiplier": 0.75,
+  "alley_wobble": 6,
+  "tip_tiers": [
+   {
+    "min": 90,
+    "bonus": 0.5,
+    "stamp": "Smooth Ride"
+   },
+   {
+    "min": 70,
+    "bonus": 0.3,
+    "stamp": ""
+   },
+   {
+    "min": 50,
+    "bonus": 0.15,
+    "stamp": ""
+   },
+   {
+    "min": 0,
+    "bonus": 0.05,
+    "stamp": ""
+   }
+  ]
+ },
+ "pay": {
+  "l2_base": 120,
+  "l4_base": 140,
+  "l5_base": 100,
+  "cat_bonus": 20,
+  "duck_friend_bonus": 15,
+  "alley_tip_bonus": 0.1,
+  "split_set_tip_loss": 8,
+  "sell_ratio": 0.9,
+  "price_min": 0.5,
+  "price_max": 2.5,
+  "buyer_premium": 1.35,
+  "swing_min": 0.1,
+  "swing_max": 0.25,
+  "history_days": 7,
+  "honk_tip": 2,
+  "room_match": 3,
+  "caught_cut": 0.25
+ },
+ "truck": {
+  "_about": "The bed is a grid: two columns across, three rows from the front wall to the door, three layers to the ceiling. It fills from the front corner outward and upward, and empties the other way. Heavy boxes and wrapped pieces ride on the floor layer.",
+  "slots": 18,
+  "floor_slots": 6,
+  "cols": 2,
+  "rows": 3,
+  "layers": 3
+ },
+ "weight": {
+  "_about": "Every piece weighs what its size says at this density, heavy ones more. A box carries the sum. On the drive, a box with more than crush_threshold_kg on top of it takes extra stress per kilo over, fragile pieces most.",
+  "density": 60,
+  "heavy_mult": 2.5,
+  "min_kg": 0.4,
+  "max_kg": 140,
+  "crush_threshold_kg": 18,
+  "crush_per_kg": 0.04,
+  "fragile_crush_mult": 1.5
+ },
+ "pack": {
+  "per_box": 6
+ },
+ "jobs": {
+  "_about": "How many pieces a move has: a base, a random span, and more as jobs are done; authored jobs get extra catalogue pieces for the place.",
+  "size_min": 18,
+  "size_span": 10,
+  "size_per_done": 1,
+  "size_done_cap": 12,
+  "authored_extra": 12
+ },
+ "handling": {
+  "_about": "Dana's hands. Every piece packed or unpacked counts toward a level; the helper breaks fewer things as it climbs. Fragile pieces break twice as often. The temper is how many breaks an owner takes before they come at you.",
+  "per_level": 12,
+  "max_level": 5,
+  "break_base": 0.12,
+  "break_step": 0.02,
+  "break_floor": 0.02,
+  "fragile_mult": 2.0,
+  "temper": 3,
+  "sue_min": 1000,
+  "sue_max": 2000,
+  "counter_step": 0.25,
+  "counter_cap": 0.85,
+  "counter_mult": 12,
+  "counter_rep": 2
+ },
+ "rep_star_gates": [
+  0,
+  2,
+  6,
+  12,
+  20,
+  30
+ ],
+ "starter_money": {
+  "dana": 120,
+  "sol": 130,
+  "hank": 100,
+  "milo": 90,
+  "bea": 110
+ },
+ "offices": [
+  {
+   "id": "garage",
+   "name": "Garage Startup",
+   "cost": 0,
+   "earned": 0,
+   "jobs": 0,
+   "rep": 0,
+   "level": "L1",
+   "playable": true
+  },
+  {
+   "id": "bakery",
+   "name": "Bakery Loft",
+   "cost": 1500,
+   "earned": 1500,
+   "jobs": 3,
+   "rep": 1,
+   "level": "L6",
+   "playable": true
+  },
+  {
+   "id": "warehouse",
+   "name": "Brick Warehouse Loft",
+   "cost": 5000,
+   "earned": 5000,
+   "jobs": 8,
+   "rep": 2,
+   "level": "L11",
+   "playable": false
+  },
+  {
+   "id": "glass",
+   "name": "Glass Co-Working Suite",
+   "cost": 15000,
+   "earned": 15000,
+   "jobs": 16,
+   "rep": 3,
+   "level": "L16",
+   "playable": false
+  },
+  {
+   "id": "corner",
+   "name": "Corner Office",
+   "cost": 40000,
+   "earned": 40000,
+   "jobs": 24,
+   "rep": 4,
+   "level": "L21",
+   "playable": false
+  }
+ ],
+ "whiteboard_milestones": [
+  100,
+  500,
+  1000
+ ],
+ "audio": {
+  "truck_idle_db": -10,
+  "quiet_boost_db": 6,
+  "trim_db": {
+   "sfx_crockery_crack": -7,
+   "sfx_angry_mutter": -9,
+   "sfx_gasp_small": -5,
+   "sfx_shove_grunt": -3,
+   "sfx_body_fall": -2,
+   "sfx_letter_open": -4
+  },
+  "quiet_sfx": [
+   "sfx_box_fold",
+   "sfx_box_open",
+   "sfx_paper_rustle",
+   "sfx_cup_set_down",
+   "sfx_spoon_stir",
+   "sfx_tea_steep",
+   "sfx_sugar_pour",
+   "sfx_syrup_drizzle"
+  ],
+  "ambience_boost_db": 8,
+  "ambience_boost": [
+   "amb_l02_cafe_loop",
+   "amb_l03_rain_loop",
+   "amb_l04_shop_clock_loop",
+   "amb_l06_skylight_rain_loop",
+   "amb_outdoor_stand_loop",
+   "amb_l09_studio_loop",
+   "amb_l19_office_loop",
+   "amb_l10_library_loop",
+   "amb_l20_lodge_loop",
+   "amb_l14_greenhouse_loop",
+   "amb_l15_coastal_loop",
+   "amb_l13_night_loop"
+  ],
+  "pitch_rand": 0.08,
+  "music_db_default": -4,
+  "sfx_db_default": -2
+ },
+ "stacking": {
+  "support_gap": 0.04,
+  "tilt_deg": 20,
+  "near_hint": 0.75,
+  "wall_y_min": 0.6,
+  "wall_y_max": 2.6,
+  "room_margin": 0.05,
+  "wall_offset": 0.12,
+  "wall_reach": 0.6,
+  "wall_height": 2.8,
+  "snap_grid": 0.25,
+  "snap_yaw": 90,
+  "snap_yaw_fine": 15,
+  "friction": 0.9,
+  "bounce": 0.05,
+  "linear_damp": 0.3,
+  "angular_damp": 2.0,
+  "settle_lin": 0.06,
+  "settle_ang": 0.25,
+  "settle_time": 0.25,
+  "settle_timeout": 4.0,
+  "room_tip_ratio": 0.1,
+  "room_tip_score_floor": 50,
+  "room_complete": 90,
+  "score_placed": 50,
+  "score_fine": 30,
+  "score_near": 20
+ },
+ "drive": {
+  "px_per_m": 32,
+  "max_speed_mps": 6.5,
+  "accel_mps2": 3.4,
+  "brake_mps2": 5.5,
+  "reverse_mps": 1.8,
+  "rain_brake_penalty": 0.15,
+  "turn_rate": 1.9,
+  "grip": 11.0,
+  "grip_rain": 6.0,
+  "lane_assist": 2.4,
+  "grip_handbrake": 1.5,
+  "traffic_cars": 10,
+  "traffic_mps": 2.4,
+  "walkers": 16
+ },
+ "play": {
+  "_about": "The replay layer: job modifiers (rush pays +35% only if the drive beats length x seconds_per_m + grace seconds; heirloom whole pays, marked costs and a star; a clean job with a nosy neighbour pays), the client's wish tip, the clean-run streak (per job in a row, capped), the Movers' League (points a star, rivals' daily points, the week, the leader's pay bonus), and the mid-job event delay.",
+  "rush_seconds_per_m": 0.5,
+  "rush_grace": 25,
+  "heirloom_bonus": 60,
+  "heirloom_loss": 60,
+  "nosy_bonus": 25,
+  "nosy_notice": 0.4,
+  "wish_tip": 20,
+  "tidy_score": 60,
+  "streak_per": 5,
+  "streak_cap": 10,
+  "points_per_star": 3,
+  "rival_min": 2,
+  "rival_max": 6,
+  "league_week": 7,
+  "leader_bonus": 0.10,
+  "event_delay": 22,
+  "stray_box_pay": 15
+ },
+ "hospital": {
+  "_about": "The worst an owner can do: through the window. A ground-floor fall is days in a ward and a bill; from upstairs it is longer and dearer. throw_chance is the share of attacks that go to the window when the room has one. Forgiving pays half the bill back and makes every owner after that one break more patient (capped). A grudge doubles the next small-claims win.",
+  "ground_days": 2,
+  "upper_days": 4,
+  "ground_bill": 140,
+  "upper_bill": 360,
+  "throw_chance": 0.5,
+  "forgive_refund": 0.5,
+  "forgive_temper_cap": 2,
+  "payback_mult": 2,
+  "part_pay": 0.5,
+  "egg_seen": 0.3,
+  "invoice_pays": 0.55,
+  "invoice_cost": 40,
+  "parcel_cost": 60,
+  "move_again_mult": 2
+ },
+ "rent": {
+  "every_days": 5,
+  "base": 80,
+  "per_tier": 60,
+  "grace_days": 4
+ },
+ "crime": {
+  "pocket_heat": 1,
+  "pocket_notice": 0.2,
+  "pocket_notice_step": 0.15,
+  "loot_rate": 0.6
+ }
+}

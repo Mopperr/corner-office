@@ -1,0 +1,1256 @@
+{
+  "version": 1,
+  "level_name_note": "L6 uses 'Bakery Loft' per specs and Boss's ruling (formerly 'Shared Coworking').",
+  "characters": [
+    {
+      "id": "pc_dana",
+      "name": "Dana Reyes",
+      "theme": "Rebuilding confidence after a layoff, one sticky note at a time.",
+      "levels": [
+        {
+          "level_id": "L1",
+          "level_name": "Garage Startup",
+          "arrival": "Dana rolls up the garage door. Nine years at Grayline fit in one box. The rest of the room is hers.",
+          "marge_email": {
+            "subject": "Welcome to the garage, boss",
+            "body": "Heard Grayline let you go. Their loss.\nMy first office was a garage too. Diesel and big plans.\nUnpack first. The whiteboard's yours.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "First whiteboard doodle: a tiny stick figure labeled 'CEO (probably)'. A neighbour peeks in and calls it cute.",
+          "ship_in": "slice"
+        },
+        {
+          "level_id": "L2",
+          "level_name": "Cat Cafe Owner",
+          "arrival": "Dana walks into Whisker & Bean with a clipboard. She's still a bit surprised anyone hired her.",
+          "marge_email": {
+            "subject": "Your first real job",
+            "body": "Priya's good people. Biscuit is not.\nCount the boxes twice. One will meow.\nPad the mugs, then you're golden.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Priya hands Dana her last latte at the old counter. 'You're a natural.' Dana sticks that on a sticky note.",
+          "ship_in": "slice"
+        },
+        {
+          "level_id": "L3",
+          "level_name": "Rainy Afternoon",
+          "arrival": "Rain on the windshield. Dana grips the wheel like it's a quarterly review.",
+          "marge_email": {
+            "subject": "Drizzle's just practice",
+            "body": "Rain adds a little stopping distance. That's all.\nBrake early, breathe slow.\nDucks have right of way. Always.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The ducks cross. Dana waves at them. Rainbow on arrival. She writes 'drove in rain!' on her hand.",
+          "ship_in": "slice"
+        },
+        {
+          "level_id": "L4",
+          "level_name": "Grandpa's Model Train Shop",
+          "arrival": "Grandpa's shop smells like sawdust and oil. Dana feels oddly at home among tiny labeled boxes.",
+          "marge_email": {
+            "subject": "Small parts, big feelings",
+            "body": "Grandpa's got a story per locomotive.\nLet him tell 'em. It's half the job.\nKeep the sets together.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Grandpa gifts her the tiny conductor. It goes next to the red stapler: 'Staff of two.'",
+          "ship_in": "slice"
+        },
+        {
+          "level_id": "L5",
+          "level_name": "Duck Pond Detour",
+          "arrival": "Bridge is closed. Dana's old self would panic. New Dana takes the pond road.",
+          "marge_email": {
+            "subject": "Detours count as miles",
+            "body": "Bridge out? Good. Scenic route.\nOne stubborn duckling per trip is the rule.\nHonk hello to the ranger.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "A duckling refuses to move. Dana waits, smiling. She realizes she hasn't checked the time once.",
+          "ship_in": "slice"
+        },
+        {
+          "level_id": "L6",
+          "level_name": "Bakery Loft",
+          "arrival": "Dana carries her whiteboard up to the Bakery Loft. It still says 'CEO (probably).' She leaves it.",
+          "marge_email": {
+            "subject": "A real office, kid",
+            "body": "Bakery Loft. Smells better than my first truck.\nHang a sign. Make it official.\nI'm proud of you, Dana.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The baker leaves a welcome croissant. Dana's first rainy morning on the skylight. She hangs 'GRAND OPENING (small)'.",
+          "ship_in": "slice"
+        },
+        {
+          "level_id": "L7",
+          "level_name": "Retiring Dentist",
+          "arrival": "The dentist tells Dana retirement feels like being laid off, only on purpose.",
+          "marge_email": {
+            "subject": "Teeth and tenure",
+            "body": "Doc's retiring after 35 years.\nYou know a thing or two about endings.\nTell him the next part's good.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Dana gets a free toothbrush and a postcard later: 'You were right. Beach is great.' It goes on the whiteboard.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L8",
+          "level_name": "Farmers Market Morning",
+          "arrival": "Market day. Dana gets cut off by a cabbage.",
+          "marge_email": {
+            "subject": "Cabbage alert",
+            "body": "Farmers market streets are busy and friendly.\nIf produce rolls, let it roll.\nTake the free peach.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Dana helps chase the runaway cabbage. A vendor slips her a peach. She laughs out loud, alone in the cab.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L9",
+          "level_name": "Chaotic Architect",
+          "arrival": "The architect redraws the plan three times. Dana just adapts. Spreadsheets taught her that.",
+          "marge_email": {
+            "subject": "Plans change",
+            "body": "Architects change plans like I change lanes.\nYou're good at moving targets now.\nDon't argue. Re-snap.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The architect says 'not bad.' Dana writes it down exactly. Highest praise of her career.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L10",
+          "level_name": "Library Move",
+          "arrival": "Dana finds a hidden love letter in a returned book and gently hands it to the librarian.",
+          "marge_email": {
+            "subject": "Shhh, we're moving",
+            "body": "Quiet job. Books are heavy, though.\nLift with your knees.\nLibraries are worth the backache.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The librarian stamps Dana's hand with the old building's last stamp. Kids cheer at the new branch.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L11",
+          "level_name": "Brick Warehouse Loft",
+          "arrival": "The freight elevator groans upward. Dana says, quietly, 'We're a real business.'",
+          "marge_email": {
+            "subject": "Brick and freight",
+            "body": "Warehouse loft! You've outgrown me, nearly.\nRide that freight elevator like a champ.\nThink about hiring help.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Behind a shelf: an old graffiti tag, 'D.R. was here'. Not her. She adds a checkmark anyway.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L12",
+          "level_name": "Indie Record Store",
+          "arrival": "The record shop owner asks Dana's favourite record. She hasn't thought about that in years.",
+          "marge_email": {
+            "subject": "Music to move by",
+            "body": "Juno says this shop's a legend.\nMind the vinyl. It hates heat.\nAsk for a song.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "He plays her old college record. A regular buys one off her dolly. She hums all afternoon.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L13",
+          "level_name": "Midnight Neon",
+          "arrival": "Night drive. Neon on wet streets. Dana feels calm, not lonely.",
+          "marge_email": {
+            "subject": "Night shift",
+            "body": "Night runs were my favorite.\nRoad's quiet. Mind's quiet.\nWave at the diner.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "A stray cat trots behind the truck. A meteor streaks by. Dana makes a wish and doesn't need one.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L14",
+          "level_name": "Florist's Greenhouse",
+          "arrival": "Rosa and Ray argue about every pot. Dana mediates like a pro.",
+          "marge_email": {
+            "subject": "Greenhouse diplomacy",
+            "body": "The twins are at it again.\nYou're the calm one now. Funny, huh?\nWatch for bees.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The twins name a small yellow flower 'The Dana'. They agree on it. A first.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L15",
+          "level_name": "Windy Coast",
+          "arrival": "Sea wind tugs the truck. Dana opens the window anyway.",
+          "marge_email": {
+            "subject": "Salt air",
+            "body": "Coast road's windy. Hold steady.\nStop at the lighthouse.\nDon't leave a sandwich unattended.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "A gull steals her sandwich. She takes a lighthouse photo and sends it to her old Grayline team.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L16",
+          "level_name": "Glass Co-Working Suite",
+          "arrival": "The glass suite has a skyline. Dana hires a helper and gets nervous giving instructions.",
+          "marge_email": {
+            "subject": "Big league",
+            "body": "Glass walls! Fancy.\nFeeling like an imposter? Everybody does.\nYou earned every square foot.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "First team lunch. Dana remembers everyone's order. Her helper says, 'You're a great boss.' She keeps it.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L17",
+          "level_name": "Theater Prop Department",
+          "arrival": "The director panics about opening night. Dana says, 'We've got this.' And means it.",
+          "marge_email": {
+            "subject": "Showtime",
+            "body": "Theater folk are dramatic. It's the job.\nKeep the piano strapped.\nTake your bow.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The piano plays itself on a bump. The cast gives Dana's crew a curtain call.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L18",
+          "level_name": "Parade Detour",
+          "arrival": "Parade route. Confetti everywhere. Dana honks along.",
+          "marge_email": {
+            "subject": "Parade day",
+            "body": "Festival drive. Slow and smiling.\nLet the band wave you through.\nBalloons are not a hazard. Mostly.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "A balloon lands on the windshield. Dana ties it to the mirror. It says 'Congrats!'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L19",
+          "level_name": "Rival Broker's Office",
+          "arrival": "The rival broker inspects Dana's work. She doesn't flinch.",
+          "marge_email": {
+            "subject": "Snooty clients",
+            "body": "This one's picky. Good practice.\nBe precise and be nice.\nThey started somewhere small too.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "The rival admits they started in a garage. They shake hands. Dana gets a referral and a 'Respect' badge.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L20",
+          "level_name": "Snowy Mountain Lodge",
+          "arrival": "Snow on the switchbacks. Dana puts the chains on, calm as cocoa.",
+          "marge_email": {
+            "subject": "Snowy roads",
+            "body": "Go slow, chains on.\nDeer don't read road signs.\nHave the cocoa.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Cocoa with the lodge owner. First snowfall at the chalet. Dana thinks of her garage and smiles.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L21",
+          "level_name": "The Corner Office",
+          "arrival": "The corner office. Floor-to-ceiling windows. Dana sets her old red stapler on the big desk.",
+          "marge_email": {
+            "subject": "You made it, boss",
+            "body": "Nine years in a cubicle. Look at you now.\nCorner office. Real view.\nI never doubted you once.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Payoff: a sunset toast with Priya, Grandpa and the twins. The whiteboard, now framed, reads 'CEO (definitely).'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L22",
+          "level_name": "The Last Delivery",
+          "arrival": "A young founder buys Dana's old garage. They look nervous. Dana knows that face.",
+          "marge_email": {
+            "subject": "One more for the road",
+            "body": "Last delivery. Full circle.\nLeave them something good.\nThat's how this road works.\n\nKeep the shiny side up,\nMile Marker"
+          },
+          "moment": "Dana hands over her sticky note stack and writes: 'You're more ready than you think.' Credits.",
+          "ship_in": "1.0"
+        }
+      ],
+      "phase": "slice"
+    },
+    {
+      "id": "pc_hank",
+      "name": "Hank 'Gravel' Dubois",
+      "theme": "A lifelong road dog learning to stay put and call somewhere home.",
+      "levels": [
+        {
+          "level_id": "L1",
+          "level_name": "Unit 14B Storage",
+          "arrival": "Hank lifts the roll-up door. One bulb. One chair. Thirty years of road signs.",
+          "marge_email": {
+            "subject": "Breaker breaker, Gravel",
+            "body": "A storage unit, huh? I've parked in worse.\nHang those lights and it's a palace.\nSpare truck's yours whenever.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Hank hangs the string lights. The unit glows. 'Well,' he says. 'Ain't that a palace.' Marge chatters on the CB.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L2",
+          "level_name": "Cat Cafe Owner",
+          "arrival": "Hank sees Biscuit. Biscuit sees Hank. A truce is made.",
+          "marge_email": {
+            "subject": "Cat on board",
+            "body": "Cats are like lot lizards. Friendly, sneaky.\nPad the mugs, Gravel.\nAnd count your boxes.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Priya gives Hank her last latte. He drinks it slowly. 'Not bad. Not truck-stop coffee, but not bad.'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L3",
+          "level_name": "Rainy Afternoon",
+          "arrival": "Rain. Hank's been in worse. He's still glad for the wipers.",
+          "marge_email": {
+            "subject": "Easy run",
+            "body": "Short haul. City streets.\nYou'll be bored. Enjoy it.\nWatch for ducks.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The radio crackles. Hank half-expects old voices. Rainbow on arrival. He tips his cap.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L4",
+          "level_name": "Grandpa's Model Train Shop",
+          "arrival": "Grandpa and Hank compare notes: trains vs. trucks.",
+          "marge_email": {
+            "subject": "Trains, ugh",
+            "body": "Don't let Grandpa win the trains-vs-trucks argument.\nOr do. Be nice.\nKeep the sets together.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Grandpa gifts Hank the tiny conductor. 'For the other road guy.' It sits on the CB.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L5",
+          "level_name": "Duck Pond Detour",
+          "arrival": "Bridge is out. Hank's whole life was detours.",
+          "marge_email": {
+            "subject": "Detour again",
+            "body": "Bridge closed. Pond road it is.\nHonk to the ranger. He loves that.\nTake it easy.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The stubborn duckling won't move. Hank kills the engine and waits. He doesn't mind waiting anymore.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L6",
+          "level_name": "Bakery Loft",
+          "arrival": "Hank moves into the Bakery Loft. A real door with a real lock. He's still nervous.",
+          "marge_email": {
+            "subject": "You stayed",
+            "body": "Gravel, you didn't skip town.\nBakery Loft. Sounds sweet.\nTry not to sleep in the truck tonight.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The baker leaves a croissant. Hank sleeps through the first rainy morning on the skylight. First time in years.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L7",
+          "level_name": "Retiring Dentist",
+          "arrival": "The dentist asks Hank where 'home' is. Hank says, 'Working on it.'",
+          "marge_email": {
+            "subject": "Teeth and toothbrushes",
+            "body": "Doc's retiring. Help him go.\nTake the free toothbrush, Gravel.\nYou need it.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Gerald's name tag gets packed. Later, a beach postcard: 'Stayed put. Love it.' Hank pins it up.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L8",
+          "level_name": "Farmers Market Morning",
+          "arrival": "Market morning. Hank remembers truck-stop breakfasts.",
+          "marge_email": {
+            "subject": "Peach run",
+            "body": "Farmers market. Slow down.\nCabbages roll. Let 'em.\nGrab a peach.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "A busker plays a 'truck song'. Hank sings along, off-key, then tips him a twenty.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L9",
+          "level_name": "Chaotic Architect",
+          "arrival": "The architect's chaos reminds Hank of dispatch. He just laughs.",
+          "marge_email": {
+            "subject": "Architects, ugh",
+            "body": "Plans change. Don't fight it.\nRe-snap, re-strap.\nYou've handled worse dispatchers.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The architect says 'not bad.' Hank says 'same to you.' They both grin.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L10",
+          "level_name": "Library Move",
+          "arrival": "Quiet library. Hank whispers like a kid.",
+          "marge_email": {
+            "subject": "Library hush",
+            "body": "Lift with your knees.\nQuiet as a parked rig.\nLibraries are good folks.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Hank finds an old road atlas. He keeps it. The librarian stamps it with the last stamp.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L11",
+          "level_name": "Brick Warehouse Loft",
+          "arrival": "Brick Warehouse Loft. Freight elevator. Hank feels the old loading-dock comfort.",
+          "marge_email": {
+            "subject": "Freight elevator",
+            "body": "Hank, you've got a building now.\nThat's roots, buddy.\nMaybe hire some help?\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Behind a shelf: an old graffiti tag of a truck. Hank adds his CB handle next to it.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L12",
+          "level_name": "Indie Record Store",
+          "arrival": "The record store plays country. Hank nods along.",
+          "marge_email": {
+            "subject": "Spin a record",
+            "body": "Mind the vinyl.\nPlay something with steel guitar.\nAnd watch that neon.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Hank's favourite record plays. A regular buys a record off his dolly. The neon flickers on.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L13",
+          "level_name": "Midnight Neon",
+          "arrival": "Night drive. Hank knows this kind of quiet.",
+          "marge_email": {
+            "subject": "Night run",
+            "body": "Midnight run, Gravel. Like old times.\nWave at the diner.\nThen go home. Home, I said.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "A stray cat follows the truck. Hank lets it ride along home. He names it 'Two Lane'.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L14",
+          "level_name": "Florist's Greenhouse",
+          "arrival": "Rosa and Ray squabble. Hank tells them about road arguments.",
+          "marge_email": {
+            "subject": "Twins and blooms",
+            "body": "The twins are bickering.\nYou're a good referee.\nWatch the bees.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The twins name a rough, sturdy flower 'Gravel'. A bee hitchhikes on his cap.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L15",
+          "level_name": "Windy Coast",
+          "arrival": "Coast road. Wind and gulls. Hank rolls the window down.",
+          "marge_email": {
+            "subject": "Salt and gulls",
+            "body": "Windy coast. Steady wheel.\nStop at the lighthouse.\nSandwich thieves ahead.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "A gull steals his sandwich. Hank laughs and watches the sunset. He doesn't need to see what's next.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L16",
+          "level_name": "Glass Co-Working Suite",
+          "arrival": "Glass suite. Hank hires a helper. He's never been anyone's boss.",
+          "marge_email": {
+            "subject": "Big glass",
+            "body": "Gravel, you're the boss now.\nTeach 'em to strap.\nAnd breathe.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "First team lunch. Hank tells road stories. The helper says he wants to drive someday.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L17",
+          "level_name": "Theater Prop Department",
+          "arrival": "The director panics. Hank says, 'Breathe, son.'",
+          "marge_email": {
+            "subject": "Showtime, Gravel",
+            "body": "Theater's dramatic.\nKeep the piano strapped.\nBow if you have to.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The piano plays itself on a bump. Hank gets a curtain call. He waves like he's on a CB.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L18",
+          "level_name": "Parade Detour",
+          "arrival": "Parade detour. Hank lets the band through.",
+          "marge_email": {
+            "subject": "Parade",
+            "body": "Slow and steady.\nWave to the band.\nConfetti's harmless.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Confetti fills the cab. A balloon lands on the windshield. Hank ties it to the mirror.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L19",
+          "level_name": "Rival Broker's Office",
+          "arrival": "The rival broker sizes up Hank. Hank just smiles.",
+          "marge_email": {
+            "subject": "Snooty broker",
+            "body": "Be precise.\nBe nice.\nThey started somewhere small too.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "The rival admits they started in a storage unit. Hank laughs. They shake hands. He gets a referral.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L20",
+          "level_name": "Snowy Mountain Lodge",
+          "arrival": "Snowy switchbacks. Hank puts on the chains like it's muscle memory.",
+          "marge_email": {
+            "subject": "Snow day",
+            "body": "Chains on, Gravel.\nDeer ahead.\nHave the cocoa.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Cocoa by the fire. A deer pauses in the headlights. Hank thinks: 'I'd like to stay here.' Then: 'I have somewhere.'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L21",
+          "level_name": "The Corner Office",
+          "arrival": "The corner office. Hank sets his CB radio on the windowsill.",
+          "marge_email": {
+            "subject": "You found it",
+            "body": "Thirty years on the road.\nNow look. A view that doesn't move.\nWelcome home, Gravel.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Payoff: a sunset toast with Marge on the terrace. The string lights hang from the corner office ceiling.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L22",
+          "level_name": "The Last Delivery",
+          "arrival": "A young founder buys Unit 14B. Hank helps them move in.",
+          "marge_email": {
+            "subject": "Last delivery",
+            "body": "Last load. Full circle.\nLeave them the lights.\nThen park it, buddy.\n\n10-4, good buddy,\nMile Marker"
+          },
+          "moment": "Hank hands over his string lights and writes: 'It's a palace once they're up.' Credits.",
+          "ship_in": "1.0"
+        }
+      ],
+      "phase": "1.0"
+    },
+    {
+      "id": "pc_milo",
+      "name": "Milo Tran",
+      "theme": "A fresh grad growing up, from ramen and big talk to a steady hand.",
+      "levels": [
+        {
+          "level_id": "L1",
+          "level_name": "Dorm Corner",
+          "arrival": "Milo unpacks a poster that says 'HUSTLE'. His roommate snores.",
+          "marge_email": {
+            "subject": "Corner of a corner",
+            "body": "Starting from a dorm corner? Good.\nSmall loads teach you to pack tight.\nEat something that isn't ramen.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Milo's first Market sale: a mug for $4. He calls his mom. She asks if he ate.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L2",
+          "level_name": "Cat Cafe Owner",
+          "arrival": "Milo arrives with big plans for 'disrupting' cafe moves. Biscuit disrupts first.",
+          "marge_email": {
+            "subject": "Your first job",
+            "body": "Priya's patient. Biscuit is not.\nPad the mugs.\nListen more than you talk.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Priya gives Milo her last latte. He tries to network. Biscuit sits on his business cards.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L3",
+          "level_name": "Rainy Afternoon",
+          "arrival": "Rain. Milo's first drive. Hands at ten and two.",
+          "marge_email": {
+            "subject": "Drizzle drill",
+            "body": "Brake early.\nDucks first.\nYou'll be fine, kid.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "The ducks cross. Milo films it. Rainbow on arrival. He forgets to post it.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L4",
+          "level_name": "Grandpa's Model Train Shop",
+          "arrival": "Grandpa tells Milo a story about each train. Milo actually listens.",
+          "marge_email": {
+            "subject": "Listen up",
+            "body": "Grandpa's got stories.\nLet him finish.\nKeep the sets together.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Grandpa gifts Milo the tiny conductor. 'Every big trip starts small.' Milo puts it on his poster.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L5",
+          "level_name": "Duck Pond Detour",
+          "arrival": "Bridge closed. Milo checks his phone. Marge says to put it down.",
+          "marge_email": {
+            "subject": "Phone down",
+            "body": "Detour. Pond road.\nPut the phone down.\nHonk to the ranger.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "A jogger waves. A duckling won't move. Milo waits. His impatience fades a little.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L6",
+          "level_name": "Bakery Loft",
+          "arrival": "Bakery Loft. Milo's roommate helps carry the beanbag and says goodbye.",
+          "marge_email": {
+            "subject": "Moving out",
+            "body": "Your first real office, kid.\nSay goodbye to your roommate.\nThen buy groceries.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "The baker leaves a croissant. Milo hangs a 'grand opening' sign, then eats an actual vegetable.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L7",
+          "level_name": "Retiring Dentist",
+          "arrival": "The dentist says Milo's teeth are fine. 'Floss, though.'",
+          "marge_email": {
+            "subject": "Floss",
+            "body": "Doc's retiring.\nTake the toothbrush.\nUse it, Milo.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Gerald's name tag gets packed. A beach postcard later: 'Floss!' Milo laughs and pins it up.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L8",
+          "level_name": "Farmers Market Morning",
+          "arrival": "Market morning. Milo bargains for a peach. Loses.",
+          "marge_email": {
+            "subject": "Peach",
+            "body": "Market's busy.\nCabbages roll.\nTake the free peach.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "The cabbage chase. Milo wins, sweaty and proud. The busker plays a 'truck song' just for him.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L9",
+          "level_name": "Chaotic Architect",
+          "arrival": "The architect's chaos stresses Milo. Marge says to roll with it.",
+          "marge_email": {
+            "subject": "Plans change",
+            "body": "Plans change.\nRe-snap.\nYou'll learn more here than in class.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "The architect says 'not bad.' Milo writes it in his notebook under 'Real Feedback'.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L10",
+          "level_name": "Library Move",
+          "arrival": "Quiet library. Milo remembers studying here.",
+          "marge_email": {
+            "subject": "Library",
+            "body": "Lift with your knees.\nBooks are heavy.\nSo are memories.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Milo finds a hidden love letter and returns it. The librarian stamps his hand. Kids cheer at the new branch.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L11",
+          "level_name": "Brick Warehouse Loft",
+          "arrival": "Brick Warehouse Loft. Milo hires help and gets nervous.",
+          "marge_email": {
+            "subject": "Big building",
+            "body": "Milo, you've got a warehouse.\nThat's grown-up stuff.\nCall your mom.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "An old graffiti tag behind a shelf. Milo adds 'M.T. grew up here.' A hired sign goes up.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L12",
+          "level_name": "Indie Record Store",
+          "arrival": "The record store owner asks Milo his favourite record. He says something trendy. Then the real one.",
+          "marge_email": {
+            "subject": "Real music",
+            "body": "Mind the vinyl.\nBe honest about your music.\nNo one's judging.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "His real favourite plays. A regular buys one off his dolly. Milo stops pretending.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L13",
+          "level_name": "Midnight Neon",
+          "arrival": "Night drive. Milo thinks about his future. It doesn't scare him.",
+          "marge_email": {
+            "subject": "Night",
+            "body": "Midnight run.\nQuiet roads.\nThink it over.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "A stray cat follows the truck. A meteor streaks. Milo makes a wish: 'Just this.'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L14",
+          "level_name": "Florist's Greenhouse",
+          "arrival": "Rosa and Ray argue. Milo helps them compromise.",
+          "marge_email": {
+            "subject": "Twins",
+            "body": "The twins argue.\nYou're good at listening now.\nWatch the bees.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "They name a small bright flower 'Milo'. A bee hitchhikes on his notebook.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L15",
+          "level_name": "Windy Coast",
+          "arrival": "Coast road. Milo rolls the window down.",
+          "marge_email": {
+            "subject": "Salt",
+            "body": "Windy coast.\nStop at the lighthouse.\nWatch your sandwich.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "A gull steals his sandwich. He doesn't care. Sunset over the water.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L16",
+          "level_name": "Glass Co-Working Suite",
+          "arrival": "Glass suite. Milo hires a helper older than him. Awkward.",
+          "marge_email": {
+            "subject": "Big league",
+            "body": "Glass walls, kid.\nImposter? Everyone.\nBe kind to your helper.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "First team lunch. Milo cooks. Not ramen. Everyone eats.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L17",
+          "level_name": "Theater Prop Department",
+          "arrival": "The director panics. Milo stays calm.",
+          "marge_email": {
+            "subject": "Showtime",
+            "body": "Theater's dramatic.\nStrap the piano.\nTake a bow.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "The piano plays itself. The crew gets a curtain call. Milo bows too long.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L18",
+          "level_name": "Parade Detour",
+          "arrival": "Parade route. Confetti everywhere. Milo grins.",
+          "marge_email": {
+            "subject": "Parade",
+            "body": "Slow and smiling.\nLet the band wave you through.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "A balloon lands on the windshield. Milo ties it to the mirror.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L19",
+          "level_name": "Rival Broker's Office",
+          "arrival": "The rival broker is snooty. Milo stays polite.",
+          "marge_email": {
+            "subject": "Snooty",
+            "body": "Be precise.\nBe nice.\nThey started small too.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "The rival admits they started in a dorm room. They shake hands. Milo gets a referral.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L20",
+          "level_name": "Snowy Mountain Lodge",
+          "arrival": "Snowy switchbacks. Milo puts on the chains.",
+          "marge_email": {
+            "subject": "Snow",
+            "body": "Go slow.\nChains on.\nCocoa after.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Cocoa with the lodge owner. A deer pauses in the headlights. Milo whispers 'hi'.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L21",
+          "level_name": "The Corner Office",
+          "arrival": "The corner office. Milo puts his old 'HUSTLE' poster up. Then takes it down.",
+          "marge_email": {
+            "subject": "You grew up",
+            "body": "Milo, look at you.\nCorner office. No ramen.\nProud of you, kid.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Payoff: a sunset toast with his old roommate and Priya. A new poster: 'Take it easy.'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L22",
+          "level_name": "The Last Delivery",
+          "arrival": "A young founder buys Milo's old dorm corner. They're nervous.",
+          "marge_email": {
+            "subject": "Last delivery",
+            "body": "Full circle.\nLeave them something.\nThen rest.\n\nShiny side up,\nMile Marker"
+          },
+          "moment": "Milo hands over his ramen kettle and writes: 'Eat a vegetable. You've got this.' Credits.",
+          "ship_in": "1.0"
+        }
+      ],
+      "phase": "1.0"
+    },
+    {
+      "id": "pc_bea",
+      "name": "Bea Lindqvist",
+      "theme": "Scaling her craft from kitchen table to studio without losing its handmade heart.",
+      "levels": [
+        {
+          "level_id": "L1",
+          "level_name": "Kitchen Table HQ",
+          "arrival": "Bea's kitchen table is covered in yarn. Her cat sits in the middle of it.",
+          "marge_email": {
+            "subject": "Kitchen tables count",
+            "body": "My first logbook was written at a kitchen table. Coffee rings and all.\nYour felt cacti would sell great at a truck stop. I'd buy two.\nUnpack the baskets and keep the cat off the keyboard.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Bea's first Market sale: a felt cactus for $8. Her cat claims the yarn ball. She lets him.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L2",
+          "level_name": "Cat Cafe Owner",
+          "arrival": "Bea arrives at Whisker & Bean with a soft felt Biscuit for the real one.",
+          "marge_email": {
+            "subject": "Cat cafe job",
+            "body": "Priya's good people. Biscuit likes yarn, so hide yours.\nPad the mugs. Count the boxes twice.\nOne of them will meow.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Priya gives Bea her last latte. Bea gives Priya a felt Biscuit. Priya cries a little and laughs.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L3",
+          "level_name": "Rainy Afternoon",
+          "arrival": "Rain on the windshield. Bea reaches for knitting, then puts it down.",
+          "marge_email": {
+            "subject": "Hands on the wheel",
+            "body": "Hands on the wheel, Bea. Knit later.\nBrake early. Ducks have right of way.\nYou'll be fine.\n\n10-4,\nMile Marker"
+          },
+          "moment": "The ducks cross. Rainbow on arrival. That night Bea knits a tiny duck for the dashboard.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L4",
+          "level_name": "Grandpa's Model Train Shop",
+          "arrival": "Grandpa's shop smells like paint and patience. Bea admires every tiny hand-painted car.",
+          "marge_email": {
+            "subject": "Small parts, big craft",
+            "body": "Grandpa's a craftsman like you.\nAsk him about the paint. He loves that.\nKeep the sets together.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Grandpa gifts Bea the tiny conductor. She knits it a scarf before packing it.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L5",
+          "level_name": "Duck Pond Detour",
+          "arrival": "Bridge closed. Bea takes the pond road and enjoys the slower pace.",
+          "marge_email": {
+            "subject": "Scenic route",
+            "body": "Bridge out? Pond road it is.\nHonk hello to the ranger.\nEnjoy the view. You've earned it.\n\n10-4,\nMile Marker"
+          },
+          "moment": "A stubborn duckling won't move. Bea waits and sketches it in her notebook.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L6",
+          "level_name": "Bakery Loft",
+          "arrival": "Bakery Loft. Bea finally has room for every yarn basket. She still keeps one under the table.",
+          "marge_email": {
+            "subject": "A real studio",
+            "body": "Bakery Loft. Smells like butter.\nDon't fill every corner with yarn. Okay, fill some.\nHang a sign you made yourself.\n\n10-4,\nMile Marker"
+          },
+          "moment": "The baker leaves a croissant. Bea hangs a hand-knitted 'grand opening' banner on the skylight wall.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L7",
+          "level_name": "Retiring Dentist",
+          "arrival": "The dentist loves her felt teeth. Bea laughs and packs carefully.",
+          "marge_email": {
+            "subject": "Teeth and felt",
+            "body": "Doc's retiring after a long haul.\nMaybe knit him something for the beach.\nTake the free toothbrush.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Bea knits Gerald a tiny name tag. A beach postcard arrives later: 'Wearing it. Beach is great.'",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L8",
+          "level_name": "Farmers Market Morning",
+          "arrival": "Market morning. Bea sets up a tiny craft stand beside the truck.",
+          "marge_email": {
+            "subject": "Peach and cactus",
+            "body": "Farmers market streets are busy and kind.\nIf a cabbage rolls, chase it politely.\nTake the free peach.\n\n10-4,\nMile Marker"
+          },
+          "moment": "The runaway cabbage chase. Bea sells six felt cacti. The busker plays a song about yarn.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L9",
+          "level_name": "Chaotic Architect",
+          "arrival": "The architect wants 'more structure.' Bea knits a soft model of the plan.",
+          "marge_email": {
+            "subject": "Plans and yarn",
+            "body": "Architects change plans like weather.\nYou're good at adapting. Re-snap and smile.\nThey'll come around.\n\n10-4,\nMile Marker"
+          },
+          "moment": "The architect says 'not bad' about her felt model. Bea glows and keeps the scrap.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L10",
+          "level_name": "Library Move",
+          "arrival": "Quiet library. Bea finds a childhood craft book on a returned shelf.",
+          "marge_email": {
+            "subject": "Library hush",
+            "body": "Lift with your knees. Books are heavy.\nQuiet as a parked rig.\nLibraries are good folks.\n\n10-4,\nMile Marker"
+          },
+          "moment": "She finds a hidden love letter and returns it. Kids cheer at her felt bookworm display in the new branch.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L11",
+          "level_name": "Brick Warehouse Loft",
+          "arrival": "Brick Warehouse Loft. Bea hires her first helper and worries about losing the heart.",
+          "marge_email": {
+            "subject": "Big studio",
+            "body": "A warehouse, Bea. That's a real shop.\nHire help, but keep it handmade.\nTeach them the notes that go with every order.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Behind a shelf: graffiti of a yarn ball. Bea feels at home. A 'Bea's Studio' sign goes up.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L12",
+          "level_name": "Indie Record Store",
+          "arrival": "The record shop owner asks for felt record sleeves. Bea delivers.",
+          "marge_email": {
+            "subject": "Vinyl and felt",
+            "body": "Mind the vinyl. It hates heat.\nSell him a cactus while you're at it.\nAsk for a song.\n\n10-4,\nMile Marker"
+          },
+          "moment": "A regular buys a felt record off her dolly. The neon flickers back on. Bea hums along.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L13",
+          "level_name": "Midnight Neon",
+          "arrival": "Night drive. Bea worries about scaling too fast. The road helps her think.",
+          "marge_email": {
+            "subject": "Night run",
+            "body": "Midnight run. Quiet roads.\nThink it over. You'll find the balance.\nWave at the diner.\n\n10-4,\nMile Marker"
+          },
+          "moment": "A stray cat follows the truck. Bea decides: every order still gets a handwritten note.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L14",
+          "level_name": "Florist's Greenhouse",
+          "arrival": "Rosa and Ray argue about every pot. Bea makes them matching felt flowers.",
+          "marge_email": {
+            "subject": "Twins and blooms",
+            "body": "The twins are at it again.\nYou're the peacemaker. Funny how that works.\nWatch for bees.\n\n10-4,\nMile Marker"
+          },
+          "moment": "They name a soft yellow flower 'Bea' and agree on it. A bee hitchhikes on her yarn.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L15",
+          "level_name": "Windy Coast",
+          "arrival": "Coast road. Bea sketches the lighthouse between gusts.",
+          "marge_email": {
+            "subject": "Salt air",
+            "body": "Coast road's windy. Hold steady.\nStop at the lighthouse.\nDon't leave a sandwich unattended.\n\n10-4,\nMile Marker"
+          },
+          "moment": "A gull steals her sandwich. She knits a tiny gull that night and laughs about it.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L16",
+          "level_name": "Glass Co-Working Suite",
+          "arrival": "Glass suite. Bea hires a small team and teaches them the heart of the work.",
+          "marge_email": {
+            "subject": "Big league, soft heart",
+            "body": "Glass walls, Bea. Fancy.\nFeeling nervous? Everybody does.\nTeach your team the handmade part.\n\n10-4,\nMile Marker"
+          },
+          "moment": "First team lunch. Everyone knits for ten minutes. Even the helper. Bea's heart stays.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L17",
+          "level_name": "Theater Prop Department",
+          "arrival": "The theater needs felt props overnight. Bea and her team deliver.",
+          "marge_email": {
+            "subject": "Showtime",
+            "body": "Theater folk are dramatic. It's the job.\nKeep the piano strapped.\nTake your bow.\n\n10-4,\nMile Marker"
+          },
+          "moment": "The piano plays itself on a bump. The cast gives Bea's crew a curtain call. Her felt props shine.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L18",
+          "level_name": "Parade Detour",
+          "arrival": "Parade route. Confetti everywhere. Bea waves like she's at a craft fair.",
+          "marge_email": {
+            "subject": "Parade day",
+            "body": "Festival drive. Slow and smiling.\nLet the band wave you through.\nBalloons are mostly harmless.\n\n10-4,\nMile Marker"
+          },
+          "moment": "A balloon lands on the windshield. Bea knits it a little cozy for the mirror.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L19",
+          "level_name": "Rival Broker's Office",
+          "arrival": "The rival broker inspects Bea's placements. She smiles and stays precise.",
+          "marge_email": {
+            "subject": "Snooty clients",
+            "body": "This one's picky. Good practice.\nBe precise and be nice.\nThey started somewhere small too.\n\n10-4,\nMile Marker"
+          },
+          "moment": "The rival admits they started at a kitchen table. They shake hands. Bea gets a referral.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L20",
+          "level_name": "Snowy Mountain Lodge",
+          "arrival": "Snowy switchbacks. Bea knits mittens for the lodge owner while the chains go on.",
+          "marge_email": {
+            "subject": "Snow day",
+            "body": "Go slow, chains on.\nDeer don't read road signs.\nHave the cocoa.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Cocoa by the fire. A deer pauses in the headlights. Bea knits a tiny deer for the chalet.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L21",
+          "level_name": "The Corner Office",
+          "arrival": "The corner office. Felt cacti on every windowsill. Bea's heart is still in every piece.",
+          "marge_email": {
+            "subject": "You made it, Bea",
+            "body": "Corner office, Bea. Still handmade.\nI bought two. Told you I would.\nProud of every stitch.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Payoff: a sunset toast. Marge holds up two felt cacti. Bea's studio has scale and heart.",
+          "ship_in": "1.0"
+        },
+        {
+          "level_id": "L22",
+          "level_name": "The Last Delivery",
+          "arrival": "A young founder buys Bea's old kitchen table. They look nervous. Bea knows that look.",
+          "marge_email": {
+            "subject": "One more for the road",
+            "body": "Last delivery. Full circle.\nLeave them the yarn.\nThat's how this road works.\n\n10-4,\nMile Marker"
+          },
+          "moment": "Bea hands over her yarn basket and writes: 'Make it with heart. The rest follows.' Credits.",
+          "ship_in": "1.0"
+        }
+      ],
+      "phase": "1.0"
+    },
+    {
+      "id": "pc_sol",
+      "name": "Sol Achebe",
+      "theme": "A freelancer finding a room of her own, without leaving her people behind.",
+      "levels": [
+        {
+          "level_id": "L1",
+          "level_name": "Cafe Corner",
+          "arrival": "Sol's corner table at Whisker & Bean. Biscuit naps on her keyboard again.",
+          "marge_email": {
+            "subject": "Priya says you're good people",
+            "body": "Priya says you've held that corner table for two years. That's a long haul.\nWhen you want a bigger desk, I've got a truck.\nBiscuit rides free.\n\nMile Marker, over and out"
+          },
+          "moment": "Sol's first Market sale: a logo for a mug. Biscuit 'gives feedback' by sitting on the draft.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L2",
+          "level_name": "Cat Cafe Owner",
+          "arrival": "Priya is moving. Sol's corner is moving too, and it feels bittersweet.",
+          "marge_email": {
+            "subject": "Moving day for Priya",
+            "body": "Priya's leaving her old spot. You know it best.\nPad the mugs. Count twice.\nOne box will meow.\n\nMile Marker, over and out"
+          },
+          "moment": "Priya's last latte at the old counter. Sol drinks it at her corner table. Biscuit hides in a box.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L3",
+          "level_name": "Rainy Afternoon",
+          "arrival": "Rain. Sol's first drive. She grips the wheel and breathes.",
+          "marge_email": {
+            "subject": "Drizzle practice",
+            "body": "Brake early. Rain adds a little stopping distance.\nDucks have right of way.\nYou'll be fine, Sol.\n\nMile Marker, over and out"
+          },
+          "moment": "The ducks cross. Rainbow on arrival. Sol sketches them in the parked truck.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L4",
+          "level_name": "Grandpa's Model Train Shop",
+          "arrival": "Grandpa's shop. Sol designs him a logo while he tells train stories.",
+          "marge_email": {
+            "subject": "Trains and logos",
+            "body": "Grandpa's got a story per locomotive.\nLet him tell 'em. It's half the job.\nKeep the sets together.\n\nMile Marker, over and out"
+          },
+          "moment": "Grandpa gifts Sol the tiny conductor. She draws it into her next logo.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L5",
+          "level_name": "Duck Pond Detour",
+          "arrival": "Bridge closed. Sol takes the pond road and doesn't mind the delay.",
+          "marge_email": {
+            "subject": "Scenic detour",
+            "body": "Bridge out? Pond road it is.\nHonk hello to the ranger.\nEnjoy the slower miles.\n\nMile Marker, over and out"
+          },
+          "moment": "A stubborn duckling won't move. Sol waits and sketches it. She's learning patience.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L6",
+          "level_name": "Bakery Loft",
+          "arrival": "Bakery Loft. Sol's first room of her own. She paints the wall soft pink.",
+          "marge_email": {
+            "subject": "Your own room",
+            "body": "Bakery Loft. Your own room, Sol.\nPriya's proud. So am I.\nHang a sign you designed.\n\nMile Marker, over and out"
+          },
+          "moment": "The baker leaves a croissant. Sol hangs a 'grand opening' sign she designed. The skylight rains.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L7",
+          "level_name": "Retiring Dentist",
+          "arrival": "The dentist wants a retirement logo. Sol makes it soft and sunny.",
+          "marge_email": {
+            "subject": "Teeth and logos",
+            "body": "Doc's retiring after a long haul.\nDesign him something beachy.\nTake the free toothbrush.\n\nMile Marker, over and out"
+          },
+          "moment": "Gerald's name tag gets packed. A beach postcard arrives later with her logo on it.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L8",
+          "level_name": "Farmers Market Morning",
+          "arrival": "Market morning. Sol sketches vendors between deliveries.",
+          "marge_email": {
+            "subject": "Peach run",
+            "body": "Farmers market streets are busy and kind.\nIf a cabbage rolls, chase it politely.\nTake the free peach.\n\nMile Marker, over and out"
+          },
+          "moment": "The runaway cabbage chase. A vendor asks for a logo. Sol sketches one on a napkin.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L9",
+          "level_name": "Chaotic Architect",
+          "arrival": "The architect redraws the plan. Sol redraws her sketch too.",
+          "marge_email": {
+            "subject": "Plans change",
+            "body": "Architects change plans like weather.\nYou're good at that. Re-snap and smile.\nThey'll come around.\n\nMile Marker, over and out"
+          },
+          "moment": "The architect says 'not bad' about her sketch. Sol keeps the scrap in her book.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L10",
+          "level_name": "Library Move",
+          "arrival": "Quiet library. Sol finds a design book she loved in college.",
+          "marge_email": {
+            "subject": "Library hush",
+            "body": "Lift with your knees. Books are heavy.\nQuiet as a parked rig.\nLibraries are good folks.\n\nMile Marker, over and out"
+          },
+          "moment": "She finds a hidden love letter and returns it. Kids cheer at the new branch. Sol sketches them.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L11",
+          "level_name": "Brick Warehouse Loft",
+          "arrival": "Brick Warehouse Loft. Sol has a real studio and hires a helper.",
+          "marge_email": {
+            "subject": "A real studio",
+            "body": "Warehouse loft, Sol. That's a studio.\nHire help. Keep your people close.\nThink about a sign.\n\nMile Marker, over and out"
+          },
+          "moment": "Behind a shelf: graffiti. Sol adds her own soft tag. A studio sign goes up.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L12",
+          "level_name": "Indie Record Store",
+          "arrival": "The record shop owner wants a new neon sign. Sol designs it.",
+          "marge_email": {
+            "subject": "Vinyl and neon",
+            "body": "Mind the vinyl. It hates heat.\nAsk for a song.\nWatch that neon.\n\nMile Marker, over and out"
+          },
+          "moment": "The neon sign she designed flickers back on. A regular buys a record off her dolly.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L13",
+          "level_name": "Midnight Neon",
+          "arrival": "Night drive. Sol thinks about home and who she'll bring with her.",
+          "marge_email": {
+            "subject": "Night run",
+            "body": "Midnight run. Quiet roads.\nThink it over.\nWave at the diner.\n\nMile Marker, over and out"
+          },
+          "moment": "A stray cat follows the truck. It looks like Biscuit. Sol smiles and keeps going.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L14",
+          "level_name": "Florist's Greenhouse",
+          "arrival": "Rosa and Ray want a logo. They argue about every letter.",
+          "marge_email": {
+            "subject": "Twins and blooms",
+            "body": "The twins are at it again.\nYou'll find the middle. You always do.\nWatch for bees.\n\nMile Marker, over and out"
+          },
+          "moment": "They name a bright flower 'Sol' and agree. A bee hitchhikes on her sketchbook.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L15",
+          "level_name": "Windy Coast",
+          "arrival": "Coast road. Sol sketches the lighthouse between gusts.",
+          "marge_email": {
+            "subject": "Salt air",
+            "body": "Coast road's windy. Hold steady.\nStop at the lighthouse.\nDon't leave a sandwich unattended.\n\nMile Marker, over and out"
+          },
+          "moment": "A gull steals her sandwich. Sunset over the water. Sol sketches both.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L16",
+          "level_name": "Glass Co-Working Suite",
+          "arrival": "Glass suite. Sol hires a helper and holds lunch at Priya's new cafe.",
+          "marge_email": {
+            "subject": "Big league",
+            "body": "Glass walls, Sol. Fancy.\nFeeling like an imposter? Everybody does.\nKeep your people close.\n\nMile Marker, over and out"
+          },
+          "moment": "First team lunch at Priya's new cafe. Biscuit naps under the table. Sol feels at home.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L17",
+          "level_name": "Theater Prop Department",
+          "arrival": "The theater needs a poster overnight. Sol and her team deliver.",
+          "marge_email": {
+            "subject": "Showtime",
+            "body": "Theater folk are dramatic. It's the job.\nKeep the piano strapped.\nTake your bow.\n\nMile Marker, over and out"
+          },
+          "moment": "The piano plays itself on a bump. Curtain call. Her poster hangs by the stage door.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L18",
+          "level_name": "Parade Detour",
+          "arrival": "Parade route. Confetti everywhere. Sol sketches the floats.",
+          "marge_email": {
+            "subject": "Parade day",
+            "body": "Festival drive. Slow and smiling.\nLet the band wave you through.\nBalloons are mostly harmless.\n\nMile Marker, over and out"
+          },
+          "moment": "A balloon lands on the windshield. Sol keeps it tied to the mirror.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L19",
+          "level_name": "Rival Broker's Office",
+          "arrival": "The rival broker is snooty about her design. Sol stays kind.",
+          "marge_email": {
+            "subject": "Snooty clients",
+            "body": "This one's picky. Good practice.\nBe precise and be nice.\nThey started somewhere small too.\n\nMile Marker, over and out"
+          },
+          "moment": "The rival admits they started at a cafe table. They shake hands. Sol gets a referral.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L20",
+          "level_name": "Snowy Mountain Lodge",
+          "arrival": "Snowy switchbacks. Sol sketches the chalet between cups of cocoa.",
+          "marge_email": {
+            "subject": "Snow day",
+            "body": "Go slow, chains on.\nDeer don't read road signs.\nHave the cocoa.\n\nMile Marker, over and out"
+          },
+          "moment": "Cocoa by the fire. A deer pauses in the headlights. Sol sketches it softly.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L21",
+          "level_name": "The Corner Office",
+          "arrival": "The corner office. A room of her own, with a view and room for friends.",
+          "marge_email": {
+            "subject": "You made it, Sol",
+            "body": "Corner office, Sol. A room of your own.\nBiscuit would approve.\nProud of every mile.\n\nMile Marker, over and out"
+          },
+          "moment": "Payoff: a sunset toast with Priya and Biscuit. Biscuit naps on her new keyboard.",
+          "ship_in": "post_slice"
+        },
+        {
+          "level_id": "L22",
+          "level_name": "The Last Delivery",
+          "arrival": "A young founder takes Sol's old cafe corner. They're nervous. Sol knows that face.",
+          "marge_email": {
+            "subject": "One more for the road",
+            "body": "Last delivery. Full circle.\nLeave them something good.\nThat's how this road works.\n\nMile Marker, over and out"
+          },
+          "moment": "Sol hands over her moody lamp and writes: 'Biscuit gives the best feedback.' Credits.",
+          "ship_in": "post_slice"
+        }
+      ],
+      "phase": "post_slice"
+    }
+  ]
+}

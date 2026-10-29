@@ -1,0 +1,41 @@
+{
+ "id": "rocco",
+ "name": "Rocco",
+ "glb": "rocco.glb",
+ "height_m": 1.72,
+ "seat_height_m": 0.454,
+ "hip_height_m": 0.808,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Rocco_Satchel",
+   "bone": "UpperChest"
+  }
+ ],
+ "tris": 47602,
+ "tris_triangulated": 86112,
+ "smoothing": {
+  "pass_": 2,
+  "helper": "v2/_build/smooth_head.py (read-only, sha256 09b9fdbf2f59)",
+  "head": "metaball forms + lids/lips -> voxel remesh -> subsurf 1 -> laplacian",
+  "cloth": "remesh -> subsurf 1 (applied)",
+  "hard_parts": "bevel 2 seg",
+  "weights": "assigned after smoothing"
+ }
+}

@@ -1,0 +1,1712 @@
+{
+ "homes": [
+  {
+   "id": "terrace_a",
+   "name": "Terrace on Elm Row",
+   "style": "brick",
+   "w": 6,
+   "d": 8,
+   "kind": "terrace",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 3.5,
+       "z": 4,
+       "w": 2.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      0.7,
+      2.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 2,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 2,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "bedroom2",
+       "name": "Back bedroom",
+       "x": 0,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 3.5,
+       "z": 4,
+       "w": 2.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      0.7,
+      2.6
+     ]
+    }
+   ]
+  },
+  {
+   "id": "terrace_b",
+   "name": "Terrace on Mill Lane",
+   "style": "clapboard",
+   "w": 6,
+   "d": 8,
+   "kind": "terrace",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 2.5,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 0.0,
+       "z": 4,
+       "w": 2.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      5.3,
+      2.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 4,
+       "z": 0,
+       "w": 2,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "bedroom2",
+       "name": "Back bedroom",
+       "x": 2.5,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0.0,
+       "z": 4,
+       "w": 2.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      5.3,
+      2.6
+     ]
+    }
+   ]
+  },
+  {
+   "id": "semi_a",
+   "name": "Semi on Larch Street",
+   "style": "render",
+   "w": 8,
+   "d": 8,
+   "kind": "semi",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 2.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 5.2,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 5,
+       "w": 8,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      4.0,
+      3.4
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 2.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 5.2,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "bedroom3",
+       "name": "Box bedroom",
+       "x": 4,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      4.0,
+      3.4
+     ]
+    }
+   ]
+  },
+  {
+   "id": "semi_b",
+   "name": "Semi on Copper Lane",
+   "style": "stone",
+   "w": 8,
+   "d": 8,
+   "kind": "semi",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 5.2,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 2.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 0.0,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 5,
+       "w": 8,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      4.0,
+      3.4
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 5.2,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 2.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 0.0,
+       "z": 0,
+       "w": 2.8,
+       "d": 5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 4,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "bedroom3",
+       "name": "Box bedroom",
+       "x": 0,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      4.0,
+      3.4
+     ]
+    }
+   ]
+  },
+  {
+   "id": "detached_a",
+   "name": "Detached on Station Hill",
+   "style": "stone",
+   "w": 10,
+   "d": 8,
+   "kind": "detached",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 5,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 5,
+       "z": 5,
+       "w": 5,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      5.0,
+      3.4
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 5,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "bedroom3",
+       "name": "Third bedroom",
+       "x": 3,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "boxroom",
+       "name": "Box room",
+       "x": 7,
+       "z": 5,
+       "w": 3,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      5.0,
+      3.4
+     ]
+    }
+   ]
+  },
+  {
+   "id": "detached_b",
+   "name": "Detached on Harbour Road",
+   "style": "brick",
+   "w": 10,
+   "d": 8,
+   "kind": "detached",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 0.0,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 5,
+       "z": 5,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 0,
+       "z": 5,
+       "w": 5,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      5.0,
+      3.4
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 0.0,
+       "z": 0,
+       "w": 3.8,
+       "d": 5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 7,
+       "z": 5,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "bedroom3",
+       "name": "Third bedroom",
+       "x": 3,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "boxroom",
+       "name": "Box room",
+       "x": 0,
+       "z": 5,
+       "w": 3,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      5.0,
+      3.4
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bungalow_a",
+   "name": "Bungalow on Mill Lane",
+   "style": "clapboard",
+   "w": 10,
+   "d": 7,
+   "kind": "bungalow",
+   "floors": [
+    {
+     "name": "Ground floor",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 3.8,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 4,
+       "w": 3.8,
+       "d": 3
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 7
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 3.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 6.2,
+       "z": 3.5,
+       "w": 1.6,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 7.8,
+       "z": 3.5,
+       "w": 2.2,
+       "d": 3.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bungalow_b",
+   "name": "Bungalow on Quay Street",
+   "style": "timber",
+   "w": 10,
+   "d": 7,
+   "kind": "bungalow",
+   "floors": [
+    {
+     "name": "Ground floor",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 6.2,
+       "z": 4,
+       "w": 3.8,
+       "d": 3
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 7
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0.0,
+       "z": 0,
+       "w": 3.8,
+       "d": 3.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 2.2,
+       "z": 3.5,
+       "w": 1.6,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 0.0,
+       "z": 3.5,
+       "w": 2.2,
+       "d": 3.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "flat_a",
+   "name": "Flat on Quay Street",
+   "style": "render",
+   "w": 7,
+   "d": 6,
+   "kind": "flat",
+   "floors": [
+    {
+     "name": "The flat",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 4.8,
+       "d": 3.5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 4.8,
+       "z": 0,
+       "w": 2.2,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 3.5,
+       "w": 4,
+       "d": 2.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 4,
+       "z": 3.5,
+       "w": 3,
+       "d": 2.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "flat_b",
+   "name": "Flat on Station Hill",
+   "style": "stone",
+   "w": 7,
+   "d": 6,
+   "kind": "flat",
+   "floors": [
+    {
+     "name": "The flat",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 2.2,
+       "z": 0,
+       "w": 4.8,
+       "d": 3.5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0.0,
+       "z": 0,
+       "w": 2.2,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 3,
+       "z": 3.5,
+       "w": 4,
+       "d": 2.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 3.5,
+       "w": 3,
+       "d": 2.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "townhouse_a",
+   "name": "Townhouse on Harbour Road",
+   "style": "brick",
+   "w": 6,
+   "d": 7,
+   "kind": "townhouse",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 6,
+       "d": 3.5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 3.5,
+       "w": 3.5,
+       "d": 3.5
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 3.5,
+       "z": 3.5,
+       "w": 2.5,
+       "d": 3.5
+      }
+     ],
+     "stairs": [
+      0.7,
+      2.2
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 2,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 2,
+       "z": 0,
+       "w": 4,
+       "d": 3.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 3.5,
+       "w": 2.6,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 2.6,
+       "z": 3.5,
+       "w": 3.4,
+       "d": 3.5
+      }
+     ],
+     "stairs": [
+      0.7,
+      2.2
+     ]
+    },
+    {
+     "name": "Loft",
+     "rooms": [
+      {
+       "id": "loft",
+       "name": "Loft",
+       "x": 0,
+       "z": 0,
+       "w": 6,
+       "d": 7
+      }
+     ],
+     "stairs": [
+      0.7,
+      2.2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "townhouse_b",
+   "name": "Townhouse on Larch Street",
+   "style": "clapboard",
+   "w": 6,
+   "d": 7,
+   "kind": "townhouse",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 6,
+       "d": 3.5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 2.5,
+       "z": 3.5,
+       "w": 3.5,
+       "d": 3.5
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 0.0,
+       "z": 3.5,
+       "w": 2.5,
+       "d": 3.5
+      }
+     ],
+     "stairs": [
+      5.3,
+      2.2
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 4,
+       "z": 0,
+       "w": 2,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 0,
+       "w": 4,
+       "d": 3.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 3.4,
+       "z": 3.5,
+       "w": 2.6,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 0.0,
+       "z": 3.5,
+       "w": 3.4,
+       "d": 3.5
+      }
+     ],
+     "stairs": [
+      5.3,
+      2.2
+     ]
+    },
+    {
+     "name": "Loft",
+     "rooms": [
+      {
+       "id": "loft",
+       "name": "Loft",
+       "x": 0,
+       "z": 0,
+       "w": 6,
+       "d": 7
+      }
+     ],
+     "stairs": [
+      5.3,
+      2.2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cottage_a",
+   "name": "Cottage on Copper Lane",
+   "style": "timber",
+   "w": 8,
+   "d": 6,
+   "kind": "cottage",
+   "floors": [
+    {
+     "name": "Ground floor",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 5.2,
+       "d": 3.5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 5.2,
+       "z": 0,
+       "w": 2.8,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 3.5,
+       "w": 3.4,
+       "d": 2.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 3.4,
+       "z": 3.5,
+       "w": 2,
+       "d": 2.5
+      },
+      {
+       "id": "shed",
+       "name": "Shed",
+       "x": 5.4,
+       "z": 3.5,
+       "w": 2.6,
+       "d": 2.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cottage_b",
+   "name": "Cottage by the Pond",
+   "style": "render",
+   "w": 8,
+   "d": 6,
+   "kind": "cottage",
+   "floors": [
+    {
+     "name": "Ground floor",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 2.8,
+       "z": 0,
+       "w": 5.2,
+       "d": 3.5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0.0,
+       "z": 0,
+       "w": 2.8,
+       "d": 3.5
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 4.6,
+       "z": 3.5,
+       "w": 3.4,
+       "d": 2.5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 2.6,
+       "z": 3.5,
+       "w": 2,
+       "d": 2.5
+      },
+      {
+       "id": "shed",
+       "name": "Shed",
+       "x": -0.0,
+       "z": 3.5,
+       "w": 2.6,
+       "d": 2.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "loftflat_a",
+   "name": "Loft on the Quay",
+   "style": "brick",
+   "w": 9,
+   "d": 7,
+   "kind": "loft",
+   "floors": [
+    {
+     "name": "The loft",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Living space",
+       "x": 0,
+       "z": 0,
+       "w": 5.8,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 5.8,
+       "z": 0,
+       "w": 3.2,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 4,
+       "w": 4.5,
+       "d": 3
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 4.5,
+       "z": 4,
+       "w": 2,
+       "d": 3
+      },
+      {
+       "id": "loft",
+       "name": "Storage loft",
+       "x": 6.5,
+       "z": 4,
+       "w": 2.5,
+       "d": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "loftflat_b",
+   "name": "Loft on Mill Lane",
+   "style": "clapboard",
+   "w": 9,
+   "d": 7,
+   "kind": "loft",
+   "floors": [
+    {
+     "name": "The loft",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Living space",
+       "x": 3.2,
+       "z": 0,
+       "w": 5.8,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0.0,
+       "z": 0,
+       "w": 3.2,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 4.5,
+       "z": 4,
+       "w": 4.5,
+       "d": 3
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 2.5,
+       "z": 4,
+       "w": 2,
+       "d": 3
+      },
+      {
+       "id": "loft",
+       "name": "Storage loft",
+       "x": 0.0,
+       "z": 4,
+       "w": 2.5,
+       "d": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "maisonette_a",
+   "name": "Maisonette on Elm Row",
+   "style": "render",
+   "w": 7,
+   "d": 8,
+   "kind": "maisonette",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 4.8,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 4.8,
+       "z": 0,
+       "w": 2.2,
+       "d": 4
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 0,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 3.5,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      0.7,
+      6.3
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 0,
+       "w": 4.8,
+       "d": 4
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 4.8,
+       "z": 0,
+       "w": 2.2,
+       "d": 4
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 3.5,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      0.7,
+      6.3
+     ]
+    }
+   ]
+  },
+  {
+   "id": "maisonette_b",
+   "name": "Maisonette on Harbour Road",
+   "style": "stone",
+   "w": 7,
+   "d": 8,
+   "kind": "maisonette",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 2.2,
+       "z": 0,
+       "w": 4.8,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0.0,
+       "z": 0,
+       "w": 2.2,
+       "d": 4
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 3.5,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 0.0,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      6.3,
+      6.3
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 2.2,
+       "z": 0,
+       "w": 4.8,
+       "d": 4
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 0.0,
+       "z": 0,
+       "w": 2.2,
+       "d": 4
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 3.5,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0.0,
+       "z": 4,
+       "w": 3.5,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      6.3,
+      6.3
+     ]
+    }
+   ]
+  },
+  {
+   "id": "villa_a",
+   "name": "Villa on Station Hill",
+   "style": "stone",
+   "w": 10,
+   "d": 10,
+   "kind": "villa",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 0,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 6
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 6,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "utility",
+       "name": "Utility room",
+       "x": 5,
+       "z": 6,
+       "w": 2.4,
+       "d": 4
+      },
+      {
+       "id": "shed",
+       "name": "Garden shed",
+       "x": 7.4,
+       "z": 6,
+       "w": 2.6,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      5.0,
+      4.2
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 6
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 6,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "bedroom3",
+       "name": "Third bedroom",
+       "x": 3.5,
+       "z": 6,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 7,
+       "z": 6,
+       "w": 3,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      5.0,
+      4.2
+     ]
+    },
+    {
+     "name": "Loft",
+     "rooms": [
+      {
+       "id": "loft",
+       "name": "Loft",
+       "x": 0,
+       "z": 0,
+       "w": 10,
+       "d": 10
+      }
+     ],
+     "stairs": [
+      5.0,
+      4.2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "villa_b",
+   "name": "Villa on Copper Lane",
+   "style": "brick",
+   "w": 10,
+   "d": 10,
+   "kind": "villa",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 6
+      },
+      {
+       "id": "dining",
+       "name": "Dining room",
+       "x": 0.0,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 5,
+       "z": 6,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "utility",
+       "name": "Utility room",
+       "x": 2.6,
+       "z": 6,
+       "w": 2.4,
+       "d": 4
+      },
+      {
+       "id": "shed",
+       "name": "Garden shed",
+       "x": -0.0,
+       "z": 6,
+       "w": 2.6,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      5.0,
+      4.2
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 6.2,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 3.8,
+       "z": 0,
+       "w": 2.4,
+       "d": 6
+      },
+      {
+       "id": "bedroom2",
+       "name": "Second bedroom",
+       "x": 0.0,
+       "z": 0,
+       "w": 3.8,
+       "d": 6
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 6.5,
+       "z": 6,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "bedroom3",
+       "name": "Third bedroom",
+       "x": 3.0,
+       "z": 6,
+       "w": 3.5,
+       "d": 4
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 0,
+       "z": 6,
+       "w": 3,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      5.0,
+      4.2
+     ]
+    },
+    {
+     "name": "Loft",
+     "rooms": [
+      {
+       "id": "loft",
+       "name": "Loft",
+       "x": 0,
+       "z": 0,
+       "w": 10,
+       "d": 10
+      }
+     ],
+     "stairs": [
+      5.0,
+      4.2
+     ]
+    }
+   ]
+  }
+ ]
+}

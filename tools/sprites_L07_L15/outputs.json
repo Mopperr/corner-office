@@ -1,0 +1,388 @@
+[
+ {
+  "entry": 1,
+  "file": "assets/ui/driving/parked_car@1x.png",
+  "size_1x": [
+   96,
+   48
+  ],
+  "size_2x": [
+   192,
+   96
+  ],
+  "hexes": [
+   "#E8DCC4 body",
+   "#7E95A3 glass",
+   "#3E3A4F tyres",
+   "#FFF1D6/#D9765F lamps"
+  ],
+  "frames": "1",
+  "note": "silhouette/alpha identical to shipped sprite; NOTE the shipped parked_car is shared by L3/L5/L7 day routes"
+ },
+ {
+  "entry": 1,
+  "file": "assets/ui/driving/parked_car_cream@1x.png",
+  "size_1x": [
+   96,
+   48
+  ],
+  "size_2x": [
+   192,
+   96
+  ],
+  "hexes": [
+   "identical pixels to parked_car"
+  ],
+  "frames": "1",
+  "note": "same pixels under an L13-only name, in case the day routes (L3/L5/L7) should keep the blue car"
+ },
+ {
+  "entry": 2,
+  "file": "assets/ui/driving/night_cat@1x.png",
+  "size_1x": [
+   24,
+   16
+  ],
+  "size_2x": [
+   48,
+   32
+  ],
+  "hexes": [
+   "#E07A5F body",
+   "#FFF1D6 eye-shine"
+  ],
+  "frames": "1",
+  "note": "same silhouette; eye-shine kept (2 px)"
+ },
+ {
+  "entry": 3,
+  "file": "assets/ui/driving/neon_sign_open@1x.png",
+  "size_1x": [
+   64,
+   32
+  ],
+  "size_2x": [
+   128,
+   64
+  ],
+  "hexes": [
+   "#E07A5F tubes",
+   "#3E3A4F board",
+   "#625C78 casing"
+  ],
+  "frames": "1",
+  "note": "OPEN lettering + border tube in L13 terracotta neon; painted 2 px bloom on the board"
+ },
+ {
+  "entry": 3,
+  "file": "assets/ui/driving/neon_sign_open_low@1x.png",
+  "size_1x": [
+   64,
+   32
+  ],
+  "size_2x": [
+   128,
+   64
+  ],
+  "hexes": [
+   "#FFF1D6 tubes",
+   "#3E3A4F board",
+   "#625C78 casing"
+  ],
+  "frames": "1",
+  "note": "low tier: cream tubes"
+ },
+ {
+  "entry": 4,
+  "file": "assets/ui/driving/windsock_sprite@1x.png",
+  "size_1x": [
+   32,
+   64
+  ],
+  "size_2x": [
+   64,
+   128
+  ],
+  "hexes": [
+   "#C0392B sock",
+   "#F4E9D8 cream stripes",
+   "#737F88 pole"
+  ],
+  "frames": "1",
+  "note": "pole darkened from #9FB3BF to weathered steel #737F88 so the whole sprite reads darker than road/sand (see VALIDATION)"
+ },
+ {
+  "entry": 5,
+  "file": "assets/ui/driving/gull@1x.png",
+  "size_1x": [
+   32,
+   20
+  ],
+  "size_2x": [
+   64,
+   40
+  ],
+  "hexes": [
+   "#E9E5DC/#FBF7EF white body",
+   "#646D78 grey mantle",
+   "#3E3A4F wing tips",
+   "#E6B655 beak"
+  ],
+  "frames": "1",
+  "note": "redrawn 32x20 (was 20x12); top-down flying gull, avg lum tuned to ~0.29 like the old sprite"
+ },
+ {
+  "entry": 6,
+  "file": "assets/ui/driving/lighthouse_sprite@1x.png",
+  "size_1x": [
+   64,
+   96
+  ],
+  "size_2x": [
+   128,
+   192
+  ],
+  "hexes": [
+   "#C9714F tower",
+   "#F4E9D8 cream bands",
+   "#A85A3E lantern",
+   "#BFDDEA/#FFF1D6 lamp"
+  ],
+  "frames": "1",
+  "note": "alpha identical; was cream tower + one terracotta band"
+ },
+ {
+  "entry": 7,
+  "file": "assets/ui/driving/dune@1x.png",
+  "size_1x": [
+   96,
+   48
+  ],
+  "size_2x": [
+   192,
+   96
+  ],
+  "hexes": [
+   "#A8783F body/shadow",
+   "#8FAF7E sage tufts (#6E8F62 roots, #A9C49A tips)"
+  ],
+  "frames": "1",
+  "note": "alpha identical; tufts drawn inside the silhouette"
+ },
+ {
+  "entry": 8,
+  "file": "assets/ui/driving/road_L8_market_lane@1x.png",
+  "size_1x": [
+   128,
+   128
+  ],
+  "size_2x": [
+   256,
+   256
+  ],
+  "hexes": [
+   "#E6D8C3 lane",
+   "#6B5A4A curb"
+  ],
+  "frames": "1",
+  "note": "lane x16-111 (same 3 m road as the shipped tile), curb x0-15 and x112-127 where the sage verge was; no centre line; tiles top-to-bottom (all vertical detail repeats every 32 px)"
+ },
+ {
+  "entry": 9,
+  "file": "assets/ui/vfx/vfx_meteor_streak@1x.png",
+  "size_1x": [
+   768,
+   64
+  ],
+  "size_2x": [
+   1536,
+   128
+  ],
+  "hexes": [
+   "#FFF1D6 head",
+   "#F2B35E warm glow",
+   "#BFDDEA cool tail end"
+  ],
+  "frames": "6 frames of 128x64 @1x (256x128 @2x), left to right",
+  "note": "one-shot (no loop), play ~12 fps; head moves upper-right to lower-left inside the frame and burns out in frame 6"
+ },
+ {
+  "entry": 10,
+  "file": "assets/ui/vfx/vfx_wind_streak_lane@1x.png",
+  "size_1x": [
+   768,
+   64
+  ],
+  "size_2x": [
+   1536,
+   128
+  ],
+  "hexes": [
+   "#FFFFFF streaks (alpha 0-217)",
+   "#E8EEF2 soft underside"
+  ],
+  "frames": "6 frames of 128x64 @1x (256x128 @2x), left to right",
+  "note": "seamless 6-frame loop (each streak wraps), 128 px wide so it spans the 96 px lane; flows left to right (flip_h for the other wind direction)"
+ },
+ {
+  "entry": 11,
+  "file": "assets/ui/driving/sandwich@1x.png",
+  "size_1x": [
+   20,
+   16
+  ],
+  "size_2x": [
+   40,
+   32
+  ],
+  "hexes": [
+   "#F4E3C1 bread",
+   "#C68B59 crust",
+   "#8FAF7E lettuce",
+   "#D9765F tomato",
+   "#E6B655 cheese"
+  ],
+  "frames": "1",
+  "note": "20x16 @1x (0.6 x 0.5 m at 32 px/m, enlarged so the 16 px readability minimum holds while a gull carries it)"
+ },
+ {
+  "entry": 12,
+  "file": "assets/ui/driving/hill_crest_shade@1x.png",
+  "size_1x": [
+   128,
+   128
+  ],
+  "size_2x": [
+   256,
+   256
+  ],
+  "hexes": [
+   "#FFF1D6 lit band (alpha<=72)",
+   "#3E3A4F shade band (alpha<=90)"
+  ],
+  "frames": "1",
+  "note": "128x128 overlay, multiply/normal blend over the road; bands run across X (uphill lit on the left, crest at x=64, far side shaded on the right), constant in Y so it tiles vertically; flip_h for the other direction"
+ },
+ {
+  "entry": 13,
+  "file": "assets/ui/driving/hospital_front@1x.png",
+  "size_1x": [
+   160,
+   96
+  ],
+  "size_2x": [
+   320,
+   192
+  ],
+  "hexes": [
+   "#F4E9D8 walls",
+   "#A8C9B8 mint trim (L7)",
+   "#7FA3B8/#8FB3C4 glass",
+   "#C0392B sign + #FFF1D6 cross",
+   "#4F7A5A lettering"
+  ],
+  "frames": "1",
+  "note": "160x96 @1x, front elevation like shopfront/diner (128x96 / 128x64); 5 m wide at 32 px/m"
+ },
+ {
+  "entry": 14,
+  "file": "assets/ui/icons/gerald_happy_fish@1x.png",
+  "size_1x": [
+   64,
+   64
+  ],
+  "size_2x": [
+   128,
+   128
+  ],
+  "hexes": [
+   "#F28C28 Gerald (L7-5 review hex)",
+   "#D9765F fins",
+   "#BFDDEA water",
+   "#E6B655 sparkles",
+   "#E8B4A8 cheek"
+  ],
+  "frames": "1",
+  "note": "64x64 @1x / 128x128 like icon_*.png; the placeholder names gerald_happy_fish.png = the 128 px file"
+ },
+ {
+  "entry": 14,
+  "file": "assets/ui/icons/gerald_worried_fish@1x.png",
+  "size_1x": [
+   64,
+   64
+  ],
+  "size_2x": [
+   128,
+   128
+  ],
+  "hexes": [
+   "#F28C28 Gerald (L7-5 review hex)",
+   "#D9765F fins",
+   "#BFDDEA water",
+   "#7FA3B8 sweat drop"
+  ],
+  "frames": "1",
+  "note": "64x64 @1x / 128x128 like icon_*.png; the placeholder names gerald_worried_fish.png = the 128 px file"
+ },
+ {
+  "entry": 15,
+  "file": "assets/ui/driving/flagger_sheet@1x.png",
+  "size_1x": [
+   64,
+   48
+  ],
+  "size_2x": [
+   128,
+   96
+  ],
+  "hexes": [
+   "#D9765F STOP face + #FFF1D6 text",
+   "#E6B655 SLOW face + #3E3A4F text",
+   "#E6B655 vest/hat",
+   "#E8B4A8 skin",
+   "#7FA3B8 trousers",
+   "#6B4A3A pole"
+  ],
+  "frames": "2 frames of 32x48 @1x (64x96 @2x), left to right",
+  "note": "frame 0 = STOP, frame 1 = SLOW; 32x48 like jogger; colours from npc_flagger.glb / flagger_sign.glb; sign text in a 3x5 pixel font on an 18x11 octagon held up on a pole"
+ },
+ {
+  "entry": 16,
+  "file": "assets/ui/driving/steel_plate@1x.png",
+  "size_1x": [
+   77,
+   58
+  ],
+  "size_2x": [
+   154,
+   116
+  ],
+  "hexes": [
+   "#A8ADB4 chrome-grey steel (L7 chrome palette)",
+   "#8E8276 wear"
+  ],
+  "frames": "1",
+  "note": "exact 77x58 @1x = 2.4 x 1.8 m at 32 px/m, top-down; diamond tread, bevel light top-left"
+ },
+ {
+  "entry": 17,
+  "file": "assets/ui/driving/jackhammer_worker_sheet@1x.png",
+  "size_1x": [
+   160,
+   48
+  ],
+  "size_2x": [
+   320,
+   96
+  ],
+  "hexes": [
+   "#E6B655 vest/hat",
+   "#C0392B jackhammer",
+   "#A8ADB4 chisel",
+   "#D9B98A/#EADBB8 dust (semi-transparent)"
+  ],
+  "frames": "4 frames of 40x48 @1x (80x96 @2x), left to right",
+  "note": "4-frame loop at ~10 fps; worker bobs 1 px on frames 1/3, dust puff grows f0->f2 and settles f3; 40x48 frames (32 px worker + 8 px for the puff)"
+ }
+]

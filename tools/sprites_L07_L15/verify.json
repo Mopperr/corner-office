@@ -1,0 +1,1871 @@
+{
+ "backdrop_lum": {
+  "road_L13_night": 0.071,
+  "road_L15_cliff": 0.577,
+  "sand_tile": 0.713
+ },
+ "night": {
+  "tint": 0.45,
+  "edge_glow": 1.3
+ },
+ "sprites": [
+  {
+   "entry": 1,
+   "name": "parked_car",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/parked_car@1x.png",
+   "size_1x": [
+    96,
+    48
+   ],
+   "size_2x": [
+    192,
+    96
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#9D9E9C",
+   "lum": 0.343,
+   "shipped": {
+    "size": [
+     96,
+     48
+    ],
+    "lum": 0.099
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L13_night": {
+     "C": 3.25,
+     "C_beam_edge": 3.77,
+     "C_shipped": 1.23
+    }
+   }
+  },
+  {
+   "entry": 1,
+   "name": "parked_car_cream",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/parked_car_cream@1x.png",
+   "size_1x": [
+    96,
+    48
+   ],
+   "size_2x": [
+    192,
+    96
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#9D9E9C",
+   "lum": 0.343,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 2,
+   "name": "night_cat",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/night_cat@1x.png",
+   "size_1x": [
+    24,
+    16
+   ],
+   "size_2x": [
+    48,
+    32
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#CF7860",
+   "lum": 0.277,
+   "shipped": {
+    "size": [
+     24,
+     16
+    ],
+    "lum": 0.052
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L13_night": {
+     "C": 2.7,
+     "C_beam_edge": 3.13,
+     "C_shipped": 1.19
+    }
+   }
+  },
+  {
+   "entry": 3,
+   "name": "neon_sign_open",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/neon_sign_open@1x.png",
+   "size_1x": [
+    64,
+    32
+   ],
+   "size_2x": [
+    128,
+    64
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#855E60",
+   "lum": 0.14,
+   "shipped": {
+    "size": [
+     64,
+     32
+    ],
+    "lum": 0.094
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L13_night": {
+     "C": 1.57,
+     "C_beam_edge": 1.82,
+     "C_shipped": 1.19
+    }
+   }
+  },
+  {
+   "entry": 3,
+   "name": "neon_sign_open_low",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/neon_sign_open_low@1x.png",
+   "size_1x": [
+    64,
+    32
+   ],
+   "size_2x": [
+    128,
+    64
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#90898B",
+   "lum": 0.258,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L13_night": {
+     "C": 2.55,
+     "C_beam_edge": 2.95
+    }
+   }
+  },
+  {
+   "entry": 4,
+   "name": "windsock_sprite",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/windsock_sprite@1x.png",
+   "size_1x": [
+    32,
+    64
+   ],
+   "size_2x": [
+    64,
+    128
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#93807F",
+   "lum": 0.233,
+   "shipped": {
+    "size": [
+     32,
+     64
+    ],
+    "lum": 0.4
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L15_cliff": {
+     "C": 2.21,
+     "C_shipped": 1.39
+    },
+    "sand_tile": {
+     "C": 2.69,
+     "C_shipped": 1.7
+    }
+   }
+  },
+  {
+   "entry": 5,
+   "name": "gull",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/gull@1x.png",
+   "size_1x": [
+    32,
+    20
+   ],
+   "size_2x": [
+    64,
+    40
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#929294",
+   "lum": 0.29,
+   "shipped": {
+    "size": [
+     20,
+     12
+    ],
+    "lum": 0.285
+   },
+   "alpha_identical_to_shipped": false,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L15_cliff": {
+     "C": 1.84,
+     "C_shipped": 1.87
+    },
+    "sand_tile": {
+     "C": 2.24,
+     "C_shipped": 2.28
+    }
+   }
+  },
+  {
+   "entry": 6,
+   "name": "lighthouse_sprite",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/lighthouse_sprite@1x.png",
+   "size_1x": [
+    64,
+    96
+   ],
+   "size_2x": [
+    128,
+    192
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#B87C63",
+   "lum": 0.256,
+   "shipped": {
+    "size": [
+     64,
+     96
+    ],
+    "lum": 0.522
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L15_cliff": {
+     "C": 2.05,
+     "C_shipped": 1.1
+    },
+    "sand_tile": {
+     "C": 2.49,
+     "C_shipped": 1.33
+    }
+   }
+  },
+  {
+   "entry": 7,
+   "name": "dune",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/dune@1x.png",
+   "size_1x": [
+    96,
+    48
+   ],
+   "size_2x": [
+    192,
+    96
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#A27A47",
+   "lum": 0.222,
+   "shipped": {
+    "size": [
+     96,
+     48
+    ],
+    "lum": 0.655
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L15_cliff": {
+     "C": 2.3,
+     "C_shipped": 1.12
+    },
+    "sand_tile": {
+     "C": 2.8,
+     "C_shipped": 1.08
+    }
+   }
+  },
+  {
+   "entry": 8,
+   "name": "road_L8_market_lane",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/road_L8_market_lane@1x.png",
+   "size_1x": [
+    128,
+    128
+   ],
+   "size_2x": [
+    256,
+    256
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#C7B8A5",
+   "lum": 0.494,
+   "shipped": {
+    "size": [
+     128,
+     128
+    ],
+    "lum": 0.519
+   },
+   "alpha_identical_to_shipped": true,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 9,
+   "name": "vfx_meteor_streak",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/vfx/vfx_meteor_streak@1x.png",
+   "size_1x": [
+    768,
+    64
+   ],
+   "size_2x": [
+    1536,
+    128
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#FADBAD",
+   "lum": 0.746,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 10,
+   "name": "vfx_wind_streak_lane",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/vfx/vfx_wind_streak_lane@1x.png",
+   "size_1x": [
+    768,
+    64
+   ],
+   "size_2x": [
+    1536,
+    128
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#FFFFFF",
+   "lum": 1.0,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 11,
+   "name": "sandwich",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/sandwich@1x.png",
+   "size_1x": [
+    20,
+    16
+   ],
+   "size_2x": [
+    40,
+    32
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#BFA880",
+   "lum": 0.408,
+   "outline_6B4A3A_px": 0,
+   "vs": {
+    "road_L15_cliff": {
+     "C": 1.37
+    },
+    "sand_tile": {
+     "C": 1.67
+    }
+   }
+  },
+  {
+   "entry": 12,
+   "name": "hill_crest_shade",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/hill_crest_shade@1x.png",
+   "size_1x": [
+    128,
+    128
+   ],
+   "size_2x": [
+    256,
+    256
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#8E8687",
+   "lum": 0.248,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 13,
+   "name": "hospital_front",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/hospital_front@1x.png",
+   "size_1x": [
+    160,
+    96
+   ],
+   "size_2x": [
+    320,
+    192
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#CBCBC1",
+   "lum": 0.594,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 14,
+   "name": "gerald_happy_fish",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/icons/gerald_happy_fish@1x.png",
+   "size_1x": [
+    64,
+    64
+   ],
+   "size_2x": [
+    128,
+    128
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#C2BCB1",
+   "lum": 0.507,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 14,
+   "name": "gerald_worried_fish",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/icons/gerald_worried_fish@1x.png",
+   "size_1x": [
+    64,
+    64
+   ],
+   "size_2x": [
+    128,
+    128
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#BFB9AE",
+   "lum": 0.492,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 15,
+   "name": "flagger_sheet",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/flagger_sheet@1x.png",
+   "size_1x": [
+    64,
+    48
+   ],
+   "size_2x": [
+    128,
+    96
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#B49570",
+   "lum": 0.326,
+   "outline_6B4A3A_px": 60
+  },
+  {
+   "entry": 16,
+   "name": "steel_plate",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/steel_plate@1x.png",
+   "size_1x": [
+    77,
+    58
+   ],
+   "size_2x": [
+    154,
+    116
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#A4A7AD",
+   "lum": 0.389,
+   "outline_6B4A3A_px": 0
+  },
+  {
+   "entry": 17,
+   "name": "jackhammer_worker_sheet",
+   "file": "pr21-new/sprites_L07_L15/assets/ui/driving/jackhammer_worker_sheet@1x.png",
+   "size_1x": [
+    160,
+    48
+   ],
+   "size_2x": [
+    320,
+    96
+   ],
+   "x2_nearest_exact": true,
+   "avg_hex": "#B09275",
+   "lum": 0.312,
+   "outline_6B4A3A_px": 0
+  }
+ ],
+ "lane": {
+  "centre_hex": "#E5D7C2",
+  "edge_hex": "#6A594A",
+  "C_lane_vs_edge": 4.71,
+  "wrap_vs_internal_joint_max_delta": 2,
+  "centre_band_max_dev": 1
+ },
+ "hill_crest_shade": {
+  "alpha_max": 90,
+  "alpha_min": 0,
+  "period4_rows_identical": true,
+  "edge_alpha_left": 0,
+  "edge_alpha_right": 0
+ },
+ "checker": {
+  "L08_market.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [
+     "lane sprite as-built still has the centre dash; Art redraw to plain cream + dark curb pending"
+    ],
+    "placeholders": 0,
+    "hazards": [
+     {
+      "sprite": "crate_stack",
+      "px": [
+       28,
+       36
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.22,
+      "passed": true
+     },
+     {
+      "sprite": "stall",
+      "px": [
+       64,
+       48
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 1.73,
+      "passed": true
+     },
+     {
+      "sprite": "cabbage",
+      "px": [
+       20,
+       20
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.27,
+      "passed": true
+     },
+     {
+      "sprite": "wood_crate",
+      "px": [
+       24,
+       24
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.37,
+      "passed": true
+     },
+     {
+      "sprite": "apple",
+      "px": [
+       12,
+       12
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.46,
+      "passed": true
+     },
+     {
+      "sprite": "vendor",
+      "px": [
+       24,
+       24
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 1.72,
+      "passed": true
+     },
+     {
+      "sprite": "produce",
+      "px": [
+       32,
+       24
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 1.93,
+      "passed": true
+     },
+     {
+      "sprite": "bunting",
+      "px": [
+       96,
+       16
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.71,
+      "passed": true
+     }
+    ],
+    "lane": {
+     "asbuilt_centre_hex": "#CFC6BE",
+     "asbuilt_edge_hex": "#8FAF7E",
+     "asbuilt_lane_vs_edge_C": 1.45,
+     "fixed_lane_vs_curb_C": 4.7,
+     "pass_fixed": true,
+     "pass_asbuilt": false,
+     "style": {
+      "fill": "#E6D8C3",
+      "curb": "#6B5A4A",
+      "centre_line": false,
+      "decision": "CMB Oct 23: plain cream lane, dark curb, no centre line",
+      "art": "redraw road_L8_market_lane@1x.png to match"
+     }
+    }
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [
+     "lane sprite as-built still has the centre dash; Art redraw to plain cream + dark curb pending"
+    ],
+    "placeholders": 0,
+    "hazards": [
+     {
+      "sprite": "crate_stack",
+      "px": [
+       28,
+       36
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.67,
+      "passed": true
+     },
+     {
+      "sprite": "stall",
+      "px": [
+       64,
+       48
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.08,
+      "passed": true
+     },
+     {
+      "sprite": "cabbage",
+      "px": [
+       20,
+       20
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.73,
+      "passed": true
+     },
+     {
+      "sprite": "wood_crate",
+      "px": [
+       24,
+       24
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.84,
+      "passed": true
+     },
+     {
+      "sprite": "apple",
+      "px": [
+       12,
+       12
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.95,
+      "passed": true
+     },
+     {
+      "sprite": "vendor",
+      "px": [
+       24,
+       24
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.06,
+      "passed": true
+     },
+     {
+      "sprite": "produce",
+      "px": [
+       32,
+       24
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 2.32,
+      "passed": true
+     },
+     {
+      "sprite": "bunting",
+      "px": [
+       96,
+       16
+      ],
+      "lum": null,
+      "vs": null,
+      "C_vs_lane": 3.25,
+      "passed": true
+     }
+    ],
+    "lane": {
+     "asbuilt_centre_hex": "#E5D7C2",
+     "asbuilt_edge_hex": "#6A594A",
+     "asbuilt_lane_vs_edge_C": 4.71,
+     "fixed_lane_vs_curb_C": 4.7,
+     "pass_fixed": true,
+     "pass_asbuilt": true,
+     "style": {
+      "fill": "#E6D8C3",
+      "curb": "#6B5A4A",
+      "centre_line": false,
+      "decision": "CMB Oct 23: plain cream lane, dark curb, no centre line",
+      "art": "redraw road_L8_market_lane@1x.png to match"
+     }
+    }
+   },
+   "redirected_keys": [
+    "lane"
+   ]
+  },
+  "L13_midnight.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [
+     "Art recolour needed: parked_car -> #E8DCC4 (as-built fails)",
+     "Art recolour needed: cat -> #E07A5F (as-built fails)"
+    ],
+    "placeholders": 1,
+    "hazards": [
+     {
+      "sprite": "cone",
+      "px": [
+       32,
+       32
+      ],
+      "lum": 0.298,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.87,
+        "C_fixed": 2.87,
+        "C_beam_edge": 3.33,
+        "C_dark_info": 2.4
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "parked_car",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.099,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.23,
+        "C_fixed": 6.39,
+        "C_beam_edge": 7.41,
+        "C_dark_info": 5.03
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "cat",
+      "px": [
+       24,
+       16
+      ],
+      "lum": 0.052,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.18,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "neon",
+      "px": [
+       64,
+       32
+      ],
+      "lum": 0.094,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.19,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "streetlight",
+      "px": [
+       32,
+       96
+      ],
+      "lum": 0.255,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.52,
+        "C_fixed": 2.52,
+        "C_beam_edge": 2.92,
+        "C_dark_info": 2.13
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "diner",
+      "px": [
+       128,
+       64
+      ],
+      "lum": 0.145,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.61,
+        "C_fixed": 1.61,
+        "C_beam_edge": 1.86,
+        "C_dark_info": 1.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [
+     {
+      "sprite": "cone",
+      "px": [
+       32,
+       32
+      ],
+      "lum": 0.298,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.87,
+        "C_fixed": 2.87,
+        "C_beam_edge": 3.33,
+        "C_dark_info": 2.4
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "parked_car",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.343,
+      "vs": {
+       "road": {
+        "C_asbuilt": 3.25,
+        "C_fixed": 6.39,
+        "C_beam_edge": 7.41,
+        "C_dark_info": 5.03
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "cat",
+      "px": [
+       24,
+       16
+      ],
+      "lum": 0.277,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.7,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "neon",
+      "px": [
+       64,
+       32
+      ],
+      "lum": 0.14,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.57,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "streetlight",
+      "px": [
+       32,
+       96
+      ],
+      "lum": 0.255,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.52,
+        "C_fixed": 2.52,
+        "C_beam_edge": 2.92,
+        "C_dark_info": 2.13
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "diner",
+      "px": [
+       128,
+       64
+      ],
+      "lum": 0.145,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.61,
+        "C_fixed": 1.61,
+        "C_beam_edge": 1.86,
+        "C_dark_info": 1.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "redirected_keys": [
+    "cat",
+    "neon",
+    "parked_car",
+    "meteor (placeholder)"
+   ]
+  },
+  "L15_coast.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [
+     "Art recolour needed: windsock -> #C0392B (as-built fails)",
+     "route_contrast:gull"
+    ],
+    "placeholders": 2,
+    "hazards": [
+     {
+      "sprite": "fence",
+      "px": [
+       64,
+       16
+      ],
+      "lum": 0.187,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.65,
+        "C_fixed": 2.65
+       },
+       "sand": {
+        "C_asbuilt": 3.23,
+        "C_fixed": 3.23
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "windsock",
+      "px": [
+       32,
+       64
+      ],
+      "lum": 0.4,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.39,
+        "C_fixed": 3.25
+       },
+       "sand": {
+        "C_asbuilt": 1.69,
+        "C_fixed": 3.95
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "gull",
+      "px": [
+       20,
+       12
+      ],
+      "lum": 0.285,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.87,
+        "C_fixed": 1.87
+       },
+       "sand": {
+        "C_asbuilt": 2.28,
+        "C_fixed": 2.28
+       }
+      },
+      "C_vs_lane": null,
+      "passed": false
+     },
+     {
+      "sprite": "lighthouse",
+      "px": [
+       64,
+       96
+      ],
+      "lum": 0.522,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.1,
+        "C_fixed": 2.1
+       },
+       "sand": {
+        "C_asbuilt": 1.33,
+        "C_fixed": 2.56
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "shack",
+      "px": [
+       64,
+       48
+      ],
+      "lum": 0.242,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.15,
+        "C_fixed": 2.15
+       },
+       "sand": {
+        "C_asbuilt": 2.62,
+        "C_fixed": 2.62
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "dune",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.655,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.12,
+        "C_fixed": 2.31
+       },
+       "sand": {
+        "C_asbuilt": 1.08,
+        "C_fixed": 2.81
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [
+     {
+      "sprite": "fence",
+      "px": [
+       64,
+       16
+      ],
+      "lum": 0.187,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.65,
+        "C_fixed": 2.65
+       },
+       "sand": {
+        "C_asbuilt": 3.23,
+        "C_fixed": 3.23
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "windsock",
+      "px": [
+       32,
+       64
+      ],
+      "lum": 0.233,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.21,
+        "C_fixed": 3.25
+       },
+       "sand": {
+        "C_asbuilt": 2.69,
+        "C_fixed": 3.95
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "gull",
+      "px": [
+       32,
+       20
+      ],
+      "lum": 0.29,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.84,
+        "C_fixed": 1.84
+       },
+       "sand": {
+        "C_asbuilt": 2.24,
+        "C_fixed": 2.24
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "lighthouse",
+      "px": [
+       64,
+       96
+      ],
+      "lum": 0.256,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.05,
+        "C_fixed": 2.1
+       },
+       "sand": {
+        "C_asbuilt": 2.49,
+        "C_fixed": 2.56
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "shack",
+      "px": [
+       64,
+       48
+      ],
+      "lum": 0.242,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.15,
+        "C_fixed": 2.15
+       },
+       "sand": {
+        "C_asbuilt": 2.62,
+        "C_fixed": 2.62
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "dune",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.222,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.3,
+        "C_fixed": 2.31
+       },
+       "sand": {
+        "C_asbuilt": 2.8,
+        "C_fixed": 2.81
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "redirected_keys": [
+    "gull",
+    "windsock",
+    "lighthouse",
+    "dune",
+    "wind_streak (placeholder)",
+    "sandwich (placeholder)"
+   ]
+  },
+  "l13_midnightneon.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [
+     "Art recolour needed: parked_car -> #E8DCC4 (as-built fails)",
+     "Art recolour needed: cat -> #E07A5F (as-built fails)"
+    ],
+    "placeholders": 1,
+    "hazards": [
+     {
+      "sprite": "cone",
+      "px": [
+       32,
+       32
+      ],
+      "lum": 0.298,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.87,
+        "C_fixed": 2.87,
+        "C_beam_edge": 3.33,
+        "C_dark_info": 2.4
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "parked_car",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.099,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.23,
+        "C_fixed": 6.39,
+        "C_beam_edge": 7.41,
+        "C_dark_info": 5.03
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "cat",
+      "px": [
+       24,
+       16
+      ],
+      "lum": 0.052,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.18,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "neon",
+      "px": [
+       64,
+       32
+      ],
+      "lum": 0.094,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.19,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "streetlight",
+      "px": [
+       32,
+       96
+      ],
+      "lum": 0.255,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.52,
+        "C_fixed": 2.52,
+        "C_beam_edge": 2.92,
+        "C_dark_info": 2.13
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "diner",
+      "px": [
+       128,
+       64
+      ],
+      "lum": 0.145,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.61,
+        "C_fixed": 1.61,
+        "C_beam_edge": 1.86,
+        "C_dark_info": 1.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [
+     {
+      "sprite": "cone",
+      "px": [
+       32,
+       32
+      ],
+      "lum": 0.298,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.87,
+        "C_fixed": 2.87,
+        "C_beam_edge": 3.33,
+        "C_dark_info": 2.4
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "parked_car",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.343,
+      "vs": {
+       "road": {
+        "C_asbuilt": 3.25,
+        "C_fixed": 6.39,
+        "C_beam_edge": 7.41,
+        "C_dark_info": 5.03
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "cat",
+      "px": [
+       24,
+       16
+      ],
+      "lum": 0.277,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.7,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "neon",
+      "px": [
+       64,
+       32
+      ],
+      "lum": 0.14,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.57,
+        "C_fixed": 2.94,
+        "C_beam_edge": 3.41,
+        "C_dark_info": 2.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "streetlight",
+      "px": [
+       32,
+       96
+      ],
+      "lum": 0.255,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.52,
+        "C_fixed": 2.52,
+        "C_beam_edge": 2.92,
+        "C_dark_info": 2.13
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "diner",
+      "px": [
+       128,
+       64
+      ],
+      "lum": 0.145,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.61,
+        "C_fixed": 1.61,
+        "C_beam_edge": 1.86,
+        "C_dark_info": 1.45
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "redirected_keys": [
+    "cat",
+    "neon",
+    "parked_car",
+    "meteor (placeholder)"
+   ]
+  },
+  "l15_windycoast.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [
+     "Art recolour needed: windsock -> #C0392B (as-built fails)",
+     "route_contrast:gull"
+    ],
+    "placeholders": 2,
+    "hazards": [
+     {
+      "sprite": "fence",
+      "px": [
+       64,
+       16
+      ],
+      "lum": 0.187,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.65,
+        "C_fixed": 2.65
+       },
+       "sand": {
+        "C_asbuilt": 3.23,
+        "C_fixed": 3.23
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "windsock",
+      "px": [
+       32,
+       64
+      ],
+      "lum": 0.4,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.39,
+        "C_fixed": 3.25
+       },
+       "sand": {
+        "C_asbuilt": 1.69,
+        "C_fixed": 3.95
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "gull",
+      "px": [
+       20,
+       12
+      ],
+      "lum": 0.285,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.87,
+        "C_fixed": 1.87
+       },
+       "sand": {
+        "C_asbuilt": 2.28,
+        "C_fixed": 2.28
+       }
+      },
+      "C_vs_lane": null,
+      "passed": false
+     },
+     {
+      "sprite": "lighthouse",
+      "px": [
+       64,
+       96
+      ],
+      "lum": 0.522,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.1,
+        "C_fixed": 2.1
+       },
+       "sand": {
+        "C_asbuilt": 1.33,
+        "C_fixed": 2.56
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "shack",
+      "px": [
+       64,
+       48
+      ],
+      "lum": 0.242,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.15,
+        "C_fixed": 2.15
+       },
+       "sand": {
+        "C_asbuilt": 2.62,
+        "C_fixed": 2.62
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "dune",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.655,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.12,
+        "C_fixed": 2.31
+       },
+       "sand": {
+        "C_asbuilt": 1.08,
+        "C_fixed": 2.81
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [
+     {
+      "sprite": "fence",
+      "px": [
+       64,
+       16
+      ],
+      "lum": 0.187,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.65,
+        "C_fixed": 2.65
+       },
+       "sand": {
+        "C_asbuilt": 3.23,
+        "C_fixed": 3.23
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "windsock",
+      "px": [
+       32,
+       64
+      ],
+      "lum": 0.233,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.21,
+        "C_fixed": 3.25
+       },
+       "sand": {
+        "C_asbuilt": 2.69,
+        "C_fixed": 3.95
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "gull",
+      "px": [
+       32,
+       20
+      ],
+      "lum": 0.29,
+      "vs": {
+       "road": {
+        "C_asbuilt": 1.84,
+        "C_fixed": 1.84
+       },
+       "sand": {
+        "C_asbuilt": 2.24,
+        "C_fixed": 2.24
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "lighthouse",
+      "px": [
+       64,
+       96
+      ],
+      "lum": 0.256,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.05,
+        "C_fixed": 2.1
+       },
+       "sand": {
+        "C_asbuilt": 2.49,
+        "C_fixed": 2.56
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "shack",
+      "px": [
+       64,
+       48
+      ],
+      "lum": 0.242,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.15,
+        "C_fixed": 2.15
+       },
+       "sand": {
+        "C_asbuilt": 2.62,
+        "C_fixed": 2.62
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     },
+     {
+      "sprite": "dune",
+      "px": [
+       96,
+       48
+      ],
+      "lum": 0.222,
+      "vs": {
+       "road": {
+        "C_asbuilt": 2.3,
+        "C_fixed": 2.31
+       },
+       "sand": {
+        "C_asbuilt": 2.8,
+        "C_fixed": 2.81
+       }
+      },
+      "C_vs_lane": null,
+      "passed": true
+     }
+    ],
+    "lane": null
+   },
+   "redirected_keys": [
+    "gull",
+    "windsock",
+    "lighthouse",
+    "dune",
+    "wind_streak (placeholder)",
+    "sandwich (placeholder)"
+   ]
+  },
+  "l7_hospitalhill.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 3,
+    "hazards": [],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "redirected_keys": [
+    "parked_car",
+    "hill_shading (placeholder)",
+    "hospital (placeholder)",
+    "happy_fish_icon (placeholder)"
+   ]
+  },
+  "l9_construction.json": {
+   "baseline": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 3,
+    "hazards": [],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "redirected_keys": [
+    "flagger (placeholder)",
+    "steel_plate (placeholder)",
+    "jackhammer (placeholder)"
+   ]
+  },
+  "l3_drizzle.json": {
+   "baseline": {
+    "hard_fail": [
+     "rewards_not_add_only:smooth_ride,shortcut_bonus"
+    ],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [
+     "rewards_not_add_only:smooth_ride,shortcut_bonus"
+    ],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "redirected_keys": [
+    "parked_car"
+   ]
+  },
+  "l3_goldenhour.json": {
+   "baseline": {
+    "hard_fail": [
+     "rewards_not_add_only:smooth_ride,shortcut_bonus"
+    ],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [
+     "rewards_not_add_only:smooth_ride,shortcut_bonus"
+    ],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "redirected_keys": [
+    "parked_car"
+   ]
+  },
+  "l5_duckpond.json": {
+   "baseline": {
+    "hard_fail": [
+     "rewards_not_add_only:duck_friend,smooth_ride"
+    ],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "new": {
+    "hard_fail": [
+     "rewards_not_add_only:duck_friend,smooth_ride"
+    ],
+    "warn": [],
+    "placeholders": 0,
+    "hazards": [],
+    "lane": null
+   },
+   "redirected_keys": []
+  }
+ }
+}

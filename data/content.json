@@ -1,0 +1,1760 @@
+{
+  "characters": [
+    {
+      "id": "dana",
+      "name": "Dana Reyes",
+      "perk": "Spreadsheet Brain",
+      "role": "Laid-off office worker",
+      "blurb": "Laid off on a Tuesday. Starts in the Garage Startup with $120.",
+      "playable": true,
+      "phase": "slice",
+      "start_office": "garage",
+      "start_money": 120
+    },
+    {
+      "id": "sol",
+      "name": "Sol Achebe",
+      "perk": "Cafe Regular",
+      "blurb": "Freelancer at the cafe corner. Coming later.",
+      "playable": false,
+      "phase": "post_slice"
+    },
+    {
+      "id": "hank",
+      "name": "Hank \"Gravel\" Dubois",
+      "perk": "Road Legs",
+      "blurb": "Thirty years of highway. Coming later.",
+      "playable": false,
+      "phase": "1.0"
+    },
+    {
+      "id": "milo",
+      "name": "Milo Tran",
+      "perk": "Campus Buzz",
+      "blurb": "Fresh diploma, tiny desk. Coming later.",
+      "playable": false,
+      "phase": "1.0"
+    },
+    {
+      "id": "bea",
+      "name": "Bea Lindqvist",
+      "perk": "Handmade Touch",
+      "blurb": "Knits and sells from the kitchen table. Coming later.",
+      "playable": false,
+      "phase": "1.0"
+    }
+  ],
+  "buyers": [
+    {
+      "id": "steve",
+      "name": "StaplerSteve88",
+      "wants": [
+        "stapler_vintage",
+        "stapler_red"
+      ],
+      "line": "I'll pay extra for a stapler with character."
+    },
+    {
+      "id": "lamp",
+      "name": "Lamp_Lady",
+      "wants": [
+        "lamp_banker",
+        "lamp_moody"
+      ],
+      "line": "That lamp looks moody. I want it."
+    },
+    {
+      "id": "keys",
+      "name": "KeyClackr",
+      "wants": [
+        "keyboard_retro",
+        "keyboard_typewriter"
+      ],
+      "line": "If it clacks, I'm listening."
+    }
+  ],
+  "items": {
+    "desk_main": {
+      "name": "Dana's Desk",
+      "model": "folding_table",
+      "w": 1.2,
+      "d": 0.7,
+      "h": 0.76,
+      "surface": 0.76,
+      "mount": "floor",
+      "flavor": "The folding table grew up. The mug still fits."
+    },
+    "starter_mug": {
+      "name": "World's Okayest Mug",
+      "model": "mug_worlds_okayest",
+      "w": 0.16,
+      "d": 0.14,
+      "h": 0.11,
+      "mount": "small",
+      "flavor": "Honest, and dishwasher safe."
+    },
+    "sticky_note_stack": {
+      "name": "Sticky Note Stack",
+      "model": "sticky_note_stack",
+      "w": 0.252,
+      "d": 0.235,
+      "h": 0.136,
+      "mount": "small",
+      "flavor": "Nine years of reminders. Most say 'call back.'"
+    },
+    "cb_radio": {
+      "name": "Old CB Radio",
+      "model": "cb_radio",
+      "w": 0.315,
+      "d": 0.198,
+      "h": 0.403,
+      "mount": "small",
+      "flavor": "Mostly static. Sometimes a trucker reading the weather."
+    },
+    "thermos_dented": {
+      "name": "Dented Thermos",
+      "model": "thermos_dented",
+      "w": 0.103,
+      "d": 0.105,
+      "h": 0.36,
+      "mount": "small",
+      "flavor": "Kept coffee hot across 41 states."
+    },
+    "ramen_kettle": {
+      "name": "Dorm Kettle",
+      "model": "ramen_kettle",
+      "w": 0.21,
+      "d": 0.17,
+      "h": 0.22,
+      "mount": "small",
+      "flavor": "Makes ramen, tea, and late-night decisions."
+    },
+    "yarn_basket": {
+      "name": "Yarn Basket",
+      "model": "yarn_basket",
+      "w": 0.559,
+      "d": 0.45,
+      "h": 0.385,
+      "mount": "floor",
+      "flavor": "Every color. One mystery knot."
+    },
+    "desk_lamp": {
+      "name": "Desk Lamp",
+      "model": "lamp",
+      "w": 0.36,
+      "d": 0.36,
+      "h": 0.58,
+      "mount": "small",
+      "light": true,
+      "flavor": "Mustard shade, soft warm light."
+    },
+    "place_keyboard": {
+      "name": "Keyboard",
+      "model": "keyboard",
+      "w": 0.44,
+      "d": 0.18,
+      "h": 0.04,
+      "mount": "small",
+      "flavor": "Lives in front of the old monitor."
+    },
+    "place_crt": {
+      "name": "HomeDesk Computer",
+      "model": "crt_computer",
+      "w": 0.46,
+      "d": 0.58,
+      "h": 0.42,
+      "mount": "small",
+      "computer": true,
+      "flavor": "Beige, humming, and open for business."
+    },
+    "office_chair": {
+      "name": "Office Chair",
+      "model": "chair",
+      "w": 0.64,
+      "d": 0.64,
+      "h": 1.08,
+      "mount": "floor",
+      "flavor": "Dusty blue seat, dark wood frame."
+    },
+    "starter_beanbag": {
+      "name": "Mustard Beanbag",
+      "model": "beanbag",
+      "w": 0.9,
+      "d": 0.94,
+      "h": 0.74,
+      "mount": "floor",
+      "flavor": "Official seat for big thinking and small naps."
+    },
+    "mini_fridge": {
+      "name": "Mini Fridge",
+      "model": "mini_fridge",
+      "w": 0.5,
+      "d": 0.59,
+      "h": 0.85,
+      "mount": "floor",
+      "drawer": true,
+      "flavor": "Mostly sparkling water and one pickle jar."
+    },
+    "whiteboard": {
+      "name": "Whiteboard",
+      "model": "whiteboard",
+      "w": 1.2,
+      "d": 0.1,
+      "h": 0.8,
+      "mount": "hang",
+      "flavor": "It fills up as the money does."
+    },
+    "shelf": {
+      "name": "Shelf",
+      "model": "shelf",
+      "w": 0.9,
+      "d": 0.36,
+      "h": 1.6,
+      "mount": "wall_floor",
+      "back_offset": 0.12,
+      "flavor": "Room for books, trinkets, and one important box."
+    },
+    "plant_fern": {
+      "name": "Fern in Terracotta",
+      "model": "plant_tall",
+      "w": 0.55,
+      "d": 0.5,
+      "h": 1.14,
+      "mount": "floor",
+      "price": 22,
+      "flavor": "Thrives on neglect and north light."
+    },
+    "plant_cactus": {
+      "name": "Tiny Cactus",
+      "model": "plant_small",
+      "w": 0.24,
+      "d": 0.24,
+      "h": 0.35,
+      "mount": "small",
+      "price": 12,
+      "flavor": "Asks for nothing. Gives a little."
+    },
+    "rug_round": {
+      "name": "Round Woven Rug",
+      "model": "rug",
+      "w": 2.0,
+      "d": 1.4,
+      "h": 0.03,
+      "mount": "floor",
+      "price": 40,
+      "flavor": "Ties the room together, famously."
+    },
+    "poster_motivational": {
+      "name": "Hang In There Poster",
+      "model": "picture_landscape",
+      "w": 0.6,
+      "d": 0.1,
+      "h": 0.45,
+      "mount": "hang",
+      "price": 18,
+      "flavor": "HANG IN THERE. The cat on it has."
+    },
+    "beanbag_mustard": {
+      "name": "Mustard Beanbag",
+      "model": "beanbag",
+      "w": 0.9,
+      "d": 0.94,
+      "h": 0.74,
+      "mount": "floor",
+      "price": 48,
+      "flavor": "Swallows whoever sits down."
+    },
+    "beanbag_sage": {
+      "name": "Sage Beanbag",
+      "model": "beanbag_sage",
+      "w": 0.9,
+      "d": 0.94,
+      "h": 0.74,
+      "mount": "floor",
+      "price": 48,
+      "flavor": "The quieter beanbag."
+    },
+    "clock_wall": {
+      "name": "Wall Clock",
+      "model": "wall_clock",
+      "w": 0.36,
+      "d": 0.08,
+      "h": 0.36,
+      "mount": "hang",
+      "price": 28,
+      "flavor": "Runs four minutes fast, on purpose."
+    },
+    "bookshelf_wood": {
+      "name": "Wooden Bookshelf",
+      "model": "shelf",
+      "w": 0.9,
+      "d": 0.36,
+      "h": 1.6,
+      "mount": "wall_floor",
+      "back_offset": 0.12,
+      "price": 60,
+      "flavor": "Holds books, and the things in front of books."
+    },
+    "kettle": {
+      "name": "Electric Kettle",
+      "model": "proc:kettle",
+      "w": 0.22,
+      "d": 0.22,
+      "h": 0.28,
+      "mount": "small",
+      "price": 20,
+      "flavor": "Clicks off a second before you look."
+    },
+    "string_lights": {
+      "name": "String Lights",
+      "model": "proc:lights",
+      "w": 1.2,
+      "d": 0.12,
+      "h": 0.2,
+      "mount": "hang",
+      "price": 26,
+      "flavor": "Every third bulb is the warm one."
+    },
+    "cat_bed": {
+      "name": "Cushioned Cat Bed",
+      "model": "proc:catbed",
+      "w": 0.5,
+      "d": 0.4,
+      "h": 0.16,
+      "mount": "floor",
+      "price": 24,
+      "flavor": "Officially the cat's. Unofficially the cat prefers the box."
+    },
+    "picture_abstract": {
+      "name": "Abstract Picture",
+      "model": "picture_abstract",
+      "w": 0.42,
+      "d": 0.08,
+      "h": 0.5,
+      "mount": "hang",
+      "price": 16,
+      "flavor": "Could be a harbour. Could be a Tuesday."
+    },
+    "picture_stripes": {
+      "name": "Striped Picture",
+      "model": "picture_stripes",
+      "w": 0.36,
+      "d": 0.06,
+      "h": 0.36,
+      "mount": "hang",
+      "price": 14,
+      "flavor": "Stripes. Confident ones."
+    },
+    "coffee_machine": {
+      "name": "Coffee Machine",
+      "model": "coffee_machine",
+      "w": 0.3,
+      "d": 0.4,
+      "h": 0.58,
+      "mount": "small",
+      "price": 55,
+      "flavor": "Hisses like it has opinions."
+    },
+    "filing_cabinet": {
+      "name": "Filing Cabinet",
+      "model": "filing_cabinet",
+      "w": 0.48,
+      "d": 0.64,
+      "h": 1.3,
+      "mount": "floor",
+      "drawer": true,
+      "price": 80,
+      "flavor": "Two drawers of paper, one of snacks."
+    },
+    "museum_photo": {
+      "name": "Biscuit's Photo",
+      "model": "picture_stripes",
+      "w": 0.36,
+      "d": 0.06,
+      "h": 0.36,
+      "mount": "hang",
+      "price": 0
+    },
+    "train_reward": {
+      "name": "Toy Train",
+      "model": "toy_train",
+      "w": 0.292,
+      "d": 0.15,
+      "h": 0.18,
+      "mount": "small",
+      "price": 0
+    },
+    "stapler_vintage": {
+      "price": 16,
+      "model": "stapler",
+      "band": "small",
+      "w": 0.2,
+      "d": 0.1,
+      "h": 0.12,
+      "mount": "small"
+    },
+    "stapler_red": {
+      "price": 24,
+      "model": "stapler",
+      "band": "small",
+      "w": 0.2,
+      "d": 0.1,
+      "h": 0.12,
+      "mount": "small"
+    },
+    "lamp_banker": {
+      "price": 36,
+      "model": "brass_desk_lamp",
+      "band": "small",
+      "w": 0.22,
+      "d": 0.22,
+      "h": 0.42,
+      "mount": "small",
+      "light": true,
+      "flavor": "Green shade, serious light."
+    },
+    "lamp_moody": {
+      "price": 32,
+      "model": "lamp",
+      "band": "small",
+      "w": 0.36,
+      "d": 0.36,
+      "h": 0.58,
+      "mount": "small",
+      "light": true,
+      "flavor": "Moody by name."
+    },
+    "keyboard_retro": {
+      "price": 48,
+      "model": "retro_keyboard",
+      "band": "electronics",
+      "w": 0.46,
+      "d": 0.18,
+      "h": 0.06,
+      "mount": "small"
+    },
+    "keyboard_typewriter": {
+      "price": 64,
+      "model": "typewriter",
+      "band": "electronics",
+      "w": 0.42,
+      "d": 0.38,
+      "h": 0.22,
+      "mount": "small",
+      "flavor": "Clacks loud enough to count."
+    },
+    "rotary_phone": {
+      "price": 26,
+      "model": "rotary_phone",
+      "band": "electronics",
+      "w": 0.22,
+      "d": 0.2,
+      "h": 0.16,
+      "mount": "small",
+      "flavor": "Still works. Nobody calls."
+    },
+    "rolodex": {
+      "price": 11,
+      "band": "small"
+    },
+    "pencil_sharpener": {
+      "price": 8,
+      "band": "small"
+    },
+    "tape_dispenser": {
+      "price": 14,
+      "band": "small"
+    },
+    "desk_fan": {
+      "price": 22,
+      "band": "small"
+    },
+    "paperweight_glass": {
+      "price": 18,
+      "band": "small"
+    },
+    "mug_worlds_okayest": {
+      "price": 9,
+      "model": "mug_worlds_okayest",
+      "band": "small"
+    },
+    "calculator_tape": {
+      "price": 28,
+      "band": "electronics"
+    },
+    "crt_monitor": {
+      "price": 70,
+      "model": "crt_computer",
+      "band": "electronics"
+    },
+    "cafe_mug": {
+      "name": "Cafe Mug",
+      "model": "mug_worlds_okayest",
+      "w": 0.16,
+      "d": 0.14,
+      "h": 0.12,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Handle out. Always."
+    },
+    "cat_tree": {
+      "name": "Cat Tree",
+      "model": "cat_tree",
+      "w": 0.525,
+      "d": 0.5,
+      "h": 1.34,
+      "mount": "floor",
+      "bulky": true,
+      "flavor": "Biscuit's lookout."
+    },
+    "cushion": {
+      "name": "Pink Cushion",
+      "model": "cafe_cushion",
+      "w": 0.5,
+      "d": 0.5,
+      "h": 0.16,
+      "mount": "floor",
+      "flavor": "Soft pink, cat-approved."
+    },
+    "menu_board": {
+      "name": "Menu Board",
+      "model": "chalk_menu_board",
+      "w": 0.9,
+      "d": 0.048,
+      "h": 1.2,
+      "mount": "hang",
+      "bulky": true,
+      "flavor": "Today: oat latte, tuna tart."
+    },
+    "espresso": {
+      "name": "Espresso Machine",
+      "model": "espresso_machine_pro",
+      "w": 0.55,
+      "d": 0.44,
+      "h": 0.73,
+      "mount": "small",
+      "heavy": true,
+      "bulky": true,
+      "fragile": true,
+      "flavor": "Heavy. Bottom of the truck."
+    },
+    "cafe_plant": {
+      "name": "Cafe Plant",
+      "model": "plant_small",
+      "w": 0.28,
+      "d": 0.28,
+      "h": 0.4,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Leans toward the window."
+    },
+    "cafe_fern": {
+      "name": "Cafe Fern",
+      "model": "plant_tall",
+      "w": 0.55,
+      "d": 0.5,
+      "h": 1.14,
+      "mount": "floor",
+      "fragile": true,
+      "flavor": "Drips a little after watering."
+    },
+    "bowl": {
+      "name": "Food Bowl",
+      "model": "proc:bowl",
+      "w": 0.2,
+      "d": 0.2,
+      "h": 0.08,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "One for kibble, one for water."
+    },
+    "clock_small": {
+      "name": "Named Clock",
+      "model": "proc:clock",
+      "w": 0.28,
+      "d": 0.16,
+      "h": 0.28,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Ticks. Reassuring or not."
+    },
+    "tool_box": {
+      "name": "Tool Tin",
+      "model": "proc:tin",
+      "w": 0.34,
+      "d": 0.22,
+      "h": 0.16,
+      "mount": "small",
+      "flavor": "Rattles with the good screws."
+    },
+    "village_kit": {
+      "name": "Village House",
+      "model": "proc:house",
+      "w": 0.3,
+      "d": 0.24,
+      "h": 0.28,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "A whole village, in parts."
+    },
+    "mystery_part": {
+      "name": "Mystery Train Part",
+      "model": "proc:part",
+      "w": 0.26,
+      "d": 0.16,
+      "h": 0.1,
+      "mount": "small",
+      "mystery": true,
+      "flavor": "Nobody knows. Everybody has a theory."
+    },
+    "station_clock": {
+      "name": "Station Clock",
+      "model": "wall_clock",
+      "w": 0.36,
+      "d": 0.08,
+      "h": 0.36,
+      "mount": "hang",
+      "fragile": true,
+      "flavor": "Big hands, bigger tick."
+    },
+    "picnic_basket": {
+      "name": "Picnic Basket",
+      "model": "proc:tin",
+      "w": 0.4,
+      "d": 0.28,
+      "h": 0.22,
+      "mount": "small",
+      "flavor": "Smells faintly of last summer."
+    },
+    "bread_crate": {
+      "name": "Bread Crate",
+      "model": "box_closed",
+      "w": 0.5,
+      "d": 0.4,
+      "h": 0.36,
+      "mount": "floor"
+    },
+    "duck_sign": {
+      "name": "Duck Crossing Sign",
+      "model": "proc:house",
+      "w": 0.3,
+      "d": 0.12,
+      "h": 0.7,
+      "mount": "floor"
+    },
+    "lemonade_pitcher": {
+      "name": "Lemonade Pitcher",
+      "model": "proc:pitcher",
+      "w": 0.22,
+      "d": 0.22,
+      "h": 0.3,
+      "mount": "small",
+      "price": 18
+    },
+    "cup_stack": {
+      "name": "Paper Cup Stack",
+      "model": "proc:cup",
+      "w": 0.12,
+      "d": 0.12,
+      "h": 0.22,
+      "mount": "small",
+      "price": 6
+    },
+    "globe": {
+      "name": "Desk Globe",
+      "model": "proc:globe",
+      "w": 0.3,
+      "d": 0.3,
+      "h": 0.42,
+      "mount": "small",
+      "flavor": "Spins. Lands on the sea every time."
+    },
+    "trophy": {
+      "name": "Bowling Trophy",
+      "model": "proc:trophy",
+      "w": 0.18,
+      "d": 0.18,
+      "h": 0.36,
+      "mount": "small",
+      "flavor": "Second place, 1994. Still counts."
+    },
+    "record_player": {
+      "name": "Record Player",
+      "model": "proc:record_player",
+      "w": 0.44,
+      "d": 0.36,
+      "h": 0.16,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Needle's fine. The hum is part of it."
+    },
+    "radio": {
+      "name": "Kitchen Radio",
+      "model": "proc:radio",
+      "w": 0.32,
+      "d": 0.14,
+      "h": 0.2,
+      "mount": "small",
+      "flavor": "Only gets the one station. It's a good station."
+    },
+    "teapot": {
+      "name": "Brown Teapot",
+      "model": "proc:teapot",
+      "w": 0.24,
+      "d": 0.18,
+      "h": 0.2,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Pours true. Never been washed inside, on principle."
+    },
+    "vase": {
+      "name": "Tall Vase",
+      "model": "proc:vase",
+      "w": 0.16,
+      "d": 0.16,
+      "h": 0.42,
+      "mount": "small",
+      "fragile": true,
+      "flavor": "Blue glaze. Holds one dramatic branch."
+    },
+    "lantern": {
+      "name": "Camping Lantern",
+      "model": "proc:lantern",
+      "w": 0.18,
+      "d": 0.18,
+      "h": 0.3,
+      "mount": "small",
+      "flavor": "Warm light, moth magnet."
+    },
+    "cash_register": {
+      "name": "Brass Till",
+      "model": "proc:register",
+      "w": 0.42,
+      "d": 0.4,
+      "h": 0.36,
+      "mount": "small",
+      "heavy": true,
+      "flavor": "Rings like it means it. Drawer sticks on Tuesdays."
+    },
+    "kitchen_scale": {
+      "name": "Kitchen Scale",
+      "model": "proc:scale",
+      "w": 0.22,
+      "d": 0.22,
+      "h": 0.24,
+      "mount": "small",
+      "flavor": "Weighs flour, letters, and the cat."
+    },
+    "birdcage": {
+      "name": "Empty Birdcage",
+      "model": "proc:birdcage",
+      "w": 0.3,
+      "d": 0.3,
+      "h": 0.5,
+      "mount": "small",
+      "flavor": "No bird. Great for a trailing plant."
+    },
+    "easel": {
+      "name": "Painter's Easel",
+      "model": "proc:easel",
+      "w": 0.6,
+      "d": 0.6,
+      "h": 1.6,
+      "mount": "floor",
+      "bulky": true,
+      "flavor": "Folds, in theory."
+    },
+    "skateboard": {
+      "name": "Skateboard",
+      "model": "proc:skateboard",
+      "w": 0.8,
+      "d": 0.22,
+      "h": 0.1,
+      "mount": "floor",
+      "flavor": "One wheel squeaks. It's the personality wheel."
+    },
+    "fridge_home": {
+      "name": "Fridge",
+      "model": "hh_fridge_home",
+      "w": 0.6,
+      "d": 0.6,
+      "h": 1.7,
+      "mount": "floor",
+      "room": "kitchen",
+      "flavor": "Hums. Magnets included.",
+      "nobox": true,
+      "heavy": true
+    },
+    "cooker": {
+      "name": "Cooker",
+      "model": "hh_cooker",
+      "w": 0.6,
+      "d": 0.6,
+      "h": 0.95,
+      "mount": "floor",
+      "room": "kitchen",
+      "flavor": "Four rings, one that works.",
+      "nobox": true,
+      "heavy": true
+    },
+    "microwave": {
+      "name": "Microwave",
+      "model": "hh_microwave",
+      "w": 0.5,
+      "d": 0.36,
+      "h": 0.3,
+      "mount": "small",
+      "room": "kitchen",
+      "flavor": "Fragile door, loud ping.",
+      "fragile": true
+    },
+    "toaster": {
+      "name": "Toaster",
+      "model": "hh_toaster",
+      "w": 0.3,
+      "d": 0.18,
+      "h": 0.2,
+      "mount": "small",
+      "room": "kitchen",
+      "flavor": "Two slots, one setting: black."
+    },
+    "knife_block": {
+      "name": "Knife block",
+      "model": "hh_knife_block",
+      "w": 0.14,
+      "d": 0.14,
+      "h": 0.3,
+      "mount": "small",
+      "room": "kitchen",
+      "flavor": "Fragile and sharp. Pad it.",
+      "fragile": true
+    },
+    "spice_rack": {
+      "name": "Spice rack",
+      "model": "hh_spice_rack",
+      "w": 0.5,
+      "d": 0.1,
+      "h": 0.3,
+      "mount": "hang",
+      "room": "kitchen",
+      "flavor": "Twelve jars, three ever used."
+    },
+    "pot_stack": {
+      "name": "Pot stack",
+      "model": "hh_pot_stack",
+      "w": 0.3,
+      "d": 0.3,
+      "h": 0.3,
+      "mount": "small",
+      "room": "kitchen",
+      "flavor": "The lids never match."
+    },
+    "bread_bin": {
+      "name": "Bread bin",
+      "model": "hh_bread_bin",
+      "w": 0.4,
+      "d": 0.26,
+      "h": 0.3,
+      "mount": "small",
+      "room": "kitchen",
+      "flavor": "Smells of toast forever."
+    },
+    "kitchen_table": {
+      "name": "Kitchen table",
+      "model": "hh_kitchen_table",
+      "w": 1.2,
+      "d": 0.8,
+      "h": 0.76,
+      "mount": "floor",
+      "room": "kitchen",
+      "flavor": "Scrubbed pine. Every argument happened here.",
+      "nobox": true,
+      "bulky": true
+    },
+    "kitchen_chair": {
+      "name": "Kitchen chair",
+      "model": "hh_kitchen_chair",
+      "w": 0.42,
+      "d": 0.42,
+      "h": 0.9,
+      "mount": "floor",
+      "room": "kitchen",
+      "flavor": "Wobbles on one leg. Everyone knows which.",
+      "nobox": true
+    },
+    "dish_rack": {
+      "name": "Dish rack",
+      "model": "hh_dish_rack",
+      "w": 0.4,
+      "d": 0.3,
+      "h": 0.2,
+      "mount": "small",
+      "room": "kitchen",
+      "flavor": "Drips on the counter. Always has."
+    },
+    "bathtub": {
+      "name": "Bathtub",
+      "model": "hh_bathtub",
+      "w": 1.64,
+      "d": 0.79,
+      "h": 0.6,
+      "mount": "floor",
+      "room": "bathroom",
+      "flavor": "Cast iron. Takes two and a bad word.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "toilet": {
+      "name": "Toilet",
+      "model": "hh_toilet",
+      "w": 0.42,
+      "d": 0.5,
+      "h": 0.8,
+      "mount": "floor",
+      "room": "bathroom",
+      "flavor": "Nobody wants this box. There is no box.",
+      "nobox": true,
+      "heavy": true
+    },
+    "pedestal_sink": {
+      "name": "Pedestal sink",
+      "model": "hh_pedestal_sink",
+      "w": 0.55,
+      "d": 0.42,
+      "h": 0.9,
+      "mount": "floor",
+      "room": "bathroom",
+      "flavor": "The basin chips if you look at it.",
+      "nobox": true,
+      "fragile": true
+    },
+    "mirror_cabinet": {
+      "name": "Mirror cabinet",
+      "model": "hh_mirror_cabinet",
+      "w": 0.5,
+      "d": 0.12,
+      "h": 0.62,
+      "mount": "hang",
+      "room": "bathroom",
+      "flavor": "Hides the good toothpaste.",
+      "fragile": true
+    },
+    "towel_stack": {
+      "name": "Towel stack",
+      "model": "hh_towel_stack",
+      "w": 0.36,
+      "d": 0.26,
+      "h": 0.34,
+      "mount": "small",
+      "room": "bathroom",
+      "flavor": "Folded by someone who cares."
+    },
+    "bath_mat": {
+      "name": "Bath mat",
+      "model": "hh_bath_mat",
+      "w": 0.6,
+      "d": 0.4,
+      "h": 0.04,
+      "mount": "floor",
+      "room": "bathroom",
+      "flavor": "Rolls up. Still damp."
+    },
+    "laundry_basket": {
+      "name": "Laundry basket",
+      "model": "hh_laundry_basket",
+      "w": 0.46,
+      "d": 0.46,
+      "h": 0.6,
+      "mount": "floor",
+      "room": "bathroom",
+      "flavor": "Wicker. Something is in it."
+    },
+    "shower_caddy": {
+      "name": "Shower caddy",
+      "model": "hh_shower_caddy",
+      "w": 0.26,
+      "d": 0.1,
+      "h": 0.5,
+      "mount": "small",
+      "room": "bathroom",
+      "flavor": "Three bottles, all nearly empty."
+    },
+    "toothbrush_cup": {
+      "name": "Toothbrush cup",
+      "model": "hh_toothbrush_cup",
+      "w": 0.1,
+      "d": 0.1,
+      "h": 0.22,
+      "mount": "small",
+      "room": "bathroom",
+      "flavor": "Two brushes. One story.",
+      "fragile": true
+    },
+    "bed_single": {
+      "name": "Single bed",
+      "model": "hh_bed_single",
+      "w": 1.0,
+      "d": 2.0,
+      "h": 0.75,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "Creaks on the left side.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "bed_double": {
+      "name": "Double bed",
+      "model": "hh_bed_double",
+      "w": 1.6,
+      "d": 2.0,
+      "h": 0.85,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "Takes the floor pad and your back.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "wardrobe": {
+      "name": "Wardrobe",
+      "model": "hh_wardrobe",
+      "w": 1.0,
+      "d": 0.6,
+      "h": 2.05,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "Checked for Narnia. Coats only.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "chest_drawers": {
+      "name": "Chest of drawers",
+      "model": "hh_chest_drawers",
+      "w": 0.9,
+      "d": 0.5,
+      "h": 0.94,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "The middle drawer sticks in summer.",
+      "nobox": true,
+      "bulky": true
+    },
+    "bedside_table": {
+      "name": "Bedside table",
+      "model": "hh_bedside_table",
+      "w": 0.45,
+      "d": 0.4,
+      "h": 0.55,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "A book, a glass, a ring of water.",
+      "nobox": true
+    },
+    "pillow_stack": {
+      "name": "Pillow stack",
+      "model": "hh_pillow_stack",
+      "w": 0.5,
+      "d": 0.36,
+      "h": 0.36,
+      "mount": "small",
+      "room": "bedroom",
+      "flavor": "Three pillows, one good one."
+    },
+    "alarm_clock": {
+      "name": "Alarm clock",
+      "model": "hh_alarm_clock",
+      "w": 0.14,
+      "d": 0.08,
+      "h": 0.2,
+      "mount": "small",
+      "room": "bedroom",
+      "flavor": "Set to 6:40. Nobody remembers why."
+    },
+    "standing_mirror": {
+      "name": "Standing mirror",
+      "model": "hh_standing_mirror",
+      "w": 0.5,
+      "d": 0.3,
+      "h": 1.55,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "Leans. Flatters a little.",
+      "nobox": true,
+      "fragile": true
+    },
+    "bedroom_rug": {
+      "name": "Bedroom rug",
+      "model": "hh_bedroom_rug",
+      "w": 1.4,
+      "d": 1.0,
+      "h": 0.04,
+      "mount": "floor",
+      "room": "bedroom",
+      "flavor": "Rolls up with the dust inside.",
+      "bulky": true
+    },
+    "sofa": {
+      "name": "Sofa",
+      "model": "hh_sofa",
+      "w": 1.8,
+      "d": 0.85,
+      "h": 0.9,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Coins under the cushions. Keep them.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "armchair": {
+      "name": "Armchair",
+      "model": "hh_armchair",
+      "w": 0.9,
+      "d": 0.85,
+      "h": 0.9,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Grandad's. Sits like him.",
+      "nobox": true,
+      "bulky": true
+    },
+    "coffee_table": {
+      "name": "Coffee table",
+      "model": "hh_coffee_table",
+      "w": 1.0,
+      "d": 0.55,
+      "h": 0.46,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Rings from every mug ever.",
+      "nobox": true,
+      "bulky": true
+    },
+    "television": {
+      "name": "Television",
+      "model": "hh_television",
+      "w": 1.1,
+      "d": 0.2,
+      "h": 0.64,
+      "mount": "small",
+      "room": "living",
+      "flavor": "Screen out, and pad it twice.",
+      "fragile": true
+    },
+    "tv_stand": {
+      "name": "TV stand",
+      "model": "hh_tv_stand",
+      "w": 1.3,
+      "d": 0.45,
+      "h": 0.49,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Cables live here. Nobody knows whose.",
+      "nobox": true,
+      "bulky": true
+    },
+    "floor_lamp": {
+      "name": "Floor lamp",
+      "model": "hh_floor_lamp",
+      "w": 0.44,
+      "d": 0.44,
+      "h": 1.78,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Leans like a drunk heron.",
+      "nobox": true,
+      "fragile": true
+    },
+    "piano": {
+      "name": "Upright piano",
+      "model": "hh_piano",
+      "w": 1.4,
+      "d": 0.8,
+      "h": 1.1,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Needs tuning after. Needs tuning before.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "magazine_rack": {
+      "name": "Magazine rack",
+      "model": "hh_magazine_rack",
+      "w": 0.4,
+      "d": 0.25,
+      "h": 0.38,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Magazines from a different decade."
+    },
+    "side_table": {
+      "name": "Side table",
+      "model": "hh_side_table",
+      "w": 0.5,
+      "d": 0.5,
+      "h": 0.52,
+      "mount": "floor",
+      "room": "living",
+      "flavor": "Just big enough for a cup and a worry.",
+      "nobox": true
+    },
+    "old_suitcase": {
+      "name": "Old suitcase",
+      "model": "hh_old_suitcase",
+      "w": 0.6,
+      "d": 0.4,
+      "h": 0.22,
+      "mount": "small",
+      "room": "loft",
+      "flavor": "Stickers from 1987. One from Margate."
+    },
+    "travel_trunk": {
+      "name": "Travel trunk",
+      "model": "hh_travel_trunk",
+      "w": 0.92,
+      "d": 0.52,
+      "h": 0.56,
+      "mount": "floor",
+      "room": "loft",
+      "flavor": "Brass corners, mystery smell.",
+      "nobox": true,
+      "bulky": true
+    },
+    "rocking_horse": {
+      "name": "Rocking horse",
+      "model": "hh_rocking_horse",
+      "w": 0.9,
+      "d": 0.3,
+      "h": 0.7,
+      "mount": "floor",
+      "room": "loft",
+      "flavor": "Rocks. Judges.",
+      "nobox": true,
+      "fragile": true,
+      "bulky": true
+    },
+    "christmas_box": {
+      "name": "Christmas box",
+      "model": "hh_christmas_box",
+      "w": 0.52,
+      "d": 0.42,
+      "h": 0.5,
+      "mount": "floor",
+      "room": "loft",
+      "flavor": "Lights tangled since last January."
+    },
+    "old_mirror": {
+      "name": "Old mirror",
+      "model": "hh_old_mirror",
+      "w": 0.7,
+      "d": 0.05,
+      "h": 0.9,
+      "mount": "hang",
+      "room": "loft",
+      "flavor": "Gilt, chipped, flattering.",
+      "fragile": true
+    },
+    "dressmaker_dummy": {
+      "name": "Dressmaker's dummy",
+      "model": "hh_dressmaker_dummy",
+      "w": 0.36,
+      "d": 0.36,
+      "h": 1.3,
+      "mount": "floor",
+      "room": "loft",
+      "flavor": "Wears a hat it was not given.",
+      "nobox": true
+    },
+    "telescope": {
+      "name": "Telescope",
+      "model": "hh_telescope",
+      "w": 0.5,
+      "d": 0.5,
+      "h": 1.4,
+      "mount": "floor",
+      "room": "loft",
+      "flavor": "Points at the neighbour's chimney.",
+      "nobox": true,
+      "fragile": true
+    },
+    "record_box": {
+      "name": "Box of records",
+      "model": "hh_record_box",
+      "w": 0.36,
+      "d": 0.34,
+      "h": 0.34,
+      "mount": "small",
+      "room": "loft",
+      "flavor": "Alphabetised, then not."
+    },
+    "lawnmower": {
+      "name": "Lawnmower",
+      "model": "hh_lawnmower",
+      "w": 0.5,
+      "d": 1.2,
+      "h": 0.95,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "Petrol. Drain it first.",
+      "nobox": true,
+      "heavy": true,
+      "bulky": true
+    },
+    "bicycle_home": {
+      "name": "Bicycle",
+      "model": "hh_bicycle_home",
+      "w": 1.6,
+      "d": 0.3,
+      "h": 0.95,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "One squeaky pedal.",
+      "nobox": true,
+      "bulky": true
+    },
+    "watering_can": {
+      "name": "Watering can",
+      "model": "hh_watering_can",
+      "w": 0.4,
+      "d": 0.24,
+      "h": 0.4,
+      "mount": "small",
+      "room": "shed",
+      "flavor": "Green. Leaks from the seam."
+    },
+    "flower_pots": {
+      "name": "Flower pots",
+      "model": "hh_flower_pots",
+      "w": 0.2,
+      "d": 0.2,
+      "h": 0.4,
+      "mount": "small",
+      "room": "shed",
+      "flavor": "Terracotta stack. Fragile as a mood.",
+      "fragile": true
+    },
+    "garden_chair": {
+      "name": "Garden chair",
+      "model": "hh_garden_chair",
+      "w": 0.5,
+      "d": 0.5,
+      "h": 0.9,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "Folds, with effort.",
+      "nobox": true
+    },
+    "wheelbarrow": {
+      "name": "Wheelbarrow",
+      "model": "hh_wheelbarrow",
+      "w": 0.6,
+      "d": 1.2,
+      "h": 0.6,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "One wheel, strong opinions.",
+      "nobox": true,
+      "bulky": true
+    },
+    "paint_tins": {
+      "name": "Paint tins",
+      "model": "hh_paint_tins",
+      "w": 0.4,
+      "d": 0.3,
+      "h": 0.34,
+      "mount": "small",
+      "room": "shed",
+      "flavor": "Half full, all of them, all magnolia."
+    },
+    "ladder": {
+      "name": "Ladder",
+      "model": "hh_ladder",
+      "w": 0.44,
+      "d": 0.1,
+      "h": 2.4,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "Long. Mind the lampshade.",
+      "nobox": true
+    },
+    "rake": {
+      "name": "Rake",
+      "model": "hh_rake",
+      "w": 0.4,
+      "d": 0.12,
+      "h": 1.5,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "Step on it once. Everyone does."
+    },
+    "hose_reel": {
+      "name": "Hose reel",
+      "model": "hh_hose_reel",
+      "w": 0.3,
+      "d": 0.46,
+      "h": 0.5,
+      "mount": "floor",
+      "room": "shed",
+      "flavor": "Kinks on purpose."
+    }
+  },
+  "starter": [
+    {
+      "uid": "desk",
+      "item": "desk_main",
+      "x": 2.5,
+      "y": 0.0,
+      "z": 4.5,
+      "rot": 0
+    },
+    {
+      "uid": "mug",
+      "item": "starter_mug",
+      "x": 2.05,
+      "y": 0.76,
+      "z": 4.4,
+      "rot": 15
+    },
+    {
+      "uid": "notes",
+      "item": "sticky_note_stack",
+      "x": 2.05,
+      "y": 0.76,
+      "z": 4.68,
+      "rot": -10
+    },
+    {
+      "uid": "lamp",
+      "item": "desk_lamp",
+      "x": 3.05,
+      "y": 0.76,
+      "z": 4.58,
+      "rot": 20
+    },
+    {
+      "uid": "keys",
+      "item": "place_keyboard",
+      "x": 2.5,
+      "y": 0.76,
+      "z": 4.22,
+      "rot": 0
+    },
+    {
+      "uid": "crt",
+      "item": "place_crt",
+      "x": 2.55,
+      "y": 0.76,
+      "z": 4.62,
+      "rot": 0
+    },
+    {
+      "uid": "chair",
+      "item": "office_chair",
+      "x": 2.5,
+      "y": 0.0,
+      "z": 3.25,
+      "rot": 180
+    },
+    {
+      "uid": "bean",
+      "item": "starter_beanbag",
+      "x": 4.6,
+      "y": 0.0,
+      "z": 2.7,
+      "rot": 25
+    },
+    {
+      "uid": "fridge",
+      "item": "mini_fridge",
+      "x": 5.15,
+      "y": 0.0,
+      "z": 6.5,
+      "rot": 90
+    },
+    {
+      "uid": "board",
+      "item": "whiteboard",
+      "x": 0.12,
+      "y": 1.05,
+      "z": 4.0,
+      "rot": 90,
+      "wall": "hang"
+    },
+    {
+      "uid": "shelf_a",
+      "item": "shelf",
+      "x": 0.12,
+      "y": 0.0,
+      "z": 2.0,
+      "rot": 90,
+      "wall": "wall_floor"
+    },
+    {
+      "uid": "shelf_b",
+      "item": "shelf",
+      "x": 1.5,
+      "y": 0.0,
+      "z": 0.12,
+      "rot": 0,
+      "wall": "wall_floor"
+    }
+  ],
+  "venues": {
+    "garage": {
+      "name": "Garage Startup",
+      "x": 0,
+      "z": 0,
+      "w": 6,
+      "d": 8,
+      "opening": "garage",
+      "open_w": 3,
+      "windows": true,
+      "stain": true,
+      "music": "music_act1_home",
+      "ambience": "amb_l01_garage_loop"
+    },
+    "cafe": {
+      "name": "Whisker & Bean",
+      "x": 0,
+      "z": 0,
+      "w": 6,
+      "d": 6,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "pink": true,
+      "cat": true,
+      "music": "music_office_build",
+      "ambience": "amb_l02_cafe_loop"
+    },
+    "train": {
+      "name": "Grandpa's Train Shop",
+      "x": 0,
+      "z": 0,
+      "w": 8,
+      "d": 6,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "train": true,
+      "music": "music_record_store",
+      "ambience": "amb_l04_shop_clock_loop",
+      "box_row": 2.8
+    },
+    "bakery": {
+      "name": "Bakery Loft",
+      "x": 0,
+      "z": 0,
+      "w": 8,
+      "d": 10,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "kit": "bakery_loft",
+      "nook": {
+        "x": -3,
+        "z": 3,
+        "w": 3,
+        "d": 4,
+        "max_h": 1.5
+      },
+      "pastry": true,
+      "music": "music_act3_loft",
+      "ambience": "amb_l06_skylight_rain_loop"
+    },
+    "park": {
+      "name": "Duck Pond Shed",
+      "x": 0,
+      "z": 0,
+      "w": 6,
+      "d": 6,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "music": "music_office_build",
+      "ambience": "amb_outdoor_stand_loop"
+    },
+    "coffee_counter": {
+      "name": "Coffee Counter",
+      "x": 0,
+      "z": 0,
+      "w": 9,
+      "d": 7,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "shop_layout": "coffee_counter",
+      "music": "music_office_build",
+      "ambience": "amb_l02_cafe_loop"
+    },
+    "lemonade_stand": {
+      "name": "Lemonade Stand",
+      "x": 0,
+      "z": 0,
+      "w": 8,
+      "d": 6,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "shop_layout": "lemonade_stand",
+      "music": "music_shop_stand",
+      "ambience": "amb_outdoor_stand_loop"
+    },
+    "studio": {
+      "name": "Corner Studio",
+      "x": 0,
+      "z": 0,
+      "w": 7,
+      "d": 6,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "studio": true,
+      "music": "music_office_build",
+      "ambience": "amb_l09_studio_loop"
+    },
+    "flat": {
+      "name": "Flat over the Bakery",
+      "x": 0,
+      "z": 0,
+      "w": 5,
+      "d": 7,
+      "opening": "door",
+      "open_w": 2,
+      "windows": true,
+      "flat": true,
+      "music": "music_act2_morning",
+      "ambience": "amb_l19_office_loop"
+    }
+  },
+  "jobs": [
+    {
+      "id": "job_catcafe",
+      "level": "L2",
+      "venue": "cafe",
+      "drive": "rainy_afternoon",
+      "base_key": "l2_base",
+      "unlock": "tutorial_done",
+      "cat": true,
+      "title": "Whisker & Bean Cafe",
+      "client": "Priya Okafor",
+      "recipe": [
+        {
+          "item": "cafe_mug",
+          "count": 6
+        },
+        {
+          "item": "cat_tree",
+          "count": 2
+        },
+        {
+          "item": "cushion",
+          "count": 3
+        },
+        {
+          "item": "menu_board",
+          "count": 1
+        },
+        {
+          "item": "espresso",
+          "count": 1
+        },
+        {
+          "item": "cafe_plant",
+          "count": 2
+        },
+        {
+          "item": "cafe_fern",
+          "count": 1
+        },
+        {
+          "item": "bowl",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "job_train",
+      "level": "L4",
+      "venue": "train",
+      "drive": "sunny_main",
+      "base_key": "l4_base",
+      "unlock": "job:job_catcafe",
+      "mystery": true,
+      "title": "Grandpa's Train Shop",
+      "client": "Grandpa Ellis",
+      "brief": "24 pieces from the back room. Keep each labeled set in the same box. A split set only costs a little tip. The mystery parts want sorting at the other end.",
+      "mentor_note": "Sets stay together, like a convoy. If one peels off, you still get paid.",
+      "recipe": [
+        {
+          "item": "clock_small",
+          "count": 6,
+          "set": "clocks",
+          "names": [
+            "Gerald",
+            "Mabel",
+            "June",
+            "Otto",
+            "Nell",
+            "Hank"
+          ]
+        },
+        {
+          "item": "tool_box",
+          "count": 5,
+          "set": "tools"
+        },
+        {
+          "item": "station_clock",
+          "count": 1,
+          "set": "clocks"
+        },
+        {
+          "item": "village_kit",
+          "count": 6,
+          "set": "village"
+        },
+        {
+          "item": "mystery_part",
+          "count": 6,
+          "set": "mystery"
+        }
+      ]
+    },
+    {
+      "id": "job_ducks",
+      "level": "L5",
+      "venue": "park",
+      "drive": "duck_pond",
+      "base_key": "l5_base",
+      "unlock": "job:job_catcafe",
+      "duck_friend": true,
+      "title": "Duck Pond Loop",
+      "client": "Park Keeper Nia",
+      "brief": "A short shed restock, then two easy laps of the pond. Gravel rattles the boxes. Honk and the ducks hurry along. No near-miss and they call you a friend.",
+      "mentor_note": "Honk like you mean it, then let them waddle. I logged the pond as scenic.",
+      "recipe": [
+        {
+          "item": "picnic_basket",
+          "count": 2
+        },
+        {
+          "item": "bread_crate",
+          "count": 2
+        },
+        {
+          "item": "cafe_plant",
+          "count": 1
+        },
+        {
+          "item": "duck_sign",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

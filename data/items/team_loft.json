@@ -1,0 +1,8861 @@
+{
+ "items": {
+  "loft_drum_kit": {
+   "name": "Drum kit",
+   "model": "proc:loft_drum_kit",
+   "w": 1.7,
+   "d": 1.3,
+   "h": 1.25,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "The neighbours have been very understanding. Outwardly.",
+   "bulky": true
+  },
+  "loft_snare_stand": {
+   "name": "Practice snare on a stand",
+   "model": "proc:loft_snare_stand",
+   "w": 0.45,
+   "d": 0.45,
+   "h": 0.68,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Bought to learn quietly. It is not quiet."
+  },
+  "loft_cello": {
+   "name": "Cello on its stand",
+   "model": "proc:loft_cello",
+   "w": 0.5,
+   "d": 0.45,
+   "h": 1.25,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Insured for more than the car, which is fair.",
+   "fragile": true,
+   "bulky": true
+  },
+  "loft_double_bass": {
+   "name": "Double bass",
+   "model": "proc:loft_double_bass",
+   "w": 0.7,
+   "d": 0.5,
+   "h": 1.85,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Needs its own seat on the train. Has had one.",
+   "fragile": true,
+   "nobox": true,
+   "bulky": true
+  },
+  "loft_guitar_amp": {
+   "name": "Valve guitar amp",
+   "model": "proc:loft_guitar_amp",
+   "w": 0.55,
+   "d": 0.26,
+   "h": 0.45,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Goes up to eleven. Stays at three for the flat below.",
+   "heavy": true
+  },
+  "loft_music_stand": {
+   "name": "Folding music stand",
+   "model": "proc:loft_music_stand",
+   "w": 0.5,
+   "d": 0.45,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Holds one page of Bach and a biscuit."
+  },
+  "loft_metronome": {
+   "name": "Wind-up metronome",
+   "model": "proc:loft_metronome",
+   "w": 0.11,
+   "d": 0.1,
+   "h": 0.22,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Keeps better time than anyone in the band.",
+   "fragile": true
+  },
+  "loft_mic_stand": {
+   "name": "Boom microphone stand",
+   "model": "proc:loft_mic_stand",
+   "w": 0.9,
+   "d": 0.6,
+   "h": 1.6,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Used twice for singing and daily for hanging a scarf."
+  },
+  "loft_accordion": {
+   "name": "Piano accordion",
+   "model": "proc:loft_accordion",
+   "w": 0.48,
+   "d": 0.22,
+   "h": 0.45,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Comes out at weddings whether invited or not.",
+   "fragile": true
+  },
+  "loft_floor_harp": {
+   "name": "Pedal harp",
+   "model": "proc:loft_floor_harp",
+   "w": 0.75,
+   "d": 0.5,
+   "h": 1.75,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Someone was meant to learn. The harp waits.",
+   "fragile": true,
+   "nobox": true,
+   "bulky": true
+  },
+  "loft_trumpet_stand": {
+   "name": "Trumpet on a stand",
+   "model": "proc:loft_trumpet_stand",
+   "w": 0.32,
+   "d": 0.22,
+   "h": 0.36,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Polished more than played, which suits everyone.",
+   "fragile": true
+  },
+  "loft_bongos": {
+   "name": "Pair of bongos",
+   "model": "proc:loft_bongos",
+   "w": 0.36,
+   "d": 0.2,
+   "h": 0.2,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Played once, at a party, and spoken of since."
+  },
+  "loft_gong": {
+   "name": "Gong on a frame",
+   "model": "proc:loft_gong",
+   "w": 0.9,
+   "d": 0.4,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Marks the end of meditation and the start of complaints.",
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_dj_decks": {
+   "name": "DJ decks and mixer",
+   "model": "proc:loft_dj_decks",
+   "w": 0.9,
+   "d": 0.4,
+   "h": 0.12,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Two turntables and a lifetime of saying 'one more'.",
+   "fragile": true
+  },
+  "loft_reel_to_reel": {
+   "name": "Reel-to-reel tape deck",
+   "model": "proc:loft_reel_to_reel",
+   "w": 0.44,
+   "d": 0.22,
+   "h": 0.5,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Plays one tape, very beautifully, very slowly.",
+   "fragile": true,
+   "heavy": true
+  },
+  "loft_mixing_desk": {
+   "name": "Recording mixing desk",
+   "model": "proc:loft_mixing_desk",
+   "w": 0.7,
+   "d": 0.45,
+   "h": 0.14,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Forty knobs, three of which do anything.",
+   "fragile": true
+  },
+  "loft_vinyl_wall_shelf": {
+   "name": "Now-playing wall shelf",
+   "model": "proc:loft_vinyl_wall_shelf",
+   "w": 0.35,
+   "d": 0.06,
+   "h": 0.34,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Shows the record that is on. Mostly the same one."
+  },
+  "loft_podcast_mic": {
+   "name": "Podcast microphone on an arm",
+   "model": "proc:loft_podcast_mic",
+   "w": 0.5,
+   "d": 0.25,
+   "h": 0.55,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Has heard every theory about the moon landings twice."
+  },
+  "loft_paint_taboret": {
+   "name": "Artist's taboret on castors",
+   "model": "proc:loft_paint_taboret",
+   "w": 0.5,
+   "d": 0.42,
+   "h": 0.78,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Every drawer holds a tube of the wrong blue.",
+   "heavy": true
+  },
+  "loft_canvas_rack": {
+   "name": "Canvas drying rack",
+   "model": "proc:loft_canvas_rack",
+   "w": 1.0,
+   "d": 0.55,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Seven paintings, all of them nearly finished.",
+   "nobox": true,
+   "bulky": true
+  },
+  "loft_brush_palette": {
+   "name": "Brush jar and palette",
+   "model": "proc:loft_brush_palette",
+   "w": 0.36,
+   "d": 0.26,
+   "h": 0.3,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "The palette is a painting in itself, and better.",
+   "fragile": true
+  },
+  "loft_lay_figure": {
+   "name": "Wooden lay figure",
+   "model": "proc:loft_lay_figure",
+   "w": 0.12,
+   "d": 0.12,
+   "h": 0.31,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Poses for nothing. Complains about nothing.",
+   "fragile": true
+  },
+  "loft_drafting_table": {
+   "name": "Tilting drafting table",
+   "model": "proc:loft_drafting_table",
+   "w": 1.2,
+   "d": 0.8,
+   "h": 1.05,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Tilts to any angle, including the useful ones.",
+   "nobox": true,
+   "bulky": true
+  },
+  "loft_pottery_wheel": {
+   "name": "Pottery wheel",
+   "model": "proc:loft_pottery_wheel",
+   "w": 0.7,
+   "d": 0.7,
+   "h": 0.6,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Everything made on it is technically a bowl.",
+   "heavy": true
+  },
+  "loft_kiln": {
+   "name": "Studio kiln",
+   "model": "proc:loft_kiln",
+   "w": 0.65,
+   "d": 0.65,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Reaches twelve hundred degrees and the electricity bill reaches further.",
+   "nobox": true,
+   "heavy": true
+  },
+  "loft_etching_press": {
+   "name": "Etching press",
+   "model": "proc:loft_etching_press",
+   "w": 0.9,
+   "d": 0.5,
+   "h": 0.82,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Prints six lovely editions of the same heron.",
+   "nobox": true,
+   "heavy": true
+  },
+  "loft_floor_loom": {
+   "name": "Floor loom",
+   "model": "proc:loft_floor_loom",
+   "w": 1.1,
+   "d": 0.9,
+   "h": 1.3,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Four metres of scarf so far, and no neck in mind.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_spinning_wheel": {
+   "name": "Spinning wheel",
+   "model": "proc:loft_spinning_wheel",
+   "w": 0.85,
+   "d": 0.4,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Turns fleece into yarn and evenings into nights.",
+   "fragile": true,
+   "bulky": true
+  },
+  "loft_printer_3d": {
+   "name": "3D printer",
+   "model": "proc:loft_printer_3d",
+   "w": 0.42,
+   "d": 0.42,
+   "h": 0.48,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Prints small plastic boats. Nobody asked for the boats.",
+   "fragile": true
+  },
+  "loft_soldering_station": {
+   "name": "Soldering station",
+   "model": "proc:loft_soldering_station",
+   "w": 0.3,
+   "d": 0.2,
+   "h": 0.18,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Smells of rosin and good intentions."
+  },
+  "loft_maker_bench": {
+   "name": "Maker's workbench",
+   "model": "proc:loft_maker_bench",
+   "w": 1.5,
+   "d": 0.7,
+   "h": 1.4,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Clear for exactly one minute after tidying.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_wood_lathe": {
+   "name": "Wood lathe",
+   "model": "proc:loft_wood_lathe",
+   "w": 1.1,
+   "d": 0.4,
+   "h": 1.15,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Makes bowls, pens and a great deal of sawdust.",
+   "nobox": true,
+   "heavy": true
+  },
+  "loft_treadmill": {
+   "name": "Folding treadmill",
+   "model": "proc:loft_treadmill",
+   "w": 0.8,
+   "d": 1.7,
+   "h": 1.4,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "An expensive place to dry shirts.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_exercise_bike": {
+   "name": "Exercise bike",
+   "model": "proc:loft_exercise_bike",
+   "w": 0.55,
+   "d": 1.1,
+   "h": 1.3,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Has done four thousand miles without leaving the loft.",
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_rowing_machine": {
+   "name": "Rowing machine",
+   "model": "proc:loft_rowing_machine",
+   "w": 0.55,
+   "d": 2.2,
+   "h": 0.85,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Rows nowhere at great speed.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_dumbbell_rack": {
+   "name": "Dumbbell rack",
+   "model": "proc:loft_dumbbell_rack",
+   "w": 0.9,
+   "d": 0.45,
+   "h": 0.9,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Lifted daily, by the cleaner, to dust under.",
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_kettlebells": {
+   "name": "Pair of kettlebells",
+   "model": "proc:loft_kettlebells",
+   "w": 0.42,
+   "d": 0.22,
+   "h": 0.3,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Doorstops with ambitions.",
+   "heavy": true
+  },
+  "loft_weight_bench": {
+   "name": "Adjustable weight bench",
+   "model": "proc:loft_weight_bench",
+   "w": 0.6,
+   "d": 1.3,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Mostly used for sitting on to tie shoelaces.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_punchbag": {
+   "name": "Hanging punchbag",
+   "model": "proc:loft_punchbag",
+   "w": 0.4,
+   "d": 0.7,
+   "h": 1.6,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Takes everything personally and shows none of it.",
+   "heavy": true
+  },
+  "loft_pullup_bar": {
+   "name": "Wall pull-up bar",
+   "model": "proc:loft_pullup_bar",
+   "w": 1.1,
+   "d": 0.5,
+   "h": 0.45,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "One pull-up, in 2019, witnessed.",
+   "heavy": true
+  },
+  "loft_yoga_mat_roll": {
+   "name": "Rolled yoga mat",
+   "model": "proc:loft_yoga_mat_roll",
+   "w": 0.62,
+   "d": 0.14,
+   "h": 0.14,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Unrolled for downward dog, mostly by the actual dog."
+  },
+  "loft_medicine_ball": {
+   "name": "Medicine ball",
+   "model": "proc:loft_medicine_ball",
+   "w": 0.32,
+   "d": 0.32,
+   "h": 0.32,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Prescribed by nobody, taken by nobody.",
+   "heavy": true
+  },
+  "loft_wall_bars": {
+   "name": "Gymnastics wall bars",
+   "model": "proc:loft_wall_bars",
+   "w": 0.9,
+   "d": 0.16,
+   "h": 2.4,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Good for stretches and for drying a whole wash.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_hammock_stand": {
+   "name": "Hammock on a stand",
+   "model": "proc:loft_hammock_stand",
+   "w": 2.9,
+   "d": 1.1,
+   "h": 1.3,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "The best seat in the loft and the hardest to leave.",
+   "nobox": true,
+   "bulky": true
+  },
+  "loft_spiral_stairs": {
+   "name": "Spiral staircase kit",
+   "model": "proc:loft_spiral_stairs",
+   "w": 1.4,
+   "d": 1.4,
+   "h": 2.7,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Comes flat-packed. Leaves as a lifelong project.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_macrame_planter": {
+   "name": "Macrame hanging planter",
+   "model": "proc:loft_macrame_planter",
+   "w": 0.32,
+   "d": 0.32,
+   "h": 0.95,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Knotted in 1976. The spider plant is newer.",
+   "fragile": true
+  },
+  "loft_tiered_plant_stand": {
+   "name": "Tiered plant stand",
+   "model": "proc:loft_tiered_plant_stand",
+   "w": 0.75,
+   "d": 0.4,
+   "h": 1.25,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Three shelves of plants, one of which is thriving.",
+   "fragile": true,
+   "bulky": true
+  },
+  "loft_bonsai": {
+   "name": "Bonsai juniper",
+   "model": "proc:loft_bonsai",
+   "w": 0.4,
+   "d": 0.28,
+   "h": 0.42,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Forty years old and still not allowed out.",
+   "fragile": true
+  },
+  "loft_book_trolley": {
+   "name": "Library book trolley",
+   "model": "proc:loft_book_trolley",
+   "w": 0.85,
+   "d": 0.45,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Returned from the library in 1998, on its own wheels.",
+   "bulky": true
+  },
+  "loft_pendant_cluster": {
+   "name": "Factory pendant lights",
+   "model": "proc:loft_pendant_cluster",
+   "w": 0.9,
+   "d": 0.35,
+   "h": 0.9,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Three enamel shades, all with an opinion on the dinner.",
+   "fragile": true
+  },
+  "loft_neon_sign": {
+   "name": "Neon sign that says OPEN",
+   "model": "proc:loft_neon_sign",
+   "w": 0.7,
+   "d": 0.08,
+   "h": 0.3,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Never once true of the person who owns it.",
+   "fragile": true
+  },
+  "loft_cast_radiator": {
+   "name": "Cast-iron column radiator",
+   "model": "proc:loft_cast_radiator",
+   "w": 1.0,
+   "d": 0.2,
+   "h": 0.75,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Takes an hour to warm and a day to cool down.",
+   "nobox": true,
+   "heavy": true
+  },
+  "loft_factory_cart": {
+   "name": "Factory cart",
+   "model": "proc:loft_factory_cart",
+   "w": 1.0,
+   "d": 0.6,
+   "h": 0.45,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Once moved engine parts, now moves magazines.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_barber_chair": {
+   "name": "Old barber's chair",
+   "model": "proc:loft_barber_chair",
+   "w": 0.7,
+   "d": 0.8,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Reclines with a clunk that could wake a street.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_pinball": {
+   "name": "Pinball machine",
+   "model": "proc:loft_pinball",
+   "w": 0.75,
+   "d": 1.4,
+   "h": 1.9,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Tilts if you look at it, which is sensible.",
+   "fragile": true,
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_table_football": {
+   "name": "Table football",
+   "model": "proc:loft_table_football",
+   "w": 1.4,
+   "d": 0.75,
+   "h": 0.92,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Spinning is banned, which has never stopped anyone.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_ping_pong_folded": {
+   "name": "Folded ping-pong table",
+   "model": "proc:loft_ping_pong_folded",
+   "w": 1.55,
+   "d": 0.6,
+   "h": 1.65,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Folded away for winter. Winter has lasted since 2015.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_model_railway": {
+   "name": "Model railway layout",
+   "model": "proc:loft_model_railway",
+   "w": 1.2,
+   "d": 0.6,
+   "h": 0.22,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "The 8.15 has been late for eleven years.",
+   "fragile": true,
+   "bulky": true
+  },
+  "loft_microscope": {
+   "name": "Brass microscope",
+   "model": "proc:loft_microscope",
+   "w": 0.18,
+   "d": 0.2,
+   "h": 0.36,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Has seen pond water up close and was not impressed.",
+   "fragile": true
+  },
+  "loft_cine_projector": {
+   "name": "Cine film projector",
+   "model": "proc:loft_cine_projector",
+   "w": 0.4,
+   "d": 0.2,
+   "h": 0.42,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Shows the same holiday in 1974 every Christmas.",
+   "fragile": true
+  },
+  "loft_projector_screen": {
+   "name": "Pull-down projector screen",
+   "model": "proc:loft_projector_screen",
+   "w": 1.8,
+   "d": 0.1,
+   "h": 1.5,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Pulled down for films and up for the cat.",
+   "bulky": true
+  },
+  "loft_darkroom_enlarger": {
+   "name": "Darkroom enlarger",
+   "model": "proc:loft_darkroom_enlarger",
+   "w": 0.45,
+   "d": 0.55,
+   "h": 0.95,
+   "mount": "small",
+   "room": "loft",
+   "flavor": "Makes prints of the cat in very serious black and white.",
+   "fragile": true,
+   "heavy": true
+  },
+  "loft_camera_tripod": {
+   "name": "Old camera on a tripod",
+   "model": "proc:loft_camera_tripod",
+   "w": 0.6,
+   "d": 0.75,
+   "h": 1.45,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Takes a portrait if everybody holds still for a week.",
+   "fragile": true,
+   "bulky": true
+  },
+  "loft_backdrop_stand": {
+   "name": "Photo backdrop stand",
+   "model": "proc:loft_backdrop_stand",
+   "w": 2.6,
+   "d": 1.1,
+   "h": 2.3,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Grey paper roll for portraits. Everyone looks wanted.",
+   "nobox": true,
+   "bulky": true
+  },
+  "loft_climbing_board": {
+   "name": "Climbing hold board",
+   "model": "proc:loft_climbing_board",
+   "w": 1.2,
+   "d": 0.12,
+   "h": 1.0,
+   "mount": "hang",
+   "room": "loft",
+   "flavor": "Two metres of chalk and one route nobody has finished.",
+   "heavy": true,
+   "bulky": true
+  },
+  "loft_surfboard": {
+   "name": "Longboard surfboard",
+   "model": "proc:loft_surfboard",
+   "w": 0.6,
+   "d": 0.12,
+   "h": 2.75,
+   "mount": "floor",
+   "room": "loft",
+   "flavor": "Leans against the wall, dreaming of Cornwall.",
+   "nobox": true,
+   "bulky": true
+  }
+ },
+ "props": {
+  "loft_drum_kit": [
+   {
+    "t": "cyl",
+    "s": [
+     0.28,
+     0.4
+    ],
+    "p": [
+     0,
+     0.28,
+     0.0
+    ],
+    "c": "B6453F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.402
+    ],
+    "p": [
+     0,
+     0.28,
+     0.0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.14
+    ],
+    "p": [
+     -0.45,
+     0.6,
+     0.3
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.18
+    ],
+    "p": [
+     -0.12,
+     0.72,
+     -0.1
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.21,
+     0.42
+    ],
+    "p": [
+     0.5,
+     0.35,
+     0.3
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.95
+    ],
+    "p": [
+     -0.65,
+     0.475,
+     0.15
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.012
+    ],
+    "p": [
+     -0.65,
+     0.95,
+     0.15
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.15
+    ],
+    "p": [
+     0.45,
+     0.575,
+     -0.35
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     0.012
+    ],
+    "p": [
+     0.45,
+     1.16,
+     -0.35
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.06
+    ],
+    "p": [
+     0,
+     0.5,
+     0.45
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.47
+    ],
+    "p": [
+     0,
+     0.235,
+     0.45
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "loft_snare_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.14
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.172,
+     0.142
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.53
+    ],
+    "p": [
+     0,
+     0.265,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.015,
+     0.03
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0.5,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.015,
+     0.03
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     -0.6,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0.05,
+     0.69,
+     0.05
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0.6,
+     0
+    ]
+   }
+  ],
+  "loft_cello": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.14,
+     0.4
+    ],
+    "p": [
+     0,
+     0.07,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.21
+    ],
+    "p": [
+     0,
+     0.42,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.17
+    ],
+    "p": [
+     0,
+     0.72,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.2,
+     0.18
+    ],
+    "p": [
+     0,
+     0.57,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.38,
+     0.03
+    ],
+    "p": [
+     0,
+     0.98,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0,
+     1.2,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.12
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "loft_double_bass": [
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.22
+    ],
+    "p": [
+     0,
+     0.55,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.24,
+     0.22
+    ],
+    "p": [
+     0,
+     0.95,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.3,
+     0.26
+    ],
+    "p": [
+     0,
+     0.75,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.6,
+     0.04
+    ],
+    "p": [
+     0,
+     1.45,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.12,
+     0.06
+    ],
+    "p": [
+     0,
+     1.79,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.25
+    ],
+    "p": [
+     0,
+     0.125,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.03
+    ],
+    "p": [
+     0,
+     0.38,
+     0.2
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "loft_guitar_amp": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.45,
+     0.26
+    ],
+    "p": [
+     0,
+     0.225,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.49,
+     0.28,
+     0.01
+    ],
+    "p": [
+     0,
+     0.17,
+     0.13
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.49,
+     0.08,
+     0.01
+    ],
+    "p": [
+     0,
+     0.38,
+     0.13
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     -0.15,
+     0.38,
+     0.13
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     -0.05,
+     0.38,
+     0.13
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     0.05,
+     0.38,
+     0.13
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.025,
+     0.03
+    ],
+    "p": [
+     0,
+     0.44,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "loft_music_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.32,
+     0.01
+    ],
+    "p": [
+     0,
+     1.0,
+     0.04
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0,
+     0.84,
+     0.08
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.85
+    ],
+    "p": [
+     0,
+     0.425,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.012,
+     0.025
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0.5,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.012,
+     0.025
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     -0.6,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.28,
+     0.004
+    ],
+    "p": [
+     -0.02,
+     1.0,
+     0.05
+    ],
+    "c": "F4F1EA",
+    "r": [
+     -0.3,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_metronome": [
+   {
+    "t": "box",
+    "s": [
+     0.11,
+     0.03,
+     0.1
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.16,
+     0.07
+    ],
+    "p": [
+     0,
+     0.11,
+     -0.005
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.08,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.18,
+     0.01
+    ],
+    "p": [
+     0,
+     0.12,
+     0.03
+    ],
+    "c": "EAE6DC",
+    "r": [
+     -0.08,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.17,
+     0.004
+    ],
+    "p": [
+     0.01,
+     0.13,
+     0.04
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     0.2
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     0.012,
+     0.01
+    ],
+    "p": [
+     0.025,
+     0.17,
+     0.042
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "loft_mic_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.1
+    ],
+    "p": [
+     0,
+     0.55,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.009,
+     0.55
+    ],
+    "p": [
+     0.12,
+     1.25,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.15
+    ],
+    "p": [
+     0.36,
+     1.32,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     -0.4
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.39,
+     1.4,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.012,
+     0.025
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0.5,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.012,
+     0.025
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     -0.6,
+     0
+    ]
+   }
+  ],
+  "loft_accordion": [
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.43,
+     0.22
+    ],
+    "p": [
+     -0.17,
+     0.225,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.43,
+     0.22
+    ],
+    "p": [
+     0.18,
+     0.225,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.38,
+     0.19
+    ],
+    "p": [
+     0.0,
+     0.215,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.36,
+     0.08
+    ],
+    "p": [
+     -0.235,
+     0.225,
+     0.05
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.36,
+     0.06
+    ],
+    "p": [
+     -0.237,
+     0.225,
+     -0.04
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.43,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.235,
+     0.3,
+     0.05
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0.235,
+     0.2,
+     0.05
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "loft_floor_harp": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.12,
+     0.42
+    ],
+    "p": [
+     0,
+     0.06,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     1.5,
+     0.08
+    ],
+    "p": [
+     -0.22,
+     0.85,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     1.2,
+     0.18
+    ],
+    "p": [
+     0.12,
+     0.72,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.35
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.1,
+     0.07
+    ],
+    "p": [
+     0.0,
+     1.6,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.25
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     1.0,
+     0.004
+    ],
+    "p": [
+     0.0,
+     0.9,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     -0.18
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.04,
+     0.06
+    ],
+    "p": [
+     -0.22,
+     1.67,
+     0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "loft_trumpet_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.01,
+     0.16
+    ],
+    "p": [
+     0,
+     0.005,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.12
+    ],
+    "p": [
+     0,
+     0.065,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.12
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.06
+    ],
+    "p": [
+     0,
+     0.27,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.3
+    ],
+    "p": [
+     0,
+     0.3,
+     0.04
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.04,
+     0.31,
+     0.07
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.009,
+     0.03
+    ],
+    "p": [
+     0.02,
+     0.34,
+     0.07
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "loft_bongos": [
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.18
+    ],
+    "p": [
+     -0.09,
+     0.09,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.075,
+     0.16
+    ],
+    "p": [
+     0.1,
+     0.08,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.092,
+     0.006
+    ],
+    "p": [
+     -0.09,
+     0.18,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.077,
+     0.006
+    ],
+    "p": [
+     0.1,
+     0.16,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.05,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.1,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.092,
+     0.02
+    ],
+    "p": [
+     -0.09,
+     0.16,
+     0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "loft_gong": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.05,
+     0.06
+    ],
+    "p": [
+     -0.4,
+     0.525,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.05,
+     0.06
+    ],
+    "p": [
+     0.4,
+     0.525,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     1.07,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.38
+    ],
+    "p": [
+     -0.4,
+     0.015,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.38
+    ],
+    "p": [
+     0.4,
+     0.015,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.33,
+     0.02
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.022
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.08
+    ],
+    "p": [
+     0,
+     1.0,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "loft_dj_decks": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.1,
+     0.38
+    ],
+    "p": [
+     -0.27,
+     0.05,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.1,
+     0.38
+    ],
+    "p": [
+     0.27,
+     0.05,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.1,
+     0.36
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.01
+    ],
+    "p": [
+     -0.28,
+     0.105,
+     -0.01
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.01
+    ],
+    "p": [
+     0.26,
+     0.105,
+     -0.01
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.012
+    ],
+    "p": [
+     -0.28,
+     0.11,
+     -0.01
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.012
+    ],
+    "p": [
+     0.26,
+     0.11,
+     -0.01
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.01,
+     0.2
+    ],
+    "p": [
+     0,
+     0.105,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.01,
+     0.16
+    ],
+    "p": [
+     -0.14,
+     0.11,
+     0.06
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0.3,
+     0
+    ]
+   }
+  ],
+  "loft_reel_to_reel": [
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.5,
+     0.2
+    ],
+    "p": [
+     0,
+     0.25,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.14,
+     0.01
+    ],
+    "p": [
+     0,
+     0.09,
+     0.1
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.012
+    ],
+    "p": [
+     -0.1,
+     0.36,
+     0.11
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.012
+    ],
+    "p": [
+     0.1,
+     0.36,
+     0.11
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.016
+    ],
+    "p": [
+     -0.1,
+     0.36,
+     0.11
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.016
+    ],
+    "p": [
+     0.1,
+     0.36,
+     0.11
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.03,
+     0.012
+    ],
+    "p": [
+     0,
+     0.2,
+     0.105
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.02
+    ],
+    "p": [
+     -0.12,
+     0.09,
+     0.11
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.09,
+     0.11
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_mixing_desk": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.06,
+     0.45
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.08,
+     0.12
+    ],
+    "p": [
+     0,
+     0.08,
+     -0.165
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.64,
+     0.004,
+     0.3
+    ],
+    "p": [
+     0,
+     0.062,
+     0.05
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.12
+    ],
+    "p": [
+     -0.2,
+     0.068,
+     0.12
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.12
+    ],
+    "p": [
+     0,
+     0.068,
+     0.12
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.01,
+     0.12
+    ],
+    "p": [
+     0.2,
+     0.068,
+     0.12
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.004,
+     0.02
+    ],
+    "p": [
+     0,
+     0.122,
+     -0.17
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.008,
+     0.01
+    ],
+    "p": [
+     0,
+     0.07,
+     -0.02
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "loft_vinyl_wall_shelf": [
+   {
+    "t": "box",
+    "s": [
+     0.35,
+     0.025,
+     0.06
+    ],
+    "p": [
+     0,
+     0.0125,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.35,
+     0.02,
+     0.012
+    ],
+    "p": [
+     0,
+     0.035,
+     0.024
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.31,
+     0.31,
+     0.008
+    ],
+    "p": [
+     0,
+     0.18,
+     -0.01
+    ],
+    "c": "EAE6DC",
+    "r": [
+     -0.08,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.01
+    ],
+    "p": [
+     0,
+     0.18,
+     0.0
+    ],
+    "c": "4A6FA5",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.011
+    ],
+    "p": [
+     0,
+     0.18,
+     0.0
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_podcast_mic": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.05,
+     0.08
+    ],
+    "p": [
+     -0.22,
+     0.025,
+     -0.06
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.25
+    ],
+    "p": [
+     -0.22,
+     0.175,
+     -0.06
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.012,
+     0.012
+    ],
+    "p": [
+     -0.08,
+     0.36,
+     -0.06
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0.1,
+     0.45,
+     -0.02
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0.3,
+     -0.2
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.14
+    ],
+    "p": [
+     0.2,
+     0.42,
+     0.05
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.032
+    ],
+    "p": [
+     0.2,
+     0.5,
+     0.05
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.004
+    ],
+    "p": [
+     0.2,
+     0.44,
+     0.1
+    ],
+    "c": "3E3A4F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_paint_taboret": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.68,
+     0.42
+    ],
+    "p": [
+     0,
+     0.42,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.18,
+     0.004
+    ],
+    "p": [
+     0,
+     0.66,
+     0.211
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.18,
+     0.004
+    ],
+    "p": [
+     0,
+     0.46,
+     0.211
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.18,
+     0.004
+    ],
+    "p": [
+     0,
+     0.26,
+     0.211
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.02,
+     0.42
+    ],
+    "p": [
+     0,
+     0.77,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.06
+    ],
+    "p": [
+     -0.2,
+     0.03,
+     0.16
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.06
+    ],
+    "p": [
+     0.2,
+     0.03,
+     0.16
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.06
+    ],
+    "p": [
+     -0.2,
+     0.03,
+     -0.16
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.06
+    ],
+    "p": [
+     0.2,
+     0.03,
+     -0.16
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.006,
+     0.03
+    ],
+    "p": [
+     -0.08,
+     0.784,
+     0.05
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.006,
+     0.03
+    ],
+    "p": [
+     0.1,
+     0.784,
+     -0.04
+    ],
+    "c": "D9765F"
+   }
+  ],
+  "loft_canvas_rack": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.06,
+     0.55
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.1,
+     0.04
+    ],
+    "p": [
+     -0.48,
+     0.55,
+     -0.25
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.1,
+     0.04
+    ],
+    "p": [
+     0.48,
+     0.55,
+     -0.25
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     1.08,
+     -0.25
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.7,
+     0.03
+    ],
+    "p": [
+     0,
+     0.42,
+     -0.16
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.8,
+     0.03
+    ],
+    "p": [
+     -0.05,
+     0.47,
+     -0.06
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.5,
+     0.03
+    ],
+    "p": [
+     0.1,
+     0.32,
+     0.04
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.6,
+     0.03
+    ],
+    "p": [
+     -0.12,
+     0.37,
+     0.14
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.9,
+     0.5
+    ],
+    "p": [
+     0,
+     0.5,
+     0
+    ],
+    "c": "D9B98A"
+   }
+  ],
+  "loft_brush_palette": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.012,
+     0.22
+    ],
+    "p": [
+     0.03,
+     0.006,
+     0.0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     -0.04,
+     0.02,
+     0.05
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.022
+    ],
+    "p": [
+     0.06,
+     0.02,
+     -0.05
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.02,
+     0.06
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.13
+    ],
+    "p": [
+     -0.12,
+     0.065,
+     -0.06
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.28
+    ],
+    "p": [
+     -0.13,
+     0.14,
+     -0.06
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     0.15
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.25
+    ],
+    "p": [
+     -0.11,
+     0.13,
+     -0.05
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.1,
+     0,
+     -0.12
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.26
+    ],
+    "p": [
+     -0.12,
+     0.13,
+     -0.08
+    ],
+    "c": "C68B59",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_lay_figure": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.012,
+     0.1
+    ],
+    "p": [
+     0,
+     0.006,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.08
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.08,
+     0.03
+    ],
+    "p": [
+     0,
+     0.17,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.022
+    ],
+    "p": [
+     0,
+     0.24,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.12
+    ],
+    "p": [
+     -0.012,
+     0.07,
+     0.01
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.3,
+     0,
+     0.1
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.12
+    ],
+    "p": [
+     0.014,
+     0.07,
+     -0.01
+    ],
+    "c": "D9B98A",
+    "r": [
+     -0.2,
+     0,
+     -0.1
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.007,
+     0.1
+    ],
+    "p": [
+     -0.04,
+     0.18,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     0.6
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.007,
+     0.1
+    ],
+    "p": [
+     0.04,
+     0.2,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     -1.0
+    ]
+   }
+  ],
+  "loft_drafting_table": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.75
+    ],
+    "p": [
+     0,
+     0.9,
+     0
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.35,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0,
+     0.78,
+     0.36
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.75,
+     0.05
+    ],
+    "p": [
+     -0.5,
+     0.375,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.75,
+     0.05
+    ],
+    "p": [
+     0.5,
+     0.375,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.7
+    ],
+    "p": [
+     -0.5,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.7
+    ],
+    "p": [
+     0.5,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.02,
+     0.03
+    ],
+    "p": [
+     0,
+     0.98,
+     0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.35,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.004,
+     0.3
+    ],
+    "p": [
+     -0.15,
+     0.93,
+     -0.05
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0.35,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_pottery_wheel": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     0.42,
+     0.45
+    ],
+    "p": [
+     0,
+     0.21,
+     -0.05
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.06
+    ],
+    "p": [
+     0,
+     0.45,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.012
+    ],
+    "p": [
+     0,
+     0.486,
+     0.02
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     0.53,
+     0.02
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.32,
+     0.02
+    ],
+    "p": [
+     0,
+     0.43,
+     0.02
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.12
+    ],
+    "p": [
+     0.25,
+     0.015,
+     0.22
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.05
+    ],
+    "p": [
+     -0.2,
+     0.47,
+     -0.2
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "loft_kiln": [
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.7
+    ],
+    "p": [
+     0,
+     0.45,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.31,
+     0.04
+    ],
+    "p": [
+     0,
+     0.82,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.31,
+     0.04
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.1,
+     0.04
+    ],
+    "p": [
+     -0.22,
+     0.05,
+     -0.22
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.1,
+     0.04
+    ],
+    "p": [
+     0.22,
+     0.05,
+     -0.22
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.1,
+     0.04
+    ],
+    "p": [
+     0,
+     0.05,
+     0.26
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.2,
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.5,
+     0.31
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     0.0,
+     0.92,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.03,
+     0.04
+    ],
+    "p": [
+     0,
+     0.86,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_etching_press": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.05,
+     0.5
+    ],
+    "p": [
+     0,
+     0.45,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.45,
+     0.4
+    ],
+    "p": [
+     -0.42,
+     0.225,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.45,
+     0.4
+    ],
+    "p": [
+     0.42,
+     0.225,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.3,
+     0.12
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.36
+    ],
+    "p": [
+     0,
+     0.55,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.01,
+     0.36
+    ],
+    "p": [
+     0.1,
+     0.48,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.3
+    ],
+    "p": [
+     0,
+     0.6,
+     0.0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.68,
+     0.0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     0.6
+    ]
+   }
+  ],
+  "loft_floor_loom": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.3,
+     0.06
+    ],
+    "p": [
+     -0.5,
+     0.65,
+     -0.4
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.3,
+     0.06
+    ],
+    "p": [
+     0.5,
+     0.65,
+     -0.4
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.8,
+     0.06
+    ],
+    "p": [
+     -0.5,
+     0.4,
+     0.4
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.8,
+     0.06
+    ],
+    "p": [
+     0.5,
+     0.4,
+     0.4
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.06,
+     0.06
+    ],
+    "p": [
+     0,
+     1.27,
+     -0.4
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.94
+    ],
+    "p": [
+     0,
+     0.78,
+     0.4
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.94
+    ],
+    "p": [
+     0,
+     0.5,
+     -0.38
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.004,
+     0.76
+    ],
+    "p": [
+     0,
+     0.8,
+     0
+    ],
+    "c": "E7DCC6",
+    "r": [
+     0.04,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.25,
+     0.04
+    ],
+    "p": [
+     0,
+     1.0,
+     -0.05
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.08,
+     0.3
+    ],
+    "p": [
+     0,
+     0.79,
+     0.25
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "loft_spinning_wheel": [
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.03
+    ],
+    "p": [
+     -0.12,
+     0.6,
+     0
+    ],
+    "c": "C68B59",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.06
+    ],
+    "p": [
+     -0.12,
+     0.6,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.75,
+     0.06,
+     0.2
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     -0.15
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.32
+    ],
+    "p": [
+     -0.3,
+     0.16,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.28
+    ],
+    "p": [
+     0.3,
+     0.14,
+     0.12
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.28
+    ],
+    "p": [
+     0.3,
+     0.14,
+     -0.12
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.6
+    ],
+    "p": [
+     -0.12,
+     0.45,
+     -0.06
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.08,
+     0.06
+    ],
+    "p": [
+     0.3,
+     0.52,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.06
+    ],
+    "p": [
+     0.3,
+     0.6,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_printer_3d": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.06,
+     0.42
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.42,
+     0.03
+    ],
+    "p": [
+     -0.195,
+     0.27,
+     -0.12
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.42,
+     0.03
+    ],
+    "p": [
+     0.195,
+     0.27,
+     -0.12
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.465,
+     -0.12
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.008,
+     0.3
+    ],
+    "p": [
+     0,
+     0.1,
+     0.02
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.3,
+     -0.1
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.05
+    ],
+    "p": [
+     0.05,
+     0.27,
+     -0.08
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.04
+    ],
+    "p": [
+     0.01,
+     0.125,
+     0.02
+    ],
+    "c": "4F8A8B"
+   }
+  ],
+  "loft_soldering_station": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.09,
+     0.16
+    ],
+    "p": [
+     -0.06,
+     0.045,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.04,
+     0.005
+    ],
+    "p": [
+     -0.06,
+     0.06,
+     0.081
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.09,
+     0.005,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.14,
+     0.012
+    ],
+    "p": [
+     0.09,
+     0.08,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     -0.5
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.14
+    ],
+    "p": [
+     0.11,
+     0.1,
+     0.0
+    ],
+    "c": "3E3A4F",
+    "r": [
+     0,
+     0,
+     0.6
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.06,
+     0.02,
+     0.07
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "loft_maker_bench": [
+   {
+    "t": "box",
+    "s": [
+     1.5,
+     0.05,
+     0.7
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.86,
+     0.06
+    ],
+    "p": [
+     -0.7,
+     0.43,
+     -0.3
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.86,
+     0.06
+    ],
+    "p": [
+     0.7,
+     0.43,
+     -0.3
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.86,
+     0.06
+    ],
+    "p": [
+     -0.7,
+     0.43,
+     0.3
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.86,
+     0.06
+    ],
+    "p": [
+     0.7,
+     0.43,
+     0.3
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.4,
+     0.03,
+     0.6
+    ],
+    "p": [
+     0,
+     0.2,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.5,
+     0.5,
+     0.02
+    ],
+    "p": [
+     0,
+     1.15,
+     -0.34
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.5,
+     0.02,
+     0.1
+    ],
+    "p": [
+     0,
+     1.39,
+     -0.3
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.08,
+     0.12
+    ],
+    "p": [
+     -0.55,
+     0.945,
+     0.25
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.1,
+     0.2
+    ],
+    "p": [
+     0.4,
+     0.955,
+     -0.15
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "loft_wood_lathe": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.08,
+     0.2
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.85,
+     0.35
+    ],
+    "p": [
+     -0.38,
+     0.425,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.85,
+     0.35
+    ],
+    "p": [
+     0.38,
+     0.425,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.22,
+     0.24
+    ],
+    "p": [
+     -0.42,
+     1.03,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.16,
+     0.16
+    ],
+    "p": [
+     0.35,
+     1.0,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.5
+    ],
+    "p": [
+     -0.02,
+     1.02,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.12,
+     0.05
+    ],
+    "p": [
+     -0.02,
+     0.97,
+     0.1
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.0,
+     1.07,
+     0.16
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_treadmill": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.14,
+     1.6
+    ],
+    "p": [
+     0,
+     0.07,
+     0.05
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.02,
+     1.4
+    ],
+    "p": [
+     0,
+     0.15,
+     0.1
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.2,
+     0.06
+    ],
+    "p": [
+     -0.35,
+     0.74,
+     -0.7
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.2,
+     0.06
+    ],
+    "p": [
+     0.35,
+     0.74,
+     -0.7
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.72,
+     0.18,
+     0.2
+    ],
+    "p": [
+     0,
+     1.3,
+     -0.75
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.1,
+     0.01
+    ],
+    "p": [
+     0,
+     1.33,
+     -0.68
+    ],
+    "c": "4A6FA5",
+    "r": [
+     -0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     1.15,
+     -0.62
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "loft_exercise_bike": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     0.03,
+     -0.45
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     0.03,
+     0.45
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     0.95
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.2,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.06
+    ],
+    "p": [
+     0,
+     0.35,
+     -0.3
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.6
+    ],
+    "p": [
+     0,
+     0.6,
+     0.25
+    ],
+    "c": "8E8276",
+    "r": [
+     -0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.06,
+     0.26
+    ],
+    "p": [
+     0,
+     0.92,
+     0.3
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.85
+    ],
+    "p": [
+     0,
+     0.7,
+     -0.25
+    ],
+    "c": "8E8276",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     1.12,
+     -0.42
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.03
+    ],
+    "p": [
+     0,
+     1.2,
+     -0.36
+    ],
+    "c": "3E3A4F"
+   }
+  ],
+  "loft_rowing_machine": [
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.06,
+     2.1
+    ],
+    "p": [
+     0,
+     0.35,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     0.2
+    ],
+    "p": [
+     0,
+     0.5,
+     -0.82
+    ],
+    "c": "3E3A4F",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     0.05,
+     -0.95
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     0.05,
+     1.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.06,
+     0.28
+    ],
+    "p": [
+     0,
+     0.3,
+     0.3
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.12,
+     0.18
+    ],
+    "p": [
+     0,
+     0.2,
+     -0.45
+    ],
+    "c": "2B2622",
+    "r": [
+     0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.5
+    ],
+    "p": [
+     0,
+     0.6,
+     -0.55
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.12,
+     0.1
+    ],
+    "p": [
+     0,
+     0.75,
+     -0.85
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "loft_dumbbell_rack": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.8,
+     0.06
+    ],
+    "p": [
+     -0.4,
+     0.4,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.8,
+     0.06
+    ],
+    "p": [
+     0.4,
+     0.4,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.04,
+     0.3
+    ],
+    "p": [
+     0,
+     0.75,
+     0.02
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.04,
+     0.3
+    ],
+    "p": [
+     0,
+     0.4,
+     0.02
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.04,
+     0.44
+    ],
+    "p": [
+     -0.4,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.04,
+     0.44
+    ],
+    "p": [
+     0.4,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.3
+    ],
+    "p": [
+     -0.2,
+     0.8,
+     0.02
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.32
+    ],
+    "p": [
+     0.2,
+     0.81,
+     0.02
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.36
+    ],
+    "p": [
+     -0.18,
+     0.46,
+     0.02
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.36
+    ],
+    "p": [
+     0.2,
+     0.47,
+     0.02
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_kettlebells": [
+   {
+    "t": "sph",
+    "s": [
+     0.1
+    ],
+    "p": [
+     -0.1,
+     0.1,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.11
+    ],
+    "p": [
+     0.1,
+     0.11,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.02
+    ],
+    "p": [
+     -0.1,
+     0.01,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.01,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.02,
+     0.02
+    ],
+    "p": [
+     -0.1,
+     0.25,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.13,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.28,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.006,
+     0.006
+    ],
+    "p": [
+     0.1,
+     0.18,
+     0.105
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.08,
+     0.02
+    ],
+    "p": [
+     -0.15,
+     0.215,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.08,
+     0.02
+    ],
+    "p": [
+     -0.05,
+     0.215,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.09,
+     0.02
+    ],
+    "p": [
+     0.045,
+     0.24,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.09,
+     0.02
+    ],
+    "p": [
+     0.155,
+     0.24,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "loft_weight_bench": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.07,
+     0.75
+    ],
+    "p": [
+     0,
+     0.45,
+     0.25
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.07,
+     0.5
+    ],
+    "p": [
+     0,
+     0.62,
+     -0.25
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.7,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.4,
+     0.08
+    ],
+    "p": [
+     0,
+     0.2,
+     0.3
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.06,
+     1.2
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.08
+    ],
+    "p": [
+     0,
+     0.03,
+     -0.55
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.1,
+     0.06
+    ],
+    "p": [
+     -0.26,
+     0.55,
+     -0.5
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     1.1,
+     0.06
+    ],
+    "p": [
+     0.26,
+     0.55,
+     -0.5
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.58
+    ],
+    "p": [
+     0,
+     1.0,
+     -0.45
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_punchbag": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.6
+    ],
+    "p": [
+     0,
+     1.55,
+     -0.05
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.2,
+     0.04
+    ],
+    "p": [
+     0,
+     1.5,
+     -0.33
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.25
+    ],
+    "p": [
+     0,
+     1.4,
+     0.15
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     1.05
+    ],
+    "p": [
+     0,
+     0.74,
+     0.15
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.172,
+     0.06
+    ],
+    "p": [
+     0,
+     1.24,
+     0.15
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.172,
+     0.06
+    ],
+    "p": [
+     0,
+     0.24,
+     0.15
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.06,
+     0.004
+    ],
+    "p": [
+     0,
+     0.74,
+     0.322
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "loft_pullup_bar": [
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.4,
+     0.04
+    ],
+    "p": [
+     -0.45,
+     0.2,
+     -0.23
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.4,
+     0.04
+    ],
+    "p": [
+     0.45,
+     0.2,
+     -0.23
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.45
+    ],
+    "p": [
+     -0.45,
+     0.35,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.45
+    ],
+    "p": [
+     0.45,
+     0.35,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     1.1
+    ],
+    "p": [
+     0,
+     0.37,
+     0.22
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     -0.3,
+     0.37,
+     0.22
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.18
+    ],
+    "p": [
+     0.3,
+     0.37,
+     0.22
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_yoga_mat_roll": [
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.61
+    ],
+    "p": [
+     0,
+     0.065,
+     0
+    ],
+    "c": "8FA882",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.612
+    ],
+    "p": [
+     0,
+     0.065,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.068,
+     0.04
+    ],
+    "p": [
+     -0.18,
+     0.065,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.068,
+     0.04
+    ],
+    "p": [
+     0.18,
+     0.065,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_medicine_ball": [
+   {
+    "t": "sph",
+    "s": [
+     0.16
+    ],
+    "p": [
+     0,
+     0.16,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.162,
+     0.03
+    ],
+    "p": [
+     0,
+     0.16,
+     0
+    ],
+    "c": "E6B655",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.162,
+     0.03
+    ],
+    "p": [
+     0,
+     0.16,
+     0
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.2,
+     0.155
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "loft_wall_bars": [
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     2.4,
+     0.08
+    ],
+    "p": [
+     -0.42,
+     1.2,
+     -0.04
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     2.4,
+     0.08
+    ],
+    "p": [
+     0.42,
+     1.2,
+     -0.04
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     0.25,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     0.55,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     0.85,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     1.15,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     1.45,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     1.75,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     2.05,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.78
+    ],
+    "p": [
+     0,
+     2.3,
+     0.05
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_hammock_stand": [
+   {
+    "t": "box",
+    "s": [
+     2.8,
+     0.06,
+     0.1
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     1.0
+    ],
+    "p": [
+     -1.35,
+     0.04,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.08,
+     1.0
+    ],
+    "p": [
+     1.35,
+     0.04,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     1.4,
+     0.08
+    ],
+    "p": [
+     -1.1,
+     0.66,
+     0
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     -0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     1.4,
+     0.08
+    ],
+    "p": [
+     1.1,
+     0.66,
+     0
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.6,
+     0.04,
+     0.8
+    ],
+    "p": [
+     0,
+     0.55,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.04,
+     0.6
+    ],
+    "p": [
+     -0.9,
+     0.78,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     -0.6
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.04,
+     0.6
+    ],
+    "p": [
+     0.9,
+     0.78,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     0.6
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.1,
+     0.25
+    ],
+    "p": [
+     -0.55,
+     0.62,
+     0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "loft_spiral_stairs": [
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     2.7
+    ],
+    "p": [
+     0,
+     1.35,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     0.32,
+     0.25,
+     -0.0
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0.0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     0.2264,
+     0.55,
+     -0.2262
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0.785,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     0.0003,
+     0.85,
+     -0.32
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     1.57,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     -0.226,
+     1.15,
+     -0.2265
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     2.355,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     -0.32,
+     1.45,
+     -0.0005
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     3.14,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     -0.2267,
+     1.75,
+     0.2258
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     3.925,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     -0.0008,
+     2.05,
+     0.32
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     4.71,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.04,
+     0.26
+    ],
+    "p": [
+     0.2256,
+     2.35,
+     0.2269
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     5.495,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.68,
+     0.03
+    ],
+    "p": [
+     0,
+     2.68,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_macrame_planter": [
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0,
+     0.94,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.55
+    ],
+    "p": [
+     -0.06,
+     0.65,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     -0.12
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.55
+    ],
+    "p": [
+     0.06,
+     0.65,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0,
+     0,
+     0.12
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.55
+    ],
+    "p": [
+     0,
+     0.65,
+     0.06
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.17
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.14
+    ],
+    "p": [
+     0,
+     0.42,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.25
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "loft_tiered_plant_stand": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.25,
+     0.04
+    ],
+    "p": [
+     -0.33,
+     0.625,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.25,
+     0.04
+    ],
+    "p": [
+     0.33,
+     0.625,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.12,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.03,
+     0.3
+    ],
+    "p": [
+     0,
+     0.3,
+     0.08
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.03,
+     0.24
+    ],
+    "p": [
+     0,
+     0.7,
+     0.03
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.03,
+     0.18
+    ],
+    "p": [
+     0,
+     1.1,
+     -0.04
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.14
+    ],
+    "p": [
+     -0.18,
+     0.385,
+     0.08
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.1
+    ],
+    "p": [
+     -0.18,
+     0.5,
+     0.08
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.12
+    ],
+    "p": [
+     0.15,
+     0.775,
+     0.03
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     0.15,
+     0.88,
+     0.03
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.1
+    ],
+    "p": [
+     0.0,
+     1.165,
+     -0.04
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.0,
+     1.21,
+     -0.04
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "loft_bonsai": [
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.07,
+     0.24
+    ],
+    "p": [
+     0,
+     0.035,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.02,
+     0.22
+    ],
+    "p": [
+     0,
+     0.075,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.2
+    ],
+    "p": [
+     -0.03,
+     0.17,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.18
+    ],
+    "p": [
+     0.06,
+     0.27,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.9
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.09
+    ],
+    "p": [
+     -0.08,
+     0.3,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0.12,
+     0.33,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.0,
+     0.36,
+     0.0
+    ],
+    "c": "8FA882"
+   }
+  ],
+  "loft_book_trolley": [
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.4
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.03,
+     0.3
+    ],
+    "p": [
+     0,
+     0.6,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0.35,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.8,
+     0.4
+    ],
+    "p": [
+     -0.4,
+     0.5,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.8,
+     0.4
+    ],
+    "p": [
+     0.4,
+     0.5,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     -0.33,
+     0.03,
+     0.15
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0.33,
+     0.03,
+     -0.15
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.22,
+     0.18
+    ],
+    "p": [
+     0,
+     0.3,
+     0.0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.2,
+     0.16
+    ],
+    "p": [
+     0,
+     0.72,
+     0.0
+    ],
+    "c": "B6453F",
+    "r": [
+     0.35,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.4
+    ],
+    "p": [
+     0,
+     0.92,
+     0
+    ],
+    "c": "8E8276"
+   }
+  ],
+  "loft_pendant_cluster": [
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.04,
+     0.35
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.4
+    ],
+    "p": [
+     -0.3,
+     0.66,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.25
+    ],
+    "p": [
+     0,
+     0.74,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.5
+    ],
+    "p": [
+     0.3,
+     0.61,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.12
+    ],
+    "p": [
+     -0.3,
+     0.4,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.12
+    ],
+    "p": [
+     0,
+     0.56,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.12
+    ],
+    "p": [
+     0.3,
+     0.3,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     -0.3,
+     0.33,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0,
+     0.49,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.3,
+     0.23,
+     0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "loft_neon_sign": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.3,
+     0.012
+    ],
+    "p": [
+     0,
+     0.15,
+     -0.034
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.18,
+     0.02
+    ],
+    "p": [
+     -0.27,
+     0.15,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.11,
+     0.025,
+     0.02
+    ],
+    "p": [
+     -0.18,
+     0.15,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.18,
+     0.02
+    ],
+    "p": [
+     -0.07,
+     0.15,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.025,
+     0.02
+    ],
+    "p": [
+     0.06,
+     0.23,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.18,
+     0.02
+    ],
+    "p": [
+     0.17,
+     0.15,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     0.18,
+     0.02
+    ],
+    "p": [
+     0.28,
+     0.15,
+     0.0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.025,
+     0.02
+    ],
+    "p": [
+     0.225,
+     0.15,
+     0.0
+    ],
+    "c": "E8B4A8",
+    "r": [
+     0,
+     0,
+     -0.9
+    ]
+   }
+  ],
+  "loft_cast_radiator": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.16
+    ],
+    "p": [
+     0,
+     0.73,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.16
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     -0.44,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     -0.33,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     -0.22,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     -0.11,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     0.0,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     0.11,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     0.22,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     0.33,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.16
+    ],
+    "p": [
+     0.44,
+     0.42,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.1,
+     0.12
+    ],
+    "p": [
+     -0.44,
+     0.05,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_factory_cart": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.08,
+     0.6
+    ],
+    "p": [
+     0,
+     0.36,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     0.3,
+     -0.28
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     0.3,
+     0.28
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.05
+    ],
+    "p": [
+     -0.32,
+     0.14,
+     0.24
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.05
+    ],
+    "p": [
+     0.32,
+     0.14,
+     0.24
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.05
+    ],
+    "p": [
+     -0.32,
+     0.14,
+     -0.24
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.05
+    ],
+    "p": [
+     0.32,
+     0.14,
+     -0.24
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.8
+    ],
+    "p": [
+     0,
+     0.14,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.04,
+     0.22
+    ],
+    "p": [
+     0.2,
+     0.42,
+     0.05
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "loft_barber_chair": [
+   {
+    "t": "cyl",
+    "s": [
+     0.28,
+     0.04
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.38
+    ],
+    "p": [
+     0,
+     0.23,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.14,
+     0.55
+    ],
+    "p": [
+     0,
+     0.5,
+     0.05
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.6,
+     0.12
+    ],
+    "p": [
+     0,
+     0.88,
+     -0.22
+    ],
+    "c": "B6453F",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.06,
+     0.5
+    ],
+    "p": [
+     -0.3,
+     0.7,
+     0.05
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.06,
+     0.5
+    ],
+    "p": [
+     0.3,
+     0.7,
+     0.05
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.12,
+     0.08
+    ],
+    "p": [
+     0,
+     1.13,
+     -0.3
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.4,
+     0.03,
+     0.16
+    ],
+    "p": [
+     0,
+     0.18,
+     0.32
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.6,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.1,
+     0.08
+    ],
+    "p": [
+     0.3,
+     0.62,
+     0.05
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "loft_pinball": [
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.35,
+     1.3
+    ],
+    "p": [
+     0,
+     0.88,
+     0.0
+    ],
+    "c": "4A6FA5",
+    "r": [
+     0.1,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.66,
+     0.01,
+     1.24
+    ],
+    "p": [
+     0,
+     1.06,
+     0.0
+    ],
+    "c": "BFD6DA",
+    "r": [
+     0.1,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.7,
+     0.75,
+     0.15
+    ],
+    "p": [
+     0,
+     1.45,
+     -0.62
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.62,
+     0.55,
+     0.01
+    ],
+    "p": [
+     0,
+     1.47,
+     -0.54
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.7,
+     0.06
+    ],
+    "p": [
+     -0.3,
+     0.35,
+     0.58
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.7,
+     0.06
+    ],
+    "p": [
+     0.3,
+     0.35,
+     0.58
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.7,
+     0.06
+    ],
+    "p": [
+     -0.3,
+     0.35,
+     -0.58
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.7,
+     0.06
+    ],
+    "p": [
+     0.3,
+     0.35,
+     -0.58
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0.1,
+     1.05,
+     0.2
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.04,
+     0.02
+    ],
+    "p": [
+     0,
+     0.82,
+     0.66
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "loft_table_football": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.18,
+     0.7
+    ],
+    "p": [
+     0,
+     0.8,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.14,
+     0.01,
+     0.64
+    ],
+    "p": [
+     0,
+     0.75,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.72,
+     0.08
+    ],
+    "p": [
+     -0.55,
+     0.36,
+     -0.3
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.72,
+     0.08
+    ],
+    "p": [
+     0.55,
+     0.36,
+     -0.3
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.72,
+     0.08
+    ],
+    "p": [
+     -0.55,
+     0.36,
+     0.3
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.72,
+     0.08
+    ],
+    "p": [
+     0.55,
+     0.36,
+     0.3
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.74
+    ],
+    "p": [
+     -0.3,
+     0.84,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.74
+    ],
+    "p": [
+     0.1,
+     0.84,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.74
+    ],
+    "p": [
+     0.3,
+     0.84,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.06,
+     0.03
+    ],
+    "p": [
+     -0.3,
+     0.82,
+     0.1
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.06,
+     0.03
+    ],
+    "p": [
+     0.1,
+     0.82,
+     -0.1
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.02
+    ],
+    "p": [
+     0,
+     0.77,
+     0
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "loft_ping_pong_folded": [
+   {
+    "t": "box",
+    "s": [
+     1.52,
+     1.4,
+     0.03
+    ],
+    "p": [
+     0,
+     0.92,
+     -0.08
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.52,
+     1.4,
+     0.03
+    ],
+    "p": [
+     0,
+     0.92,
+     0.08
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     1.4,
+     0.032
+    ],
+    "p": [
+     0,
+     0.92,
+     0.096
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.52,
+     0.02,
+     0.032
+    ],
+    "p": [
+     0,
+     1.6,
+     0.096
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.5,
+     0.15,
+     0.02
+    ],
+    "p": [
+     0,
+     1.6,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.2,
+     0.5
+    ],
+    "p": [
+     -0.6,
+     0.12,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.2,
+     0.5
+    ],
+    "p": [
+     0.6,
+     0.12,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.05
+    ],
+    "p": [
+     -0.6,
+     0.025,
+     0.22
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.05
+    ],
+    "p": [
+     0.6,
+     0.025,
+     0.22
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_model_railway": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.05,
+     0.6
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.006,
+     0.45
+    ],
+    "p": [
+     0,
+     0.053,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.007,
+     0.41
+    ],
+    "p": [
+     0,
+     0.054,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0.2,
+     0.085,
+     0.21
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0.05,
+     0.085,
+     0.21
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.12,
+     0.14
+    ],
+    "p": [
+     -0.35,
+     0.11,
+     -0.12
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.04,
+     0.16
+    ],
+    "p": [
+     -0.35,
+     0.19,
+     -0.12
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.08
+    ],
+    "p": [
+     0.35,
+     0.09,
+     -0.1
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.15
+    ],
+    "p": [
+     0.2,
+     0.125,
+     -0.15
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "loft_microscope": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.03,
+     0.18
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.16,
+     0.05
+    ],
+    "p": [
+     0,
+     0.11,
+     -0.06
+    ],
+    "c": "C9A24E",
+    "r": [
+     0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.012,
+     0.1
+    ],
+    "p": [
+     0,
+     0.13,
+     0.02
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.022,
+     0.18
+    ],
+    "p": [
+     0,
+     0.25,
+     0.0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.05
+    ],
+    "p": [
+     0,
+     0.35,
+     -0.04
+    ],
+    "c": "2B2622",
+    "r": [
+     0.3,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.04
+    ],
+    "p": [
+     0,
+     0.15,
+     0.03
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.1
+    ],
+    "p": [
+     0,
+     0.17,
+     -0.07
+    ],
+    "c": "C9A24E",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "loft_cine_projector": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.18,
+     0.18
+    ],
+    "p": [
+     0,
+     0.09,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.03
+    ],
+    "p": [
+     -0.1,
+     0.3,
+     0
+    ],
+    "c": "3E3A4F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.03
+    ],
+    "p": [
+     0.08,
+     0.3,
+     0
+    ],
+    "c": "3E3A4F",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.14,
+     0.03
+    ],
+    "p": [
+     -0.1,
+     0.2,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.14,
+     0.03
+    ],
+    "p": [
+     0.08,
+     0.2,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.08
+    ],
+    "p": [
+     0.17,
+     0.1,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.2,
+     0.1,
+     0
+    ],
+    "c": "BFD6DA",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.06
+    ],
+    "p": [
+     -0.05,
+     0.195,
+     0.0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_projector_screen": [
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     1.8
+    ],
+    "p": [
+     0,
+     1.45,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.7,
+     1.25,
+     0.004
+    ],
+    "p": [
+     0,
+     0.78,
+     0.0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.7,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.15,
+     0.0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.7,
+     0.05,
+     0.005
+    ],
+    "p": [
+     0,
+     1.38,
+     0.003
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.003,
+     0.12
+    ],
+    "p": [
+     0,
+     0.08,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.012
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_darkroom_enlarger": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.03,
+     0.55
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.9
+    ],
+    "p": [
+     0,
+     0.45,
+     -0.22
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.16,
+     0.25
+    ],
+    "p": [
+     0,
+     0.7,
+     -0.08
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.06
+    ],
+    "p": [
+     0,
+     0.6,
+     -0.04
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.05
+    ],
+    "p": [
+     0,
+     0.545,
+     -0.04
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.01,
+     0.24
+    ],
+    "p": [
+     0,
+     0.035,
+     0.05
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.05
+    ],
+    "p": [
+     0,
+     0.85,
+     -0.12
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_camera_tripod": [
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.25
+    ],
+    "p": [
+     0,
+     0.62,
+     0.17
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.28,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.25
+    ],
+    "p": [
+     -0.15,
+     0.62,
+     -0.09
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.14,
+     0,
+     -0.24
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.25
+    ],
+    "p": [
+     0.15,
+     0.62,
+     -0.09
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.14,
+     0,
+     0.24
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.04,
+     0.1
+    ],
+    "p": [
+     0,
+     1.25,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.18,
+     0.2
+    ],
+    "p": [
+     0,
+     1.36,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.16,
+     0.14
+    ],
+    "p": [
+     0,
+     1.36,
+     0.16
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.06
+    ],
+    "p": [
+     0,
+     1.36,
+     0.25
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.062
+    ],
+    "p": [
+     0,
+     1.36,
+     0.25
+    ],
+    "c": "BFD6DA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "loft_backdrop_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     2.2
+    ],
+    "p": [
+     -1.05,
+     1.1,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     2.2
+    ],
+    "p": [
+     1.05,
+     1.1,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     2.1
+    ],
+    "p": [
+     0,
+     2.2,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     2.0,
+     1.9,
+     0.004
+    ],
+    "p": [
+     0,
+     1.2,
+     0.06
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     2.0,
+     0.004,
+     0.45
+    ],
+    "p": [
+     0,
+     0.004,
+     0.28
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.012,
+     0.025
+    ],
+    "p": [
+     -1.05,
+     0.01,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.012,
+     0.025
+    ],
+    "p": [
+     1.05,
+     0.01,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "loft_climbing_board": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     1.0,
+     0.03
+    ],
+    "p": [
+     0,
+     0.5,
+     -0.045
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     -0.4,
+     0.2,
+     -0.01
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.1,
+     0.35,
+     -0.01
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0.3,
+     0.3,
+     -0.01
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.3,
+     0.6,
+     -0.01
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     0.15,
+     0.62,
+     -0.01
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.05,
+     0.85,
+     -0.01
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.4,
+     0.8,
+     -0.01
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.05
+    ],
+    "p": [
+     0,
+     0.95,
+     0.0
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "loft_surfboard": [
+   {
+    "t": "box",
+    "s": [
+     0.55,
+     2.4,
+     0.07
+    ],
+    "p": [
+     0,
+     1.35,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.04,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.27,
+     0.07
+    ],
+    "p": [
+     0,
+     2.47,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.27,
+     0.07
+    ],
+    "p": [
+     0,
+     0.28,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     2.5,
+     0.075
+    ],
+    "p": [
+     0,
+     1.38,
+     0.0
+    ],
+    "c": "4F8A8B",
+    "r": [
+     0.04,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     0.15,
+     0.08
+    ],
+    "p": [
+     0,
+     0.35,
+     0.04
+    ],
+    "c": "2B2622"
+   }
+  ]
+ }
+}
