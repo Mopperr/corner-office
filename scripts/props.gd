@@ -1467,11 +1467,22 @@ static func v2_character(id: String) -> Node3D:
 	if figure == null:
 		return null
 	figure.name = "Figure"
-	# The models face +Z; the room's people face -Z when their yaw is 0.
-	figure.rotation.y = PI
+	# The models face +Z, the same way as the built figures (nose at +Z), so
+	# the wrapper is not turned: a yaw of atan2(dir.x, dir.z) faces `dir`.
 	person.add_child(figure)
 	person.set_meta("v2", true)
 	person.set_meta("v2_id", id)
+	# Something to carry, shown only while carrying (the room swaps in the
+	# actual piece when one is in hand).
+	var carry := make("box_closed")
+	carry.name = "Carry"
+	carry.scale = Vector3(0.7, 0.7, 0.7)
+	carry.position = Vector3(0, 0.62, 0.3)
+	carry.visible = false
+	var carry_collision := carry.get_node_or_null("PropCollision")
+	if carry_collision:
+		carry_collision.free()
+	figure.add_child(carry)
 	play_clip(figure, "idle", true)
 	return person
 

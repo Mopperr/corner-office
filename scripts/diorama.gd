@@ -2301,6 +2301,15 @@ func _unload_top() -> Vector3:
 	return unload_truck.to_global(Vector3(BED_TAIL_X + 0.05, BED_FLOOR_Y, 0.0)) if unload_truck else _door_world()
 
 
+func _pile_spot(box_id: int) -> Vector3:
+	# The pavement pile: three boxes wide beside the ramp, rows running back
+	# along the kerb, each box at its place in the unloading order.
+	var door := _door_world()
+	var order: Array = GameState.unload_order()
+	var index := maxi(0, order.find(box_id))
+	return Vector3(door.x + 2.0 + float(index % 3) * 0.52, 0.2, door.z - 1.1 - float(index / 3) * 0.52)
+
+
 func _unload_foot() -> Vector3:
 	return _door_world() + Vector3(0, 0, -0.7)
 
@@ -2464,11 +2473,10 @@ func _carry_next() -> void:
 		_toast("One at a time. She's on the ramp.")
 		return
 	for id in GameState.unload_order():
-		var slot := int(GameState.job_box(int(id)).get("slot", -1))
-		if slot < 0 or GameState.slot_can_unload(slot) == "":
+		if int(GameState.job_box(int(id)).get("slot", -1)) >= 0 and not bool(carried.get(int(id), false)):
 			_carry_in(int(id))
 			return
-	_toast("The truck is empty.")
+	_toast("The pile is empty.")
 
 
 func _carry_in(box_id: int) -> void:
@@ -2482,29 +2490,22 @@ func _carry_in(box_id: int) -> void:
 		return
 	var box := GameState.job_box(box_id)
 	var slot := int(box.get("slot", -1))
-	if slot >= 0:
-		var why := GameState.slot_can_unload(slot)
-		if why != "":
-			_toast(why)
-			AudioDirector.play_sfx("sfx_invalid_placement")
-			if OS.get_environment("CO_DEBUG") != "":
-				var cell: Dictionary = GameState.slot_cell(slot)
-				print("  carry_in %d refused: %s (slot %d cell %s, carried %s)" % [box_id, why, slot, cell, GameState.job.get("carried", [])])
-			return
 	if player == null or not is_instance_valid(player) or unload_truck == null or slot < 0:
 		_finish_carry_in(box_id)
 		return
+	# The boxes stand in a pile on the pavement beside the ramp: Dana walks
+	# out of the door to the pile, lifts the box and carries it in.
 	unload_pending = true
-	var in_bed := unload_truck.to_global(_slot_pos(slot) + Vector3(0.1, 0, 0))
-	in_bed.y = BED_FLOOR_Y
+	var pile := _pile_spot(box_id)
 	var node: Node = nodes_by_uid.get("boxcarry:%d" % box_id)
-	_walk_path([_door_world() + Vector3(0, 0, 0.6), _unload_foot(), _unload_top(), in_bed], func():
+	_walk_path([_door_world() + Vector3(0, 0, 0.6), Vector3(pile.x - 0.5, 0.0, pile.z + 0.1)], func():
 		player_carrying = true
+		_act(player, "reach", 0.5)
 		AudioDirector.play_sfx("sfx_item_pick_up")
 		if node != null and is_instance_valid(node):
 			node.visible = false
 		var spot := _open_box_spot(box_id)
-		_walk_path([_unload_top(), _unload_foot(), _door_world() + Vector3(0, 0, 0.6), Vector3(spot.x - 0.5, 0.0, spot.z + 0.4)], func():
+		_walk_path([_door_world() + Vector3(0, 0, 0.6), Vector3(spot.x - 0.5, 0.0, spot.z + 0.4)], func():
 			player_carrying = false
 			unload_pending = false
 			_finish_carry_in(box_id)
@@ -3960,11 +3961,62 @@ func _player_go(at: Vector3) -> void:
 		_act(player, "reach", 0.7)
 
 
+func _sync_carry_prop() -> void:
+	# What is in Dana's hands shows in them: a kraft box on the ramp, the
+	# piece itself when she carries one across the room.
+	if player == null or not is_instance_valid(player):
+		return
+	var want := ""
+	if player_carrying or unload_pending or truck_pending:
+		want = "box"
+	var hand_uid := held_uid if held_source != "decor" else ""
+	if hand_uid == "" and (auto_busy or player_carrying):
+		for item in GameState.job.get("items", []):
+			if str(item.get("state", "")) == "hand":
+				hand_uid = str(item.get("uid", ""))
+				break
+	if hand_uid != "":
+		want = hand_uid
+	if want == str(player.get_meta("carry_key", "")):
+		return
+	player.set_meta("carry_key", want)
+	var old := player.get_node_or_null("CarryProp")
+	if old != null:
+		player.remove_child(old)
+		old.free()
+	if want == "" or want == "box":
+		# The rig's own box for a box; nothing in hand otherwise.
+		return
+	var rec := GameState.job_item(want)
+	if rec.is_empty():
+		rec = GameState.find_office_item(want)
+	if rec.is_empty():
+		return
+	var def: Dictionary = ItemDB.get_item(str(rec.get("item_id", rec.get("item", ""))))
+	if def.is_empty():
+		return
+	var prop := Props.make(str(def.get("model", "box_closed")))
+	if prop == null:
+		return
+	prop.name = "CarryProp"
+	var longest := maxf(0.2, maxf(float(def.get("w", 0.4)), maxf(float(def.get("h", 0.3)), float(def.get("d", 0.4)))))
+	var k := clampf(0.55 / longest, 0.25, 1.0)
+	prop.scale = Vector3(k, k, k)
+	prop.position = Vector3(0, 0.66, 0.34)
+	var collision := prop.get_node_or_null("PropCollision")
+	if collision:
+		collision.free()
+	for picker in prop.find_children("*", "StaticBody3D", true, false):
+		picker.free()
+	player.add_child(prop)
+
+
 func _tick_player(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
 	player_time += delta
 	player.set_meta("carry", held_uid != "" or (selected_box >= 0 and GameState.mode == "job_pack") or player_carrying)
+	_sync_carry_prop()
 	if player_moving:
 		var to := player_target - player.position
 		if player_path.is_empty() and absf(to.y) < 0.3:
@@ -4580,12 +4632,13 @@ func _spawn_carry_boxes() -> void:
 			continue
 		if _is_home() and home_floor != 0:
 			continue
-		# Still on the truck: in its place in the bed, stacked as it was loaded.
+		# Off the truck already and waiting on the pavement: a pile beside the
+		# ramp, in the order they come off, clear of the body of the truck.
 		var node := Node3D.new()
 		var slot := int(box.get("slot", -1))
 		if unload_truck != null and slot >= 0:
-			node.position = unload_truck.to_global(_slot_pos(slot)) + Vector3(0, 0.2, 0)
-			node.rotation.y = unload_truck.rotation.y
+			node.position = _pile_spot(box_id)
+			node.rotation.y = 0.12 * float((box_id * 7) % 5 - 2)
 		else:
 			node.position = Vector3(float(venue.get("x", 0)) + float(venue.get("w", 6)) - 0.2, 0.2, 1.0 + index * 0.55)
 		node.set_meta("uid", "boxcarry:%d" % int(box.get("id", 0)))
@@ -6157,10 +6210,11 @@ func _spawn_street() -> void:
 		person.name = "Passerby%d" % i
 		var x := cx - 12.0 + rng.randf() * 24.0
 		var dir := 1.0 if rng.randf() < 0.5 else -1.0
-		person.position = Vector3(x, 0.0, z + rng.randf_range(-0.3, 0.3))
+		var lane := rng.randf_range(-0.3, 0.3)
+		person.position = Vector3(x, 0.0, z + lane)
 		person.rotation.y = PI * 0.5 if dir > 0.0 else -PI * 0.5
 		add_child(person)
-		street.append({"node": person, "dir": dir, "speed": rng.randf_range(0.7, 1.1), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx})
+		street.append({"node": person, "dir": dir, "speed": rng.randf_range(0.7, 1.1), "phase": rng.randf() * TAU, "pause": 0.0, "cx": cx, "lane": lane})
 		if i == 2 and rng.randf() < 0.6:
 			# One of the town's named faces, from the team's models, walking by.
 			var cameo := _cameo_npc(rng)
@@ -6242,6 +6296,12 @@ func _tick_street(delta: float) -> void:
 		var walking := float(entry["pause"]) <= 0.0
 		if walking:
 			node.position.x += dir * float(entry.get("speed", 0.9)) * delta
+			# The pavement line, bent round the back of the truck when one is
+			# parked at the door: nobody walks through a lorry.
+			var lane_z := float(venue.get("z", 0)) - 4.2 + float(entry.get("lane", 0.0))
+			if unload_truck != null and is_instance_valid(unload_truck) and absf(node.position.x - unload_truck.position.x) < 3.6:
+				lane_z = unload_truck.position.z - 3.4
+			node.position.z = move_toward(node.position.z, lane_z, 1.6 * delta)
 			var cx := float(entry.get("cx", 0.0))
 			if node.position.x > cx + 13.0 or node.position.x < cx - 13.0:
 				entry["dir"] = -dir
@@ -6554,19 +6614,60 @@ func _bubble(node: Node3D, text: String, seconds := 4.0) -> void:
 	label.font = UIKit.body_font()
 	label.font_size = 36
 	label.pixel_size = 0.0042
-	label.outline_size = 10
-	label.outline_modulate = UIKit.CREAM_CARD
+	label.outline_size = 0
 	label.modulate = UIKit.DARK
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = true
+	label.render_priority = 3
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.width = 420.0
 	label.position = Vector3(0, 1.95, 0)
 	label.set_meta("ttl", seconds)
 	node.add_child(label)
-	var dot := Props.mesh_cylinder(0.035, 0.01, UIKit.CREAM_CARD)
+	# A white card behind the words, sized to them, so the line reads over
+	# any floor or wall: a speech bubble, not loose text.
+	var chars_per_line := 24
+	var lines := 0
+	var longest := 0
+	for part in text.split("\n"):
+		lines += maxi(1, int(ceil(float(part.length()) / float(chars_per_line))))
+		longest = maxi(longest, mini(part.length(), chars_per_line))
+	var px := label.pixel_size
+	var wide := (float(longest) * 17.5 + 44.0) * px
+	var tall := (float(lines) * 44.0 + 26.0) * px
+	var back := MeshInstance3D.new()
+	back.name = "ThoughtBack"
+	var quad := QuadMesh.new()
+	quad.size = Vector2(wide, tall)
+	back.mesh = quad
+	var paper := StandardMaterial3D.new()
+	paper.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	paper.albedo_color = Color("FFFDF7")
+	paper.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	paper.no_depth_test = true
+	paper.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	paper.render_priority = 2
+	back.material_override = paper
+	back.position = Vector3(0, 0, -0.002)
+	label.add_child(back)
+	var rim := MeshInstance3D.new()
+	rim.name = "ThoughtRim"
+	var rim_quad := QuadMesh.new()
+	rim_quad.size = Vector2(wide + 0.03, tall + 0.03)
+	rim.mesh = rim_quad
+	var ink := StandardMaterial3D.new()
+	ink.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	ink.albedo_color = UIKit.DARK
+	ink.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	ink.no_depth_test = true
+	ink.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	ink.render_priority = 1
+	rim.material_override = ink
+	rim.position = Vector3(0, 0, -0.004)
+	label.add_child(rim)
+	var dot := Props.mesh_cylinder(0.05, 0.01, Color("FFFDF7"))
 	dot.name = "ThoughtDot"
-	dot.position = Vector3(0.1, 1.58, 0)
+	dot.position = Vector3(0.1, 1.62, 0.12)
 	dot.set_meta("ttl", seconds)
 	node.add_child(dot)
 
@@ -6887,6 +6988,10 @@ func _tick_bubbles(delta: float) -> void:
 				dot.queue_free()
 		elif ttl < 0.5:
 			(node as Label3D).modulate.a = ttl / 0.5
+			for part_name in ["ThoughtBack", "ThoughtRim"]:
+				var part := node.get_node_or_null(part_name) as MeshInstance3D
+				if part and part.material_override is StandardMaterial3D:
+					(part.material_override as StandardMaterial3D).albedo_color.a = ttl / 0.5
 			if dot:
 				(dot as MeshInstance3D).transparency = 1.0 - ttl / 0.5
 
@@ -7074,11 +7179,28 @@ func _act(node: Node3D, action: String, seconds: float) -> void:
 	node.set_meta("action_until", Time.get_ticks_msec() / 1000.0 + seconds)
 
 
+func _face_motion(node: Node3D, walking: bool, delta: float) -> void:
+	# Whoever walks turns to face the way they are going (the figures' front
+	# is +Z, so the yaw is atan2(dx, dz)); standing still keeps the last heading.
+	var last: Vector3 = node.get_meta("last_pos", node.position)
+	node.set_meta("last_pos", node.position)
+	if not walking:
+		return
+	var moved := node.position - last
+	moved.y = 0.0
+	if moved.length() < 0.003:
+		return
+	var yaw := atan2(moved.x, moved.z)
+	node.rotation.y = lerp_angle(node.rotation.y, yaw, minf(1.0, delta * 14.0))
+
+
 func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> void:
 	# Walking: a bob and a swing of the arms. Standing: a slow sway and a glance around.
 	var figure := node.get_node_or_null("Figure") as Node3D
 	if figure == null:
 		return
+	if not bool(node.get_meta("down", false)):
+		_face_motion(node, walking, delta)
 	if bool(node.get_meta("v2", false)):
 		# The team's rig plays its own clips: walk on the move, sit when
 		# sat, idle otherwise; a fall still tips the whole figure over.
@@ -7094,6 +7216,9 @@ func _animate_person(node: Node3D, t: float, walking: bool, delta: float) -> voi
 				figure.position.y = 0.0
 		var sat := bool(node.get_meta("sit", false)) or bool(node.get_meta("sitting", false))
 		Props.v2_play(node, "walk" if walking else ("sit" if sat else "idle"))
+		var carry_box := figure.get_node_or_null("Carry") as Node3D
+		if carry_box:
+			carry_box.visible = bool(node.get_meta("carry", false)) and node.get_node_or_null("CarryProp") == null
 		return
 	var action := str(node.get_meta("action", ""))
 	if action != "" and Time.get_ticks_msec() / 1000.0 < float(node.get_meta("action_until", 0.0)):

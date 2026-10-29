@@ -1091,15 +1091,11 @@ func _unpack() -> void:
 			_fail("unpack: no carry box for box %d" % (int(id) + 1))
 			return
 		if first_off:
-			# The one under it cannot come first.
-			var blocked := -1
-			for other in GameState.job.get("boxes", []):
-				if GameState.slot_can_unload(int(other.get("slot", -1))) != "" and int(other.get("slot", -1)) >= 0:
-					blocked = int(other.get("id", -1))
-					break
-			if blocked >= 0:
-				room.call("_carry_in", blocked)
-				_check(not bool(room.carried.get(blocked, false)), "unpack: box %d waits its turn under the stack" % (blocked + 1))
+			# The boxes wait in a pile on the pavement beside the ramp, clear of the truck.
+			var door: Vector3 = room.call("_door_world")
+			var truck: Node3D = room.get_node_or_null("UnloadTruck")
+			var clear := truck == null or absf(node.global_position.x - truck.position.x) > 1.4 or node.global_position.z > truck.position.z + 2.4
+			_check(node.global_position.x > door.x + 1.5 and clear, "unpack: box %d waits in the pile beside the ramp" % (int(id) + 1))
 			first_off = false
 		var seen := await _probe(room, node, func(h): return h == "boxcarry:%d" % int(id))
 		var covered: Array = _controls_under(room, _last_hover) if seen != "" else []
