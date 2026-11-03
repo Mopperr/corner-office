@@ -83,3 +83,67 @@ What still holds it back, in order:
 Two hours of content is there on paper: the board, six venues, the ladder, the
 workbench tree, the back room and the goals. Whether it holds two hours depends
 on the pacing points above more than on more systems.
+
+# QA pass three: the recorded playthrough and the rework (29 Oct to 3 Nov)
+
+Played end to end again, headless in CI and on the branch, and recorded once with
+Movie Maker (`corner_office_playthrough_part1.mp4`, 16 minutes to the house move's
+unpack, then the full take after the rework). Watching the recording is what set
+the agenda for this pass: the problems below are the ones a player sees in the first
+minute, not the ones a test finds.
+
+## Seen in the recording and fixed
+
+1. **Dana walked backwards.** The team's models face +Z like the built figures, but
+   the wrapper turned them 180 degrees, and nothing turned a walker toward its
+   motion. Everyone now faces the way they move (`_face_motion`).
+2. **Nothing in her hands.** The v2 rig had no carry prop; a kraft box shows on the
+   ramp and the actual piece shows when she carries one across the room.
+3. **Floating text.** Lines over heads were loose white text; they are speech bubbles
+   on a white card with a dark rim, and they fade with the card.
+4. **Into the truck for every box.** At the new place the boxes come off into a pile
+   on the pavement beside the ramp, and Dana fetches them from the pile; the loading
+   pile at the old place stands on the camera's side of the ramp.
+5. **People through the truck.** Passers-by bend their line round the back of the
+   parked truck.
+6. **The drive.** A steep bird's-eye camera over a grey town with a tiny truck. Now a
+   low close chase camera that drops back and widens with speed, lane assist on a
+   straight, softer walls, a warmer town under a stronger sun with kerb lines, bigger
+   route marks, a pillar of light over the bay, the next turn and its distance in the
+   objective, and a speed readout.
+7. **No music of our own.** Six tracks composed and rendered in code, in rotation.
+
+## Found by the runs and fixed
+
+8. A board recipe could carry four wrapped pieces into a move the bed cannot hold
+   (nothing stacks on a wrapped piece); a wrapped piece now costs its whole column.
+9. "Pack the rest for me" taped a half-full box shut whenever a hefty piece came
+   along; the hefty piece takes a fresh box and the open one stays open.
+10. A stale hand record after the shove swallowed the next click; it is cleared.
+11. The kettle card, moved to the top centre, sat over the room and took clicks;
+    it times out on its own and the run answers it.
+12. Spilled pieces could heap on one spot in a crowded room where none could be
+    clicked; the fallback now takes any free square first.
+13. A click over the family's things with a piece in hand opened their card instead
+    of placing; placing wins. Their pictures hang clear of the default hang point.
+14. After a forgiveness in the ward the owner takes one more slip, so the forced
+    breaks in the test follow the temper limit.
+
+## The fun layer (docs/FUN_RESEARCH.md)
+
+From the research: pieces hop into the box with a bounce and a +1; an emptied box
+folds flat and pops away; a neat placement earns a word, a sparkle and a chime that
+climbs with each good one in a row; china clinks and heavy things thump; a wrong
+room says so; a progress bar for the step; Dana says where a piece lives; the
+wrong-room check at Finish with outlines and a fix-or-finish card; "Kitchen done!";
+the PERFECT MOVE stamp; the room before and after on the results card; houses with
+six to nine of the family's pieces a room and pictures on the walls.
+
+## Still open
+
+- Rendered runs under software GL are slow; a Movie Maker take of the whole slice
+  takes two to three hours of wall time at 1080p.
+- The L07 to L15 sprites are in the tree, unused by the 3D drive.
+- Rocco's v2 look is off his concept (the team's note).
+- The combo chime reuses the shelf chime at a shifted pitch; a dedicated set of
+  placement tones would read cleaner.
