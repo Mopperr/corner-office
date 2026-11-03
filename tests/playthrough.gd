@@ -164,7 +164,10 @@ func _run() -> void:
 		await _do_job(str(GameState.generated_jobs[0].get("id", "")))
 		if not fails.is_empty():
 			return
-		_check(int(GameState.stats.get("board_jobs", 0)) >= 1, "board job counted (%s)" % GameState.stats)
+		if thrown_this_job:
+			print("  board job ended in the ward; not counted, by design")
+		else:
+			_check(int(GameState.stats.get("board_jobs", 0)) >= 1, "board job counted (%s)" % GameState.stats)
 
 	await _buy_loft()
 
@@ -1335,8 +1338,15 @@ func _unpack() -> void:
 			await click_world(room, _last_hover)
 		await wait(0.1)
 		if room.held_uid != picked:
-			_fail("unpack: cannot pick up %s (state %s, held %s)" % [picked, GameState.job_item(picked).get("state", ""), room.held_uid])
-			return
+			# Pieces lie close together after a tip-out: the click can lift the
+			# neighbour. A player would just place that one; so does the run.
+			var other := str(room.held_uid)
+			if other != "" and str(GameState.job_item(other).get("state", "")) == "hand":
+				print("UX: the click lifted %s rather than %s; placing it instead" % [other, picked])
+				picked = other
+			else:
+				_fail("unpack: cannot pick up %s (state %s, held %s)" % [picked, GameState.job_item(picked).get("state", ""), room.held_uid])
+				return
 		var item: Dictionary = GameState.job_item(picked)
 		var target: Variant = null
 		var mount := str(item.get("mount", "floor"))
