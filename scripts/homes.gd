@@ -424,6 +424,16 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 		if index == 0:
 			# Keep the box row and the front of the house clear.
 			blocked.append(Rect2(ox, oz + float(venue.get("d", 8)) - 2.6, float(venue.get("w", 8)), 2.6))
+			# And the family's standing room just inside the door, so a click
+			# on them never lands on a piece of theirs.
+			var w := float(venue.get("w", 6))
+			var open_w := float(venue.get("open_w", 2))
+			var door_x := ox + 3.5 if (absf(open_w - 3.0) < 0.1 and w >= 6.0) else ox + w * 0.5
+			blocked.append(Rect2(door_x - 2.8, oz, 5.6, 2.0))
+		# Nothing stands on the stairs or at their foot.
+		var well := stairs_rect(venue, index)
+		if well.size != Vector2.ZERO:
+			blocked.append(well.grow(0.5))
 		for room in rooms(venue, index):
 			var room_kind := kind(str(room.get("id", "")))
 			var pool: Array = (OWNER_ITEMS.get(room_kind, []) as Array).duplicate()
