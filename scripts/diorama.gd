@@ -3405,7 +3405,7 @@ func _take_photo(key: String) -> void:
 	# A picture of the room for the results card: the viewport as it is,
 	# scaled down. Headless runs have no picture and skip it.
 	var viewport := get_viewport()
-	if viewport == null:
+	if viewport == null or DisplayServer.get_name() == "headless":
 		return
 	var texture := viewport.get_texture()
 	if texture == null:
