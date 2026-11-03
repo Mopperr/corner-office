@@ -1115,7 +1115,9 @@ func _build_facade() -> void:
 	# The boxes still to go, piled by the door; the pile shrinks as the bed fills.
 	var pile := Node3D.new()
 	pile.name = "BoxPile"
-	pile.position = Vector3(0.4, 0.0, -1.5)
+	# On the apron by the foot of the ramp, on the camera's side of the
+	# truck, so the boxes waiting to go up are in view.
+	pile.position = Vector3(-5.4, 0.0, 1.0)
 	facade.add_child(pile)
 	_sync_pile()
 
@@ -2292,7 +2294,7 @@ func _truck_click(uid: String) -> void:
 			_refresh_hud_buttons()
 			if warning != "":
 				_toast(warning, "Dana")
-			_walk_path([_ramp_top(), _ramp_foot(), Vector3(1.6, 0.0, -0.9)], Callable())
+			_walk_path([_ramp_top(), _ramp_foot(), Vector3(-4.0, 0.0, 1.9)], Callable())
 		)
 		return
 	if warning != "":
@@ -2511,12 +2513,20 @@ func _tea_card() -> void:
 	AudioDirector.play_sfx("sfx_notification_soft")
 	# An offer, not a demand: left unanswered a while, the kettle goes cold
 	# and the card goes, so it never sits over the room for good.
-	get_tree().create_timer(14.0).timeout.connect(func():
-		if is_instance_valid(card) and card.is_inside_tree():
-			_toast("The tea went cold. Another time.", client)
-			layer.remove_child(card)
-			card.queue_free()
-	)
+	get_tree().create_timer(14.0).timeout.connect(_tea_cold.bind(client))
+
+
+func _tea_cold(client: String) -> void:
+	# Looked up by name, not captured: the card is usually gone by now.
+	var layer := _hud_layer()
+	if layer == null:
+		return
+	var card := layer.get_node_or_null("TeaCard")
+	if card == null:
+		return
+	_toast("The tea went cold. Another time.", client)
+	layer.remove_child(card)
+	card.queue_free()
 
 
 func _carry_next() -> void:
@@ -3930,6 +3940,23 @@ func _spill_spot(box_id: int, n: int) -> Vector3:
 	for at2 in squares:
 		if _spot_free(at2, taken) and not _spot_blocked(at2):
 			return at2
+	# Still nothing behind the row: any free square in the room beats a
+	# heap of pieces on one spot that nobody can click.
+	var anywhere: Array = []
+	var az := z0 + 0.8
+	while az < z0 + d - 0.5:
+		var ax := x0 + 0.8
+		while ax < x0 + w - 0.5:
+			anywhere.append(Vector3(ax, 0.0, az))
+			ax += 0.6
+		az += 0.6
+	anywhere.sort_custom(func(a, b): return (a.x + a.z) < (b.x + b.z))
+	for at3 in anywhere:
+		if _spot_free(at3, taken) and not _spot_blocked(at3):
+			return at3
+	for at3 in anywhere:
+		if _spot_free(at3, taken):
+			return at3
 	return Vector3(x0 + w * 0.5, 0.0, z0 + d * 0.5)
 
 
@@ -4158,7 +4185,7 @@ func _spawn_player() -> void:
 	var door := _door_world()
 	player.position = door + Vector3(0.6, 0.0, 1.3)
 	if GameState.mode == "truck":
-		player.position = Vector3(1.6, 0.0, -0.9)
+		player.position = Vector3(-4.0, 0.0, 1.9)
 	player.rotation.y = PI
 	if GameState.mode == "hospital":
 		# Flat on the bed, head to the wall, feet to the camera.
