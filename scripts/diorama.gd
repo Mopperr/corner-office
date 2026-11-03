@@ -2319,6 +2319,11 @@ func _unpack_click(uid: String) -> void:
 		_use_stairs()
 		return
 	if uid.begins_with("owner:"):
+		# With a piece in hand, a click over the family's things places it
+		# beside them; the owner card waits for an empty hand.
+		if held_uid != "":
+			_try_place_held()
+			return
 		_open_owner_card(uid)
 		return
 	if uid.begins_with("boxcarry:"):

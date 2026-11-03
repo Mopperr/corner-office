@@ -531,7 +531,9 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 						var hdef: Dictionary = ItemDB.get_item(hid)
 						if hdef.is_empty():
 							continue
-						var hx := rx + rw * (0.3 if h == 0 else 0.7)
+						# Off the hang point by the door end (1.4 m in), so a hung piece
+						# of the move still has its spot on the back wall.
+						var hx := rx + rw * (0.58 if h == 0 else 0.84)
 						var hz := rz + 0.12 + float(hdef.get("d", 0.1)) * 0.5
 						out.append({
 							"uid": "owner:%d" % n, "item_id": hid, "name": str(hdef.get("name", hid)),
