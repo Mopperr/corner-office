@@ -2019,7 +2019,16 @@ func _commit_place(uid: String, source: String, on_wall: bool) -> void:
 	_refresh_items()
 
 
+func _clear_misfit(uid: String) -> void:
+	var node: Node = nodes_by_uid.get(uid)
+	if node != null and is_instance_valid(node) and bool(node.get_meta("misfit", false)) and not _misfits().has(uid):
+		Props.set_hover_outline(node, false)
+		node.set_meta("misfit", false)
+
+
 func _after_place(source: String) -> void:
+	if source == "job" and _last_placed_uid != "":
+		_clear_misfit(_last_placed_uid)
 	if source == "office" or source == "decor":
 		if source == "office" and _last_placed_uid != "":
 			_place_feedback(_last_placed_uid)
@@ -2398,6 +2407,7 @@ func _spawn_unload_truck() -> void:
 	Props.add_picker(cab, Vector3(2.0, 2.0, 2.2))
 	add_child(truck)
 	_build_ramp(self, _unload_top() + Vector3(0, -0.02, 0), _unload_foot(), "UnloadRamp")
+	_take_photo_before()
 
 
 # --- something happens mid-job ---
@@ -2805,9 +2815,40 @@ func _box_row(item: Dictionary, box_id: int, width: float) -> PanelContainer:
 	return card
 
 
+func _fold_box(box_id: int) -> void:
+	# The last piece is out: the box folds flat and pops away with a whoosh,
+	# instead of vanishing on the next refresh.
+	var box := GameState.job_box(box_id)
+	if box.is_empty() or bool(box.get("folded", false)):
+		return
+	box["folded"] = true
+	var at := _open_box_spot(box_id)
+	var fold := Props.make("box_open")
+	if fold == null:
+		return
+	var collision := fold.get_node_or_null("PropCollision")
+	if collision:
+		collision.free()
+	for picker in fold.find_children("*", "StaticBody3D", true, false):
+		picker.free()
+	fold.position = at
+	add_child(fold)
+	AudioDirector.play_sfx("sfx_box_fold", true)
+	var tw := create_tween()
+	tw.tween_property(fold, "scale", Vector3(1.12, 0.06, 1.12), 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tw.tween_property(fold, "scale", Vector3(0.01, 0.01, 0.01), 0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(fold, "position", at + Vector3(0, 0.5, 0), 0.16)
+	tw.tween_callback(func():
+		_dust(at)
+		fold.queue_free()
+	)
+
+
 func _loosen(item: Dictionary, box_id: int, index: int) -> void:
 	item["state"] = "loose"
 	arrive_from[str(item.get("uid", ""))] = _open_box_spot(box_id) + Vector3(0, 0.35, 0)
+	if not _box_still_packed(box_id):
+		_fold_box(box_id)
 	var at := _spill_spot(box_id, index)
 	item["x"] = at.x
 	item["z"] = at.z
@@ -3300,8 +3341,182 @@ func _place_feedback(uid: String) -> void:
 	_score_pop(at + Vector3(0, 0.6, 0), word, UIKit.MUSTARD if score < 2 else UIKit.TERRA)
 	_sparkle(at, UIKit.MUSTARD, 12 + 6 * mini(score, 3))
 	AudioDirector.play_sfx_pitched("sfx_l10_shelf_chime", 0.9 + 0.08 * float(mini(place_combo, 8)), -4.0)
+	_set_down_foley(uid)
 	if place_combo == 5:
 		_toast("Five in a row. That's a mover's eye.", "Dana")
+	_room_done_check(uid)
+
+
+func _set_down_foley(uid: String) -> void:
+	# What a piece sounds like landing: glass and china clink, the heavy
+	# things thump, the rest snap into place.
+	var rec := GameState.job_item(uid)
+	if rec.is_empty():
+		rec = GameState.find_office_item(uid)
+	var def: Dictionary = ItemDB.get_item(str(rec.get("item_id", rec.get("item", ""))))
+	if bool(def.get("fragile", false)) or bool(rec.get("fragile", false)):
+		AudioDirector.play_sfx("sfx_l02_cup_clink", true)
+	elif bool(def.get("heavy", false)) or bool(def.get("bulky", false)):
+		AudioDirector.play_sfx("sfx_l10_book_thump", true)
+
+
+func _room_done_check(uid: String) -> void:
+	# A house: when the last tagged piece for a kind of room is in a room of
+	# that kind, the room is done and says so.
+	if not _is_home():
+		return
+	var rec := GameState.job_item(uid)
+	var tag := str(rec.get("room", ""))
+	if tag == "" or not Homes.has_tag(venue, tag):
+		return
+	var done: Array = GameState.job.get("rooms_done", [])
+	if done.has(tag):
+		return
+	var total := 0
+	var right := 0
+	for item in GameState.job.get("items", []):
+		if str(item.get("room", "")) != tag:
+			continue
+		total += 1
+		if str(item.get("state", "")) != "placed":
+			continue
+		var room := Homes.room_at(venue, int(item.get("floor", 0)), float(item.get("x", 0)), float(item.get("z", 0)))
+		if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) == tag:
+			right += 1
+	if total < 2 or right < total:
+		return
+	done.append(tag)
+	GameState.job["rooms_done"] = done
+	var where := str(ROOM_WORDS.get(tag, "the " + tag)).capitalize()
+	var node: Node3D = nodes_by_uid.get(uid)
+	var at: Vector3 = node.global_position if node != null and is_instance_valid(node) else player.position
+	_score_pop(at + Vector3(0, 1.1, 0), "%s done!" % where, UIKit.SAGE)
+	_sparkle(at, UIKit.SAGE, 30)
+	AudioDirector.play_sfx("sfx_success_chime")
+	_toast("%s, done. Every piece where it lives." % where, "Dana")
+
+
+func _take_photo(key: String) -> void:
+	# A picture of the room for the results card: the viewport as it is,
+	# scaled down. Headless runs have no picture and skip it.
+	var viewport := get_viewport()
+	if viewport == null:
+		return
+	var texture := viewport.get_texture()
+	if texture == null:
+		return
+	var image := texture.get_image()
+	if image == null or image.get_width() < 8 or image.get_height() < 8:
+		return
+	image.resize(480, int(480.0 * float(image.get_height()) / float(image.get_width())), Image.INTERPOLATE_BILINEAR)
+	GameState.job_photos[key] = ImageTexture.create_from_image(image)
+
+
+func _misfits() -> Array:
+	# Job pieces standing in the wrong kind of room, by uid.
+	var out: Array = []
+	if not _is_home():
+		return out
+	for item in GameState.job.get("items", []):
+		var tag := str(item.get("room", ""))
+		if tag == "" or not Homes.has_tag(venue, tag) or str(item.get("state", "")) != "placed":
+			continue
+		var room := Homes.room_at(venue, int(item.get("floor", 0)), float(item.get("x", 0)), float(item.get("z", 0)))
+		if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) != tag:
+			out.append(str(item.get("uid", "")))
+	return out
+
+
+func _outline_misfits(on: bool) -> void:
+	for uid in _misfits():
+		var node: Node = nodes_by_uid.get(uid)
+		if node != null and is_instance_valid(node):
+			Props.set_hover_outline(node, on)
+			node.set_meta("misfit", on)
+
+
+func _finish_job_now() -> void:
+	_take_photo("after")
+	if bool(GameState.payout.get("perfect", false)) or (_misfits().is_empty() and int(GameState.job.get("broken", 0)) == 0 and _is_home()):
+		_confetti()
+	GameState.finish_job()
+	if bool(GameState.payout.get("perfect", false)):
+		AudioDirector.play_sfx("sfx_success_chime")
+		AudioDirector.play_sfx("sfx_coins_award")
+	GameState.set_mode("results")
+	SaveManager.save_game()
+	AudioDirector.play_sfx("sfx_job_complete")
+	emit_signal("request_results")
+
+
+func _misfit_card(misfits: Array) -> void:
+	# Before the job closes: the pieces in the wrong room, outlined, and the
+	# choice to set them right or call it done.
+	var layer := _hud_layer()
+	if layer == null:
+		_finish_job_now()
+		return
+	var old := layer.get_node_or_null("MisfitCard")
+	if old != null:
+		layer.remove_child(old)
+		old.free()
+	_outline_misfits(true)
+	var card := PanelContainer.new()
+	card.name = "MisfitCard"
+	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 16, 4, UIKit.TERRA))
+	layer.add_child(card)
+	UIKit.pin_center_top(card, -380, 120, 380, 120)
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 16)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 8)
+	margin.add_child(column)
+	column.add_child(UIKit.ribbon("Not quite home", UIKit.TERRA, 28))
+	var names: Array = []
+	for uid in misfits:
+		names.append(str(GameState.job_item(uid).get("name", "a piece")).to_lower())
+	var line := UIKit.label("%d piece%s stand%s in the wrong room (outlined): %s. The tip is better with every one where it lives." % [misfits.size(), "" if misfits.size() == 1 else "s", "s" if misfits.size() == 1 else "", ", ".join(names.slice(0, 4)) + ("…" if names.size() > 4 else "")], 25, UIKit.DARK, "small")
+	line.custom_minimum_size = Vector2(700, 0)
+	column.add_child(line)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	column.add_child(row)
+	var fix := UIKit.button("Set them right", UIKit.SAGE)
+	fix.name = "MisfitFix"
+	fix.custom_minimum_size = Vector2(260, 52)
+	fix.pressed.connect(func():
+		_toast("Right. The outlined ones. Pick them up and find the room.", "Dana")
+		if is_instance_valid(card):
+			layer.remove_child(card)
+			card.queue_free()
+	)
+	row.add_child(fix)
+	var go := UIKit.button("Finish anyway", UIKit.WOOD)
+	go.name = "MisfitFinish"
+	go.custom_minimum_size = Vector2(260, 52)
+	go.pressed.connect(func():
+		_outline_misfits(false)
+		if is_instance_valid(card):
+			layer.remove_child(card)
+			card.queue_free()
+		_finish_job_now()
+	)
+	row.add_child(go)
+	UIKit.link_focus([fix, go])
+	AudioDirector.play_sfx("sfx_notification_soft")
+
+
+func _take_photo_before() -> void:
+	# A frame after the room is built: the boxes still on the pavement.
+	if GameState.mode != "job_unpack" or GameState.job.is_empty():
+		return
+	if GameState.job_photos.has("before"):
+		return
+	await get_tree().create_timer(0.5).timeout
+	if is_inside_tree() and GameState.mode == "job_unpack":
+		_take_photo("before")
 
 
 func _pack_finish() -> void:
@@ -5241,11 +5456,14 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 		)
 	if ready and all_in:
 		_act_button(layer, "Finish job", Vector2(1060, 620), func():
-			GameState.finish_job()
-			GameState.set_mode("results")
-			SaveManager.save_game()
-			AudioDirector.play_sfx("sfx_job_complete")
-			emit_signal("request_results")
+			_tally_rooms()
+			var misfits := _misfits()
+			if misfits.is_empty() or bool(GameState.job.get("misfits_seen", false)):
+				_outline_misfits(false)
+				_finish_job_now()
+			else:
+				GameState.job["misfits_seen"] = true
+				_misfit_card(misfits)
 		)
 
 

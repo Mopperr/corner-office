@@ -42,6 +42,8 @@ var museum: Array = []
 var held_uid := ""
 var job: Dictionary = {}
 var payout: Dictionary = {}
+# Before and after pictures of the room on the current job (not saved).
+var job_photos: Dictionary = {}
 var buyer_offer: Dictionary = {}
 var pastry_day := -1
 var decor_serial := 0
@@ -1114,6 +1116,7 @@ func start_job(id: String) -> void:
 	var def := JobDB.get_job(id)
 	if def.is_empty():
 		return
+	job_photos = {}
 	var items: Array = JobDB.build_job_items(def)
 	var cat_uid := ""
 	if bool(def.get("cat", false)):
@@ -1761,6 +1764,9 @@ func finish_job() -> Dictionary:
 	payout["duck"] = bool(job.get("duck_friend", false))
 	payout["rooms_right"] = int(job.get("rooms_right", 0))
 	payout["rooms_total"] = int(job.get("rooms_total", 0))
+	# A perfect move: every tagged piece in the room it lives in, nothing
+	# dropped, nothing crushed on the road.
+	payout["perfect"] = int(job.get("rooms_total", 0)) > 0 and int(job.get("rooms_right", 0)) == int(job.get("rooms_total", 0)) and int(job.get("broken", 0)) == 0 and int(job.get("crushed", 0)) == 0
 	payout["rooms_wrong"] = job.get("rooms_wrong", [])
 	payout["room_pay"] = room_pay
 	var pocketed: Array = job.get("pocketed", [])

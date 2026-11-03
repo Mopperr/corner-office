@@ -773,6 +773,10 @@ func _play_job(job_id: String) -> void:
 		await _save_roundtrip("after the ward, " + job_id)
 		return
 	_check(press("Finish job"), "%s: Finish job button" % job_id)
+	await wait(0.5)
+	if press("Finish anyway"):
+		# A house with pieces in the wrong rooms asks first; the run takes the job as it stands.
+		print("  misfits: the room check came up; finishing anyway")
 	await wait(1.0)
 	_check(GameState.mode == "results", "%s: results (got %s)" % [job_id, GameState.mode])
 	await shot("results_" + job_id)

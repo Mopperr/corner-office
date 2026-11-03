@@ -108,6 +108,8 @@ func _ready() -> void:
 	lines.append("Tips you keep  $%d" % int(pay.get("net_tips", 0)))
 	lines.append("You take home  $%d" % int(pay.get("total", 0)))
 	var stamps := []
+	if bool(pay.get("perfect", false)):
+		stamps.append("PERFECT MOVE")
 	if str(pay.get("stamp", "")) != "":
 		stamps.append(pay.get("stamp"))
 	if bool(pay.get("all_fine", false)):
@@ -152,7 +154,7 @@ func _center_card() -> void:
 	layout_mode = 0
 	position = Vector2.ZERO
 	size = vp
-	var card_size := Vector2(900, 760)
+	var card_size := Vector2(960, 860) if _has_photos() else Vector2(900, 760)
 	if vp.y < card_size.y + 16.0:
 		card_size.y = maxf(360.0, vp.y - 16.0)
 	if vp.x < card_size.x + 16.0:
@@ -180,9 +182,40 @@ func _build() -> void:
 	UIKit.fill(dim, 0, 0, 0, 0)
 	var card := Panel.new()
 	card.name = "Card"
-	card.custom_minimum_size = Vector2(900, 760)
+	var photos := _has_photos()
+	card.custom_minimum_size = Vector2(960, 860) if photos else Vector2(900, 760)
 	card.add_theme_stylebox_override("panel", UIKit.style(UIKit.CREAM_CARD, 20))
 	add_child(card)
+	# The room as it was and as you left it, side by side under the stars.
+	var top := 136.0
+	if photos:
+		var pair := HBoxContainer.new()
+		pair.name = "Photos"
+		pair.add_theme_constant_override("separation", 20)
+		pair.position = Vector2(40, 136)
+		card.add_child(pair)
+		for key in ["before", "after"]:
+			var frame := PanelContainer.new()
+			var paper := UIKit.style(Color("FFFDF7"), 10, 3, UIKit.WOOD)
+			paper.content_margin_left = 6
+			paper.content_margin_right = 6
+			paper.content_margin_top = 6
+			paper.content_margin_bottom = 6
+			frame.add_theme_stylebox_override("panel", paper)
+			pair.add_child(frame)
+			var column := VBoxContainer.new()
+			column.add_theme_constant_override("separation", 4)
+			frame.add_child(column)
+			var pic := TextureRect.new()
+			pic.texture = GameState.job_photos[key]
+			pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+			pic.custom_minimum_size = Vector2(416, 234)
+			column.add_child(pic)
+			var caption := UIKit.label("Before" if key == "before" else "After", 24, UIKit.WOOD, "small", false)
+			caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			column.add_child(caption)
+		top = 136.0 + 290.0
 	var title := UIKit.ribbon(str(GameState.payout.get("title", "Job done")), UIKit.TERRA, 40)
 	title.position = Vector2(36, 20)
 	title.size = Vector2(820, 56)
@@ -215,8 +248,10 @@ func _build() -> void:
 			money_end = i + 1
 			break
 	var columns := money_end < story_from
-	var left_y := 136.0
-	var right_y := 136.0
+	var left_y := top
+	var right_y := top
+	var story_y := 536.0 + (top - 136.0)
+	var card_h := card.custom_minimum_size.y
 	for i in lines.size():
 		var is_story := i >= story_from
 		var text := str(lines[i])
@@ -224,7 +259,7 @@ func _build() -> void:
 		var row: Label
 		if is_story:
 			row = UIKit.label(text, 24, UIKit.BLUE, "small", true)
-			row.position = Vector2(40, 536.0 + 64.0 * float(i - story_from))
+			row.position = Vector2(40, story_y + 64.0 * float(i - story_from))
 			row.size = Vector2(820, 80)
 			row.custom_minimum_size = Vector2(800, 0)
 			row.max_lines_visible = 2
@@ -250,12 +285,12 @@ func _build() -> void:
 		# A hairline between the columns.
 		var rule := ColorRect.new()
 		rule.color = Color(UIKit.WOOD, 0.35)
-		rule.position = Vector2(472, 140)
-		rule.size = Vector2(2, maxf(left_y, right_y) - 140.0)
+		rule.position = Vector2(472, top + 4.0)
+		rule.size = Vector2(2, maxf(left_y, right_y) - top - 4.0)
 		card.add_child(rule)
 	var to_ward := GameState.in_hospital()
 	var btn := UIKit.button("To the ward" if to_ward else "Back to the office", UIKit.NIGHT if to_ward else UIKit.SAGE)
-	btn.position = Vector2(270, 684)
+	btn.position = Vector2(270, card_h - 76.0)
 	btn.size = Vector2(360, 56)
 	btn.custom_minimum_size = Vector2(360, 56)
 	btn.pressed.connect(func():
@@ -268,6 +303,10 @@ func _build() -> void:
 	card.add_child(btn)
 	UIKit.link_focus([btn])
 	UIKit.pop_in(card, 0.26)
+
+
+func _has_photos() -> bool:
+	return GameState.job_photos.has("before") and GameState.job_photos.has("after") and GameState.job_photos["before"] != null and GameState.job_photos["after"] != null
 
 
 func _reveal() -> void:
