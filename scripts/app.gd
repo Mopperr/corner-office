@@ -140,10 +140,27 @@ func show_results() -> void:
 	_clear(view_root)
 	_fade_up(0.3)
 	var results := preload("res://scripts/results_ui.gd").new()
+	# The last delivery closes with the ending before the office comes back.
+	var last_delivery := str(GameState.payout.get("job_id", "")) == "job_last" and not bool(GameState.payout.get("busted", false)) and not bool(GameState.payout.get("thrown", false))
 	results.closed.connect(func():
-		show_play()
+		if last_delivery and not GameState.stats.has("ending_seen"):
+			GameState.stats["ending_seen"] = 1
+			show_ending()
+		else:
+			show_play()
 	)
 	view_root.add_child(results)
+
+
+func show_ending() -> void:
+	_clear(view_root)
+	_fade_up(0.3)
+	var ending := preload("res://scripts/ending_ui.gd").new()
+	ending.closed.connect(func():
+		SaveManager.save_game()
+		show_play()
+	)
+	view_root.add_child(ending)
 
 
 func _open_computer() -> void:

@@ -3334,6 +3334,27 @@ func _play_checks() -> Array:
 		play.call("_unpack_click", "stray")
 		if GameState.money != jar + int(Tuning.get_value("play.stray_box_pay", 15)):
 			found.append("the stray box paid %d" % (GameState.money - jar))
+	# The ending after the last delivery builds its pages and ends on Keep playing.
+	var ending: Control = load("res://scripts/ending_ui.gd").new()
+	add_child(ending)
+	await get_tree().process_frame
+	var pages := 0
+	var landed := {"yes": false}
+	while pages < 8:
+		var next := ending.find_child("EndingNext", true, false) as Button
+		if next == null:
+			found.append("ending page %d has no button" % pages)
+			break
+		pages += 1
+		if next.text == "Keep playing":
+			ending.closed.connect(func(): landed["yes"] = true)
+			next.pressed.emit()
+			break
+		next.pressed.emit()
+		await get_tree().process_frame
+	if not bool(landed["yes"]):
+		found.append("ending never offered Keep playing (%d pages)" % pages)
+	_bury(ending)
 	var computer: Control = load("res://scripts/computer_ui.gd").new()
 	add_child(computer)
 	GameState.network = ["Priya Okafor", "Priya Okafor's friend"]
