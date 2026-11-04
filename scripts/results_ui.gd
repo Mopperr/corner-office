@@ -63,7 +63,11 @@ func _ready() -> void:
 		lines.append("In the right room  %d/%d  +$%d" % [int(pay.get("rooms_right", 0)), int(pay.get("rooms_total", 0)), int(pay.get("room_pay", 0))])
 		var wrong: Array = pay.get("rooms_wrong", [])
 		if not wrong.is_empty():
-			lines.append("Not quite: %s." % ", ".join(wrong.slice(0, 2)))
+			# One example, short, so the line keeps to its column.
+			var example := str(wrong[0])
+			if example.length() > 34:
+				example = example.left(31) + "..."
+			lines.append("Not quite: %s%s" % [example, "" if wrong.size() == 1 else " and %d more" % (wrong.size() - 1)])
 	if int(pay.get("caught_cut", 0)) > 0:
 		lines.append("Seen pocketing  −$%d and a rep star" % int(pay.get("caught_cut", 0)))
 	if int(pay.get("crushed", 0)) > 0:
@@ -154,7 +158,7 @@ func _center_card() -> void:
 	layout_mode = 0
 	position = Vector2.ZERO
 	size = vp
-	var card_size := Vector2(960, 860) if _has_photos() else Vector2(900, 760)
+	var card_size: Vector2 = card.custom_minimum_size
 	if vp.y < card_size.y + 16.0:
 		card_size.y = maxf(360.0, vp.y - 16.0)
 	if vp.x < card_size.x + 16.0:
@@ -210,12 +214,12 @@ func _build() -> void:
 			pic.texture = GameState.job_photos[key]
 			pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-			pic.custom_minimum_size = Vector2(416, 234)
+			pic.custom_minimum_size = Vector2(416, 200)
 			column.add_child(pic)
 			var caption := UIKit.label("Before" if key == "before" else "After", 24, UIKit.WOOD, "small", false)
 			caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			column.add_child(caption)
-		top = 136.0 + 290.0
+		top = 136.0 + 254.0
 	var title := UIKit.ribbon(str(GameState.payout.get("title", "Job done")), UIKit.TERRA, 40)
 	title.position = Vector2(36, 20)
 	title.size = Vector2(820, 56)
@@ -250,7 +254,9 @@ func _build() -> void:
 	var columns := money_end < story_from
 	var left_y := top
 	var right_y := top
-	var story_y := 536.0 + (top - 136.0)
+	# The money and the extras first; the story lines go under whichever
+	# column ran longer, and the card grows to hold it all.
+	var story_y := 0.0
 	var card_h := card.custom_minimum_size.y
 	for i in lines.size():
 		var is_story := i >= story_from
@@ -258,6 +264,8 @@ func _build() -> void:
 		var home := text.begins_with("You take home")
 		var row: Label
 		if is_story:
+			if story_y <= 0.0:
+				story_y = maxf(left_y, right_y) + 14.0
 			row = UIKit.label(text, 24, UIKit.BLUE, "small", true)
 			row.position = Vector2(40, story_y + 64.0 * float(i - story_from))
 			row.size = Vector2(820, 80)
@@ -288,6 +296,11 @@ func _build() -> void:
 		rule.position = Vector2(472, top + 4.0)
 		rule.size = Vector2(2, maxf(left_y, right_y) - top - 4.0)
 		card.add_child(rule)
+	var story_count := lines.size() - story_from
+	var need := (story_y + 64.0 * float(story_count) if story_y > 0.0 else maxf(left_y, right_y)) + 100.0
+	if need > card_h:
+		card_h = need
+		card.custom_minimum_size.y = card_h
 	var to_ward := GameState.in_hospital()
 	var btn := UIKit.button("To the ward" if to_ward else "Back to the office", UIKit.NIGHT if to_ward else UIKit.SAGE)
 	btn.position = Vector2(270, card_h - 76.0)

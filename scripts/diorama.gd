@@ -3395,7 +3395,7 @@ func _placement_grade(uid: String) -> Dictionary:
 		var tag := str(rec.get("room", ""))
 		if tag != "" and Homes.has_tag(venue, tag):
 			var room := Homes.room_at(venue, int(rec.get("floor", 0)), x, z)
-			if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) == tag:
+			if _room_accepts(room, tag):
 				why.append("right room")
 			else:
 				return {"score": -1, "why": ["wrong room"]}
@@ -3507,6 +3507,21 @@ func _take_photo(key: String) -> void:
 	GameState.job_photos[key] = ImageTexture.create_from_image(image)
 
 
+const SHOP_PUBLIC_TAGS := ["living", "kitchen", "office"]
+
+
+func _room_accepts(room: Dictionary, tag: String) -> bool:
+	# A piece belongs where its tag says. In a shop the public rooms share:
+	# a mug on a seating table or a plant at the counter is where it lives;
+	# a bath mat in the kitchen is not.
+	var room_tag := Homes.tag_of_kind(Homes.kind(str(room.get("id", ""))))
+	if room_tag == tag:
+		return true
+	if str(venue.get("kind", "")) == "shop" and tag in SHOP_PUBLIC_TAGS and room_tag in SHOP_PUBLIC_TAGS:
+		return true
+	return false
+
+
 func _misfits() -> Array:
 	# Job pieces standing in the wrong kind of room, by uid.
 	var out: Array = []
@@ -3517,7 +3532,7 @@ func _misfits() -> Array:
 		if tag == "" or not Homes.has_tag(venue, tag) or str(item.get("state", "")) != "placed":
 			continue
 		var room := Homes.room_at(venue, int(item.get("floor", 0)), float(item.get("x", 0)), float(item.get("z", 0)))
-		if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) != tag:
+		if not _room_accepts(room, tag):
 			out.append(str(item.get("uid", "")))
 	return out
 
@@ -5030,7 +5045,7 @@ func _tally_rooms() -> void:
 			continue
 		total += 1
 		var room := Homes.room_at(venue, int(item.get("floor", 0)), float(item.get("x", 0)), float(item.get("z", 0)))
-		if Homes.tag_of_kind(Homes.kind(str(room.get("id", "")))) == tag:
+		if _room_accepts(room, tag):
 			right += 1
 		else:
 			wrong.append("%s in the %s" % [str(item.get("name", "piece")), str(room.get("name", "hall")).to_lower()])
