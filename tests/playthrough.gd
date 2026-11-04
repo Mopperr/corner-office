@@ -1240,6 +1240,9 @@ func _unpack() -> void:
 			if str(item.get("state", "")) != "placed":
 				left += 1
 		print("  auto-unpack left %d pieces to place by hand" % left)
+		for item in GameState.job.get("items", []):
+			if str(item.get("state", "")) != "placed":
+				print("    left: %s state=%s box=%s at (%.1f, %.1f)" % [item.get("uid", ""), item.get("state", ""), item.get("box", -1), float(item.get("x", 0)), float(item.get("z", 0))])
 		await shot("unpack_auto")
 	# Open each box that is now in the room. The first box shows its contents
 	# modal: set one piece down from it, then tip the rest out.

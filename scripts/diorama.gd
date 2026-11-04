@@ -3059,6 +3059,19 @@ func _auto_next() -> void:
 		_auto_finish()
 		return
 	var step: Dictionary = auto_queue.pop_front()
+	# A piece still in Dana's arms whose carry was cut short (the owner's
+	# shove, a card over the room) goes down loose at her feet before the
+	# next step, or it would hang in her hands with nothing to set it down.
+	if str(step.get("kind", "")) != "carry":
+		for item in GameState.job.get("items", []):
+			if str(item.get("state", "")) == "hand" and str(item.get("uid", "")) != held_uid:
+				item["state"] = "loose"
+				item["y"] = 0.0
+				if player != null and is_instance_valid(player):
+					item["x"] = player.position.x
+					item["z"] = player.position.z
+				player_carrying = false
+				_refresh_items()
 	match str(step.get("kind", "")):
 		"unpack":
 			_auto_walk(_open_box_spot(int(step["box"])), _auto_take_out.bind(step))
