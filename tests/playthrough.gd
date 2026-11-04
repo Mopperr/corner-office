@@ -1132,9 +1132,17 @@ func _unpack() -> void:
 	_check(party != null and party.members.size() > 0, "family: on site (%d)" % (party.members.size() if party else 0))
 	if party != null and party.members.size() > 0:
 		var member: Node3D = party.members[0]
-		await click_node(room, "client:0", member)
-		# The bubble follows the click a frame or two later on a slow runner.
-		await wait_until(func(): return not is_instance_valid(member) or member.get_node_or_null("Thought") != null, 1.2)
+		# A click is swallowed while the room is still settling the last
+		# pieces, which on a slow runner outlasts the helper; wait, then
+		# give the click a second go if the first found nothing.
+		await wait_until(func(): return not room.settling, 4.0)
+		for attempt in 2:
+			await click_node(room, "client:0", member)
+			# The bubble follows the click a frame or two later on a slow runner.
+			await wait_until(func(): return not is_instance_valid(member) or member.get_node_or_null("Thought") != null, 1.2)
+			if not is_instance_valid(member) or member.get_node_or_null("Thought") != null:
+				break
+			await wait_until(func(): return not room.settling, 3.0)
 		var hovered := get_viewport().gui_get_hovered_control()
 		_check(is_instance_valid(member) and member.get_node_or_null("Thought") != null, "family: answers a click (ray %s, over %s)" % [room._pick_uid(), hovered.name if hovered else "nothing"])
 		await shot("family_talk")

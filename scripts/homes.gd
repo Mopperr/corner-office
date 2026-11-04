@@ -336,7 +336,10 @@ static func build(parent: Node3D, venue: Dictionary, index: int, wall_color: Col
 		label.pixel_size = 0.0045
 		label.modulate = Color(0.16, 0.14, 0.12, 0.62)
 		label.outline_size = 0
-		label.no_depth_test = false
+		# Drawn through the walls, like the lettering on a plan, so a room's name
+		# reads from whichever side the camera is on.
+		label.no_depth_test = true
+		label.render_priority = 1
 		label.transform.basis = Basis(Vector3(1, 0, -1).normalized(), Vector3(-1, 0, -1).normalized(), Vector3(0, 1, 0))
 		# Toward the near corner of the room, where the camera looks first.
 		label.position = Vector3(rx + rw * 0.5 + minf(rw, 1.6) * 0.18, 0.03, rz + rd * 0.5 + minf(rd, 1.6) * 0.18)
