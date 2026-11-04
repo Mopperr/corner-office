@@ -1133,9 +1133,10 @@ func _unpack() -> void:
 	if party != null and party.members.size() > 0:
 		var member: Node3D = party.members[0]
 		await click_node(room, "client:0", member)
-		await wait(0.2)
+		# The bubble follows the click a frame or two later on a slow runner.
+		await wait_until(func(): return not is_instance_valid(member) or member.get_node_or_null("Thought") != null, 1.2)
 		var hovered := get_viewport().gui_get_hovered_control()
-		_check(member.get_node_or_null("Thought") != null, "family: answers a click (ray %s, over %s)" % [room._pick_uid(), hovered.name if hovered else "nothing"])
+		_check(is_instance_valid(member) and member.get_node_or_null("Thought") != null, "family: answers a click (ray %s, over %s)" % [room._pick_uid(), hovered.name if hovered else "nothing"])
 		await shot("family_talk")
 	var generated := bool(GameState.job.get("def", {}).get("generated", false))
 	if generated and press("Stack the boxes"):
