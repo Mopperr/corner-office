@@ -6844,7 +6844,7 @@ func _mode_hint() -> String:
 		"truck":
 			return "Pick a box, then a pad in the bed. Mustard pads are the floor, and heavy goes there."
 		"job_unpack":
-			return "Carry a box in, open it, set each piece where it belongs. Stack empty boxes to clear the floor."
+			return "Carry a box in, open it, set each piece where it belongs. Stack the empties."
 	return ""
 
 
@@ -7702,7 +7702,7 @@ func _bubble(node: Node3D, text: String, seconds := 4.0) -> void:
 	label.text = text
 	label.font = UIKit.body_font()
 	label.font_size = 36
-	label.pixel_size = 0.0042
+	label.pixel_size = 0.0052
 	label.outline_size = 0
 	label.modulate = UIKit.DARK
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
