@@ -808,11 +808,13 @@ func _play_job(job_id: String) -> void:
 	if job_id == "job_last":
 		# The last delivery closes with the ending: page through to Keep playing.
 		var pages := 0
+		await shot("ending")
 		while pages < 8 and press_named(app.view_root, "EndingNext"):
 			pages += 1
 			await wait(0.4)
+			if pages == 1:
+				await shot("ending_people")
 		_check(pages >= 3, "%s: the ending rolled (%d pages)" % [job_id, pages])
-		await shot("ending")
 		await wait(0.6)
 	_check(GameState.mode == "office", "%s: back in office (got %s)" % [job_id, GameState.mode])
 	await _save_roundtrip("after " + job_id)
