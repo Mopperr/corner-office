@@ -228,8 +228,9 @@ func _build() -> void:
 			column.add_child(caption)
 		top = 136.0 + 254.0
 	var title := UIKit.ribbon(str(GameState.payout.get("title", "Job done")), UIKit.TERRA, 40)
+	# The ribbon stops short of Dana's portrait instead of running under it.
 	title.position = Vector2(36, 20)
-	title.size = Vector2(820, 56)
+	title.size = Vector2(724, 56)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.add_child(title)
 	var stars := int(GameState.payout.get("stars", 1))
@@ -292,6 +293,7 @@ func _build() -> void:
 			row.size = Vector2(430 if columns else 820, 40)
 			row.custom_minimum_size = Vector2(430 if columns else 820, 40)
 			row.clip_text = true
+			row.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 			left_y += 38.0 if not home else 44.0
 		row.modulate.a = 0.0
 		row.name = "Line%d" % i
