@@ -140,39 +140,39 @@ VENUES = {
 # Recipes stay within the truck: a wrapped piece costs three places, a heavy one, the rest six to a box.
 JOBS = [
  dict(id="job_dentist", level="L7", venue="dentist", drive="dentist_run", unlock="job:job_ducks", title="Retiring Dentist",
-      client="Dr. Ada Hartley", base=180, twist="fragile",
+      client="Dr. Ada Hartley", base=180, twist="fragile", mood='warm', brief='Thirty-five years of a surgery into eleven rooms by the park. The records cabinet is heavy and the mirrors are glass; the plants have names.', mentor_note="Doc's retiring. You know a thing or two about endings; tell him the next part's good.", why='Retiring after thirty-five years.', line='Retirement feels like being laid off, only on purpose.',
       recipe=[("filing_cabinet_grey", 1), ("office_plant_sage", 3), ("whiteboard_aluminium", 1), ("safe_black", 1), ("side_table_v_oak", 2),
               ("bar_stool_blue", 3), ("suitcase_tan", 2), ("mirror_round_small_steel", 2), ("bath_bin_steel", 2), ("wine_rack_oak", 1), ("picture_frame_oak", 2), ("crate_stack_plastic", 2)]),
  dict(id="job_architect", level="L9", venue="architect", drive="architect_rain", unlock="job:job_dentist", title="Chaotic Architect",
-      client="Femi Okonkwo", base=210, twist="plain",
+      client="Femi Okonkwo", base=210, twist="plain", mood='fussy', brief="Two drawing studios, a model room and a partner's office. The plan has been redrawn three times. Expect a fourth.", mentor_note='The architect will move the goalposts. You moved spreadsheets for a living. Adapt.', why='A bigger studio for a bigger practice.', line="I've redrawn it. Again. Just put things down where they make sense and I'll argue later.",
       recipe=[("filing_cabinet_steel", 2), ("whiteboard_oak", 2), ("office_plant_large_sage", 2), ("school_desk_oak", 3), ("side_table_v_walnut", 2),
               ("picture_v_oak", 2), ("crate_stack_oak", 3), ("bar_stool_sage", 2), ("suitcase_cabin_blue", 2), ("kitchen_clock_sage", 1), ("plant_pot_v_mustard", 3)]),
  dict(id="job_library", level="L10", venue="library", drive="library_day", unlock="job:job_architect", title="Library Move",
-      client="Ms. Imogen Bly", base=240, twist="sets",
+      client="Ms. Imogen Bly", base=240, twist="sets", mood='warm', brief="The whole branch to the new building: shelves, desks, the children's corner and crates of books by the hundred. Keep the sets together.", mentor_note='A library is a thousand small things that each belong somewhere. Take the time.', why='The old building is closing.', line="Mind the crates. Every one of those is somebody's winter.",
       recipe=[("kitchen_shelf_large_oak", 2), ("school_desk_pine", 4), ("crate_stack_oak", 4), ("picture_frame_pine", 3), ("side_table_v_pine", 2),
               ("office_plant_grey", 3), ("deck_chair_sage", 2), ("suitcase_sage", 2), ("dartboard_classic", 1), ("bath_mat_sage", 1)]),
  dict(id="job_record", level="L12", venue="record", drive="record_run", unlock="job:job_library", title="Indie Record Store",
-      client="Theo Marsh", base=200, twist="fragile",
+      client="Theo Marsh", base=200, twist="fragile", mood='warm', brief='Racks, crates of records and a listening corner into the shop on the corner. The aquarium is heavier than it looks.', mentor_note="He'll ask your favourite record. Have an answer.", why='A shop with a window at last.', line="What's your favourite record? Don't say you don't have one. Everyone has one.",
       recipe=[("armchair_v_mustard", 1), ("crate_stack_oak", 2), ("loft_vinyl_wall_shelf", 2), ("school_desk_oak", 2), ("side_table_v_painted_sage", 2), ("bar_stool_rose", 2),
               ("picture_v_pine", 3), ("plant_pot_v_sage", 2), ("suitcase_rose", 1), ("dartboard_faded", 1), ("aquarium_black", 1)]),
  dict(id="job_florist", level="L14", venue="florist", drive="florist_run", unlock="job:job_record", title="Florist's Greenhouse",
-      client="Rosa & Ray Pemberton", party=["adult", "adult"], base=220, twist="fragile",
+      client="Rosa & Ray Pemberton", base=220, twist="fragile", mood='fussy', party=['adult', 'adult'], brief='Two flower shops becoming one greenhouse. Rosa wants the pots by colour, Ray wants them by size. Do not pick a side.', mentor_note='Twins. Say yes to both and put it where it fits.', why='Two shops are becoming one.', line="By colour. (By size.) By colour. Just... put it down, we'll move it.",
       recipe=[("garden_bench_oak", 1), ("plant_pot_v_sage", 4), ("plant_pot_v_mustard", 4), ("deck_chair_mustard", 2), ("barbecue_green", 1),
               ("push_mower_green", 1), ("pegboard_sage", 1), ("wine_rack_pine", 1), ("bath_mat_rose", 2), ("side_table_v_painted_white", 2), ("tool_box_v_red", 1)]),
  dict(id="job_theatre", level="L17", venue="theatre", drive="theatre_rain", unlock="job:job_florist", title="Theater Prop Department",
-      client="Marguerite Vale", base=280, twist="heavy",
+      client="Marguerite Vale", base=280, twist="heavy", mood='warm', brief='The prop department of the Alcazar into the new backstage: trunks, a coat stand of costumes, crates of props and the piano that plays itself on a bump.', mentor_note="Opening night is Friday. Tell them we've got this, and mean it.", why='Opening night is Friday.', line='Everything in here is older than me and more dramatic. Careful with the trunks.',
       recipe=[("trunk_v_leather", 1), ("coat_stand_brass", 1), ("crate_stack_walnut", 2), ("side_table_v_painted_white", 2), ("broken_chair_painted_white", 3), ("school_desk_walnut", 2),
               ("picture_v_white", 3), ("suitcase_stack_terracotta", 1), ("dartboard_classic", 1), ("plant_pot_v_sage", 2), ("bar_stool_mustard", 2)]),
  dict(id="job_broker", level="L19", venue="broker", drive="broker_day", unlock="job:job_theatre", title="Rival Broker's Office",
-      client="Vernon Grayline", base=320, twist="plain",
+      client="Vernon Grayline", base=320, twist="plain", mood='rude', brief="Your old firm's rival, moving up a floor. Filing cabinets, a safe, the plants nobody waters. They will be watching.", mentor_note="The rival broker will inspect every box. Don't flinch.", why='Moving up a floor.', line="So you're the garage outfit. We'll see.",
       recipe=[("filing_cabinet_black", 2), ("safe_grey", 1), ("whiteboard_black", 2), ("office_plant_large_grey", 3), ("side_table_v_large_walnut", 2),
               ("bar_stool_blue", 2), ("picture_frame_brass", 3), ("crate_stack_plastic", 2), ("suitcase_cabin_terracotta", 2), ("kitchen_clock_terracotta", 1)]),
  dict(id="job_lodge", level="L20", venue="lodge", drive="lodge_snow", unlock="job:job_broker", title="Snowy Mountain Lodge",
-      client="The Halvorsen family", party=["adult", "adult", "kid"], base=360, twist="heavy",
+      client="The Halvorsen family", base=360, twist="heavy", mood='warm', party=['adult', 'adult', 'kid'], brief="A family's lodge up the switchbacks: wingbacks, a trunk, the bunk room and the wood store. Snow on the road; chains on the truck.", mentor_note='Snow on the switchbacks. Chains on, calm as cocoa.', why='The first winter at the lodge.', line="Cocoa's on when you're done. Mind the step, it ices over.",
       recipe=[("armchair_v_wingback_terracotta", 2), ("trunk_v_pine", 1), ("deck_chair_rose", 2), ("barbecue_kettle_black", 1), ("wine_rack_walnut", 2),
               ("suitcase_tan", 3), ("bath_mat_cream", 2), ("laundry_hamper_wicker", 1), ("picture_v_oak", 3), ("plant_pot_v_mustard", 2), ("side_table_v_large_oak", 2), ("tool_box_v_steel", 1)]),
  dict(id="job_last", level="L22", venue="garage", drive="sunny_main", unlock="job:job_lodge", title="The Last Delivery",
-      client="Nia Okafor-Reyes", base=150, twist="plain",
+      client="Nia Okafor-Reyes", base=150, twist="plain", mood='warm', brief='A young founder has bought your old garage. A desk, some crates, a whiteboard. You know that face.', mentor_note="Hand over the sticky notes. They're more ready than they think.", why='Starting out, in your old garage.', line='Is it always this quiet before the first job?',
       recipe=[("school_desk_pine", 1), ("crate_stack_oak", 3), ("office_plant_sage", 2), ("side_table_v_oak", 1), ("whiteboard_oak", 1),
               ("suitcase_cabin_blue", 2), ("bar_stool_sage", 2), ("picture_frame_pine", 2)]),
 ]
@@ -237,8 +237,9 @@ def main():
         rec = {"id": j["id"], "level": j["level"], "venue": j["venue"], "drive": j["drive"], "unlock": j["unlock"], "title": j["title"],
                "client": j["client"], "narrative_base": j["base"], "twist": j["twist"], "authored": "gen_levels",
                "recipe": [{"item": item, "count": n} for item, n in j["recipe"]]}
-        if "party" in j:
-            rec["party"] = j["party"]
+        for key in ("party", "mood", "brief", "mentor_note", "story", "why", "line"):
+            if key in j:
+                rec[key] = j[key]
         content["jobs"].append(rec)
     save("data/content.json", content)
 
