@@ -132,6 +132,16 @@ func _run() -> void:
 
 	var job_ids := ["job_catcafe", "job_train", "job_ducks"]
 	var limit := int(OS.get_environment("CO_JOBS")) if OS.get_environment("CO_JOBS") != "" else job_ids.size()
+	# CO_STORY_JOBS=job_dentist,job_lodge plays those chapter jobs instead,
+	# with whatever each one waits on counted as cleared.
+	var picked := OS.get_environment("CO_STORY_JOBS")
+	if picked != "":
+		job_ids = Array(picked.split(","))
+		limit = job_ids.size()
+		for job_id in job_ids:
+			var rule := str(JobDB.get_job(str(job_id)).get("unlock", ""))
+			if rule.begins_with("job:"):
+				GameState.jobs_cleared[rule.trim_prefix("job:")] = true
 	for job_id in job_ids.slice(0, limit):
 		await _do_job(job_id)
 		if not fails.is_empty():
