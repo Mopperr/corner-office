@@ -357,6 +357,11 @@ func _frame_camera() -> void:
 	# floor clears the hint bar at the bottom of the screen.
 	var center := origin + Vector3(width * 0.5 + 0.4, 0.9, depth * 0.5 + 0.4)
 	var spread := 1.12
+	if GameState.mode == "office" and yard_shop != null and is_instance_valid(yard_shop) and GameState.shop_tier != "stand":
+		# The business in the yard is half the picture: lean that way and widen.
+		center.x += 1.6
+		center.z += 0.6
+		spread = 1.3
 	if GameState.mode == "job_unpack" and _boxes_on_truck() > 0:
 		# The truck stands on the road past the door: pull back and lean that
 		# way so its bed, and every box still in it, is on screen.
@@ -8449,6 +8454,7 @@ func _sync_yard_shop() -> void:
 		yard_shop.queue_free()
 		yard_shop = null
 	yard_shop = YardShop.build(self, venue, tier)
+	_frame_camera()
 
 
 func _yard_counter() -> Node3D:

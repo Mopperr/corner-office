@@ -36,8 +36,12 @@ static func build(parent: Node3D, venue: Dictionary, tier: String) -> Node3D:
 			_cart(root, at + Vector3(0, 0, 1.2))
 			_counter_body(root, at + Vector3(0, 0, 1.2))
 		"sandwich":
-			_house(root, at, "Sandwiches", AWNING_A, Color("FFF1D2"), "sandwich")
-			_front_tables(root, front, 2, false)
+			# A proper lunch bar: the wider house, a bench along the side, a
+			# board of today's fillings, string lights over three tables.
+			_house(root, at, "Sandwiches", AWNING_A, Color("FFF1D2"), "sandwich", 4.6)
+			_front_tables(root, front, 3, false)
+			_side_bench(root, at + Vector3(2.9, 0, 0.2), AWNING_A)
+			_string_lights(root, front + Vector3(-2.2, 2.4, 1.2), front + Vector3(2.2, 2.4, 1.2))
 			_counter_body(root, front)
 		"shawarma":
 			_house(root, at, "Shawarma", Color("E6B655"), Color("F2D9A8"), "grill")
@@ -45,9 +49,13 @@ static func build(parent: Node3D, venue: Dictionary, tier: String) -> Node3D:
 			_bar_tables(root, front + Vector3(0, 0, 0.6))
 			_counter_body(root, front)
 		"cafe":
-			_house(root, at, "Corner Café", Color("8FAF7E"), Color("E8EFD9"), "coffee")
-			_front_tables(root, front, 3, false)
+			# The café has a window seat, four tables, a cake stand on the
+			# counter and lights strung to the pergola post.
+			_house(root, at, "Corner Café", Color("8FAF7E"), Color("E8EFD9"), "coffee", 5.0)
+			_front_tables(root, front, 4, false)
 			_pendants(root, front + Vector3(0, 0, 1.0))
+			_side_bench(root, at + Vector3(3.1, 0, 0.2), Color("8FAF7E"))
+			_string_lights(root, front + Vector3(-2.4, 2.4, 1.4), front + Vector3(2.4, 2.4, 1.4))
 			_counter_body(root, front)
 		"restaurant":
 			_deck(root, front + Vector3(0.2, 0, 1.2))
@@ -60,12 +68,12 @@ static func build(parent: Node3D, venue: Dictionary, tier: String) -> Node3D:
 	return root
 
 
-static func _house(root: Node3D, at: Vector3, title: String, accent: Color, wall: Color, kitchen: String) -> void:
+static func _house(root: Node3D, at: Vector3, title: String, accent: Color, wall: Color, kitchen: String, width := 3.6) -> void:
 	# A small shop building: slab, back and side walls, a flat roof with a
 	# parapet, an open front with a serving counter in the window, a door,
 	# shelves and a kitchen inside, a sign and a menu board out front.
-	var w := 3.6
-	var d := 2.8
+	var w := width
+	var d := 2.8 if width <= 3.6 else 3.4
 	var h := 2.7
 	var slab := Props.mesh_box(Vector3(w + 0.3, 0.1, d + 0.3), Color("CFC3B2"))
 	slab.position = at
@@ -259,6 +267,64 @@ static func _front_tables(root: Node3D, front: Vector3, count: int, fancy: bool)
 			var leg := Props.mesh_cylinder(0.02, 0.44, STEEL)
 			leg.position = seat_pos
 			root.add_child(leg)
+
+
+static func _side_bench(root: Node3D, at: Vector3, color: Color) -> void:
+	# A bench along the side wall, with a cushion and a planter at each end.
+	var seat := Props.mesh_box(Vector3(0.5, 0.06, 2.0), WOOD_DARK)
+	seat.position = at + Vector3(0, 0.46, 0)
+	root.add_child(seat)
+	for k in 2:
+		var cushion := Props.mesh_box(Vector3(0.42, 0.08, 0.5), color)
+		cushion.position = at + Vector3(0, 0.53, -0.5 + k * 1.0)
+		root.add_child(cushion)
+	for end in [-1.15, 1.15]:
+		var leg := Props.mesh_box(Vector3(0.46, 0.44, 0.08), WOOD_DARK)
+		leg.position = at + Vector3(0, 0.22, end * 0.85)
+		root.add_child(leg)
+		var planter := Props.mesh_box(Vector3(0.4, 0.4, 0.4), UIKit.TERRA)
+		planter.position = at + Vector3(0, 0, end)
+		root.add_child(planter)
+		var bush := MeshInstance3D.new()
+		var sphere := SphereMesh.new()
+		sphere.radius = 0.24
+		sphere.height = 0.4
+		bush.mesh = sphere
+		bush.material_override = Props.mat(Color("7FA866"))
+		bush.position = at + Vector3(0, 0.55, end)
+		root.add_child(bush)
+
+
+static func _string_lights(root: Node3D, from: Vector3, to: Vector3) -> void:
+	# A line of bulbs between two posts, sagging a little in the middle.
+	for end in [from, to]:
+		var post := Props.mesh_cylinder(0.04, end.y, STEEL)
+		post.position = Vector3(end.x, 0.0, end.z)
+		root.add_child(post)
+	var n := 9
+	for i in range(n + 1):
+		var t := float(i) / float(n)
+		var at := from.lerp(to, t) + Vector3(0, -0.25 * sin(t * PI), 0)
+		if i < n:
+			var next := from.lerp(to, float(i + 1) / float(n)) + Vector3(0, -0.25 * sin(float(i + 1) / float(n) * PI), 0)
+			var wire := Props.mesh_box(Vector3(at.distance_to(next), 0.015, 0.015), UIKit.DARK)
+			wire.position = (at + next) * 0.5
+			wire.look_at(next, Vector3.UP)
+			wire.rotate_object_local(Vector3.UP, PI * 0.5)
+			root.add_child(wire)
+		if i % 2 == 1:
+			var bulb := MeshInstance3D.new()
+			var sphere := SphereMesh.new()
+			sphere.radius = 0.05
+			sphere.height = 0.1
+			bulb.mesh = sphere
+			var glow := Props.mat(Color("FFE3A0"))
+			glow.emission_enabled = true
+			glow.emission = Color("FFD98A")
+			glow.emission_energy_multiplier = 1.6
+			bulb.material_override = glow
+			bulb.position = at + Vector3(0, -0.08, 0)
+			root.add_child(bulb)
 
 
 static func _counter_body(root: Node3D, at: Vector3) -> void:
