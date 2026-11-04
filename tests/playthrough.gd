@@ -805,6 +805,15 @@ func _play_job(job_id: String) -> void:
 		_check(GameState.network.size() >= 1, "%s: the client joined the network (%d know the counter)" % [job_id, GameState.network.size()])
 	_check(press("Back to the office"), "%s: results close button" % job_id)
 	await wait(1.0)
+	if job_id == "job_last":
+		# The last delivery closes with the ending: page through to Keep playing.
+		var pages := 0
+		while pages < 8 and press_named(app.view_root, "EndingNext"):
+			pages += 1
+			await wait(0.4)
+		_check(pages >= 3, "%s: the ending rolled (%d pages)" % [job_id, pages])
+		await shot("ending")
+		await wait(0.6)
 	_check(GameState.mode == "office", "%s: back in office (got %s)" % [job_id, GameState.mode])
 	await _save_roundtrip("after " + job_id)
 
