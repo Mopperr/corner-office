@@ -5359,6 +5359,9 @@ func _layout_by_room(loose: Array, blocked: Array) -> Array:
 		spots[str(room.get("id", ""))] = list
 	var rest: Array = []
 	var turn := 0
+	# Flat-topped pieces already set down in a room take the small things:
+	# a mug stands on the table, not on the floor beside it.
+	var surfaces: Dictionary = {}
 	for item in loose:
 		var tag := str(item.get("room", ""))
 		var takers: Array = []
@@ -5369,12 +5372,52 @@ func _layout_by_room(loose: Array, blocked: Array) -> Array:
 		if takers.is_empty():
 			rest.append(item)
 			continue
+		var def := ItemDB.get_item(str(item.get("item_id", "")))
+		var w := float(def.get("w", 0.4))
+		var d := float(def.get("d", 0.4))
+		var h := float(def.get("h", 0.4))
+		var small := str(def.get("mount", "floor")) == "small" and w <= 0.45 and d <= 0.45
+		if small:
+			var seated := false
+			for id in takers:
+				for top in surfaces.get(id, []):
+					var slots: Array = top["slots"]
+					if slots.is_empty():
+						continue
+					var on: Vector2 = slots.pop_front()
+					item["x"] = on.x
+					item["z"] = on.y
+					item["y"] = float(top["h"])
+					seated = true
+					break
+				if seated:
+					break
+			if seated:
+				continue
 		var id: String = takers[turn % takers.size()]
 		turn += 1
 		var at: Vector2 = (spots[id] as Array).pop_front()
 		item["x"] = at.x
 		item["z"] = at.y
 		item["y"] = 0.0
+		var item_id := str(item.get("item_id", ""))
+		var soft := false
+		for word in ["chair", "sofa", "bed", "plant", "stool", "bench", "lamp", "fern", "tree", "cushion", "beanbag"]:
+			if item_id.contains(word):
+				soft = true
+		if not small and not soft and h >= 0.55 and h <= 1.1 and w >= 0.7 and d >= 0.5:
+			# A table, desk or counter: its top takes small things in a grid.
+			var slots: Array = []
+			var sx := at.x - w * 0.5 + 0.18
+			while sx <= at.x + w * 0.5 - 0.18:
+				var sz := at.y - d * 0.5 + 0.18
+				while sz <= at.y + d * 0.5 - 0.18:
+					slots.append(Vector2(sx, sz))
+					sz += 0.36
+				sx += 0.36
+			if not surfaces.has(id):
+				surfaces[id] = []
+			(surfaces[id] as Array).append({"h": h, "slots": slots})
 	return rest
 
 
