@@ -1583,13 +1583,21 @@ func _network_at_counter() -> void:
 		print("note: network %d, shop accepting %s; skipping the counter check" % [GameState.network.size(), GameState.shop_accepting()])
 		return
 	var known := ""
-	for i in 12:
+	# A regular takes four arrivals in ten and a stranger some of the rest:
+	# forty tries make a name at the counter a certainty, not a coin toss.
+	for i in 40:
 		room.call("_spawn_customer")
 		for entry in room.customers:
 			if str(entry.get("known", "")) != "":
 				known = str(entry["known"])
 		if known != "":
 			break
+		if room.customers.size() >= 6:
+			for entry in room.customers.duplicate():
+				var node = entry.get("node")
+				if node != null and is_instance_valid(node):
+					node.queue_free()
+			room.customers.clear()
 		await wait(0.1)
 	_check(known != "" and GameState.network.has(known), "network: %s came to the counter (%d know it)" % [known if known != "" else "nobody", GameState.network.size()])
 	_check(GameState.shop_known_today >= 1, "network: the till counts them (%d)" % GameState.shop_known_today)
