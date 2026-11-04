@@ -51,6 +51,11 @@ kettle at the counter, tools in the workshop) rather than on a grid across
 the whole floor, so the rooms say what goes together before a box is opened.
 Room names are drawn through the walls, like the lettering on a plan.
 
+**Done since.** When Dana puts the lot away herself she knows where things
+live: on a plan she tries the rooms that take a piece's kind first, nearest
+spot first, before spiralling out from where it lies, so a helper you pay
+for does not fill the porch with saucepans.
+
 **Ideas held back.** Dragging a box across the floor (a second way to move heavy
 things, slower but safe); a dolly that is pushed rather than carried; two
 movers lifting a sofa together with the helper. Each is a system; none is

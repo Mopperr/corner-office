@@ -4080,6 +4080,28 @@ func _auto_place_item(item: Dictionary, source := "job") -> bool:
 		var z0 := float(venue.get("z", 0))
 		var w := float(venue.get("w", 6))
 		var d := float(venue.get("d", 8))
+		if _is_home():
+			# Dana knows where things live: on a plan she tries the rooms that
+			# take this kind of piece first, nearest spot first, before the
+			# spiral out from where it lies.
+			var tag := str(item.get("room", ""))
+			var near: Array = []
+			for room in Homes.rooms(venue, home_floor):
+				if tag == "" or not _room_accepts(room, tag):
+					continue
+				var rx := x0 + float(room.get("x", 0))
+				var rz := z0 + float(room.get("z", 0))
+				var rw := float(room.get("w", 2))
+				var rd := float(room.get("d", 2))
+				var az := rz + 0.5
+				while az < rz + rd - 0.45:
+					var ax := rx + 0.5
+					while ax < rx + rw - 0.45:
+						near.append(Vector3(ax, 0.0, az))
+						ax += 0.5
+					az += 0.5
+			near.sort_custom(func(a: Vector3, b: Vector3): return a.distance_squared_to(origin) < b.distance_squared_to(origin))
+			candidates.append_array(near)
 		var ring := 0.0
 		while ring < maxf(w, d):
 			var step := 0.5
