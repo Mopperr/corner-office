@@ -2628,6 +2628,11 @@ func _visitor_request(who: Dictionary) -> void:
 func _shop_summary(closed_day: int, earned: int, visitors: int, vibe: int) -> void:
 	var spec: Dictionary = Catalog.shop.get("summary_email", {})
 	var body := fill_tokens(str(spec.get("body", "")), {"day": closed_day, "earned": earned, "visitors": visitors, "vibe": vibe})
+	# The jobs show in the till: some of the day's faces knew the counter from a move.
+	var known := mini(visitors, int(round(float(visitors) * (1.0 - footfall_mult()))))
+	if known > 0 and not network.is_empty():
+		var who := str(network[(closed_day + visitors) % network.size()])
+		body = body.replace("Nobody was rushed,", "%s knew the counter from a move. Nobody was rushed," % (("%d of them" % known) if known > 1 else who))
 	inbox.append({
 		"id": "shop_day_%d" % closed_day,
 		"from": str(spec.get("from", "Marge Holloway")),
