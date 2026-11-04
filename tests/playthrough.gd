@@ -1327,7 +1327,13 @@ func _unpack() -> void:
 			direct = true
 		if not direct:
 			await click_world(room, _last_hover)
-		await wait(0.1)
+		# A slow frame can land the click after the next check: give the hand
+		# most of a second to close before judging the click.
+		await wait_until(func(): return not is_instance_valid(room) or room.held_uid != "", 0.8)
+		if not is_instance_valid(room) or GameState.mode != "job_unpack":
+			if await _maybe_thrown():
+				return
+			continue
 		if room.held_uid == "" and not direct:
 			# A click can land in the moment the room is busy (a piece still
 			# settling, Dana crossing the line of sight, a card on its way
@@ -1337,12 +1343,12 @@ func _unpack() -> void:
 				print("UX: the click did not lift %s (settling=%s hovered=%s ray='%s'); clicking again" % [picked, room.settling, get_viewport().gui_get_hovered_control(), room._pick_uid()])
 				await wait(0.5)
 				var node := _node_for(room, picked)
-				if node != null:
+				if node != null and is_instance_valid(node):
 					var hit: String = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
 					if hit != "":
 						await click_world(room, _last_hover)
-						await wait(0.1)
-				if room.held_uid != "":
+						await wait_until(func(): return not is_instance_valid(room) or room.held_uid != "", 0.8)
+				if not is_instance_valid(room) or room.held_uid != "":
 					break
 		if room.held_uid != picked:
 			# Pieces lie close together after a tip-out: the click can lift the
