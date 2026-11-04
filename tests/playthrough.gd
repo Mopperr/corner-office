@@ -1007,6 +1007,9 @@ func _drive() -> void:
 	var limit := 8.0 if fast_drive else 240.0
 	var shot_taken := false
 	while not done[0] and t < limit:
+		# The course is freed the moment the drive ends; a last poll must not touch it.
+		if not is_instance_valid(drive):
+			break
 		if str(drive.state) == "drive":
 			if bool(drive.at_dropoff):
 				_release_keys()
@@ -1017,7 +1020,7 @@ func _drive() -> void:
 			_release_keys()
 		await wait(0.1)
 		t += 0.1
-		if int(round(t * 10.0)) % 100 == 0:
+		if int(round(t * 10.0)) % 100 == 0 and is_instance_valid(drive):
 			print("  road: t=%.0f state=%s speed=%.0f along=%.0f/%.0f at_end=%s backed=%s" % [t, drive.state, float(drive.speed), float(drive.along), float(drive.lane_total), drive.at_end, drive.backed_in])
 		if t > 6.0 and not shot_taken:
 			shot_taken = true
