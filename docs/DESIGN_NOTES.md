@@ -145,6 +145,17 @@ broker's photocopier and safe; the lodge's wingbacks, cuckoo clock, fishing
 rods, snow globe and chess set. Each recipe stays within the truck's eighteen
 places and six floor places, checked by the authoring tool.
 
+## The ending (done)
+
+**What people love.** A bow on it: credits that mean the game is finished,
+and a world that stays open afterwards. Nobody wants a cosy game to lock.
+
+**Done.** Finishing L22, The Last Delivery, closes with four pages before
+the office comes back: the arc's last moment (the sticky notes handed over),
+the people who know the counter with the run's numbers, the credits, and
+"From Garage Startup to Corner Office" with Keep playing. Settings has a
+Full screen toggle that is remembered between runs.
+
 ## The level ladder (next)
 
 L1 to L6 are the slice. L7 to L22 have their narrative beats (the dentist, the

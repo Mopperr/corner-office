@@ -4965,7 +4965,13 @@ func _spawn_party() -> void:
 	party = ClientPartyLib.new()
 	add_child(party)
 	party.setup(self, def, _door_world(), Vector3(0, 0, 1))
-	party.react("greet", {}, true)
+	# At the door of the place being packed the client says their own line,
+	# the one the clipboard carried; at the new place the mood pool greets.
+	var own_line := str(def.get("line", ""))
+	if GameState.mode == "job_pack" and own_line != "":
+		party.say(own_line)
+	else:
+		party.react("greet", {}, true)
 
 
 func _party_react(event: String, fills: Dictionary, force := false) -> void:

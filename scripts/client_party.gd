@@ -265,6 +265,23 @@ func react(event: String, fills: Dictionary, force := false, who_uid := "") -> S
 	return said
 
 
+func say(text: String, pose := "wave") -> String:
+	# The client's own words, in their own mouth: the line the job carries,
+	# said by whoever would greet you, with the pose the moment calls for.
+	if members.is_empty() or text == "":
+		return ""
+	var who := speaker("greet")
+	if who == null:
+		return ""
+	var said := GameState.fill_tokens(text)
+	cooldown = COOLDOWN
+	if diorama != null and diorama.has_method("_bubble"):
+		diorama.call("_bubble", who, said, 5.5)
+	if diorama != null and diorama.has_method("_act"):
+		diorama.call("_act", who, pose, 1.2)
+	return said
+
+
 func member_for(uid: String) -> Node3D:
 	for person in members:
 		if is_instance_valid(person) and str(person.get_meta("uid", "")) == uid:
