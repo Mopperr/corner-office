@@ -64,6 +64,14 @@ network. A job that ends in a shove, a suit or a hand in their things takes
 the client's name off the list, and the friend they would have brought with
 it; the results card says so.
 
+## The network at the counter
+
+As often as the network has grown, a customer is somebody Dana moved: they
+arrive under their own name with a line about the move, a friend says who
+sent them, and they tip a quarter more. The Books page on the computer has a
+People sheet: who knows the counter, from which move, and whether they have
+been in since.
+
 ## What is still only words
 
 The chapter unlock chain (the dentist tells the architect, who tells the

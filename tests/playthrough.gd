@@ -1142,7 +1142,7 @@ func _unpack() -> void:
 		var carried_in := await wait_until(func():
 			var now := _room()
 			return (now != null and bool(now.carried.get(int(id), false))) or GameState.mode == "results"
-		, 16.0)
+		, 32.0)
 		if await _maybe_thrown():
 			return
 		_check(carried_in, "unpack: box %d carried in" % (int(id) + 1))

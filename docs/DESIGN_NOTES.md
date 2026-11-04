@@ -124,6 +124,11 @@ Marge's welcome email and the how-to-play page carry it. Each loop has its
 own reason in Dana's and Marge's words in `data/narrative/why.json`;
 `docs/WHY_EACH_LOOP.md` lays them out.
 
+**Done since.** The loop closes where the player can see it: the people Dana
+moved walk into the shop by name with a line about the move, a friend says who
+sent them, and the Books page lists them on a People sheet with the move that
+put them there and the visits since.
+
 ## The chapters' named pieces (done)
 
 **What people love.** A brief that promises a piano and then hands you a
