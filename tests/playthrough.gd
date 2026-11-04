@@ -1243,7 +1243,14 @@ func _unpack() -> void:
 		var opened := _node_for(room, "boxopen:%d" % id)
 		if opened == null:
 			# A box emptied through a neighbour's click has folded away already.
-			if generated or (room.call("_box_contents", id) as Array).is_empty():
+			if (room.call("_box_contents", id) as Array).is_empty():
+				continue
+			if generated:
+				# Still full but not on view (low in a tower, or the helper
+				# ran out of time on a slow runner): tip it out directly.
+				print("UX: box %d still has pieces after the helper; tipping it out" % (id + 1))
+				room.call("_open_carried_box", id)
+				await wait(0.4)
 				continue
 			_fail("unpack: carried box %d is not in the room to open" % (id + 1))
 			return

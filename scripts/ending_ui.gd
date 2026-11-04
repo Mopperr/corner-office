@@ -10,6 +10,8 @@ var _pages: Array = []
 
 
 func _ready() -> void:
+	# The whole screen, so the card centres on it.
+	UIKit.fill(self)
 	AudioDirector.play_music("music_credits_reprise")
 	_pages = _build_pages()
 	_show()
@@ -33,7 +35,7 @@ func _build_pages() -> Array:
 		if not str(name).ends_with("'s friend"):
 			names.append(str(name))
 	var roll := "Nobody yet. The next one will." if names.is_empty() else ", ".join(names.slice(0, mini(names.size(), 8))) + (" and %d more" % (names.size() - 8) if names.size() > 8 else "")
-	pages.append({"title": "%d people know the counter" % known, "lines": [
+	pages.append({"title": ("One person knows the counter" if known == 1 else "%d people know the counter" % known), "lines": [
 		"Laid off on a Tuesday. The garage opened on a Wednesday with a counter out front and nobody at it.",
 		"",
 		"Every job was somebody who would know where it was.",
