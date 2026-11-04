@@ -334,6 +334,27 @@ func _settings() -> void:
 	)
 	column.add_child(snap)
 	buttons.append(snap)
+	var full := CheckBox.new()
+	full.name = "FullscreenToggle"
+	full.text = "Full screen"
+	full.button_pressed = SaveManager.fullscreen
+	full.focus_mode = Control.FOCUS_ALL
+	full.custom_minimum_size = Vector2(720, 56)
+	full.add_theme_font_override("font", UIKit.body_font())
+	full.add_theme_font_size_override("font_size", UIKit.font_px(28))
+	for key in ["font_color", "font_hover_color", "font_focus_color"]:
+		full.add_theme_color_override(key, UIKit.DARK)
+	full.add_theme_stylebox_override("normal", UIKit.style(UIKit.CREAM, 12, 2, UIKit.DARK))
+	full.add_theme_stylebox_override("hover", UIKit.style(UIKit.CREAM_CARD, 12, 3, UIKit.WOOD))
+	full.add_theme_stylebox_override("focus", UIKit.style(UIKit.CREAM_CARD, 12, 4, UIKit.MUSTARD))
+	full.add_theme_stylebox_override("pressed", UIKit.style(UIKit.CREAM, 12, 2, UIKit.DARK))
+	full.toggled.connect(func(on):
+		SaveManager.fullscreen = on
+		SaveManager.save_settings()
+		SaveManager.apply_window()
+	)
+	column.add_child(full)
+	buttons.append(full)
 	var quality_row := HBoxContainer.new()
 	quality_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quality_row.add_theme_constant_override("separation", 16)

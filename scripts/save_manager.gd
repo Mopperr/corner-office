@@ -8,6 +8,8 @@ var sfx_linear := 0.8
 var shake := true
 var text_scale := 1.0
 var snap_to_grid := false
+# Window: full screen or a window, remembered between runs.
+var fullscreen := false
 var graphics_quality := "medium"
 
 const Graphics = preload("res://scripts/settings_manager.gd")
@@ -17,6 +19,16 @@ const Controls = preload("res://scripts/control_map.gd")
 func _ready() -> void:
 	load_settings()
 	Graphics.apply_tier(get_tree(), graphics_quality)
+	apply_window()
+
+
+func apply_window() -> void:
+	# Headless and the test runs keep their window as it is.
+	if DisplayServer.get_name() == "headless" or OS.has_environment("CO_SHOTS") or OS.has_environment("CO_JOBS"):
+		return
+	var want := DisplayServer.WINDOW_MODE_FULLSCREEN if fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
+	if DisplayServer.window_get_mode() != want:
+		DisplayServer.window_set_mode(want)
 
 
 func has_save() -> bool:
@@ -74,6 +86,7 @@ func save_settings() -> void:
 	cfg.set_value("access", "text_scale", text_scale)
 	cfg.set_value("place", "snap_to_grid", snap_to_grid)
 	cfg.set_value("graphics", "quality", graphics_quality)
+	cfg.set_value("graphics", "fullscreen", fullscreen)
 	cfg.set_value("controls", "bindings", Controls.export_json())
 	cfg.save(SETTINGS_PATH)
 
@@ -88,4 +101,5 @@ func load_settings() -> void:
 	text_scale = float(cfg.get_value("access", "text_scale", text_scale))
 	snap_to_grid = bool(cfg.get_value("place", "snap_to_grid", snap_to_grid))
 	graphics_quality = Graphics.normalize(str(cfg.get_value("graphics", "quality", graphics_quality)))
+	fullscreen = bool(cfg.get_value("graphics", "fullscreen", fullscreen))
 	Controls.import_json(str(cfg.get_value("controls", "bindings", "")))
