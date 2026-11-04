@@ -4809,7 +4809,7 @@ func _stumble() -> void:
 		if ghost:
 			ghost.visible = false
 		_refresh_items()
-		if GameState.roll_break(item, 1.0):
+		if GameState.roll_break(item, 0.35):
 			_break_piece(item, at)
 		else:
 			_toast("Oof. Tripped. The %s is fine. I think." % str(item.get("name", "piece")).to_lower(), "Dana")

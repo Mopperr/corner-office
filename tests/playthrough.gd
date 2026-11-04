@@ -1370,6 +1370,9 @@ func _unpack() -> void:
 			# on the click (the ray lands on a loose piece). Try the next one.
 			var tries := 0
 			for hit in _floor_candidates(room):
+				# The owner can end the job mid-placement (a throw): the room goes away.
+				if not is_instance_valid(room) or GameState.mode != "job_unpack":
+					break
 				await hover_world(room, hit)
 				var aim = room._aim_point()
 				if aim == null or not bool(room._snap_point(aim)["valid"]):
@@ -1384,6 +1387,8 @@ func _unpack() -> void:
 				if tries >= (40 if room._is_home() else 12):
 					break
 			if target == null:
+				if await _maybe_thrown():
+					return
 				_fail("unpack: %s never settled after %d spots (state %s)" % [picked, tries, item.get("state", "")])
 				return
 			continue
