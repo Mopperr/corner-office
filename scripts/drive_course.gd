@@ -636,6 +636,8 @@ func _wave_nearby() -> void:
 
 
 const FACADES: Array = ["E2B88F", "D98A6B", "F1E6D2", "C9B9A8", "B9CBD6", "E6CDA3", "B98C72", "EFC7B3", "A9C6A2", "F0D7A5"]
+# Names over the shopfronts along the route, so the town reads as a town.
+const SHOP_NAMES: Array = ["Launderette", "Bakery", "Records", "Hardware", "Florist", "Barber", "Books", "Chemist", "Deli", "Tailor", "Bikes", "Pet Shop", "Frames", "Noodles", "Greengrocer", "Keys Cut", "Wool", "Café", "Toys", "Pizza", "Dry Cleaner", "Post Office", "Antiques", "Guitars"]
 
 
 func _build_building(entry: Dictionary, rng: RandomNumberGenerator) -> void:
@@ -728,6 +730,7 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 	var glass_color := Color("4A5F6E") if rng.randf() < 0.6 else Color("5C6B5A")
 	var awning_color: Color = [Color("D9765F"), Color("7FA3B8"), Color("8FAF7E"), Color("E6B655")][rng.randi_range(0, 3)]
 	var awnings := rng.randf() < 0.55
+	var named := false
 	for face in faces:
 		var origin: Vector3 = face["origin"]
 		var dir: Vector3 = face["dir"]
@@ -754,6 +757,15 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 					valance.position = origin + dir * (face_len * 0.5) + normal * 1.12 + Vector3(0, 2.3, 0)
 					valance.rotation.y = -atan2(dir.z, dir.x)
 					world.add_child(valance)
+					# A name board over the awning, the first street face only.
+					if not named:
+						named = true
+						var board := Props.mesh_box(Vector3(minf(face_len - 1.8, 4.2), 0.7, 0.1), color.darkened(0.45))
+						board.position = origin + dir * (face_len * 0.5) + normal * 0.08 + Vector3(0, 3.15, 0)
+						board.rotation.y = -atan2(dir.z, dir.x)
+						world.add_child(board)
+						var label := _sign_text(str(SHOP_NAMES[rng.randi_range(0, SHOP_NAMES.size() - 1)]), origin + dir * (face_len * 0.5) + normal * 0.2 + Vector3(0, 3.15, 0), Color("F4E9D8"))
+						label.font_size = 56
 				var mullion_count := maxi(1, int(face_len / 1.6))
 				for m in range(1, mullion_count):
 					var mullion := Props.mesh_box(Vector3(0.08, 2.1, 0.12), trim)
