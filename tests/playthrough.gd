@@ -1176,8 +1176,15 @@ func _unpack() -> void:
 			if not is_instance_valid(member) or member.get_node_or_null("Thought") != null:
 				break
 			await wait_until(func(): return not room.settling, 3.0)
-		var hovered := get_viewport().gui_get_hovered_control()
-		_check(is_instance_valid(member) and member.get_node_or_null("Thought") != null, "family: answers a click (ray %s, over %s)" % [room._pick_uid(), hovered.name if hovered else "nothing"])
+		if await _maybe_thrown():
+			return
+		if is_instance_valid(member) and bool(member.get_meta("walking", false)):
+			# Mid-stride (an owner on the way over, or back to the door): a click
+			# lands where they were. A player waits; so does the run.
+			print("note: the family member was walking; the click is not judged")
+		else:
+			var hovered := get_viewport().gui_get_hovered_control()
+			_check(is_instance_valid(member) and member.get_node_or_null("Thought") != null, "family: answers a click (ray %s, over %s)" % [room._pick_uid(), hovered.name if hovered else "nothing"])
 		await shot("family_talk")
 	var generated := bool(GameState.job.get("def", {}).get("generated", false))
 	if generated and press("Stack the boxes"):
