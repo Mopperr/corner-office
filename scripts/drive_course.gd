@@ -68,6 +68,7 @@ var truck: Node3D
 var cam: Camera3D
 var meter: ProgressBar
 var meter_label: Label
+var stamp_label: Label
 var hint: Label
 var time_alive := 0.0
 var rain: CPUParticles3D
@@ -764,8 +765,12 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 						board.position = origin + dir * (face_len * 0.5) + normal * 0.08 + Vector3(0, 3.15, 0)
 						board.rotation.y = -atan2(dir.z, dir.x)
 						world.add_child(board)
-						var label := _sign_text(str(SHOP_NAMES[rng.randi_range(0, SHOP_NAMES.size() - 1)]), origin + dir * (face_len * 0.5) + normal * 0.2 + Vector3(0, 3.15, 0), Color("F4E9D8"))
+						var label := _sign_text(str(SHOP_NAMES[rng.randi_range(0, SHOP_NAMES.size() - 1)]), origin + dir * (face_len * 0.5) + normal * 0.16 + Vector3(0, 3.15, 0), Color("F4E9D8"))
 						label.font_size = 56
+						# Painted on the board: it faces the street, not the camera.
+						label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+						label.rotation.y = atan2(normal.x, normal.z)
+						label.visibility_range_end = 40.0
 				var mullion_count := maxi(1, int(face_len / 1.6))
 				for m in range(1, mullion_count):
 					var mullion := Props.mesh_box(Vector3(0.08, 2.1, 0.12), trim)
@@ -1368,6 +1373,7 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 		var lift := 3.3 if hash(text) % 2 == 0 else 3.95
 		var label := _sign_text(text, door + inward * 0.3 + Vector3(0, lift, 0), Color("3E3A4F"))
 		label.font_size = 72
+		label.visibility_range_end = 38.0
 
 
 func _near_front(door: Vector2, front_doors: Array) -> bool:
@@ -1696,11 +1702,17 @@ func _hud() -> void:
 	speed_label.position = Vector2(400, 70)
 	speed_label.custom_minimum_size = Vector2(150, 40)
 	card.add_child(speed_label)
+	# The ride's verdict ("Smooth Ride") under the speed, so it never runs off the card.
+	stamp_label = UIKit.label("", 22, UIKit.DARK, "small", false)
+	stamp_label.name = "StampLabel"
+	stamp_label.position = Vector2(400, 110)
+	stamp_label.custom_minimum_size = Vector2(150, 36)
+	card.add_child(stamp_label)
 	if str(course.get("weather", "clear")) == "night":
 		spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
 		spot_label.name = "SpotLabel"
 		spot_label.position = Vector2(20, 118)
-		spot_label.custom_minimum_size = Vector2(500, 36)
+		spot_label.custom_minimum_size = Vector2(370, 36)
 		card.add_child(spot_label)
 	var hint_bar := Panel.new()
 	hint_bar.name = "DriveHint"
@@ -2092,7 +2104,9 @@ func _process(delta: float) -> void:
 	if meter_fill:
 		meter_fill.bg_color = UIKit.SAGE if condition >= 70 else (UIKit.MUSTARD if condition >= 50 else UIKit.TERRA)
 	var stamp := Tuning.tip_stamp(condition)
-	meter_label.text = "%d  %s" % [condition, stamp]
+	meter_label.text = str(condition)
+	if stamp_label:
+		stamp_label.text = stamp
 	hint.text = _hint_text()
 	if set_line_t > 0.0:
 		set_line_t -= delta
@@ -2553,7 +2567,7 @@ func _patrols(delta: float) -> void:
 			spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
 			spot_label.name = "SpotLabel"
 			spot_label.position = Vector2(20, 118)
-			spot_label.custom_minimum_size = Vector2(500, 36)
+			spot_label.custom_minimum_size = Vector2(370, 36)
 			card.add_child(spot_label)
 	if watched and naughty and spot_cool <= 0.0:
 		spot_meter += delta
