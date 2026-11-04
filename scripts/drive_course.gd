@@ -69,6 +69,7 @@ var cam: Camera3D
 var meter: ProgressBar
 var meter_label: Label
 var stamp_label: Label
+var kerb_signs := 0
 var hint: Label
 var time_alive := 0.0
 var rain: CPUParticles3D
@@ -1370,9 +1371,13 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 	var text := str(place.get("name", ""))
 	if text != "":
 		# Neighbours' names take turns at two heights, so none sit on top of another.
-		var lift := 3.3 if hash(text) % 2 == 0 else 3.95
+		var lift := 3.2 if kerb_signs % 2 == 0 else 4.05
+		kerb_signs += 1
 		var label := _sign_text(text, door + inward * 0.3 + Vector3(0, lift, 0), Color("3E3A4F"))
-		label.font_size = 72
+		label.font_size = 64
+		# Gone before the truck is alongside, when it would fill the windscreen.
+		label.visibility_range_begin = 10.0
+		label.visibility_range_begin_margin = 3.0
 		label.visibility_range_end = 38.0
 
 

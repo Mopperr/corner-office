@@ -2842,8 +2842,12 @@ func _open_box_modal(box_id: int) -> void:
 		_auto_unpack_box(box_id)
 	)
 	foot.add_child(auto)
-	var hint := UIKit.label("Take: carry it to a spot. Set here: next to the box.", 24, UIKit.WOOD, "small", false)
+	var hint := UIKit.label("Take it with you, or set it beside the box.", 20, UIKit.WOOD, "small", false)
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# Two lines in the room left beside the buttons, never past the card's edge.
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.custom_minimum_size = Vector2(maxf(card_size.x - 48 - 200 - 320 - 24, 120), 0)
+	hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	foot.add_child(hint)
 	var focus_buttons: Array = [close]
 	for child in rows.get_children():

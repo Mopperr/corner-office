@@ -528,7 +528,8 @@ func _board_rows() -> void:
 		text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		text.custom_minimum_size = Vector2(info_w - 180.0, 0)
-		text.clip_text = true
+		# A long title wraps onto a second line rather than being cut mid-word.
+		text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		row.add_child(text)
 		var go := UIKit.button("Take", UIKit.TERRA)
 		go.custom_minimum_size = Vector2(120, 48)
