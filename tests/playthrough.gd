@@ -1381,7 +1381,7 @@ func _unpack() -> void:
 					break
 				if GameState.mode == "results":
 					break
-				if tries >= 12:
+				if tries >= (40 if room._is_home() else 12):
 					break
 			if target == null:
 				_fail("unpack: %s never settled after %d spots (state %s)" % [picked, tries, item.get("state", "")])
