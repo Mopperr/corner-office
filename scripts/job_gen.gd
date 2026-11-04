@@ -161,6 +161,11 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 		var size := int(Tuning.get_value("jobs.size_min", 18)) + rng.randi_range(0, int(Tuning.get_value("jobs.size_span", 10))) + mini(jobs_done * int(Tuning.get_value("jobs.size_per_done", 1)), int(Tuning.get_value("jobs.size_done_cap", 12)))
 		size = clampi(size, 8, 48)
 		var recipe := _recipe_home(rng, size, twist, home) if is_home else _recipe(rng, size, twist)
+		# The truck budget can trim a recipe; the brief and the pay follow the
+		# pieces that are really coming.
+		size = 0
+		for group in recipe:
+			size += int(group.get("count", 1))
 		var drive := _drive(rng, drive_id, twist)
 		drives[drive_id] = drive
 		var pay := 90 + size * 4 + int(float(drive.get("length_m", 150)) * 0.25) + rep * 12
@@ -198,15 +203,28 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 
 
 static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Array:
-	var ids: Array = POOL.keys()
+	# The twist's own pieces go in first, so the truck budget counts them.
 	var recipe: Array = []
+	if twist == "mystery":
+		_add_to_recipe(recipe, "mystery_part", 3)
+	if twist == "fragile":
+		_add_to_recipe(recipe, "bowl", 2)
+	if twist == "heavy":
+		_add_to_recipe(recipe, "tool_box", 2)
+		_add_to_recipe(recipe, "filing_cabinet", 1)
+	var ids: Array = POOL.keys()
 	var total := 0
+	var slots := recipe_slots(recipe)
+	var floor_need := recipe_floor_need(recipe)
+	var floor_cap := int(Tuning.get_value("truck.floor_slots", 4)) - 1
+	for group in recipe:
+		total += int(group.get("count", 1))
 	var guard := 0
 	var set_names := ["clocks", "books", "tools", "frames"]
 	var set_index := 0
 	var hung := 0
 	var wall_floor := 0
-	while total < size and guard < 60:
+	while total < size and guard < 80:
 		guard += 1
 		var item := str(ids[rng.randi_range(0, ids.size() - 1)])
 		var already := false
@@ -225,6 +243,21 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 			if cap <= 0:
 				continue
 		var count := clampi(rng.randi_range(1, cap), 1, size - total)
+		# Room on the truck: a wrapped piece costs its column, a hefty one a
+		# box, and the floor layer holds only so many of either. Fewer of a
+		# kind when the full count would not ride; none when one would not.
+		var def: Dictionary = ItemDB.get_item(item)
+		var on_floor := bool(def.get("nobox", false)) or bool(def.get("heavy", false))
+		while count > 0 and slots + slots_for(def, count) > truck_slots() - 1.4:
+			count -= 1
+		if on_floor:
+			while count > 0 and floor_need + count > floor_cap:
+				count -= 1
+		if count <= 0:
+			continue
+		slots += slots_for(def, count)
+		if on_floor:
+			floor_need += count
 		if HANG.has(item):
 			hung += count
 		var group := {"item": item, "count": count}
@@ -233,13 +266,6 @@ static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Arr
 			set_index += 1
 		recipe.append(group)
 		total += count
-	if twist == "mystery":
-		_add_to_recipe(recipe, "mystery_part", 3)
-	if twist == "fragile":
-		_add_to_recipe(recipe, "bowl", 2)
-	if twist == "heavy":
-		_add_to_recipe(recipe, "tool_box", 2)
-		_add_to_recipe(recipe, "filing_cabinet", 1)
 	return recipe
 
 

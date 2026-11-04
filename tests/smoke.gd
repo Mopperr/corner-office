@@ -2939,6 +2939,8 @@ func _catalog_checks() -> Array:
 			recipes += 1
 			if JobGen.recipe_slots(candidate.get("recipe", [])) > JobGen.truck_slots():
 				over += 1
+			if JobGen.recipe_floor_need(candidate.get("recipe", [])) > GameState.floor_slots():
+				over += 1
 	if over > 0:
 		found.append("%d of %d board recipes overflow the truck" % [over, recipes])
 	# Full moves: the truck takes ten places, six to a box, a board job has at

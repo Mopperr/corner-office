@@ -826,7 +826,7 @@ func _pack() -> void:
 			_fail("pack: none of %d loose items can be clicked" % loose.size())
 			return
 		var rec: Dictionary = GameState.job_item(picked)
-		if in_box >= 5:
+		if in_box >= GameState.per_box():
 			await _seal_current()
 			press("New box")
 			await wait(0.1)
