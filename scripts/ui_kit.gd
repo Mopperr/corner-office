@@ -479,12 +479,14 @@ static func pop_in(control: Control, seconds := 0.18) -> void:
 	await tree.process_frame
 	if not is_instance_valid(control) or not control.is_inside_tree():
 		return
+	# A card fitted to a small window keeps its fitted scale (meta "fit_scale").
+	var rest: Vector2 = control.get_meta("fit_scale", Vector2.ONE)
 	control.pivot_offset = control.size * 0.5
-	control.scale = Vector2(0.965, 0.965)
+	control.scale = rest * 0.965
 	var tw := control.create_tween()
 	tw.set_parallel(true)
 	tw.tween_property(control, "modulate", Color.WHITE, seconds).set_trans(Tween.TRANS_SINE)
-	tw.tween_property(control, "scale", Vector2.ONE, seconds).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(control, "scale", rest, seconds).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 static func slide_in(control: Control, from_y := -14.0, seconds := 0.22) -> void:

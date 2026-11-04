@@ -166,10 +166,12 @@ func _center_card() -> void:
 	position = Vector2.ZERO
 	size = vp
 	var card_size: Vector2 = card.custom_minimum_size
-	if vp.y < card_size.y + 16.0:
-		card_size.y = maxf(360.0, vp.y - 16.0)
-	if vp.x < card_size.x + 16.0:
-		card_size.x = maxf(480.0, vp.x - 16.0)
+	# A card taller than the window shrinks as a whole, so the button at
+	# its foot stays on screen instead of the card being cut off.
+	var fit := minf(1.0, minf((vp.y - 16.0) / maxf(card_size.y, 1.0), (vp.x - 16.0) / maxf(card_size.x, 1.0)))
+	card.pivot_offset = card_size * 0.5
+	card.scale = Vector2(fit, fit)
+	card.set_meta("fit_scale", Vector2(fit, fit))
 	card.layout_mode = 1
 	card.anchor_left = 0.5
 	card.anchor_top = 0.5
@@ -281,28 +283,42 @@ func _build() -> void:
 			row.max_lines_visible = 2
 		elif columns and i >= money_end:
 			row = UIKit.label(text, 25, UIKit.WOOD, "small", true)
-			row.position = Vector2(490, right_y)
-			row.size = Vector2(370, 60)
-			row.custom_minimum_size = Vector2(370, 0)
-			row.max_lines_visible = 2
+			var right_lines := _lines_for(text, row.get_theme_font_size("font_size"), 290.0, 3)
+			row.max_lines_visible = right_lines
 			row.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-			right_y += 34.0 if text.length() < 30 else 58.0
+			row.position = Vector2(620, right_y)
+			row.custom_minimum_size = Vector2(290, 0)
+			var right_tall := float(row.get_theme_font_size("font_size")) * 1.45 * float(right_lines) + 6.0
+			row.size = Vector2(290, right_tall)
+			right_y += right_tall + 2.0
 		else:
 			row = UIKit.label(text, 32 if home else 28, UIKit.TERRA if home else UIKit.DARK, "title" if home else "body", false)
-			row.position = Vector2(40, left_y)
-			row.size = Vector2(430 if columns else 820, 40)
-			row.custom_minimum_size = Vector2(430 if columns else 820, 40)
+			var width := 560.0 if columns else 820.0
+			# A long line wraps onto a second line rather than losing its end to an ellipsis.
+			var money_lines := 1 if home else _lines_for(text, row.get_theme_font_size("font_size"), width, 2)
+			if money_lines > 1:
+				row.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			row.max_lines_visible = money_lines
 			row.clip_text = true
 			row.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-			left_y += 38.0 if not home else 44.0
+			row.position = Vector2(40, left_y)
+			# Out of the tree a label does not know its line height yet; the font size does.
+			var tall := float(row.get_theme_font_size("font_size")) * 1.45 * float(money_lines) + 8.0
+			row.custom_minimum_size = Vector2(width, 40.0 if money_lines == 1 else tall)
+			left_y += (38.0 if not home else 44.0) + (tall - 40.0 if money_lines > 1 else 0.0)
 		row.modulate.a = 0.0
 		row.name = "Line%d" % i
+		# The width is applied again once the row is in the tree: out of it,
+		# a label keeps the minimum size it was first given (the helper's
+		# estimate of its text width), so a long line would run under the rule.
+		var want := row.custom_minimum_size
 		card.add_child(row)
+		row.size = Vector2(want.x, maxf(want.y, row.size.y))
 	if columns:
 		# A hairline between the columns.
 		var rule := ColorRect.new()
 		rule.color = Color(UIKit.WOOD, 0.35)
-		rule.position = Vector2(472, top + 4.0)
+		rule.position = Vector2(602, top + 4.0)
 		rule.size = Vector2(2, maxf(left_y, right_y) - top - 4.0)
 		card.add_child(rule)
 	var story_count := lines.size() - story_from
@@ -325,6 +341,12 @@ func _build() -> void:
 	card.add_child(btn)
 	UIKit.link_focus([btn])
 	UIKit.pop_in(card, 0.26)
+
+
+func _lines_for(text: String, px: int, width: float, cap: int) -> int:
+	# How many lines a label needs, from the text's rough width at its font size.
+	var per_line := maxf(8.0, width / (float(px) * 0.5))
+	return clampi(int(ceil(float(text.length()) / per_line)), 1, cap)
 
 
 func _has_photos() -> bool:
