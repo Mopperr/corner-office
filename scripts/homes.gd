@@ -513,8 +513,9 @@ static func owner_layout(venue: Dictionary, seed: int) -> Array:
 			var rz := oz + float(room.get("z", 0))
 			var rw := float(room.get("w", 2))
 			var rd := float(room.get("d", 2))
-			# A lived-in room: six pieces in a small one, up to nine in a big one.
-			var want := mini(pool.size(), 6 + (1 if rw * rd > 11.0 else 0) + (1 if rw * rd > 16.0 else 0) + (1 if rw * rd > 22.0 else 0))
+			# A lived-in room, with floor left for the move: a piece for every
+			# two and a half square metres, two in a cupboard, nine in a hall.
+			var want := mini(pool.size(), clampi(int(rw * rd / 2.5), 2, 9))
 			# Slots along the back wall (min z), the left wall (min x) and the
 			# right wall: the sides the camera looks into, and the one it looks past.
 			var slots: Array = []
