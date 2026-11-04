@@ -44,6 +44,13 @@ func _ready() -> void:
 	cam.fov = 35
 	await get_tree().create_timer(0.3).timeout
 	await _shot(who + "_face")
+	# A portrait: head and shoulders, three-quarter, square-ish framing.
+	person.rotation.y = deg_to_rad(-18)
+	cam.position = Vector3(0.32, 1.52, 1.25)
+	cam.look_at(Vector3(0, 1.42, 0), Vector3.UP)
+	cam.fov = 30
+	await get_tree().create_timer(0.3).timeout
+	await _shot(who + "_portrait")
 	print("PEEK_OK")
 	get_tree().quit()
 

@@ -1502,7 +1502,10 @@ static func _dress_dana(figure: Node3D) -> void:
 	# terracotta knit with a cream collar over navy trousers, and a mustard
 	# beanie with a bobble on the Head bone. Procedural art only; the
 	# skin tone is the team's.
-	var face: Texture2D = load(DANA_FACE) if ResourceLoader.exists(DANA_FACE) else null
+	var face_path := DANA_FACE
+	if OS.get_environment("CO_DANA_FACE") != "":
+		face_path = OS.get_environment("CO_DANA_FACE")
+	var face: Texture2D = load(face_path) if ResourceLoader.exists(face_path) else null
 	for mesh in figure.find_children("*", "MeshInstance3D", true, false):
 		var inst := mesh as MeshInstance3D
 		if inst.mesh == null:

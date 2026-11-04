@@ -28,7 +28,20 @@ def ellipse(draw, cx, cy, rx, ry, fill, outline=None, width=0):
     draw.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=fill, outline=outline, width=width)
 
 
+import sys
+
+EXPRESSIONS = {
+    "v3": dict(smile=58, brow=0, eye=1.0, mouth_open=False),
+    "neutral": dict(smile=30, brow=0, eye=1.0, mouth_open=False),
+    "happy": dict(smile=78, brow=6, eye=0.82, mouth_open=False),
+    "proud": dict(smile=52, brow=10, eye=0.9, mouth_open=False),
+    "surprised": dict(smile=10, brow=22, eye=1.12, mouth_open=True),
+}
+
+
 def main():
+    name = sys.argv[1] if len(sys.argv) > 1 else "v3"
+    ex = EXPRESSIONS[name]
     img = Image.new("RGB", (SIZE, SIZE), SKIN)
     # Blush, soft.
     blush = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
@@ -45,14 +58,14 @@ def main():
         for i in range(0, 21):
             t = i / 20.0
             x = cx + (t - 0.5) * 230 * sx
-            y = 352 - 44 * (1 - (2 * t - 1) ** 2) + (18 if sx * (t - 0.5) > 0 else 0) * abs(t - 0.5) * 2
+            y = 352 - ex["brow"] - 44 * (1 - (2 * t - 1) ** 2) + (18 if sx * (t - 0.5) > 0 else 0) * abs(t - 0.5) * 2
             pts.append((x, y))
         d.line(pts, fill=BROW, width=11, joint="curve")
     # Eyes: big and bright.
     for sx in (-1, 1):
         cx = 512 + sx * 172
         cy = 548
-        ellipse(d, cx, cy, 92, 74, WHITE)
+        ellipse(d, cx, cy, 92, int(74 * ex["eye"]), WHITE)
         # upper lid shadow
         shade = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
         sd = ImageDraw.Draw(shade)
@@ -95,16 +108,20 @@ def main():
     for i in range(0, 31):
         t = i / 30.0
         x = 372 + t * 280
-        y = 790 + 58 * (1 - (2 * t - 1) ** 2)
+        y = 790 + ex["smile"] * (1 - (2 * t - 1) ** 2)
         smile.append((x, y))
     d.line(smile, fill=LIP_DARK, width=10, joint="curve")
     lower = [(p[0], p[1] + 2) for p in smile]
     poly = smile + [(x, y + 26 * (1 - ((x - 512) / 140.0) ** 2)) for (x, y) in reversed(lower)]
     d.polygon(poly, fill=LIP)
-    teeth = [(x, y + 1) for (x, y) in smile[8:23]] + [(x, y + 9) for (x, y) in reversed(smile[8:23])]
-    d.polygon(teeth, fill=(250, 246, 238))
+    if ex["mouth_open"]:
+        ellipse(d, 512, 812, 40, 34, LIP_DARK)
+        ellipse(d, 512, 806, 26, 18, (60, 30, 40))
+    else:
+        teeth = [(x, y + 1) for (x, y) in smile[8:23]] + [(x, y + 9) for (x, y) in reversed(smile[8:23])]
+        d.polygon(teeth, fill=(250, 246, 238))
     d.line(smile, fill=LIP_DARK, width=6, joint="curve")
-    out = "assets/characters/dana/face/dana_face_v3.png"
+    out = "assets/characters/dana/face/dana_face_%s.png" % name
     img.save(out)
     print("wrote", out)
 

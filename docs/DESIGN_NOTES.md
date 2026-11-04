@@ -89,8 +89,10 @@ blush) on the same UV layout as the team's; a terracotta rib knit with a cream
 collar over navy trousers; a mustard beanie with a bobble on the Head bone. All
 procedural, the team's skin tone and rig untouched.
 
-**Still to do.** The portrait on the cards to match the new face; an idle with
-personality (a hum, a hair tuck, a stretch after a heavy piece).
+**Done since.** The portrait icons and the expression cards are renders of the
+new face (`tools/paint_dana_face.py <expression>`, `tests/figure_peek.tscn`,
+`tools/build_dana_portraits.py`), so the HUD matches the figure. Standing still she
+shifts her weight, looks round the room or stretches.
 
 ## The level ladder (next)
 
