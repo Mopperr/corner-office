@@ -22,6 +22,8 @@ var rep_stars := 0
 # finished job with a client adds one, a job with every piece in the right
 # room adds the friend they bring. The counter's footfall follows it.
 var network: Array = []
+# What each name on it is to Dana: the day and the job that put it there, the visits since.
+var network_log: Dictionary = {}
 var jobs_done := 0
 var jobs_cleared: Dictionary = {}
 var office_id := "garage"
@@ -106,6 +108,7 @@ func _grow_network(def: Dictionary) -> void:
 		for name in [client, "%s's friend" % client]:
 			if network.has(name):
 				network.erase(name)
+				network_log.erase(name)
 				lost += 1
 		payout["network"] = {"client": client, "lost": lost, "size": network.size()}
 		return
@@ -114,11 +117,13 @@ func _grow_network(def: Dictionary) -> void:
 	if not network.has(client):
 		network.append(client)
 		added += 1
+	network_log[client] = {"day": day, "job": str(def.get("title", "a move")), "visits": int(network_log.get(client, {}).get("visits", 0)), "perfect": told}
 	if told:
 		var friend := "%s's friend" % client
 		if not network.has(friend):
 			network.append(friend)
 			added += 1
+		network_log[friend] = {"day": day, "job": "%s told them" % client.split(" ")[0], "visits": int(network_log.get(friend, {}).get("visits", 0)), "perfect": false}
 	payout["network"] = {"client": client, "told": told, "added": added, "size": network.size()}
 
 
@@ -139,6 +144,7 @@ func new_game(who: String) -> void:
 	total_earned = 0
 	rep_stars = 0
 	network = []
+	network_log = {}
 	jobs_done = 0
 	jobs_cleared = {}
 	office_id = "garage"
@@ -2657,6 +2663,7 @@ func to_dict() -> Dictionary:
 		"total_earned": total_earned,
 		"rep_stars": rep_stars,
 		"network": network.duplicate(),
+		"network_log": network_log.duplicate(true),
 		"jobs_done": jobs_done,
 		"jobs_cleared": jobs_cleared.duplicate(true),
 		"office_id": office_id,
@@ -2729,6 +2736,7 @@ func from_dict(raw: Dictionary) -> void:
 	total_earned = int(raw.get("total_earned", 0))
 	rep_stars = int(raw.get("rep_stars", 0))
 	network = raw.get("network", [])
+	network_log = raw.get("network_log", {})
 	jobs_done = int(raw.get("jobs_done", 0))
 	jobs_cleared = raw.get("jobs_cleared", {})
 	office_id = str(raw.get("office_id", "garage"))

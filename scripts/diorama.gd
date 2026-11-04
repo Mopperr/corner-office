@@ -8138,6 +8138,9 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 		order["who"] = named
 		order["tip_mult"] = float(order.get("tip_mult", 1.0)) * 1.25
 		GameState.shop_known_today += 1
+		var log: Dictionary = GameState.network_log.get(known, {"day": GameState.day, "job": "a move", "visits": 0})
+		log["visits"] = int(log.get("visits", 0)) + 1
+		GameState.network_log[known] = log
 	person.name = "Customer_" + uid
 	# The order floats over their head until it is in their hand.
 	var bubble := Node3D.new()

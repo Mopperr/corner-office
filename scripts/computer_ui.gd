@@ -861,7 +861,7 @@ func _books(sub := "ledger") -> void:
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation", 8)
 	column.add_child(tabs)
-	for pair in [["ledger", "Ledger"], ["record", "The record"], ["staff", "The accountant"], ["gear", "Gear"], ["journal", "Journal"]]:
+	for pair in [["ledger", "Ledger"], ["record", "The record"], ["people", "People"], ["staff", "The accountant"], ["gear", "Gear"], ["journal", "Journal"]]:
 		var tab_btn := UIKit.button(str(pair[1]), UIKit.TERRA if str(pair[0]) == sub else UIKit.WOOD)
 		tab_btn.name = "Books_" + str(pair[0])
 		tab_btn.custom_minimum_size = Vector2(150, 50)
@@ -887,6 +887,9 @@ func _books(sub := "ledger") -> void:
 		return
 	if sub == "journal":
 		column.add_child(_journal_panel(wide))
+		return
+	if sub == "people":
+		column.add_child(_people_panel(wide))
 		return
 	var today := GameState.money - int(GameState.day_log.get("money_start", GameState.money))
 	var week_pay := 0
@@ -1004,6 +1007,36 @@ func _gear_panel(wide: float) -> PanelContainer:
 			_refresh_money()
 		)
 		line.add_child(buy)
+	return panel
+
+
+func _people_panel(wide: float) -> PanelContainer:
+	# The people who know the counter: who, which move, and whether they
+	# have been in since. Why the jobs are worth taking, in names.
+	var table: Array = []
+	var names: Array = GameState.network.duplicate()
+	names.reverse()
+	for name in names:
+		var log: Dictionary = GameState.network_log.get(str(name), {})
+		var visits := int(log.get("visits", 0))
+		var since := "Not been in yet"
+		if visits == 1:
+			since = "Been in once"
+		elif visits > 1:
+			since = "Been in %d times" % visits
+		var how := str(log.get("job", "a move"))
+		if bool(log.get("perfect", false)):
+			how += "  ·  every piece in the right room"
+		table.append([str(name), "Day %d" % int(log.get("day", 0)), how, since])
+	if table.is_empty():
+		table.append(["Nobody yet", "", "Nobody on the street knows the name.", "Every job is somebody who will."])
+	var title := "People who know the counter  ·  %d" % GameState.network.size()
+	var panel := _books_panel(title, UIKit.SAGE, table, wide)
+	panel.name = "PeoplePanel"
+	var col := panel.get_child(0) as VBoxContainer
+	var foot := UIKit.label("Every finished move adds a name; a move with every piece in the right room adds the friend they bring. The more who know, the shorter the wait at the till. Sal's work adds nobody.", 22, UIKit.WOOD, "small")
+	foot.custom_minimum_size = Vector2(wide - 40.0, 0)
+	col.add_child(foot)
 	return panel
 
 

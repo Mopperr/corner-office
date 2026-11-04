@@ -3336,7 +3336,9 @@ func _play_checks() -> Array:
 			found.append("the stray box paid %d" % (GameState.money - jar))
 	var computer: Control = load("res://scripts/computer_ui.gd").new()
 	add_child(computer)
-	for sheet in ["gear", "journal", "record", "ledger"]:
+	GameState.network = ["Priya Okafor", "Priya Okafor's friend"]
+	GameState.network_log = {"Priya Okafor": {"day": 2, "job": "Whisker & Bean Cafe", "visits": 1, "perfect": true}}
+	for sheet in ["gear", "journal", "people", "record", "ledger"]:
 		computer.page = "books"
 		computer.books_tab = sheet
 		computer.call("_show_page")
@@ -3347,6 +3349,15 @@ func _play_checks() -> Array:
 			found.append("gear sheet empty")
 		if sheet == "journal" and computer.find_child("JournalPanel", true, false) == null:
 			found.append("journal sheet empty")
+		if sheet == "people":
+			var people := computer.find_child("PeoplePanel", true, false)
+			var named := false
+			if people != null:
+				for label in people.find_children("*", "Label", true, false):
+					if str((label as Label).text).begins_with("Priya Okafor"):
+						named = true
+			if not named:
+				found.append("people sheet does not name Priya")
 	_bury(computer)
 	_bury(play)
 	GameState.new_game("dana")
