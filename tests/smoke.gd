@@ -2465,6 +2465,32 @@ func _party_checks() -> Array:
 		found.append("party of %d, wanted %d" % [party.members.size(), (job.get("party", []) as Array).size()])
 	if party.member_for("client:0") == null:
 		found.append("party members not clickable")
+	# Everybody in a party of two or more has a name, and their bubbles say who is talking.
+	if party.members.size() >= 2:
+		var tags: Dictionary = {}
+		for person in party.members:
+			var tag := str(person.get_meta("who", ""))
+			if tag == "":
+				found.append("a party member has no name (%s)" % job.get("client", "?"))
+			tags[tag] = true
+		if tags.size() != party.members.size():
+			found.append("party names repeat: %s" % str(tags.keys()))
+		var greeted: String = party.say("Hello there.")
+		var greeter: Node3D = party.speaker("greet")
+		var tagged_any := false
+		for person in party.members:
+			var bubble: Node = person.get_node_or_null("Thought")
+			if bubble != null and ": Hello there." in str(bubble.text):
+				tagged_any = true
+		if greeted == "" or not tagged_any:
+			found.append("the family's bubble does not say who is talking")
+		party.cooldown = 0.0
+	var dealt: Array = Party.member_names("Yuki, Ren and Baba", ["adult", "adult", "elder", "kid"], RandomNumberGenerator.new(), Party.load_data())
+	if dealt.size() != 4 or dealt[0] != "Yuki" or dealt[1] != "Ren" or dealt[2] != "Baba" or str(dealt[3]) == "":
+		found.append("member names from a label: %s" % str(dealt))
+	var twins: Array = Party.member_names("The Achebe twins", ["adult", "adult"], RandomNumberGenerator.new(), Party.load_data())
+	if twins.size() != 2 or str(twins[0]) == "" or twins[0] == twins[1]:
+		found.append("twins' names: %s" % str(twins))
 	var said: String = party.react("wrong_room", {"item": "toaster", "room": "bathroom"}, true)
 	if said == "":
 		found.append("the family said nothing about the toaster")

@@ -115,6 +115,7 @@ func setup(owner: Node, def: Dictionary, door: Vector3, inward: Vector3) -> void
 	var palette: Array = pools.get("palette", ["D9765F"])
 	var hairs: Array = pools.get("hair", ["4A3626"])
 	var kinds: Array = party_for(def)
+	var names: Array = member_names(client_name, kinds, rng, pools)
 	var n := 0
 	for kind in kinds:
 		var color := Color(str(palette[(rng.randi() + n) % palette.size()]))
@@ -134,6 +135,8 @@ func setup(owner: Node, def: Dictionary, door: Vector3, inward: Vector3) -> void
 		person.name = "Client%d" % n
 		person.set_meta("uid", "client:%d" % n)
 		person.set_meta("kid", Figure.is_kid_kind(figure_kind))
+		# Who this is, so a bubble can say who is talking.
+		person.set_meta("who", str(record.get("name", names[n] if n < names.size() else "")))
 		# A loose cluster just inside the door, to either side of it: out of the
 		# box row and the spill behind it, facing the room.
 		var side := -1.0 if n % 2 == 0 else 1.0
@@ -249,7 +252,7 @@ func react(event: String, fills: Dictionary, force := false, who_uid := "") -> S
 		return ""
 	cooldown = COOLDOWN
 	if diorama != null and diorama.has_method("_bubble"):
-		diorama.call("_bubble", who, said, 4.5)
+		diorama.call("_bubble", who, tagged(who, said), 4.5)
 	var pose := "nod"
 	match event:
 		"wrong_room", "scuff", "caught", "tipped", "broken", "attack":
@@ -276,10 +279,59 @@ func say(text: String, pose := "wave") -> String:
 	var said := GameState.fill_tokens(text)
 	cooldown = COOLDOWN
 	if diorama != null and diorama.has_method("_bubble"):
-		diorama.call("_bubble", who, said, 5.5)
+		diorama.call("_bubble", who, tagged(who, said), 5.5)
 	if diorama != null and diorama.has_method("_act"):
 		diorama.call("_act", who, pose, 1.2)
 	return said
+
+
+func tagged(who: Node3D, said: String) -> String:
+	# In a party of two or more, the bubble says who is talking.
+	if members.size() < 2 or who == null:
+		return said
+	var tag := str(who.get_meta("who", ""))
+	return said if tag == "" else "%s: %s" % [tag, said]
+
+
+static func member_names(client: String, kinds: Array, rng: RandomNumberGenerator, pools: Dictionary) -> Array:
+	# A name per member from the client label: "Rosa & Ray Pemberton" and
+	# "Yuki, Ren and Baba" name their people in order; "The Halvorsen
+	# family" and "Dev and the boys" get first names dealt from the pool;
+	# one person is the label itself ("Grandpa Ellis", "Dr. Ada Hartley").
+	var out: Array = []
+	if kinds.size() <= 1:
+		return [client]
+	var label := client.strip_edges()
+	var given: Array = []
+	var family := label.begins_with("The ")
+	if not family:
+		var text := label.replace(" & ", ", ").replace(" and ", ", ")
+		for part in text.split(","):
+			var word := str(part).strip_edges()
+			if word == "" or word.begins_with("the "):
+				continue
+			given.append(word.split(" ")[0])
+	var first_names: Dictionary = pools.get("first_names", {})
+	var dealt: Dictionary = {}
+	for i in kinds.size():
+		var kind: Variant = kinds[i]
+		var kind_name := str(kind.get("kind", "adult")) if kind is Dictionary else str(kind)
+		var tier := "kid" if Figure.is_kid_kind(kind_name) else ("elder" if kind_name == "elder" else "adult")
+		if i < given.size() and tier != "kid":
+			out.append(given[i])
+			continue
+		var pool: Array = first_names.get(tier, [])
+		if pool.is_empty():
+			out.append("")
+			continue
+		var pick := str(pool[rng.randi() % pool.size()])
+		var tries := 0
+		while dealt.has(pick) and tries < 8:
+			pick = str(pool[rng.randi() % pool.size()])
+			tries += 1
+		dealt[pick] = true
+		out.append(pick)
+	return out
 
 
 func member_for(uid: String) -> Node3D:

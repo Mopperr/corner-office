@@ -308,10 +308,11 @@ static func _string_lights(root: Node3D, from: Vector3, to: Vector3) -> void:
 		if i < n:
 			var next := from.lerp(to, float(i + 1) / float(n)) + Vector3(0, -0.25 * sin(float(i + 1) / float(n) * PI), 0)
 			var wire := Props.mesh_box(Vector3(at.distance_to(next), 0.015, 0.015), UIKit.DARK)
+			# In the tree before look_at, which needs a world transform.
+			root.add_child(wire)
 			wire.position = (at + next) * 0.5
 			wire.look_at(next, Vector3.UP)
 			wire.rotate_object_local(Vector3.UP, PI * 0.5)
-			root.add_child(wire)
 		if i % 2 == 1:
 			var bulb := MeshInstance3D.new()
 			var sphere := SphereMesh.new()

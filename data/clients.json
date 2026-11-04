@@ -403,5 +403,54 @@
   "A8763E",
   "C9C2B5",
   "1E1A17"
- ]
+ ],
+ "first_names": {
+  "_about": "Dealt to family members the client label does not name, so a bubble can say who is talking.",
+  "adult": [
+   "Ingrid",
+   "Lars",
+   "Tomas",
+   "Amara",
+   "Felix",
+   "Nadia",
+   "Oskar",
+   "Leila",
+   "Ravi",
+   "Clara",
+   "Mateo",
+   "Hanne",
+   "Kwame",
+   "Sofia",
+   "Elias",
+   "Zara",
+   "Bram",
+   "Ayo"
+  ],
+  "elder": [
+   "Nan",
+   "Grandad",
+   "Auntie Ro",
+   "Uncle Per",
+   "Granny Ivy",
+   "Pop",
+   "Oma",
+   "Opa",
+   "Bibi",
+   "Nonna"
+  ],
+  "kid": [
+   "Sunny",
+   "Milo",
+   "Posy",
+   "Teddy",
+   "Ines",
+   "Finn",
+   "Juno",
+   "Ozzy",
+   "Wren",
+   "Kit",
+   "Nell",
+   "Bo"
+  ]
+ }
 }

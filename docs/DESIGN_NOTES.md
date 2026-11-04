@@ -164,3 +164,15 @@ co-working suite, the corner office, the last delivery) but no venues, jobs or
 drives of their own yet. The build list calls for eleven client jobs and six
 standalone drives. The plan machinery now makes a venue a day's work: a plan,
 a recipe, a drive, a client, the beat's email.
+
+## The family by name
+
+A party of two or more has a name per person, and every bubble says who
+is talking: "Ray: By colour." The names come from the client label when
+it carries them ("Rosa & Ray Pemberton", "Yuki, Ren and Baba", "Dev and
+the boys") and from a first-name pool in `data/clients.json` otherwise
+("The Halvorsen family" deals Ingrid, Lars and Sunny). A person on their
+own keeps the label as it is, so Grandpa Ellis stays Grandpa Ellis. On the
+drive, the ride's verdict ("Smooth Ride") has its own line under the speed,
+the awning name boards are painted flat on the board, and the kerb signs
+fade out at 38 m so the far end of a street is not a stack of names.
