@@ -3019,7 +3019,8 @@ var auto_fast := OS.get_environment("CO_FAST_DRIVE") != ""
 
 
 func _auto_pace() -> float:
-	return 0.06 if auto_fast else 0.35
+	# A beat between steps; brisk, because nobody wants to watch a helper dawdle.
+	return 0.06 if auto_fast else 0.22
 
 
 func _auto_unpack(box_ids: Array) -> void:
@@ -4645,7 +4646,8 @@ func _tick_player(delta: float) -> void:
 		# Weight tells: a heavy piece slows the walk, and the odd step
 		# under one can go wrong.
 		var load_factor := 1.0 if kg <= 0.0 else clampf(1.12 - kg / float(Tuning.get_value("walk.slow_kg", 70)), 0.55, 1.0)
-		var step := PLAYER_SPEED * load_factor * delta * (4.0 if auto_fast and (auto_busy or truck_pending or unload_pending) else 1.0)
+		# On the queue Dana works at a clip: half as fast again as a stroll.
+		var step := PLAYER_SPEED * load_factor * delta * (4.0 if auto_fast and (auto_busy or truck_pending or unload_pending) else (1.5 if auto_busy else 1.0))
 		_maybe_trip(kg, step)
 		if to.length() <= step:
 			player.position = player_target

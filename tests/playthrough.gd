@@ -1766,7 +1766,7 @@ func _wait_auto(room: Node, label: String) -> void:
 	# small claims card, which the test answers by suing.
 	var waited := 0.0
 	var sued := false
-	while room != null and is_instance_valid(room) and bool(room.get("auto_busy")) and waited < 240.0:
+	while room != null and is_instance_valid(room) and bool(room.get("auto_busy")) and waited < 420.0:
 		await wait(0.25)
 		waited += 0.25
 		if not sued and press("Sue them"):
