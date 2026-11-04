@@ -18,6 +18,10 @@ var character := "dana"
 var money := 120
 var total_earned := 0
 var rep_stars := 0
+# The people Dana has moved who now know where the counter is: every
+# finished job with a client adds one, a job with every piece in the right
+# room adds the friend they bring. The counter's footfall follows it.
+var network: Array = []
 var jobs_done := 0
 var jobs_cleared: Dictionary = {}
 var office_id := "garage"
@@ -87,6 +91,32 @@ func _ready() -> void:
 	rng.randomize()
 
 
+func _grow_network(def: Dictionary) -> void:
+	# Why the jobs exist: the client now knows the counter. A move with every
+	# piece in the right room and nothing broken sends them in with a friend.
+	var client := str(def.get("client", ""))
+	if client == "" or bool(def.get("shady", false)):
+		return
+	var told := bool(payout.get("perfect", false))
+	var added := 0
+	if not network.has(client):
+		network.append(client)
+		added += 1
+	if told:
+		var friend := "%s's friend" % client
+		if not network.has(friend):
+			network.append(friend)
+			added += 1
+	payout["network"] = {"client": client, "told": told, "added": added, "size": network.size()}
+
+
+func footfall_mult() -> float:
+	# The wait between faces at the counter shrinks with the network: ten
+	# people who know the place take a third off it, thirty take half.
+	var size := network.size()
+	return clampf(1.0 / (1.0 + 0.05 * float(size)), 0.5, 1.0)
+
+
 func rep_rank() -> int:
 	return Tuning.rep_rank(rep_stars)
 
@@ -96,6 +126,7 @@ func new_game(who: String) -> void:
 	money = int(Tuning.get_value("starter_money." + who, 120))
 	total_earned = 0
 	rep_stars = 0
+	network = []
 	jobs_done = 0
 	jobs_cleared = {}
 	office_id = "garage"
@@ -1813,6 +1844,7 @@ func finish_job() -> Dictionary:
 	add_money(net_pay, true)
 	rep_stars += stars
 	jobs_done += 1
+	_grow_network(def)
 	jobs_cleared[str(job.get("id", ""))] = true
 	if bool(def.get("payback", false)):
 		bump_stat("payback_jobs")
@@ -2607,6 +2639,7 @@ func to_dict() -> Dictionary:
 		"money": money,
 		"total_earned": total_earned,
 		"rep_stars": rep_stars,
+		"network": network.duplicate(),
 		"jobs_done": jobs_done,
 		"jobs_cleared": jobs_cleared.duplicate(true),
 		"office_id": office_id,
@@ -2677,6 +2710,7 @@ func from_dict(raw: Dictionary) -> void:
 	money = int(raw.get("money", 120))
 	total_earned = int(raw.get("total_earned", 0))
 	rep_stars = int(raw.get("rep_stars", 0))
+	network = raw.get("network", [])
 	jobs_done = int(raw.get("jobs_done", 0))
 	jobs_cleared = raw.get("jobs_cleared", {})
 	office_id = str(raw.get("office_id", "garage"))

@@ -8,6 +8,6 @@ The new one is the Garage Startup. It has a roll-up door, a folding table, $120 
 
 Trade odd office treasures on your trusty old computer. Pick up mover jobs around town. Unpack, decorate, and slowly grow your space.
 
-Nobody's rushing you. Put the kettle on.
+Nobody knows you yet. Every job fixes that.
 
 From Garage Startup to Corner Office, one box at a time.

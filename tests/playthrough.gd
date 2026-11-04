@@ -72,6 +72,10 @@ func _probe(room: Node, node: Node3D, accept: Callable) -> String:
 	# Hover around the node until the ray lands on something `accept` likes.
 	for off in PROBE_OFFSETS:
 		await hover_world(room, node.global_position + off)
+		# A card or a button over the spot takes the click, not the room;
+		# a player would turn the view, so the probe reports nothing here.
+		if room.has_method("_over_ui") and bool(room.call("_over_ui")):
+			continue
 		var hit: String = room._pick_uid()
 		if hit != "" and accept.call(hit):
 			return hit
@@ -795,6 +799,9 @@ func _play_job(job_id: String) -> void:
 	await shot("results_" + job_id)
 	print("payout: %s" % JSON.stringify(GameState.payout))
 	await wait(2.5)
+	# Why the jobs: the client now knows where the counter is.
+	if not bool(GameState.payout.get("busted", false)) and not bool(GameState.payout.get("thrown", false)):
+		_check(GameState.network.size() >= 1, "%s: the client joined the network (%d know the counter)" % [job_id, GameState.network.size()])
 	_check(press("Back to the office"), "%s: results close button" % job_id)
 	await wait(1.0)
 	_check(GameState.mode == "office", "%s: back in office (got %s)" % [job_id, GameState.mode])
@@ -832,6 +839,20 @@ func _pack() -> void:
 			picked = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
 			if picked != "":
 				break
+		if picked == "":
+			# Behind a wall or under a card from this side: turn the room and look again.
+			for turn in 3:
+				room.call("rotate_view", 1)
+				await wait(0.3)
+				for item in loose:
+					var node := _node_for(room, str(item.get("uid", "")))
+					if node == null:
+						continue
+					picked = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
+					if picked != "":
+						break
+				if picked != "":
+					break
 		if picked == "":
 			_fail("pack: none of %d loose items can be clicked" % loose.size())
 			return
@@ -1354,6 +1375,11 @@ func _unpack() -> void:
 				var node := _node_for(room, picked)
 				if node != null and is_instance_valid(node):
 					var hit: String = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
+					if hit == "":
+						# Under a card, or behind the owner: turn the room and look again.
+						room.call("rotate_view", 1)
+						await wait(0.3)
+						hit = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
 					if hit != "":
 						await click_world(room, _last_hover)
 						await wait_until(func(): return not is_instance_valid(room) or room.held_uid != "", 0.8)
@@ -1394,7 +1420,10 @@ func _unpack() -> void:
 					continue
 				tries += 1
 				await click_world(room, hit)
-				if await wait_until(func(): return str(item.get("state", "")) == "placed" and (not is_instance_valid(room) or not room.settling), 3.0):
+				# A heavy piece crosses a big plan slowly: the walk to the far
+				# room can take most of ten seconds under thirty kilos.
+				var carry_wait := 3.0 if not room._is_home() else 9.0
+				if await wait_until(func(): return str(item.get("state", "")) == "placed" and (not is_instance_valid(room) or not room.settling), carry_wait):
 					target = hit
 					break
 				if GameState.mode == "results":

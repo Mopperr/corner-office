@@ -959,7 +959,7 @@ func _screen_copy_checks() -> Array:
 	if how is Dictionary:
 		for tip in how.get("tips", []):
 			how_titles.append(str(tip.get("title", "")))
-	var expected_tips := ["Pack with Care", "Load the Truck", "A Gentle Drive", "Unpack & Place", "Pay & Tips", "Trade on the Computer", "Make It Yours", "No Rush, No Fail"]
+	var expected_tips := ["Why the Jobs", "Pack with Care", "Load the Truck", "A Gentle Drive", "Unpack & Place", "Pay & Tips", "Trade on the Computer", "Make It Yours", "No Rush, No Fail"]
 	if how_titles != expected_tips:
 		found.append("how to play %s" % how_titles)
 	var credit_names: Array = []

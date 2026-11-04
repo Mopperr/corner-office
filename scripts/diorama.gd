@@ -1430,6 +1430,9 @@ func _sync_goals_panel() -> void:
 		row.custom_minimum_size = Vector2(520, 0)
 		goals_column.add_child(row)
 	goals_panel.visible = true
+	# The card's height just changed; the stairs buttons under it follow.
+	if _is_home() and GameState.mode == "job_unpack" and Homes.floors(venue).size() > 1:
+		_refresh_hud_buttons()
 
 
 func _cat_idle(delta: float) -> void:
@@ -5251,6 +5254,10 @@ func _layout_loose() -> void:
 		blocked = Homes.wall_rects(venue, 0, 0.35)
 		for door in Homes.doorways(venue, 0):
 			blocked.append(Rect2(door.x - 0.7, door.z - 0.7, 1.4, 1.4))
+		# A place being packed up still reads as itself: the kitchen things
+		# stand in the kitchen and the books in the study, so the rooms tell
+		# you what goes together before a box is opened.
+		loose = _layout_by_room(loose, blocked)
 	var i := 0
 	var slot := 0
 	while i < loose.size() and slot < cols * 40:
@@ -5269,6 +5276,55 @@ func _layout_loose() -> void:
 		item["z"] = z
 		item["y"] = 0.0
 		i += 1
+
+
+func _layout_by_room(loose: Array, blocked: Array) -> Array:
+	# Set each loose piece down in a ground-floor room that takes its kind,
+	# on a grid inside that room, big pieces first. Pieces no room takes,
+	# or that find no spot, come back for the plain grid.
+	var ox := float(venue.get("x", 0))
+	var oz := float(venue.get("z", 0))
+	var spots: Dictionary = {}
+	for room in Homes.rooms(venue, 0):
+		var rx := ox + float(room.get("x", 0))
+		var rz := oz + float(room.get("z", 0))
+		var rw := float(room.get("w", 2))
+		var rd := float(room.get("d", 2))
+		var list: Array = []
+		var z := rz + 0.55
+		while z < rz + rd - 0.45:
+			var x := rx + 0.55
+			while x < rx + rw - 0.45:
+				# The box row along the front wall stays clear.
+				var free := z > oz + 1.5
+				for rect in blocked:
+					if (rect as Rect2).has_point(Vector2(x, z)):
+						free = false
+						break
+				if free:
+					list.append(Vector2(x, z))
+				x += 0.75
+			z += 0.75
+		spots[str(room.get("id", ""))] = list
+	var rest: Array = []
+	var turn := 0
+	for item in loose:
+		var tag := str(item.get("room", ""))
+		var takers: Array = []
+		for room in Homes.rooms(venue, 0):
+			var id := str(room.get("id", ""))
+			if tag != "" and _room_accepts(room, tag) and not (spots[id] as Array).is_empty():
+				takers.append(id)
+		if takers.is_empty():
+			rest.append(item)
+			continue
+		var id: String = takers[turn % takers.size()]
+		turn += 1
+		var at: Vector2 = (spots[id] as Array).pop_front()
+		item["x"] = at.x
+		item["z"] = at.y
+		item["y"] = 0.0
+	return rest
 
 
 func _spawn_pack_boxes() -> void:
@@ -5685,13 +5741,16 @@ func _refresh_hud_buttons() -> void:
 		# boxed pieces of a bigger room end up, and a button there eats clicks.
 		_act_button(layer, "Rotate view", Vector2(16, y + 58), func(): rotate_view(1))
 		if _is_home() and GameState.mode == "job_unpack" and Homes.floors(venue).size() > 1:
-			# Low in the left column, under the hint card: the stairs buttons.
+			# In the left column under the room-score card, which grows with
+			# its goals: the stairs buttons never sit on the last goal line.
 			var fy := 556.0
-			if home_floor > 0:
-				_act_button(layer, "Down to %s" % Homes.floor_name(venue, home_floor - 1).to_lower(), Vector2(16, fy), func(): _set_floor(home_floor - 1))
-				fy -= 58
+			if goals_panel != null and goals_panel.visible:
+				fy = maxf(fy, goals_panel.position.y + goals_panel.get_combined_minimum_size().y + 14.0)
 			if home_floor < Homes.floors(venue).size() - 1:
 				_act_button(layer, "Up to %s" % Homes.floor_name(venue, home_floor + 1).to_lower(), Vector2(16, fy), func(): _set_floor(home_floor + 1))
+				fy += 58
+			if home_floor > 0:
+				_act_button(layer, "Down to %s" % Homes.floor_name(venue, home_floor - 1).to_lower(), Vector2(16, fy), func(): _set_floor(home_floor - 1))
 	if GameState.mode == "office" and GameState.office_phase == "place":
 		_act_button(layer, "Place it all for me", Vector2(1100, y), _place_office_all)
 	if GameState.mode == "office" and GameState.office_phase == "pack":
@@ -6052,6 +6111,12 @@ func _fill_jobs(rows: VBoxContainer, width: float) -> void:
 		empty.custom_minimum_size = Vector2(width - 20.0, 0)
 		rows.add_child(empty)
 		return
+	# Why the jobs: the counter needs faces, and every move is one who
+	# knows where it is now.
+	var why: Dictionary = Narrative.why_loop("shop" if GameState.shop_open() else "pack")
+	var why_line := UIKit.label("%s  ·  %d people know the counter from your jobs" % [str(why.get("dana", "")), GameState.network.size()] if GameState.network.size() > 0 else "%s  ·  Nobody on the street knows the name yet. Every job is somebody who will." % str(why.get("dana", "")), 24, UIKit.WOOD, "small")
+	why_line.custom_minimum_size = Vector2(width - 20.0, 0)
+	rows.add_child(why_line)
 	if not story.is_empty():
 		rows.add_child(UIKit.label("Marge's jobs", 28, UIKit.TERRA, "title", false))
 		for decorated in story:
@@ -7400,7 +7465,8 @@ func _tick_cars(delta: float) -> void:
 	car_wait -= delta
 	if car_wait > 0.0 or not (want_customer or want_browser):
 		return
-	car_wait = randf_range(26.0, 48.0)
+	# The people Dana has moved come by: the wait shrinks with the network.
+	car_wait = randf_range(26.0, 48.0) * GameState.footfall_mult()
 	_arrive_car(want_customer)
 
 

@@ -45,6 +45,12 @@ forward; past fifteen kilos a step can catch, she goes down, the piece lands at
 her feet and can break. The trip is rare (about one in eighty metres with a
 twenty-kilo piece) so it reads as a story, not a tax.
 
+**Done since.** A place being packed up reads as itself: the loose pieces
+start in the room that takes their kind (mugs on the seating floor, the
+kettle at the counter, tools in the workshop) rather than on a grid across
+the whole floor, so the rooms say what goes together before a box is opened.
+Room names are drawn through the walls, like the lettering on a plan.
+
 **Ideas held back.** Dragging a box across the floor (a second way to move heavy
 things, slower but safe); a dolly that is pushed rather than carried; two
 movers lifting a sofa together with the helper. Each is a system; none is
@@ -93,6 +99,41 @@ procedural, the team's skin tone and rig untouched.
 new face (`tools/paint_dana_face.py <expression>`, `tests/figure_peek.tscn`,
 `tools/build_dana_portraits.py`), so the HUD matches the figure. Standing still she
 shifts her weight, looks round the room or stretches.
+
+## Why each loop (decided: the counter is the point)
+
+**What people love.** A reason. Unpacking's story is told in the objects;
+Moving Out's is a company you work for; Lake's is a postal round you chose.
+Nobody asks why in a game that has already answered.
+
+**What they bounce off.** A job board with no reason behind it: pack, drive,
+unpack, get paid, repeat, and never know who any of it was for.
+
+**Done.** Dana's shop is struggling because nobody on the street knows the
+name yet, and every move is somebody who will. The people she moves join a
+network that saves with the game; a job with every piece in the right room
+adds the friend they bring; the counter's wait between faces shrinks as the
+network grows. The results card says "Word gets round · Ada Hartley knows the
+counter now", the clipboard opens with the reason and the count, the intro,
+Marge's welcome email and the how-to-play page carry it. Each loop has its
+own reason in Dana's and Marge's words in `data/narrative/why.json`;
+`docs/WHY_EACH_LOOP.md` lays them out.
+
+## The chapters' named pieces (done)
+
+**What people love.** A brief that promises a piano and then hands you a
+piano. The thing the client is worried about being the thing in your hands.
+
+**Done.** Every chapter job now carries what its brief names, drawn from the
+team's catalogue: the dentist's gilt mirror, clocking-in machine and
+typewriter; the architect's model ship and globe; the library's tall
+bookcase, book trolley and revolving bookcase with stacks of books; the
+record shop's record cabinet, aquarium, vinyl crates and speakers; the
+florist's pots in three colours and a wheelbarrow; the theatre's upright
+piano and stool, trunk, coat stand, standing mirror and accordion; the
+broker's photocopier and safe; the lodge's wingbacks, cuckoo clock, fishing
+rods, snow globe and chess set. Each recipe stays within the truck's eighteen
+places and six floor places, checked by the authoring tool.
 
 ## The level ladder (next)
 

@@ -1916,11 +1916,27 @@
      "count": 1
     },
     {
+     "item": "wall_mirror_tall_gilt",
+     "count": 1
+    },
+    {
+     "item": "mirror_round_small_steel",
+     "count": 2
+    },
+    {
      "item": "office_plant_sage",
      "count": 3
     },
     {
-     "item": "whiteboard_aluminium",
+     "item": "office_plant_large_sage",
+     "count": 1
+    },
+    {
+     "item": "off_clocking_in",
+     "count": 1
+    },
+    {
+     "item": "typewriter_cream",
      "count": 1
     },
     {
@@ -1928,35 +1944,27 @@
      "count": 1
     },
     {
-     "item": "side_table_v_oak",
+     "item": "bath_bin_steel",
      "count": 2
-    },
-    {
-     "item": "bar_stool_blue",
-     "count": 3
     },
     {
      "item": "suitcase_tan",
      "count": 2
     },
     {
-     "item": "mirror_round_small_steel",
+     "item": "side_table_v_oak",
      "count": 2
     },
     {
-     "item": "bath_bin_steel",
+     "item": "bar_stool_blue",
      "count": 2
     },
     {
-     "item": "wine_rack_oak",
+     "item": "wall_clock_small_steel",
      "count": 1
     },
     {
      "item": "picture_frame_oak",
-     "count": 2
-    },
-    {
-     "item": "crate_stack_plastic",
      "count": 2
     }
    ],
@@ -1980,14 +1988,10 @@
    "recipe": [
     {
      "item": "filing_cabinet_steel",
-     "count": 2
+     "count": 1
     },
     {
      "item": "whiteboard_oak",
-     "count": 2
-    },
-    {
-     "item": "office_plant_large_sage",
      "count": 2
     },
     {
@@ -1995,23 +1999,27 @@
      "count": 3
     },
     {
-     "item": "side_table_v_walnut",
+     "item": "model_ship_large_oak",
+     "count": 1
+    },
+    {
+     "item": "globe_office_antique",
+     "count": 1
+    },
+    {
+     "item": "desk_lamp_sage",
      "count": 2
     },
     {
-     "item": "picture_v_oak",
+     "item": "office_plant_large_sage",
      "count": 2
     },
     {
      "item": "crate_stack_oak",
-     "count": 3
-    },
-    {
-     "item": "bar_stool_sage",
      "count": 2
     },
     {
-     "item": "suitcase_cabin_blue",
+     "item": "bar_stool_sage",
      "count": 2
     },
     {
@@ -2019,8 +2027,12 @@
      "count": 1
     },
     {
-     "item": "plant_pot_v_mustard",
-     "count": 3
+     "item": "picture_v_oak",
+     "count": 2
+    },
+    {
+     "item": "suitcase_cabin_blue",
+     "count": 1
     }
    ],
    "mood": "fussy",
@@ -2042,44 +2054,52 @@
    "authored": "gen_levels",
    "recipe": [
     {
-     "item": "kitchen_shelf_large_oak",
-     "count": 2
+     "item": "tall_bookcase_oak",
+     "count": 1
+    },
+    {
+     "item": "loft_book_trolley",
+     "count": 1
+    },
+    {
+     "item": "liv_revolving_bookcase",
+     "count": 1
     },
     {
      "item": "school_desk_pine",
-     "count": 4
-    },
-    {
-     "item": "crate_stack_oak",
-     "count": 4
-    },
-    {
-     "item": "picture_frame_pine",
      "count": 3
     },
     {
-     "item": "side_table_v_pine",
+     "item": "book_stack_sage",
+     "count": 3
+    },
+    {
+     "item": "book_stack_to_read_blue",
+     "count": 2
+    },
+    {
+     "item": "book_stack_paperbacks_rose",
+     "count": 2
+    },
+    {
+     "item": "globe_v_large_antique",
+     "count": 1
+    },
+    {
+     "item": "crate_stack_oak",
      "count": 2
     },
     {
      "item": "office_plant_grey",
-     "count": 3
+     "count": 2
     },
     {
      "item": "deck_chair_sage",
      "count": 2
     },
     {
-     "item": "suitcase_sage",
+     "item": "picture_frame_pine",
      "count": 2
-    },
-    {
-     "item": "dartboard_classic",
-     "count": 1
-    },
-    {
-     "item": "bath_mat_sage",
-     "count": 1
     }
    ],
    "mood": "warm",
@@ -2101,11 +2121,27 @@
    "authored": "gen_levels",
    "recipe": [
     {
-     "item": "armchair_v_mustard",
+     "item": "liv_record_cabinet",
      "count": 1
     },
     {
-     "item": "crate_stack_oak",
+     "item": "aquarium_large_black",
+     "count": 1
+    },
+    {
+     "item": "vinyl_crate_oak",
+     "count": 2
+    },
+    {
+     "item": "vinyl_crate_milk_crate",
+     "count": 1
+    },
+    {
+     "item": "record_player_walnut",
+     "count": 1
+    },
+    {
+     "item": "speaker_bookshelf_walnut",
      "count": 2
     },
     {
@@ -2113,12 +2149,8 @@
      "count": 2
     },
     {
-     "item": "school_desk_oak",
-     "count": 2
-    },
-    {
-     "item": "side_table_v_painted_sage",
-     "count": 2
+     "item": "armchair_v_mustard",
+     "count": 1
     },
     {
      "item": "bar_stool_rose",
@@ -2126,22 +2158,14 @@
     },
     {
      "item": "picture_v_pine",
-     "count": 3
+     "count": 2
     },
     {
      "item": "plant_pot_v_sage",
      "count": 2
     },
     {
-     "item": "suitcase_rose",
-     "count": 1
-    },
-    {
-     "item": "dartboard_faded",
-     "count": 1
-    },
-    {
-     "item": "aquarium_black",
+     "item": "liv_bookends",
      "count": 1
     }
    ],
@@ -2176,15 +2200,19 @@
      "count": 4
     },
     {
+     "item": "plant_pot_v_rose",
+     "count": 2
+    },
+    {
      "item": "deck_chair_mustard",
      "count": 2
     },
     {
-     "item": "barbecue_green",
+     "item": "push_mower_green",
      "count": 1
     },
     {
-     "item": "push_mower_green",
+     "item": "wheelbarrow_v_green",
      "count": 1
     },
     {
@@ -2192,19 +2220,15 @@
      "count": 1
     },
     {
-     "item": "wine_rack_pine",
+     "item": "tool_box_v_red",
      "count": 1
-    },
-    {
-     "item": "bath_mat_rose",
-     "count": 2
     },
     {
      "item": "side_table_v_painted_white",
      "count": 2
     },
     {
-     "item": "tool_box_v_red",
+     "item": "bath_mat_rose",
      "count": 1
     }
    ],
@@ -2231,6 +2255,14 @@
    "authored": "gen_levels",
    "recipe": [
     {
+     "item": "piano",
+     "count": 1
+    },
+    {
+     "item": "liv_piano_stool",
+     "count": 1
+    },
+    {
      "item": "trunk_v_leather",
      "count": 1
     },
@@ -2239,40 +2271,36 @@
      "count": 1
     },
     {
-     "item": "crate_stack_walnut",
-     "count": 2
+     "item": "standing_mirror",
+     "count": 1
     },
     {
-     "item": "side_table_v_painted_white",
-     "count": 2
+     "item": "loft_accordion",
+     "count": 1
+    },
+    {
+     "item": "crate_stack_walnut",
+     "count": 1
     },
     {
      "item": "broken_chair_painted_white",
      "count": 3
     },
     {
-     "item": "school_desk_walnut",
-     "count": 2
-    },
-    {
      "item": "picture_v_white",
      "count": 3
     },
     {
-     "item": "suitcase_stack_terracotta",
-     "count": 1
-    },
-    {
-     "item": "dartboard_classic",
-     "count": 1
-    },
-    {
-     "item": "plant_pot_v_sage",
+     "item": "lantern_brass",
      "count": 2
     },
     {
      "item": "bar_stool_mustard",
      "count": 2
+    },
+    {
+     "item": "liv_carriage_clock",
+     "count": 1
     }
    ],
    "mood": "warm",
@@ -2302,8 +2330,20 @@
      "count": 1
     },
     {
+     "item": "off_photocopier",
+     "count": 1
+    },
+    {
+     "item": "off_clocking_in",
+     "count": 1
+    },
+    {
+     "item": "office_clock_black",
+     "count": 1
+    },
+    {
      "item": "whiteboard_black",
-     "count": 2
+     "count": 1
     },
     {
      "item": "office_plant_large_grey",
@@ -2322,16 +2362,8 @@
      "count": 3
     },
     {
-     "item": "crate_stack_plastic",
-     "count": 2
-    },
-    {
      "item": "suitcase_cabin_terracotta",
      "count": 2
-    },
-    {
-     "item": "kitchen_clock_terracotta",
-     "count": 1
     }
    ],
    "mood": "rude",
@@ -2361,16 +2393,32 @@
      "count": 1
     },
     {
+     "item": "liv_cuckoo_clock",
+     "count": 1
+    },
+    {
+     "item": "fishing_rods_oak",
+     "count": 1
+    },
+    {
+     "item": "lantern_copper",
+     "count": 2
+    },
+    {
+     "item": "liv_snow_globe",
+     "count": 1
+    },
+    {
+     "item": "chess_set_walnut",
+     "count": 1
+    },
+    {
      "item": "deck_chair_rose",
      "count": 2
     },
     {
-     "item": "barbecue_kettle_black",
-     "count": 1
-    },
-    {
      "item": "wine_rack_walnut",
-     "count": 2
+     "count": 1
     },
     {
      "item": "suitcase_tan",
@@ -2381,15 +2429,7 @@
      "count": 2
     },
     {
-     "item": "laundry_hamper_wicker",
-     "count": 1
-    },
-    {
      "item": "picture_v_oak",
-     "count": 3
-    },
-    {
-     "item": "plant_pot_v_mustard",
      "count": 2
     },
     {
@@ -2442,6 +2482,14 @@
     },
     {
      "item": "whiteboard_oak",
+     "count": 1
+    },
+    {
+     "item": "typewriter_sage",
+     "count": 1
+    },
+    {
+     "item": "desk_lamp_sage",
      "count": 1
     },
     {
