@@ -3817,8 +3817,10 @@ func _town_checks() -> Array:
 		found.append("no playground on a green")
 	if drive.world.find_children("Setback", "", true, false).is_empty():
 		found.append("no stepped-back tall buildings")
-	if drive.minimap == null or drive.minimap.get_parent().custom_minimum_size.x > 0.0 and drive.minimap.get_parent().custom_minimum_size.x < 400.0:
-		found.append("minimap card did not grow")
+	if drive.minimap != null:
+		found.append("the minimap is back on the drive HUD")
+	if drive.world.find_children("Front_*", "", false, false).size() != 2 or drive.world.find_children("Hills", "", false, false).is_empty():
+		found.append("the two kerbside fronts or the hills are missing")
 	var house_blocks := 0
 	for entry in town.buildings:
 		if str(entry.get("kind", "")) == "houses":

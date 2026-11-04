@@ -1028,7 +1028,14 @@ func _walk_path(points: Array, then: Callable) -> void:
 		if then.is_valid():
 			then.call()
 		return
-	player_path = points.duplicate()
+	# Each leg goes round the walls of the floor, through the doorways.
+	var legs: Array = []
+	var prev: Vector3 = player.position
+	for point in points:
+		for step in _nav_path(prev, point):
+			legs.append(step)
+		prev = point
+	player_path = legs
 	player_on_arrive = then
 	player_target = player_path.pop_front()
 	player_moving = true
@@ -2292,6 +2299,7 @@ func _truck_click(uid: String) -> void:
 	if player != null and is_instance_valid(player) and truck_root != null:
 		truck_pending = true
 		player_carrying = true
+		carry_kg = GameState.box_weight(loaded_id)
 		var local := _slot_pos(slot)
 		var in_bed := truck_root.to_global(Vector3(local.x + 0.1, BED_FLOOR_Y, local.z))
 		_walk_path([_ramp_foot(), _ramp_top(), in_bed], func():
@@ -2558,6 +2566,7 @@ func _carry_next() -> void:
 
 func _carry_in(box_id: int) -> void:
 	# One box off the truck: the one on top and nearest the door first.
+	carry_kg = GameState.box_weight(box_id)
 	if OS.get_environment("CO_DEBUG") != "":
 		print("  carry_in %d: pending=%s slot=%s" % [box_id, unload_pending, GameState.job_box(box_id).get("slot", "?")])
 	if unload_pending:
@@ -3628,9 +3637,7 @@ func _owner_attack(force_throw := false) -> void:
 	var exit := _window_exit()
 	var throw := not exit.is_empty() and not GameState.has_grudge() and (force_throw or GameState.rng.randf() < GameState.throw_chance())
 	who.set_meta("throw", throw)
-	var tw := create_tween()
-	tw.tween_property(who, "position", stand, seconds).set_trans(Tween.TRANS_SINE)
-	tw.tween_callback(_owner_shove.bind(who))
+	_tween_walk(who, stand, 2.2, _owner_shove.bind(who))
 
 
 func _owner_shove(who: Node3D) -> void:
@@ -3794,11 +3801,8 @@ func _owner_return(who: Node3D) -> void:
 	if not is_instance_valid(who):
 		return
 	var home: Vector3 = who.get_meta("home_pos", who.position)
-	var seconds := maxf(0.3, who.position.distance_to(home) / 2.0)
 	who.set_meta("walking", true)
-	var tw := create_tween()
-	tw.tween_property(who, "position", home, seconds).set_trans(Tween.TRANS_SINE)
-	tw.tween_callback(func():
+	_tween_walk(who, home, 2.0, func():
 		if is_instance_valid(who):
 			who.set_meta("walking", false)
 			who.rotation.y = float(who.get_meta("home_yaw", who.rotation.y))
@@ -4427,9 +4431,12 @@ func _player_go(at: Vector3) -> void:
 	var z0 := float(venue.get("z", 0))
 	spot.x = clampf(spot.x, x0 + 0.4, x0 + float(venue.get("w", 6)) - 0.4)
 	spot.z = clampf(spot.z, z0 + 0.4, z0 + float(venue.get("d", 8)) - 0.4)
-	player_target = spot
+	var path := _nav_path(player.position, spot)
+	player_path = path.slice(1)
+	player_target = path[0]
 	player_moving = player.position.distance_to(spot) > 0.15
 	if not player_moving:
+		player_path.clear()
 		_act(player, "reach", 0.7)
 
 
@@ -4489,11 +4496,16 @@ func _tick_player(delta: float) -> void:
 	player_time += delta
 	player.set_meta("carry", held_uid != "" or (selected_box >= 0 and GameState.mode == "job_pack") or player_carrying)
 	_sync_carry_prop()
-	if player_moving:
+	if player_moving and not bool(player.get_meta("down", false)):
 		var to := player_target - player.position
 		if player_path.is_empty() and absf(to.y) < 0.3:
 			to.y = 0.0
-		var step := PLAYER_SPEED * delta * (4.0 if auto_fast and (auto_busy or truck_pending or unload_pending) else 1.0)
+		var kg := _carry_kg()
+		# Weight tells: a heavy piece slows the walk, and the odd step
+		# under one can go wrong.
+		var load_factor := 1.0 if kg <= 0.0 else clampf(1.12 - kg / float(Tuning.get_value("walk.slow_kg", 70)), 0.55, 1.0)
+		var step := PLAYER_SPEED * load_factor * delta * (4.0 if auto_fast and (auto_busy or truck_pending or unload_pending) else 1.0)
+		_maybe_trip(kg, step)
 		if to.length() <= step:
 			player.position = player_target
 			if not player_path.is_empty():
@@ -4510,6 +4522,220 @@ func _tick_player(delta: float) -> void:
 		else:
 			player.position += to.normalized() * step
 	_animate_person(player, player_time, player_moving, delta)
+	_lean_under_load(delta)
+
+
+# ---------------------------------------------------------------- walls and weight
+# People walk round the interior walls and through the doorways; what
+# they carry slows them, bends them, and now and then trips them.
+
+const NAV_CELL := 0.3
+const NAV_PAD := 0.2
+var carry_kg := 0.0
+var trip_meter := 0.0
+var trip_cool := 0.0
+
+
+func _nav_blocks() -> Array:
+	# The interior walls and the stairs of the floor in play, grown by a
+	# shoulder's width. A one-room venue has nothing to walk round.
+	if venue.is_empty() or not _is_home():
+		return []
+	return Homes.wall_rects(venue, home_floor, NAV_PAD)
+
+
+func _nav_clear(a: Vector2, b: Vector2, blocks: Array) -> bool:
+	var n := int(ceil(a.distance_to(b) / 0.1)) + 1
+	for i in n + 1:
+		var p := a.lerp(b, float(i) / float(n))
+		for r in blocks:
+			if (r as Rect2).has_point(p):
+				return false
+	return true
+
+
+func _nav_path(from: Vector3, to: Vector3) -> Array:
+	# The points to walk through to get from here to there without passing
+	# through a wall: the straight line when it is clear, else a route over
+	# a grid of the floor, pulled taut.
+	var blocks := _nav_blocks()
+	var a := Vector2(from.x, from.z)
+	var b := Vector2(to.x, to.z)
+	if blocks.is_empty() or _nav_clear(a, b, blocks):
+		return [to]
+	var ox := float(venue.get("x", 0)) - 0.6
+	var oz := float(venue.get("z", 0)) - 0.6
+	var cols := int(ceil((float(venue.get("w", 6)) + 1.2) / NAV_CELL)) + 1
+	var rows := int(ceil((float(venue.get("d", 8)) + 1.2) / NAV_CELL)) + 1
+	var blocked: Dictionary = {}
+	for c in cols:
+		for r in rows:
+			var p := Vector2(ox + c * NAV_CELL, oz + r * NAV_CELL)
+			for rect in blocks:
+				if (rect as Rect2).has_point(p):
+					blocked[Vector2i(c, r)] = true
+					break
+	var start := _nav_cell(a, ox, oz, cols, rows, blocked)
+	var goal := _nav_cell(b, ox, oz, cols, rows, blocked)
+	if start == goal:
+		return [to]
+	var open: Array = [start]
+	var came: Dictionary = {start: start}
+	var g: Dictionary = {start: 0.0}
+	var found := false
+	var guard := 0
+	while not open.is_empty() and guard < 6000:
+		guard += 1
+		var best := 0
+		var best_f := INF
+		for i in open.size():
+			var cell: Vector2i = open[i]
+			var f: float = float(g[cell]) + Vector2(cell - goal).length()
+			if f < best_f:
+				best_f = f
+				best = i
+		var current: Vector2i = open[best]
+		open.remove_at(best)
+		if current == goal:
+			found = true
+			break
+		for dx in [-1, 0, 1]:
+			for dz in [-1, 0, 1]:
+				if dx == 0 and dz == 0:
+					continue
+				var next := current + Vector2i(dx, dz)
+				if next.x < 0 or next.y < 0 or next.x >= cols or next.y >= rows or blocked.has(next):
+					continue
+				if dx != 0 and dz != 0 and (blocked.has(current + Vector2i(dx, 0)) or blocked.has(current + Vector2i(0, dz))):
+					continue
+				var cost: float = float(g[current]) + (1.4142 if dx != 0 and dz != 0 else 1.0)
+				if not g.has(next) or cost < float(g[next]):
+					g[next] = cost
+					came[next] = current
+					if not open.has(next):
+						open.append(next)
+	if not found:
+		return [to]
+	var cells: Array = []
+	var walk: Vector2i = goal
+	while walk != start:
+		cells.push_front(walk)
+		walk = came[walk]
+	var points: Array = [a]
+	for cell in cells:
+		points.append(Vector2(ox + (cell as Vector2i).x * NAV_CELL, oz + (cell as Vector2i).y * NAV_CELL))
+	points[points.size() - 1] = b
+	# Pull the string taut: skip every point the next clear line can reach.
+	var out: Array = []
+	var i := 0
+	while i < points.size() - 1:
+		var j := points.size() - 1
+		while j > i + 1 and not _nav_clear(points[i], points[j], blocks):
+			j -= 1
+		out.append(Vector3((points[j] as Vector2).x, to.y, (points[j] as Vector2).y))
+		i = j
+	if out.is_empty():
+		out.append(to)
+	return out
+
+
+func _nav_cell(p: Vector2, ox: float, oz: float, cols: int, rows: int, blocked: Dictionary) -> Vector2i:
+	var cell := Vector2i(clampi(int(round((p.x - ox) / NAV_CELL)), 0, cols - 1), clampi(int(round((p.y - oz) / NAV_CELL)), 0, rows - 1))
+	if not blocked.has(cell):
+		return cell
+	# Inside a wall's margin: the nearest free cell.
+	for ring in range(1, 4):
+		for dx in range(-ring, ring + 1):
+			for dz in range(-ring, ring + 1):
+				var next := cell + Vector2i(dx, dz)
+				if next.x >= 0 and next.y >= 0 and next.x < cols and next.y < rows and not blocked.has(next):
+					return next
+	return cell
+
+
+func _tween_walk(who: Node3D, dest: Vector3, mps: float, then: Callable) -> void:
+	# A person crosses the room along the walls' way, leg by leg.
+	var legs := _nav_path(who.position, dest)
+	var tw := create_tween()
+	var prev: Vector3 = who.position
+	for leg in legs:
+		var seconds := maxf(0.15, prev.distance_to(leg) / mps)
+		tw.tween_property(who, "position", leg, seconds).set_trans(Tween.TRANS_SINE)
+		prev = leg
+	if then.is_valid():
+		tw.tween_callback(then)
+
+
+func _carry_kg() -> float:
+	if held_uid != "" and held_source == "job":
+		return float(GameState.job_item(held_uid).get("weight", 0.0))
+	if held_uid != "":
+		return 6.0
+	if player_carrying or truck_pending or unload_pending:
+		return maxf(carry_kg, 4.0)
+	return 0.0
+
+
+func _lean_under_load(delta: float) -> void:
+	# A heavy piece bends the figure forward and rocks the walk.
+	var figure := player.get_node_or_null("Figure") as Node3D
+	if figure == null or bool(player.get_meta("down", false)):
+		return
+	var kg := _carry_kg()
+	var bend := clampf(kg / 40.0, 0.0, 1.0)
+	var want_x := -0.14 * bend
+	var sway := sin(player_time * 7.0) * 0.045 * bend if player_moving else 0.0
+	figure.rotation.x = lerpf(figure.rotation.x, want_x, minf(1.0, delta * 5.0))
+	figure.rotation.z = lerpf(figure.rotation.z, sway, minf(1.0, delta * 8.0))
+
+
+func _maybe_trip(kg: float, step: float) -> void:
+	# Under a heavy load, once in a while a foot catches: Dana goes down,
+	# the piece lands at her feet, and it can break.
+	trip_cool = maxf(0.0, trip_cool - step)
+	if kg < float(Tuning.get_value("walk.heavy_kg", 15)) or trip_cool > 0.0 or held_uid == "" or held_source != "job":
+		return
+	if auto_busy or auto_hold or not (GameState.mode in ["job_pack", "job_unpack"]):
+		return
+	trip_meter += step
+	if trip_meter < 1.0:
+		return
+	trip_meter -= 1.0
+	var chance := float(Tuning.get_value("walk.trip_per_m", 0.012)) * (kg / 20.0) * Extras.break_mult()
+	if GameState.rng.randf() >= chance:
+		return
+	trip_cool = 14.0
+	_stumble()
+
+
+func _stumble() -> void:
+	var item := GameState.job_item(held_uid)
+	var at := player.position + Vector3(0.0, 0.0, 0.45)
+	player_moving = false
+	player_path.clear()
+	player.set_meta("down", true)
+	player.set_meta("action", "")
+	AudioDirector.play_sfx("sfx_body_fall")
+	_dust(player.position)
+	if not item.is_empty():
+		item["x"] = at.x
+		item["y"] = 0.0
+		item["z"] = at.z
+		item["state"] = "loose"
+		item["floor"] = home_floor
+		held_uid = ""
+		held_source = ""
+		if ghost:
+			ghost.visible = false
+		_refresh_items()
+		if GameState.roll_break(item, 1.0):
+			_break_piece(item, at)
+		else:
+			_toast("Oof. Tripped. The %s is fine. I think." % str(item.get("name", "piece")).to_lower(), "Dana")
+	get_tree().create_timer(1.1).timeout.connect(func():
+		if player != null and is_instance_valid(player):
+			player.set_meta("down", false)
+	)
 
 
 func _in_room_world(px: float, pz: float) -> bool:

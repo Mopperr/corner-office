@@ -974,6 +974,8 @@ func _drive() -> void:
 			_release_keys()
 		await wait(0.1)
 		t += 0.1
+		if int(round(t * 10.0)) % 100 == 0:
+			print("  road: t=%.0f state=%s speed=%.0f along=%.0f/%.0f at_end=%s backed=%s" % [t, drive.state, float(drive.speed), float(drive.along), float(drive.lane_total), drive.at_end, drive.backed_in])
 		if t > 6.0 and not shot_taken:
 			shot_taken = true
 			await shot("drive_moving")
@@ -993,42 +995,20 @@ var _wp_index := 1
 
 
 func _steer(drive: Node) -> void:
-	# Follow the game's own route. Slow down for corners and for the bay at the end.
-	var points: PackedVector2Array = drive.route
-	if points.size() < 2:
-		_key(KEY_W, true)
-		return
-	_wp_index = clampi(_wp_index, 1, points.size() - 1)
-	var pos: Vector2 = drive.pos
-	var goal: Vector2 = points[_wp_index]
-	var last := _wp_index == points.size() - 1
-	if not last and pos.distance_to(goal) < 90.0:
-		_wp_index += 1
-		goal = points[_wp_index]
-		last = _wp_index == points.size() - 1
-	var want := (goal - pos).angle()
-	var diff := wrapf(want - float(drive.heading), -PI, PI)
-	var dist := pos.distance_to(goal)
-	var speed := float(drive.speed)
-	var slow_zone := (last and dist < 260.0) or (absf(diff) > 0.5 and dist < 220.0)
-	var target_speed := 60.0 if slow_zone else 400.0
-	if last and dist < 40.0:
-		target_speed = 0.0
-	# In the bay: the truck has to be backed in, so reverse for a moment.
-	if last and bool(drive.in_bay) and not bool(drive.backed_in):
+	# The truck keeps its own lane. Hold the throttle, brake for a hazard
+	# close ahead, and at the stop past the bay hold the brake to back in.
+	if bool(drive.at_end):
 		_key(KEY_W, false)
-		_key(KEY_A, false)
-		_key(KEY_D, false)
-		_key(KEY_S, true)
+		if bool(drive.backed_in) and absf(float(drive.speed)) < 1.0 and bool(drive.at_dropoff):
+			_key(KEY_S, false)
+		else:
+			_key(KEY_S, true)
 		return
-	# Creep forward while turning: the truck cannot turn on the spot.
-	_key(KEY_W, speed < target_speed and (absf(diff) < 1.3 or absf(speed) < 40.0))
-	_key(KEY_S, speed > target_speed + 30.0)
-	_key(KEY_A, diff < -0.06)
-	_key(KEY_D, diff > 0.06)
-	if last and dist < 40.0 and speed < 14.0:
-		_release_keys()
-	drive.route_index = _wp_index
+	var cue: Dictionary = drive._hazard_ahead()
+	var speed := float(drive.speed)
+	var slow := not cue.is_empty() and float(cue.get("dist", 999.0)) < 160.0 and speed > 55.0
+	_key(KEY_W, not slow)
+	_key(KEY_S, slow)
 
 
 func _v2(value) -> Vector2:

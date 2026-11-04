@@ -19,6 +19,7 @@ const City = preload("res://scripts/city.gd")
 const Props = preload("res://scripts/props.gd")
 const Outdoors = preload("res://scripts/outdoors.gd")
 const Graphics = preload("res://scripts/settings_manager.gd")
+const Homes = preload("res://scripts/homes.gd")
 
 signal finished(result: Dictionary)
 
@@ -141,6 +142,21 @@ var _chips_key := ""
 var distance_label: Label
 var speed_label: Label
 var meter_fill: StyleBoxFlat
+# The ridden road: the truck keeps to its lane along the route on its own.
+# The player works the throttle, the brake and the horn; at the far end the
+# truck stops just past the bay and backs into it.
+const LANE_OFFSET := 48.0
+const CORNER_R := 96.0
+const PAST_BAY := 150.0
+var lane := PackedVector2Array()
+var lane_cum := PackedFloat32Array()
+var lane_total := 0.0
+var along := 0.0
+var back_path := PackedVector2Array()
+var back_t := 0.0
+var at_end := false
+var jolt := Vector2.ZERO
+var roll := 0.0
 
 
 func _ready() -> void:
@@ -172,6 +188,7 @@ func _ready() -> void:
 	box_count = maxi(1, GameState.job.get("boxes", []).size())
 	_resolve_hazards()
 	_resolve_turnouts()
+	_build_lane()
 	_lights()
 	world = Node3D.new()
 	world.name = "Town"
@@ -179,7 +196,6 @@ func _ready() -> void:
 	_build_town()
 	_build_truck()
 	_spawn_traffic()
-	_build_route_marks()
 	cam = Camera3D.new()
 	cam.name = "ChaseCamera"
 	cam.fov = 62.0
@@ -252,7 +268,7 @@ func _check_lighthouse_photo(delta: float) -> void:
 		var reward := str(spot.get("reward", ""))
 		if reward == "" or photos.has(reward):
 			continue
-		if (spot["rect"] as Rect2).has_point(pos):
+		if (spot["rect"] as Rect2).has_point(pos) or (spot["rect"] as Rect2).get_center().distance_to(pos) < 130.0:
 			inside = true
 			if absf(speed) < 14.0:
 				turnout_hold += delta
@@ -395,8 +411,11 @@ func _build_town() -> void:
 				continue
 			# Raised kerb around the block.
 			_slab(Vector3(rect.size.x / PX, 0.12, rect.size.y / PX), rect_center(rect, 0.0), KERB)
+	_front_spans = _front_footprints()
 	for entry in city.buildings:
 		_build_building(entry, rng)
+	_build_fronts()
+	_build_hills(size)
 	for cut in city.alleys:
 		var cut_rect: Rect2 = cut
 		_slab(Vector3(cut_rect.size.x / PX, 0.03, cut_rect.size.y / PX), rect_center(cut_rect, 0.0), Color("6B4A3A"))
@@ -620,7 +639,15 @@ func _build_building(entry: Dictionary, rng: RandomNumberGenerator) -> void:
 		var origin := Vector3(rect.position.x / PX, 0.12, rect.position.y / PX)
 		var parcel_pos := origin + (Vector3(cursor, 0, 0) if along_x else Vector3(0, 0, cursor))
 		var parcel_size := Vector3(want, 0, depth) if along_x else Vector3(depth, 0, want)
-		_build_parcel(parcel_pos, parcel_size, rng, along_x, first, last)
+		# The place the truck leaves from and the one it pulls up at are
+		# built from their own blueprints; the row leaves them their plot.
+		var parcel_rect := Rect2(parcel_pos.x * PX, parcel_pos.z * PX, parcel_size.x * PX, parcel_size.z * PX)
+		var taken := false
+		for span in _front_spans:
+			if (span as Rect2).intersects(parcel_rect):
+				taken = true
+		if not taken:
+			_build_parcel(parcel_pos, parcel_size, rng, along_x, first, last)
 		cursor += want
 		index += 1
 
@@ -937,6 +964,216 @@ func _build_green(rect: Rect2) -> void:
 	green.add_child(head)
 
 
+var _front_spans: Array = []
+
+
+func _front_venue(place: Dictionary) -> Dictionary:
+	# The blueprint behind a kerb: the job's venue for both ends of the
+	# move, the family's house at the far end of a house move.
+	var venue_id := str(GameState.job.get("def", {}).get("venue", ""))
+	if venue_id == "":
+		venue_id = str(place.get("id", "")).trim_suffix("_new")
+	var venues: Dictionary = ItemDB.venues()
+	if not venues.has(venue_id):
+		for key in venues.keys():
+			if str(place.get("id", "")).begins_with(str(key)):
+				venue_id = str(key)
+	return venues.get(venue_id, {})
+
+
+func _front_footprints() -> Array:
+	# The plots the two blueprint fronts take, in drive pixels.
+	var out: Array = []
+	for place in [pickup, dropoff]:
+		if place.is_empty():
+			continue
+		var venue_def := _front_venue(place)
+		if venue_def.is_empty():
+			continue
+		var w := float(venue_def.get("w", 6)) * PX
+		var d := float(venue_def.get("d", 6)) * PX
+		var home := Homes.is_home(venue_def)
+		var setback := (3.6 if home else 0.0) * PX
+		var door: Vector2 = place.get("door", Vector2.ZERO)
+		var rect: Rect2 = place.get("rect", Rect2())
+		var side := str(place.get("side", "N"))
+		var pad: float = city.sidewalk
+		match side:
+			"N":
+				out.append(Rect2(door.x - w * 0.5 - 20.0, rect.position.y + pad, w + 40.0, setback + d + 20.0))
+			"S":
+				out.append(Rect2(door.x - w * 0.5 - 20.0, rect.end.y - pad - setback - d - 20.0, w + 40.0, setback + d + 20.0))
+			"W":
+				out.append(Rect2(rect.position.x + pad, door.y - w * 0.5 - 20.0, setback + d + 20.0, w + 40.0))
+			_:
+				out.append(Rect2(rect.end.x - pad - setback - d - 20.0, door.y - w * 0.5 - 20.0, setback + d + 20.0, w + 40.0))
+	return out
+
+
+func _build_fronts() -> void:
+	var i := 0
+	for place in [pickup, dropoff]:
+		if not place.is_empty():
+			_build_front(place, _front_venue(place), i)
+		i += 1
+
+
+func _build_front(place: Dictionary, venue_def: Dictionary, which: int) -> void:
+	# The building at the kerb, raised from the same rooms the unpack scene
+	# uses: its width and depth, the door where the blueprint puts it, a
+	# window for each front room, a storey per floor, and a garden or a
+	# shopfront by what it is. The truck pulls up at this door.
+	if venue_def.is_empty():
+		return
+	var home := Homes.is_home(venue_def)
+	var w := float(venue_def.get("w", 6))
+	var d := float(venue_def.get("d", 6))
+	var floors: Array = Homes.floors(venue_def)
+	var storeys := maxi(1, floors.size())
+	var storey_h := 3.0
+	var h := storeys * storey_h
+	var setback := 3.6 if home else 0.0
+	var side := str(place.get("side", "N"))
+	var inward := _inward3(side)
+	var door_w: Vector3 = to_world(place.get("door", Vector2.ZERO), 0.12)
+	var root := Node3D.new()
+	root.name = "Front_" + str(place.get("id", ""))
+	root.position = door_w + inward * (city.sidewalk / PX + setback + d * 0.5)
+	root.rotation.y = atan2(inward.x, inward.z)
+	world.add_child(root)
+	var style := str(venue_def.get("style", ""))
+	var wall_color: Color = place.get("color", Color("D8B4A0")) if place.get("color") is Color else Color(str(place.get("color", "D8B4A0")))
+	if home:
+		wall_color = {"brick": Color("B8694F"), "render": Color("EDE3CF"), "timber": Color("C9A66B"), "stone": Color("B9B2A4")}.get(style, Color("D8B4A0"))
+		if which == 0:
+			wall_color = wall_color.darkened(0.08)
+	var trim := wall_color.lightened(0.35)
+	var body := Props.mesh_box(Vector3(w, h, d), wall_color)
+	body.name = "FrontBody"
+	body.position = Vector3(0, h * 0.5, 0)
+	root.add_child(body)
+	var plinth := Props.mesh_box(Vector3(w + 0.1, 0.4, d + 0.1), wall_color.darkened(0.3))
+	plinth.position = Vector3(0, 0.2, 0)
+	root.add_child(plinth)
+	# The front face is local -Z. Door first, where the blueprint has it.
+	var door_dx := 0.0
+	if not home and float(venue_def.get("open_w", 2)) >= 2.9 and w >= 6.0:
+		door_dx = 3.5 - w * 0.5
+	var front_z := -d * 0.5
+	var door_color := wall_color.darkened(0.45) if home else Color("3E3A4F")
+	var door := Props.mesh_box(Vector3(1.0, 2.1, 0.1), door_color)
+	door.position = Vector3(door_dx, 1.05, front_z - 0.04)
+	root.add_child(door)
+	var step := Props.mesh_box(Vector3(1.4, 0.12, 0.6), Color("C9C2B5"))
+	step.position = Vector3(door_dx, 0.06, front_z - 0.3)
+	root.add_child(step)
+	# Windows: one per front room on each floor; shops get glazing instead.
+	var glass := Color("9FC4D6")
+	if home:
+		for index in storeys:
+			var rooms: Array = Homes.rooms(venue_def, index)
+			for room in rooms:
+				if float(room.get("z", 0)) > 0.05:
+					continue
+				var cx := float(room.get("x", 0)) + float(room.get("w", 2)) * 0.5 - w * 0.5
+				if index == 0 and absf(cx - door_dx) < 1.0:
+					cx += 1.2 if cx >= door_dx else -1.2
+				var win := Props.mesh_box(Vector3(1.1, 1.2, 0.08), glass)
+				win.position = Vector3(cx, index * storey_h + 1.6, front_z - 0.03)
+				root.add_child(win)
+				var sill := Props.mesh_box(Vector3(1.3, 0.1, 0.2), trim)
+				sill.position = Vector3(cx, index * storey_h + 0.95, front_z - 0.1)
+				root.add_child(sill)
+		# A pitched roof and a chimney.
+		var roof := MeshInstance3D.new()
+		var prism := PrismMesh.new()
+		prism.size = Vector3(w + 0.6, 1.8, d + 0.6)
+		prism.left_to_right = 0.5
+		roof.mesh = prism
+		roof.material_override = Props.mat({"brick": Color("6E4A3A"), "render": Color("6E6A66"), "timber": Color("5A3B2A")}.get(style, Color("7A6A5A")))
+		roof.position = Vector3(0, h + 0.9, 0)
+		root.add_child(roof)
+		var stack := Props.mesh_box(Vector3(0.5, 1.1, 0.5), wall_color.darkened(0.3))
+		stack.position = Vector3(w * 0.3, h + 1.2, 0)
+		root.add_child(stack)
+		# Front garden: lawn, a path to the door, hedges at the kerb with a gate.
+		var lawn := Props.mesh_box(Vector3(w + 1.0, 0.06, setback), Color("9CC07E"))
+		lawn.position = Vector3(0, 0.03, front_z - setback * 0.5)
+		root.add_child(lawn)
+		var path := Props.mesh_box(Vector3(0.9, 0.08, setback), Color("C9B99A"))
+		path.position = Vector3(door_dx, 0.05, front_z - setback * 0.5)
+		root.add_child(path)
+		for sgn in [-1.0, 1.0]:
+			var hedge_w := (w + 1.0) * 0.5 - 0.7
+			var hedge := Props.mesh_box(Vector3(hedge_w, 0.8, 0.5), Color("5F8F55"))
+			hedge.position = Vector3(door_dx + sgn * (0.7 + hedge_w * 0.5), 0.4, front_z - setback + 0.25)
+			root.add_child(hedge)
+		Outdoors._tree(root, Vector3(-w * 0.5 + 0.6, 0.0, front_z - setback + 1.0), 0.8)
+	else:
+		for sgn in [-1.0, 1.0]:
+			var pane_w := w * 0.5 - 1.2
+			var pane := Props.mesh_box(Vector3(pane_w, 2.0, 0.08), glass)
+			pane.position = Vector3(door_dx + sgn * (0.9 + pane_w * 0.5), 1.35, front_z - 0.03)
+			root.add_child(pane)
+		if storeys > 1 or d >= 7.0:
+			for k in 3:
+				var cx := -w * 0.5 + w * (0.5 + k) / 3.0
+				var win := Props.mesh_box(Vector3(1.0, 1.1, 0.08), glass)
+				win.position = Vector3(cx, storey_h + 1.5, front_z - 0.03)
+				root.add_child(win)
+			if storeys == 1:
+				h = storey_h * 2.0
+				body.mesh = BoxMesh.new()
+				(body.mesh as BoxMesh).size = Vector3(w, h, d)
+				body.position.y = h * 0.5
+		var awning := Props.mesh_box(Vector3(w * 0.8, 0.14, 1.0), wall_color.darkened(0.1))
+		awning.position = Vector3(0, 2.75, front_z - 0.5)
+		root.add_child(awning)
+		var parapet := Props.mesh_box(Vector3(w + 0.3, 0.5, d + 0.3), trim)
+		parapet.position = Vector3(0, h + 0.1, 0)
+		root.add_child(parapet)
+		var board := Props.mesh_box(Vector3(w * 0.7, 0.8, 0.12), Color("3E3A4F"))
+		board.position = Vector3(0, 3.5, front_z - 0.1)
+		root.add_child(board)
+		var label := _sign_text(str(place.get("name", "")), Vector3.ZERO, Color("F4E9D8"))
+		label.reparent(root)
+		label.position = Vector3(0, 3.5, front_z - 0.2)
+		label.rotation = Vector3.ZERO
+		label.rotation.y = PI
+		label.font_size = 64
+	# Side windows so the shell reads from the chase camera too.
+	for sgn in [-1.0, 1.0]:
+		for index in storeys:
+			var win := Props.mesh_box(Vector3(0.08, 1.1, 1.0), glass)
+			win.position = Vector3(sgn * (w * 0.5 + 0.03), index * storey_h + 1.6, 0.0)
+			root.add_child(win)
+
+
+func _build_hills(size: Vector3) -> void:
+	# A ring of hills past the last street, so the road has a horizon.
+	var hills := Node3D.new()
+	hills.name = "Hills"
+	world.add_child(hills)
+	var cx := size.x * 0.5
+	var cz := size.z * 0.5
+	var ring := maxf(size.x, size.z) * 0.95
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	for i in 18:
+		var angle := TAU * float(i) / 18.0 + rng.randf_range(-0.08, 0.08)
+		var dist := ring + rng.randf_range(10.0, 40.0)
+		var hill := MeshInstance3D.new()
+		var mesh := SphereMesh.new()
+		var radius := rng.randf_range(34.0, 60.0)
+		mesh.radius = radius
+		mesh.height = radius * rng.randf_range(0.5, 0.8)
+		hill.mesh = mesh
+		var night := str(course.get("weather", "clear")) == "night"
+		hill.material_override = Props.mat(Color("8FB573").darkened(0.1 + 0.25 * rng.randf()) if not night else Color("1E2A30"))
+		hill.position = Vector3(cx + cos(angle) * dist, -mesh.height * 0.35, cz + sin(angle) * dist)
+		hills.add_child(hill)
+
+
 func _build_house_row(entry: Dictionary, rng: RandomNumberGenerator) -> void:
 	# A street of houses: pitched roofs, chimneys, a front garden with a
 	# hedge and a path on each street side, back gardens with a shed between.
@@ -1211,10 +1448,7 @@ func _build_truck() -> void:
 		lamp.visible = false
 		truck.add_child(lamp)
 		reverse_lights.append(lamp)
-	arrow = Outdoors._cone(0.45, 0.9, UIKit.TERRA)
-	arrow.name = "RouteArrow"
-	arrow.rotation.x = PI * 0.5
-	add_child(arrow)
+	arrow = null
 
 
 func _make_car(color: Color) -> Node3D:
@@ -1442,35 +1676,21 @@ func _hud() -> void:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_bar.add_child(name_label)
 	UIKit.fill(name_label, 12, 8, 12, 8)
+	# The radio is a small dial under the title; the road itself is the map.
 	radio_button = UIKit.button("♪ Radio", UIKit.NIGHT)
 	radio_button.name = "RadioButton"
 	radio_button.custom_minimum_size = Vector2(300, 52)
 	radio_button.pressed.connect(_radio_next)
 	hud_root.add_child(radio_button)
-	UIKit.pin_top_right(radio_button, -332, 476, -16, 528)
+	UIKit.pin_top_right(radio_button, -332, 96, -16, 148)
 	radio_button.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	UIKit.link_focus([radio_button])
-	# Minimap under the title: the whole town, the route, the truck.
-	var map_card := Panel.new()
-	map_card.name = "Minimap"
-	map_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	map_card.add_theme_stylebox_override("panel", UIKit.style(Color(UIKit.CREAM_CARD, 0.94), 16))
-	hud_root.add_child(map_card)
-	UIKit.pin_top_right(map_card, -456, 96, -16, 456)
-	minimap = Control.new()
-	minimap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	map_card.add_child(minimap)
-	UIKit.fill(minimap, 12, 12, 12, 52)
-	minimap.draw.connect(_draw_minimap)
-	distance_label = UIKit.label("", 24, UIKit.DARK, "small", false)
-	distance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	map_card.add_child(distance_label)
-	distance_label.layout_mode = 1
-	distance_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	distance_label.offset_top = -44
-	distance_label.offset_bottom = -8
-	distance_label.offset_left = 12
-	distance_label.offset_right = -12
+	minimap = null
+	distance_label = UIKit.label("", 24, UIKit.CREAM_CARD, "small", false)
+	distance_label.name = "DistanceLabel"
+	distance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	hud_root.add_child(distance_label)
+	UIKit.pin_top_right(distance_label, -332, 156, -16, 196)
 
 
 func _set_action(text: String) -> void:
@@ -1507,13 +1727,19 @@ func _hint_text() -> String:
 		"drive":
 			if at_dropoff:
 				line = "Backed into the bay. Hand the boxes over."
-			elif in_bay and not backed_in:
-				line = "Nose-first won't do. Pull out and back the truck into the bay."
+			elif at_end:
+				line = "Stopped past the bay. Hold the brake to back the truck in."
+			elif along < 60.0 and speed < 5.0:
+				line = "Hold the throttle to pull away. The truck keeps its lane."
 			else:
-				line = "Follow the arrow and the dots. Back into the bay at the end."
-				if bool(course.get("alley", false)):
-					line += " The alley is shorter, but bumpy."
-				elif str(course.get("id", "")) == "duck_pond":
+				var cue := _hazard_ahead()
+				if not cue.is_empty():
+					line = "%s ahead. Ease off and the boxes ride easy." % _hazard_word(str(cue.get("kind", "")))
+				elif _in_turnout_zone():
+					line = "The turnout. Stop here a moment for the photo."
+				else:
+					line = "The truck keeps its lane. Brake for what's on the road; honk for the people on the kerb."
+				if str(course.get("id", "")) == "duck_pond":
 					line += " Honk and the ducks hurry."
 		"unload":
 			line = "Unloading at %s." % dest
@@ -1526,7 +1752,7 @@ func _hint_text() -> String:
 			"load":
 				objective.text = "Load up at %s" % pickup.get("name", "the curb")
 			"drive":
-				objective.text = "Backed in" if at_dropoff else ("Back into the bay" if in_bay else "Deliver to %s%s" % [dest, _turn_cue()])
+				objective.text = "Backed in" if at_dropoff else ("Back into the bay" if at_end else "To %s%s" % [dest, _turn_cue()])
 			"unload":
 				objective.text = "Unloading"
 			_:
@@ -1537,9 +1763,34 @@ func _hint_text() -> String:
 	return line
 
 
+func _hazard_word(kind: String) -> String:
+	match kind:
+		"cone":
+			return "Cones"
+		"bump":
+			return "A speed bump"
+		"puddle":
+			return "A puddle"
+		"gravel":
+			return "Loose gravel"
+		"ducks":
+			return "Ducks on the road"
+	return "Something"
+
+
+func _in_turnout_zone() -> bool:
+	for spot in turnouts:
+		if (spot["rect"] as Rect2).get_center().distance_to(pos) < 130.0 and not photos.has(str(spot.get("reward", ""))):
+			return true
+	return false
+
+
 func _turn_cue() -> String:
 	# The next turn and how far off it is: "left in 24 m", "straight on",
 	# "the bay in 12 m". Read off the route ahead of the truck.
+	var cue := _hazard_ahead()
+	if not cue.is_empty() and float(cue["dist"]) < 40.0 * PX:
+		return "  ·  %s in %d m" % [_hazard_word(str(cue.get("kind", ""))).to_lower(), int(round(float(cue["dist"]) / PX))]
 	if route.size() < 2:
 		return ""
 	var idx := clampi(route_index, 1, route.size() - 1)
@@ -1568,8 +1819,10 @@ func _sync_chips() -> void:
 		items = [[Controls.describe_key("interact"), "load up"]]
 	elif state == "drive" and at_dropoff:
 		items = [[Controls.describe_key("interact"), "unload"]]
+	elif state == "drive" and at_end:
+		items = [[Controls.describe_key("drive_back"), "back in"], [Controls.describe_key("drive_forward"), "pull forward"]]
 	elif state == "drive":
-		items = [["W A S D", "drive"], [Controls.describe_key("handbrake"), "handbrake"], [Controls.describe_key("horn"), "honk"]]
+		items = [[Controls.describe_key("drive_forward"), "go"], [Controls.describe_key("drive_back"), "brake"], [Controls.describe_key("horn"), "honk"]]
 	var key := JSON.stringify(items)
 	if key == _chips_key:
 		return
@@ -1630,12 +1883,14 @@ func _process(delta: float) -> void:
 	hint.text = _hint_text()
 	if distance_label:
 		var left := _route_left()
-		distance_label.text = "%d m to go" % int(round(left / PX)) if state == "drive" else "Boxes on the curb"
+		distance_label.text = "%d m to go" % int(round(left / PX)) if state == "drive" and not at_end else ""
 	if minimap:
 		minimap.queue_redraw()
 
 
 func _route_left() -> float:
+	if lane_total > 0.0:
+		return maxf(0.0, lane_total - along)
 	if route.size() < 2:
 		return 0.0
 	var idx := clampi(route_index, 1, route.size() - 1)
@@ -1646,11 +1901,13 @@ func _route_left() -> float:
 
 
 func _place_truck(delta: float) -> void:
-	truck.position = to_world(pos)
+	var side := Vector2(-sin(heading), cos(heading))
+	truck.position = to_world(pos + side * jolt.x)
 	truck.rotation.y = -heading
 	# Lean into corners and rock on a hit.
-	var lean := clampf(-skid / 160.0, -0.08, 0.08)
+	var lean := clampf(-skid / 160.0, -0.08, 0.08) + roll
 	truck.rotation.x = lerpf(truck.rotation.x, lean, delta * 6.0)
+	jolt = jolt.move_toward(Vector2.ZERO, 40.0 * delta)
 	if shake > 0.0 and SaveManager.shake:
 		shake -= delta
 		truck.position += Vector3(randf_range(-0.05, 0.05), 0.0, randf_range(-0.05, 0.05))
@@ -1669,12 +1926,26 @@ func _update_camera(delta: float) -> void:
 	var truck_at := to_world(pos)
 	var back := 7.6 + 2.4 * pace
 	var goal := truck_at - forward * back + Vector3(0, 3.3 + 0.6 * pace, 0)
-	var look := truck_at + forward * (4.0 + 7.0 * clampf(speed / max_speed, -0.3, 1.0)) + Vector3(0, 1.3, 0)
-	var k := clampf(delta * 5.0, 0.0, 1.0)
+	# Look up the road itself, so a bend is in view before the truck takes it.
+	var ahead2 := _lane_point(along + (4.0 + 9.0 * pace) * PX)
+	var look := to_world(ahead2) + Vector3(0, 1.3, 0)
+	if at_end or state != "drive":
+		# At a kerb the camera stands out on the road, so the building the
+		# truck is parked against never swallows it.
+		var place: Dictionary = dropoff if (at_end or state == "unload") else pickup
+		var inward := _inward3(str(place.get("side", "N")))
+		goal = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
+		look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
+	else:
+		goal = _camera_clear(goal, truck_at)
+	var k := clampf(delta * 3.2, 0.0, 1.0)
 	cam.position = cam.position.lerp(goal, k)
-	cam_look = cam_look.lerp(look, clampf(delta * 6.5, 0.0, 1.0))
+	cam_look = cam_look.lerp(look, clampf(delta * 4.5, 0.0, 1.0))
 	cam.look_at(cam_look, Vector3.UP)
-	cam.fov = lerpf(cam.fov, 62.0 + 10.0 * pace, clampf(delta * 3.0, 0.0, 1.0))
+	cam.fov = lerpf(cam.fov, 60.0 + 12.0 * pace, clampf(delta * 3.0, 0.0, 1.0))
+	# A touch of bank through a bend.
+	var bank := clampf(-_lane_curvature(along) * pace * 0.9, -0.06, 0.06)
+	cam.rotate_object_local(Vector3.FORWARD, lerpf(0.0, bank, 1.0))
 
 
 func _snap_camera() -> void:
@@ -1682,25 +1953,35 @@ func _snap_camera() -> void:
 	var truck_at := to_world(pos)
 	cam.position = truck_at - forward * 7.6 + Vector3(0, 3.3, 0)
 	cam_look = truck_at + forward * 4.0 + Vector3(0, 1.3, 0)
+	if at_end or state != "drive":
+		var place: Dictionary = dropoff if (at_end or state == "unload") else pickup
+		var inward := _inward3(str(place.get("side", "N")))
+		cam.position = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
+		cam_look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
 	cam.look_at(cam_look, Vector3.UP)
 
 
+func _camera_clear(goal: Vector3, truck_at: Vector3) -> Vector3:
+	# A camera point inside a building slides toward the truck until it is
+	# out in the street again.
+	var px := Vector2(goal.x * PX, goal.z * PX)
+	for i in 6:
+		var inside := false
+		for entry in city.buildings:
+			if (entry.get("rect", Rect2()) as Rect2).has_point(px):
+				inside = true
+		if not inside:
+			break
+		goal = goal.lerp(truck_at + Vector3(0, 3.0, 0), 0.25)
+		px = Vector2(goal.x * PX, goal.z * PX)
+	return goal
+
+
 func _update_marks() -> void:
-	if arrow == null:
-		return
-	if state != "drive" or route.size() < 2:
-		arrow.visible = false
-	else:
-		arrow.visible = true
+	if state == "drive" and route.size() > 1:
 		var goal := route[mini(route_index, route.size() - 1)]
 		if route_index < route.size() - 1 and pos.distance_to(goal) < 90.0:
 			route_index += 1
-			goal = route[route_index]
-		var dir := (goal - pos).normalized()
-		arrow.position = to_world(pos, 3.8 + sin(pulse * 3.0) * 0.15) + Vector3(dir.x, 0, dir.y) * 1.5
-		# The cone's axis is +Y; look_at points -Z at the target, then +Y is swung onto -Z.
-		arrow.look_at(arrow.position + Vector3(dir.x, 0, dir.y), Vector3.UP)
-		arrow.rotate_object_local(Vector3.RIGHT, -PI * 0.5)
 	for dot in route_dots:
 		if is_instance_valid(dot):
 			dot.visible = state == "drive" and int(dot.get_meta("leg", 0)) >= route_index
@@ -1717,13 +1998,7 @@ func _drive(delta: float, weather: String) -> void:
 		brake *= 1.0 - float(Tuning.get_value("drive.rain_brake_penalty", 0.15))
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
 	var reverse_max := float(Tuning.get_value("drive.reverse_mps", 1.8)) * PX
-	var turn := float(Tuning.get_value("drive.turn_rate", 2.2))
-	var grip := float(Tuning.get_value("drive.grip", 8.0))
-	if weather == "rain":
-		grip = float(Tuning.get_value("drive.grip_rain", 4.5))
 	var handbrake: bool = Controls.held("handbrake")
-	if handbrake:
-		grip = float(Tuning.get_value("drive.grip_handbrake", 1.5))
 	var throttle: float = Controls.axis("drive_back", "drive_forward")
 	var forward := Vector2.RIGHT.rotated(heading)
 	speed = vel.dot(forward)
@@ -1735,11 +2010,32 @@ func _drive(delta: float, weather: String) -> void:
 	if brake_cd <= 0.0 and absf(speed) > max_speed * 0.45 and ((throttle < 0.0 and speed > 0.0) or handbrake):
 		brake_cd = 1.6
 		AudioDirector.play_sfx("sfx_l19_bus_brakes")
-	if throttle > 0.0 and speed < max_speed * 0.25 and rev_cd <= 0.0:
+	if throttle > 0.0 and speed < max_speed * 0.25 and rev_cd <= 0.0 and not at_end:
 		AudioDirector.play_sfx("sfx_truck_rev")
 		rev_cd = 1.6
-	var off_road: bool = not city.on_road(pos) and not _in_bay(pos)
-	var cap := max_speed * (0.45 if off_road else 1.0)
+	if lane.size() < 2:
+		return
+	if at_end:
+		# Past the bay: the brake pedal backs the truck in along its own
+		# arc, the throttle pulls it forward again. No wheel to turn.
+		var back_len := _path_length(back_path)
+		var want_back := throttle < 0.0 or handbrake
+		if want_back and back_t < 1.0:
+			back_t = minf(1.0, back_t + reverse_max * delta / maxf(back_len, 1.0))
+			speed = -reverse_max
+		elif throttle > 0.0 and back_t > 0.0:
+			back_t = maxf(0.0, back_t - reverse_max * delta / maxf(back_len, 1.0))
+			speed = reverse_max
+		else:
+			speed = 0.0
+		var here := _bezier(back_path, back_t)
+		var nose := _bezier(back_path, maxf(0.0, back_t - 0.02))
+		if nose.distance_to(here) > 0.01:
+			heading = (nose - here).angle()
+		pos = here
+		vel = Vector2.RIGHT.rotated(heading) * speed
+		return
+	var cap := max_speed
 	# Traffic ahead in our lane sets the pace: ease off and sit behind it.
 	var lead := _lead_car(forward)
 	if not lead.is_empty():
@@ -1747,57 +2043,208 @@ func _drive(delta: float, weather: String) -> void:
 		var lead_speed := maxf(0.0, float(lead.get("speed", 0.0)))
 		var follow_cap := lead_speed + maxf(0.0, gap - FOLLOW_GAP) * 2.5
 		cap = minf(cap, follow_cap)
-		if speed > cap:
-			vel = vel.move_toward(forward * cap, brake * 1.5 * delta)
 	if duck_hold > 0.0:
 		duck_hold -= delta
 		cap = minf(cap, 18.0)
+	# The truck eases itself to a stop at the end of the lane, past the bay.
+	var remaining := lane_total - along
+	cap = minf(cap, sqrt(maxf(0.0, 2.0 * brake * 0.8 * remaining)) + (6.0 if remaining > 8.0 else 0.0))
+	# Bends: a lorry does not take a corner flat out.
+	var bend := absf(_lane_curvature(along + 40.0))
+	if bend > 0.004:
+		cap = minf(cap, max_speed * 0.55)
 	if handbrake:
-		vel = vel.move_toward(Vector2.ZERO, brake * 1.2 * delta)
+		speed = move_toward(speed, 0.0, brake * 1.2 * delta)
 	elif throttle > 0.0:
-		if speed < -5.0:
-			var before := speed
-			vel = vel.move_toward(Vector2.ZERO, brake * delta)
-			_maybe_hard_brake(weather, absf(before), delta)
-		elif speed < cap:
+		if speed < cap:
 			# Punchy off the line, tapering as it winds up: a gear-step feel.
-			vel += forward * accel * delta * throttle * (1.35 - 0.6 * clampf(speed / max_speed, 0.0, 1.0))
+			speed += accel * delta * throttle * (1.35 - 0.6 * clampf(speed / max_speed, 0.0, 1.0))
 	elif throttle < 0.0:
-		if speed > 5.0:
-			var before2 := speed
-			vel = vel.move_toward(Vector2.ZERO, brake * delta)
-			_maybe_hard_brake(weather, before2, delta)
-		elif speed > -reverse_max:
-			vel -= forward * accel * 0.7 * delta
+		var before := speed
+		speed = move_toward(speed, 0.0, brake * delta)
+		_maybe_hard_brake(weather, before, delta)
 	else:
-		vel = vel.move_toward(Vector2.ZERO, accel * 0.45 * delta)
-	# Tyres: bleed off the sideways part of the motion. Less in rain, hardly at all on the handbrake.
-	var lateral := vel - forward * vel.dot(forward)
-	vel -= lateral * clampf(grip * delta, 0.0, 1.0)
-	skid = lateral.length() * (1.0 if lateral.cross(forward) > 0.0 else -1.0)
-	if vel.length() > cap:
-		vel = vel.normalized() * cap
-	speed = vel.dot(forward)
-	var steer: float = Controls.axis("steer_left", "steer_right")
-	if absf(speed) > 10.0:
-		var sign := 1.0 if speed >= 0.0 else -1.0
-		heading += steer * turn * delta * clampf(absf(speed) / max_speed, 0.35, 1.0) * sign
-	if absf(steer) < 0.1 and speed > 10.0 and not off_road and not handbrake:
-		# Hands off the wheel on a straight: the truck eases square to the
-		# road, so a keyboard drive does not wander into the kerb.
-		var square: float = round(heading / (PI * 0.5)) * PI * 0.5
-		var diff: float = angle_difference(heading, square)
-		if absf(diff) < 0.4:
-			heading = lerp_angle(heading, square, clampf(delta * float(Tuning.get_value("drive.lane_assist", 2.4)), 0.0, 1.0))
+		speed = move_toward(speed, 0.0, accel * 0.35 * delta)
+	if speed > cap:
+		speed = move_toward(speed, cap, brake * 1.5 * delta)
+	speed = maxf(0.0, speed)
+	along = minf(lane_total, along + speed * delta)
+	var here2 := _lane_point(along)
+	var ahead := _lane_point(minf(lane_total, along + 12.0))
+	if ahead.distance_to(here2) > 0.01:
+		heading = lerp_angle(heading, (ahead - here2).angle(), clampf(delta * 8.0, 0.0, 1.0))
+	pos = here2
+	forward = Vector2.RIGHT.rotated(heading)
+	vel = forward * speed
+	skid = _lane_curvature(along) * speed * 14.0
+	roll = clampf(_lane_curvature(along) * speed * 0.0025, -0.05, 0.05)
 	if absf(spin) > 0.001:
-		heading += spin * delta
 		spin = move_toward(spin, 0.0, 4.5 * delta)
-	pos += vel * delta
-	_collide_buildings()
-	var inside: Rect2 = (city.bounds as Rect2).grow(-60.0)
-	pos = Vector2(clampf(pos.x, inside.position.x, inside.end.x), clampf(pos.y, inside.position.y, inside.end.y))
+	if along >= lane_total - 0.5:
+		at_end = true
+		speed = 0.0
+		vel = Vector2.ZERO
+		back_t = 0.0
+		AudioDirector.play_sfx("sfx_notification_soft")
 	var edge := int(Tuning.get_value("box_condition.collision", 10))
-	_contact("offroad", off_road and absf(speed) > 80.0, edge)
+	_contact("offroad", false, edge)
+
+
+# ---------------------------------------------------------------- the lane
+
+func _build_lane() -> void:
+	# The route runs down the middle of the road; the truck's lane is the
+	# right-hand one. Corners are rounded, the start is the bay itself, and
+	# the end is a stop a little past the far bay, from which the truck
+	# backs in along a short arc.
+	lane = PackedVector2Array()
+	back_path = PackedVector2Array()
+	along = 0.0
+	at_end = false
+	back_t = 0.0
+	if route.size() < 2:
+		lane_total = 0.0
+		return
+	var raw := PackedVector2Array()
+	var bay_in: Rect2 = pickup.get("bay", Rect2())
+	var start: Vector2 = bay_in.get_center() if bay_in.size != Vector2.ZERO else route[0]
+	raw.append(start)
+	var dir0 := (route[1] - route[0]).normalized()
+	raw.append(start + dir0 * 70.0)
+	for i in range(1, route.size()):
+		var a := route[i - 1]
+		var b := route[i]
+		var dir := (b - a).normalized()
+		var side := Vector2(-dir.y, dir.x)
+		if i == 1:
+			raw.append(a + dir * 150.0 + side * LANE_OFFSET)
+		else:
+			raw.append(a + side * LANE_OFFSET)
+		if i == route.size() - 1:
+			# Abeam the far bay in the lane, then the stop past it.
+			var bay_out: Rect2 = dropoff.get("bay", Rect2())
+			var goal: Vector2 = bay_out.get_center() if bay_out.size != Vector2.ZERO else b
+			var abeam := a + dir * maxf(0.0, (goal - a).dot(dir)) + side * LANE_OFFSET
+			raw.append(abeam)
+			var stop := abeam + dir * PAST_BAY
+			raw.append(stop)
+			# The reverse arc: from the stop, back and across into the bay.
+			back_path = PackedVector2Array([stop, abeam + dir * 30.0, goal])
+		else:
+			raw.append(b + side * LANE_OFFSET)
+	# Where two offset segments meet at a corner, the lane bends through the
+	# corner instead of crossing itself.
+	var cleaned := PackedVector2Array()
+	for p in raw:
+		if cleaned.is_empty() or cleaned[cleaned.size() - 1].distance_to(p) > 4.0:
+			cleaned.append(p)
+	lane = _round_corners(cleaned, CORNER_R)
+	lane_cum = PackedFloat32Array()
+	var run := 0.0
+	lane_cum.append(0.0)
+	for i in range(1, lane.size()):
+		run += lane[i - 1].distance_to(lane[i])
+		lane_cum.append(run)
+	lane_total = run
+	pos = lane[0]
+	heading = dir0.angle()
+	route_index = 1
+
+
+func _round_corners(points: PackedVector2Array, radius: float) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	if points.size() < 3:
+		return points
+	out.append(points[0])
+	for i in range(1, points.size() - 1):
+		var prev := points[i - 1]
+		var here := points[i]
+		var next := points[i + 1]
+		var din := (here - prev).normalized()
+		var dout := (next - here).normalized()
+		if din.dot(dout) > 0.96:
+			out.append(here)
+			continue
+		var r := minf(radius, minf(prev.distance_to(here), here.distance_to(next)) * 0.45)
+		var a := here - din * r
+		var b := here + dout * r
+		var steps := 6
+		for k in range(0, steps + 1):
+			var t := float(k) / float(steps)
+			out.append(a.lerp(here, t).lerp(here.lerp(b, t), t))
+	out.append(points[points.size() - 1])
+	return out
+
+
+func _lane_point(dist: float) -> Vector2:
+	if lane.size() == 0:
+		return pos
+	if lane.size() == 1 or dist <= 0.0:
+		return lane[0]
+	if dist >= lane_total:
+		return lane[lane.size() - 1]
+	var lo := 0
+	var hi := lane.size() - 1
+	while hi - lo > 1:
+		var mid := (lo + hi) / 2
+		if lane_cum[mid] <= dist:
+			lo = mid
+		else:
+			hi = mid
+	var seg := lane_cum[hi] - lane_cum[lo]
+	var t := 0.0 if seg <= 0.0 else (dist - lane_cum[lo]) / seg
+	return lane[lo].lerp(lane[hi], t)
+
+
+func _lane_curvature(dist: float) -> float:
+	# Signed turn per pixel around a point on the lane: positive bends right.
+	var a := _lane_point(dist - 24.0)
+	var b := _lane_point(dist)
+	var c := _lane_point(dist + 24.0)
+	var d1 := (b - a)
+	var d2 := (c - b)
+	if d1.length() < 0.01 or d2.length() < 0.01:
+		return 0.0
+	return d1.normalized().angle_to(d2.normalized()) / 48.0
+
+
+func _path_length(points: PackedVector2Array) -> float:
+	var total := 0.0
+	for i in range(1, points.size()):
+		total += points[i - 1].distance_to(points[i])
+	return total
+
+
+func _bezier(points: PackedVector2Array, t: float) -> Vector2:
+	if points.size() < 3:
+		return points[0] if points.size() > 0 else pos
+	var p0 := points[0]
+	var p1 := points[1]
+	var p2 := points[2]
+	var u := 1.0 - t
+	return p0 * (u * u) + p1 * (2.0 * u * t) + p2 * (t * t)
+
+
+func _hazard_ahead() -> Dictionary:
+	# The nearest hazard in the truck's lane up the road, by distance along it.
+	var best: Dictionary = {}
+	var forward := Vector2.RIGHT.rotated(heading)
+	for hazard in hazards:
+		var kind := str(hazard.get("type", ""))
+		if kind == "wobble":
+			continue
+		var at := Vector2(float(hazard.get("x", 0)), float(hazard.get("y", 0)))
+		var rel := at - pos
+		var d := rel.dot(forward)
+		if d <= 0.0 or d > 80.0 * PX:
+			continue
+		if absf(rel.cross(forward)) > city.road * 0.5:
+			continue
+		if int(hazard.get("lane", 0)) < 0 and kind != "bump":
+			continue
+		if best.is_empty() or d < float(best["dist"]):
+			best = {"kind": kind, "dist": d, "hazard": hazard}
+	return best
 
 
 func _in_bay(p: Vector2) -> bool:
@@ -1973,7 +2420,8 @@ func _cops(delta: float) -> void:
 		# The PIT: on the rear quarter at speed, shove the truck sideways.
 		if pitting and at.distance_to(goal) < 34.0:
 			car["pit_cool"] = 4.0
-			vel += side * -120.0
+			vel *= 0.6
+			jolt.x = -side_sign * 0.9
 			spin += -side_sign * 2.4
 			_apply_hit("patrol", 8, 500)
 			AudioDirector.play_sfx("sfx_cone_hit")
@@ -2077,6 +2525,11 @@ func _traffic(delta: float) -> void:
 		var to_truck := truck_center - at
 		var ahead := to_truck.dot(dir) > 0.0 and to_truck.length() < 170.0 and absf(to_truck.cross(dir)) < 70.0
 		var wanted: float = 0.0 if ahead else car["cruise"]
+		# A car with the truck on its tail picks up its pace: the ride is
+		# never parked behind a dawdler, with no wheel to pass it.
+		var behind := to_truck.dot(dir) < 0.0 and to_truck.length() < 260.0 and absf(to_truck.cross(dir)) < 70.0
+		if behind and not ahead and not bool(car.get("patrol", false)):
+			wanted = maxf(wanted, float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX * 0.95)
 		# Keep a car's length behind the car in front, so traffic moves as a line.
 		for other in cars:
 			if other == car:
@@ -2190,6 +2643,10 @@ func _check_alley() -> void:
 		return
 	for cut in city.alleys:
 		if (cut as Rect2).grow(-10).has_point(pos):
+			# Only the cut through the block counts, not its mouth on the road.
+			for road_rect in city.roads:
+				if (road_rect as Rect2).has_point(pos):
+					return
 			alley = true
 			AudioDirector.play_sfx("sfx_notification_soft")
 			return
@@ -2439,7 +2896,10 @@ func _hazards() -> void:
 			var zone := Rect2(at.x - float(hazard.get("w", 180)) * 0.5, at.y - float(hazard.get("h", 140)) * 0.5, float(hazard.get("w", 180)), float(hazard.get("h", 140)))
 			if _hits_rect(zone):
 				if bool(hazard.get("auto_stop", false)):
-					duck_hold = 1.4
+					# The ducks cross once: a short wait, then the road is theirs no more.
+					if not bool(hazard.get("crossed", false)):
+						hazard["crossed"] = true
+						duck_hold = 2.2
 					if not hazard_cd.has("quack"):
 						hazard_cd["quack"] = Time.get_ticks_msec()
 						AudioDirector.play_sfx("sfx_ducks_quack")
@@ -2466,7 +2926,10 @@ func _hazards() -> void:
 		if not hit:
 			continue
 		if kind == "cone":
-			active["cone"] = int(Tuning.get_value("box_condition.collision", 10))
+			# Roadworks: crawl past and the cones only scrape; take them at
+			# pace and they go under the wheels.
+			var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+			active["cone"] = int(Tuning.get_value("box_condition.collision", 10)) if absf(speed) > max_speed * 0.35 else 0
 		elif kind == "gravel":
 			active["gravel"] = 0 if pond else int(Tuning.get_value("box_condition.bump_min", 3))
 		elif kind == "bump":

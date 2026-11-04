@@ -126,6 +126,12 @@
  "pack": {
   "per_box": 6
  },
+ "walk": {
+  "_about": "What Dana carries slows her walk and bends her; past heavy_kg a step can catch, trip_per_m a metre scaled by the weight.",
+  "slow_kg": 70,
+  "heavy_kg": 15,
+  "trip_per_m": 0.012
+ },
  "jobs": {
   "_about": "How many pieces a move has: a base, a random span, and more as jobs are done; authored jobs get extra catalogue pieces for the place.",
   "size_min": 18,
