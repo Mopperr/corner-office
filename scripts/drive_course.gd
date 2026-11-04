@@ -157,6 +157,12 @@ var back_t := 0.0
 var at_end := false
 var jolt := Vector2.ZERO
 var roll := 0.0
+# The chapters' small moments on the road: a line in the hint card and a
+# thing in the world, once each.
+var set_line := ""
+var set_line_t := 0.0
+var set_done: Dictionary = {}
+var stray_cat: Node3D
 
 
 func _ready() -> void:
@@ -1768,6 +1774,154 @@ func _hint_text() -> String:
 	return line
 
 
+func _say(line: String, seconds: float) -> void:
+	set_line = line
+	set_line_t = seconds
+
+
+func _set_pieces(delta: float) -> void:
+	# What the chapter promised: the gull on the coast, the cat and the
+	# meteor at night, the confetti on the parade (on the horn).
+	var id := str(course.get("id", ""))
+	var frac := along / maxf(lane_total, 1.0)
+	match id:
+		"windy_coast":
+			if frac > 0.45 and not set_done.has("gull"):
+				set_done["gull"] = true
+				_gull_swoop()
+		"neon_night":
+			if frac > 0.2 and not set_done.has("cat"):
+				set_done["cat"] = true
+				_stray_cat_appears()
+			if frac > 0.6 and not set_done.has("meteor"):
+				set_done["meteor"] = true
+				_meteor()
+			if stray_cat != null and is_instance_valid(stray_cat):
+				var behind := to_world(pos) - _forward() * 3.2 + Vector3(0.9, 0.0, 0.0)
+				stray_cat.position = stray_cat.position.lerp(behind, clampf(delta * 2.5, 0.0, 1.0))
+				stray_cat.position.y = 0.12 + absf(sin(time_alive * 10.0)) * 0.05
+				stray_cat.rotation.y = -heading
+		"parade_detour":
+			if frac > 0.1 and not set_done.has("parade"):
+				set_done["parade"] = true
+				_say("Parade day. Honk along.", 4.0)
+				_confetti()
+		"lodge_snow":
+			if frac > 0.05 and not set_done.has("chains"):
+				set_done["chains"] = true
+				_say("Chains on. Calm as cocoa.", 4.0)
+
+
+func _confetti() -> void:
+	var burst := CPUParticles3D.new()
+	burst.amount = 160
+	burst.lifetime = 2.4
+	burst.one_shot = true
+	burst.explosiveness = 0.9
+	burst.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	burst.emission_box_extents = Vector3(6, 1, 6)
+	burst.direction = Vector3(0, 1, 0)
+	burst.spread = 60
+	burst.gravity = Vector3(0, -1.4, 0)
+	burst.initial_velocity_min = 2.0
+	burst.initial_velocity_max = 5.0
+	burst.scale_amount_min = 0.06
+	burst.scale_amount_max = 0.12
+	burst.mesh = BoxMesh.new()
+	(burst.mesh as BoxMesh).size = Vector3(1, 0.2, 1)
+	burst.color_ramp = Gradient.new()
+	burst.color_ramp.set_color(0, Color("E6B655"))
+	burst.color_ramp.set_color(1, Color("D9765F"))
+	burst.position = to_world(pos) + Vector3(0, 4.5, 0)
+	add_child(burst)
+	burst.emitting = true
+	AudioDirector.play_sfx("sfx_applause")
+	get_tree().create_timer(3.0).timeout.connect(burst.queue_free)
+
+
+func _gull_swoop() -> void:
+	# A gull crosses low over the cab and leaves with the sandwich.
+	var gull := Node3D.new()
+	gull.name = "Gull"
+	var body := Props.mesh_box(Vector3(0.5, 0.14, 0.2), Color("F4F1EA"))
+	gull.add_child(body)
+	for side in [-1.0, 1.0]:
+		var wing := Props.mesh_box(Vector3(0.18, 0.03, 0.7), Color("E4E0D6"))
+		wing.position = Vector3(0, 0.05, side * 0.4)
+		wing.name = "WingL" if side < 0.0 else "WingR"
+		gull.add_child(wing)
+	var beak := Props.mesh_box(Vector3(0.12, 0.05, 0.06), Color("E6B655"))
+	beak.position = Vector3(0.3, 0.02, 0)
+	gull.add_child(beak)
+	add_child(gull)
+	var forward := _forward()
+	var side_v := Vector3(-forward.z, 0, forward.x)
+	var start := to_world(pos) + forward * 14.0 + side_v * 6.0 + Vector3(0, 7.0, 0)
+	var dip := to_world(pos) + forward * 4.0 + Vector3(0, 3.2, 0)
+	var away := to_world(pos) - forward * 10.0 - side_v * 8.0 + Vector3(0, 9.0, 0)
+	gull.position = start
+	gull.look_at(dip, Vector3.UP)
+	var tw := create_tween()
+	tw.tween_property(gull, "position", dip, 1.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_callback(func():
+		AudioDirector.play_sfx("sfx_l15_gull_call")
+		_say("A gull. That was the sandwich.", 4.0)
+		if is_instance_valid(gull):
+			gull.look_at(away, Vector3.UP)
+	)
+	tw.tween_property(gull, "position", away, 2.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_callback(gull.queue_free)
+
+
+func _stray_cat_appears() -> void:
+	var cat := Node3D.new()
+	cat.name = "StrayCat"
+	var body := Props.mesh_box(Vector3(0.5, 0.22, 0.2), Color("E07A5F"))
+	body.position.y = 0.11
+	cat.add_child(body)
+	var head := Props.mesh_box(Vector3(0.2, 0.18, 0.18), Color("E07A5F"))
+	head.position = Vector3(0.3, 0.24, 0)
+	cat.add_child(head)
+	for side in [-0.06, 0.06]:
+		var ear := Props.mesh_box(Vector3(0.05, 0.07, 0.04), Color("D06A50"))
+		ear.position = Vector3(0.33, 0.36, side)
+		cat.add_child(ear)
+		var eye := Props.mesh_box(Vector3(0.02, 0.03, 0.03), Color("FFF1D6"))
+		eye.position = Vector3(0.41, 0.26, side)
+		cat.add_child(eye)
+	var tail := Props.mesh_box(Vector3(0.3, 0.04, 0.04), Color("D06A50"))
+	tail.position = Vector3(-0.36, 0.3, 0)
+	tail.rotation.z = 0.6
+	cat.add_child(tail)
+	cat.position = to_world(pos) - _forward() * 4.0
+	world.add_child(cat)
+	stray_cat = cat
+	AudioDirector.play_sfx("sfx_cat_meow")
+	_say("A stray cat is trotting behind the truck.", 4.0)
+
+
+func _meteor() -> void:
+	var streak := Props.mesh_box(Vector3(3.0, 0.08, 0.08), Color("FFF1D6"))
+	var glow := Props.mat(Color("FFF1D6"))
+	glow.emission_enabled = true
+	glow.emission = Color("FFE9B0")
+	glow.emission_energy_multiplier = 3.0
+	glow.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	streak.material_override = glow
+	var forward := _forward()
+	var side_v := Vector3(-forward.z, 0, forward.x)
+	var from := to_world(pos) + forward * 40.0 + side_v * 18.0 + Vector3(0, 30.0, 0)
+	var to := to_world(pos) + forward * 48.0 - side_v * 10.0 + Vector3(0, 14.0, 0)
+	streak.position = from
+	streak.look_at(to, Vector3.UP)
+	streak.rotate_object_local(Vector3.UP, PI * 0.5)
+	add_child(streak)
+	var tw := create_tween()
+	tw.tween_property(streak, "position", to, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_callback(streak.queue_free)
+	_say("A meteor. Make a wish. Or don't need one.", 4.0)
+
+
 func _hazard_word(kind: String) -> String:
 	match kind:
 		"cone":
@@ -1871,6 +2025,7 @@ func _process(delta: float) -> void:
 			reverse_beep = 0.0
 		_traffic(delta)
 		_hazards()
+		_set_pieces(delta)
 		_check_alley()
 		_check_lighthouse_photo(delta)
 		_check_dropoff()
@@ -1886,6 +2041,9 @@ func _process(delta: float) -> void:
 	var stamp := Tuning.tip_stamp(condition)
 	meter_label.text = "%d  %s" % [condition, stamp]
 	hint.text = _hint_text()
+	if set_line_t > 0.0:
+		set_line_t -= delta
+		hint.text = set_line
 	if distance_label:
 		var left := _route_left()
 		distance_label.text = "%d m to go" % int(round(left / PX)) if state == "drive" and not at_end else ""
@@ -2716,6 +2874,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_count_honk()
 		AudioDirector.play_sfx("sfx_truck_horn")
 		_wave_nearby()
+		if str(course.get("id", "")) == "parade_detour" and state == "drive":
+			_confetti()
 		if _near_honk_ducks():
 			duck_hold = 1.6
 			AudioDirector.play_sfx("sfx_ducks_quack")
@@ -2876,6 +3036,10 @@ func _apply_hit(kind: String, amount: int, cooldown := 0) -> void:
 		AudioDirector.play_sfx("sfx_speed_bump")
 		AudioDirector.play_sfx("sfx_cardboard_bump")
 		AudioDirector.play_sfx("sfx_box_rattle")
+		if str(course.get("id", "")) == "theatre_rain":
+			# The piano in the back plays itself on every bump.
+			AudioDirector.play_sfx("sfx_success_chime")
+			_say("The piano played itself. Again.", 3.0)
 	else:
 		AudioDirector.play_sfx("sfx_cardboard_bump")
 		AudioDirector.play_sfx("sfx_box_rattle")
