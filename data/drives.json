@@ -157,5 +157,289 @@
    }
   },
   "scenery": "town"
+ },
+ "dentist_run": {
+  "title": "Hartley Dental, clear",
+  "weather": "clear",
+  "pickup": "train",
+  "dropoff": "dentist",
+  "hazards": [
+   {
+    "type": "cone",
+    "along": 0.3,
+    "lane": 1
+   },
+   {
+    "type": "bump",
+    "along": 0.55,
+    "w": 170,
+    "h": 36
+   },
+   {
+    "type": "cone",
+    "along": 0.75,
+    "lane": 1
+   }
+  ],
+  "scenery": "town",
+  "id": "dentist_run",
+  "authored": "gen_levels"
+ },
+ "market_morning": {
+  "title": "Farmers Market Morning",
+  "weather": "clear",
+  "pickup": "florist",
+  "dropoff": "library",
+  "hazards": [
+   {
+    "type": "gravel",
+    "along": 0.25,
+    "lane": 1,
+    "w": 260,
+    "h": 80
+   },
+   {
+    "type": "ducks",
+    "along": 0.5,
+    "w": 220,
+    "h": 160,
+    "auto_stop": true
+   },
+   {
+    "type": "gravel",
+    "along": 0.72,
+    "lane": 1,
+    "w": 260,
+    "h": 80
+   }
+  ],
+  "scenery": "town",
+  "id": "market_morning",
+  "authored": "gen_levels"
+ },
+ "architect_rain": {
+  "title": "Rain on Quay Street",
+  "weather": "rain",
+  "pickup": "cafe",
+  "dropoff": "architect",
+  "hazards": [
+   {
+    "type": "puddle",
+    "along": 0.2,
+    "lane": 1,
+    "r": 60
+   },
+   {
+    "type": "cone",
+    "along": 0.5,
+    "lane": 1
+   },
+   {
+    "type": "puddle",
+    "along": 0.7,
+    "lane": 1,
+    "r": 56
+   }
+  ],
+  "scenery": "town",
+  "id": "architect_rain",
+  "authored": "gen_levels"
+ },
+ "library_day": {
+  "title": "Mill Lane, clear",
+  "weather": "clear",
+  "pickup": "library",
+  "dropoff": "corner",
+  "hazards": [
+   {
+    "type": "bump",
+    "along": 0.3,
+    "w": 170,
+    "h": 36
+   },
+   {
+    "type": "bump",
+    "along": 0.65,
+    "w": 170,
+    "h": 36
+   }
+  ],
+  "scenery": "town",
+  "id": "library_day",
+  "authored": "gen_levels"
+ },
+ "neon_night": {
+  "title": "Midnight Neon",
+  "weather": "night",
+  "pickup": "record",
+  "dropoff": "theatre",
+  "patrols": 1,
+  "hazards": [
+   {
+    "type": "cone",
+    "along": 0.35,
+    "lane": 1
+   },
+   {
+    "type": "puddle",
+    "along": 0.6,
+    "lane": 1,
+    "r": 60
+   }
+  ],
+  "scenery": "town",
+  "id": "neon_night",
+  "authored": "gen_levels"
+ },
+ "record_run": {
+  "title": "Spindle Records, clear",
+  "weather": "clear",
+  "pickup": "record",
+  "dropoff": "warehouse",
+  "hazards": [
+   {
+    "type": "cone",
+    "along": 0.4,
+    "lane": 1
+   },
+   {
+    "type": "gravel",
+    "along": 0.7,
+    "lane": 1,
+    "w": 260,
+    "h": 80
+   }
+  ],
+  "scenery": "town",
+  "id": "record_run",
+  "authored": "gen_levels"
+ },
+ "florist_run": {
+  "title": "Two shops, one van",
+  "weather": "clear",
+  "pickup": "florist",
+  "dropoff": "glass",
+  "hazards": [
+   {
+    "type": "bump",
+    "along": 0.35,
+    "w": 170,
+    "h": 36
+   },
+   {
+    "type": "ducks",
+    "along": 0.8,
+    "w": 220,
+    "h": 160,
+    "auto_stop": true
+   }
+  ],
+  "scenery": "town",
+  "id": "florist_run",
+  "authored": "gen_levels"
+ },
+ "theatre_rain": {
+  "title": "Opening night, rain",
+  "weather": "rain",
+  "pickup": "theatre",
+  "dropoff": "train",
+  "hazards": [
+   {
+    "type": "puddle",
+    "along": 0.3,
+    "lane": 1,
+    "r": 64
+   },
+   {
+    "type": "cone",
+    "along": 0.55,
+    "lane": 1
+   },
+   {
+    "type": "puddle",
+    "along": 0.8,
+    "lane": 1,
+    "r": 56
+   }
+  ],
+  "scenery": "town",
+  "id": "theatre_rain",
+  "authored": "gen_levels"
+ },
+ "parade_detour": {
+  "title": "Parade Detour",
+  "weather": "clear",
+  "pickup": "cafe_new",
+  "dropoff": "broker",
+  "hazards": [
+   {
+    "type": "cone",
+    "along": 0.3,
+    "lane": 1
+   },
+   {
+    "type": "cone",
+    "along": 0.4,
+    "lane": 1
+   },
+   {
+    "type": "ducks",
+    "along": 0.6,
+    "w": 220,
+    "h": 160,
+    "auto_stop": true
+   }
+  ],
+  "scenery": "town",
+  "id": "parade_detour",
+  "authored": "gen_levels"
+ },
+ "broker_day": {
+  "title": "The other side of town",
+  "weather": "clear",
+  "pickup": "glass",
+  "dropoff": "broker",
+  "hazards": [
+   {
+    "type": "bump",
+    "along": 0.5,
+    "w": 170,
+    "h": 36
+   }
+  ],
+  "scenery": "town",
+  "id": "broker_day",
+  "authored": "gen_levels"
+ },
+ "lodge_snow": {
+  "title": "Snow on the Switchbacks",
+  "weather": "snow",
+  "pickup": "warehouse",
+  "dropoff": "lodge",
+  "hazards": [
+   {
+    "type": "gravel",
+    "along": 0.3,
+    "lane": 1,
+    "w": 260,
+    "h": 80
+   },
+   {
+    "type": "puddle",
+    "along": 0.55,
+    "lane": 1,
+    "r": 60
+   },
+   {
+    "type": "gravel",
+    "along": 0.8,
+    "lane": 1,
+    "w": 260,
+    "h": 80
+   }
+  ],
+  "scenery": "town",
+  "id": "lodge_snow",
+  "authored": "gen_levels"
  }
 }

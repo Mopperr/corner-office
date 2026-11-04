@@ -154,7 +154,8 @@ func _ready() -> void:
 		var office: Node = diorama_script.new()
 		add_child(office)
 		_bury(office)
-		if GameState.loaded_arc_characters() != 5 or GameState.slice_beats().size() != 6:
+		# The whole ladder ships now: the six slice chapters and the sixteen after them.
+		if GameState.loaded_arc_characters() != 5 or GameState.slice_beats().size() != 22:
 			failures.append("arc filter %d %d" % [GameState.loaded_arc_characters(), GameState.slice_beats().size()])
 		var saw_l1 := false
 		for mail in GameState.inbox:
@@ -174,6 +175,9 @@ func _ready() -> void:
 		var l6_mail: Variant = l6.get("marge_email", {})
 		if str(l6.get("level_name", "")) != "Bakery Loft" or typeof(l6_mail) != TYPE_DICTIONARY or not str(l6_mail.get("body", "")).contains("Bakery Loft"):
 			failures.append("l6 bakery")
+		var l7: Dictionary = GameState.present_slice_level("L7")
+		if str(l7.get("level_name", "")) != "Retiring Dentist":
+			failures.append("l7 beat")
 		if not GameState.present_slice_level("L2").is_empty() or not GameState.present_slice_level("L7").is_empty():
 			failures.append("arc repeat")
 		GameState.fired.erase("arc_L2")
@@ -239,25 +243,19 @@ func _ready() -> void:
 		var orphans_before := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 		var loft: Node = diorama_script.new()
 		add_child(loft)
-		var scraps := 0
-		for child in loft.get_children():
-			if child.has_meta("floor_scrap"):
-				scraps += 1
-		if scraps != 6:
-			failures.append("nook floor scraps %d" % scraps)
 		var orphans_after := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 		if orphans_after > orphans_before:
 			failures.append("nook floor orphans %d" % (orphans_after - orphans_before))
+		# The loft is a floor plan now: the goal shelf and fern stand in the
+		# shop room, and the rooms are the plan's.
 		var goal_fern := loft.find_child("GoalFern", true, false) as Node3D
-		var nook_beam := loft.find_child("NookBeam", true, false) as Node3D
-		if goal_fern == null or nook_beam == null:
-			failures.append("beam nook missing")
-		else:
-			var view_dir := Vector2(1, 1).normalized()
-			var fern_depth := Vector2(goal_fern.position.x, goal_fern.position.z).dot(view_dir)
-			var beam_depth := Vector2(nook_beam.position.x, nook_beam.position.z).dot(view_dir)
-			if fern_depth <= beam_depth + 0.2:
-				failures.append("beam hides fern %s %s" % [fern_depth, beam_depth])
+		var goal_shelf := loft.find_child("GoalShelf", true, false) as Node3D
+		if goal_fern == null or goal_shelf == null:
+			failures.append("loft goal shelf or fern missing")
+		if loft.find_child("Interior", false, false) == null:
+			failures.append("loft has no floor plan interior")
+		if Homes.rooms(loft.venue, 0).size() < 8:
+			failures.append("loft ground floor has %d rooms" % Homes.rooms(loft.venue, 0).size())
 		_bury(loft)
 		GameState.office_id = "garage"
 		GameState.set_mode("job_pack")
@@ -2943,6 +2941,35 @@ func _catalog_checks() -> Array:
 				over += 1
 	if over > 0:
 		found.append("%d of %d board recipes overflow the truck" % [over, recipes])
+	# Every authored chapter job resolves: its place has a plan, its road has
+	# both kerbs in the town, its pieces are in the catalogue and fit the bed.
+	var town_map = load("res://scripts/city.gd").load_default()
+	for story_job in JobDB.all_jobs():
+		var job_id := str(story_job.get("id", ""))
+		var venue_id := str(story_job.get("venue", ""))
+		if not ItemDB.venues().has(venue_id):
+			found.append("%s: no venue %s" % [job_id, venue_id])
+		var story_drive: Dictionary = JobDB.get_drive(str(story_job.get("drive", "")))
+		if story_drive.is_empty():
+			found.append("%s: no drive %s" % [job_id, story_job.get("drive", "")])
+		elif town_map.place(str(story_drive.get("pickup", ""))).is_empty() or town_map.place(str(story_drive.get("dropoff", ""))).is_empty():
+			found.append("%s: drive %s has a kerb the town lacks" % [job_id, story_drive.get("id", "")])
+		for group in story_job.get("recipe", []):
+			if ItemDB.get_item(str(group.get("item", ""))).is_empty():
+				found.append("%s: unknown piece %s" % [job_id, group.get("item", "")])
+		if JobGen.recipe_slots(story_job.get("recipe", [])) > JobGen.truck_slots() or JobGen.recipe_floor_need(story_job.get("recipe", [])) > GameState.floor_slots():
+			found.append("%s: recipe overflows the truck" % job_id)
+	for plan_id in Homes.plans().keys():
+		var plan_venue: Dictionary = ItemDB.venues().get(plan_id, {})
+		if plan_venue.is_empty() or not bool(plan_venue.get("plan", false)):
+			found.append("plan %s has no venue" % plan_id)
+			continue
+		for index in Homes.floors(plan_venue).size():
+			var plan_area := 0.0
+			for room in Homes.rooms(plan_venue, index):
+				plan_area += float(room["w"]) * float(room["d"])
+			if absf(plan_area - float(plan_venue["w"]) * float(plan_venue["d"])) > 0.01:
+				found.append("plan %s floor %d does not tile" % [plan_id, index])
 	# Full moves: the truck takes ten places, six to a box, a board job has at
 	# least eighteen pieces, and an authored job carries the place's extras.
 	if GameState.truck_slots() < 10 or GameState.floor_slots() < 6 or GameState.per_box() < 6:

@@ -221,8 +221,8 @@ func _ready() -> void:
 		road_track = "music_open_road"
 	AudioDirector.play_bed(road_track, air)
 	_radio_apply(false)
-	if weather == "rain":
-		_make_rain()
+	if weather == "rain" or weather == "snow":
+		_make_rain(weather == "snow")
 	if str(course.get("id", "")) == "duck_pond":
 		AudioDirector.start_loop("sfx_l05_fountain_loop")
 	AudioDirector.start_loop("sfx_truck_idle_loop")
@@ -324,6 +324,11 @@ func _lights() -> void:
 		sky_material.sky_horizon_color = Color("A5A7B0")
 		sky_material.ground_bottom_color = Color("4F4B4E")
 		sky_material.ground_horizon_color = Color("8E8A8C")
+	elif weather == "snow":
+		sky_material.sky_top_color = Color("B9C3CC")
+		sky_material.sky_horizon_color = Color("E6EAEE")
+		sky_material.ground_bottom_color = Color("D9DEE3")
+		sky_material.ground_horizon_color = Color("EEF1F3")
 	else:
 		sky_material.sky_top_color = Color("79B4E6")
 		sky_material.sky_horizon_color = Color("EAF2F6")
@@ -374,7 +379,7 @@ func _build_town() -> void:
 	var bounds: Rect2 = city.bounds
 	var size := to_world(bounds.size)
 	# Ground, then sidewalks, roads and lane paint on top.
-	_slab(Vector3(size.x + 80, 0.1, size.z + 80), Vector3(size.x * 0.5, -0.1, size.z * 0.5), GRASS)
+	_slab(Vector3(size.x + 80, 0.1, size.z + 80), Vector3(size.x * 0.5, -0.1, size.z * 0.5), GRASS if str(course.get("weather", "clear")) != "snow" else Color("EEF1F3"))
 	_slab(Vector3(size.x, 0.02, size.z), Vector3(size.x * 0.5, -0.02, size.z * 0.5), PAVEMENT)
 	for rect in city.roads:
 		var r: Rect2 = rect
@@ -992,7 +997,7 @@ func _front_footprints() -> Array:
 			continue
 		var w := float(venue_def.get("w", 6)) * PX
 		var d := float(venue_def.get("d", 6)) * PX
-		var home := Homes.is_home(venue_def)
+		var home := Homes.is_home(venue_def) and str(venue_def.get("kind", "house")) != "shop"
 		var setback := (3.6 if home else 0.0) * PX
 		var door: Vector2 = place.get("door", Vector2.ZERO)
 		var rect: Rect2 = place.get("rect", Rect2())
@@ -1025,7 +1030,7 @@ func _build_front(place: Dictionary, venue_def: Dictionary, which: int) -> void:
 	# shopfront by what it is. The truck pulls up at this door.
 	if venue_def.is_empty():
 		return
-	var home := Homes.is_home(venue_def)
+	var home := Homes.is_home(venue_def) and str(venue_def.get("kind", "house")) != "shop"
 	var w := float(venue_def.get("w", 6))
 	var d := float(venue_def.get("d", 6))
 	var floors: Array = Homes.floors(venue_def)
@@ -1568,23 +1573,23 @@ func _build_route_marks() -> void:
 		beacon.set_meta("leg", 999)
 
 
-func _make_rain() -> void:
+func _make_rain(snow := false) -> void:
 	rain = CPUParticles3D.new()
-	rain.amount = 500
-	rain.lifetime = 1.4
+	rain.amount = 500 if not snow else 320
+	rain.lifetime = 1.4 if not snow else 3.2
 	rain.preprocess = 1.0
 	rain.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
 	rain.emission_box_extents = Vector3(18, 1, 18)
 	rain.direction = Vector3(0.1, -1, 0)
 	rain.spread = 4
 	rain.gravity = Vector3(0, -2, 0)
-	rain.initial_velocity_min = 9.0
-	rain.initial_velocity_max = 12.0
-	rain.scale_amount_min = 0.03
-	rain.scale_amount_max = 0.05
+	rain.initial_velocity_min = 9.0 if not snow else 1.6
+	rain.initial_velocity_max = 12.0 if not snow else 2.6
+	rain.scale_amount_min = 0.03 if not snow else 0.05
+	rain.scale_amount_max = 0.05 if not snow else 0.09
 	rain.mesh = BoxMesh.new()
-	(rain.mesh as BoxMesh).size = Vector3(0.6, 6.0, 0.6)
-	rain.material_override = Props.mat(Color(0.8, 0.86, 0.95, 0.5))
+	(rain.mesh as BoxMesh).size = Vector3(0.6, 6.0, 0.6) if not snow else Vector3(0.9, 0.9, 0.9)
+	rain.material_override = Props.mat(Color(0.8, 0.86, 0.95, 0.5) if not snow else Color(0.98, 0.98, 1.0, 0.85))
 	(rain.material_override as StandardMaterial3D).transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	add_child(rain)
 
@@ -1994,7 +1999,7 @@ func _update_marks() -> void:
 func _drive(delta: float, weather: String) -> void:
 	var accel := float(Tuning.get_value("drive.accel_mps2", 3.0)) * PX
 	var brake := float(Tuning.get_value("drive.brake_mps2", 4.5)) * PX
-	if weather == "rain":
+	if weather == "rain" or weather == "snow":
 		brake *= 1.0 - float(Tuning.get_value("drive.rain_brake_penalty", 0.15))
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
 	var reverse_max := float(Tuning.get_value("drive.reverse_mps", 1.8)) * PX
@@ -2821,7 +2826,7 @@ func bump_points(speed_px: float) -> int:
 
 
 func _maybe_hard_brake(weather: String, before: float, delta: float) -> void:
-	if weather != "rain":
+	if weather != "rain" and weather != "snow":
 		return
 	var max_speed := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
 	if before > max_speed * 0.55 and speed < before - 40.0 * delta:

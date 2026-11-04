@@ -200,7 +200,7 @@
    "jobs": 8,
    "rep": 2,
    "level": "L11",
-   "playable": false
+   "playable": true
   },
   {
    "id": "glass",
@@ -210,7 +210,7 @@
    "jobs": 16,
    "rep": 3,
    "level": "L16",
-   "playable": false
+   "playable": true
   },
   {
    "id": "corner",
@@ -220,7 +220,7 @@
    "jobs": 24,
    "rep": 4,
    "level": "L21",
-   "playable": false
+   "playable": true
   }
  ],
  "whiteboard_milestones": [
@@ -328,7 +328,7 @@
   "rival_min": 2,
   "rival_max": 6,
   "league_week": 7,
-  "leader_bonus": 0.10,
+  "leader_bonus": 0.1,
   "event_delay": 22,
   "stray_box_pay": 15
  },

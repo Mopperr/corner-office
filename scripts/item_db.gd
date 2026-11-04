@@ -160,6 +160,23 @@ func venues() -> Dictionary:
 		_venues_cache = (content.get("venues", {}) as Dictionary).duplicate(true)
 		for home_id in Homes.all().keys():
 			_venues_cache[str(home_id)] = Homes.venue_for(str(home_id))
+		# The authored places carry a floor plan: rooms per floor laid over
+		# the venue record, so a shop is rooms and doorways like a house.
+		for plan_id in Homes.plans().keys():
+			if not _venues_cache.has(plan_id):
+				continue
+			var plan: Dictionary = Homes.plans()[plan_id]
+			var venue_def: Dictionary = _venues_cache[plan_id]
+			venue_def["w"] = float(plan.get("w", venue_def.get("w", 6)))
+			venue_def["d"] = float(plan.get("d", venue_def.get("d", 8)))
+			venue_def["floors"] = plan.get("floors", [])
+			venue_def["fixtures"] = plan.get("fixtures", [])
+			venue_def["home"] = true
+			venue_def["plan"] = true
+			venue_def["kind"] = str(plan.get("kind", "shop"))
+			venue_def["style"] = str(plan.get("style", "render"))
+			venue_def["box_row"] = 1.4
+			venue_def.erase("nook")
 	return _venues_cache
 
 

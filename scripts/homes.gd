@@ -20,6 +20,12 @@ const STAIRS_D := 2.2
 const KIND_TAG := {
 	"lounge": "living", "study": "living", "kitchen": "kitchen", "dining": "kitchen", "utility": "kitchen",
 	"bathroom": "bathroom", "bedroom": "bedroom", "loft": "loft", "boxroom": "loft", "shed": "shed",
+	# The shops' rooms, mapped to the catalogue's room tags.
+	"seating": "living", "counter": "kitchen", "pantry": "kitchen", "store": "shed", "washroom": "bathroom",
+	"office": "office", "staff": "living", "shopfloor": "living", "workshop": "shed", "layout": "loft",
+	"display": "loft", "kitchenette": "kitchen", "loo": "bathroom", "shop": "living", "bakery": "kitchen",
+	"prep": "kitchen", "coldstore": "kitchen", "flourstore": "shed", "studio": "office", "kiosk": "kitchen",
+	"boathouse": "shed", "workbench": "shed", "reception": "office", "darkroom": "office", "props": "loft",
 }
 # Floor tint per kind, blended into the house's floor colour.
 # The floor each kind of room gets, from the team's textures.
@@ -27,11 +33,21 @@ const KIND_FLOOR := {
 	"hall": "oak_floor", "landing": "carpet_wool", "lounge": "oak_floor", "study": "oak_floor", "kitchen": "kitchen_tile",
 	"dining": "oak_floor", "utility": "concrete", "bathroom": "bathroom_tile", "bedroom": "carpet_wool", "loft": "pine_planks",
 	"boxroom": "pine_planks", "shed": "concrete",
+	"seating": "oak_floor", "counter": "kitchen_tile", "pantry": "kitchen_tile", "store": "concrete", "washroom": "bathroom_tile",
+	"office": "carpet_wool", "staff": "carpet_wool", "shopfloor": "oak_floor", "workshop": "concrete", "layout": "pine_planks",
+	"display": "pine_planks", "kitchenette": "kitchen_tile", "loo": "bathroom_tile", "shop": "oak_floor", "bakery": "kitchen_tile",
+	"prep": "kitchen_tile", "coldstore": "concrete", "flourstore": "concrete", "studio": "oak_floor", "kiosk": "pine_planks",
+	"boathouse": "pine_planks", "workbench": "concrete", "reception": "oak_floor", "darkroom": "concrete", "props": "pine_planks",
 }
 const KIND_TINT := {
 	"hall": "D9C9A8", "landing": "D9C9A8", "lounge": "C98F7A", "study": "B9A27E", "kitchen": "DCD3B6",
 	"dining": "C9B18F", "utility": "C9C9C0", "bathroom": "BFD6DA", "bedroom": "C7B6D6", "loft": "A99784",
 	"boxroom": "B5A48F", "shed": "9F9A86",
+	"seating": "D4A68C", "counter": "E0C9A0", "pantry": "D9CFA8", "store": "B8B1A0", "washroom": "BFD6DA",
+	"office": "C2B3A1", "staff": "C9B9A6", "shopfloor": "CFA98A", "workshop": "A9A49A", "layout": "B59F86",
+	"display": "C4AE94", "kitchenette": "DCD3B6", "loo": "BFD6DA", "shop": "D7B596", "bakery": "E3CFA6",
+	"prep": "DAD0B5", "coldstore": "BFCCD1", "flourstore": "D2CBBE", "studio": "D1C2B0", "kiosk": "D4B88F",
+	"boathouse": "A9977F", "workbench": "AAA59B", "reception": "D3BCA3", "darkroom": "8F8A94", "props": "B9A58C",
 }
 # What the client already has standing in each kind of room when you arrive.
 const OWNER_ITEMS := {
@@ -46,12 +62,51 @@ const OWNER_ITEMS := {
 	"loft": ["old_suitcase", "christmas_box", "record_box"],
 	"boxroom": ["travel_trunk"],
 	"shed": ["lawnmower", "ladder", "paint_tins", "watering_can"],
+	"seating": ["kitchen_chair", "kitchen_chair", "magazine_rack"],
+	"counter": ["bread_bin", "knife_block"],
+	"pantry": ["bread_bin"],
+	"store": ["old_suitcase", "paint_tins"],
+	"washroom": ["pedestal_sink", "toilet"],
+	"loo": ["toilet", "pedestal_sink"],
+	"office": ["globe", "magazine_rack"],
+	"staff": ["kitchen_chair", "alarm_clock"],
+	"shopfloor": ["magazine_rack", "standing_mirror"],
+	"workshop": ["ladder", "paint_tins"],
+	"layout": ["record_box"],
+	"display": ["travel_trunk"],
+	"kitchenette": ["bread_bin", "knife_block"],
+	"shop": ["magazine_rack"],
+	"bakery": ["cooker", "bread_bin"],
+	"prep": ["knife_block"],
+	"coldstore": ["fridge_home"],
+	"flourstore": ["laundry_basket"],
+	"studio": ["telescope"],
+	"kiosk": ["bread_bin"],
+	"boathouse": ["ladder", "watering_can"],
+	"workbench": ["paint_tins"],
+	"reception": ["standing_mirror"],
+	"darkroom": [],
+	"props": ["travel_trunk", "old_suitcase"],
 }
 
 # What a house sounds like, by what it is built of.
 const STYLE_AIR := {"brick": "amb_l04_shop_clock_loop", "render": "amb_l10_library_loop", "stone": "amb_l20_lodge_loop", "timber": "amb_l14_greenhouse_loop", "clapboard": "amb_l15_coastal_loop"}
 
 static var _data: Dictionary = {}
+
+
+static var _plans: Dictionary = {}
+
+
+static func plans() -> Dictionary:
+	# The floor plans of the authored places, from data/office_plans.json.
+	if _plans.is_empty():
+		var file := FileAccess.open("res://data/office_plans.json", FileAccess.READ)
+		if file:
+			var parsed: Variant = JSON.parse_string(file.get_as_text())
+			if typeof(parsed) == TYPE_DICTIONARY:
+				_plans = parsed.get("plans", {})
+	return _plans
 
 
 static func all() -> Dictionary:

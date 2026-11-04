@@ -1472,6 +1472,8 @@ static func v2_character(id: String) -> Node3D:
 	person.add_child(figure)
 	person.set_meta("v2", true)
 	person.set_meta("v2_id", id)
+	if id == "dana":
+		_dress_dana(figure)
 	# Something to carry, shown only while carrying (the room swaps in the
 	# actual piece when one is in hand).
 	var carry := make("box_closed")
@@ -1485,6 +1487,81 @@ static func v2_character(id: String) -> Node3D:
 	figure.add_child(carry)
 	play_clip(figure, "idle", true)
 	return person
+
+
+const DANA_FACE := "res://assets/characters/dana/face/dana_face_v3.png"
+const DANA_KNIT := "res://assets/characters/dana/face/rib_knit_grey.png"
+const DANA_SWEATER := Color("D9765F")
+const DANA_TROUSERS := Color("3A4660")
+const DANA_COLLAR := Color("F4E9D8")
+const DANA_BEANIE := Color("E6B655")
+
+
+static func _dress_dana(figure: Node3D) -> void:
+	# Dana's look over the team's rig: a livelier painted face, a
+	# terracotta knit with a cream collar over navy trousers, and a mustard
+	# beanie with a bobble on the Head bone. Procedural art only; the
+	# skin tone is the team's.
+	var face: Texture2D = load(DANA_FACE) if ResourceLoader.exists(DANA_FACE) else null
+	for mesh in figure.find_children("*", "MeshInstance3D", true, false):
+		var inst := mesh as MeshInstance3D
+		if inst.mesh == null:
+			continue
+		for i in inst.mesh.get_surface_count():
+			var material := inst.get_active_material(i) as StandardMaterial3D
+			if material == null:
+				continue
+			var copy := material.duplicate() as StandardMaterial3D
+			match material.resource_name:
+				"M_Face":
+					if face != null:
+						copy.albedo_texture = face
+				"M_Sweater":
+					copy.albedo_color = DANA_SWEATER
+					if ResourceLoader.exists(DANA_KNIT):
+						copy.albedo_texture = load(DANA_KNIT)
+				"M_Trousers":
+					copy.albedo_color = DANA_TROUSERS
+				"M_Collar":
+					copy.albedo_color = DANA_COLLAR
+				_:
+					continue
+			inst.set_surface_override_material(i, copy)
+	var skeletons := figure.find_children("*", "Skeleton3D", true, false)
+	var skeleton := (skeletons[0] as Skeleton3D) if not skeletons.is_empty() else null
+	if skeleton == null:
+		return
+	var head := skeleton.find_bone("Head")
+	if head < 0:
+		return
+	var hat := BoneAttachment3D.new()
+	hat.name = "Beanie"
+	hat.bone_name = "Head"
+	skeleton.add_child(hat)
+	# Offsets are in the bone's own space: the crown sits above the head
+	# joint along the skeleton's up, whichever way the bone's axes point.
+	var rest := skeleton.get_bone_global_rest(head)
+	var inv := rest.basis.inverse()
+	var crown := MeshInstance3D.new()
+	var dome := SphereMesh.new()
+	dome.radius = 0.145
+	dome.height = 0.24
+	crown.mesh = dome
+	crown.material_override = mat(DANA_BEANIE)
+	crown.position = inv * Vector3(0, 0.235, -0.02)
+	hat.add_child(crown)
+	var band := mesh_cylinder(0.148, 0.055, DANA_BEANIE.darkened(0.12))
+	band.position = inv * Vector3(0, 0.17, -0.02)
+	band.basis = Basis(inv)
+	hat.add_child(band)
+	var bobble := MeshInstance3D.new()
+	var ball := SphereMesh.new()
+	ball.radius = 0.038
+	ball.height = 0.076
+	bobble.mesh = ball
+	bobble.material_override = mat(DANA_COLLAR)
+	bobble.position = inv * Vector3(0, 0.37, -0.02)
+	hat.add_child(bobble)
 
 
 static func v2_play(person: Node3D, clip: String) -> void:

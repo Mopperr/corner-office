@@ -836,6 +836,9 @@ func _dress() -> void:
 		ShopLayout.place(self, layout_name)
 		return
 	var id := str(venue.get("id", ""))
+	if bool(venue.get("plan", false)):
+		_dress_plan()
+		return
 	if id == "garage":
 		_place_model("driveway_apron_2m", Vector3(2.5, 0, -1.02))
 		_place_model("driveway_apron_2m", Vector3(4.5, 0, -1.02))
@@ -901,6 +904,73 @@ func _dress() -> void:
 		VenueDressing.build(self, venue)
 	if bool(venue.get("pastry", false)):
 		var bun := _place_model("pastry_basket", Vector3(1.5, 0, 1.3))
+		if bun:
+			bun.name = "Pastry"
+			Props.add_picker(bun, Vector3(0.44, 0.23, 0.44))
+			bun.set_meta("pastry", true)
+			bun.set_meta("goal_item", "pastry_basket")
+			bun.set_meta("goal_h", 0.23)
+
+
+func _dress_plan() -> void:
+	# A place with a floor plan keeps its fixtures by room: each one stands
+	# at an offset from its room's corner, on the floor in play.
+	var ox := float(venue.get("x", 0))
+	var oz := float(venue.get("z", 0))
+	var dressing := Node3D.new()
+	dressing.name = "VenueDressing"
+	add_child(dressing)
+	var n := 0
+	for room in Homes.rooms(venue, home_floor):
+		var rect := Rect2(ox + float(room.get("x", 0)), oz + float(room.get("z", 0)), float(room.get("w", 2)), float(room.get("d", 2)))
+		VenueDressing.room(dressing, Homes.kind(str(room.get("id", ""))), rect, hash(str(venue.get("id", "")) + str(n)))
+		n += 1
+	for raw in venue.get("fixtures", []):
+		var fixture: Dictionary = raw
+		var room_id := str(fixture.get("room", ""))
+		var found := false
+		var floor_index := 0
+		var room: Dictionary = {}
+		for index in Homes.floors(venue).size():
+			for candidate in Homes.rooms(venue, index):
+				if str(candidate.get("id", "")) == room_id:
+					room = candidate
+					floor_index = index
+					found = true
+					break
+			if found:
+				break
+		if not found or floor_index != home_floor:
+			continue
+		var at := Vector3(ox + float(room.get("x", 0)) + float(fixture.get("dx", 0.0)), float(fixture.get("dy", 0.0)), oz + float(room.get("z", 0)) + float(fixture.get("dz", 0.0)))
+		var node := _place_model(str(fixture.get("model", "")), at, float(fixture.get("rot", 0.0)))
+		if node == null:
+			continue
+		if fixture.has("name"):
+			node.name = str(fixture["name"])
+		if fixture.has("clip"):
+			Props.play_clip(node, str(fixture["clip"]), true)
+		if fixture.has("goal"):
+			_mark_goal(node, str(fixture["goal"]), float(fixture.get("goal_h", 0.5)), float(fixture.get("goal_w", 0.4)), float(fixture.get("goal_d", 0.4)))
+			if fixture.has("goal_model"):
+				node.set_meta("goal_model", str(fixture["goal_model"]))
+		if bool(fixture.get("glow", false)):
+			var sky := OmniLight3D.new()
+			sky.name = "SkylightGlow"
+			sky.position = at + Vector3(0, -0.3, 0)
+			sky.light_color = Color("FFF1D6")
+			sky.light_energy = 1.1
+			sky.omni_range = 5.0
+			sky.shadow_enabled = false
+			add_child(sky)
+	if bool(venue.get("cat", false)):
+		cat_rig = _place_model("cat_biscuit", Vector3(ox + 4.3, 0, oz + 1.6))
+		if cat_rig:
+			Props.play_clip(cat_rig, "idle", true)
+			cat_player = cat_rig.find_child("AnimationPlayer", true, false) as AnimationPlayer
+			cat_base_y = cat_rig.position.y
+	if bool(venue.get("pastry", false)):
+		var bun := _place_model("pastry_basket", Vector3(ox + 1.5, 0, oz + 1.3))
 		if bun:
 			bun.name = "Pastry"
 			Props.add_picker(bun, Vector3(0.44, 0.23, 0.44))
@@ -3113,13 +3183,19 @@ func _auto_finish() -> void:
 # Packing: Dana goes to each loose piece, lifts it, carries it to the open
 # box and sets it in. Big pieces are wrapped where they stand.
 
+func _box_row_x0() -> float:
+	# The packing boxes line the front wall; on a floor plan the row starts
+	# past the hall and its stairs.
+	return 3.4 if bool(venue.get("plan", false)) else 0.8
+
+
 func _pack_box_spot(box_id: int) -> Vector3:
 	var i := 0
 	for box in GameState.job.get("boxes", []):
 		if int(box.get("id", -1)) == box_id:
 			break
 		i += 1
-	return Vector3(float(venue.get("x", 0)) + 0.8 + float(i) * 0.6, 0.0, float(venue.get("z", 0)) + 0.8)
+	return Vector3(float(venue.get("x", 0)) + _box_row_x0() + float(i) * 0.6, 0.0, float(venue.get("z", 0)) + 0.8)
 
 
 func _auto_pack_pick(step: Dictionary) -> void:
@@ -5108,10 +5184,29 @@ func _layout_loose() -> void:
 	)
 	var w := float(venue.get("w", 6))
 	var cols := maxi(3, int((w - 1.6) / 0.85))
+	# On a floor plan the pieces keep off the walls, the stairs and the
+	# doorways: a spot that would stand in one is skipped.
+	var blocked: Array = []
+	if _is_home():
+		blocked = Homes.wall_rects(venue, 0, 0.35)
+		for door in Homes.doorways(venue, 0):
+			blocked.append(Rect2(door.x - 0.7, door.z - 0.7, 1.4, 1.4))
 	var i := 0
-	for item in loose:
-		item["x"] = float(venue.get("x", 0)) + 1.0 + float(i % cols) * 0.85
-		item["z"] = float(venue.get("z", 0)) + 2.2 + float(int(i / cols)) * 0.85
+	var slot := 0
+	while i < loose.size() and slot < cols * 40:
+		var x := float(venue.get("x", 0)) + 1.0 + float(slot % cols) * 0.85
+		var z := float(venue.get("z", 0)) + 2.2 + float(int(slot / cols)) * 0.85
+		slot += 1
+		var taken := false
+		for rect in blocked:
+			if (rect as Rect2).has_point(Vector2(x, z)):
+				taken = true
+				break
+		if taken:
+			continue
+		var item: Dictionary = loose[i]
+		item["x"] = x
+		item["z"] = z
 		item["y"] = 0.0
 		i += 1
 
@@ -5123,7 +5218,7 @@ func _spawn_pack_boxes() -> void:
 	for box in GameState.job.get("boxes", []):
 		var id := int(box.get("id", 0))
 		var node := Node3D.new()
-		node.position = Vector3(float(venue.get("x", 0)) + 0.8 + float(i) * 0.6, 0.0, float(venue.get("z", 0)) + 0.8)
+		node.position = Vector3(float(venue.get("x", 0)) + _box_row_x0() + float(i) * 0.6, 0.0, float(venue.get("z", 0)) + 0.8)
 		node.set_meta("uid", "boxpack:%d" % id)
 		var sealed := bool(box.get("sealed", false))
 		node.add_child(Props.make("box_closed" if sealed else "box_open"))

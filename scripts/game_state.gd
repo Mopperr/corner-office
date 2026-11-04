@@ -347,7 +347,7 @@ func slice_beats() -> Array:
 		for entry in who.get("levels", []):
 			if typeof(entry) != TYPE_DICTIONARY:
 				continue
-			if str(entry.get("ship_in", "")) != "slice":
+			if not (str(entry.get("ship_in", "")) in ["slice", "1.0"]):
 				continue
 			beats.append(entry)
 	return beats
@@ -391,21 +391,18 @@ func _current_slice_level_id() -> String:
 		return ""
 	if mode == "drive":
 		var drive_id := str(job.get("def", {}).get("drive", ""))
-		if drive_id == "rainy_afternoon":
-			return "L3"
-		if drive_id == "duck_pond":
-			return "L5"
-		return ""
+		var road_levels := {"rainy_afternoon": "L3", "duck_pond": "L5", "market_morning": "L8", "neon_night": "L13", "windy_coast": "L15", "parade_detour": "L18"}
+		return str(road_levels.get(drive_id, ""))
 	if mode == "job_pack" or mode == "truck" or mode == "job_unpack":
+		# Every authored job carries its chapter; the beat fires on arrival.
 		var level := str(job.get("def", {}).get("level", ""))
-		if level == "L2" or level == "L4":
+		if level.begins_with("L") and not bool(job.get("def", {}).get("generated", false)):
 			return level
 		return ""
 	if mode == "office":
-		if office_id == "bakery":
-			return "L6"
-		if office_id == "garage":
-			return "L1"
+		var office := Tuning.office_def(office_id)
+		if not office.is_empty():
+			return str(office.get("level", ""))
 	return ""
 
 

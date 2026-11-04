@@ -42,6 +42,73 @@ static func build(parent: Node3D, venue: Dictionary) -> Node3D:
 	return root
 
 
+static func room(root: Node3D, kind: String, rect: Rect2, seed: int) -> void:
+	# What a room of this kind has before the boxes come in: the counter's
+	# cake stand and pendants, the seating's tables, the kitchen's shelf
+	# row, the workshop's bench lamp, a frame on an office wall. Small,
+	# along the walls, so the middle stays for the move.
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed
+	var x := rect.position.x
+	var z := rect.position.y
+	var w := rect.size.x
+	var d := rect.size.y
+	var cx := x + w * 0.5
+	var cz := z + d * 0.5
+	match kind:
+		"seating", "shopfloor", "shop", "reception":
+			var tables := clampi(int(w * d / 10.0), 1, 4)
+			for i in tables:
+				var tx := x + 1.1 + (w - 2.2) * (float(i) + 0.5) / float(tables)
+				_round_table(root, Vector3(tx, 0, z + d - 1.3), WOOD, [UIKit.PINK, UIKit.SAGE, UIKit.MUSTARD, UIKit.BLUE][i % 4])
+			for i in maxi(1, tables - 1):
+				_pendant(root, Vector3(x + 1.1 + (w - 2.2) * (float(i) + 0.5) / float(maxi(1, tables - 1)), 2.7, cz), UIKit.TERRA)
+			if w >= 4.0:
+				_bunting(root, Vector3(x + 0.3, 2.5, z + 0.4), Vector3(x + w - 0.3, 2.5, z + 0.4))
+		"counter", "kiosk", "bakery", "prep":
+			_pendant(root, Vector3(cx, 2.7, cz), UIKit.TERRA)
+			var stand := Props.mesh_cylinder(0.18, 0.03, CLOTH)
+			stand.position = Vector3(x + w - 0.6, 0.98, z + d - 0.5)
+			root.add_child(stand)
+			var cake := Props.mesh_cylinder(0.14, 0.1, UIKit.PINK)
+			cake.position = Vector3(x + w - 0.6, 1.01, z + d - 0.5)
+			root.add_child(cake)
+			_shelf_row(root, Vector3(x + 0.18, 1.5, cz), minf(d - 1.0, 2.0), 90.0)
+		"kitchen", "kitchenette", "pantry", "coldstore", "flourstore":
+			_shelf_row(root, Vector3(x + 0.18, 1.4, cz), minf(d - 1.0, 2.4), 90.0)
+			_shelf_row(root, Vector3(x + 0.18, 1.9, cz), minf(d - 1.0, 2.4), 90.0)
+			for k in 3:
+				var jar := Props.mesh_cylinder(0.06, 0.14, [Color("DCE9EE"), Color("E6B655"), Color("D9765F")][k])
+				jar.position = Vector3(x + 0.2, 1.42, cz - 0.6 + k * 0.5)
+				root.add_child(jar)
+		"workshop", "workbench", "store", "props", "boathouse", "layout":
+			_shelf_row(root, Vector3(x + w - 0.18, 1.3, cz), minf(d - 1.0, 2.4), -90.0)
+			var lamp := Props.mesh_cylinder(0.03, 0.9, STEEL)
+			lamp.position = Vector3(x + 0.5, 0.9, z + 0.5)
+			root.add_child(lamp)
+			var shade := Props.mesh_cylinder(0.14, 0.1, Color("3E5A52"))
+			shade.position = Vector3(x + 0.5, 1.82, z + 0.5)
+			root.add_child(shade)
+		"office", "staff", "study", "darkroom":
+			_wall_frame(root, Vector3(cx, 1.9, z + 0.1), Vector2(0.9, 0.6), BOARD, [Color("2F2B3E"), UIKit.BLUE, UIKit.MUSTARD][rng.randi_range(0, 2)])
+			_pendant(root, Vector3(cx, 2.7, cz), Color("3E5A52"))
+		"display", "loft":
+			_shelf_row(root, Vector3(x + 0.18, 1.2, cz), minf(d - 1.0, 2.6), 90.0)
+			_shelf_row(root, Vector3(x + 0.18, 1.75, cz), minf(d - 1.0, 2.6), 90.0)
+		"washroom", "loo", "bathroom":
+			var mirror := Props.mesh_box(Vector3(0.6, 0.8, 0.04), Color("BFDDEA"))
+			mirror.position = Vector3(cx, 1.6, z + 0.08)
+			root.add_child(mirror)
+		"hall", "landing":
+			_wall_frame(root, Vector3(cx, 1.8, z + 0.1), Vector2(0.5, 0.7), WOOD_DARK, UIKit.SAGE)
+		"lounge", "dining":
+			_pendant(root, Vector3(cx, 2.7, cz), UIKit.MUSTARD)
+		"bedroom":
+			_wall_frame(root, Vector3(cx, 1.9, z + 0.1), Vector2(0.6, 0.45), WOOD_DARK, UIKit.PINK)
+		_:
+			pass
+
+
 # ---------------------------------------------------------------- helpers
 
 static func _add(root: Node3D, mesh_instance: MeshInstance3D, at: Vector3, rot_y := 0.0) -> MeshInstance3D:

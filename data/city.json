@@ -143,6 +143,102 @@
    "side": "E",
    "t": 0.5,
    "color": "8FB573"
+  },
+  {
+   "id": "dentist",
+   "name": "Hartley Dental",
+   "block": [
+    1,
+    2
+   ],
+   "side": "N",
+   "t": 0.5,
+   "color": "BFDDEA",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "architect",
+   "name": "Okonkwo & Partners",
+   "block": [
+    3,
+    1
+   ],
+   "side": "W",
+   "t": 0.5,
+   "color": "E6CDA3",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "library",
+   "name": "Mill Lane Library",
+   "block": [
+    1,
+    3
+   ],
+   "side": "N",
+   "t": 0.5,
+   "color": "B98C72",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "record",
+   "name": "Spindle Records",
+   "block": [
+    3,
+    3
+   ],
+   "side": "S",
+   "t": 0.3,
+   "color": "3E3A4F",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "florist",
+   "name": "Pemberton & Pemberton",
+   "block": [
+    0,
+    2
+   ],
+   "side": "E",
+   "t": 0.5,
+   "color": "A9C6A2",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "theatre",
+   "name": "The Alcazar",
+   "block": [
+    1,
+    0
+   ],
+   "side": "S",
+   "t": 0.5,
+   "color": "C0392B",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "broker",
+   "name": "Grayline Brokerage",
+   "block": [
+    3,
+    2
+   ],
+   "side": "S",
+   "t": 0.7,
+   "color": "9FC4D6",
+   "authored": "gen_levels"
+  },
+  {
+   "id": "lodge",
+   "name": "Switchback Lodge",
+   "block": [
+    4,
+    3
+   ],
+   "side": "S",
+   "t": 0.5,
+   "color": "7A5C40",
+   "authored": "gen_levels"
   }
  ],
  "shops": [
