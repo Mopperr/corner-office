@@ -3188,6 +3188,16 @@ func _auto_finish() -> void:
 	if was == "job_pack":
 		_pack_finish()
 	elif was == "job_unpack":
+		# A shove or a thrown-out job can end the queue with a piece still
+		# in Dana's arms: it goes down at her feet, loose, so the job can
+		# still be finished by hand.
+		for item in GameState.job.get("items", []):
+			if str(item.get("state", "")) == "hand" and str(item.get("uid", "")) != held_uid:
+				item["state"] = "loose"
+				item["y"] = 0.0
+				if player != null and is_instance_valid(player):
+					item["x"] = player.position.x
+					item["z"] = player.position.z
 		_refresh_items()
 		_unhide_loose()
 		if auto_missed > 0:
@@ -6182,10 +6192,19 @@ func _job_card(decorated: Dictionary, width: float, from_board: bool) -> PanelCo
 	text.add_theme_constant_override("separation", 4)
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text)
-	var head := HBoxContainer.new()
-	head.add_theme_constant_override("separation", 12)
+	# The head row flows: a long title ("Benji moves into Grandpa's Train
+	# Shop") wraps and the pay and tags drop to the next line, rather than
+	# pushing the card off the clipboard.
+	var head := HFlowContainer.new()
+	head.add_theme_constant_override("h_separation", 12)
+	head.add_theme_constant_override("v_separation", 2)
 	text.add_child(head)
-	var name_label := UIKit.label(str(decorated.get("title", "")), 28, UIKit.DARK, "title", false)
+	var title_text := str(decorated.get("title", ""))
+	var name_label := UIKit.label(title_text, 28, UIKit.DARK, "title", false)
+	var natural := name_label.get_theme_font("font").get_string_size(title_text, HORIZONTAL_ALIGNMENT_LEFT, -1, name_label.get_theme_font_size("font_size")).x
+	if natural > width - 420.0:
+		name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		name_label.custom_minimum_size = Vector2(width - 420.0, 0)
 	head.add_child(name_label)
 	var pay := JobDB.base_pay(decorated)
 	var pay_label := UIKit.label("$%d base" % pay, 24, UIKit.SAGE, "small", false)
