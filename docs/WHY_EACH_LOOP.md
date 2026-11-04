@@ -49,18 +49,22 @@ Shady jobs (Sal's) add nobody: money without faces.
 
 ## Where the player meets it
 
-- The intro card: "The counter out front sells four coffees on a good day.
-  The street does not know the name on the door yet. Rent does. Every job is
-  somebody who will."
+- The intro card: "Nobody knows you yet. Every job fixes that."
 - Marge's welcome email: "Then take the jobs. The counter out front won't
   feed you until the street knows where you are."
 - How to play: a first tip, "Why the Jobs".
 - The clipboard header, the results card line, and the till email's visitor
   count, every day.
 
+## Referrals and lost names
+
+Once people know the counter, seven board jobs in ten come by referral: the
+brief opens with who sent them ("Grandpa Ellis sent them."), drawn from the
+network. A job that ends in a shove, a suit or a hand in their things takes
+the client's name off the list, and the friend they would have brought with
+it; the results card says so.
+
 ## What is still only words
 
 The chapter unlock chain (the dentist tells the architect, who tells the
-librarian) reads as referral but is a fixed order. A later pass could make
-the board's generated clients come from the network ("Ada's neighbour heard
-about you"), and let a bad job cost a name.
+librarian) reads as referral but is a fixed order.

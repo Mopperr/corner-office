@@ -2,20 +2,81 @@
  "_about": "Why Dana does each thing in the game, in her own words, and what each loop feeds. The counter out front is the point; everything else is how a stranger on the corner becomes a regular. Read by the clipboard, the results card and the how-to-play page.",
  "premise": "Laid off on a Tuesday. The garage opened on a Wednesday with a counter out front and nobody at it. The street does not know the name on the door yet. Rent does. Every job is somebody who will.",
  "loops": [
-  {"id": "pack", "title": "Packing", "dana": "You handle somebody's whole life in an afternoon. Pack it right and they trust you with the thing they care about. Trust is what fills a counter.", "feeds": "A neat pack earns the tip; a tipped client remembers the name on the box.", "marge": "Nobody remembers a cheap mover. They remember the one who padded the clock."},
-  {"id": "drive", "title": "The drive", "dana": "The truck is the only advert I can afford. Every street it rolls down is a street that has seen the name.", "feeds": "Honk at the people on the kerb and they look up; the ones who look up find the counter.", "marge": "Keep it slow and keep it seen. A lorry that nobody notices is a lorry that works for free."},
-  {"id": "unpack", "title": "Unpacking and placing", "dana": "The room I leave behind is the one they tell their friends about. The right room, the right wall, the chair where the light is.", "feeds": "A job with every piece in the right room sends the client to the counter with a friend.", "marge": "You are not placing furniture. You are placing the next conversation about you."},
-  {"id": "shop", "title": "The counter", "dana": "This is the point of all of it. The people I moved come in for a coffee because they know where I am now.", "feeds": "Every name in the network shortens the wait for the next face at the till.", "marge": "A shop is a room people come back to. Give them a reason and a seat."},
-  {"id": "market", "title": "The computer", "dana": "Rent does not wait for the next move. Buying low on the market and selling when the line goes up keeps the lights on between jobs.", "feeds": "Cash between jobs; the odd piece that makes the counter look like a shop.", "marge": "Trade keeps you fed. Jobs make you known. You need both, and you need them in that order some weeks."},
-  {"id": "workshop", "title": "The workbench", "dana": "A chipped thing mended is a client who comes back. Repairs are reputation you can hold in your hand.", "feeds": "Mending what a move scuffed keeps the tip and the client.", "marge": "Fix it before they notice and they tell nobody. Fix it after and they tell everybody how well."},
-  {"id": "crime", "title": "The back room", "dana": "When the till is empty and the rent is due, Sal's work is money tonight. Nobody at the counter asks where it came from. Until they do.", "feeds": "Money without faces; heat that keeps the regulars away.", "marge": "I am not going to tell you what to do. I will tell you the regulars can smell it."},
-  {"id": "league", "title": "The Movers' League", "dana": "The bigger shop needs the bigger name. The league is where the name gets made.", "feeds": "Rank opens the bigger offices and the clients who pay for a reputation.", "marge": "Points are just people who would say your name if asked. Earn enough and they stop needing to be asked."},
-  {"id": "life", "title": "A life of her own", "dana": "Pickle in the cab. A room that is mine. A first million that is a number on a whiteboard until it is not.", "feeds": "The reason to want any of this on a Tuesday.", "marge": "Buy the dog first. The dog tips better than the accountant."},
-  {"id": "offices", "title": "The ladder of offices", "dana": "Each office is a bigger window on a busier street. From a roll-up door to a corner with my name on the glass.", "feeds": "A bigger window is a bigger counter and more of the street walking past it.", "marge": "You will miss the garage. Everybody does. Go anyway."}
+  {
+   "id": "pack",
+   "title": "Packing",
+   "dana": "You handle somebody's whole life in an afternoon. Pack it right and they trust you with the thing they care about. Trust is what fills a counter.",
+   "feeds": "A neat pack earns the tip; a tipped client remembers the name on the box.",
+   "marge": "Nobody remembers a cheap mover. They remember the one who padded the clock."
+  },
+  {
+   "id": "drive",
+   "title": "The drive",
+   "dana": "The truck is the only advert I can afford. Every street it rolls down is a street that has seen the name.",
+   "feeds": "Honk at the people on the kerb and they look up; the ones who look up find the counter.",
+   "marge": "Keep it slow and keep it seen. A lorry that nobody notices is a lorry that works for free."
+  },
+  {
+   "id": "unpack",
+   "title": "Unpacking and placing",
+   "dana": "The room I leave behind is the one they tell their friends about. The right room, the right wall, the chair where the light is.",
+   "feeds": "A job with every piece in the right room sends the client to the counter with a friend.",
+   "marge": "You are not placing furniture. You are placing the next conversation about you."
+  },
+  {
+   "id": "shop",
+   "title": "The counter",
+   "dana": "This is the point of all of it. The people I moved come in for a coffee because they know where I am now.",
+   "feeds": "Every name in the network shortens the wait for the next face at the till.",
+   "marge": "A shop is a room people come back to. Give them a reason and a seat."
+  },
+  {
+   "id": "market",
+   "title": "The computer",
+   "dana": "Rent does not wait for the next move. Buying low on the market and selling when the line goes up keeps the lights on between jobs.",
+   "feeds": "Cash between jobs; the odd piece that makes the counter look like a shop.",
+   "marge": "Trade keeps you fed. Jobs make you known. You need both, and you need them in that order some weeks."
+  },
+  {
+   "id": "workshop",
+   "title": "The workbench",
+   "dana": "A chipped thing mended is a client who comes back. Repairs are reputation you can hold in your hand.",
+   "feeds": "Mending what a move scuffed keeps the tip and the client.",
+   "marge": "Fix it before they notice and they tell nobody. Fix it after and they tell everybody how well."
+  },
+  {
+   "id": "crime",
+   "title": "The back room",
+   "dana": "When the till is empty and the rent is due, Sal's work is money tonight. Nobody at the counter asks where it came from. Until they do.",
+   "feeds": "Money without faces; heat that keeps the regulars away.",
+   "marge": "I am not going to tell you what to do. I will tell you the regulars can smell it."
+  },
+  {
+   "id": "league",
+   "title": "The Movers' League",
+   "dana": "The bigger shop needs the bigger name. The league is where the name gets made.",
+   "feeds": "Rank opens the bigger offices and the clients who pay for a reputation.",
+   "marge": "Points are just people who would say your name if asked. Earn enough and they stop needing to be asked."
+  },
+  {
+   "id": "life",
+   "title": "A life of her own",
+   "dana": "Pickle in the cab. A room that is mine. A first million that is a number on a whiteboard until it is not.",
+   "feeds": "The reason to want any of this on a Tuesday.",
+   "marge": "Buy the dog first. The dog tips better than the accountant."
+  },
+  {
+   "id": "offices",
+   "title": "The ladder of offices",
+   "dana": "Each office is a bigger window on a busier street. From a roll-up door to a corner with my name on the glass.",
+   "feeds": "A bigger window is a bigger counter and more of the street walking past it.",
+   "marge": "You will miss the garage. Everybody does. Go anyway."
+  }
  ],
  "results": {
   "known": "Word gets round  {client} knows the counter now",
   "told": "Word gets round  {client} brings a friend to the counter",
-  "spotted": "The truck was seen on {count} kerbs"
+  "spotted": "The truck was seen on {count} kerbs",
+  "lost": "Word gets round the other way  {client} will not be at the counter"
  }
 }

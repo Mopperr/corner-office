@@ -104,7 +104,9 @@ func _ready() -> void:
 	if int(pay.get("life_extra", 0)) > 0:
 		lines.append("Your own people  +$%d" % int(pay.get("life_extra", 0)))
 	var network: Dictionary = pay.get("network", {})
-	if int(network.get("added", 0)) > 0:
+	if int(network.get("lost", 0)) > 0:
+		lines.append(Narrative.why_result("lost").format({"client": str(network.get("client", "They"))}))
+	elif int(network.get("added", 0)) > 0:
 		lines.append(Narrative.why_result("told" if bool(network.get("told", false)) else "known").format({"client": str(network.get("client", "They"))}))
 	if int(pay.get("split_loss", 0)) > 0:
 		lines.append("Split sets  −$%d" % int(pay.get("split_loss", 0)))

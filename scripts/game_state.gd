@@ -97,6 +97,16 @@ func _grow_network(def: Dictionary) -> void:
 	var client := str(def.get("client", ""))
 	if client == "" or bool(def.get("shady", false)):
 		return
+	# A shove, a suit or a hand in their things: the name comes off the
+	# list, and the friend they would have brought with it.
+	if bool(payout.get("attacked", false)) or bool(payout.get("caught_pocketing", false)) or int(payout.get("sue_won", 0)) > 0:
+		var lost := 0
+		for name in [client, "%s's friend" % client]:
+			if network.has(name):
+				network.erase(name)
+				lost += 1
+		payout["network"] = {"client": client, "lost": lost, "size": network.size()}
+		return
 	var told := bool(payout.get("perfect", false))
 	var added := 0
 	if not network.has(client):

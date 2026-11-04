@@ -182,6 +182,11 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 		drives[drive_id] = drive
 		var pay := 90 + size * 4 + int(float(drive.get("length_m", 150)) * 0.25) + rep * 12
 		pay = clampi(pay, 100, 320)
+		# Word of mouth: once people know the counter, the board's clients
+		# come by referral, and the brief says who sent them.
+		var referral := ""
+		if not GameState.network.is_empty() and rng.randf() < 0.7:
+			referral = str(GameState.network[rng.randi_range(0, GameState.network.size() - 1)])
 		var job := {
 			"id": id,
 			"generated": true,
@@ -195,7 +200,8 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 			"mood": client.get("mood", ""),
 			"story": client.get("story", ""),
 			"why": client.get("why", ""),
-			"brief": "%s%s %d pieces to %s. %s" % [(str(client.get("why", "")) + " ") if str(client.get("why", "")) != "" else "", client.get("line", ""), size, drive.get("title", "the new place"), _twist_line(twist)],
+			"brief": "%s%s%s %d pieces to %s. %s" % [("%s sent them. " % referral) if referral != "" else "", (str(client.get("why", "")) + " ") if str(client.get("why", "")) != "" else "", client.get("line", ""), size, drive.get("title", "the new place"), _twist_line(twist)],
+			"referral": referral,
 			"mentor_note": _mentor_line(twist, rng),
 			"narrative_base": pay,
 			"recipe": recipe,
