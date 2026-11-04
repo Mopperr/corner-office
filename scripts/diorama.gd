@@ -439,6 +439,16 @@ func rotate_view(steps: int) -> void:
 	, 0.0, 1.0, 0.35)
 	AudioDirector.play_sfx("sfx_ui_click")
 	_markers_key = ""
+	_orient_room_names()
+
+
+func _orient_room_names() -> void:
+	# The names on the floors turn with the view, so they read the right
+	# way up from whichever side the camera has come round to.
+	var base := Basis(Vector3(1, 0, -1).normalized(), Vector3(-1, 0, -1).normalized(), Vector3(0, 1, 0))
+	var turn := Basis(Vector3.UP, view_quadrant * PI * 0.5)
+	for label in find_children("RoomName_*", "Label3D", true, false):
+		(label as Label3D).transform.basis = turn * base
 
 
 func zoom_view(delta_zoom: float) -> void:
@@ -4973,6 +4983,7 @@ func _build_interior() -> void:
 		remove_child(old)
 		old.free()
 	Homes.build(self, venue, home_floor, _wall_color(), _trim_color(), _floor_color(), GameState.mode != "job_pack")
+	_orient_room_names()
 
 
 func _set_floor(index: int) -> void:
@@ -6113,9 +6124,14 @@ func _fill_jobs(rows: VBoxContainer, width: float) -> void:
 		return
 	# Why the jobs: the counter needs faces, and every move is one who
 	# knows where it is now.
-	var why: Dictionary = Narrative.why_loop("shop" if GameState.shop_open() else "pack")
-	var why_line := UIKit.label("%s  ·  %d people know the counter from your jobs" % [str(why.get("dana", "")), GameState.network.size()] if GameState.network.size() > 0 else "%s  ·  Nobody on the street knows the name yet. Every job is somebody who will." % str(why.get("dana", "")), 24, UIKit.WOOD, "small")
-	why_line.custom_minimum_size = Vector2(width - 20.0, 0)
+	var known := GameState.network.size()
+	var why: Dictionary = Narrative.why_loop("shop" if GameState.shop_open() and known > 0 else "pack")
+	var why_text := "Nobody on the street knows the name yet. Every job is somebody who will."
+	if known > 0:
+		why_text = "%s  ·  %d %s the counter from your jobs." % [str(why.get("dana", "")), known, "person knows" if known == 1 else "people know"]
+	var why_line := UIKit.label(why_text, 24, UIKit.WOOD, "small")
+	why_line.custom_minimum_size = Vector2(width - 120.0, 0)
+	why_line.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	rows.add_child(why_line)
 	if not story.is_empty():
 		rows.add_child(UIKit.label("Marge's jobs", 28, UIKit.TERRA, "title", false))
