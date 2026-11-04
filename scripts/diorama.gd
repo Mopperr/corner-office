@@ -6658,7 +6658,7 @@ func _mode_hint() -> String:
 		"truck":
 			return "Pick a box, then a pad in the bed. Mustard pads are the floor, and heavy goes there."
 		"job_unpack":
-			return "Click a box in the truck to carry it in. Click it again to see what's inside, then set each piece on the floor, a desk or a shelf. Stack the boxes to clear the floor."
+			return "Carry a box in, open it, set each piece where it belongs. Stack empty boxes to clear the floor."
 	return ""
 
 

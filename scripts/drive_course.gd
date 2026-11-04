@@ -432,11 +432,20 @@ func _build_town() -> void:
 		_slab(Vector3(cut_rect.size.x / PX, 0.03, cut_rect.size.y / PX), rect_center(cut_rect, 0.0), Color("6B4A3A"))
 		var alley_sign := _sign_text("Alley", rect_center(Rect2(cut_rect.position, Vector2(minf(cut_rect.size.x, 72.0), 40)), 3.2), Color("F4E9D8"))
 		alley_sign.font_size = 90
+	# The two kerbside fronts carry their own name board; a second sign at
+	# the same door would read twice.
+	var front_doors: Array = []
+	for front in [pickup, dropoff]:
+		var front_def := _front_venue(front)
+		if not front.is_empty() and not (Homes.is_home(front_def) and str(front_def.get("kind", "house")) != "shop"):
+			front_doors.append(front.get("door", Vector2.ZERO))
 	for shop in city.shops:
-		_build_sign(shop, Color("C68B59"))
+		if not _near_front(shop.get("door", Vector2.ZERO), front_doors):
+			_build_sign(shop, Color("C68B59"))
 	for id in city.places.keys():
 		var place: Dictionary = city.places[id]
-		_build_sign(place, place.get("color", Color("C68B59")))
+		if not _near_front(place.get("door", Vector2.ZERO), front_doors):
+			_build_sign(place, place.get("color", Color("C68B59")))
 	_build_bay(pickup, "LOAD")
 	_build_bay(dropoff, "UNLOAD")
 	for spot in city.curb_spots(rng):
@@ -771,7 +780,24 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 				deck.rotation.y = -atan2(dir.z, dir.x)
 				world.add_child(deck)
 	_multimesh(Vector3(1.3, 1.6, 0.08), trim, frames)
-	_multimesh(Vector3(1.05, 1.35, 0.08), glass_color, panes)
+	if str(course.get("weather", "clear")) == "night":
+		# After dark about a third of the windows are lit, warm or television blue.
+		var dark: Array = []
+		var warm: Array = []
+		var cool: Array = []
+		for pane in panes:
+			var roll := rng.randf()
+			if roll < 0.28:
+				warm.append(pane)
+			elif roll < 0.36:
+				cool.append(pane)
+			else:
+				dark.append(pane)
+		_multimesh(Vector3(1.05, 1.35, 0.08), Color("1B2630"), dark)
+		_multimesh(Vector3(1.05, 1.35, 0.08), Color("FFE7B0"), warm, 1.6)
+		_multimesh(Vector3(1.05, 1.35, 0.08), Color("9FD0FF"), cool, 1.2)
+	else:
+		_multimesh(Vector3(1.05, 1.35, 0.08), glass_color, panes)
 	_multimesh(Vector3(1.5, 0.08, 0.22), trim.darkened(0.1), sills)
 	# The tall ones step back at the top, with a terrace and a hedge round it.
 	if floors >= 4 and rng.randf() < 0.5:
@@ -820,7 +846,7 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 					world.add_child(post)
 
 
-func _multimesh(size: Vector3, color: Color, transforms: Array) -> void:
+func _multimesh(size: Vector3, color: Color, transforms: Array, glow := 0.0) -> void:
 	if transforms.is_empty():
 		return
 	var mm := MultiMesh.new()
@@ -833,7 +859,12 @@ func _multimesh(size: Vector3, color: Color, transforms: Array) -> void:
 		mm.set_instance_transform(i, transforms[i])
 	var node := MultiMeshInstance3D.new()
 	node.multimesh = mm
-	node.material_override = Props.mat(color)
+	var material := Props.mat(color)
+	if glow > 0.0:
+		material.emission_enabled = true
+		material.emission = color
+		material.emission_energy_multiplier = glow
+	node.material_override = material
 	world.add_child(node)
 
 
@@ -1327,6 +1358,13 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 		label.font_size = 72
 
 
+func _near_front(door: Vector2, front_doors: Array) -> bool:
+	for at in front_doors:
+		if door.distance_to(at) < 4.0 * PX:
+			return true
+	return false
+
+
 func _sign_text(text: String, at: Vector3, color: Color) -> Label3D:
 	var label := Label3D.new()
 	label.text = text
@@ -1684,7 +1722,8 @@ func _hud() -> void:
 	name_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_bar.add_theme_stylebox_override("panel", UIKit.style(UIKit.NIGHT, 14))
 	hud_root.add_child(name_bar)
-	UIKit.pin_top_right(name_bar, -520, 16, -16, 84)
+	# The app's Pause button owns the top-right corner; the title sits to its left.
+	UIKit.pin_top_right(name_bar, -640, 16, -172, 84)
 	var name_label := UIKit.label(str(course.get("title", "Drive")), 28, UIKit.CREAM_CARD, "title", false)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_bar.add_child(name_label)

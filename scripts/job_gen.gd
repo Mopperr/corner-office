@@ -100,6 +100,18 @@ const STREETS: Array = ["Larch Street", "Mill Lane", "Harbour Road", "Elm Row", 
 static var _clients_cache: Array = []
 
 
+static func _title(client: Dictionary, venue_def: Dictionary) -> String:
+	# A household's story names its own job; a trade client is moving into
+	# the place by name, so the board says where rather than what they do.
+	if str(client.get("title", "")) != "":
+		return str(client.get("title", ""))
+	var first := str(client.get("name", "Someone")).split(" ")[0]
+	var place := str(venue_def.get("name", ""))
+	if place != "" and str(venue_def.get("kind", "house")) == "shop":
+		return "%s moves into %s" % [first, place]
+	return "%s's %s move" % [first, str(client.get("trade", ""))]
+
+
 static func clients() -> Array:
 	# The trade clients above, plus every household with a story in data/stories.json.
 	if _clients_cache.is_empty():
@@ -176,7 +188,7 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 			"venue": venue,
 			"drive": drive_id,
 			"unlock": "tutorial_done",
-			"title": str(client.get("title", "%s's %s move" % [str(client.get("name", "Someone")).split(" ")[0], client.get("trade", "")])),
+			"title": _title(client, home),
 			"home": is_home,
 			"client": client.get("name", ""),
 			"party": client.get("party", ["adult"]),
