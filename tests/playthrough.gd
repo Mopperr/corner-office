@@ -1200,7 +1200,8 @@ func _unpack() -> void:
 		room = _room()
 		var opened := _node_for(room, "boxopen:%d" % id)
 		if opened == null:
-			if generated:
+			# A box emptied through a neighbour's click has folded away already.
+			if generated or (room.call("_box_contents", id) as Array).is_empty():
 				continue
 			_fail("unpack: carried box %d is not in the room to open" % (id + 1))
 			return
