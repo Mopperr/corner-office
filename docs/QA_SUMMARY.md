@@ -6,6 +6,10 @@ tests, which all run in CI.
 
 ## Verdict
 
+Playable start to finish, and recorded that way: the Movie Maker take of 4 Nov
+runs the whole slice in 15 min 47 s of game time with 345 checks green (see
+`docs/QA_REPORT.md`, "The recording").
+
 Playable start to finish. No crashes, no soft locks, saves round-trip after
 every step. It is a game now, not a slice; the remaining work is polish and
 feel, not missing systems.

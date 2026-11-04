@@ -139,6 +139,30 @@ wrong-room check at Finish with outlines and a fix-or-finish card; "Kitchen done
 the PERFECT MOVE stamp; the room before and after on the results card; houses with
 six to nine of the family's pieces a room and pictures on the walls.
 
+## The recording (4 Nov)
+
+Three Movie Maker takes of the whole slice at 1080p, 20 frames a second, with
+sound. Take 1 was cut by the recorder's own time cap. Take 2 (16.5 min of game
+time) was cut at the house move by a test rule since fixed: the click lifted the
+neighbour of the piece it aimed at, which the run now simply places. Take 3, on the
+commit with the click retry, played start to finish: 345 checks passed, no script
+errors, 15 min 47 s of game time; the engine rendered it at about 270 ms a frame
+under software GL, so one take is two and a half hours of wall time.
+
+What the take shows, in order: menu and character select, the garage tutorial, the
+computer and map, the shop with a customer's ask and a hand-made order, three jobs
+through pack, truck, drive, unpack and results (conditions 52, 49 and 92 on the
+road), Pickle from the Life page, the goals, the workbench, the back room haggle,
+the night move with patrols, a generated house move with the family on site and
+the wrong-room check at Finish, and the Bakery Loft. The four UX notes the run
+printed are the known ones: a truck pad or a bed box hidden by a loaded box and
+reached by a tap on the truck, and one loose piece found after a turn of the view.
+
+One CI run on the layout commit failed when the first click after the family's
+card closed did not lift the piece; the run now clicks again, at most twice, and
+prints what stood in the way. The smoke tests, the headless playthrough and both
+CI runs are green on that commit.
+
 ## Still open
 
 - Rendered runs under software GL are slow; a Movie Maker take of the whole slice
