@@ -2181,10 +2181,29 @@ func _camera_clear(goal: Vector3, truck_at: Vector3) -> Vector3:
 	# A camera point inside a building slides toward the truck until it is
 	# out in the street again.
 	var px := Vector2(goal.x * PX, goal.z * PX)
+	# Over one of the two kerbside fronts (pulling away from the one just
+	# packed, or arriving at the next) the camera steps out onto the road,
+	# the way the parked camera stands, rather than climbing onto the truck.
+	for place in [pickup, dropoff]:
+		if place.is_empty():
+			continue
+		for span in _front_spans:
+			if (span as Rect2).grow(16.0).has_point(px):
+				var out := -_inward3(str(place.get("side", "N")))
+				var door: Vector3 = to_world(place.get("door", Vector2.ZERO), 0.0)
+				if door.distance_to(goal) < 24.0:
+					for step in 4:
+						goal += out * 1.6
+						px = Vector2(goal.x * PX, goal.z * PX)
+						if not (span as Rect2).grow(16.0).has_point(px):
+							break
 	for i in 6:
 		var inside := false
 		for entry in city.buildings:
 			if (entry.get("rect", Rect2()) as Rect2).has_point(px):
+				inside = true
+		for span in _front_spans:
+			if (span as Rect2).grow(16.0).has_point(px):
 				inside = true
 		if not inside:
 			break
