@@ -78,5 +78,20 @@
   "told": "Word gets round  {client} brings a friend to the counter",
   "spotted": "The truck was seen on {count} kerbs",
   "lost": "Word gets round the other way  {client} will not be at the counter"
- }
+ },
+ "visitor_lines": [
+  "You moved my whole life in an afternoon. The least I can do is buy a coffee.",
+  "Found you. The truck's easier to spot than the sign.",
+  "Still got the box you packed the clock in. Can't bring myself to flatten it.",
+  "I told the whole street where you were. You're welcome.",
+  "Nothing broke. I'm here to say so in person.",
+  "The chair's where you put it. We tried moving it. It went back.",
+  "Knew you'd be here. Marge said the kettle's always on.",
+  "Came to see the counter you kept going on about."
+ ],
+ "friend_lines": [
+  "{client} said you'd know where everything goes. Prove it with a coffee.",
+  "{client} won't stop talking about the move. Thought I'd see the place.",
+  "{client} sent me. Said you pad the clocks."
+ ]
 }

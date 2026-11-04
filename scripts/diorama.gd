@@ -8125,6 +8125,19 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 		order["who"] = named
 	else:
 		person = _make_person(color)
+	# Somebody Dana moved, come to find the counter: the point of the jobs,
+	# as often as the network has grown.
+	var known := ""
+	if regular == "" and not GameState.network.is_empty() and regular_rng.randf() < clampf(0.25 + 0.03 * float(GameState.network.size()), 0.25, 0.7):
+		known = str(GameState.network[regular_rng.randi_range(0, GameState.network.size() - 1)])
+		var named: Dictionary = (order.get("who", {}) as Dictionary).duplicate()
+		named["name"] = known
+		var friend_of := known.trim_suffix("'s friend") if known.ends_with("'s friend") else ""
+		named["line"] = Narrative.visitor_line(regular_rng, friend_of.split(" ")[0] if friend_of != "" else "")
+		named["request"] = ""
+		order["who"] = named
+		order["tip_mult"] = float(order.get("tip_mult", 1.0)) * 1.25
+		GameState.shop_known_today += 1
 	person.name = "Customer_" + uid
 	# The order floats over their head until it is in their hand.
 	var bubble := Node3D.new()
@@ -8150,7 +8163,7 @@ func _spawn_customer(from_car: Node3D = null) -> void:
 	for entry in customers:
 		if str(entry.get("stage", "")) != "leaving":
 			index += 1
-	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0, "car": from_car, "regular": regular}
+	var entry := {"uid": uid, "node": person, "order": order, "stage": "walking", "wait": 0.0, "index": index, "hover": 0.0, "car": from_car, "regular": regular, "known": known}
 	var asks: Array = Catalog.asks()
 	if not asks.is_empty() and randf() < 0.45:
 		entry["ask"] = asks[randi() % asks.size()]

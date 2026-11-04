@@ -183,6 +183,7 @@ func _run() -> void:
 		else:
 			_check(int(GameState.stats.get("board_jobs", 0)) >= 1, "board job counted (%s)" % GameState.stats)
 
+	await _network_at_counter()
 	await _buy_loft()
 
 
@@ -1563,6 +1564,33 @@ func _home_floors(room: Node) -> void:
 
 
 # ---------------------------------------------------------------- loft
+
+func _network_at_counter() -> void:
+	# The point of the jobs: somebody Dana moved walks into the shop by name.
+	var room := _room()
+	if room == null or GameState.network.is_empty() or not GameState.shop_accepting() or GameState.mode != "office":
+		print("note: network %d, shop accepting %s; skipping the counter check" % [GameState.network.size(), GameState.shop_accepting()])
+		return
+	var known := ""
+	for i in 12:
+		room.call("_spawn_customer")
+		for entry in room.customers:
+			if str(entry.get("known", "")) != "":
+				known = str(entry["known"])
+		if known != "":
+			break
+		await wait(0.1)
+	_check(known != "" and GameState.network.has(known), "network: %s came to the counter (%d know it)" % [known if known != "" else "nobody", GameState.network.size()])
+	_check(GameState.shop_known_today >= 1, "network: the till counts them (%d)" % GameState.shop_known_today)
+	if known != "":
+		await shot("network_at_counter")
+	for entry in room.customers.duplicate():
+		var node = entry.get("node")
+		if node != null and is_instance_valid(node):
+			node.queue_free()
+	room.customers.clear()
+	await wait(0.3)
+
 
 func _buy_loft() -> void:
 	if GameState.jobs_done < 3:

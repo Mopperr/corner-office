@@ -31,5 +31,13 @@ static func why_result(key: String) -> String:
 	return str(why().get("results", {}).get(key, ""))
 
 
+static func visitor_line(rng: RandomNumberGenerator, friend_of := "") -> String:
+	# What somebody Dana moved says at the counter; a friend names who sent them.
+	var pool: Array = why().get("friend_lines" if friend_of != "" else "visitor_lines", [])
+	if pool.is_empty():
+		return ""
+	return str(pool[rng.randi_range(0, pool.size() - 1)]).format({"client": friend_of})
+
+
 static func premise() -> String:
 	return str(why().get("premise", ""))

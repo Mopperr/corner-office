@@ -57,6 +57,8 @@ var prime := false
 var menu_markup := 1.0
 var shop_today := 0
 var shop_visitors_today := 0
+# Faces at the counter today who knew it from a move.
+var shop_known_today := 0
 var shop_ledger: Array = []
 var shop_closed := false
 var shop_hand_served := 0
@@ -2014,6 +2016,7 @@ func advance_day() -> void:
 		_shop_summary(closed_day, earned, visitors, vibe)
 	shop_today = 0
 	shop_visitors_today = 0
+	shop_known_today = 0
 	refresh_board()
 	Crime.new_day()
 	_charge_rent(summary)
@@ -2628,11 +2631,10 @@ func _visitor_request(who: Dictionary) -> void:
 func _shop_summary(closed_day: int, earned: int, visitors: int, vibe: int) -> void:
 	var spec: Dictionary = Catalog.shop.get("summary_email", {})
 	var body := fill_tokens(str(spec.get("body", "")), {"day": closed_day, "earned": earned, "visitors": visitors, "vibe": vibe})
-	# The jobs show in the till: some of the day's faces knew the counter from a move.
-	var known := mini(visitors, int(round(float(visitors) * (1.0 - footfall_mult()))))
-	if known > 0 and not network.is_empty():
-		var who := str(network[(closed_day + visitors) % network.size()])
-		body = body.replace("Nobody was rushed,", "%s knew the counter from a move. Nobody was rushed," % (("%d of them" % known) if known > 1 else who))
+	# The jobs show in the till: the day's faces who knew the counter from a move.
+	var known := mini(visitors, shop_known_today)
+	if known > 0:
+		body = body.replace("Nobody was rushed,", "%s knew the counter from a move. Nobody was rushed," % (("%d of them" % known) if known > 1 else "One of them"))
 	inbox.append({
 		"id": "shop_day_%d" % closed_day,
 		"from": str(spec.get("from", "Marge Holloway")),
@@ -2684,6 +2686,7 @@ func to_dict() -> Dictionary:
 		"menu_markup": menu_markup,
 		"shop_today": shop_today,
 		"shop_visitors_today": shop_visitors_today,
+		"shop_known_today": shop_known_today,
 		"shop_ledger": shop_ledger.duplicate(true),
 		"shop_closed": shop_closed,
 		"shop_hand_served": shop_hand_served,
@@ -2760,6 +2763,7 @@ func from_dict(raw: Dictionary) -> void:
 	menu_markup = float(raw.get("menu_markup", 1.0))
 	shop_today = int(raw.get("shop_today", 0))
 	shop_visitors_today = int(raw.get("shop_visitors_today", 0))
+	shop_known_today = int(raw.get("shop_known_today", 0))
 	shop_ledger = raw.get("shop_ledger", []).duplicate(true) if raw.has("shop_ledger") else []
 	shop_closed = bool(raw.get("shop_closed", false))
 	shop_hand_served = int(raw.get("shop_hand_served", 0))
