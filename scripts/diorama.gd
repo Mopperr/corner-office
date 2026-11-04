@@ -4604,6 +4604,7 @@ func _tick_player(delta: float) -> void:
 			player.position += to.normalized() * step
 	_animate_person(player, player_time, player_moving, delta)
 	_lean_under_load(delta)
+	_idle_personality(delta)
 
 
 # ---------------------------------------------------------------- walls and weight
@@ -4745,6 +4746,45 @@ func _tween_walk(who: Node3D, dest: Vector3, mps: float, then: Callable) -> void
 		prev = leg
 	if then.is_valid():
 		tw.tween_callback(then)
+
+
+var idle_clock := 0.0
+var idle_next := 6.0
+
+
+func _idle_personality(delta: float) -> void:
+	# Standing still, Dana is still somebody: every few seconds a weight
+	# shift, a look round the room, or a stretch after a heavy one.
+	if player_moving or auto_busy or bool(player.get_meta("down", false)) or held_uid != "":
+		idle_clock = 0.0
+		return
+	idle_clock += delta
+	if idle_clock < idle_next:
+		return
+	idle_clock = 0.0
+	idle_next = GameState.rng.randf_range(6.0, 11.0)
+	var figure := player.get_node_or_null("Figure") as Node3D
+	if figure == null:
+		return
+	var tw := create_tween()
+	match GameState.rng.randi_range(0, 2):
+		0:
+			# A weight shift to one hip and back.
+			var side := 0.05 if GameState.rng.randf() < 0.5 else -0.05
+			tw.tween_property(figure, "rotation:z", side, 0.5).set_trans(Tween.TRANS_SINE)
+			tw.tween_interval(1.4)
+			tw.tween_property(figure, "rotation:z", 0.0, 0.6).set_trans(Tween.TRANS_SINE)
+		1:
+			# A look round the room.
+			var turn := 0.5 if GameState.rng.randf() < 0.5 else -0.5
+			tw.tween_property(figure, "rotation:y", turn, 0.7).set_trans(Tween.TRANS_SINE)
+			tw.tween_interval(1.1)
+			tw.tween_property(figure, "rotation:y", 0.0, 0.7).set_trans(Tween.TRANS_SINE)
+		_:
+			# A stretch: up on the toes, arms would go up if the rig let them.
+			tw.tween_property(figure, "scale", Vector3(0.98, 1.04, 0.98), 0.6).set_trans(Tween.TRANS_SINE)
+			tw.tween_interval(0.5)
+			tw.tween_property(figure, "scale", Vector3.ONE, 0.5).set_trans(Tween.TRANS_SINE)
 
 
 func _carry_kg() -> float:

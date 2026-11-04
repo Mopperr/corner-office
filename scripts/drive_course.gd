@@ -1321,7 +1321,9 @@ func _build_sign(place: Dictionary, color: Color) -> void:
 	world.add_child(frame)
 	var text := str(place.get("name", ""))
 	if text != "":
-		var label := _sign_text(text, door + inward * 0.3 + Vector3(0, 3.3, 0), Color("3E3A4F"))
+		# Neighbours' names take turns at two heights, so none sit on top of another.
+		var lift := 3.3 if hash(text) % 2 == 0 else 3.95
+		var label := _sign_text(text, door + inward * 0.3 + Vector3(0, lift, 0), Color("3E3A4F"))
 		label.font_size = 72
 
 
