@@ -1343,21 +1343,28 @@ func _unpack() -> void:
 		for item in GameState.job.get("items", []):
 			if str(item.get("state", "")) == "loose":
 				loose.append(item)
-		if loose.is_empty():
+		# A piece already in Dana's hand (a click meant for the family lands on
+		# the piece beside them) is placed first, as a player would.
+		var in_hand := str(room.held_uid) if str(GameState.job_item(str(room.held_uid)).get("state", "")) == "hand" else ""
+		if loose.is_empty() and in_hand == "":
 			break
 		# The kettle card, if it is up, takes a click before the room does.
 		if press("Yes please"):
 			print("  tea: yes please, then back to it")
 			await wait(0.4)
 		var picked := ""
+		var direct := false
+		if in_hand != "":
+			print("UX: %s was already in hand; placing it first" % in_hand)
+			picked = in_hand
+			direct = true
 		for item in loose:
+			if picked != "":
+				break
 			var node := _node_for(room, str(item.get("uid", "")))
 			if node == null:
 				continue
 			picked = await _probe(room, node, func(h): return str(GameState.job_item(h).get("state", "")) == "loose")
-			if picked != "":
-				break
-		var direct := false
 		if picked == "":
 			# Hidden behind something from this side: turn the room and look again, as a player would.
 			for turn in 3:
