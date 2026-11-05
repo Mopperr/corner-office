@@ -71,6 +71,14 @@
    "dana": "Each office is a bigger window on a busier street. From a roll-up door to a corner with my name on the glass.",
    "feeds": "A bigger window is a bigger counter and more of the street walking past it.",
    "marge": "You will miss the garage. Everybody does. Go anyway."
+  },
+  {
+   "id": "haul",
+   "name": "The long haul",
+   "kind": "Loop",
+   "dana": "Somebody in Charleston needs a mover from Columbia and the name travels with the truck. Two hundred miles of interstate is two hundred miles of people reading the side of it.",
+   "feeds": "Pay by the mile, and a client in a city the counter could never reach on its own.",
+   "marge": "Fill up before you go. Nobody tips the mover who ran out of gas at Orangeburg."
   }
  ],
  "results": {

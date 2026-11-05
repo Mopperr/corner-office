@@ -46,6 +46,7 @@ Shady jobs (Sal's) add nobody: money without faces.
 | The Movers' League | The bigger shop needs the bigger name. | Rank opens the bigger offices and the clients who pay for a reputation. |
 | A life of her own | Pickle in the cab. A room that is mine. | The reason to want any of this. |
 | The ladder of offices | Each office is a bigger window on a busier street. | A bigger window is a bigger counter and more of the street walking past. |
+| The long haul | Somebody in Charleston needs a mover from Columbia and the name travels with the truck. | Pay by the mile, and a client in a city the counter could never reach on its own. |
 
 ## Where the player meets it
 
