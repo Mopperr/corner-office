@@ -210,3 +210,15 @@ state). No ducks on an interstate. The highway's box condition carries
 into the second leg, which is the town as usual. The map's Region
 button shows South Carolina with the roads out from Columbia, the
 cities by reach, and today's haul in terracotta.
+
+The interstate is a real one: two carriageways of three 3.7 m lanes with
+a 2.6 m shoulder each, a 6 m grass median with a concrete barrier and
+reflector posts down it, yellow edge lines by the median and white by
+the shoulder, dashes between the lanes. Overhead gantries every couple
+of hundred metres carry the city and its miles, an exit, or a keep-right.
+Six lanes of traffic reuse the town's car logic: a loop per lane pair
+runs east and comes back west past the ends, inner lanes faster, rigs
+(a tractor and a box trailer) in the slow lane, cars in the truck's own
+lane a touch quicker than the truck so it is never parked behind one.
+After dark every car has head and tail lights. The truck's route is the
+outer eastbound lane, and hazards land in that lane only.

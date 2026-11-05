@@ -170,6 +170,13 @@ var stray_cat: Node3D
 var haul: Dictionary = {}
 var highway := false
 var highway_px := 0.0
+# The interstate's cross-section, in metres: three lanes a carriageway,
+# a shoulder outside each, a grass median with a barrier between them.
+const HW_LANE := 3.7
+const HW_LANES := 3
+const HW_SHOULDER := 2.6
+const HW_MEDIAN := 6.0
+const HW_ROAD_PX := 1120.0
 
 
 func _ready() -> void:
@@ -191,9 +198,10 @@ func _ready() -> void:
 	if highway:
 		highway_px = float(course.get("highway_m", 600)) * PX
 		city = City.new()
-		city.setup({"cols": 1, "rows": 0, "block": [highway_px, 100], "road": 160, "sidewalk": 0, "park": [-1, -1], "places": [], "shops": [], "kinds": {}, "alleys": []})
-		pickup = {"id": "onramp", "name": "the on-ramp", "bay": Rect2(140, 60, 60, 40), "heading": 0.0}
-		dropoff = {"id": "exit", "name": str(haul.get("city", "the exit")), "bay": Rect2(highway_px + 60, 60, 60, 40), "heading": 0.0}
+		city.setup({"cols": 1, "rows": 0, "block": [highway_px, 100], "road": HW_ROAD_PX, "sidewalk": 0, "park": [-1, -1], "places": [], "shops": [], "kinds": {}, "alleys": []})
+		var lane_y := _hw_lane_z(HW_LANES - 1, 1.0) * PX
+		pickup = {"id": "onramp", "name": "the on-ramp", "bay": Rect2(140, lane_y - 20.0, 60, 40), "heading": 0.0}
+		dropoff = {"id": "exit", "name": str(haul.get("city", "the exit")), "bay": Rect2(highway_px + 60, lane_y - 20.0, 60, 40), "heading": 0.0}
 	else:
 		city = City.load_default()
 		pickup = city.place(str(course.get("pickup", "garage")))
@@ -211,6 +219,12 @@ func _ready() -> void:
 		var first := (route[1] - pos).angle()
 		heading = round(first / (PI * 0.5)) * PI * 0.5
 	box_count = maxi(1, GameState.job.get("boxes", []).size())
+	if highway:
+		# The route runs down the truck's own lane: the outer lane of the
+		# eastbound carriageway, straight to the exit.
+		var lane_y := _hw_lane_z(HW_LANES - 1, 1.0) * PX
+		route = PackedVector2Array([Vector2(140.0, lane_y - LANE_OFFSET), Vector2(highway_px + 60.0, lane_y - LANE_OFFSET)])
+		pos = route[0]
 	_resolve_hazards()
 	_resolve_turnouts()
 	_build_lane()
@@ -223,7 +237,9 @@ func _ready() -> void:
 	else:
 		_build_town()
 	_build_truck()
-	if not highway:
+	if highway:
+		_spawn_highway_traffic()
+	else:
 		_spawn_traffic()
 	cam = Camera3D.new()
 	cam.name = "ChaseCamera"
@@ -323,7 +339,8 @@ func _resolve_hazards() -> void:
 			var spot: Dictionary = city.point_along(route, float(hazard.get("along", 0.5)))
 			var dir: Vector2 = spot.get("dir", Vector2.RIGHT)
 			var side := Vector2(-dir.y, dir.x)
-			var at: Vector2 = spot.get("pos", Vector2.ZERO) + side * float(hazard.get("lane", 0)) * city.road * 0.25
+			var lane_step: float = city.road * 0.25 if not highway else HW_LANE * PX * 0.25
+			var at: Vector2 = spot.get("pos", Vector2.ZERO) + side * float(hazard.get("lane", 0)) * lane_step
 			hazard["x"] = at.x
 			hazard["y"] = at.y
 			if str(hazard.get("type", "")) == "bump" and absf(dir.x) > absf(dir.y):
@@ -1310,18 +1327,30 @@ func _complete_highway() -> void:
 	emit_signal("finished", {"highway": true, "condition": condition, "alley": false, "honks": honks, "backed_in": false, "spotted": spotted, "busted": false, "duck_friend": false, "near_miss": near_miss, "time": time_alive})
 
 
+func _hw_center_z() -> float:
+	return HW_ROAD_PX / PX * 0.5
+
+
+func _hw_lane_z(lane: int, side: float) -> float:
+	# The centre of lane `lane` (0 nearest the median) on the side given:
+	# +1 is the eastbound carriageway (the truck's), -1 westbound.
+	return _hw_center_z() + side * (HW_MEDIAN * 0.5 + HW_LANE * (float(lane) + 0.5))
+
+
 func _build_highway() -> void:
-	# A straight interstate: two lanes and a shoulder each way, guardrails,
-	# a tree line by region, fields and water beyond, billboards and mile
-	# markers along it, an overpass halfway, a water tower with the city's
-	# name and a welcome sign at the far end.
+	# A real interstate: two carriageways of three lanes with a shoulder
+	# each, a grass median with a barrier down it, lane dashes, yellow
+	# edge lines on the median side and white on the outside, overhead
+	# gantries, a tree line by region, fields and water beyond, billboards
+	# and mile markers, an overpass halfway, the city's water tower and a
+	# welcome sign at the far end.
 	var region: Dictionary = Regions.region(str(haul.get("region", "midlands")))
 	var night := str(course.get("weather", "clear")) == "night"
+	var snow := str(course.get("weather", "clear")) == "snow"
 	# The sun behind the truck, so the signs ahead are lit faces, not shadow.
 	var sun := get_node_or_null("Sun") as DirectionalLight3D
 	if sun:
 		sun.look_at_from_position(Vector3(-30, 40, 14), Vector3.ZERO, Vector3.UP)
-	var snow := str(course.get("weather", "clear")) == "snow"
 	var length := highway_px / PX + 60.0
 	var ground := Color(str(region.get("ground", "7FA85C")))
 	if snow:
@@ -1333,41 +1362,60 @@ func _build_highway() -> void:
 		field = field.darkened(0.55)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(str(course.get("id", "")) + "highway")
-	var road_z := 160.0 / PX * 0.5
-	_slab(Vector3(length + 400.0, 0.1, 420.0), Vector3(length * 0.5, -0.1, road_z), ground)
-	# The road: asphalt with a hard shoulder each side.
-	_slab(Vector3(length + 40.0, 0.02, 160.0 / PX), Vector3(length * 0.5, -0.02, road_z), ASPHALT)
-	_slab(Vector3(length + 40.0, 0.021, 0.9), Vector3(length * 0.5, -0.02, road_z - 160.0 / PX * 0.5 + 0.45), ASPHALT.lightened(0.12))
-	_slab(Vector3(length + 40.0, 0.021, 0.9), Vector3(length * 0.5, -0.02, road_z + 160.0 / PX * 0.5 - 0.45), ASPHALT.lightened(0.12))
-	# Lane paint: a dashed centre, solid edges.
-	var dashes: Array = []
-	var x := 0.0
-	while x < length:
-		dashes.append(Transform3D(Basis.IDENTITY, Vector3(x + 1.5, 0.0, road_z)))
-		x += 6.0
-	_multimesh(Vector3(3.0, 0.01, 0.18), LANE_LINE, dashes)
-	_slab(Vector3(length + 40.0, 0.01, 0.14), Vector3(length * 0.5, 0.0, road_z - 160.0 / PX * 0.5 + 1.0), Color(LANE_LINE, 0.85))
-	_slab(Vector3(length + 40.0, 0.01, 0.14), Vector3(length * 0.5, 0.0, road_z + 160.0 / PX * 0.5 - 1.0), Color(LANE_LINE, 0.85))
-	# Guardrails on both verges.
-	var posts: Array = []
-	var rails: Array = []
+	var cz := _hw_center_z()
+	var carriage := HW_LANE * float(HW_LANES)
+	var half := HW_MEDIAN * 0.5 + carriage + HW_SHOULDER
+	var yellow := Color("E6C14E") if not night else Color("8E7A3A")
+	var white := LANE_LINE if not night else LANE_LINE.darkened(0.35)
+	_slab(Vector3(length + 400.0, 0.1, 520.0), Vector3(length * 0.5, -0.1, cz), ground)
+	# Each carriageway with its shoulder.
 	for side: float in [-1.0, 1.0]:
-		var z: float = road_z + side * (160.0 / PX * 0.5 + 1.4)
-		x = 0.0
+		var inner := cz + side * HW_MEDIAN * 0.5
+		var mid := inner + side * (carriage + HW_SHOULDER) * 0.5
+		_slab(Vector3(length + 40.0, 0.02, carriage + HW_SHOULDER), Vector3(length * 0.5, -0.02, mid), ASPHALT)
+		# The shoulder a shade lighter, with a rumble strip at the lane edge.
+		var shoulder_mid := inner + side * (carriage + HW_SHOULDER * 0.5)
+		_slab(Vector3(length + 40.0, 0.021, HW_SHOULDER), Vector3(length * 0.5, -0.02, shoulder_mid), ASPHALT.lightened(0.1))
+		# Edge lines: yellow by the median, white by the shoulder.
+		_slab(Vector3(length + 40.0, 0.01, 0.15), Vector3(length * 0.5, 0.0, inner + side * 0.25), yellow)
+		_slab(Vector3(length + 40.0, 0.01, 0.15), Vector3(length * 0.5, 0.0, inner + side * (carriage - 0.1)), white)
+		# Lane dashes between the lanes.
+		var dashes: Array = []
+		for lane in range(1, HW_LANES):
+			var z := inner + side * HW_LANE * float(lane)
+			var x := 0.0
+			while x < length:
+				dashes.append(Transform3D(Basis.IDENTITY, Vector3(x + 1.5, 0.0, z)))
+				x += 9.0
+		_multimesh(Vector3(3.0, 0.01, 0.15), white, dashes)
+	# The median: grass, and a concrete barrier down the middle.
+	_slab(Vector3(length + 40.0, 0.03, HW_MEDIAN - 0.4), Vector3(length * 0.5, -0.03, cz), ground.darkened(0.06))
+	_slab(Vector3(length + 40.0, 0.8, 0.5), Vector3(length * 0.5, 0.0, cz), Color("B5B2AA") if not night else Color("4A4846"))
+	_slab(Vector3(length + 40.0, 0.12, 0.62), Vector3(length * 0.5, 0.78, cz), Color("C6C3BB") if not night else Color("55534F"))
+	# Reflector posts along the barrier.
+	var reflectors: Array = []
+	var rx := 0.0
+	while rx < length:
+		reflectors.append(Transform3D(Basis.IDENTITY, Vector3(rx, 1.05, cz)))
+		rx += 12.0
+	_multimesh(Vector3(0.08, 0.3, 0.08), Color("FFE7B0"), reflectors, 1.4 if night else 0.0)
+	# Guardrails on both outer verges.
+	var posts: Array = []
+	for side: float in [-1.0, 1.0]:
+		var z: float = cz + side * (half + 1.0)
+		var x := 0.0
 		while x < length:
 			posts.append(Transform3D(Basis.IDENTITY, Vector3(x, 0.35, z)))
 			x += 4.0
-		rails.append(Transform3D(Basis.IDENTITY, Vector3(length * 0.5, 0.62, z)))
+		_slab(Vector3(length + 40.0, 0.3, 0.08), Vector3(length * 0.5, 0.5, z), Color("B5BBC0"))
 	_multimesh(Vector3(0.12, 0.7, 0.12), Color("8A8F94"), posts)
-	for t in rails:
-		_slab(Vector3(length + 40.0, 0.3, 0.08), Vector3(length * 0.5, 0.5, t.origin.z), Color("B5BBC0"))
 	# Fields and water beyond the verge, in strips so the land changes as it goes by.
-	x = -60.0
+	var x := -60.0
 	while x < length + 60.0:
 		var w := rng.randf_range(40.0, 110.0)
 		for side: float in [-1.0, 1.0]:
 			var roll := rng.randf()
-			var z0: float = road_z + side * (160.0 / PX * 0.5 + rng.randf_range(14.0, 30.0))
+			var z0: float = cz + side * (half + rng.randf_range(16.0, 32.0))
 			var depth := rng.randf_range(30.0, 90.0)
 			if bool(region.get("water", false)) and roll < 0.22:
 				_slab(Vector3(w, 0.03, depth), Vector3(x + w * 0.5, -0.05, z0 + side * depth * 0.5), Color("7FA3B8") if not night else Color("27384A"))
@@ -1385,7 +1433,7 @@ func _build_highway() -> void:
 	while x < length:
 		for side: float in [-1.0, 1.0]:
 			if rng.randf() < 0.75:
-				var z: float = road_z + side * (160.0 / PX * 0.5 + rng.randf_range(6.0, 26.0))
+				var z: float = cz + side * (half + rng.randf_range(7.0, 28.0))
 				var at := Vector3(x + rng.randf_range(-3.0, 3.0), 0.0, z)
 				var sc := rng.randf_range(0.8, 1.4)
 				if kind == "palmetto":
@@ -1423,39 +1471,48 @@ func _build_highway() -> void:
 				mesh.height = radius * rng.randf_range(0.5, 0.8)
 				hill.mesh = mesh
 				hill.material_override = Props.mat(Color("8FB573").darkened(0.15 + 0.25 * rng.randf()) if not night else Color("1E2A30"))
-				hill.position = Vector3(x + rng.randf_range(-20.0, 20.0), -mesh.height * 0.35, road_z + side * (120.0 + rng.randf_range(0.0, 60.0)))
+				hill.position = Vector3(x + rng.randf_range(-20.0, 20.0), -mesh.height * 0.35, cz + side * (half + 110.0 + rng.randf_range(0.0, 60.0)))
 				hills.add_child(hill)
 			x += 90.0
-	# Billboards every so often, alternating sides, the last few counting the miles down.
-	var copy: Array = Regions.billboards()
+	# Overhead gantries every so often: the city and its miles, an exit, a lane sign.
 	var city_name := str(haul.get("city", ""))
 	var miles := int(haul.get("miles", 0))
-	x = 80.0
+	x = 120.0
+	var g := 0
+	while x < length - 120.0:
+		var text := "%s  %d" % [city_name, int(ceil(float(miles) * (1.0 - x / length)))]
+		if g % 3 == 1:
+			text = "EXIT %d  ·  %s" % [rng.randi_range(20, 180), ["Gas · Food", "Rest Area", "Weigh Station", "Scenic Overlook"][rng.randi_range(0, 3)]]
+		elif g % 3 == 2:
+			text = "%s  %d  ·  Keep Right" % [city_name, int(ceil(float(miles) * (1.0 - x / length)))]
+		_build_gantry(x, cz, half, text, night)
+		x += rng.randf_range(220.0, 300.0)
+		g += 1
+	# Billboards on the verges, alternating sides.
+	var copy: Array = Regions.billboards()
+	x = 60.0
 	var n := 0
 	while x < length - 90.0:
 		var side := -1.0 if n % 2 == 0 else 1.0
-		var text := str(copy[rng.randi_range(0, copy.size() - 1)])
-		if n % 3 == 2:
-			text = "%s  %d" % [city_name.to_upper(), int(ceil(float(miles) * (1.0 - x / length)))]
-		_build_billboard(Vector3(x, 0, road_z + side * (160.0 / PX * 0.5 + 9.0)), side, text, night)
-		x += rng.randf_range(110.0, 170.0)
+		_build_billboard(Vector3(x, 0, cz + side * (half + 10.0)), side, str(copy[rng.randi_range(0, copy.size() - 1)]), night)
+		x += rng.randf_range(130.0, 190.0)
 		n += 1
 	# Mile markers: a small green post every so often, counting down.
 	var markers: Array = []
 	x = 30.0
 	while x < length - 30.0:
-		markers.append(Transform3D(Basis.IDENTITY, Vector3(x, 0.7, road_z + 160.0 / PX * 0.5 + 2.6)))
+		markers.append(Transform3D(Basis.IDENTITY, Vector3(x, 0.7, cz + half + 2.6)))
 		x += 48.0
 	_multimesh(Vector3(0.25, 1.4, 0.06), Color("2E7D4F"), markers)
-	# An overpass halfway: two piers and a deck across the road.
+	# An overpass halfway: piers on the verges and the median, a deck across all of it.
 	var mid := length * 0.5
-	for side: float in [-1.0, 1.0]:
-		_slab(Vector3(2.2, 6.0, 1.6), Vector3(mid, 0.0, road_z + side * (160.0 / PX * 0.5 + 2.2)), Color("9C9A94"))
-	_slab(Vector3(2.8, 1.1, 160.0 / PX + 10.0), Vector3(mid, 6.0, road_z), Color("8E8C86"))
-	_slab(Vector3(2.9, 0.9, 0.2), Vector3(mid, 7.1, road_z - 160.0 / PX * 0.5 - 4.9), Color("B5BBC0"))
-	_slab(Vector3(2.9, 0.9, 0.2), Vector3(mid, 7.1, road_z + 160.0 / PX * 0.5 + 4.9), Color("B5BBC0"))
+	for pz in [cz - half - 2.4, cz, cz + half + 2.4]:
+		_slab(Vector3(2.2, 6.0, 1.6), Vector3(mid, 0.0, pz), Color("9C9A94"))
+	_slab(Vector3(2.8, 1.1, half * 2.0 + 10.0), Vector3(mid, 6.0, cz), Color("8E8C86"))
+	_slab(Vector3(2.9, 0.9, 0.2), Vector3(mid, 7.1, cz - half - 4.9), Color("B5BBC0"))
+	_slab(Vector3(2.9, 0.9, 0.2), Vector3(mid, 7.1, cz + half + 4.9), Color("B5BBC0"))
 	# The water tower with the city's name, and the welcome sign at the end.
-	var tower_at := Vector3(length - 40.0, 0.0, road_z - 160.0 / PX * 0.5 - 22.0)
+	var tower_at := Vector3(length - 40.0, 0.0, cz - half - 24.0)
 	var tank := Props.mesh_cylinder(4.0, 5.0, Color("D8D2C4") if not night else Color("5A5852"))
 	tank.position = tower_at + Vector3(0, 16.0, 0)
 	world.add_child(tank)
@@ -1474,9 +1531,9 @@ func _build_highway() -> void:
 	if str(haul.get("state", "SC")) != "SC":
 		welcome = "Welcome to %s" % _state_name(str(haul.get("state", "")))
 		# The state line comes before the city: a second sign at two thirds.
-		_build_billboard(Vector3(length * 0.66, 0, road_z + 160.0 / PX * 0.5 + 9.0), 1.0, "Leaving South Carolina · Y'all come back", night)
+		_build_billboard(Vector3(length * 0.66, 0, cz + half + 10.0), 1.0, "Leaving South Carolina · Y'all come back", night)
 	var board := Props.mesh_box(Vector3(0.16, 1.6, 7.0), Color("2E5E3E"))
-	board.position = Vector3(length - 14.0, 2.6, road_z + 160.0 / PX * 0.5 + 4.0)
+	board.position = Vector3(length - 14.0, 2.6, cz + half + 4.0)
 	world.add_child(board)
 	for dz in [-2.8, 2.8]:
 		var post := Props.mesh_cylinder(0.1, 2.0, Color("8A8F94"))
@@ -1488,12 +1545,122 @@ func _build_highway() -> void:
 	welcome_label.rotation.y = -PI * 0.5
 	welcome_label.visibility_range_begin = 0.0
 	welcome_label.visibility_range_end = 90.0
-	# A few pulled-over cars on the shoulder for scale, facing the way we go.
-	for i in rng.randi_range(2, 4):
-		var parked := _make_car([Color("F2E5B8"), Color("9FC4D6"), Color("C9D2C0"), Color("7A5C40")][rng.randi_range(0, 3)])
-		parked.position = Vector3(rng.randf_range(60.0, length - 80.0), 0.0, road_z + 160.0 / PX * 0.5 + 0.2)
-		parked.rotation.y = -PI * 0.5
-		world.add_child(parked)
+
+
+func _build_gantry(x: float, cz: float, half: float, text: String, night: bool) -> void:
+	# An overhead sign across the eastbound carriageway: two posts on
+	# the verge and the median, a truss, a green board with the words.
+	var inner := cz + HW_MEDIAN * 0.5
+	var outer := cz + half + 1.6
+	for pz in [inner - 0.6, outer]:
+		var post := Props.mesh_box(Vector3(0.4, 7.2, 0.4), Color("8A8F94"))
+		post.position = Vector3(x, 3.6, pz)
+		world.add_child(post)
+	var span := outer - (inner - 0.6)
+	var truss := Props.mesh_box(Vector3(0.5, 0.5, span + 0.4), Color("8A8F94"))
+	truss.position = Vector3(x, 7.0, (inner - 0.6 + outer) * 0.5)
+	world.add_child(truss)
+	var board := Props.mesh_box(Vector3(0.16, 2.6, 10.0), Color("2E6B45") if not night else Color("1E3A2A"))
+	board.position = Vector3(x, 6.0, inner + HW_LANE * 1.5)
+	world.add_child(board)
+	var rim := Props.mesh_box(Vector3(0.1, 2.9, 10.3), Color("F4E9D8") if not night else Color("8A9A8E"))
+	rim.position = board.position + Vector3(0.06, 0.0, 0.0)
+	world.add_child(rim)
+	var label := _sign_text(text, board.position + Vector3(-0.14, 0.0, 0.0), Color("F4E9D8"))
+	label.font_size = 190
+	label.outline_size = 0
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	label.rotation.y = -PI * 0.5
+	label.visibility_range_begin = 0.0
+	label.visibility_range_end = 120.0
+	label.visibility_range_end_margin = 16.0
+
+
+func _make_rig(color: Color) -> Node3D:
+	# A tractor and a box trailer, the big thing in the slow lane.
+	var rig := Node3D.new()
+	var cab := Props.mesh_box(Vector3(2.4, 2.4, 2.4), color)
+	cab.position = Vector3(4.6, 1.5, 0)
+	rig.add_child(cab)
+	var glass := Props.mesh_box(Vector3(0.1, 0.9, 2.0), Color("9FC4D6"))
+	glass.position = Vector3(5.85, 2.1, 0)
+	rig.add_child(glass)
+	var trailer := Props.mesh_box(Vector3(9.0, 2.8, 2.5), Color("F4E9D8"))
+	trailer.position = Vector3(-1.2, 2.1, 0)
+	rig.add_child(trailer)
+	var chassis := Props.mesh_box(Vector3(10.0, 0.4, 1.6), Color("2E2A2C"))
+	chassis.position = Vector3(0.0, 0.55, 0)
+	rig.add_child(chassis)
+	for dx in [4.6, -3.6, -5.0, 1.0]:
+		for dz in [-1.05, 1.05]:
+			var wheel := Props.mesh_cylinder(0.5, 0.4, Color("2E2A2C"))
+			wheel.rotation.x = PI * 0.5
+			wheel.position = Vector3(dx, 0.5, dz)
+			rig.add_child(wheel)
+	return rig
+
+
+func _car_lights(node: Node3D, rig: bool) -> void:
+	# Headlights and tail lights after dark: small lit boxes, no light nodes.
+	var front_x := 5.9 if rig else 2.05
+	var back_x := -5.7 if rig else -2.05
+	var y := 1.1 if rig else 0.65
+	var head := Props.mat(Color("FFF2C8"))
+	head.emission_enabled = true
+	head.emission = Color("FFF2C8")
+	head.emission_energy_multiplier = 3.0
+	var tail := Props.mat(Color("FF3B2F"))
+	tail.emission_enabled = true
+	tail.emission = Color("FF3B2F")
+	tail.emission_energy_multiplier = 2.2
+	for dz in [-0.7, 0.7]:
+		var lamp := Props.mesh_box(Vector3(0.1, 0.22, 0.34), Color("FFF2C8"))
+		lamp.material_override = head
+		lamp.position = Vector3(front_x, y, dz)
+		node.add_child(lamp)
+		var rear := Props.mesh_box(Vector3(0.1, 0.18, 0.34), Color("FF3B2F"))
+		rear.material_override = tail
+		rear.position = Vector3(back_x, y, dz)
+		node.add_child(rear)
+
+
+func _spawn_highway_traffic() -> void:
+	# Six lanes of traffic: a loop per lane pair runs east in one
+	# carriageway and comes back west in the other, turning round past the
+	# ends out of sight. The inner lanes run faster; the outer lane
+	# carries the rigs. Cars in the truck's lane are a touch quicker than
+	# the truck, so the ride is never parked behind one for long.
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(str(course.get("id", "highway")))
+	var length_px := highway_px + 60.0 * PX
+	var truck_max := float(Tuning.get_value("drive.max_speed_mps", 5.5)) * PX
+	var palette := [Color("F2E5B8"), Color("9FC4D6"), Color("D9765F"), Color("C9D2C0"), Color("E6B655"), Color("7A5C40"), Color("3E3A4F"), Color("B9CBD6")]
+	var per_lane := clampi(int(length_px / PX / 90.0), 3, 9)
+	var n := 0
+	for lane in HW_LANES:
+		var ze := _hw_lane_z(lane, 1.0) * PX
+		var zw := _hw_lane_z(lane, -1.0) * PX
+		var loop := PackedVector2Array([Vector2(-80.0 * PX, ze), Vector2(length_px + 80.0 * PX, ze), Vector2(length_px + 80.0 * PX, zw), Vector2(-80.0 * PX, zw)])
+		var factor: float = [1.25, 1.1, 1.02][lane]
+		for i in per_lane * 2:
+			var east := i < per_lane
+			var seg := 0 if east else 2
+			var start: Vector2 = loop[seg].lerp(loop[seg + 1], rng.randf())
+			if east and absf(start.x - pos.x) < 260.0:
+				start.x += 320.0
+			var rig := lane == HW_LANES - 1 and rng.randf() < 0.4
+			var node := _make_rig(palette[rng.randi_range(0, palette.size() - 1)]) if rig else _make_car(palette[n % palette.size()])
+			node.name = "Rig" if rig else "Car"
+			node.position = to_world(start)
+			world.add_child(node)
+			if str(course.get("weather", "clear")) == "night":
+				_car_lights(node, rig)
+			var cruise: float = truck_max * factor * rng.randf_range(0.92, 1.06)
+			if rig:
+				cruise = truck_max * 0.9 * rng.randf_range(0.95, 1.05)
+			cars.append({"loop": loop, "seg": seg, "pos": start, "speed": cruise, "cruise": cruise, "node": node, "heading": 0.0 if east else PI, "horn": 0.0, "vel": Vector2.ZERO, "mode": "drive", "knock_t": 0.0, "spin": 0.0, "mass": (CAR_MASS * 6.0) if rig else CAR_MASS})
+			n += 1
 
 
 func _build_billboard(at: Vector3, side: float, text: String, night: bool) -> void:
