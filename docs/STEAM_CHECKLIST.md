@@ -20,9 +20,11 @@ assets and builds that only Andrew can make.
 
 ## Builds (Andrew, about an afternoon)
 
-1. Install the Godot 4.7.2 export templates on a machine with the editor
-   (Editor, Manage Export Templates, Download). The container here has the
-   headless binary only, so no build was made from this branch.
+1. Install the Godot 4.7.2 export templates (Editor, Manage Export
+   Templates, Download). A first Windows build was exported from this
+   branch on 5 Nov with the headless engine and the Windows release
+   template alone, so the presets are known to work; the only warnings
+   were the icon sizes, and `icon.ico` now carries all six.
 2. `godot --headless --export-release "Windows Desktop" export/CornerOffice.exe`
    and the same for "Linux". macOS needs signing and notarisation to run
    outside the developer's own machine; it can wait for a later update.
