@@ -2704,8 +2704,14 @@ func _update_camera(delta: float) -> void:
 		# truck is parked against never swallows it.
 		var place: Dictionary = dropoff if (at_end or state == "unload") else pickup
 		var inward := _inward3(str(place.get("side", "N")))
-		goal = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
-		look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
+		if back_t > 0.0 or at_dropoff or state == "unload":
+			# Backing in, the nose points at the road: the camera stands out
+			# on the road and watches the truck come in, never in the wall.
+			goal = _bay_camera(truck_at, inward)
+			look = truck_at + Vector3(0, 1.2, 0)
+		else:
+			goal = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
+			look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
 	else:
 		goal = _camera_clear(goal, truck_at)
 	var k := clampf(delta * 3.2, 0.0, 1.0)
@@ -2726,12 +2732,25 @@ func _snap_camera() -> void:
 	if at_end or state != "drive":
 		var place: Dictionary = dropoff if (at_end or state == "unload") else pickup
 		var inward := _inward3(str(place.get("side", "N")))
-		cam.position = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
-		cam_look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
+		if back_t > 0.0 or at_dropoff or state == "unload":
+			cam.position = _bay_camera(truck_at, inward)
+			cam_look = truck_at + Vector3(0, 1.2, 0)
+		else:
+			cam.position = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
+			cam_look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
 	# The same clearance the live camera gets, so a snap never lands in a wall.
 	if world != null:
 		cam.position = _camera_clear(cam.position, truck_at)
 	cam.look_at(cam_look, Vector3.UP)
+
+
+func _bay_camera(truck_at: Vector3, inward: Vector3) -> Vector3:
+	# Backing in: the camera stands on the road a little way back up it,
+	# just off the kerb, so neither the bay's building nor the one across
+	# the road swallows it, and watches the truck come in.
+	var travel := to_world(_lane_point(lane_total)) - to_world(_lane_point(maxf(0.0, lane_total - 10.0)))
+	var back := -travel.normalized() if travel.length() > 0.01 else Vector3(-inward.z, 0, inward.x)
+	return truck_at - inward * 3.2 + back * 7.5 + Vector3(0, 4.5, 0)
 
 
 func _camera_clear(goal: Vector3, truck_at: Vector3) -> Vector3:
