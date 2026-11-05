@@ -438,6 +438,7 @@ func _build_town() -> void:
 			_slab(Vector3(0.12, 0.01, r.size.y / PX), Vector3((r.end.x - 14.0) / PX, 0.0, (r.position.y + r.size.y * 0.5) / PX), Color(LANE_LINE, 0.8))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(str(course.get("id", "")) + "town")
+	_build_crossings()
 	for c in city.cols:
 		for r in city.rows:
 			var rect: Rect2 = city.block_rect(c, r)
@@ -710,6 +711,12 @@ func _build_parcel(at: Vector3, footprint: Vector3, rng: RandomNumberGenerator, 
 	var center := at + Vector3(footprint.x * 0.5, 0, footprint.z * 0.5)
 	var body := _slab(Vector3(footprint.x, height, footprint.z), at + Vector3(footprint.x * 0.5, 0, footprint.z * 0.5), color)
 	body.name = "Building"
+	# The wall gets a texture to go with its colour: brick on the warm
+	# fronts, plaster on the pale ones, concrete on the tall ones.
+	var tex := "brick_painted" if color.r > color.b + 0.15 else "plaster"
+	if floors >= 5:
+		tex = "concrete"
+	body.material_override = Props.tex_mat(tex, color, 0.55 if tex == "brick_painted" else 0.35, 0.9)
 	# Plinth, string courses between floors, and a cornice under the roof.
 	_slab(Vector3(footprint.x + 0.12, 0.7, footprint.z + 0.12), center, color.darkened(0.3))
 	for f in range(1, floors):
@@ -1232,6 +1239,36 @@ func _build_front(place: Dictionary, venue_def: Dictionary, which: int) -> void:
 			var win := Props.mesh_box(Vector3(0.08, 1.1, 1.0), glass)
 			win.position = Vector3(sgn * (w * 0.5 + 0.03), index * storey_h + 1.6, 0.0)
 			root.add_child(win)
+
+
+func _build_crossings() -> void:
+	# Zebra stripes across each road where it meets a junction, on all
+	# four arms, in one multimesh for the whole town.
+	var stripes: Array = []
+	var road_w: float = float(city.road) / PX
+	var stripe := Vector3(0.5, 0.012, 0.0)
+	for i in city.cols + 1:
+		for j in city.rows + 1:
+			var node: Vector2 = city.node_at(i, j)
+			var center := to_world(node, 0.0)
+			# Arms along x (the crossing runs across the vertical road) and along z.
+			for sgn: float in [-1.0, 1.0]:
+				var arm_x := center + Vector3(sgn * (road_w * 0.5 + 1.3), 0.0, 0.0)
+				if i + int(sgn) < 0 or i + int(sgn) > city.cols:
+					continue
+				var k: float = -road_w * 0.5 + 0.9
+				while k < road_w * 0.5 - 0.6:
+					stripes.append(Transform3D(Basis(Vector3.UP, PI * 0.5), arm_x + Vector3(0.0, 0.006, k)))
+					k += 1.2
+			for sgn: float in [-1.0, 1.0]:
+				var arm_z := center + Vector3(0.0, 0.0, sgn * (road_w * 0.5 + 1.3))
+				if j + int(sgn) < 0 or j + int(sgn) > city.rows:
+					continue
+				var k: float = -road_w * 0.5 + 0.9
+				while k < road_w * 0.5 - 0.6:
+					stripes.append(Transform3D(Basis.IDENTITY, arm_z + Vector3(k, 0.006, 0.0)))
+					k += 1.2
+	_multimesh(Vector3(0.55, 0.012, 1.6), Color(LANE_LINE, 0.95), stripes)
 
 
 func _build_hills(size: Vector3) -> void:
