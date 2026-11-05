@@ -176,3 +176,18 @@ own keeps the label as it is, so Grandpa Ellis stays Grandpa Ellis. On the
 drive, the ride's verdict ("Smooth Ride") has its own line under the speed,
 the awning name boards are painted flat on the board, and the kerb signs
 fade out at 38 m so the far end of a street is not a stack of names.
+
+## A pass at 1280x720
+
+Every screen of the playthrough rendered at the smallest common window.
+What it caught, and the rule each one left behind: a label built out of
+the tree keeps the first minimum size it is given (the label helper's
+estimate of its text width), so a column width must be applied again once
+the row is in the tree (`results_ui.gd`); a card that can grow past the
+window scales down as a whole rather than clamping (the pop-in keeps the
+fitted scale through meta `fit_scale`); a line that would lose its end to
+an ellipsis wraps instead, with room for the font's line height; HUD
+lines that can be long (the ride verdict, the patrol warning) get their
+own line rather than sharing one. The kerb signs fade out at ten metres
+so they never fill the windscreen alongside, and at thirty-eight so the
+far end of a street is not a stack of names.
