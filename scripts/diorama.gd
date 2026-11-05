@@ -5856,6 +5856,18 @@ func _build_hud() -> void:
 	GameState.toast_requested.connect(func(message: String): _toast(message, "Marge"))
 
 
+func _floor_button_count() -> int:
+	# How many Up/Down buttons the plan shows for the floor we are on.
+	if not (_is_home() and GameState.mode == "job_unpack" and Homes.floors(venue).size() > 1):
+		return 0
+	var count := 0
+	if home_floor < Homes.floors(venue).size() - 1:
+		count += 1
+	if home_floor > 0:
+		count += 1
+	return count
+
+
 func _refresh_hud_buttons() -> void:
 	var layer := _hud_layer()
 	if layer == null:
@@ -6020,7 +6032,14 @@ func _unpack_actions(layer: CanvasLayer) -> void:
 	# box helpers go left while the truck still has boxes on it.
 	var column_x := 16.0 if on_truck > 0 else 860.0
 	if on_truck > 0:
+		# Under the room-score card, however tall it is, and under the
+		# stairs buttons when the place has them.
 		y = 498.0
+		if goals_panel != null and is_instance_valid(goals_panel) and goals_panel.visible:
+			y = maxf(y, goals_panel.position.y + goals_panel.get_combined_minimum_size().y + 14.0)
+		var stairs := _floor_button_count()
+		if stairs > 0:
+			y = maxf(y, 556.0) + 58.0 * float(stairs)
 	elif y < 100.0:
 		y = 100.0
 	if _stackable_count() >= 2:
