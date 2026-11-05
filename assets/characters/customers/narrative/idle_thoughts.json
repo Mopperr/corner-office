@@ -1,0 +1,237 @@
+{
+  "_meta": {
+    "version": 2,
+    "phase": "slice",
+    "product_source": "/workspace/game/drink_unlocks.json (14 drinks; products.json from Programmer Master not yet present, ids to match)",
+    "product_ids": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee",
+      "espresso",
+      "honey_lavender_lemonade",
+      "latte",
+      "cappuccino",
+      "mocha",
+      "iced_coffee",
+      "vanilla_latte",
+      "seasonal_special"
+    ],
+    "product_ids_provisional": false,
+    "tone": "Cozy sitcom. Customers are kind. Off drinks get gentle, funny feedback and the customer still pays.",
+    "max_chars": 40,
+    "slice_drinks": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee"
+    ],
+    "legacy_product_ids": {
+      "lemonade": "classic_lemonade",
+      "iced_lemonade": "classic_lemonade (served with extra ice; heat-weather variant)",
+      "sweet_coffee": "black_coffee + sugar (no longer a menu item; nearest menu drinks: mocha, vanilla_latte)"
+    },
+    "quality_bands": {
+      "great": ">=80",
+      "okay": "50-79",
+      "off": "<50"
+    }
+  },
+  "per_customer": {
+    "steve": [
+      "Do they sell staples here?",
+      "Four staples, maybe five...",
+      "Cup looks stackable.",
+      "Exact change: ready.",
+      "Shiny stapler, shiny day.",
+      "Should I start a cup collection?"
+    ],
+    "lamp_lady": [
+      "That window light is perfect.",
+      "Is that bulb warm white?",
+      "Sunhat: on. Mood: lit.",
+      "Ooh, sparkly ice!",
+      "Every room needs one more lamp.",
+      "Golden hour all day here."
+    ],
+    "keyclackr": [
+      "Clack clack clack...",
+      "Linear or tactile mood today?",
+      "Need more keycaps. Always.",
+      "Coffee = keyboard fuel.",
+      "WPM going up, I can feel it.",
+      "Is that a typo on the sign?"
+    ],
+    "dottie": [
+      "Slow down, everybody. No rush.",
+      "Harold loved lemonade.",
+      "Vest still fits!",
+      "Such a nice young barista.",
+      "Two sugars, maybe three...",
+      "What a lovely little line."
+    ],
+    "theo": [
+      "So... sleepy...",
+      "Coffee, then bed. Yes.",
+      "Twelve hours. Worth it.",
+      "Is it morning or night?",
+      "Warm cup. Warm blanket. Soon.",
+      "Everyone's being so nice."
+    ],
+    "pippa": [
+      "Noting the cup size...",
+      "Gold star potential.",
+      "Sour? Bring it on.",
+      "I'll charge 25 cents more.",
+      "Margins, margins, margins.",
+      "Need more stickers."
+    ],
+    "rocco": [
+      "8,412 steps!",
+      "Biscuit's waiting at #12.",
+      "Zing! I need zing.",
+      "Package for the bakery later.",
+      "Sun's out, shorts out.",
+      "Who's got gossip today?"
+    ],
+    "wren": [
+      "Foam like a cloud...",
+      "Five, seven, five...",
+      "The rain has a rhythm.",
+      "Counting bubbles. Seven.",
+      "Ink on my finger again.",
+      "This line is a little poem."
+    ],
+    "neighbor_kid": [
+      "Quarters: counted twice.",
+      "Quiet straw, please.",
+      "Mom says say thank you."
+    ],
+    "dana": [
+      "First sale. Breathe.",
+      "Sticky note: more ice?",
+      "This place is coming together."
+    ],
+    "priya_okafor": [
+      "My usual, please.",
+      "Biscuit says hi.",
+      "Fur on my sleeve again."
+    ],
+    "biscuit": [
+      "Sunbeam: located.",
+      "Is that... a box?",
+      "Prrrrrp."
+    ],
+    "cyclist_from_l3": [
+      "Socks: soaked.",
+      "Is that the sun?",
+      "Helmet hair, don't care."
+    ],
+    "grandpa_train_shop": [
+      "Next stop: lemonade.",
+      "Caboose is the best car.",
+      "Ticket, please... oh, me."
+    ],
+    "duckling": [
+      "Quack.",
+      "Puddle! Puddle!",
+      "Where's mom?"
+    ],
+    "delbert_finch": [
+      "Three minutes, twelve seconds.",
+      "Tick, tock, coffee.",
+      "My watch is never wrong."
+    ],
+    "retiring_dentist": [
+      "Last day. Strange feeling.",
+      "Gerald needs a good home.",
+      "No sugar. Professional reasons."
+    ],
+    "gerald": [
+      "Blub.",
+      "Bowl: very round today.",
+      "Blub blub."
+    ],
+    "npc_vendor": [
+      "Bees were busy today.",
+      "Market's buzzing.",
+      "Did a cabbage just roll by?"
+    ],
+    "npc_architect": [
+      "Door: redraw again?",
+      "Foam is a blueprint.",
+      "Pencil behind my ear..."
+    ],
+    "agnes_pell": [
+      "Shhh... the foam is thinking.",
+      "Overdue: one nap.",
+      "Page 112, I think."
+    ],
+    "juno_park": [
+      "Soundcheck in ten... ish.",
+      "Mocha is a backbeat.",
+      "Drumsticks? Pocket. Keys? Hmm."
+    ],
+    "record_store_owner": [
+      "Flip to side B.",
+      "That bassline...",
+      "Ice clinks in 4/4."
+    ],
+    "rosa_pemberton": [
+      "Is Ray here today?",
+      "Ferns need water.",
+      "Vanilla latte, please."
+    ],
+    "ray_pemberton": [
+      "Where's Rosa?",
+      "Plain is fine. Plain is great.",
+      "Should I buy her flowers? Oh."
+    ],
+    "coworker_npc": [
+      "Meeting at three?",
+      "What's on the board?",
+      "Snacks in the break room?"
+    ],
+    "food_critic": [
+      "Noting the cup weight...",
+      "Lighting: cozy.",
+      "Hm. Hm! Hm."
+    ],
+    "marge_holloway": [
+      "Checking in on my favourite.",
+      "Long drive, good coffee.",
+      "Look at this place now."
+    ],
+    "queue_npc": [
+      "Long line, good sign.",
+      "What's everyone getting?",
+      "Smells great."
+    ],
+    "customer": [
+      "Reading the review board.",
+      "Leave a review? Sure.",
+      "Cozy spot."
+    ]
+  },
+  "generic": [
+    "Smells amazing in here.",
+    "What a cozy little place.",
+    "No rush. Nice.",
+    "Ooh, what should I get?",
+    "Love that menu board.",
+    "Perfect day for a drink.",
+    "I should come here more.",
+    "Is that cat around?",
+    "Mmm, fresh lemons.",
+    "That grinder sounds happy.",
+    "Nice music.",
+    "Everyone's so friendly here.",
+    "Hope the ice holds out!",
+    "Warm cup, warm heart.",
+    "Today's a good day."
+  ]
+}

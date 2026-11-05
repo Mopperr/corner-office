@@ -1,0 +1,238 @@
+{
+  "size": [
+    1700,
+    820
+  ],
+  "roads": [
+    [
+      [
+        120,
+        650
+      ],
+      [
+        520,
+        650
+      ],
+      [
+        520,
+        380
+      ],
+      [
+        980,
+        380
+      ],
+      [
+        980,
+        150
+      ],
+      [
+        1560,
+        150
+      ]
+    ],
+    [
+      [
+        520,
+        650
+      ],
+      [
+        900,
+        650
+      ],
+      [
+        900,
+        820
+      ]
+    ],
+    [
+      [
+        980,
+        380
+      ],
+      [
+        1380,
+        380
+      ],
+      [
+        1380,
+        620
+      ],
+      [
+        1640,
+        620
+      ]
+    ],
+    [
+      [
+        1380,
+        380
+      ],
+      [
+        1380,
+        150
+      ]
+    ],
+    [
+      [
+        120,
+        650
+      ],
+      [
+        120,
+        800
+      ]
+    ]
+  ],
+  "water": [
+    {
+      "x": 1560,
+      "y": 260,
+      "r": 110
+    }
+  ],
+  "green": [
+    {
+      "x": 320,
+      "y": 250,
+      "r": 90
+    },
+    {
+      "x": 420,
+      "y": 180,
+      "r": 60
+    },
+    {
+      "x": 1150,
+      "y": 560,
+      "r": 70
+    },
+    {
+      "x": 700,
+      "y": 520,
+      "r": 60
+    },
+    {
+      "x": 1620,
+      "y": 420,
+      "r": 55
+    },
+    {
+      "x": 1240,
+      "y": 770,
+      "r": 70
+    }
+  ],
+  "places": [
+    {
+      "id": "garage",
+      "name": "Garage Startup",
+      "kind": "office",
+      "office": "garage",
+      "x": 300,
+      "y": 650,
+      "blurb": "Dana's first office. A roll-up door, a folding table, and $120 in the jar.",
+      "icon": "house"
+    },
+    {
+      "id": "cafe",
+      "name": "Whisker & Bean",
+      "kind": "client",
+      "job": "job_catcafe",
+      "x": 740,
+      "y": 380,
+      "blurb": "Priya's cat cafe. Eighteen pieces, one of which purrs.",
+      "icon": "cafe"
+    },
+    {
+      "id": "train",
+      "name": "Grandpa's Train Shop",
+      "kind": "client",
+      "job": "job_train",
+      "x": 1380,
+      "y": 500,
+      "blurb": "Twenty-four pieces and a mystery bag of parts. Keep the sets together.",
+      "icon": "train"
+    },
+    {
+      "id": "park",
+      "name": "Duck Pond",
+      "kind": "client",
+      "job": "job_ducks",
+      "x": 1480,
+      "y": 150,
+      "blurb": "A shed restock and two laps of the pond. Honk, and the ducks hurry along.",
+      "icon": "duck"
+    },
+    {
+      "id": "bakery",
+      "name": "Bakery Loft",
+      "kind": "office",
+      "office": "bakery",
+      "x": 900,
+      "y": 700,
+      "blurb": "Upstairs from the bakery. Skylight, a radiator, and morning pastries.",
+      "icon": "loft"
+    },
+    {
+      "id": "warehouse",
+      "name": "Brick Warehouse Loft",
+      "kind": "office",
+      "office": "warehouse",
+      "x": 1180,
+      "y": 380,
+      "blurb": "Coming later. High ceilings and a freight lift.",
+      "icon": "loft"
+    },
+    {
+      "id": "glass",
+      "name": "Glass Co-Working Suite",
+      "kind": "office",
+      "office": "glass",
+      "x": 1640,
+      "y": 620,
+      "blurb": "Coming later. Helpers, a staff room, and a lot of windows.",
+      "icon": "glass"
+    },
+    {
+      "id": "corner",
+      "name": "Corner Office",
+      "kind": "office",
+      "office": "corner",
+      "x": 1100,
+      "y": 150,
+      "blurb": "Coming later. The one with two windows and the view.",
+      "icon": "loft"
+    },
+    {
+      "id": "forest",
+      "name": "TropicalForest Depot",
+      "kind": "shop",
+      "x": 160,
+      "y": 520,
+      "blurb": "Where the courier starts from. Order from the beige computer.",
+      "icon": "bag"
+    }
+  ],
+  "rail": [
+    [
+      [
+        1380,
+        560
+      ],
+      [
+        1380,
+        720
+      ]
+    ],
+    [
+      [
+        1260,
+        720
+      ],
+      [
+        1700,
+        720
+      ]
+    ]
+  ]
+}

@@ -1,0 +1,46 @@
+{
+ "vfx_meteor_streak": {
+  "frame": [
+   256,
+   128
+  ],
+  "frames": 6,
+  "frame_1x": [
+   128,
+   64
+  ]
+ },
+ "vfx_wind_streak_lane": {
+  "frame": [
+   256,
+   128
+  ],
+  "frames": 6,
+  "frame_1x": [
+   128,
+   64
+  ]
+ },
+ "flagger_sheet": {
+  "frame": [
+   64,
+   96
+  ],
+  "frames": 2,
+  "frame_1x": [
+   32,
+   48
+  ]
+ },
+ "jackhammer_worker_sheet": {
+  "frame": [
+   80,
+   96
+  ],
+  "frames": 4,
+  "frame_1x": [
+   40,
+   48
+  ]
+ }
+}

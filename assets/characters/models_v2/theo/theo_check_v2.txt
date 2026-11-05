@@ -1,0 +1,24 @@
+v1: customers3d/theo.glb
+v2: customers3d/v2/theo/theo.glb
+v2 loads OK: meshes=['Icosphere', 'Theo_Body', 'Theo_Thermos'] tris=87816 (v1 meshes=['Icosphere', 'Theo_Body', 'Theo_Thermos'] tris=53456)
+[PASS] bone count 23 vs 23
+[PASS] bone names identical []
+[PASS] hierarchy identical 
+[PASS] rest pose identical max diff 0.00e+00 m
+[PASS] clip names identical ['idle_Theo_Skeleton', 'sit_Theo_Skeleton', 'walk_Theo_Skeleton'] vs ['idle_Theo_Skeleton', 'sit_Theo_Skeleton', 'walk_Theo_Skeleton']
+[PASS] clip idle_Theo_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip idle_Theo_Skeleton channel set 230/230 channels
+[PASS] clip idle_Theo_Skeleton key count + frame times 
+[PASS] clip idle_Theo_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip idle_Theo_Skeleton arm/hand key values changed on: ['RightHand', 'RightLowerArm', 'RightUpperArm'] (max diff 0.174)
+[PASS] clip sit_Theo_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip sit_Theo_Skeleton channel set 230/230 channels
+[PASS] clip sit_Theo_Skeleton key count + frame times 
+[PASS] clip sit_Theo_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip sit_Theo_Skeleton arm/hand key values changed on: ['RightHand', 'RightLowerArm', 'RightUpperArm'] (max diff 0.174)
+[PASS] clip walk_Theo_Skeleton frame range (0.0, 25.6) vs (0.0, 25.6)
+[PASS] clip walk_Theo_Skeleton channel set 230/230 channels
+[PASS] clip walk_Theo_Skeleton key count + frame times 
+[PASS] clip walk_Theo_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip walk_Theo_Skeleton arm/hand key values changed on: ['RightHand', 'RightLowerArm', 'RightUpperArm'] (max diff 0.174)
+RESULT: ALL PASS

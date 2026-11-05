@@ -1,0 +1,943 @@
+{
+  "tick_seconds": 16,
+  "vibe_haste": 0.08,
+  "tip_per_vibe": 0.012,
+  "music_bonus": 6,
+  "clean_base": 12,
+  "damage_penalty": 2,
+  "floor_vibe": 8,
+  "cap": 100,
+  "barista": {
+    "name": "Biscuit on the till",
+    "unlock_job": "job_catcafe",
+    "needs": [
+      "cat_bed",
+      "cushion"
+    ],
+    "vibe": 8,
+    "blurb": "After the cafe move, a cat bed or cushion puts Biscuit on shift. Visitors stay a little longer."
+  },
+  "summary_email": {
+    "from": "Marge Holloway",
+    "subject": "The till, day {day}",
+    "body": "The shop took ${earned} from {visitors} visitors. Vibe sat at {vibe}. Nobody was rushed, and the base of the day is still yours.\n\nLeave the door open. I'll count it again tomorrow.\n\n— Marge"
+  },
+  "fixtures": [
+    {
+      "item": "coffee_machine",
+      "role": "counter",
+      "serves": [
+        "drip",
+        "latte"
+      ],
+      "label": "Coffee machine"
+    },
+    {
+      "item": "espresso",
+      "role": "counter",
+      "serves": [
+        "latte",
+        "espresso_shot"
+      ],
+      "label": "Espresso"
+    },
+    {
+      "item": "kettle",
+      "role": "counter",
+      "serves": [
+        "tea",
+        "drip"
+      ],
+      "label": "Kettle"
+    },
+    {
+      "item": "bookshelf_wood",
+      "role": "shelf",
+      "serves": [
+        "used_book",
+        "pencil"
+      ],
+      "label": "Bookshelf"
+    },
+    {
+      "item": "filing_cabinet",
+      "role": "counter",
+      "serves": [
+        "pencil",
+        "used_book"
+      ],
+      "label": "Counter cabinet"
+    },
+    {
+      "item": "plant_fern",
+      "role": "plant_stand",
+      "serves": [
+        "cutting"
+      ],
+      "label": "Fern stand"
+    },
+    {
+      "item": "cafe_fern",
+      "role": "plant_stand",
+      "serves": [
+        "cutting"
+      ],
+      "label": "Cafe fern"
+    },
+    {
+      "item": "menu_board",
+      "role": "pastry",
+      "serves": [
+        "bun",
+        "latte"
+      ],
+      "label": "Pastry board"
+    },
+    {
+      "item": "lemonade_pitcher",
+      "role": "counter",
+      "serves": [
+        "lemonade",
+        "iced_tea"
+      ],
+      "label": "Lemonade pitcher"
+    },
+    {
+      "item": "cup_stack",
+      "role": "counter",
+      "serves": [
+        "lemonade"
+      ],
+      "label": "Cup stack"
+    }
+  ],
+  "menu": [
+    {
+      "id": "drip",
+      "name": "Drip coffee",
+      "price": 3,
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "drip"
+      ]
+    },
+    {
+      "id": "latte",
+      "name": "Oat latte",
+      "price": 5,
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "espresso",
+        "oat_milk",
+        "foam"
+      ]
+    },
+    {
+      "id": "espresso_shot",
+      "name": "Espresso",
+      "price": 4,
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "espresso"
+      ]
+    },
+    {
+      "id": "tea",
+      "name": "Kettle tea",
+      "price": 3,
+      "tag": "coffee",
+      "recipe": [
+        "cup",
+        "tea",
+        "water"
+      ]
+    },
+    {
+      "id": "bun",
+      "name": "Morning bun",
+      "price": 4,
+      "tag": "snack",
+      "recipe": [
+        "bun",
+        "butter",
+        "jam"
+      ]
+    },
+    {
+      "id": "used_book",
+      "name": "Used paperback",
+      "price": 6,
+      "tag": "goods",
+      "recipe": [
+        "book",
+        "bookmark"
+      ],
+      "vessel": "plate"
+    },
+    {
+      "id": "pencil",
+      "name": "A good pencil",
+      "price": 2,
+      "tag": "goods",
+      "recipe": [
+        "pencil",
+        "sharpener"
+      ],
+      "vessel": "plate"
+    },
+    {
+      "id": "cutting",
+      "name": "Plant cutting",
+      "price": 7,
+      "tag": "plant",
+      "recipe": [
+        "pot",
+        "soil",
+        "cutting"
+      ],
+      "vessel": "plate"
+    },
+    {
+      "id": "lemonade",
+      "name": "Fresh lemonade",
+      "price": 4,
+      "tag": "juice",
+      "recipe": [
+        "glass",
+        "ice",
+        "lemon",
+        "sugar",
+        "water"
+      ]
+    },
+    {
+      "id": "iced_tea",
+      "name": "Iced tea",
+      "price": 3,
+      "tag": "juice",
+      "recipe": [
+        "glass",
+        "ice",
+        "tea",
+        "mint"
+      ]
+    },
+    {
+      "id": "flat_white",
+      "name": "Flat white",
+      "price": 5,
+      "tag": "coffee",
+      "tier": "cart",
+      "recipe": [
+        "cup",
+        "espresso",
+        "oat_milk"
+      ]
+    },
+    {
+      "id": "cold_brew",
+      "name": "Cold brew",
+      "price": 5,
+      "tag": "juice",
+      "tier": "cart",
+      "recipe": [
+        "glass",
+        "ice",
+        "cold_brew"
+      ]
+    },
+    {
+      "id": "blt",
+      "name": "BLT",
+      "price": 8,
+      "tag": "sandwich",
+      "tier": "sandwich",
+      "recipe": [
+        "bread",
+        "mayo",
+        "bacon",
+        "lettuce",
+        "tomato"
+      ]
+    },
+    {
+      "id": "veggie_wrap",
+      "name": "Veggie wrap",
+      "price": 7,
+      "tag": "sandwich",
+      "tier": "sandwich",
+      "recipe": [
+        "wrap",
+        "hummus",
+        "peppers",
+        "lettuce"
+      ]
+    },
+    {
+      "id": "soup_cup",
+      "name": "Cup of soup",
+      "price": 6,
+      "tag": "plate",
+      "tier": "sandwich",
+      "recipe": [
+        "cup",
+        "soup",
+        "cream"
+      ],
+      "vessel": "cup"
+    },
+    {
+      "id": "chicken_shawarma",
+      "name": "Chicken shawarma",
+      "price": 11,
+      "tag": "grill",
+      "tier": "shawarma",
+      "recipe": [
+        "wrap",
+        "chicken",
+        "pickles",
+        "garlic_sauce"
+      ]
+    },
+    {
+      "id": "falafel_wrap",
+      "name": "Falafel wrap",
+      "price": 9,
+      "tag": "grill",
+      "tier": "shawarma",
+      "recipe": [
+        "wrap",
+        "hummus",
+        "falafel",
+        "pickles"
+      ]
+    },
+    {
+      "id": "garlic_fries",
+      "name": "Garlic fries",
+      "price": 5,
+      "tag": "plate",
+      "tier": "shawarma",
+      "recipe": [
+        "plate",
+        "fries",
+        "garlic",
+        "parsley"
+      ]
+    },
+    {
+      "id": "croissant",
+      "name": "Almond croissant",
+      "price": 6,
+      "tag": "snack",
+      "tier": "cafe",
+      "recipe": [
+        "plate",
+        "croissant",
+        "butter"
+      ]
+    },
+    {
+      "id": "eggs_benedict",
+      "name": "Eggs Benedict",
+      "price": 14,
+      "tag": "plate",
+      "tier": "cafe",
+      "recipe": [
+        "plate",
+        "muffin",
+        "egg",
+        "hollandaise"
+      ]
+    },
+    {
+      "id": "affogato",
+      "name": "Affogato",
+      "price": 7,
+      "tag": "coffee",
+      "tier": "cafe",
+      "recipe": [
+        "glass",
+        "ice_cream",
+        "espresso"
+      ],
+      "vessel": "cup"
+    },
+    {
+      "id": "tasting_menu",
+      "name": "Tasting menu",
+      "price": 48,
+      "tag": "plate",
+      "tier": "restaurant",
+      "recipe": [
+        "plate",
+        "amuse",
+        "scallop",
+        "lamb",
+        "sorbet"
+      ]
+    },
+    {
+      "id": "steak_frites",
+      "name": "Steak frites",
+      "price": 32,
+      "tag": "plate",
+      "tier": "restaurant",
+      "recipe": [
+        "plate",
+        "steak",
+        "fries",
+        "jus"
+      ]
+    },
+    {
+      "id": "creme_brulee",
+      "name": "Crème brûlée",
+      "price": 12,
+      "tag": "plate",
+      "tier": "restaurant",
+      "recipe": [
+        "plate",
+        "custard",
+        "caramel",
+        "berry"
+      ]
+    }
+  ],
+  "markups": [
+    0.8,
+    1.0,
+    1.25
+  ],
+  "visitors": [
+    {
+      "id": "marge",
+      "name": "Marge",
+      "line": "Black coffee. I can wait.",
+      "request": "",
+      "request_note": ""
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "line": "One oat latte. Tell Biscuit I waved.",
+      "request": "tf_mug",
+      "request_note": "A joke mug on the counter would make this feel like a shop and not a hallway."
+    },
+    {
+      "id": "ellis",
+      "name": "Grandpa Ellis",
+      "line": "Something warm. I'll browse the books.",
+      "request": "tf_shelf",
+      "request_note": "A bookshelf would give the regulars somewhere to lean."
+    },
+    {
+      "id": "nia",
+      "name": "Nia",
+      "line": "Tea, please. The ducks can wait.",
+      "request": "tf_fern",
+      "request_note": "A fern by the door makes people walk slower, which is the whole trick."
+    },
+    {
+      "id": "sol",
+      "name": "Sol",
+      "line": "The usual, if the usual exists yet.",
+      "request": "tf_coffee",
+      "request_note": "A coffee machine is the difference between a room and a shop."
+    },
+    {
+      "id": "tomas",
+      "name": "Tomas",
+      "line": "Lemonade, the big one. It's a walking day.",
+      "request": "",
+      "request_note": ""
+    },
+    {
+      "id": "june",
+      "name": "June",
+      "line": "Iced tea and a bun, and no rush.",
+      "request": "",
+      "request_note": ""
+    }
+  ],
+  "tags": {
+    "plant_fern": [
+      "plant"
+    ],
+    "plant_cactus": [
+      "plant"
+    ],
+    "cafe_fern": [
+      "plant"
+    ],
+    "cafe_plant": [
+      "plant"
+    ],
+    "desk_lamp": [
+      "light"
+    ],
+    "lamp_banker": [
+      "light"
+    ],
+    "lamp_moody": [
+      "light"
+    ],
+    "string_lights": [
+      "light"
+    ],
+    "rug_round": [
+      "decor"
+    ],
+    "poster_motivational": [
+      "decor"
+    ],
+    "picture_abstract": [
+      "decor"
+    ],
+    "picture_stripes": [
+      "decor"
+    ],
+    "clock_wall": [
+      "decor"
+    ],
+    "beanbag_mustard": [
+      "decor"
+    ],
+    "beanbag_sage": [
+      "decor"
+    ],
+    "starter_beanbag": [
+      "decor"
+    ],
+    "cat_bed": [
+      "decor",
+      "music"
+    ],
+    "cushion": [
+      "decor"
+    ],
+    "coffee_machine": [
+      "counter"
+    ],
+    "espresso": [
+      "counter"
+    ],
+    "kettle": [
+      "counter"
+    ],
+    "bookshelf_wood": [
+      "decor"
+    ],
+    "filing_cabinet": [
+      "decor"
+    ],
+    "office_chair": [
+      "decor"
+    ],
+    "whiteboard": [
+      "decor"
+    ],
+    "menu_board": [
+      "decor"
+    ],
+    "lemonade_pitcher": [
+      "counter"
+    ],
+    "cup_stack": [
+      "counter"
+    ]
+  },
+  "serve_seconds": 9,
+  "hand_tip_bonus": 1.6,
+  "queue_max": 3,
+  "tiers": [
+    {
+      "id": "stand",
+      "name": "Lemonade stand",
+      "cost": 0,
+      "rep": 0,
+      "blurb": "A pitcher on the counter. It begins here.",
+      "tags": [
+        "juice",
+        "coffee",
+        "snack",
+        "goods",
+        "plant"
+      ]
+    },
+    {
+      "id": "cart",
+      "name": "Coffee cart",
+      "cost": 120,
+      "rep": 0,
+      "blurb": "Proper cups, a grinder, and a queue that forms by itself.",
+      "dishes": [
+        "flat_white",
+        "cold_brew"
+      ]
+    },
+    {
+      "id": "sandwich",
+      "name": "Sandwich bar",
+      "cost": 350,
+      "rep": 1,
+      "blurb": "Bread, a toaster, and lunch for the whole street.",
+      "dishes": [
+        "blt",
+        "veggie_wrap",
+        "soup_cup"
+      ]
+    },
+    {
+      "id": "shawarma",
+      "name": "Shawarma grill",
+      "cost": 800,
+      "rep": 2,
+      "blurb": "The spit turns all day. People follow their nose.",
+      "dishes": [
+        "chicken_shawarma",
+        "falafel_wrap",
+        "garlic_fries"
+      ]
+    },
+    {
+      "id": "cafe",
+      "name": "Corner Café",
+      "cost": 1600,
+      "rep": 3,
+      "blurb": "Table service, pastries, and your name on the window.",
+      "dishes": [
+        "croissant",
+        "eggs_benedict",
+        "affogato"
+      ]
+    },
+    {
+      "id": "restaurant",
+      "name": "Top-end restaurant",
+      "cost": 3500,
+      "rep": 4,
+      "blurb": "Tasting menu, white tablecloths, a waiting list.",
+      "dishes": [
+        "tasting_menu",
+        "steak_frites",
+        "creme_brulee"
+      ]
+    }
+  ],
+  "asks": [
+    {
+      "text": "Extra ice in that, if it's no trouble?",
+      "yes": "Of course",
+      "no": "We're out of ice",
+      "yes_line": "Extra ice. A person of taste.",
+      "no_line": "No ice. I'll live. Barely."
+    },
+    {
+      "text": "Could you warm the bun a little?",
+      "yes": "Warm it up",
+      "no": "Cold's how it comes",
+      "yes_line": "Warm bun. Day made.",
+      "no_line": "Cold bun. Character building."
+    },
+    {
+      "text": "Is the cat in today?",
+      "yes": "Biscuit's on the till",
+      "no": "Napping, sorry",
+      "yes_line": "I'll say hello to Biscuit then.",
+      "no_line": "Give the cat my regards."
+    },
+    {
+      "text": "Oat milk, if you've got it?",
+      "yes": "Always",
+      "no": "Only the cow kind",
+      "yes_line": "Oat milk. I'm a regular now.",
+      "no_line": "Cow it is. Don't tell my sister."
+    },
+    {
+      "text": "Can I get the receipt emailed?",
+      "yes": "Done",
+      "no": "Paper only here",
+      "yes_line": "Look at this. Modern.",
+      "no_line": "Paper. Vintage. Fine."
+    },
+    {
+      "text": "Any chance of a loyalty stamp?",
+      "yes": "Here's a card",
+      "no": "Not yet",
+      "yes_line": "One stamp down. Nine to go.",
+      "no_line": "I'll loyal anyway."
+    },
+    {
+      "text": "Could you cut it in half? Sharing.",
+      "yes": "Halved",
+      "no": "Comes whole",
+      "yes_line": "Two halves. One friendship saved.",
+      "no_line": "Whole. The friendship will cope."
+    },
+    {
+      "text": "Mind if I take a chair outside?",
+      "yes": "Take two",
+      "no": "Chairs stay",
+      "yes_line": "Sun on my face. Thank you.",
+      "no_line": "Standing it is. Good for the calves."
+    },
+    {
+      "text": "Is this the one Ravi recommends?",
+      "yes": "It's the one",
+      "no": "Ravi says a lot",
+      "yes_line": "Ravi was right. Annoying.",
+      "no_line": "Ravi was wrong. Delightful."
+    },
+    {
+      "text": "Can you make it less sweet?",
+      "yes": "Half sugar",
+      "no": "It's set",
+      "yes_line": "Half sugar. My teeth thank you.",
+      "no_line": "Sweet it is. Dentist's gain."
+    },
+    {
+      "text": "Got a cup for the dog?",
+      "yes": "Water bowl's out",
+      "no": "Dogs drink later",
+      "yes_line": "The dog says thanks. Loudly.",
+      "no_line": "The dog will remember this."
+    },
+    {
+      "text": "Could I pay next time? Left my card.",
+      "yes": "Pay me Thursday",
+      "no": "Card or cash",
+      "yes_line": "Thursday. On my honour.",
+      "no_line": "Found a coin. Found three. Fine."
+    }
+  ],
+  "ingredients": {
+    "cup": {
+      "name": "Paper cup",
+      "color": "F4EFE6"
+    },
+    "glass": {
+      "name": "Tall glass",
+      "color": "DCE9EE"
+    },
+    "ice": {
+      "name": "Ice",
+      "color": "CFE6F2"
+    },
+    "water": {
+      "name": "Water",
+      "color": "BFD9EA"
+    },
+    "lemon": {
+      "name": "Lemon",
+      "color": "F7D040"
+    },
+    "sugar": {
+      "name": "Sugar",
+      "color": "FFF6DC"
+    },
+    "tea": {
+      "name": "Tea",
+      "color": "B9814A"
+    },
+    "mint": {
+      "name": "Mint",
+      "color": "7FB069"
+    },
+    "espresso": {
+      "name": "Espresso",
+      "color": "5A3B2A"
+    },
+    "drip": {
+      "name": "Drip coffee",
+      "color": "6B4A3A"
+    },
+    "oat_milk": {
+      "name": "Oat milk",
+      "color": "E9DCC7"
+    },
+    "foam": {
+      "name": "Foam",
+      "color": "F7F1E1"
+    },
+    "cold_brew": {
+      "name": "Cold brew",
+      "color": "4A2E1E"
+    },
+    "ice_cream": {
+      "name": "Ice cream",
+      "color": "FBF3E4"
+    },
+    "bun": {
+      "name": "Bun",
+      "color": "D9A866"
+    },
+    "butter": {
+      "name": "Butter",
+      "color": "F2C14E"
+    },
+    "jam": {
+      "name": "Jam",
+      "color": "B5343E"
+    },
+    "croissant": {
+      "name": "Croissant",
+      "color": "D99A4E"
+    },
+    "bread": {
+      "name": "Bread",
+      "color": "E0B570"
+    },
+    "lettuce": {
+      "name": "Lettuce",
+      "color": "7FB069"
+    },
+    "tomato": {
+      "name": "Tomato",
+      "color": "E04E3A"
+    },
+    "bacon": {
+      "name": "Bacon",
+      "color": "B5543A"
+    },
+    "cheese": {
+      "name": "Cheese",
+      "color": "F2CC8F"
+    },
+    "mayo": {
+      "name": "Mayo",
+      "color": "FFF5E1"
+    },
+    "wrap": {
+      "name": "Flatbread",
+      "color": "E7D7B8"
+    },
+    "hummus": {
+      "name": "Hummus",
+      "color": "E6D5A8"
+    },
+    "peppers": {
+      "name": "Roast peppers",
+      "color": "D9534F"
+    },
+    "soup": {
+      "name": "Tomato soup",
+      "color": "D86B3A"
+    },
+    "cream": {
+      "name": "Cream",
+      "color": "FBF7EE"
+    },
+    "chicken": {
+      "name": "Chicken",
+      "color": "C98B5A"
+    },
+    "falafel": {
+      "name": "Falafel",
+      "color": "8A6A3C"
+    },
+    "pickles": {
+      "name": "Pickles",
+      "color": "8CA64B"
+    },
+    "garlic_sauce": {
+      "name": "Garlic sauce",
+      "color": "F4EDDA"
+    },
+    "fries": {
+      "name": "Fries",
+      "color": "F2C14E"
+    },
+    "garlic": {
+      "name": "Garlic",
+      "color": "EDE3C8"
+    },
+    "parsley": {
+      "name": "Parsley",
+      "color": "5E9A4E"
+    },
+    "muffin": {
+      "name": "English muffin",
+      "color": "D9A866"
+    },
+    "egg": {
+      "name": "Poached egg",
+      "color": "F7F1E1"
+    },
+    "hollandaise": {
+      "name": "Hollandaise",
+      "color": "F2C14E"
+    },
+    "steak": {
+      "name": "Steak",
+      "color": "7A3B2E"
+    },
+    "jus": {
+      "name": "Red wine jus",
+      "color": "4C2A2A"
+    },
+    "custard": {
+      "name": "Custard",
+      "color": "F6E3A1"
+    },
+    "caramel": {
+      "name": "Burnt sugar",
+      "color": "B8732F"
+    },
+    "berry": {
+      "name": "Berries",
+      "color": "8E2F4A"
+    },
+    "amuse": {
+      "name": "Amuse-bouche",
+      "color": "E07A5F"
+    },
+    "scallop": {
+      "name": "Scallop",
+      "color": "F4E6D2"
+    },
+    "lamb": {
+      "name": "Lamb",
+      "color": "8A4B3C"
+    },
+    "sorbet": {
+      "name": "Sorbet",
+      "color": "F0A0C0"
+    },
+    "plate": {
+      "name": "Plate",
+      "color": "FFFDF6"
+    },
+    "book": {
+      "name": "Book",
+      "color": "7FA3B8"
+    },
+    "bookmark": {
+      "name": "Bookmark",
+      "color": "E6B655"
+    },
+    "pencil": {
+      "name": "Pencil",
+      "color": "E6B655"
+    },
+    "sharpener": {
+      "name": "Sharpener",
+      "color": "6B4A3A"
+    },
+    "pot": {
+      "name": "Little pot",
+      "color": "D9765F"
+    },
+    "soil": {
+      "name": "Soil",
+      "color": "5B4030"
+    },
+    "cutting": {
+      "name": "Cutting",
+      "color": "8FAF7E"
+    }
+  }
+}

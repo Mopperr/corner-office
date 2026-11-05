@@ -1,0 +1,1680 @@
+[
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_armchair_v.glb",
+  "fid": "armchair_v",
+  "bytes": 111384,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_bar_stool.glb",
+  "fid": "bar_stool",
+  "bytes": 64136,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: seat"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_bath_bin.glb",
+  "fid": "bath_bin",
+  "bytes": 37096,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_bath_mat.glb",
+  "fid": "bath_mat",
+  "bytes": 58572,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: mat"
+  ],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_bin_kitchen.glb",
+  "fid": "bin_kitchen",
+  "bytes": 37904,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_bookshelf_v.glb",
+  "fid": "bookshelf_v",
+  "bytes": 335192,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_coat_stand.glb",
+  "fid": "coat_stand",
+  "bytes": 232656,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_dressing_stool.glb",
+  "fid": "dressing_stool",
+  "bytes": 83012,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_floor_lamp_v.glb",
+  "fid": "floor_lamp_v",
+  "bytes": 48344,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_high_chair.glb",
+  "fid": "high_chair",
+  "bytes": 113244,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion,seat"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_kitchen_trolley.glb",
+  "fid": "kitchen_trolley",
+  "bytes": 145620,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top,towel"
+  ],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_laundry_hamper.glb",
+  "fid": "laundry_hamper",
+  "bytes": 68764,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_ottoman.glb",
+  "fid": "ottoman",
+  "bytes": 82476,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_plant_pot_v.glb",
+  "fid": "plant_pot_v",
+  "bytes": 166324,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: soil"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_rocking_chair.glb",
+  "fid": "rocking_chair",
+  "bytes": 148964,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion,seat"
+  ],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_shoe_rack.glb",
+  "fid": "shoe_rack",
+  "bytes": 262224,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_side_table_v.glb",
+  "fid": "side_table_v",
+  "bytes": 48984,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 1
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_suitcase.glb",
+  "fid": "suitcase",
+  "bytes": 93240,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_toy_box.glb",
+  "fid": "toy_box",
+  "bytes": 70776,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch1/hh_cat_wine_rack.glb",
+  "fid": "wine_rack",
+  "bytes": 208872,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_axe_logs.glb",
+  "fid": "axe_logs",
+  "bytes": 96564,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_coffee_machine_v.glb",
+  "fid": "coffee_machine_v",
+  "bytes": 80144,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_desk_calendar.glb",
+  "fid": "desk_calendar",
+  "bytes": 69948,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_desk_fan.glb",
+  "fid": "desk_fan",
+  "bytes": 119388,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_desk_lamp.glb",
+  "fid": "desk_lamp",
+  "bytes": 83852,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_desk_phone.glb",
+  "fid": "desk_phone",
+  "bytes": 189632,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_desk_tidy.glb",
+  "fid": "desk_tidy",
+  "bytes": 71384,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_dispatch_scale.glb",
+  "fid": "dispatch_scale",
+  "bytes": 49404,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_folder_stack.glb",
+  "fid": "folder_stack",
+  "bytes": 146416,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_globe_office.glb",
+  "fid": "globe_office",
+  "bytes": 92336,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_keyboard_mouse.glb",
+  "fid": "keyboard_mouse",
+  "bytes": 513588,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_laptop.glb",
+  "fid": "laptop",
+  "bytes": 383944,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_monitor.glb",
+  "fid": "monitor",
+  "bytes": 35512,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_mug_tree.glb",
+  "fid": "mug_tree",
+  "bytes": 58684,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_office_kettle.glb",
+  "fid": "office_kettle",
+  "bytes": 60544,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_office_speaker.glb",
+  "fid": "office_speaker",
+  "bytes": 25212,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_paper_tray.glb",
+  "fid": "paper_tray",
+  "bytes": 81264,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_pen_pot.glb",
+  "fid": "pen_pot",
+  "bytes": 47568,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_printer.glb",
+  "fid": "printer",
+  "bytes": 62220,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_projector.glb",
+  "fid": "projector",
+  "bytes": 59652,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_reception_sign.glb",
+  "fid": "reception_sign",
+  "bytes": 360136,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch10/hh_cat_stapler_set.glb",
+  "fid": "stapler_set",
+  "bytes": 51160,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_bean_bag.glb",
+  "fid": "bean_bag",
+  "bytes": 35876,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: seat"
+  ],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_bedroom_chair.glb",
+  "fid": "bedroom_chair",
+  "bytes": 82080,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion,seat"
+  ],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_clothes_rail.glb",
+  "fid": "clothes_rail",
+  "bytes": 197344,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_coffee_table_v.glb",
+  "fid": "coffee_table_v",
+  "bytes": 73732,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_cot.glb",
+  "fid": "cot",
+  "bytes": 227208,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: mattress,pillow"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_crate_stack.glb",
+  "fid": "crate_stack",
+  "bytes": 377252,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_drinks_trolley.glb",
+  "fid": "drinks_trolley",
+  "bytes": 187496,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_fireplace_set.glb",
+  "fid": "fireplace_set",
+  "bytes": 105856,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_footstool.glb",
+  "fid": "footstool",
+  "bytes": 74876,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_glass_cabinet.glb",
+  "fid": "glass_cabinet",
+  "bytes": 243192,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_kitchen_clock.glb",
+  "fid": "kitchen_clock",
+  "bytes": 110936,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_kitchen_shelf.glb",
+  "fid": "kitchen_shelf",
+  "bytes": 159328,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_picture_frame.glb",
+  "fid": "picture_frame",
+  "bytes": 51128,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_picture_v.glb",
+  "fid": "picture_v",
+  "bytes": 36400,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_round_rug.glb",
+  "fid": "round_rug",
+  "bytes": 91212,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: rug"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_tall_bookcase.glb",
+  "fid": "tall_bookcase",
+  "bytes": 524540,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_trunk_v.glb",
+  "fid": "trunk_v",
+  "bytes": 89280,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_tv_small.glb",
+  "fid": "tv_small",
+  "bytes": 36784,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_wall_clock.glb",
+  "fid": "wall_clock",
+  "bytes": 62760,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch2/hh_cat_wall_mirror.glb",
+  "fid": "wall_mirror",
+  "bytes": 29724,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_bedside_lamp.glb",
+  "fid": "bedside_lamp",
+  "bytes": 62800,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_blanket.glb",
+  "fid": "blanket",
+  "bytes": 75880,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_guitar.glb",
+  "fid": "guitar",
+  "bytes": 138952,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: saddle"
+  ],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_hat_box.glb",
+  "fid": "hat_box",
+  "bytes": 91092,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_jug.glb",
+  "fid": "jug",
+  "bytes": 38240,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_keyboard_piano.glb",
+  "fid": "keyboard_piano",
+  "bytes": 444084,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_log_basket.glb",
+  "fid": "log_basket",
+  "bytes": 97040,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_mirror_oval.glb",
+  "fid": "mirror_oval",
+  "bytes": 30908,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_mirror_round.glb",
+  "fid": "mirror_round",
+  "bytes": 30580,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_mug.glb",
+  "fid": "mug",
+  "bytes": 28840,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_plate_stack.glb",
+  "fid": "plate_stack",
+  "bytes": 72748,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_rubber_duck.glb",
+  "fid": "rubber_duck",
+  "bytes": 58072,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_saucepan.glb",
+  "fid": "saucepan",
+  "bytes": 51844,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_speaker.glb",
+  "fid": "speaker",
+  "bytes": 67272,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_storage_jar.glb",
+  "fid": "storage_jar",
+  "bytes": 37252,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_suitcase_stack.glb",
+  "fid": "suitcase_stack",
+  "bytes": 190800,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: strap"
+  ],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_table_lamp.glb",
+  "fid": "table_lamp",
+  "bytes": 81744,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_teddy.glb",
+  "fid": "teddy",
+  "bytes": 106128,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_towel_pile.glb",
+  "fid": "towel_pile",
+  "bytes": 79852,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: towel"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch3/hh_cat_vase.glb",
+  "fid": "vase",
+  "bytes": 63380,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_barbecue.glb",
+  "fid": "barbecue",
+  "bytes": 82616,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_bath_plant.glb",
+  "fid": "bath_plant",
+  "bytes": 88660,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_biscuit_tin.glb",
+  "fid": "biscuit_tin",
+  "bytes": 133044,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_board_games.glb",
+  "fid": "board_games",
+  "bytes": 111676,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_book_stack.glb",
+  "fid": "book_stack",
+  "bytes": 112536,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_bowl_set.glb",
+  "fid": "bowl_set",
+  "bytes": 55024,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_broken_chair.glb",
+  "fid": "broken_chair",
+  "bytes": 75552,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: seat"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_casserole.glb",
+  "fid": "casserole",
+  "bytes": 50840,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_child_bike.glb",
+  "fid": "child_bike",
+  "bytes": 131152,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: saddle"
+  ],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_chopping_board.glb",
+  "fid": "chopping_board",
+  "bytes": 97740,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_cookbooks.glb",
+  "fid": "cookbooks",
+  "bytes": 80624,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_deck_chair.glb",
+  "fid": "deck_chair",
+  "bytes": 54528,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_hat_stand_loft.glb",
+  "fid": "hat_stand_loft",
+  "bytes": 147248,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_mannequin.glb",
+  "fid": "mannequin",
+  "bytes": 67920,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_planter_box.glb",
+  "fid": "planter_box",
+  "bytes": 184356,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_poster.glb",
+  "fid": "poster",
+  "bytes": 37756,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_pram.glb",
+  "fid": "pram",
+  "bytes": 167068,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_skis.glb",
+  "fid": "skis",
+  "bytes": 115372,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: strap"
+  ],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_teapot.glb",
+  "fid": "teapot",
+  "bytes": 62720,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch4/hh_cat_towel_rail.glb",
+  "fid": "towel_rail",
+  "bytes": 59312,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: towel"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_bath_shelf.glb",
+  "fid": "bath_shelf",
+  "bytes": 111480,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_candles.glb",
+  "fid": "candles",
+  "bytes": 78920,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_cushion_set.glb",
+  "fid": "cushion_set",
+  "bytes": 58320,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: cushion"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_filing_cabinet.glb",
+  "fid": "filing_cabinet",
+  "bytes": 90212,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_garden_bench.glb",
+  "fid": "garden_bench",
+  "bytes": 156352,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_globe_v.glb",
+  "fid": "globe_v",
+  "bytes": 90460,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_low_cabinet.glb",
+  "fid": "low_cabinet",
+  "bytes": 80632,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_office_plant.glb",
+  "fid": "office_plant",
+  "bytes": 57400,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_office_poster.glb",
+  "fid": "office_poster",
+  "bytes": 46956,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_radio_kitchen.glb",
+  "fid": "radio_kitchen",
+  "bytes": 74644,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_sawhorse.glb",
+  "fid": "sawhorse",
+  "bytes": 82688,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_school_desk.glb",
+  "fid": "school_desk",
+  "bytes": 81648,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: seat"
+  ],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_sewing_box.glb",
+  "fid": "sewing_box",
+  "bytes": 121688,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_sideboard.glb",
+  "fid": "sideboard",
+  "bytes": 102928,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: top"
+  ],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_slippers.glb",
+  "fid": "slippers",
+  "bytes": 54184,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_stand_mixer.glb",
+  "fid": "stand_mixer",
+  "bytes": 87996,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_towel_rail_bath.glb",
+  "fid": "towel_rail_bath",
+  "bytes": 42924,
+  "fail": [],
+  "warn": [],
+  "nmats": 2
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_tray.glb",
+  "fid": "tray",
+  "bytes": 91284,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_tree_box.glb",
+  "fid": "tree_box",
+  "bytes": 147904,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch5/hh_cat_utensil_jar.glb",
+  "fid": "utensil_jar",
+  "bytes": 70580,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_blender.glb",
+  "fid": "blender",
+  "bytes": 87672,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_coffee_grinder.glb",
+  "fid": "coffee_grinder",
+  "bytes": 53908,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_cork_board.glb",
+  "fid": "cork_board",
+  "bytes": 74548,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_dollhouse.glb",
+  "fid": "dollhouse",
+  "bytes": 124744,
+  "fail": [],
+  "warn": [
+   "texture-hook part names: rug"
+  ],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_fruit_bowl.glb",
+  "fid": "fruit_bowl",
+  "bytes": 72200,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_hair_dryer.glb",
+  "fid": "hair_dryer",
+  "bytes": 64268,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_hangers.glb",
+  "fid": "hangers",
+  "bytes": 114228,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_jewellery_box.glb",
+  "fid": "jewellery_box",
+  "bytes": 140028,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_laundry_bag.glb",
+  "fid": "laundry_bag",
+  "bytes": 57844,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_locker.glb",
+  "fid": "locker",
+  "bytes": 118952,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_magazine_pile.glb",
+  "fid": "magazine_pile",
+  "bytes": 48828,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_office_chair.glb",
+  "fid": "office_chair",
+  "bytes": 116344,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_parasol.glb",
+  "fid": "parasol",
+  "bytes": 91296,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_record_player.glb",
+  "fid": "record_player",
+  "bytes": 116808,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_scales.glb",
+  "fid": "scales",
+  "bytes": 63548,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_soap_dish.glb",
+  "fid": "soap_dish",
+  "bytes": 46672,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_soap_dispenser.glb",
+  "fid": "soap_dispenser",
+  "bytes": 39328,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_spice_jars.glb",
+  "fid": "spice_jars",
+  "bytes": 133024,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_toothbrush_set.glb",
+  "fid": "toothbrush_set",
+  "bytes": 70280,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch6/hh_cat_whiteboard.glb",
+  "fid": "whiteboard",
+  "bytes": 79484,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_aquarium.glb",
+  "fid": "aquarium",
+  "bytes": 766408,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_bath_scales.glb",
+  "fid": "bath_scales",
+  "bytes": 70416,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_bread_board.glb",
+  "fid": "bread_board",
+  "bytes": 123600,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_cake_stand.glb",
+  "fid": "cake_stand",
+  "bytes": 220780,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_candle_holder.glb",
+  "fid": "candle_holder",
+  "bytes": 68836,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_coat_rack_office.glb",
+  "fid": "coat_rack_office",
+  "bytes": 201004,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_compost_bin.glb",
+  "fid": "compost_bin",
+  "bytes": 66592,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_cutlery_tray.glb",
+  "fid": "cutlery_tray",
+  "bytes": 175940,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_egg_box.glb",
+  "fid": "egg_box",
+  "bytes": 127860,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_fishing_rods.glb",
+  "fid": "fishing_rods",
+  "bytes": 122612,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_generator.glb",
+  "fid": "generator",
+  "bytes": 114076,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_labelled_box.glb",
+  "fid": "labelled_box",
+  "bytes": 29052,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_metal_shelving.glb",
+  "fid": "metal_shelving",
+  "bytes": 318240,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_pegboard.glb",
+  "fid": "pegboard",
+  "bytes": 430200,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_push_mower.glb",
+  "fid": "push_mower",
+  "bytes": 138704,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_salt_pepper.glb",
+  "fid": "salt_pepper",
+  "bytes": 101644,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_step_ladder.glb",
+  "fid": "step_ladder",
+  "bytes": 117092,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_tent_bag.glb",
+  "fid": "tent_bag",
+  "bytes": 74300,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_toiletries.glb",
+  "fid": "toiletries",
+  "bytes": 203988,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch7/hh_cat_typewriter.glb",
+  "fid": "typewriter",
+  "bytes": 448968,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_bath_caddy.glb",
+  "fid": "bath_caddy",
+  "bytes": 243132,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_bucket.glb",
+  "fid": "bucket",
+  "bytes": 94908,
+  "fail": [],
+  "warn": [],
+  "nmats": 3
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_chess_set.glb",
+  "fid": "chess_set",
+  "bytes": 340156,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_console.glb",
+  "fid": "console",
+  "bytes": 95592,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_desk_v.glb",
+  "fid": "desk_v",
+  "bytes": 90324,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_loo_roll.glb",
+  "fid": "loo_roll",
+  "bytes": 80440,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_medicine_cabinet.glb",
+  "fid": "medicine_cabinet",
+  "bytes": 119784,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_model_ship.glb",
+  "fid": "model_ship",
+  "bytes": 189464,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_notice_board.glb",
+  "fid": "notice_board",
+  "bytes": 88568,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_office_bin.glb",
+  "fid": "office_bin",
+  "bytes": 50140,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_office_clock.glb",
+  "fid": "office_clock",
+  "bytes": 75312,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_office_shelf.glb",
+  "fid": "office_shelf",
+  "bytes": 311476,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_old_lamp.glb",
+  "fid": "old_lamp",
+  "bytes": 108952,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_safe.glb",
+  "fid": "safe",
+  "bytes": 114496,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_string_lights.glb",
+  "fid": "string_lights",
+  "bytes": 221252,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_trophy.glb",
+  "fid": "trophy",
+  "bytes": 87060,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_umbrella_stand.glb",
+  "fid": "umbrella_stand",
+  "bytes": 67420,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_watering_v.glb",
+  "fid": "watering_v",
+  "bytes": 70892,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_wellies.glb",
+  "fid": "wellies",
+  "bytes": 107684,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch8/hh_cat_wheelbarrow_v.glb",
+  "fid": "wheelbarrow_v",
+  "bytes": 75016,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_bird_cage.glb",
+  "fid": "bird_cage",
+  "bytes": 246872,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_bird_feeder.glb",
+  "fid": "bird_feeder",
+  "bytes": 75584,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_cool_box.glb",
+  "fid": "cool_box",
+  "bytes": 56744,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_dartboard.glb",
+  "fid": "dartboard",
+  "bytes": 389480,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_flower_pot_v.glb",
+  "fid": "flower_pot_v",
+  "bytes": 364592,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_gramophone.glb",
+  "fid": "gramophone",
+  "bytes": 146272,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_heater.glb",
+  "fid": "heater",
+  "bytes": 107132,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_hose_v.glb",
+  "fid": "hose_v",
+  "bytes": 50204,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_kayak.glb",
+  "fid": "kayak",
+  "bytes": 54480,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_lantern.glb",
+  "fid": "lantern",
+  "bytes": 63428,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_office_trolley.glb",
+  "fid": "office_trolley",
+  "bytes": 141820,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_paint_cans.glb",
+  "fid": "paint_cans",
+  "bytes": 148848,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_picture_stack.glb",
+  "fid": "picture_stack",
+  "bytes": 153572,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_seed_trays.glb",
+  "fid": "seed_trays",
+  "bytes": 423332,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_sewing_machine.glb",
+  "fid": "sewing_machine",
+  "bytes": 95868,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_shredder.glb",
+  "fid": "shredder",
+  "bytes": 37896,
+  "fail": [],
+  "warn": [],
+  "nmats": 7
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_spades.glb",
+  "fid": "spades",
+  "bytes": 85016,
+  "fail": [],
+  "warn": [],
+  "nmats": 4
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_tool_box_v.glb",
+  "fid": "tool_box_v",
+  "bytes": 97676,
+  "fail": [],
+  "warn": [],
+  "nmats": 5
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_vinyl_crate.glb",
+  "fid": "vinyl_crate",
+  "bytes": 203020,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ },
+ {
+  "file": "/workspace/game/pr21-new/families/batch9/hh_cat_water_cooler.glb",
+  "fid": "water_cooler",
+  "bytes": 55972,
+  "fail": [],
+  "warn": [],
+  "nmats": 6
+ }
+]

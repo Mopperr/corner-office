@@ -1,0 +1,127 @@
+{
+  "speaker": "Marge \"Mile Marker\" Holloway",
+  "context": "Random cozy office idle chatter. Warm, gently funny, trucker flavor, never stressful. Variety over catchphrase spam.",
+  "phase": "slice",
+  "lines": [
+    {
+      "id": "idle_01",
+      "line": "Coffee's still hot. Exit 12 still gets four stars from me."
+    },
+    {
+      "id": "idle_02",
+      "line": "Check your straps once. Then check 'em again. Old habit."
+    },
+    {
+      "id": "idle_03",
+      "line": "Nice light in here. Almost as good as a sunrise on I-80."
+    },
+    {
+      "id": "idle_04",
+      "line": "Ducks have right of way. Always. Even in the parking lot."
+    },
+    {
+      "id": "idle_05",
+      "line": "Market looking friendly today. Like a clear lane at rush hour."
+    },
+    {
+      "id": "idle_06",
+      "line": "You eat yet? Rest-stop pretzels don't count as dinner."
+    },
+    {
+      "id": "idle_07",
+      "line": "Nap window's open. I logged twenty minutes. Highly recommend."
+    },
+    {
+      "id": "idle_08",
+      "line": "That plant's doing fine. Give it a little sun, not a lecture."
+    },
+    {
+      "id": "idle_09",
+      "line": "Ticker chirped once. Nothing urgent — just numbers gossiping."
+    },
+    {
+      "id": "idle_10",
+      "line": "Load's balanced when it feels quiet. Trust your ears."
+    },
+    {
+      "id": "idle_11",
+      "line": "Rain on a roll-up door is my favorite office music."
+    },
+    {
+      "id": "idle_12",
+      "line": "You're doing great, rookie. Logbook agrees. That's official."
+    },
+    {
+      "id": "idle_13",
+      "line": "Bubble wrap is free hugs for fragile things. Use generously."
+    },
+    {
+      "id": "idle_14",
+      "line": "If the chart dips, sit tight. Lanes clear. Prices do too."
+    },
+    {
+      "id": "idle_15",
+      "line": "I once rated a rest-stop muffin. Two stars. Don't ask why."
+    },
+    {
+      "id": "idle_16",
+      "line": "Windows beat garage doors. You're headed that way. Slow is fine."
+    },
+    {
+      "id": "idle_17",
+      "line": "Tap the kettle when you can. Moving goes better with steam."
+    },
+    {
+      "id": "idle_18",
+      "line": "CB tip: leave a little silence between calls. Folks appreciate it."
+    },
+    {
+      "id": "idle_19",
+      "line": "Your whiteboard's filling up. That's a good kind of busy."
+    },
+    {
+      "id": "idle_20",
+      "line": "Foggy mornings are soft on the eyes. Take the scenic turn."
+    },
+    {
+      "id": "idle_21",
+      "line": "If a box meows, peek before you tape. Learned that the hard way."
+    },
+    {
+      "id": "idle_22",
+      "line": "Buy when the Market's boring. Sell when it won't stop talking."
+    },
+    {
+      "id": "idle_23",
+      "line": "Label the boxes you care about. Future-you says thanks."
+    },
+    {
+      "id": "idle_24",
+      "line": "I saved you a parking spot in my head. It's by the muffins."
+    },
+    {
+      "id": "idle_25",
+      "line": "Sunny side of the truck cooks vinyl. Shade side is kindness."
+    },
+    {
+      "id": "idle_26",
+      "line": "How's the back? Lift with your knees. Libraries taught me that."
+    },
+    {
+      "id": "idle_27",
+      "line": "Idle chatter's free. Advice costs a coffee. I'm cheap today."
+    },
+    {
+      "id": "idle_28",
+      "line": "Mile Marker checking in. Still upright? Good. Carry on."
+    },
+    {
+      "id": "idle_29",
+      "line": "Storm passed. Roads look friendly. So does your garage."
+    },
+    {
+      "id": "idle_30",
+      "line": "Whenever you're ready. Nobody's clocking us. Soft pedal is fine."
+    }
+  ]
+}

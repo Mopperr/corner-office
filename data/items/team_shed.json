@@ -1,0 +1,8652 @@
+{
+ "items": {
+  "shed_weather_vane": {
+   "name": "Weather vane (cockerel)",
+   "model": "proc:shed_weather_vane",
+   "w": 0.6,
+   "d": 0.22,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Points with total confidence at wherever the wind isn't.",
+   "bulky": true
+  },
+  "shed_tyre_swing": {
+   "name": "Tyre swing",
+   "model": "proc:shed_tyre_swing",
+   "w": 0.7,
+   "d": 0.3,
+   "h": 1.6,
+   "mount": "hang",
+   "room": "shed",
+   "flavor": "Built for children, mostly used by adults at barbecues.",
+   "bulky": true
+  },
+  "shed_bird_bath": {
+   "name": "Bird bath (stone)",
+   "model": "proc:shed_bird_bath",
+   "w": 0.5,
+   "d": 0.5,
+   "h": 0.72,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "The pigeons treat it as a spa. The robins pay the membership.",
+   "fragile": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "shed_garden_gnome": {
+   "name": "Garden gnome (fishing)",
+   "model": "proc:shed_garden_gnome",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 0.38,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Has not caught a single fish in eleven years. Remains hopeful.",
+   "fragile": true
+  },
+  "shed_stone_hare": {
+   "name": "Stone hare",
+   "model": "proc:shed_stone_hare",
+   "w": 0.15,
+   "d": 0.32,
+   "h": 0.37,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Sits in the border looking like it has heard something about you.",
+   "heavy": true
+  },
+  "shed_sundial": {
+   "name": "Sundial on a plinth",
+   "model": "proc:shed_sundial",
+   "w": 0.36,
+   "d": 0.36,
+   "h": 0.9,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Accurate to the minute, on the four days a year it gets to work.",
+   "heavy": true,
+   "bulky": true
+  },
+  "shed_obelisk": {
+   "name": "Plant obelisk",
+   "model": "proc:shed_obelisk",
+   "w": 0.45,
+   "d": 0.45,
+   "h": 1.5,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Sweet peas are meant to climb it. They have other plans.",
+   "bulky": true
+  },
+  "shed_trellis_panel": {
+   "name": "Trellis panel",
+   "model": "proc:shed_trellis_panel",
+   "w": 0.9,
+   "d": 0.04,
+   "h": 1.8,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Leaning against the shed until the clematis makes up its mind.",
+   "nobox": true
+  },
+  "shed_water_feature": {
+   "name": "Bubbling water feature",
+   "model": "proc:shed_water_feature",
+   "w": 0.45,
+   "d": 0.45,
+   "h": 0.6,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Sold as relaxing. Mainly makes everyone want the loo.",
+   "fragile": true,
+   "heavy": true
+  },
+  "shed_scarecrow": {
+   "name": "Scarecrow",
+   "model": "proc:shed_scarecrow",
+   "w": 1.0,
+   "d": 0.3,
+   "h": 1.7,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "The crows have known for years. They let him keep his dignity.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_windmill": {
+   "name": "Garden windmill",
+   "model": "proc:shed_windmill",
+   "w": 0.56,
+   "d": 0.15,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Spins happily in a breeze. Panics in anything stronger.",
+   "fragile": true
+  },
+  "shed_hanging_basket": {
+   "name": "Hanging basket",
+   "model": "proc:shed_hanging_basket",
+   "w": 0.4,
+   "d": 0.4,
+   "h": 0.55,
+   "mount": "hang",
+   "room": "shed",
+   "flavor": "Needs watering twice a day and admiring once.",
+   "fragile": true
+  },
+  "shed_nest_box": {
+   "name": "Bird nest box",
+   "model": "proc:shed_nest_box",
+   "w": 0.16,
+   "d": 0.24,
+   "h": 0.28,
+   "mount": "hang",
+   "room": "shed",
+   "flavor": "Blue tits viewed it twice and went with the hedge."
+  },
+  "shed_insect_hotel": {
+   "name": "Insect hotel",
+   "model": "proc:shed_insect_hotel",
+   "w": 0.34,
+   "d": 0.12,
+   "h": 0.42,
+   "mount": "hang",
+   "room": "shed",
+   "flavor": "Five-star reviews from the solitary bees. Woodlice refuse to leave."
+  },
+  "shed_hedgehog_house": {
+   "name": "Hedgehog house",
+   "model": "proc:shed_hedgehog_house",
+   "w": 0.4,
+   "d": 0.5,
+   "h": 0.3,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Rent-free, provided the slugs are dealt with.",
+   "bulky": true
+  },
+  "shed_bee_hive": {
+   "name": "Beehive (National)",
+   "model": "proc:shed_bee_hive",
+   "w": 0.46,
+   "d": 0.46,
+   "h": 0.8,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Forty thousand tenants, none of whom have ever paid on time.",
+   "fragile": true,
+   "bulky": true
+  },
+  "shed_cloche": {
+   "name": "Glass bell cloche",
+   "model": "proc:shed_cloche",
+   "w": 0.3,
+   "d": 0.3,
+   "h": 0.32,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Keeps one lettuce warm and smug.",
+   "fragile": true
+  },
+  "shed_cold_frame": {
+   "name": "Cold frame",
+   "model": "proc:shed_cold_frame",
+   "w": 1.0,
+   "d": 0.6,
+   "h": 0.45,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "A greenhouse for people with modest ambitions and small seedlings.",
+   "fragile": true,
+   "nobox": true
+  },
+  "shed_rain_butt": {
+   "name": "Water butt",
+   "model": "proc:shed_rain_butt",
+   "w": 0.6,
+   "d": 0.65,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Holds two hundred litres and one small, permanent frog.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_leaf_rake": {
+   "name": "Leaf rake",
+   "model": "proc:shed_leaf_rake",
+   "w": 0.5,
+   "d": 0.06,
+   "h": 1.6,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Gathers leaves into a pile, then waits for the wind.",
+   "nobox": true
+  },
+  "shed_loppers": {
+   "name": "Long-handled loppers",
+   "model": "proc:shed_loppers",
+   "w": 0.7,
+   "d": 0.1,
+   "h": 0.06,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "For branches that have overstayed their welcome."
+  },
+  "shed_hedge_trimmer": {
+   "name": "Hedge trimmer",
+   "model": "proc:shed_hedge_trimmer",
+   "w": 0.95,
+   "d": 0.2,
+   "h": 0.2,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Makes the hedge look tidy and the neighbours look round."
+  },
+  "shed_strimmer": {
+   "name": "Strimmer",
+   "model": "proc:shed_strimmer",
+   "w": 0.3,
+   "d": 0.2,
+   "h": 1.5,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Takes the edges off the lawn and the paint off the fence.",
+   "bulky": true
+  },
+  "shed_leaf_blower": {
+   "name": "Leaf blower",
+   "model": "proc:shed_leaf_blower",
+   "w": 0.75,
+   "d": 0.2,
+   "h": 0.3,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Moves leaves from your lawn to next door's with real efficiency."
+  },
+  "shed_pump_sprayer": {
+   "name": "Pump sprayer",
+   "model": "proc:shed_pump_sprayer",
+   "w": 0.3,
+   "d": 0.2,
+   "h": 0.55,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Five litres of weedkiller and four of regret."
+  },
+  "shed_garden_kneeler": {
+   "name": "Garden kneeler",
+   "model": "proc:shed_garden_kneeler",
+   "w": 0.6,
+   "d": 0.3,
+   "h": 0.5,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Flip it over and it is a seat. Flip your knees over and they still hurt."
+  },
+  "shed_garden_sieve": {
+   "name": "Garden sieve",
+   "model": "proc:shed_garden_sieve",
+   "w": 0.4,
+   "d": 0.4,
+   "h": 0.12,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Turns lumpy soil into fine soil and a good arm into a tired one."
+  },
+  "shed_trug": {
+   "name": "Garden trug",
+   "model": "proc:shed_trug",
+   "w": 0.55,
+   "d": 0.32,
+   "h": 0.3,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Holds a whole morning's weeding and one forgotten trowel."
+  },
+  "shed_cane_bundle": {
+   "name": "Bundle of bamboo canes",
+   "model": "proc:shed_cane_bundle",
+   "w": 0.12,
+   "d": 0.12,
+   "h": 1.8,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Fifty canes, each with a rubber cap gone missing.",
+   "nobox": true
+  },
+  "shed_chicken_wire": {
+   "name": "Roll of chicken wire",
+   "model": "proc:shed_chicken_wire",
+   "w": 0.9,
+   "d": 0.3,
+   "h": 0.3,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Will scratch you whichever way you hold it.",
+   "bulky": true
+  },
+  "shed_sprinkler": {
+   "name": "Oscillating sprinkler",
+   "model": "proc:shed_sprinkler",
+   "w": 0.45,
+   "d": 0.2,
+   "h": 0.15,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Waters the lawn evenly, and the person who set it up thoroughly."
+  },
+  "shed_lawn_spreader": {
+   "name": "Lawn feed spreader",
+   "model": "proc:shed_lawn_spreader",
+   "w": 0.55,
+   "d": 0.78,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Perfectly even, apart from the stripes everyone can see.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_garden_roller": {
+   "name": "Garden roller",
+   "model": "proc:shed_garden_roller",
+   "w": 0.55,
+   "d": 0.8,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Flattens the lawn and anyone who tries to lift it.",
+   "nobox": true,
+   "heavy": true
+  },
+  "shed_compost_sack": {
+   "name": "Sack of compost",
+   "model": "proc:shed_compost_sack",
+   "w": 0.5,
+   "d": 0.25,
+   "h": 0.75,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Seventy litres. Somehow always split at the bottom corner.",
+   "nobox": true,
+   "heavy": true
+  },
+  "shed_incinerator": {
+   "name": "Garden incinerator",
+   "model": "proc:shed_incinerator",
+   "w": 0.5,
+   "d": 0.5,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Burns the hedge clippings and, briefly, the neighbours' goodwill.",
+   "bulky": true
+  },
+  "shed_pressure_washer": {
+   "name": "Pressure washer",
+   "model": "proc:shed_pressure_washer",
+   "w": 0.4,
+   "d": 0.4,
+   "h": 0.9,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Reveals the patio's true colour, and some of next door's.",
+   "heavy": true
+  },
+  "shed_rotary_line": {
+   "name": "Rotary washing line (folded)",
+   "model": "proc:shed_rotary_line",
+   "w": 0.2,
+   "d": 0.2,
+   "h": 1.8,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Spins in the wind like it is trying to take off.",
+   "nobox": true
+  },
+  "shed_workbench": {
+   "name": "Workbench",
+   "model": "proc:shed_workbench",
+   "w": 1.5,
+   "d": 0.6,
+   "h": 0.98,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Nobody has seen the actual surface since 2009.",
+   "nobox": true,
+   "heavy": true
+  },
+  "shed_bench_vice": {
+   "name": "Bench vice",
+   "model": "proc:shed_bench_vice",
+   "w": 0.22,
+   "d": 0.3,
+   "h": 0.2,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Holds anything firmly except the attention of whoever's using it.",
+   "heavy": true
+  },
+  "shed_bench_grinder": {
+   "name": "Bench grinder",
+   "model": "proc:shed_bench_grinder",
+   "w": 0.4,
+   "d": 0.2,
+   "h": 0.25,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Puts an edge on anything, including your nerves.",
+   "heavy": true
+  },
+  "shed_pillar_drill": {
+   "name": "Bench pillar drill",
+   "model": "proc:shed_pillar_drill",
+   "w": 0.4,
+   "d": 0.45,
+   "h": 0.82,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Drills a perfectly straight hole slightly to the left of the mark.",
+   "heavy": true
+  },
+  "shed_mitre_saw": {
+   "name": "Mitre saw",
+   "model": "proc:shed_mitre_saw",
+   "w": 0.55,
+   "d": 0.5,
+   "h": 0.4,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Forty-five degrees on the dial, forty-three on the skirting.",
+   "heavy": true
+  },
+  "shed_drill_case": {
+   "name": "Cordless drill in its case",
+   "model": "proc:shed_drill_case",
+   "w": 0.38,
+   "d": 0.12,
+   "h": 0.3,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Battery always flat. Spare battery always flatter."
+  },
+  "shed_wood_plane": {
+   "name": "Woodworking plane",
+   "model": "proc:shed_wood_plane",
+   "w": 0.26,
+   "d": 0.07,
+   "h": 0.14,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Grandad's. Sharper than anything else in the house."
+  },
+  "shed_sash_clamps": {
+   "name": "Sash clamps (pair)",
+   "model": "proc:shed_sash_clamps",
+   "w": 1.0,
+   "d": 0.1,
+   "h": 0.12,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "For holding two bits of wood together while the glue argues."
+  },
+  "shed_screw_drawers": {
+   "name": "Screw and nail drawers",
+   "model": "proc:shed_screw_drawers",
+   "w": 0.3,
+   "d": 0.16,
+   "h": 0.41,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Sixty little drawers. The screw you need is in the sixty-first.",
+   "fragile": true
+  },
+  "shed_anvil": {
+   "name": "Small anvil",
+   "model": "proc:shed_anvil",
+   "w": 0.4,
+   "d": 0.15,
+   "h": 0.22,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Bought for a hobby that lasted a weekend. Will outlive the house.",
+   "heavy": true
+  },
+  "shed_chopping_block": {
+   "name": "Log chopping block",
+   "model": "proc:shed_chopping_block",
+   "w": 0.45,
+   "d": 0.45,
+   "h": 0.45,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "A stump with a scar for every winter.",
+   "heavy": true
+  },
+  "shed_log_store": {
+   "name": "Log store",
+   "model": "proc:shed_log_store",
+   "w": 1.0,
+   "d": 0.5,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Stacked with the dry logs at the back, where nobody can reach them.",
+   "nobox": true,
+   "heavy": true
+  },
+  "shed_workshop_vac": {
+   "name": "Wet and dry vac",
+   "model": "proc:shed_workshop_vac",
+   "w": 0.45,
+   "d": 0.45,
+   "h": 0.65,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Hoovers up sawdust, water and, once, a hamster. He was fine.",
+   "bulky": true
+  },
+  "shed_air_compressor": {
+   "name": "Air compressor",
+   "model": "proc:shed_air_compressor",
+   "w": 0.78,
+   "d": 0.3,
+   "h": 0.6,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Inflates a football in two seconds and wakes the street doing it.",
+   "heavy": true
+  },
+  "shed_extension_reel": {
+   "name": "Extension cable reel",
+   "model": "proc:shed_extension_reel",
+   "w": 0.28,
+   "d": 0.2,
+   "h": 0.32,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Twenty-five metres, used to reach the plug two feet away.",
+   "heavy": true
+  },
+  "shed_jerry_can": {
+   "name": "Jerry can",
+   "model": "proc:shed_jerry_can",
+   "w": 0.35,
+   "d": 0.17,
+   "h": 0.47,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Twenty litres, for the mower that only needs one.",
+   "heavy": true
+  },
+  "shed_trolley_jack": {
+   "name": "Trolley jack",
+   "model": "proc:shed_trolley_jack",
+   "w": 0.3,
+   "d": 0.7,
+   "h": 0.2,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Lifts a car with ease, provided you can remember where it goes.",
+   "heavy": true
+  },
+  "shed_car_ramps": {
+   "name": "Car ramps (pair)",
+   "model": "proc:shed_car_ramps",
+   "w": 0.55,
+   "d": 0.8,
+   "h": 0.22,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Driven up once, very slowly, with someone shouting.",
+   "bulky": true
+  },
+  "shed_sack_truck": {
+   "name": "Sack truck",
+   "model": "proc:shed_sack_truck",
+   "w": 0.5,
+   "d": 0.45,
+   "h": 1.2,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "The only member of the household who enjoys moving day.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_bike_pump": {
+   "name": "Track bike pump",
+   "model": "proc:shed_bike_pump",
+   "w": 0.25,
+   "d": 0.15,
+   "h": 0.65,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Brings every tyre to the right pressure except the one that's flat."
+  },
+  "shed_bike_stand": {
+   "name": "Bike repair stand",
+   "model": "proc:shed_bike_stand",
+   "w": 0.6,
+   "d": 0.6,
+   "h": 1.4,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Holds the bike at a perfect height for not fixing it.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_chiminea": {
+   "name": "Chiminea",
+   "model": "proc:shed_chiminea",
+   "w": 0.5,
+   "d": 0.5,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Smokes like a chimney, mainly in the direction of the guests.",
+   "fragile": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "shed_fire_pit": {
+   "name": "Fire pit bowl",
+   "model": "proc:shed_fire_pit",
+   "w": 0.7,
+   "d": 0.7,
+   "h": 0.4,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Everyone gathers round it, then moves every time the smoke does.",
+   "heavy": true,
+   "bulky": true
+  },
+  "shed_folding_table": {
+   "name": "Folding garden table",
+   "model": "proc:shed_folding_table",
+   "w": 0.76,
+   "d": 0.76,
+   "h": 0.72,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Seats four, wobbles for all of them.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_swing_seat": {
+   "name": "Garden swing seat",
+   "model": "proc:shed_swing_seat",
+   "w": 1.9,
+   "d": 1.24,
+   "h": 1.75,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "A three-seater, in theory. A one-and-a-half-seater with a cat.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "shed_croquet_set": {
+   "name": "Croquet set in a stand",
+   "model": "proc:shed_croquet_set",
+   "w": 0.5,
+   "d": 0.3,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Garden croquet. Friendships end on the second hoop.",
+   "bulky": true
+  },
+  "shed_swingball": {
+   "name": "Swingball",
+   "model": "proc:shed_swingball",
+   "w": 0.4,
+   "d": 0.4,
+   "h": 1.6,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Seventeen minutes of fun, then a ball wrapped tight round the top.",
+   "bulky": true
+  },
+  "shed_goal_net": {
+   "name": "Pop-up football goal",
+   "model": "proc:shed_goal_net",
+   "w": 1.5,
+   "d": 0.8,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Last used as an excuse for the broken greenhouse pane.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_sledge": {
+   "name": "Wooden sledge",
+   "model": "proc:shed_sledge",
+   "w": 0.45,
+   "d": 1.02,
+   "h": 0.25,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Waits patiently all year for the one Tuesday of snow.",
+   "bulky": true
+  },
+  "shed_rabbit_hutch": {
+   "name": "Rabbit hutch",
+   "model": "proc:shed_rabbit_hutch",
+   "w": 1.2,
+   "d": 0.62,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Two storeys, a run and a view. Better than most London flats.",
+   "nobox": true,
+   "bulky": true
+  },
+  "shed_kennel": {
+   "name": "Dog kennel",
+   "model": "proc:shed_kennel",
+   "w": 0.84,
+   "d": 0.95,
+   "h": 0.95,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Built for the dog. The dog sleeps on the sofa.",
+   "nobox": true,
+   "heavy": true,
+   "bulky": true
+  },
+  "shed_garden_gate": {
+   "name": "Spare garden gate",
+   "model": "proc:shed_garden_gate",
+   "w": 0.9,
+   "d": 0.06,
+   "h": 1.0,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Off its hinges since the storm. Still squeaks out of habit.",
+   "nobox": true
+  },
+  "shed_mangle": {
+   "name": "Old mangle",
+   "model": "proc:shed_mangle",
+   "w": 0.84,
+   "d": 0.45,
+   "h": 1.1,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Squeezes the water out of sheets and the joy out of Mondays.",
+   "nobox": true,
+   "heavy": true
+  },
+  "shed_tool_rack": {
+   "name": "Long-handled tool rack",
+   "model": "proc:shed_tool_rack",
+   "w": 1.2,
+   "d": 0.15,
+   "h": 0.4,
+   "mount": "hang",
+   "room": "shed",
+   "flavor": "Every tool has its hook. Every hook has someone else's tool."
+  },
+  "shed_potting_bench": {
+   "name": "Potting bench",
+   "model": "proc:shed_potting_bench",
+   "w": 1.2,
+   "d": 0.55,
+   "h": 1.35,
+   "mount": "floor",
+   "room": "shed",
+   "flavor": "Where seedlings start life and teacups end it.",
+   "nobox": true,
+   "heavy": true
+  },
+  "shed_propagator": {
+   "name": "Heated propagator",
+   "model": "proc:shed_propagator",
+   "w": 0.6,
+   "d": 0.4,
+   "h": 0.25,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Tomatoes from seed by May, or a tray of green fluff.",
+   "fragile": true
+  },
+  "shed_bird_seed_bin": {
+   "name": "Bird seed bin",
+   "model": "proc:shed_bird_seed_bin",
+   "w": 0.35,
+   "d": 0.35,
+   "h": 0.45,
+   "mount": "small",
+   "room": "shed",
+   "flavor": "Locked against squirrels. They have the code."
+  }
+ },
+ "props": {
+  "shed_weather_vane": [
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.82
+    ],
+    "p": [
+     0,
+     0.44,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.012,
+     0.012
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.012,
+     0.2
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.12,
+     0.01
+    ],
+    "p": [
+     0.02,
+     0.79,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.13,
+     0.01
+    ],
+    "p": [
+     -0.13,
+     0.83,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     0.35
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.13,
+     0.88,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0.17,
+     0.87,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.008,
+     0.008
+    ],
+    "p": [
+     0,
+     0.72,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.018
+    ],
+    "p": [
+     0,
+     0.66,
+     0
+    ],
+    "c": "C9A24E"
+   }
+  ],
+  "shed_tyre_swing": [
+   {
+    "t": "cyl",
+    "s": [
+     0.32,
+     0.22
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.23
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     1.0
+    ],
+    "p": [
+     0,
+     1.1,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.06
+    ],
+    "p": [
+     0,
+     1.58,
+     0
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "shed_bird_bath": [
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.06
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.5
+    ],
+    "p": [
+     0,
+     0.31,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.11,
+     0.04
+    ],
+    "p": [
+     0,
+     0.56,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.24,
+     0.1
+    ],
+    "p": [
+     0,
+     0.63,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.02
+    ],
+    "p": [
+     0,
+     0.675,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.12,
+     0.7,
+     0.05
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "shed_garden_gnome": [
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.03
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.065,
+     0.14
+    ],
+    "p": [
+     0,
+     0.1,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.03,
+     0.11
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.055
+    ],
+    "p": [
+     0,
+     0.23,
+     0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.07,
+     0.03
+    ],
+    "p": [
+     0,
+     0.21,
+     0.045
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.05,
+     0.1
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.022
+    ],
+    "p": [
+     0,
+     0.36,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.15
+    ],
+    "p": [
+     0.04,
+     0.19,
+     0.03
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.6
+    ]
+   }
+  ],
+  "shed_stone_hare": [
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.26
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0,
+     0.1,
+     -0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.055
+    ],
+    "p": [
+     0,
+     0.17,
+     0.05
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0,
+     0.23,
+     0.09
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.11,
+     0.015
+    ],
+    "p": [
+     -0.015,
+     0.31,
+     0.07
+    ],
+    "c": "8E8276",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.11,
+     0.015
+    ],
+    "p": [
+     0.015,
+     0.31,
+     0.07
+    ],
+    "c": "8E8276",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   }
+  ],
+  "shed_sundial": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.06,
+     0.3
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.7
+    ],
+    "p": [
+     0,
+     0.41,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.05,
+     0.3
+    ],
+    "p": [
+     0,
+     0.785,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.01
+    ],
+    "p": [
+     0,
+     0.815,
+     0
+    ],
+    "c": "C9A24E"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.06,
+     0.1
+    ],
+    "p": [
+     0,
+     0.84,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     0.5,
+     0,
+     0
+    ]
+   }
+  ],
+  "shed_obelisk": [
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.4,
+     0.03
+    ],
+    "p": [
+     0.12,
+     0.7,
+     0.12
+    ],
+    "c": "5E7B52",
+    "r": [
+     -0.1,
+     0,
+     0.1
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.4,
+     0.03
+    ],
+    "p": [
+     -0.12,
+     0.7,
+     0.12
+    ],
+    "c": "5E7B52",
+    "r": [
+     -0.1,
+     0,
+     -0.1
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.4,
+     0.03
+    ],
+    "p": [
+     0.12,
+     0.7,
+     -0.12
+    ],
+    "c": "5E7B52",
+    "r": [
+     0.1,
+     0,
+     0.1
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.4,
+     0.03
+    ],
+    "p": [
+     -0.12,
+     0.7,
+     -0.12
+    ],
+    "c": "5E7B52",
+    "r": [
+     0.1,
+     0,
+     -0.1
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.02,
+     0.34
+    ],
+    "p": [
+     0,
+     0.4,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.02,
+     0.26
+    ],
+    "p": [
+     0,
+     0.85,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.05
+    ],
+    "p": [
+     0,
+     1.44,
+     0
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "shed_trellis_panel": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.8,
+     0.03
+    ],
+    "p": [
+     -0.43,
+     0.9,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.8,
+     0.03
+    ],
+    "p": [
+     0.43,
+     0.9,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0,
+     1.76,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.015,
+     0.012
+    ],
+    "p": [
+     0,
+     0.5,
+     0.012
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.015,
+     0.012
+    ],
+    "p": [
+     0,
+     0.9,
+     0.012
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.86,
+     0.015,
+     0.012
+    ],
+    "p": [
+     0,
+     1.3,
+     0.012
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     1.7,
+     0.012
+    ],
+    "p": [
+     -0.15,
+     0.9,
+     -0.012
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.015,
+     1.7,
+     0.012
+    ],
+    "p": [
+     0.15,
+     0.9,
+     -0.012
+    ],
+    "c": "D9B98A"
+   }
+  ],
+  "shed_water_feature": [
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     0.1
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.19,
+     0.012
+    ],
+    "p": [
+     0,
+     0.106,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.2
+    ],
+    "p": [
+     0,
+     0.2,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.15,
+     0.06
+    ],
+    "p": [
+     0,
+     0.33,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.15
+    ],
+    "p": [
+     0,
+     0.435,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     0,
+     0.53,
+     0
+    ],
+    "c": "8E8276"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.04
+    ],
+    "p": [
+     0,
+     0.58,
+     0
+    ],
+    "c": "BFD6DA"
+   }
+  ],
+  "shed_scarecrow": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     1.6,
+     0.04
+    ],
+    "p": [
+     0,
+     0.8,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     1.3,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.5,
+     0.2
+    ],
+    "p": [
+     0,
+     1.15,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.1,
+     0.16
+    ],
+    "p": [
+     -0.32,
+     1.3,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.1,
+     0.16
+    ],
+    "p": [
+     0.32,
+     1.3,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.12
+    ],
+    "p": [
+     0,
+     1.5,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.02
+    ],
+    "p": [
+     0,
+     1.59,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.1
+    ],
+    "p": [
+     0,
+     1.65,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0,
+     0.98,
+     0
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "shed_windmill": [
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.9
+    ],
+    "p": [
+     0,
+     0.45,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.06,
+     0.06
+    ],
+    "p": [
+     0,
+     0.93,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.27,
+     0.005
+    ],
+    "p": [
+     0,
+     1.06,
+     0.04
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.27,
+     0.005
+    ],
+    "p": [
+     0,
+     0.8,
+     0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.27,
+     0.03,
+     0.005
+    ],
+    "p": [
+     0.13,
+     0.93,
+     0.04
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.27,
+     0.03,
+     0.005
+    ],
+    "p": [
+     -0.13,
+     0.93,
+     0.04
+    ],
+    "c": "8FA882"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0,
+     0.93,
+     0.05
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "shed_hanging_basket": [
+   {
+    "t": "sph",
+    "s": [
+     0.18
+    ],
+    "p": [
+     0,
+     0.17,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.19,
+     0.04
+    ],
+    "p": [
+     0,
+     0.19,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.14
+    ],
+    "p": [
+     0,
+     0.24,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.1,
+     0.3,
+     0.06
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     -0.08,
+     0.32,
+     -0.05
+    ],
+    "c": "6E4B6E"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.035
+    ],
+    "p": [
+     0.02,
+     0.33,
+     -0.1
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.2
+    ],
+    "p": [
+     0,
+     0.43,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.01
+    ],
+    "p": [
+     0,
+     0.535,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_nest_box": [
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.22,
+     0.14
+    ],
+    "p": [
+     0,
+     0.11,
+     0.02
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.012,
+     0.18
+    ],
+    "p": [
+     0,
+     0.24,
+     0.02
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     0.004
+    ],
+    "p": [
+     0,
+     0.16,
+     0.091
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.004,
+     0.03
+    ],
+    "p": [
+     0,
+     0.12,
+     0.1
+    ],
+    "c": "6B4A3A",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.28,
+     0.02
+    ],
+    "p": [
+     0,
+     0.14,
+     -0.08
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "shed_insect_hotel": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.12
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.34,
+     0.12
+    ],
+    "p": [
+     -0.14,
+     0.17,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.34,
+     0.12
+    ],
+    "p": [
+     0.14,
+     0.17,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.02,
+     0.12
+    ],
+    "p": [
+     -0.07,
+     0.36,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.02,
+     0.12
+    ],
+    "p": [
+     0.07,
+     0.36,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.12,
+     0.1
+    ],
+    "p": [
+     0,
+     0.08,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.02,
+     0.1
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.14,
+     0.1
+    ],
+    "p": [
+     0,
+     0.23,
+     0
+    ],
+    "c": "D9B98A"
+   }
+  ],
+  "shed_hedgehog_house": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.22,
+     0.46
+    ],
+    "p": [
+     0,
+     0.11,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.015,
+     0.5
+    ],
+    "p": [
+     -0.1,
+     0.25,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.015,
+     0.5
+    ],
+    "p": [
+     0.1,
+     0.25,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     -0.45
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.1,
+     0.01
+    ],
+    "p": [
+     0.1,
+     0.05,
+     0.231
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.06,
+     0.03,
+     0.2
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "shed_bee_hive": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.14,
+     0.42
+    ],
+    "p": [
+     0,
+     0.07,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.25,
+     0.46
+    ],
+    "p": [
+     0,
+     0.265,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.16,
+     0.46
+    ],
+    "p": [
+     0,
+     0.47,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.16,
+     0.46
+    ],
+    "p": [
+     0,
+     0.63,
+     0
+    ],
+    "c": "EAE6DC"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.08,
+     0.46
+    ],
+    "p": [
+     0,
+     0.75,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.012,
+     0.01
+    ],
+    "p": [
+     0,
+     0.156,
+     0.231
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0,
+     0.13,
+     0.2
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "shed_cloche": [
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.18
+    ],
+    "p": [
+     0,
+     0.09,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.14
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.07
+    ],
+    "p": [
+     0,
+     0.07,
+     0
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "shed_cold_frame": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.2,
+     0.04
+    ],
+    "p": [
+     0,
+     0.1,
+     0.28
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.4,
+     0.04
+    ],
+    "p": [
+     0,
+     0.2,
+     -0.28
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.3,
+     0.52
+    ],
+    "p": [
+     -0.48,
+     0.15,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.3,
+     0.52
+    ],
+    "p": [
+     0.48,
+     0.15,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.98,
+     0.01,
+     0.6
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "BFD6DA",
+    "r": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.62
+    ],
+    "p": [
+     0,
+     0.33,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     -0.25,
+     0.08,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.08
+    ],
+    "p": [
+     0.25,
+     0.08,
+     0
+    ],
+    "c": "8FA882"
+   }
+  ],
+  "shed_rain_butt": [
+   {
+    "t": "cyl",
+    "s": [
+     0.28,
+     0.92
+    ],
+    "p": [
+     0,
+     0.46,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.29,
+     0.04
+    ],
+    "p": [
+     0,
+     0.22,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.29,
+     0.04
+    ],
+    "p": [
+     0,
+     0.72,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.27,
+     0.04
+    ],
+    "p": [
+     0,
+     0.94,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     0,
+     0.12,
+     0.29
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.05,
+     0.02
+    ],
+    "p": [
+     0,
+     0.12,
+     0.3
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_leaf_rake": [
+   {
+    "t": "cyl",
+    "s": [
+     0.014,
+     1.2
+    ],
+    "p": [
+     0,
+     1.0,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0,
+     0.38,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.015,
+     0.008
+    ],
+    "p": [
+     0,
+     0.2,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.26,
+     0.006
+    ],
+    "p": [
+     -0.08,
+     0.26,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     0.5
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.26,
+     0.006
+    ],
+    "p": [
+     0.08,
+     0.26,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     -0.5
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     0.03
+    ],
+    "p": [
+     0,
+     1.585,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_loppers": [
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.025,
+     0.025
+    ],
+    "p": [
+     -0.12,
+     0.03,
+     -0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0.06,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.025,
+     0.025
+    ],
+    "p": [
+     -0.12,
+     0.03,
+     0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     -0.06,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.012,
+     0.035
+    ],
+    "p": [
+     0.24,
+     0.03,
+     0.01
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0.1,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.012,
+     0.03
+    ],
+    "p": [
+     0.24,
+     0.03,
+     -0.01
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     -0.1,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.015
+    ],
+    "p": [
+     0.15,
+     0.0295,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.03,
+     0.03
+    ],
+    "p": [
+     -0.31,
+     0.03,
+     -0.035
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     0.03,
+     0.03
+    ],
+    "p": [
+     -0.31,
+     0.03,
+     0.035
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "shed_hedge_trimmer": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.13,
+     0.12
+    ],
+    "p": [
+     -0.3,
+     0.065,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.16
+    ],
+    "p": [
+     -0.4,
+     0.17,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.03,
+     0.03
+    ],
+    "p": [
+     -0.15,
+     0.16,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.012,
+     0.07
+    ],
+    "p": [
+     0.22,
+     0.06,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.004,
+     0.09
+    ],
+    "p": [
+     0.22,
+     0.06,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.12,
+     0.17
+    ],
+    "p": [
+     -0.12,
+     0.07,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "shed_strimmer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     1.15
+    ],
+    "p": [
+     0,
+     0.755,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.04
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.08,
+     0.1
+    ],
+    "p": [
+     0,
+     0.11,
+     0.03
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.16,
+     0.1
+    ],
+    "p": [
+     0,
+     1.36,
+     0.04
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.9,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.06
+    ],
+    "p": [
+     0,
+     1.47,
+     0.04
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_leaf_blower": [
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.2,
+     0.16
+    ],
+    "p": [
+     -0.2,
+     0.1,
+     0
+    ],
+    "c": "E8B4A8"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.04,
+     0.04
+    ],
+    "p": [
+     -0.22,
+     0.25,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.04
+    ],
+    "p": [
+     -0.3,
+     0.22,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.045,
+     0.42
+    ],
+    "p": [
+     0.14,
+     0.1,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.1
+    ],
+    "p": [
+     0.32,
+     0.1,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.08,
+     0.04
+    ],
+    "p": [
+     -0.33,
+     0.1,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_pump_sprayer": [
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.36
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     0.39,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.1
+    ],
+    "p": [
+     0,
+     0.47,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.53,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.4
+    ],
+    "p": [
+     0.11,
+     0.24,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     0.15
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0.115,
+     0.46,
+     0
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "shed_garden_kneeler": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.28
+    ],
+    "p": [
+     0,
+     0.23,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.2,
+     0.03
+    ],
+    "p": [
+     -0.23,
+     0.1,
+     -0.11
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.2,
+     0.03
+    ],
+    "p": [
+     0.23,
+     0.1,
+     -0.11
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.2,
+     0.03
+    ],
+    "p": [
+     -0.23,
+     0.1,
+     0.11
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.2,
+     0.03
+    ],
+    "p": [
+     0.23,
+     0.1,
+     0.11
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.22,
+     0.03
+    ],
+    "p": [
+     -0.25,
+     0.36,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.22,
+     0.03
+    ],
+    "p": [
+     0.25,
+     0.36,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.2
+    ],
+    "p": [
+     -0.25,
+     0.47,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_garden_sieve": [
+   {
+    "t": "cyl",
+    "s": [
+     0.19,
+     0.1
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.004
+    ],
+    "p": [
+     0,
+     0.022,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.17,
+     0.1
+    ],
+    "p": [
+     0,
+     0.055,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.012,
+     0.01
+    ],
+    "p": [
+     0,
+     0.1,
+     0
+    ],
+    "c": "C68B59"
+   }
+  ],
+  "shed_trug": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.012,
+     0.25
+    ],
+    "p": [
+     0,
+     0.012,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.07,
+     0.13
+    ],
+    "c": "D9B98A",
+    "r": [
+     0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.07,
+     -0.13
+    ],
+    "c": "D9B98A",
+    "r": [
+     -0.25,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.1,
+     0.28
+    ],
+    "p": [
+     0.25,
+     0.06,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.012,
+     0.1,
+     0.28
+    ],
+    "p": [
+     -0.25,
+     0.06,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.018,
+     0.2,
+     0.02
+    ],
+    "p": [
+     -0.18,
+     0.2,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.018,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0.18,
+     0.2,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.29,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.08,
+     0.06,
+     0.03
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "shed_cane_bundle": [
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     1.8
+    ],
+    "p": [
+     0,
+     0.9,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     1.76
+    ],
+    "p": [
+     0.02,
+     0.88,
+     0.01
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     1.7
+    ],
+    "p": [
+     -0.02,
+     0.85,
+     0.01
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     1.78
+    ],
+    "p": [
+     0.01,
+     0.89,
+     -0.02
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     1.72
+    ],
+    "p": [
+     -0.01,
+     0.86,
+     -0.02
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     0,
+     0.515,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.03
+    ],
+    "p": [
+     0,
+     1.215,
+     0
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "shed_chicken_wire": [
+   {
+    "t": "cyl",
+    "s": [
+     0.14,
+     0.9
+    ],
+    "p": [
+     0,
+     0.14,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.91
+    ],
+    "p": [
+     0,
+     0.14,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.142,
+     0.02
+    ],
+    "p": [
+     -0.3,
+     0.14,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.142,
+     0.02
+    ],
+    "p": [
+     0.3,
+     0.14,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_sprinkler": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.03,
+     0.16
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.08
+    ],
+    "p": [
+     -0.19,
+     0.06,
+     0
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.36
+    ],
+    "p": [
+     0,
+     0.11,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.03
+    ],
+    "p": [
+     -0.18,
+     0.07,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.08,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.07,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.004
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_lawn_spreader": [
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.25,
+     0.3
+    ],
+    "p": [
+     0,
+     0.245,
+     0.1
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.04
+    ],
+    "p": [
+     -0.24,
+     0.1,
+     0.1
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.04
+    ],
+    "p": [
+     0.24,
+     0.1,
+     0.1
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.5
+    ],
+    "p": [
+     0,
+     0.1,
+     0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.9,
+     0.03
+    ],
+    "p": [
+     -0.18,
+     0.55,
+     -0.15
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.5,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.9,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.55,
+     -0.15
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.5,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.4
+    ],
+    "p": [
+     0,
+     0.94,
+     -0.32
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_garden_roller": [
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.5
+    ],
+    "p": [
+     0,
+     0.2,
+     0.15
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.205,
+     0.03
+    ],
+    "p": [
+     -0.25,
+     0.2,
+     0.15
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.205,
+     0.03
+    ],
+    "p": [
+     0.25,
+     0.2,
+     0.15
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.9,
+     0.03
+    ],
+    "p": [
+     -0.2,
+     0.55,
+     -0.1
+    ],
+    "c": "1E1B19",
+    "r": [
+     -0.55,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.9,
+     0.03
+    ],
+    "p": [
+     0.2,
+     0.55,
+     -0.1
+    ],
+    "c": "1E1B19",
+    "r": [
+     -0.55,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.44
+    ],
+    "p": [
+     0,
+     0.93,
+     -0.33
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_compost_sack": [
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.66,
+     0.22
+    ],
+    "p": [
+     0,
+     0.33,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.06,
+     0.18
+    ],
+    "p": [
+     0,
+     0.69,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.2,
+     0.002
+    ],
+    "p": [
+     0,
+     0.36,
+     0.111
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.002
+    ],
+    "p": [
+     0,
+     0.54,
+     0.111
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.2,
+     0.03,
+     0.08
+    ],
+    "c": "6B4A3A"
+   }
+  ],
+  "shed_incinerator": [
+   {
+    "t": "cyl",
+    "s": [
+     0.22,
+     0.62
+    ],
+    "p": [
+     0,
+     0.37,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.23,
+     0.06
+    ],
+    "p": [
+     0,
+     0.69,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.18
+    ],
+    "p": [
+     0,
+     0.81,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.03
+    ],
+    "p": [
+     0,
+     0.915,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.04
+    ],
+    "p": [
+     -0.15,
+     0.03,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0.15,
+     0.03,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.06,
+     0.02
+    ],
+    "p": [
+     0,
+     0.12,
+     0.215
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_pressure_washer": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.45,
+     0.28
+    ],
+    "p": [
+     0,
+     0.285,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.03
+    ],
+    "p": [
+     -0.16,
+     0.07,
+     -0.08
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.03
+    ],
+    "p": [
+     0.16,
+     0.07,
+     -0.08
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.36,
+     0.03
+    ],
+    "p": [
+     -0.13,
+     0.68,
+     -0.11
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.36,
+     0.03
+    ],
+    "p": [
+     0.13,
+     0.68,
+     -0.11
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.018,
+     0.28
+    ],
+    "p": [
+     0,
+     0.87,
+     -0.11
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.06
+    ],
+    "p": [
+     0,
+     0.32,
+     0.17
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0.08,
+     0.1,
+     0.15
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "shed_rotary_line": [
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     1.7
+    ],
+    "p": [
+     0,
+     0.85,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.04
+    ],
+    "p": [
+     0,
+     1.37,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     1.0,
+     0.025
+    ],
+    "p": [
+     0.05,
+     1.25,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     -0.04
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     1.0,
+     0.025
+    ],
+    "p": [
+     -0.05,
+     1.25,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     0.04
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     1.0,
+     0.025
+    ],
+    "p": [
+     0,
+     1.25,
+     0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.04,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.025,
+     1.0,
+     0.025
+    ],
+    "p": [
+     0,
+     1.25,
+     -0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     -0.04,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     1.76,
+     0
+    ],
+    "c": "5E7B52"
+   }
+  ],
+  "shed_workbench": [
+   {
+    "t": "box",
+    "s": [
+     1.5,
+     0.05,
+     0.6
+    ],
+    "p": [
+     0,
+     0.875,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.85,
+     0.06
+    ],
+    "p": [
+     -0.69,
+     0.425,
+     -0.25
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.85,
+     0.06
+    ],
+    "p": [
+     0.69,
+     0.425,
+     -0.25
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.85,
+     0.06
+    ],
+    "p": [
+     -0.69,
+     0.425,
+     0.25
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.85,
+     0.06
+    ],
+    "p": [
+     0.69,
+     0.425,
+     0.25
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.4,
+     0.03,
+     0.54
+    ],
+    "p": [
+     0,
+     0.195,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.4,
+     0.08,
+     0.04
+    ],
+    "p": [
+     0,
+     0.8,
+     0.26
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.12,
+     0.2
+    ],
+    "p": [
+     -0.4,
+     0.27,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.08,
+     0.08
+    ],
+    "p": [
+     0.5,
+     0.94,
+     -0.1
+    ],
+    "c": "C9A070"
+   }
+  ],
+  "shed_bench_vice": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.04,
+     0.18
+    ],
+    "p": [
+     0,
+     0.02,
+     -0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.09,
+     0.2
+    ],
+    "p": [
+     0,
+     0.085,
+     -0.02
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0,
+     0.15,
+     -0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.04
+    ],
+    "p": [
+     0,
+     0.15,
+     0.04
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.012,
+     0.01
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.12
+    ],
+    "p": [
+     0,
+     0.1,
+     0.1
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.2
+    ],
+    "p": [
+     0,
+     0.1,
+     0.14
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_bench_grinder": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.03,
+     0.18
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.14
+    ],
+    "p": [
+     0,
+     0.13,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.075,
+     0.025
+    ],
+    "p": [
+     -0.13,
+     0.13,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.075,
+     0.025
+    ],
+    "p": [
+     0.13,
+     0.13,
+     0
+    ],
+    "c": "8E8276",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.08,
+     0.17
+    ],
+    "p": [
+     -0.165,
+     0.17,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.08,
+     0.17
+    ],
+    "p": [
+     0.165,
+     0.17,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.015,
+     0.03
+    ],
+    "p": [
+     -0.13,
+     0.07,
+     0.08
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.015,
+     0.03
+    ],
+    "p": [
+     0.13,
+     0.07,
+     0.08
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.03,
+     0.01
+    ],
+    "p": [
+     0,
+     0.06,
+     0.08
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "shed_pillar_drill": [
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.04,
+     0.4
+    ],
+    "p": [
+     0,
+     0.02,
+     0.02
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.72
+    ],
+    "p": [
+     0,
+     0.4,
+     -0.12
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.025,
+     0.2
+    ],
+    "p": [
+     0,
+     0.3125,
+     0.06
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.16,
+     0.34
+    ],
+    "p": [
+     0,
+     0.68,
+     0.0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     0.79,
+     -0.08
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.14
+    ],
+    "p": [
+     0,
+     0.53,
+     0.1
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.08
+    ],
+    "p": [
+     0,
+     0.42,
+     0.1
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.2
+    ],
+    "p": [
+     0.1,
+     0.62,
+     0.05
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.015
+    ],
+    "p": [
+     0.19,
+     0.62,
+     0.05
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_mitre_saw": [
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.38
+    ],
+    "p": [
+     0,
+     0.03,
+     0.04
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.02
+    ],
+    "p": [
+     0,
+     0.07,
+     0.06
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.03
+    ],
+    "p": [
+     0,
+     0.09,
+     -0.08
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.01
+    ],
+    "p": [
+     0,
+     0.22,
+     0.03
+    ],
+    "c": "C9CED3",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.14,
+     0.06
+    ],
+    "p": [
+     0,
+     0.27,
+     0.03
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.18,
+     0.06
+    ],
+    "p": [
+     0,
+     0.18,
+     -0.15
+    ],
+    "c": "2B2622",
+    "r": [
+     0.4,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0.05,
+     0.36,
+     0.06
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_drill_case": [
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.3,
+     0.1
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.38,
+     0.02,
+     0.105
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.12,
+     0.03,
+     0.03
+    ],
+    "p": [
+     0,
+     0.295,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.015
+    ],
+    "p": [
+     -0.12,
+     0.12,
+     0.055
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.015
+    ],
+    "p": [
+     0.12,
+     0.12,
+     0.055
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.05,
+     0.002
+    ],
+    "p": [
+     0,
+     0.23,
+     0.051
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "shed_wood_plane": [
+   {
+    "t": "box",
+    "s": [
+     0.25,
+     0.04,
+     0.06
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "3E3A4F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.1,
+     0.07,
+     0.045
+    ],
+    "p": [
+     -0.07,
+     0.07,
+     0
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     -0.25
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.025
+    ],
+    "p": [
+     0.08,
+     0.06,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.09,
+     0.05
+    ],
+    "p": [
+     0.0,
+     0.07,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     0.7
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.02
+    ],
+    "p": [
+     0.03,
+     0.11,
+     0
+    ],
+    "c": "C9A24E",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "shed_sash_clamps": [
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.025,
+     0.012
+    ],
+    "p": [
+     0,
+     0.02,
+     -0.025
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.025,
+     0.012
+    ],
+    "p": [
+     0,
+     0.02,
+     0.025
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.1,
+     0.07
+    ],
+    "p": [
+     -0.46,
+     0.05,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.1,
+     0.07
+    ],
+    "p": [
+     0.3,
+     0.05,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.01,
+     0.12
+    ],
+    "p": [
+     0.42,
+     0.05,
+     0
+    ],
+    "c": "C9CED3",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.05
+    ],
+    "p": [
+     0.47,
+     0.05,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_screw_drawers": [
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.38,
+     0.15
+    ],
+    "p": [
+     0,
+     0.19,
+     0
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.1,
+     0.01
+    ],
+    "p": [
+     0,
+     0.07,
+     0.076
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.1,
+     0.01
+    ],
+    "p": [
+     0,
+     0.19,
+     0.076
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.28,
+     0.1,
+     0.01
+    ],
+    "p": [
+     0,
+     0.31,
+     0.076
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.36,
+     0.012
+    ],
+    "p": [
+     -0.07,
+     0.19,
+     0.078
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.004,
+     0.36,
+     0.012
+    ],
+    "p": [
+     0.07,
+     0.19,
+     0.078
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.03,
+     0.06
+    ],
+    "p": [
+     0,
+     0.39,
+     0
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "shed_anvil": [
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.04,
+     0.14
+    ],
+    "p": [
+     0,
+     0.02,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.09,
+     0.07
+    ],
+    "p": [
+     0,
+     0.085,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.07,
+     0.1
+    ],
+    "p": [
+     0.02,
+     0.165,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.12
+    ],
+    "p": [
+     -0.14,
+     0.165,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.005,
+     0.02
+    ],
+    "p": [
+     0.1,
+     0.203,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_chopping_block": [
+   {
+    "t": "cyl",
+    "s": [
+     0.21,
+     0.42
+    ],
+    "p": [
+     0,
+     0.21,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.01
+    ],
+    "p": [
+     0,
+     0.425,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.12,
+     0.012
+    ],
+    "p": [
+     0,
+     0.426,
+     0
+    ],
+    "c": "C9A070"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.01,
+     0.004
+    ],
+    "p": [
+     0.02,
+     0.428,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.3,
+     0.04
+    ],
+    "p": [
+     -0.2,
+     0.15,
+     0.0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     0.1
+    ]
+   }
+  ],
+  "shed_log_store": [
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.1,
+     0.05
+    ],
+    "p": [
+     -0.47,
+     0.55,
+     -0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.1,
+     0.05
+    ],
+    "p": [
+     0.47,
+     0.55,
+     -0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.0,
+     0.05
+    ],
+    "p": [
+     -0.47,
+     0.5,
+     0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.0,
+     0.05
+    ],
+    "p": [
+     0.47,
+     0.5,
+     0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.03,
+     0.52
+    ],
+    "p": [
+     0,
+     1.08,
+     0
+    ],
+    "c": "6B4A3A",
+    "r": [
+     -0.2,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.9,
+     0.04,
+     0.44
+    ],
+    "p": [
+     0,
+     0.12,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.88
+    ],
+    "p": [
+     0,
+     0.2,
+     0.08
+    ],
+    "c": "C9A070",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.88
+    ],
+    "p": [
+     0,
+     0.2,
+     -0.08
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.88
+    ],
+    "p": [
+     0,
+     0.31,
+     0
+    ],
+    "c": "C9A070",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.88
+    ],
+    "p": [
+     0,
+     0.31,
+     0.14
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_workshop_vac": [
+   {
+    "t": "cyl",
+    "s": [
+     0.2,
+     0.42
+    ],
+    "p": [
+     0,
+     0.27,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.21,
+     0.12
+    ],
+    "p": [
+     0,
+     0.54,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.14,
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.15,
+     0.03,
+     0.1
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.15,
+     0.03,
+     0.1
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0,
+     0.03,
+     -0.17
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.3
+    ],
+    "p": [
+     0.14,
+     0.35,
+     0.12
+    ],
+    "c": "2B2622",
+    "r": [
+     0.5,
+     0,
+     0.3
+    ]
+   }
+  ],
+  "shed_air_compressor": [
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.5
+    ],
+    "p": [
+     0,
+     0.18,
+     0
+    ],
+    "c": "B6453F",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.13
+    ],
+    "p": [
+     -0.25,
+     0.18,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.13
+    ],
+    "p": [
+     0.25,
+     0.18,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.26,
+     0.2,
+     0.2
+    ],
+    "p": [
+     0.04,
+     0.4,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.02
+    ],
+    "p": [
+     0.15,
+     0.42,
+     0.1
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.05,
+     0.04
+    ],
+    "p": [
+     -0.2,
+     0.025,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.05,
+     0.04
+    ],
+    "p": [
+     0.2,
+     0.025,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.24
+    ],
+    "p": [
+     -0.1,
+     0.55,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_extension_reel": [
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.03
+    ],
+    "p": [
+     0,
+     0.15,
+     -0.07
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.03
+    ],
+    "p": [
+     0,
+     0.15,
+     0.07
+    ],
+    "c": "E6B655",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.11
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.12
+    ],
+    "p": [
+     0,
+     0.29,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.03,
+     0.15
+    ],
+    "p": [
+     0,
+     0.015,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.05,
+     0.01
+    ],
+    "p": [
+     0.0,
+     0.15,
+     0.09
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "shed_jerry_can": [
+   {
+    "t": "box",
+    "s": [
+     0.34,
+     0.4,
+     0.16
+    ],
+    "p": [
+     0,
+     0.2,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.02,
+     0.17
+    ],
+    "p": [
+     0,
+     0.2,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.04,
+     0.04
+    ],
+    "p": [
+     -0.04,
+     0.43,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.05
+    ],
+    "p": [
+     0.12,
+     0.425,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.45,
+     0
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_trolley_jack": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.1,
+     0.5
+    ],
+    "p": [
+     0,
+     0.08,
+     0.08
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     -0.12,
+     0.03,
+     0.28
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.03,
+     0.28
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     -0.12,
+     0.03,
+     -0.12
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.02
+    ],
+    "p": [
+     0.12,
+     0.03,
+     -0.12
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.04
+    ],
+    "p": [
+     0,
+     0.15,
+     0.25
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.3
+    ],
+    "p": [
+     0,
+     0.14,
+     -0.2
+    ],
+    "c": "C9CED3",
+    "r": [
+     0.3,
+     0,
+     0
+    ]
+   }
+  ],
+  "shed_car_ramps": [
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.02,
+     0.6
+    ],
+    "p": [
+     -0.15,
+     0.12,
+     0.06
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.02,
+     0.6
+    ],
+    "p": [
+     0.15,
+     0.12,
+     0.06
+    ],
+    "c": "1E1B19",
+    "r": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.2,
+     0.22
+    ],
+    "p": [
+     -0.15,
+     0.1,
+     -0.27
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.22,
+     0.2,
+     0.22
+    ],
+    "p": [
+     0.15,
+     0.1,
+     -0.27
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.02,
+     0.04
+    ],
+    "p": [
+     -0.15,
+     0.21,
+     -0.35
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.02,
+     0.04
+    ],
+    "p": [
+     0.15,
+     0.21,
+     -0.35
+    ],
+    "c": "E6B655"
+   }
+  ],
+  "shed_sack_truck": [
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.15,
+     0.03
+    ],
+    "p": [
+     -0.18,
+     0.6,
+     -0.12
+    ],
+    "c": "B6453F",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     1.15,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.6,
+     -0.12
+    ],
+    "c": "B6453F",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.02,
+     0.18
+    ],
+    "p": [
+     0,
+     0.02,
+     0.12
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.45,
+     -0.07
+    ],
+    "c": "B6453F",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.36,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.8,
+     -0.12
+    ],
+    "c": "B6453F",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.06
+    ],
+    "p": [
+     -0.22,
+     0.1,
+     -0.08
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.06
+    ],
+    "p": [
+     0.22,
+     0.1,
+     -0.08
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.36
+    ],
+    "p": [
+     0,
+     1.17,
+     -0.2
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_bike_pump": [
+   {
+    "t": "box",
+    "s": [
+     0.24,
+     0.02,
+     0.06
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     0.5
+    ],
+    "p": [
+     0,
+     0.27,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.035,
+     0.02
+    ],
+    "p": [
+     0,
+     0.12,
+     0.03
+    ],
+    "c": "F4F1EA",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.006,
+     0.1
+    ],
+    "p": [
+     0,
+     0.57,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.22
+    ],
+    "p": [
+     0,
+     0.63,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.005,
+     0.5
+    ],
+    "p": [
+     0.06,
+     0.25,
+     0.04
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0,
+     0.12
+    ]
+   }
+  ],
+  "shed_bike_stand": [
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     1.25
+    ],
+    "p": [
+     0,
+     0.625,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     0.6,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.025,
+     0.025
+    ],
+    "p": [
+     0,
+     0.05,
+     0
+    ],
+    "c": "1E1B19",
+    "r": [
+     0,
+     -0.6,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0,
+     1.25,
+     0.1
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.1,
+     0.06
+    ],
+    "p": [
+     0,
+     1.3,
+     0.2
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.02,
+     0.04
+    ],
+    "p": [
+     0,
+     1.3,
+     0.25
+    ],
+    "c": "1E1B19",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "shed_chiminea": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.12,
+     0.04
+    ],
+    "p": [
+     -0.15,
+     0.06,
+     -0.1
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.12,
+     0.04
+    ],
+    "p": [
+     0.15,
+     0.06,
+     -0.1
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.12,
+     0.04
+    ],
+    "p": [
+     0,
+     0.06,
+     0.18
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.23
+    ],
+    "p": [
+     0,
+     0.35,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.09,
+     0.5
+    ],
+    "p": [
+     0,
+     0.75,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.1,
+     0.06
+    ],
+    "p": [
+     0,
+     1.03,
+     0
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.18,
+     0.15,
+     0.04
+    ],
+    "p": [
+     0,
+     0.36,
+     0.215
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "shed_fire_pit": [
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.2,
+     0.04
+    ],
+    "p": [
+     -0.22,
+     0.1,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.2,
+     0.04
+    ],
+    "p": [
+     0.11,
+     0.1,
+     0.19
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.2,
+     0.04
+    ],
+    "p": [
+     0.11,
+     0.1,
+     -0.19
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.34,
+     0.12
+    ],
+    "p": [
+     0,
+     0.26,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.3,
+     0.02
+    ],
+    "p": [
+     0,
+     0.32,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.3
+    ],
+    "p": [
+     0,
+     0.35,
+     0.05
+    ],
+    "c": "6B4A3A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.28
+    ],
+    "p": [
+     0.05,
+     0.35,
+     0
+    ],
+    "c": "C68B59",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   }
+  ],
+  "shed_folding_table": [
+   {
+    "t": "cyl",
+    "s": [
+     0.35,
+     0.03
+    ],
+    "p": [
+     0,
+     0.705,
+     0
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.75,
+     0.03
+    ],
+    "p": [
+     -0.18,
+     0.34,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     0.5
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.75,
+     0.03
+    ],
+    "p": [
+     0.18,
+     0.34,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0,
+     0,
+     -0.5
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.75,
+     0.03
+    ],
+    "p": [
+     0,
+     0.34,
+     -0.18
+    ],
+    "c": "5E7B52",
+    "r": [
+     -0.5,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.75,
+     0.03
+    ],
+    "p": [
+     0,
+     0.34,
+     0.18
+    ],
+    "c": "5E7B52",
+    "r": [
+     0.5,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.04
+    ],
+    "p": [
+     0,
+     0.68,
+     0
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "shed_swing_seat": [
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.75,
+     0.05
+    ],
+    "p": [
+     -0.9,
+     0.84,
+     -0.3
+    ],
+    "c": "2B2622",
+    "r": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.75,
+     0.05
+    ],
+    "p": [
+     -0.9,
+     0.84,
+     0.3
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.75,
+     0.05
+    ],
+    "p": [
+     0.9,
+     0.84,
+     -0.3
+    ],
+    "c": "2B2622",
+    "r": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.75,
+     0.05
+    ],
+    "p": [
+     0.9,
+     0.84,
+     0.3
+    ],
+    "c": "2B2622",
+    "r": [
+     -0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.025,
+     1.85
+    ],
+    "p": [
+     0,
+     1.6,
+     0
+    ],
+    "c": "2B2622",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.6,
+     0.1,
+     0.55
+    ],
+    "p": [
+     0,
+     0.47,
+     0
+    ],
+    "c": "4F8A8B"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.6,
+     0.5,
+     0.08
+    ],
+    "p": [
+     0,
+     0.75,
+     -0.25
+    ],
+    "c": "4F8A8B",
+    "r": [
+     -0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.8,
+     0.04,
+     1.0
+    ],
+    "p": [
+     0,
+     1.66,
+     0
+    ],
+    "c": "EAE6DC",
+    "r": [
+     0.1,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     1.05,
+     0.01
+    ],
+    "p": [
+     -0.78,
+     1.04,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.01,
+     1.05,
+     0.01
+    ],
+    "p": [
+     0.78,
+     1.04,
+     0
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "shed_croquet_set": [
+   {
+    "t": "box",
+    "s": [
+     0.48,
+     0.06,
+     0.28
+    ],
+    "p": [
+     0,
+     0.03,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.85
+    ],
+    "p": [
+     -0.18,
+     0.485,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.85
+    ],
+    "p": [
+     -0.06,
+     0.485,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.85
+    ],
+    "p": [
+     0.06,
+     0.485,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.012,
+     0.85
+    ],
+    "p": [
+     0.18,
+     0.485,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.44,
+     0.06,
+     0.06
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "6B4A3A"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     -0.15,
+     0.1,
+     0.09
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     -0.05,
+     0.1,
+     0.09
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     0.05,
+     0.1,
+     0.09
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.045
+    ],
+    "p": [
+     0.15,
+     0.1,
+     0.09
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.14,
+     0.01
+    ],
+    "p": [
+     0,
+     0.13,
+     -0.1
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "shed_swingball": [
+   {
+    "t": "cyl",
+    "s": [
+     0.016,
+     1.5
+    ],
+    "p": [
+     0,
+     0.75,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.18,
+     0.02
+    ],
+    "p": [
+     0,
+     0.01,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.03,
+     0.12
+    ],
+    "p": [
+     0,
+     1.44,
+     0
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.04
+    ],
+    "p": [
+     0.12,
+     1.0,
+     0.05
+    ],
+    "c": "E6B655"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.002,
+     0.45
+    ],
+    "p": [
+     0.06,
+     1.2,
+     0.025
+    ],
+    "c": "F4F1EA",
+    "r": [
+     0,
+     0,
+     0.3
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0,
+     0.5,
+     0.06
+    ],
+    "c": "4A6FA5"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.2,
+     0.02
+    ],
+    "p": [
+     0,
+     0.5,
+     -0.06
+    ],
+    "c": "4A6FA5"
+   }
+  ],
+  "shed_goal_net": [
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.9,
+     0.035
+    ],
+    "p": [
+     -0.72,
+     0.45,
+     0.3
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.035,
+     0.9,
+     0.035
+    ],
+    "p": [
+     0.72,
+     0.45,
+     0.3
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.48,
+     0.035,
+     0.035
+    ],
+    "p": [
+     0,
+     0.9,
+     0.3
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.44,
+     0.02,
+     0.6
+    ],
+    "p": [
+     0,
+     0.6,
+     -0.05
+    ],
+    "c": "F4F1EA",
+    "r": [
+     -0.5,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     1.48,
+     0.02,
+     0.02
+    ],
+    "p": [
+     0,
+     0.01,
+     -0.38
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.88,
+     0.7
+    ],
+    "p": [
+     -0.72,
+     0.45,
+     -0.05
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.02,
+     0.88,
+     0.7
+    ],
+    "p": [
+     0.72,
+     0.45,
+     -0.05
+    ],
+    "c": "E7DCC6"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.11
+    ],
+    "p": [
+     0.3,
+     0.11,
+     0.1
+    ],
+    "c": "F4F1EA"
+   }
+  ],
+  "shed_sledge": [
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.92
+    ],
+    "p": [
+     -0.19,
+     0.04,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.2
+    ],
+    "p": [
+     -0.19,
+     0.12,
+     -0.42
+    ],
+    "c": "B6453F",
+    "r": [
+     0.9,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.92
+    ],
+    "p": [
+     0.19,
+     0.04,
+     0
+    ],
+    "c": "B6453F"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.06,
+     0.2
+    ],
+    "p": [
+     0.19,
+     0.12,
+     -0.42
+    ],
+    "c": "B6453F",
+    "r": [
+     0.9,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.42,
+     0.02,
+     0.7
+    ],
+    "p": [
+     0,
+     0.15,
+     0.08
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.1,
+     0.03
+    ],
+    "p": [
+     -0.17,
+     0.09,
+     0.3
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.1,
+     0.03
+    ],
+    "p": [
+     0.17,
+     0.09,
+     0.3
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.1,
+     0.03
+    ],
+    "p": [
+     -0.17,
+     0.09,
+     -0.15
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.1,
+     0.03
+    ],
+    "p": [
+     0.17,
+     0.09,
+     -0.15
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.008,
+     0.4
+    ],
+    "p": [
+     0,
+     0.2,
+     -0.44
+    ],
+    "c": "C9A070",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   }
+  ],
+  "shed_rabbit_hutch": [
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.05
+    ],
+    "p": [
+     -0.56,
+     0.15,
+     -0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.05
+    ],
+    "p": [
+     0.56,
+     0.15,
+     -0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.05
+    ],
+    "p": [
+     -0.56,
+     0.15,
+     0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.3,
+     0.05
+    ],
+    "p": [
+     0.56,
+     0.15,
+     0.22
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.55,
+     0.5
+    ],
+    "p": [
+     0,
+     0.575,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.6,
+     0.45,
+     0.01
+    ],
+    "p": [
+     0.28,
+     0.575,
+     0.256
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.45,
+     0.45,
+     0.01
+    ],
+    "p": [
+     -0.3,
+     0.575,
+     0.256
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.6
+    ],
+    "p": [
+     0,
+     0.92,
+     0
+    ],
+    "c": "5E7B52",
+    "r": [
+     0.15,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.06
+    ],
+    "p": [
+     0.25,
+     0.42,
+     0.18
+    ],
+    "c": "EAE6DC"
+   }
+  ],
+  "shed_kennel": [
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.05,
+     0.9
+    ],
+    "p": [
+     0,
+     0.025,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.76,
+     0.5,
+     0.9
+    ],
+    "p": [
+     0,
+     0.3,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.95
+    ],
+    "p": [
+     -0.2,
+     0.69,
+     0
+    ],
+    "c": "B6453F",
+    "r": [
+     0,
+     0,
+     0.62
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.03,
+     0.95
+    ],
+    "p": [
+     0.2,
+     0.69,
+     0
+    ],
+    "c": "B6453F",
+    "r": [
+     0,
+     0,
+     -0.62
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.3,
+     0.38,
+     0.01
+    ],
+    "p": [
+     0,
+     0.24,
+     0.451
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.2,
+     0.06,
+     0.012
+    ],
+    "p": [
+     0,
+     0.6,
+     0.451
+    ],
+    "c": "F4F1EA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.58,
+     0.3,
+     0.88
+    ],
+    "p": [
+     0,
+     0.62,
+     0
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     0.785
+    ]
+   }
+  ],
+  "shed_garden_gate": [
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     1.0,
+     0.04
+    ],
+    "p": [
+     -0.4,
+     0.5,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.09,
+     1.0,
+     0.04
+    ],
+    "p": [
+     0.4,
+     0.5,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.1,
+     0.03
+    ],
+    "p": [
+     0,
+     0.15,
+     0.02
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.8,
+     0.1,
+     0.03
+    ],
+    "p": [
+     0,
+     0.85,
+     0.02
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.0,
+     0.1,
+     0.03
+    ],
+    "p": [
+     0,
+     0.5,
+     0.02
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     0.78
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.02
+    ],
+    "p": [
+     -0.15,
+     0.5,
+     -0.015
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.07,
+     0.6,
+     0.02
+    ],
+    "p": [
+     0.15,
+     0.5,
+     -0.015
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.025,
+     0.012
+    ],
+    "p": [
+     0.35,
+     0.75,
+     0.025
+    ],
+    "c": "1E1B19"
+   }
+  ],
+  "shed_mangle": [
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.0,
+     0.4
+    ],
+    "p": [
+     -0.25,
+     0.5,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.0,
+     0.4
+    ],
+    "p": [
+     0.25,
+     0.5,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.46
+    ],
+    "p": [
+     0,
+     0.82,
+     0.03
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.07,
+     0.46
+    ],
+    "p": [
+     0,
+     0.68,
+     0.03
+    ],
+    "c": "D9B98A",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.46,
+     0.03,
+     0.36
+    ],
+    "p": [
+     0,
+     0.315,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.13,
+     0.02
+    ],
+    "p": [
+     0.28,
+     0.75,
+     0.0
+    ],
+    "c": "2B2622",
+    "r": [
+     1.5708,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.015,
+     0.06
+    ],
+    "p": [
+     0.29,
+     0.85,
+     0.0
+    ],
+    "c": "C68B59",
+    "r": [
+     0,
+     0,
+     1.5708
+    ]
+   },
+   {
+    "t": "box",
+    "s": [
+     0.5,
+     0.06,
+     0.06
+    ],
+    "p": [
+     0,
+     1.03,
+     0.03
+    ],
+    "c": "2B2622"
+   }
+  ],
+  "shed_tool_rack": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.08,
+     0.02
+    ],
+    "p": [
+     0,
+     0.3,
+     -0.06
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.1
+    ],
+    "p": [
+     -0.45,
+     0.3,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.1
+    ],
+    "p": [
+     -0.15,
+     0.3,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.1
+    ],
+    "p": [
+     0.15,
+     0.3,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.04,
+     0.1
+    ],
+    "p": [
+     0.45,
+     0.3,
+     0.0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.02
+    ],
+    "p": [
+     -0.3,
+     0.3,
+     -0.05
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.06,
+     0.04,
+     0.02
+    ],
+    "p": [
+     0.3,
+     0.3,
+     -0.05
+    ],
+    "c": "C9CED3"
+   }
+  ],
+  "shed_potting_bench": [
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.04,
+     0.55
+    ],
+    "p": [
+     0,
+     0.88,
+     0
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.35,
+     0.05
+    ],
+    "p": [
+     -0.57,
+     0.675,
+     -0.24
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     1.35,
+     0.05
+    ],
+    "p": [
+     0.57,
+     0.675,
+     -0.24
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.86,
+     0.05
+    ],
+    "p": [
+     -0.57,
+     0.43,
+     0.24
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.05,
+     0.86,
+     0.05
+    ],
+    "p": [
+     0.57,
+     0.43,
+     0.24
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.03,
+     0.2
+    ],
+    "p": [
+     0,
+     1.215,
+     -0.17
+    ],
+    "c": "D9B98A"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.1,
+     0.02,
+     0.5
+    ],
+    "p": [
+     0,
+     0.21,
+     0
+    ],
+    "c": "C68B59"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.06,
+     0.1
+    ],
+    "p": [
+     0.3,
+     0.95,
+     0.05
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.07
+    ],
+    "p": [
+     -0.3,
+     1.265,
+     -0.17
+    ],
+    "c": "D9765F"
+   },
+   {
+    "t": "box",
+    "s": [
+     1.2,
+     0.1,
+     0.02
+    ],
+    "p": [
+     0,
+     0.95,
+     -0.265
+    ],
+    "c": "D9B98A"
+   }
+  ],
+  "shed_propagator": [
+   {
+    "t": "box",
+    "s": [
+     0.58,
+     0.07,
+     0.38
+    ],
+    "p": [
+     0,
+     0.035,
+     0
+    ],
+    "c": "1E1B19"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.56,
+     0.16,
+     0.36
+    ],
+    "p": [
+     0,
+     0.15,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.08
+    ],
+    "p": [
+     -0.15,
+     0.24,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.08,
+     0.02,
+     0.08
+    ],
+    "p": [
+     0.15,
+     0.24,
+     0
+    ],
+    "c": "BFD6DA"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     -0.15,
+     0.1,
+     0.08
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.0,
+     0.1,
+     -0.08
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "sph",
+    "s": [
+     0.03
+    ],
+    "p": [
+     0.15,
+     0.1,
+     0.08
+    ],
+    "c": "5E7B52"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.04,
+     0.02,
+     0.01
+    ],
+    "p": [
+     0.25,
+     0.035,
+     0.191
+    ],
+    "c": "B6453F"
+   }
+  ],
+  "shed_bird_seed_bin": [
+   {
+    "t": "cyl",
+    "s": [
+     0.16,
+     0.38
+    ],
+    "p": [
+     0,
+     0.19,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.165,
+     0.04
+    ],
+    "p": [
+     0,
+     0.4,
+     0
+    ],
+    "c": "C9CED3"
+   },
+   {
+    "t": "cyl",
+    "s": [
+     0.04,
+     0.02
+    ],
+    "p": [
+     0,
+     0.43,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.03
+    ],
+    "p": [
+     0.15,
+     0.37,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.03,
+     0.04,
+     0.03
+    ],
+    "p": [
+     -0.15,
+     0.37,
+     0
+    ],
+    "c": "2B2622"
+   },
+   {
+    "t": "box",
+    "s": [
+     0.16,
+     0.1,
+     0.002
+    ],
+    "p": [
+     0,
+     0.2,
+     0.161
+    ],
+    "c": "C9A070"
+   }
+  ]
+ }
+}

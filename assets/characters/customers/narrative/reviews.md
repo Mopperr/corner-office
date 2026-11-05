@@ -1,0 +1,297 @@
+# Drink Reviews
+
+Product source: `/workspace/game/drink_unlocks.json (14 drinks; products.json from Programmer Master not yet present, ids to match)`. Ids: classic_lemonade, pink_lemonade, iced_tea_lemonade, strawberry_lemonade, mint_lemonade, black_coffee, espresso, honey_lavender_lemonade, latte, cappuccino, mocha, iced_coffee, vanilla_latte, seasonal_special.
+
+Customer always pays and leaves 3+ stars. Off (<50) = warm, gentle and funny, never harsh.
+
+## black_coffee
+**great**
+- Bold, smooth, not a hint of bitter. Perfect.
+- That's a proper cup. Marge would rate it five mile markers.
+- Strong enough to lift a couch. Thank you!
+- Rich and hot. My whole morning just straightened up.
+- Smooth, warm, just right. Goldilocks would move in.
+
+**okay**
+- Gentle and honest. Warm hands, warm heart.
+- A bold little edge. I kind of like it.
+- Could stand one more scoop of beans. Still nice!
+- Solid. A dependable mid-size box of a coffee.
+
+**off**
+- This coffee is... shy. Very shy. I'll cheer it on.
+- Beans' gentle cousin, this one. I like the whole family!
+- Coffee, as told by a friend of a friend. Great story. Thank you!
+- Bold choice, adding no bold. Here's your money, friend.
+- Extra bold! Like a pep talk from my favourite grumpy uncle. Love him.
+
+## latte
+**great**
+- Perfect foam. I could nap on it.
+- Silky milk, smooth shot. A hug in a cup.
+- Foam holds its shape like a good moving box. Wonderful.
+- Creamy, warm, balanced. You've got the touch.
+- That milk was steamed with love.
+
+**okay**
+- Foam's a little flat, but the flavor's lovely.
+- Extra milky, extra cozy. I'll take it!
+- Could be a smidge hotter. I'll drink fast!
+- Nice! The shot's a little quiet under all that milk.
+
+**off**
+- The foam took the day off. Fair enough, honestly.
+- Milk with a whispered rumor of espresso. I love a good rumor!
+- Cozy-warm, not hot-warm. My hands are happy. Here you go.
+- Milk and coffee are still getting to know each other. Sweet first date!
+- Flat as a packed box, and I love a good box. Sipping happily!
+
+## classic_lemonade
+**great**
+- Sweet and sour in perfect harmony!
+- A summer afternoon in a cup. Wow.
+- Fresh-squeezed, you can tell. Wonderful.
+- Just enough pucker. Bright and happy.
+- That's a front-porch lemonade. Perfect.
+
+**okay**
+- Needs a squeeze more lemon, but it's sweet!
+- Bit sour! My face did a little dance.
+- Light and breezy. Very refreshing!
+- Good! A pinch more sugar and it's legendary.
+
+**off**
+- Sugar water with lemony daydreams. Sweetest daydream I've had!
+- My whole face folded up. Like a cardboard box! Thanks!
+- So refreshing it's practically a spa day. Hydrated and happy!
+- So sour I can hear colors! What a ride. Thank you!
+- The lemon's playing hide-and-seek. I'll keep sipping till I find it!
+
+## pink_lemonade
+**great**
+- Pink as a sunset and twice as sweet. Perfect!
+- The berry splash is just right. Biscuit would approve.
+- It's so pretty I almost didn't drink it. Almost.
+
+**okay**
+- A little more lemon than berry today. Still cheerful!
+- Pale pink. Shy pink. I like shy.
+- Berry's hiding at the bottom. Fun surprise for the last sip!
+
+**off**
+- Ruby-red instead of pink. Very dramatic! I'm a fan of drama.
+- The berries threw a party! Lemons can come next time. Fun!
+- It's pink-ish. In the right light. I'll bring a lamp. Here you go!
+
+## iced_tea_lemonade
+**great**
+- Tea and lemon holding hands. Lovely.
+- Cooled just right. Tastes like the sun coming back.
+- Smooth tea, bright lemon. A rainy-day reward.
+
+**okay**
+- Tea's still a bit warm, so the ice is racing. Tasty though!
+- A touch strong on the tea. Very awake now!
+- Little light on lemon. Still a nice porch sip.
+
+**off**
+- A warm iced tea! Brave little drink. Cozy on a gray day.
+- The ice melted out of politeness. Such good manners, this cup!
+- Mostly tea, a whisper of lemon. Nap-flavored. Thank you!
+
+## strawberry_lemonade
+**great**
+- Caboose-red and full steam ahead!
+- You can taste real strawberries. Wonderful.
+- Sweet, tart, berry-bright. Perfect ride.
+
+**okay**
+- A few berry chunks went rogue. I'll chew them happily.
+- Could use a bit more muddle. Still lovely!
+- More lemon than berry. A pink-ish caboose.
+
+**off**
+- Soft and sweet. The strawberries must be napping. Sweet dreams!
+- A strawberry smoothie took a wrong turn and found me. Lucky me!
+- One whole strawberry, just floating. Like a little lifeboat! Here you go.
+
+## mint_lemonade
+**great**
+- Cool mint, bright lemon. Like a breeze off the pond.
+- So fresh I can hear ducks. Perfect.
+- Just enough mint. You're a natural.
+
+**okay**
+- Mint's a little shy. Still refreshing!
+- A bit leafy! I'm part garden now.
+- Strong mint! My nose feels very clean.
+- Extra ice! A frosty little adventure. Tasty!
+
+**off**
+- Minty fresh! My smile is extra sparkly now. Fun!
+- The mint's off visiting the pond. Still sweet and sunny!
+- There's a whole leaf in my straw. We're friends now. Here you go!
+
+## espresso
+**great**
+- Tiny cup, big hug. Perfect shot.
+- Crema like a little sunset. Wonderful.
+- Short, sweet, strong. Like a great nap in reverse.
+
+**okay**
+- A touch quick on the pull. Still zippy!
+- Ends with a kick. Wakes me right up!
+- Light and lively. It's got spirit!
+
+**off**
+- A very relaxed espresso. On vacation, maybe. I could use one too!
+- Strong enough to reorganize my bookshelf. Thank you!
+- A long shot! A really long shot. More espresso to love.
+
+## honey_lavender_lemonade
+**great**
+- Honey, lavender, lemon. A garden in a glass.
+- Floral but not soapy. That's hard! Bravo.
+- Tastes like the market on a sunny Saturday.
+
+**okay**
+- Lavender's a little loud today. Still pretty!
+- Honey sank to the bottom. Sweet treasure at the end.
+- Gentle and nice. Could steep a smidge longer.
+
+**off**
+- Like sipping a sweet candle. My whole day smells nice now!
+- Lavender took the whole stage. Standing ovation anyway!
+- More honey than lemonade. The bees would be proud. Here you go!
+
+## cappuccino
+**great**
+- Perfect foam, light as a library whisper.
+- Cocoa dust on a cloud. Wonderful.
+- Equal parts coffee, milk and foam. Textbook!
+
+**okay**
+- Foam's a little thin, but it's cozy.
+- Cocoa-forward! I'm wearing a chocolate mustache now.
+- Nice! Slightly more latte than cappuccino today.
+
+**off**
+- The foam slipped off to read a book. Can't blame it. Cozy cup!
+- Cocoa avalanche! I'm wearing it. Thank you!
+- It's flat, but it's trying its best. So am I. Here you go!
+
+## mocha
+**great**
+- Chocolate and coffee best friends. Perfect.
+- Rich, warm, and the whip is a crown. Wonderful.
+- A snow day in a mug. Thank you!
+
+**okay**
+- Little more chocolate than coffee. Not complaining!
+- Chocolate's hiding at the bottom. Stir and smile!
+- Bit sweet! My teeth waved hello.
+
+**off**
+- Hot chocolate wearing a little coffee hat. Adorable and delicious!
+- The whip sank like a tiny ship. Brave whip. Here you go!
+- The chocolate's fashionably late. Meanwhile, a hopeful latte. Lovely!
+
+## iced_coffee
+**great**
+- Smooth cold brew, clinking ice. Perfect groove.
+- Cold, strong, not bitter. You nailed it.
+- Tastes like a record on a lazy afternoon.
+
+**okay**
+- Lots of ice, lots of chill. What's there is tasty!
+- Mellows out at the end. Still chill!
+- Strong! I'm vibrating slightly. Happily.
+
+**off**
+- An ice cube with big coffee dreams. I believe in it!
+- A warm iced coffee! Bold invention. Patent pending!
+- So much ice! Built-in refills as it melts. Clever!
+
+## vanilla_latte
+**great**
+- Vanilla like a warm cookie. Lovely.
+- Sweet but balanced. A flower in a cup.
+- Silky, gentle, perfect. Thank you!
+
+**okay**
+- Vanilla's a little shy today. Still cozy!
+- A tad sweet! Dessert came early.
+- Foam's a bit flat, flavor's lovely.
+
+**off**
+- A vanilla candle's first draft. Smells like a hug!
+- The vanilla's hiding in the milk. Still warm, still kind.
+- Vanilla party! Everyone came. Here's your money, friend.
+
+## seasonal_special
+**great**
+- Tastes exactly like this time of year. Perfect.
+- The topping makes it. Seasonal magic!
+- Cozy, spiced, just right. I'll be back next season.
+
+**okay**
+- Syrup's a little strong. Very festive though!
+- Topping slid off. It's on the saucer now. Fine!
+- Nice! The season's a bit faint in this one.
+
+**off**
+- Several seasons at once. A whole year in one cup!
+- The topping went on a little adventure down the side. Cute!
+- Very mysterious flavor. Like a surprise gift. Thank you!
+
+## Per-customer
+- **steve**: great "Five staples out of five. Acquired with joy." / okay "Three and a half staples. Solid binding." / off "Two staples. But they're good staples. Here's exact change!"
+- **lamp_lady**: great "Warm wattage, darling! This glows!" / okay "Soft lighting. A little dim, still pretty." / off "Bit of a flicker in this one! I adore a fixer-upper. Paying!"
+- **keyclackr**: great "Tactile perfection. Zero input lag." / okay "Linear. Smooth enough. 7/10, wuold sip again." / off "Lots of key chatter in this cup. Still a fan! Payign! Paying."
+- **dottie**: great "Oh, sweetie, that's just how Harold made it." / okay "Close enough for Sunday, dear." / off "Warm-ish and made with love. Here's a little extra for trying, sweetie."
+- **theo**: great "Clinically excellent. I may cry." / okay "Vitals stable. Drink is fine. So am I." / off "I've had worse at 4 a.m. Many times. Thank you, truly."
+- **pippa**: great "GOLD STAR. I'm writing this down." / okay "Silver star. Room to grow!" / off "You get the 'nice try' frog. He's very proud of you."
+- **rocco**: great "Signed, sealed, delicious!" / okay "Arrived a little dented, but it got here!" / off "Return to sender? Nah, I'll keep it. Paid in full!"
+- **wren**: great "Warm between my palms / a small sun I can hold close / thank you, morning hands" / okay "Almost there, just like / the first warm day of April. / Still, I'm glad of it." / off "Brave little cup, you / tried your best and so did I. / Here, for your effort."
+- **neighbor_kid**: great "Best. Lemonade. On the whole street!" / okay "It's lemon-y AND sugar-y. Telling everyone." / off "Still lemonade! Lemonade is always good."
+- **dana**: great "Nailed it. Writing that one on the sticky note." / okay "Not bad! Next one's even better." / off "Okay, note to self: more lemon. Still proud."
+- **priya_okafor**: great "My usual, and somehow better. Purr-fect." / okay "Just how I like it, give or take a whisker." / off "Bit of a hairball day for this one, but I'm smiling!"
+- **biscuit**: great "(Slow blink. A purr like a tiny engine.)" / okay "(Biscuit sniffs the cup and sits on your foot.)" / off "(Biscuit headbutts the cup. Approved anyway.)"
+- **cyclist_from_l3**: great "Worth every puddle on the way here." / okay "Hit the spot. My socks disagree, but I don't." / off "Rain got in it? Fair. I'm half rain too. Cheers!"
+- **grandpa_train_shop**: great "All aboard! First-class lemonade." / okay "Right on schedule. Good and sweet." / off "A little late to the station, but it arrived. Toot toot!"
+- **duckling**: great "Quack! (one tiny happy hop)" / okay "Quack. (polite little waddle)" / off "Quack? (it pats the cup with one webbed foot, kindly)"
+- **delbert_finch**: great "Precise. Like a well-wound watch." / okay "Ticks along nicely." / off "Running a few seconds slow, as do I. Thank you kindly."
+- **retiring_dentist**: great "A flawless shot. I'd floss with joy." / okay "Good bite to it. No cavities detected." / off "A gentle little espresso. Very kind to the teeth!"
+- **gerald**: great "(Gerald does a delighted loop.)" / okay "(Gerald blows one approving bubble.)" / off "(Gerald blinks. He loves you regardless.)"
+- **npc_vendor**: great "That's my honey singing in there!" / okay "Sweet and calm. Bees would approve." / off "A bit shy on the honey. I'll bring you an extra jar!"
+- **npc_architect**: great "Clean lines, perfect foam. I'd frame it." / okay "Solid structure. Lovely finish." / off "A draft, not a final. Drafts are my favourite part!"
+- **agnes_pell**: great "(whispering) Exquisite. Five quiet stars." / okay "(whispering) Very nice. Shelved under 'cozy'." / off "(whispering) A little loud, but so am I on Thursdays. Thank you."
+- **juno_park**: great "This mocha is a ten out of ten. Encore!" / okay "Solid groove. I'd play this one twice." / off "A rough first take! Every great song starts with one."
+- **record_store_owner**: great "Pure groove. Iced coffee on vinyl." / okay "Nice B-side. Easy listening." / off "Off-beat, like all the best jazz. Love it."
+- **rosa_pemberton**: great "My usual, and it's in full bloom!" / okay "Lovely as ever, dear." / off "Needs a little sun, like my ferns. Still lovely."
+- **ray_pemberton**: great "Best cup in town. Don't tell Rosa I said 'best'." / okay "Good, honest coffee." / off "Gentle, the way my knees like it. Cheers, friend."
+- **coworker_npc**: great "New season, new favourite!" / okay "Nice twist on the season." / off "A brave seasonal experiment! I respect it."
+- **food_critic**: great "(writes for a long time, then smiles) Remarkable." / okay "(nods) Honest and well made." / off "(gentle smile) Promising. I'll be back to see it grow."
+- **marge_holloway**: great "That's a mile-marker cup, kiddo. Proud of you." / okay "Good work. Keep the wheels turning." / off "Every road has a bump. You're doing fine."
+- **queue_npc**: great "Wow, worth the wait!" / okay "Nice, thanks!" / off "No worries, still tasty!"
+- **customer**: great "Five stars, easy!" / okay "Pretty good!" / off "Still nice! Thanks for trying."
+
+## Per-customer, per-drink
+- **theo** / `latte`: great "This foam is a pillow. Goodnight. Kidding. Thank you."
+- **theo** / `cappuccino`: okay "Foam's a bit thin. Like my patience at hour eleven. Still lovely."
+- **lamp_lady** / `classic_lemonade`: great "Look how the ice catches the light!" / off "Soft sparkle today. I brought my own, so we're both glowing!"
+- **lamp_lady** / `pink_lemonade`: great "It's the exact color of my favorite lampshade!"
+- **pippa** / `classic_lemonade`: off "One more lemon and it's gold-star! I'll make you a chart. Free!"
+- **pippa** / `strawberry_lemonade`: great "Gold star AND a strawberry sticker. Rare!" / off "Nice-try frog. He likes strawberries, so he's extra proud."
+- **rocco** / `classic_lemonade`: great "Coldest stop on my whole route!"
+- **rocco** / `mint_lemonade`: great "Minty zing! Fastest block of the whole route now."
+- **rocco** / `strawberry_lemonade`: great "Signed, sealed, strawberry! Mint can take its time." / off "Bit squished in transit, but I'd sign for it again."
+- **dottie** / `classic_lemonade`: great "Harold's lemon tree would be proud."
+- **dottie** / `mocha`: great "Chocolate in my coffee! Harold would've called this cheating. Delicious cheating."
+- **keyclackr** / `black_coffee`: great "Clicky. Bold. Blue switch energy."
+- **keyclackr** / `iced_coffee`: great "Cold brew, clean actuation. Zero latency." / off "Bit of input lag on the chill. Still smashing 'like'!"
+- **steve** / `black_coffee`: okay "Three and a half staples. Standard issue. Dependable."
+- **steve** / `espresso`: great "Compact. Efficient. A mini stapler of a drink. Five staples."
+- **wren** / `latte`: great "Soft foam, like fresh snow / a little heart drawn in white / I'll keep this moment"
+- **wren** / `honey_lavender_lemonade`: great "Lavender evening / honey settles like the dusk / lemon, the first star"
+- **wren** / `black_coffee`: great "Dark and plain and warm / nothing extra, nothing missed / the morning, poured out" / off "Thin as early light / still, it found my hands. Thank you / for pouring the dawn"

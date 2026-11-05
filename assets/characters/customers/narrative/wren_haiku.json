@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "source": "_haiku.py",
+    "storage": "lines joined with \\n in data files",
+    "rule": "5-7-5, hand-counted"
+  },
+  "haiku": [
+    {
+      "where": "reviews.per_customer.wren.great + line_cust_wren_haiku_card_haiku_great (mock)",
+      "lines": [
+        "Warm between my palms",
+        "a small sun I can hold close",
+        "thank you, morning hands"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "warm(1) be-tween(2) my(1) palms(1)",
+        "a(1) small(1) sun(1) I(1) can(1) hold(1) close(1)",
+        "thank(1) you(1) mor-ning(2) hands(1)"
+      ],
+      "before": null
+    },
+    {
+      "where": "reviews.per_customer.wren.okay + line_cust_wren_haiku_card_haiku_okay",
+      "lines": [
+        "Almost there, just like",
+        "the first warm day of April.",
+        "Still, I'm glad of it."
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "al-most(2) there(1) just(1) like(1)",
+        "the(1) first(1) warm(1) day(1) of(1) A-pril(2)",
+        "still(1) I'm(1) glad(1) of(1) it(1)"
+      ],
+      "before": "Almost there, like / the first warm day of April. / Still, I'm glad of it.  (4/7/5)"
+    },
+    {
+      "where": "reviews.per_customer.wren.off + line_cust_wren_haiku_card_haiku_off",
+      "lines": [
+        "Brave little cup, you",
+        "tried your best and so did I.",
+        "Here, for your effort."
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "brave(1) lit-tle(2) cup(1) you(1)",
+        "tried(1) your(1) best(1) and(1) so(1) did(1) I(1)",
+        "here(1) for(1) your(1) ef-fort(2)"
+      ],
+      "before": null
+    },
+    {
+      "where": "line_cust_wren_napkin_wall_shop_haiku (shop haiku, poem corner)",
+      "lines": [
+        "Warm cups, kind faces",
+        "a corner where words can rest",
+        "this place is a verse"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "warm(1) cups(1) kind(1) fa-ces(2)",
+        "a(1) cor-ner(2) where(1) words(1) can(1) rest(1)",
+        "this(1) place(1) is(1) a(1) verse(1)"
+      ],
+      "before": "Warm cups, kind faces / a corner where words can rest / this place is a poem  (5/7/6: 'po-em' is 2)"
+    },
+    {
+      "where": "line_leave_shiftend_wren_1 (leave line)",
+      "lines": [
+        "The day folds itself",
+        "like a napkin, soft and small.",
+        "Until tomorrow."
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "the(1) day(1) folds(1) it-self(2)",
+        "like(1) a(1) nap-kin(2) soft(1) and(1) small(1)",
+        "un-til(2) to-mor-row(3)"
+      ],
+      "before": null
+    },
+    {
+      "where": "reviews.per_customer_product.wren.latte.great",
+      "lines": [
+        "Soft foam, like fresh snow",
+        "a little heart drawn in white",
+        "I'll keep this moment"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "soft(1) foam(1) like(1) fresh(1) snow(1)",
+        "a(1) lit-tle(2) heart(1) drawn(1) in(1) white(1)",
+        "I'll(1) keep(1) this(1) mo-ment(2)"
+      ],
+      "before": "Foam like fresh snow / a heart drawn in the white / I'll keep this moment  (4/6/5)"
+    },
+    {
+      "where": "reviews.per_customer_product.wren.honey_lavender_lemonade.great (steam_page + marketing quote)",
+      "lines": [
+        "Lavender evening",
+        "honey settles like the dusk",
+        "lemon, the first star"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "lav-en-der(3) eve-ning(2)",
+        "hon-ey(2) set-tles(2) like(1) the(1) dusk(1)",
+        "lem-on(2) the(1) first(1) star(1)"
+      ],
+      "before": null
+    },
+    {
+      "where": "reviews.per_customer_product.wren.black_coffee.great",
+      "lines": [
+        "Dark and plain and warm",
+        "nothing extra, nothing missed",
+        "the morning, poured out"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "dark(1) and(1) plain(1) and(1) warm(1)",
+        "noth-ing(2) ex-tra(2) noth-ing(2) missed(1)",
+        "the(1) mor-ning(2) poured(1) out(1)"
+      ],
+      "before": "Dark, plain, and warm / nothing extra, nothing missed / the morning, poured out  (4/7/5)"
+    },
+    {
+      "where": "reviews.per_customer_product.wren.black_coffee.off",
+      "lines": [
+        "Thin as early light",
+        "still, it found my hands. Thank you",
+        "for pouring the dawn"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ],
+      "hand_count": [
+        "thin(1) as(1) ear-ly(2) light(1)",
+        "still(1) it(1) found(1) my(1) hands(1) thank(1) you(1)",
+        "for(1) pour-ing(2) the(1) dawn(1)"
+      ],
+      "before": null
+    }
+  ]
+}

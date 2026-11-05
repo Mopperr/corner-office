@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "phase": "slice",
+  "speaker": "Marge 'Mile Marker' Holloway",
+  "note": "Idle reactions to stacking. These are gentle and never scold. Lines are keyed by trigger tag, and the engine picks one at random from the tag with a cooldown. 'toppled' is a soft encouragement line, never a failure.",
+  "reactions": {
+    "tall_tower": [
+      "Ooh, look at that tower. Reaching for the skylight, are we?",
+      "That's taller than my old CB antenna.",
+      "Sky-high and steady. Nice work."
+    ],
+    "wobbly": [
+      "Little wobble there. It's got character.",
+      "That one's dancing a bit. Maybe nudge it to the middle?",
+      "Wobbly's fine. Trucks wobble too and they still get home."
+    ],
+    "bold": [
+      "Ooh, bold tower.",
+      "Now that's a statement piece.",
+      "Bold choice. I like bold."
+    ],
+    "tidy": [
+      "Neat as a fresh load. Very tidy.",
+      "Everything lined up square. Somebody's been practicing."
+    ],
+    "mug_pile": [
+      "That's a lot of mugs. Expecting company?",
+      "A mug mountain. Nobody's going thirsty on your watch."
+    ],
+    "plant_on_top": [
+      "A plant on top. Every tower needs a little hat.",
+      "That fern's got the best view in the office now."
+    ],
+    "record_stack": [
+      "A stack of records. Juno would drum a little fill for that.",
+      "Spin one for me. Something with a steel guitar."
+    ],
+    "book_stack": [
+      "Books stacked up make a fine little library.",
+      "Building a reading tower? I respect it."
+    ],
+    "box_stack": [
+      "Boxes on boxes. Feels like moving day in here.",
+      "Good box stack. You'd load a truck just fine."
+    ],
+    "lamp_on_top": [
+      "A lamp on top, like a little lighthouse.",
+      "Lighting it up from the top down. Clever."
+    ],
+    "max_layers": [
+      "Four high! That's as tall as it goes. Lovely."
+    ],
+    "toppled": [
+      "Oops, it tumbled. Happens to the best of us. Want to try again?"
+    ]
+  }
+}

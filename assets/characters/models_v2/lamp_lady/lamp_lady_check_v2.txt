@@ -1,0 +1,24 @@
+v1: customers3d/lamp_lady.glb
+v2: customers3d/v2/lamp_lady/lamp_lady.glb
+v2 loads OK: meshes=['Icosphere', 'Lorna_Body', 'Lorna_Tote'] tris=82372 (v1 meshes=['Icosphere', 'Lorna_Body', 'Lorna_Tote'] tris=89950)
+[PASS] bone count 23 vs 23
+[PASS] bone names identical []
+[PASS] hierarchy identical 
+[PASS] rest pose identical max diff 0.00e+00 m
+[PASS] clip names identical ['idle_Lorna_Skeleton', 'sit_Lorna_Skeleton', 'walk_Lorna_Skeleton'] vs ['idle_Lorna_Skeleton', 'sit_Lorna_Skeleton', 'walk_Lorna_Skeleton']
+[PASS] clip idle_Lorna_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip idle_Lorna_Skeleton channel set 230/230 channels
+[PASS] clip idle_Lorna_Skeleton key count + frame times 
+[PASS] clip idle_Lorna_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip idle_Lorna_Skeleton arm/hand key values changed on: none (max diff 0.000)
+[PASS] clip sit_Lorna_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip sit_Lorna_Skeleton channel set 230/230 channels
+[PASS] clip sit_Lorna_Skeleton key count + frame times 
+[PASS] clip sit_Lorna_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip sit_Lorna_Skeleton arm/hand key values changed on: none (max diff 0.000)
+[PASS] clip walk_Lorna_Skeleton frame range (0.0, 25.6) vs (0.0, 25.6)
+[PASS] clip walk_Lorna_Skeleton channel set 230/230 channels
+[PASS] clip walk_Lorna_Skeleton key count + frame times 
+[PASS] clip walk_Lorna_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip walk_Lorna_Skeleton arm/hand key values changed on: none (max diff 0.000)
+RESULT: ALL PASS

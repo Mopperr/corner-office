@@ -1,0 +1,11 @@
+{
+ "_about": "Mover gear, bought once from the Books page and kept for good. Each piece changes one rule: what the boxes can take, how many fit in one, how often a hand slips.",
+ "gear": [
+  {"id": "dolly", "name": "The dolly", "cost": 80, "blurb": "Two wheels and a lip. Every box rides as if a fifth lighter: the weight on the boxes below counts 20% less.", "effect": "Crush weight counts 80%"},
+  {"id": "blankets", "name": "Moving blankets", "cost": 60, "blurb": "Six quilted blankets for the sofas and wardrobes. Wrapped pieces take 40% less of the road.", "effect": "Wrapped pieces 40% safer on the drive"},
+  {"id": "racks", "name": "Bed racks", "cost": 120, "blurb": "Steel shelves in the truck bed. A box takes eight more kilos on top before anything inside gives.", "effect": "Crush line +8 kg"},
+  {"id": "tape_gun", "name": "The tape gun", "cost": 40, "blurb": "A real one, with the handle. Boxes seal tighter and take two more pieces each.", "effect": "+2 pieces a box"},
+  {"id": "gloves", "name": "Grip gloves", "cost": 50, "blurb": "Rubber palms. A hand slips 30% less often, fragile or not.", "effect": "Drops 30% rarer"},
+  {"id": "charm", "name": "Marge's lucky charm", "cost": 30, "blurb": "A brass duck on a string. Once a job, the first piece that would have slipped doesn't.", "effect": "First drop of every job caught"}
+ ]
+}

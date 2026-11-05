@@ -1,0 +1,32 @@
+{
+ "id": "pippa",
+ "name": "Pippa",
+ "glb": "pippa.glb",
+ "height_m": 1.33,
+ "seat_height_m": 0.334,
+ "hip_height_m": 0.585,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Pippa_Clipboard",
+   "bone": "UpperChest"
+  }
+ ],
+ "tris": 84784
+}

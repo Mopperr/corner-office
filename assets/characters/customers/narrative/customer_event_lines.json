@@ -1,0 +1,1220 @@
+{
+  "_meta": {
+    "version": 1,
+    "source": "/workspace/game/customer_events.json",
+    "keyed_by": "line_id",
+    "count": 165,
+    "count_line_cust": 63,
+    "count_event_lines": 102,
+    "fields": {
+      "speaker": "character id from the event (or 'narration' for scene text)",
+      "text": "default line",
+      "variants*": "optional keyed alternatives; pick by the named key, else use text"
+    },
+    "placeholders": {
+      "{drink}": "display name",
+      "{price}/{cost}/{profit}/{margin_pct}": "from products.json"
+    },
+    "tone": "Cozy sitcom. Off results are kind and funny; the customer always pays.",
+    "quality_bands": {
+      "great": ">=80",
+      "okay": "50-79",
+      "off": "<50"
+    }
+  },
+  "lines": {
+    "line_ev_drink_classic_first_sale_order": {
+      "event": "ev_drink_classic_first_sale",
+      "speaker": "neighbor_kid",
+      "text": "One classic lemonade, please. With a quiet straw. Mom says the squeaky ones are rude."
+    },
+    "line_ev_drink_classic_first_sale_success": {
+      "event": "ev_drink_classic_first_sale",
+      "speaker": "neighbor_kid",
+      "text": "Whoa. This is the best lemonade on the whole street. Maybe the whole world. Here's a quarter extra!"
+    },
+    "line_ev_drink_classic_first_sale_okay": {
+      "event": "ev_drink_classic_first_sale",
+      "speaker": "neighbor_kid",
+      "text": "It's good! It's lemon-y and sugar-y. I'm gonna tell everybody."
+    },
+    "line_ev_drink_classic_first_sale_off": {
+      "event": "ev_drink_classic_first_sale",
+      "speaker": "neighbor_kid",
+      "text": "It's a little funny... but it's still lemonade! Lemonade is always lemonade. Thank you!"
+    },
+    "line_ev_drink_pink_biscuit_nose_order": {
+      "event": "ev_drink_pink_biscuit_nose",
+      "speaker": "priya_okafor",
+      "text": "Priya here! Could I get the pink one? Like his nose. Biscuit insisted. Well, he blinked at the menu."
+    },
+    "line_ev_drink_pink_biscuit_nose_success": {
+      "event": "ev_drink_pink_biscuit_nose",
+      "speaker": "priya_okafor",
+      "text": "Oh, that's exactly Biscuit-nose pink! I'm putting it on the Whisker & Bean specials board. With credit."
+    },
+    "line_ev_drink_pink_biscuit_nose_okay": {
+      "event": "ev_drink_pink_biscuit_nose",
+      "speaker": "priya_okafor",
+      "text": "A little pale, but sweet. More of a sleepy-nose pink. Biscuit approves, I think. He yawned."
+    },
+    "line_ev_drink_pink_biscuit_nose_off": {
+      "event": "ev_drink_pink_biscuit_nose",
+      "speaker": "priya_okafor",
+      "text": "That's more of a sunburned-nose pink! Still lovely. Want to try one more pour? No rush at all."
+    },
+    "line_ev_drink_pink_biscuit_nose_biscuit_meow": {
+      "event": "ev_drink_pink_biscuit_nose",
+      "speaker": "biscuit",
+      "text": "Mrrp? (Biscuit watches the pitcher very, very closely.)"
+    },
+    "line_ev_drink_icedtea_after_rain_order": {
+      "event": "ev_drink_icedtea_after_rain",
+      "speaker": "cyclist_from_l3",
+      "text": "Rain's done and I'm soaked. Iced tea lemonade, please. Cold drink, wet jacket. Perfect balance."
+    },
+    "line_ev_drink_icedtea_after_rain_success": {
+      "event": "ev_drink_icedtea_after_rain",
+      "speaker": "cyclist_from_l3",
+      "text": "Oh, that's the sun coming back in a cup. Worth every puddle on the way here."
+    },
+    "line_ev_drink_icedtea_after_rain_okay": {
+      "event": "ev_drink_icedtea_after_rain",
+      "speaker": "cyclist_from_l3",
+      "text": "Tea's a touch warm, so the ice is racing. I'm racing too. We'll all get there!"
+    },
+    "line_ev_drink_icedtea_after_rain_off": {
+      "event": "ev_drink_icedtea_after_rain",
+      "speaker": "cyclist_from_l3",
+      "text": "That's hot tea in a cold disguise! Honestly, cozy after the rain. Want another go? I'm in no hurry."
+    },
+    "line_cust_dottie_rain_wave": {
+      "event": "ev_drink_icedtea_after_rain",
+      "speaker": "dottie",
+      "text": "Yoo-hoo! Rain's stopped, sweetie. I'll have one of those tea lemonades too. Light ice, my teeth are retired."
+    },
+    "line_ev_drink_strawberry_caboose_order": {
+      "event": "ev_drink_strawberry_caboose",
+      "speaker": "grandpa_train_shop",
+      "text": "Walt Hale, all aboard! One strawberry lemonade, caboose-red if you please. This little fella keeps time."
+    },
+    "line_ev_drink_strawberry_caboose_success": {
+      "event": "ev_drink_strawberry_caboose",
+      "speaker": "grandpa_train_shop",
+      "text": "Caboose-red, right on schedule! Best stop on the whole line."
+    },
+    "line_ev_drink_strawberry_caboose_okay": {
+      "event": "ev_drink_strawberry_caboose",
+      "speaker": "grandpa_train_shop",
+      "text": "A touch more pink than red. A caboose that's been out in the sun. I'll take it, gladly."
+    },
+    "line_ev_drink_strawberry_caboose_off": {
+      "event": "ev_drink_strawberry_caboose",
+      "speaker": "grandpa_train_shop",
+      "text": "Hm! A few berries missed the train. Happens on every line. Shall we run it one more time?"
+    },
+    "line_ev_drink_strawberry_caboose_caboose_gift": {
+      "event": "ev_drink_strawberry_caboose",
+      "speaker": "grandpa_train_shop",
+      "text": "You keep the caboose. Every good stand needs a conductor. Toot toot."
+    },
+    "line_ev_drink_mint_duckling_order": {
+      "event": "ev_drink_mint_duckling",
+      "speaker": "pond_jogger",
+      "text": "Mint lemonade, please! Oh, don't mind my friend. He followed me from the pond. He has opinions."
+    },
+    "line_ev_drink_mint_duckling_success": {
+      "event": "ev_drink_mint_duckling",
+      "speaker": "pond_jogger",
+      "text": "That's a breeze off the pond in a cup. And so calm! He didn't even flinch. You're a duck friend now."
+    },
+    "line_ev_drink_mint_duckling_okay": {
+      "event": "ev_drink_mint_duckling",
+      "speaker": "pond_jogger",
+      "text": "Mint's a little shy, but it's cool and sweet. My little shadow is very content."
+    },
+    "line_ev_drink_mint_duckling_off": {
+      "event": "ev_drink_mint_duckling",
+      "speaker": "pond_jogger",
+      "text": "Whoa, minty! My whole face feels brand new. Want to try a gentler one? We'll wait. He's sitting."
+    },
+    "line_ev_drink_mint_duckling_duck_quack": {
+      "event": "ev_drink_mint_duckling",
+      "speaker": "duckling",
+      "text": "Quack. (The duckling settles down beside the stand.)"
+    },
+    "line_ev_drink_black_delbert_clock_order": {
+      "event": "ev_drink_black_delbert_clock",
+      "speaker": "delbert_finch",
+      "text": "Black coffee, please. A quiet cup. This clock and I have an appointment with nothing at all."
+    },
+    "line_ev_drink_black_delbert_clock_success": {
+      "event": "ev_drink_black_delbert_clock",
+      "speaker": "delbert_finch",
+      "text": "Precisely right. Not a second too strong. I'll be back tomorrow at this same tick."
+    },
+    "line_ev_drink_black_delbert_clock_okay": {
+      "event": "ev_drink_black_delbert_clock",
+      "speaker": "delbert_finch",
+      "text": "A touch thin. Like a clock that runs two minutes slow. Still keeps good company."
+    },
+    "line_ev_drink_black_delbert_clock_off": {
+      "event": "ev_drink_black_delbert_clock",
+      "speaker": "delbert_finch",
+      "text": "Ah. This one's running backwards a bit. No matter. Shall we wind it again?"
+    },
+    "line_ev_drink_black_delbert_clock_clock_tick": {
+      "event": "ev_drink_black_delbert_clock",
+      "speaker": "narration",
+      "text": "Tick... tick... (Delbert's pocket clock keeps time on the counter.)"
+    },
+    "line_ev_drink_espresso_dentist_order": {
+      "event": "ev_drink_espresso_dentist",
+      "speaker": "retiring_dentist",
+      "text": "One espresso, please. Before I never hear a drill again. Gerald's along, he's very well behaved."
+    },
+    "line_ev_drink_espresso_dentist_success": {
+      "event": "ev_drink_espresso_dentist",
+      "speaker": "retiring_dentist",
+      "text": "Perfect crema. And I didn't even check anyone's molars. Retirement is wonderful."
+    },
+    "line_ev_drink_espresso_dentist_okay": {
+      "event": "ev_drink_espresso_dentist",
+      "speaker": "retiring_dentist",
+      "text": "A smidge bitter. Like a good flossing. Good for you, mostly."
+    },
+    "line_ev_drink_espresso_dentist_off": {
+      "event": "ev_drink_espresso_dentist",
+      "speaker": "retiring_dentist",
+      "text": "Very... relaxed shot. On vacation, like me! Want to pull one more? Gerald and I have all day."
+    },
+    "line_ev_drink_espresso_dentist_gerald_bubble": {
+      "event": "ev_drink_espresso_dentist",
+      "speaker": "gerald",
+      "text": "blub. (Gerald makes one tiny, approving bubble.)"
+    },
+    "line_ev_drink_honeylav_vendor_order": {
+      "event": "ev_drink_honeylav_vendor",
+      "speaker": "npc_vendor",
+      "text": "Brought you honey from my stall and a little lavender bunch. Try the fancy one? I've been dying to taste it."
+    },
+    "line_ev_drink_honeylav_vendor_success": {
+      "event": "ev_drink_honeylav_vendor",
+      "speaker": "npc_vendor",
+      "text": "Oh, that's a Saturday morning in a glass! I'm sending my whole aisle over."
+    },
+    "line_ev_drink_honeylav_vendor_okay": {
+      "event": "ev_drink_honeylav_vendor",
+      "speaker": "npc_vendor",
+      "text": "Lavender's a little loud, but it's sweet as can be. Next time, a shorter steep!"
+    },
+    "line_ev_drink_honeylav_vendor_off": {
+      "event": "ev_drink_honeylav_vendor",
+      "speaker": "npc_vendor",
+      "text": "That's a very sweet candle you've made! Ha! Take another go, there's plenty of honey."
+    },
+    "line_ev_drink_honeylav_vendor_honey_gift": {
+      "event": "ev_drink_honeylav_vendor",
+      "speaker": "npc_vendor",
+      "text": "Keep the jar. Honey keeps forever, and so do good neighbors."
+    },
+    "line_ev_drink_latte_sketch_art_order": {
+      "event": "ev_drink_latte_sketch_art",
+      "speaker": "npc_architect",
+      "text": "Latte. With this on top. No, wait, this. Okay, this. Final answer. Probably."
+    },
+    "line_ev_drink_latte_sketch_art_success": {
+      "event": "ev_drink_latte_sketch_art",
+      "speaker": "npc_architect",
+      "text": "That's... my sketch. In foam. I'm pinning the napkin on your wall. Don't argue, I'm an architect."
+    },
+    "line_ev_drink_latte_sketch_art_okay": {
+      "event": "ev_drink_latte_sketch_art",
+      "speaker": "npc_architect",
+      "text": "Close. It's like my sketch after a second draft. I'll allow it."
+    },
+    "line_ev_drink_latte_sketch_art_off": {
+      "event": "ev_drink_latte_sketch_art",
+      "speaker": "npc_architect",
+      "text": "Interesting. Abstract. I may have drawn it upside down anyway. Try again? I'll hold the napkin still."
+    },
+    "line_ev_drink_latte_sketch_art_grudging_not_bad": {
+      "event": "ev_drink_latte_sketch_art",
+      "speaker": "npc_architect",
+      "text": "...Not bad. Don't let it go to your head."
+    },
+    "line_ev_drink_cappuccino_quiet_order": {
+      "event": "ev_drink_cappuccino_quiet",
+      "speaker": "agnes_pell",
+      "text": "(whispering) One cappuccino, please. Quiet foam, if you have it."
+    },
+    "line_ev_drink_cappuccino_quiet_success": {
+      "event": "ev_drink_cappuccino_quiet",
+      "speaker": "agnes_pell",
+      "text": "(whispering) Lovely. Foam like a turned page. Five stars, silently."
+    },
+    "line_ev_drink_cappuccino_quiet_okay": {
+      "event": "ev_drink_cappuccino_quiet",
+      "speaker": "agnes_pell",
+      "text": "(whispering) A little thin, but very kind. Like a paperback."
+    },
+    "line_ev_drink_cappuccino_quiet_off": {
+      "event": "ev_drink_cappuccino_quiet",
+      "speaker": "agnes_pell",
+      "text": "(whispering) It's a bit loud, flavor-wise. That's all right, dear. Another one, softly?"
+    },
+    "line_ev_drink_cappuccino_quiet_shh": {
+      "event": "ev_drink_cappuccino_quiet",
+      "speaker": "narration",
+      "text": "shh... (Agnes smiles and taps her book.)"
+    },
+    "line_cust_wren_whisper_order": {
+      "event": "ev_drink_cappuccino_quiet",
+      "speaker": "wren",
+      "text": "(whispering) A cappuccino, please. I like a quiet foam too."
+    },
+    "line_ev_drink_mocha_juno_order": {
+      "event": "ev_drink_mocha_juno",
+      "speaker": "juno_park",
+      "text": "mocha!! extra whip!! sorry, I'm late, I'm always late, the band's waiting, it's fine!!"
+    },
+    "line_ev_drink_mocha_juno_success": {
+      "event": "ev_drink_mocha_juno",
+      "speaker": "juno_park",
+      "text": "OH that's an encore in a cup. Big tip. Biggest tip. You're on the guest list forever."
+    },
+    "line_ev_drink_mocha_juno_okay": {
+      "event": "ev_drink_mocha_juno",
+      "speaker": "juno_park",
+      "text": "It's chocolatey, it's coffee-ish, it's GREAT. Okay, it's good! Still tipping!"
+    },
+    "line_ev_drink_mocha_juno_off": {
+      "event": "ev_drink_mocha_juno",
+      "speaker": "juno_park",
+      "text": "Ha! Hot chocolate with a coffee rumor! I love it. I'm late anyway, wanna try again?"
+    },
+    "line_ev_drink_iced_on_beat_order": {
+      "event": "ev_drink_iced_on_beat",
+      "speaker": "record_store_owner",
+      "text": "Lou Marchetti. Dropped a record on for you. Iced coffee, please, and feel the groove."
+    },
+    "line_ev_drink_iced_on_beat_success": {
+      "event": "ev_drink_iced_on_beat",
+      "speaker": "record_store_owner",
+      "text": "Every step on the beat. That's a B-side hit. Here's a coupon, my friend."
+    },
+    "line_ev_drink_iced_on_beat_okay": {
+      "event": "ev_drink_iced_on_beat",
+      "speaker": "record_store_owner",
+      "text": "A little off the rhythm, but the melody's there. Nice chill."
+    },
+    "line_ev_drink_iced_on_beat_off": {
+      "event": "ev_drink_iced_on_beat",
+      "speaker": "record_store_owner",
+      "text": "Ha, you skipped a groove! Happens to the best records. Drop the needle again?"
+    },
+    "line_ev_drink_iced_on_beat_needle_drop": {
+      "event": "ev_drink_iced_on_beat",
+      "speaker": "narration",
+      "text": "*crackle* (The needle drops. A warm bassline fills the room.)"
+    },
+    "line_cust_keyclackr_drum_along": {
+      "event": "ev_drink_iced_on_beat",
+      "speaker": "keyclackr",
+      "text": "*tap tap tap* Sorry! This bassline is a perfect typing tempo."
+    },
+    "line_ev_drink_vanilla_orchid_order": {
+      "event": "ev_drink_vanilla_orchid",
+      "speaker": "rosa_pemberton",
+      "text": "Rosa Pemberton, from the greenhouse! Vanilla latte, please. The pod's from my orchid corner. Don't tell Ray."
+    },
+    "line_ev_drink_vanilla_orchid_success": {
+      "event": "ev_drink_vanilla_orchid",
+      "speaker": "rosa_pemberton",
+      "text": "Oh, it smells like my orchids at sunrise! I'm naming a bud after this cup."
+    },
+    "line_ev_drink_vanilla_orchid_okay": {
+      "event": "ev_drink_vanilla_orchid",
+      "speaker": "rosa_pemberton",
+      "text": "Vanilla's a little shy, like a bud that's not quite open. Lovely anyway."
+    },
+    "line_ev_drink_vanilla_orchid_off": {
+      "event": "ev_drink_vanilla_orchid",
+      "speaker": "rosa_pemberton",
+      "text": "That's a lot of vanilla! Ray would say I told you so. Let's try once more, gently."
+    },
+    "line_ev_drink_seasonal_board_board_reveal": {
+      "event": "ev_drink_seasonal_board",
+      "speaker": "dana",
+      "text": "New on the board! (Dana chalks the season's flavor in big curly letters.)",
+      "variants": {
+        "spring": "New on the board: Blossom Honey Latte!",
+        "summer": "New on the board: Toasted Coconut Latte!",
+        "autumn": "New on the board: Maple Pumpkin Latte!",
+        "winter": "New on the board: Winter Spice Latte!"
+      }
+    },
+    "line_ev_drink_seasonal_board_order": {
+      "event": "ev_drink_seasonal_board",
+      "speaker": "coworker_npc",
+      "text": "Ooh, the seasonal one! I have no idea what that word means, but I want it."
+    },
+    "line_ev_drink_seasonal_board_success": {
+      "event": "ev_drink_seasonal_board",
+      "speaker": "coworker_npc",
+      "text": "It tastes exactly like this time of year. I'm telling the whole floor."
+    },
+    "line_ev_drink_seasonal_board_okay": {
+      "event": "ev_drink_seasonal_board",
+      "speaker": "coworker_npc",
+      "text": "Little heavy on the syrup. Very festive. I'm extremely awake now."
+    },
+    "line_ev_drink_seasonal_board_off": {
+      "event": "ev_drink_seasonal_board",
+      "speaker": "coworker_npc",
+      "text": "The topping went on a little adventure down the side! Cute. Want a redo? I'll wait."
+    },
+    "line_cust_wren_seasonal_first": {
+      "event": "ev_drink_seasonal_board",
+      "speaker": "wren",
+      "text": "A new season on the board. I'll write a new poem for it."
+    },
+    "line_ev_gen_regular_returns_greeting": {
+      "event": "ev_gen_regular_returns",
+      "speaker": "regular",
+      "text": "Hey, it's me again! Missed this place."
+    },
+    "line_ev_gen_regular_returns_usual": {
+      "event": "ev_gen_regular_returns",
+      "speaker": "regular",
+      "text": "The usual, please. You remember, right? No pressure!"
+    },
+    "line_ev_gen_regular_returns_success": {
+      "event": "ev_gen_regular_returns",
+      "speaker": "regular",
+      "text": "You remembered! That makes my whole day."
+    },
+    "line_ev_gen_regular_returns_okay": {
+      "event": "ev_gen_regular_returns",
+      "speaker": "regular",
+      "text": "Close to my usual! Close enough to make me smile."
+    },
+    "line_ev_gen_regular_returns_off": {
+      "event": "ev_gen_regular_returns",
+      "speaker": "regular",
+      "text": "Ha, not quite my usual, but you tried! Shall we have another go together?"
+    },
+    "line_ev_gen_two_customers_chat_chat_a": {
+      "event": "ev_gen_two_customers_chat",
+      "speaker": "rosa_pemberton",
+      "text": "Ray! Fancy meeting you in line. Have you tried the sweet one?"
+    },
+    "line_ev_gen_two_customers_chat_chat_b": {
+      "event": "ev_gen_two_customers_chat",
+      "speaker": "ray_pemberton",
+      "text": "Rosa. I came here to avoid your sugar opinions."
+    },
+    "line_ev_gen_two_customers_chat_order_change": {
+      "event": "ev_gen_two_customers_chat",
+      "speaker": "ray_pemberton",
+      "text": "Fine. I'll have what she's having. Don't tell her she's right."
+    },
+    "line_ev_gen_two_customers_chat_success": {
+      "event": "ev_gen_two_customers_chat",
+      "speaker": "ray_pemberton",
+      "text": "...She was right. This one's wonderful. I'll deny saying that."
+    },
+    "line_ev_gen_two_customers_chat_okay": {
+      "event": "ev_gen_two_customers_chat",
+      "speaker": "ray_pemberton",
+      "text": "Hm. Not bad. Not as good as mine. But not bad."
+    },
+    "line_ev_gen_two_customers_chat_off": {
+      "event": "ev_gen_two_customers_chat",
+      "speaker": "ray_pemberton",
+      "text": "See, Rosa? Too much of a good thing! Ha. One more try, though? It's growing on me."
+    },
+    "line_ev_gen_rush_hour_rush_start": {
+      "event": "ev_gen_rush_hour",
+      "speaker": "narration",
+      "text": "Ding ding! Here comes the rush. Everybody's smiling. Take it one cup at a time.",
+      "variants": {
+        "coffee_counter": "Ding ding! The morning crowd's here. Deep breath, one cup at a time.",
+        "lemonade_stand": "Ding ding! Afternoon thirst o'clock. One cup at a time."
+      }
+    },
+    "line_ev_gen_rush_hour_rush_clear_great": {
+      "event": "ev_gen_rush_hour",
+      "speaker": "dana",
+      "text": "Rush Hour Hero! Every cup a winner. Dana's doing a tiny victory dance."
+    },
+    "line_ev_gen_rush_hour_rush_clear_okay": {
+      "event": "ev_gen_rush_hour",
+      "speaker": "dana",
+      "text": "Rush cleared! Everyone left happy and caffeinated (or lemonaded)."
+    },
+    "line_ev_gen_biscuit_visit_arrive": {
+      "event": "ev_gen_biscuit_visit",
+      "speaker": "narration",
+      "text": "Biscuit has arrived. Biscuit is sitting on the counter. Biscuit is in charge now."
+    },
+    "line_ev_gen_biscuit_visit_pet": {
+      "event": "ev_gen_biscuit_visit",
+      "speaker": "biscuit",
+      "text": "Prrrrrrr. (Biscuit leans into the scratch.)"
+    },
+    "line_ev_gen_biscuit_visit_customer_aww": {
+      "event": "ev_gen_biscuit_visit",
+      "speaker": "customer",
+      "text": "Awww! Is he yours? Can I pet him? I'm leaving a cat-photo review."
+    },
+    "line_ev_gen_biscuit_visit_leave": {
+      "event": "ev_gen_biscuit_visit",
+      "speaker": "narration",
+      "text": "Biscuit stretches, blinks slowly at you, and strolls off. Business as usual."
+    },
+    "line_ev_gen_kid_short_quarter_short": {
+      "event": "ev_gen_kid_short_quarter",
+      "speaker": "neighbor_kid",
+      "text": "Um... I'm one quarter short. I counted twice. It's still one quarter."
+    },
+    "line_ev_gen_kid_short_quarter_on_house": {
+      "event": "ev_gen_kid_short_quarter",
+      "speaker": "dana",
+      "text": "This one's on the house, kiddo. Enjoy your lemonade."
+    },
+    "line_ev_gen_kid_short_quarter_next_time": {
+      "event": "ev_gen_kid_short_quarter",
+      "speaker": "dana",
+      "text": "No worries. Pay me next time, okay?"
+    },
+    "line_ev_gen_kid_short_quarter_payback": {
+      "event": "ev_gen_kid_short_quarter",
+      "speaker": "neighbor_kid",
+      "text": "I'm back! Here's two quarters, one for last time and one for being nice!"
+    },
+    "line_ev_gen_critic_visit_arrive": {
+      "event": "ev_gen_critic_visit",
+      "speaker": "narration",
+      "text": "A quiet customer with a notebook sits down. They seem to be noticing... everything."
+    },
+    "line_ev_gen_critic_visit_order": {
+      "event": "ev_gen_critic_visit",
+      "speaker": "food_critic",
+      "text": "Your most ambitious drink, please. Take all the time you need."
+    },
+    "line_ev_gen_critic_visit_review_great": {
+      "event": "ev_gen_critic_visit",
+      "speaker": "food_critic",
+      "text": "'A hidden gem. Warm, careful, delicious.' I'll be writing about this."
+    },
+    "line_ev_gen_critic_visit_review_okay": {
+      "event": "ev_gen_critic_visit",
+      "speaker": "food_critic",
+      "text": "'A charming spot with real heart.' Four stars, with pleasure."
+    },
+    "line_ev_gen_critic_visit_review_off": {
+      "event": "ev_gen_critic_visit",
+      "speaker": "food_critic",
+      "text": "'Promising.' Truly. Everything great starts somewhere."
+    },
+    "line_cust_pippa_critic_copy": {
+      "event": "ev_gen_critic_visit",
+      "speaker": "pippa",
+      "text": "(Pippa sits next to the critic and copies their notes exactly. Same frown. Same pen tap.)"
+    },
+    "line_ev_gen_marge_checkin_arrive": {
+      "event": "ev_gen_marge_checkin",
+      "speaker": "marge_holloway",
+      "text": "Mile Marker, checking in! New office, new counter. Had to see it with my own eyes."
+    },
+    "line_ev_gen_marge_checkin_order": {
+      "event": "ev_gen_marge_checkin",
+      "speaker": "marge_holloway",
+      "text": "Give me whatever's newest, boss. I like my coffee like my routes: fresh."
+    },
+    "line_ev_gen_marge_checkin_logged_and_loaded": {
+      "event": "ev_gen_marge_checkin",
+      "speaker": "marge_holloway",
+      "text": "Logged and loaded. That one's going in the logbook."
+    },
+    "line_ev_gen_marge_checkin_hint_next": {
+      "event": "ev_gen_marge_checkin",
+      "speaker": "marge_holloway",
+      "text": "Word down the road is something new is coming soon. Keep your straps tight.",
+      "variants_by_next_drink": {
+        "pink_lemonade": "Heard the cat cafe crowd likes things pink. Just saying.",
+        "iced_tea_lemonade": "Rain's on the radio. Something tea-flavored usually follows a good rain.",
+        "strawberry_lemonade": "There's a fella with a train set who swears by strawberries. Keep an ear out.",
+        "mint_lemonade": "The pond road's got wild mint growing all along it. Smells like a breeze.",
+        "black_coffee": "A real office deserves a real coffee counter. Truck-stop rule number one.",
+        "espresso": "Small cups, big kick. Somebody retiring might show you how it's done.",
+        "honey_lavender_lemonade": "Market day's coming. Honey and lavender, if my nose is right.",
+        "latte": "Saw an architect doodling on napkins. Bet they'd like a drawing on their coffee.",
+        "cappuccino": "Libraries run on quiet foam, I hear. Whisper it.",
+        "mocha": "A warehouse morning calls for chocolate. Don't argue with Mile Marker.",
+        "iced_coffee": "Record shop owner brews it cold and slow. Keeps a good beat.",
+        "vanilla_latte": "There's a florist with an orchid corner. Smells like vanilla, I'm told.",
+        "seasonal_special": "Fancy offices have fancy menu boards. Chalk's already in my glovebox."
+      }
+    },
+    "line_ev_gen_weather_turn_rain_start": {
+      "event": "ev_gen_weather_turn",
+      "speaker": "narration",
+      "text": "Pitter-patter! Customers huddle under the awning. Something warm, or tea with lemon?"
+    },
+    "line_ev_gen_weather_turn_heat_start": {
+      "event": "ev_gen_weather_turn",
+      "speaker": "narration",
+      "text": "Phew, a hot one! Everyone's fanning themselves and asking for extra ice."
+    },
+    "line_ev_gen_weather_turn_weather_quip": {
+      "event": "ev_gen_weather_turn",
+      "speaker": "queue_npc",
+      "text": "Weather's changing, but this line's still the coziest spot in town.",
+      "variants": {
+        "rain": "Rain makes everything taste better under an awning.",
+        "heat": "Extra ice, please! I'm basically a puddle."
+      }
+    },
+    "line_cust_dottie_rain_traffic": {
+      "event": "ev_gen_weather_turn",
+      "speaker": "dottie",
+      "text": "Single file under the awning, everybody! Umbrellas in, elbows friendly."
+    },
+    "line_cust_rocco_heat_ice": {
+      "event": "ev_gen_weather_turn",
+      "speaker": "rocco",
+      "text": "Extra ice, chief! It's ninety degrees on my route and Biscuit the beagle wants shade."
+    },
+    "line_ev_gen_review_board_fan_favourite": {
+      "event": "ev_gen_review_board",
+      "speaker": "dana",
+      "text": "Fan favourite today: {drink}! The people have spoken."
+    },
+    "line_ev_gen_review_board_tip_note": {
+      "event": "ev_gen_review_board",
+      "speaker": "dana",
+      "text": "Sticky note from Dana: Try a little less ice next time. You're doing great!",
+      "variants_by_weakest_part": {
+        "ingredients": "Sticky note: double-check the recipe card. You're doing great!",
+        "order": "Sticky note: steps in order make it sing. You're doing great!",
+        "amounts": "Sticky note: a little less pour, a little more taste. You're doing great!",
+        "ice_temp": "Sticky note: watch the ice and the heat. You're doing great!",
+        "timing": "Sticky note: a quick serve keeps it fresh. No rush, though. You're doing great!"
+      }
+    },
+    "line_cust_steve_staple_rating_order": {
+      "event": "ev_cust_steve_staple_rating",
+      "speaker": "steve",
+      "text": "One black coffee, please. I'd like to acquire it.",
+      "variants_by_drink": {
+        "espresso": "One espresso, please. Small, dense, reliable.",
+        "vanilla_latte": "A vanilla latte, please. Weekend acquisition."
+      }
+    },
+    "line_cust_steve_staple_rating_stackable_ask": {
+      "event": "ev_cust_steve_staple_rating",
+      "speaker": "steve",
+      "text": "Quick question: are the cups stackable? For science. And joy."
+    },
+    "line_cust_steve_staple_rating_stack_done": {
+      "event": "ev_cust_steve_staple_rating",
+      "speaker": "steve",
+      "text": "Look at that. A perfect stack. May I acquire one for the collection?"
+    },
+    "line_cust_steve_staple_rating_staples_great": {
+      "event": "ev_cust_steve_staple_rating",
+      "speaker": "steve",
+      "text": "Five staples out of five. Acquired with joy. Here's exact change, plus two."
+    },
+    "line_cust_steve_staple_rating_staples_okay": {
+      "event": "ev_cust_steve_staple_rating",
+      "speaker": "steve",
+      "text": "Three staples. Solid binding. A dependable cup."
+    },
+    "line_cust_steve_staple_rating_staples_off": {
+      "event": "ev_cust_steve_staple_rating",
+      "speaker": "steve",
+      "text": "Two staples. But they still hold the pages together! Paying with exact change."
+    },
+    "line_cust_lamp_lady_golden_hour_order": {
+      "event": "ev_cust_lamp_lady_golden_hour",
+      "speaker": "lamp_lady",
+      "text": "Pink lemonade, sweetie! It's golden hour and I want something that glows.",
+      "variants_by_drink": {
+        "honey_lavender_lemonade": "The honey-lavender, please! It's golden hour, darling.",
+        "latte": "A latte, please! Lots of foam for the low light."
+      }
+    },
+    "line_cust_lamp_lady_golden_hour_hold_to_light": {
+      "event": "ev_cust_lamp_lady_golden_hour",
+      "speaker": "lamp_lady",
+      "text": "(Lorna lifts the cup toward the setting sun.) Oh, look at that. Just look at it."
+    },
+    "line_cust_lamp_lady_golden_hour_warm_wattage": {
+      "event": "ev_cust_lamp_lady_golden_hour",
+      "speaker": "lamp_lady",
+      "text": "Warm wattage! A hundred watts of happy!"
+    },
+    "line_cust_lamp_lady_golden_hour_forty_watts": {
+      "event": "ev_cust_lamp_lady_golden_hour",
+      "speaker": "lamp_lady",
+      "text": "A cozy forty watts. Perfect for reading by."
+    },
+    "line_cust_lamp_lady_golden_hour_dim_but_sunny": {
+      "event": "ev_cust_lamp_lady_golden_hour",
+      "speaker": "lamp_lady",
+      "text": "A little dim, but that's okay. I brought my own sunshine! Paying, of course."
+    },
+    "line_cust_lamp_lady_golden_hour_lamp_gift": {
+      "event": "ev_cust_lamp_lady_golden_hour",
+      "speaker": "lamp_lady",
+      "text": "This is for you, darling. Every stand needs a little lamp. Doesn't it glow?"
+    },
+    "line_cust_keyclackr_typed_order_typing": {
+      "event": "ev_cust_keyclackr_typed_order",
+      "speaker": "keyclackr",
+      "text": "*clack clack clack* Order coming in! Hold on, autocorrect is fighting me.",
+      "note": "Event drink is black_coffee (L6). Espresso unlocks at L7; after that the ticket can show the ticket_espresso variant.",
+      "variants": {
+        "ticket_espresso": "1x expresso plz",
+        "ticket_black_coffee": "1x blakc coffee plz",
+        "ticket_iced_coffee": "1x iced cofee plz",
+        "ticket_latte": "1x lattee plz"
+      }
+    },
+    "line_cust_keyclackr_typed_order_typo_fix": {
+      "event": "ev_cust_keyclackr_typed_order",
+      "speaker": "keyclackr",
+      "text": "Ha, thanks. You fixed my typo faster than I did. Zero input lag."
+    },
+    "line_cust_keyclackr_typed_order_tactile": {
+      "event": "ev_cust_keyclackr_typed_order",
+      "speaker": "keyclackr",
+      "text": "Tactile. Perfect actuation. Posting a five-star review with a keyboard emoji. ⌨️"
+    },
+    "line_cust_keyclackr_typed_order_linear": {
+      "event": "ev_cust_keyclackr_typed_order",
+      "speaker": "keyclackr",
+      "text": "Linear. Smooth enough. 7/10, wuold sip again. Would. Would sip."
+    },
+    "line_cust_keyclackr_typed_order_mushy": {
+      "event": "ev_cust_keyclackr_typed_order",
+      "speaker": "keyclackr",
+      "text": "Bit mushy, like a membrane board. Still paying! Payign. Paying."
+    },
+    "line_cust_dottie_crossing_guard_stand_up": {
+      "event": "ev_cust_dottie_crossing_guard",
+      "speaker": "dottie",
+      "text": "Alright, everybody! (Dottie stands up and straightens her vest.) Thirty years of training, here we go."
+    },
+    "line_cust_dottie_crossing_guard_wave_line": {
+      "event": "ev_cust_dottie_crossing_guard",
+      "speaker": "dottie",
+      "text": "You first, then you, then you. Nice and easy. Nobody's in a rush here."
+    },
+    "line_cust_dottie_crossing_guard_you_go_first": {
+      "event": "ev_cust_dottie_crossing_guard",
+      "speaker": "dottie",
+      "text": "You go ahead, sweetie. I'm retired. I've got all day."
+    },
+    "line_cust_dottie_crossing_guard_smooth_traffic": {
+      "event": "ev_cust_dottie_crossing_guard",
+      "speaker": "dottie",
+      "text": "Smooth traffic today. I'm so proud of all of you."
+    },
+    "line_cust_dottie_crossing_guard_slow_down_sweetie": {
+      "event": "ev_cust_dottie_crossing_guard",
+      "speaker": "dottie",
+      "text": "Slow down, sweetie. You're doing fine. Better than fine."
+    },
+    "line_cust_dottie_lemon_tree_arrive_bag": {
+      "event": "ev_cust_dottie_lemon_tree",
+      "speaker": "dottie",
+      "text": "I brought you something, dear. Lemons from Harold's old tree. Still going strong, just like me."
+    },
+    "line_cust_dottie_lemon_tree_harold_story": {
+      "event": "ev_cust_dottie_lemon_tree",
+      "speaker": "dottie",
+      "text": "Harold planted that tree the week we got married. Every summer he'd make lemonade too sour, and I'd add sugar when he wasn't looking."
+    },
+    "line_cust_dottie_lemon_tree_harold_proud": {
+      "event": "ev_cust_dottie_lemon_tree",
+      "speaker": "dottie",
+      "text": "Oh, that's it. That's the one. Harold's lemon tree would be proud."
+    },
+    "line_cust_dottie_lemon_tree_bag_gift": {
+      "event": "ev_cust_dottie_lemon_tree",
+      "speaker": "dottie",
+      "text": "You keep the rest. A jar of lemons looks lovely on a windowsill. He'd like that."
+    },
+    "line_cust_theo_night_shift_yawn": {
+      "event": "ev_cust_theo_night_shift",
+      "speaker": "theo",
+      "text": "*yaaaawn* Sorry. Twelve hours. Hi."
+    },
+    "line_cust_theo_night_shift_order": {
+      "event": "ev_cust_theo_night_shift",
+      "speaker": "theo",
+      "text": "A coffee to sleep after, please. Somehow it works. Don't ask.",
+      "note": "Event drink is black_coffee (L6). Latte unlocks at L9; from then the latte variant can play.",
+      "variants_by_drink": {
+        "black_coffee": "Black coffee, please. Then sleep. In that order.",
+        "latte": "A latte, hot as you can, extra foam. I'm basically a cloud now."
+      }
+    },
+    "line_cust_theo_night_shift_thanks_twice": {
+      "event": "ev_cust_theo_night_shift",
+      "speaker": "theo",
+      "text": "Thank you. And thank you. Once for each eye that's open."
+    },
+    "line_cust_theo_night_shift_vitals_stable": {
+      "event": "ev_cust_theo_night_shift",
+      "speaker": "theo",
+      "text": "Vitals stable. Drink is fine. So am I. Mostly."
+    },
+    "line_cust_theo_night_shift_worse_at_4am": {
+      "event": "ev_cust_theo_night_shift",
+      "speaker": "theo",
+      "text": "I've had worse at 4 a.m. Many times. This is lovely by comparison. Thank you, truly."
+    },
+    "line_cust_pippa_critique_arrive_official": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "Hello. This is an official review. Please act natural."
+    },
+    "line_cust_pippa_critique_watching": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "(Pippa leans in, clipboard up, watching every pour.) Mm-hmm. Interesting. Very interesting."
+    },
+    "line_cust_pippa_critique_box_balance": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "Balance: sweet versus sour.",
+      "variants_by_band": {
+        "great": "Balance: gold star. Sweet and sour are best friends.",
+        "okay": "Balance: silver star. A tiny bit more lemon, please.",
+        "off": "Balance: nice-try frog. Next time, taste before you serve!"
+      }
+    },
+    "line_cust_pippa_critique_box_chill": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "Chill: ice level.",
+      "variants_by_band": {
+        "great": "Chill: gold star. Perfect ice. My brain is only slightly frozen.",
+        "okay": "Chill: silver star. One more scoop of ice next time.",
+        "off": "Chill: nice-try frog. The ice went on vacation."
+      }
+    },
+    "line_cust_pippa_critique_box_service": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "Service: timing.",
+      "variants_by_band": {
+        "great": "Service: gold star. Fast and friendly.",
+        "okay": "Service: silver star. Good, a little slow. That's okay!",
+        "off": "Service: nice-try frog. But you smiled the whole time. That counts."
+      }
+    },
+    "line_cust_pippa_critique_gold_seal": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "Three gold stars. That's the Official Seal. It's going right here on your stand. Don't peel it off."
+    },
+    "line_cust_pippa_critique_silver_tip": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "Silver star. Room to grow! Tip: work on your weakest box. I believe in you."
+    },
+    "line_cust_pippa_critique_frog_tip": {
+      "event": "ev_cust_pippa_critique",
+      "speaker": "pippa",
+      "text": "You get the nice-try frog. He's very proud of you. Tip: one thing at a time. I'll check back next time!"
+    },
+    "line_cust_pippa_margins_margins_ask": {
+      "event": "ev_cust_pippa_margins",
+      "speaker": "pippa",
+      "text": "Question. What are your profit margins? Just curious. For my future empire."
+    },
+    "line_cust_pippa_margins_ledger_card": {
+      "event": "ev_cust_pippa_margins",
+      "speaker": "narration",
+      "text": "One cup: price {price}, ingredients {cost}, you keep {profit}. That's about {margin_pct}% for you!"
+    },
+    "line_cust_pippa_margins_business_partner": {
+      "event": "ev_cust_pippa_margins",
+      "speaker": "pippa",
+      "text": "Makes sense. You're a smart business. Future business partner. I'm writing it down."
+    },
+    "line_cust_rocco_route_stop_arrive_route": {
+      "event": "ev_cust_rocco_route_stop",
+      "speaker": "rocco",
+      "text": "Two minutes, chief! Step count's on! Strawberry lemonade, please. My mint's still in the mail.",
+      "min_level": "L1",
+      "max_level": "L4",
+      "note": "Base text is L1-L4 only (min_level/max_level, banter.json convention): mint lemonade unlocks at L5. From L5 onward use variants_by_level['L5+'] (variants_by_level_range: min_level L5, no max).",
+      "variants_by_level": {
+        "L5+": "Two minutes, chief! Step count's on! Strawberry for the event, but hey, the mint finally got delivered!"
+      },
+      "variants_by_level_range": {
+        "L5+": {
+          "min_level": "L5"
+        }
+      }
+    },
+    "line_cust_rocco_route_stop_gossip": {
+      "event": "ev_cust_rocco_route_stop",
+      "speaker": "rocco",
+      "text": "Got some news from the route, hot off the satchel...",
+      "note": "Gossip is a hint about the NEXT level. Pick variants_by_next_level[next level]. Rocco appears from L4, so the first hint teases L5.",
+      "variants_by_next_level": {
+        "L5": "Heads up: they're closing the bridge for repairs. Detour goes right round the duck pond. Ducks have the right of way, you know.",
+        "L6": "Word is there's a sunny room up above the bakery. Smells like bread every morning. Just saying, chief.",
+        "L7": "The dentist on Elm's finally retiring. Big chair, lots of glass, and a fish named Gerald. Gerald's a VIP.",
+        "L8": "Saturday's market day! Watch the lanes, though. Last week a cabbage made a run for it.",
+        "L9": "There's an architect on my route who's redrawn her own front door three times this week.",
+        "L10": "Library's moving to the new branch. Don't tell anyone, but I heard there's a secret letter tucked in one of the books.",
+        "L11": "Delivered a package to an old brick warehouse. Huge windows, clanky elevator. Real business vibes.",
+        "L12": "The record shop's owner keeps a turntable spinning all day long. My route goes faster past there.",
+        "L13": "Did a late route last night. The streets glow after dark, and a little cat followed me three whole blocks.",
+        "L14": "The greenhouse twins are fighting about pots again. Somebody's going to have to move all those plants.",
+        "L15": "Drove the coast road. Windy! A gull stole my sandwich. Worth it for the lighthouse.",
+        "L16": "There's a glass suite downtown with room for a whole team. Fancy! Bet you'd look good in there.",
+        "L17": "The theater's opening night is coming up and the director's in a panic. Piano, castle wall, rubber chicken, the works.",
+        "L18": "Parade's this weekend! Main road's closed, so plan a detour. Follow the band if you get lost.",
+        "L19": "A rival mover's been asking about you. Very snooty. Very shiny shoes. I think they're secretly impressed.",
+        "L20": "Up at the mountain lodge, they say the cocoa's the best in the state. And the first snow's on its way.",
+        "L21": "There's a corner office with floor-to-ceiling windows sitting empty. I'd keep my eye on that one, chief.",
+        "L22": "Some kid starting a business is asking about an old garage. Funny how things come back around, huh?"
+      }
+    },
+    "line_cust_rocco_route_stop_personal_best": {
+      "event": "ev_cust_rocco_route_stop",
+      "speaker": "rocco",
+      "text": "Personal best! Look at that step counter go!"
+    },
+    "line_cust_rocco_route_stop_signed_sealed": {
+      "event": "ev_cust_rocco_route_stop",
+      "speaker": "rocco",
+      "text": "Signed, sealed, delicious!"
+    },
+    "line_cust_rocco_route_stop_dented": {
+      "event": "ev_cust_rocco_route_stop",
+      "speaker": "rocco",
+      "text": "Arrived a little dented, but it got here! That's what counts."
+    },
+    "line_cust_rocco_route_stop_return_to_sender": {
+      "event": "ev_cust_rocco_route_stop",
+      "speaker": "rocco",
+      "text": "Return to sender? Nah, I'll keep it. Paid in full!"
+    },
+    "line_cust_wren_haiku_card_sip_count": {
+      "event": "ev_cust_wren_haiku_card",
+      "speaker": "wren",
+      "text": "(Wren sips slowly.) Seven bubbles. No, eight. One was hiding.",
+      "note": "Event drink is black_coffee (L6); Wren orders black coffee until honey-lavender unlocks at L8.",
+      "variants_by_drink": {
+        "black_coffee": "(Wren holds the cup close and looks in.) Dark as a quiet night. One small bubble, like a moon.",
+        "honey_lavender_lemonade": "(Wren sips slowly.) Seven bubbles. No, eight. One was hiding. And the lavender is humming."
+      }
+    },
+    "line_cust_wren_haiku_card_haiku_great": {
+      "event": "ev_cust_wren_haiku_card",
+      "speaker": "wren",
+      "text": "Warm between my palms\na small sun I can hold close\nthank you, morning hands",
+      "note": "Default great haiku; prefer reviews.json per_customer_product.wren[drink].great when present.",
+      "lines": [
+        "Warm between my palms",
+        "a small sun I can hold close",
+        "thank you, morning hands"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ]
+    },
+    "line_cust_wren_haiku_card_haiku_okay": {
+      "event": "ev_cust_wren_haiku_card",
+      "speaker": "wren",
+      "text": "Almost there, just like\nthe first warm day of April.\nStill, I'm glad of it.",
+      "note": "Default okay haiku; prefer reviews.json per_customer_product.wren[drink].okay when present.",
+      "lines": [
+        "Almost there, just like",
+        "the first warm day of April.",
+        "Still, I'm glad of it."
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ]
+    },
+    "line_cust_wren_haiku_card_haiku_off": {
+      "event": "ev_cust_wren_haiku_card",
+      "speaker": "wren",
+      "text": "Brave little cup, you\ntried your best and so did I.\nHere, for your effort.",
+      "note": "Default off haiku; prefer reviews.json per_customer_product.wren[drink].off when present.",
+      "lines": [
+        "Brave little cup, you",
+        "tried your best and so did I.",
+        "Here, for your effort."
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ]
+    },
+    "line_cust_wren_haiku_card_napkin_tip": {
+      "event": "ev_cust_wren_haiku_card",
+      "speaker": "wren",
+      "text": "(Wren folds the napkin into a tiny square and tucks it under the cup.) For you."
+    },
+    "line_cust_wren_napkin_wall_notice_napkins": {
+      "event": "ev_cust_wren_napkin_wall",
+      "speaker": "wren",
+      "text": "You kept them? All my napkins? Oh. I don't know what to say. That's rare for me."
+    },
+    "line_cust_wren_napkin_wall_pin_request": {
+      "event": "ev_cust_wren_napkin_wall",
+      "speaker": "wren",
+      "text": "Could we pin them up somewhere? A little poem corner. Anywhere you like."
+    },
+    "line_cust_wren_napkin_wall_shop_haiku": {
+      "event": "ev_cust_wren_napkin_wall",
+      "speaker": "wren",
+      "text": "Warm cups, kind faces\na corner where words can rest\nthis place is a verse",
+      "lines": [
+        "Warm cups, kind faces",
+        "a corner where words can rest",
+        "this place is a verse"
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ]
+    }
+  },
+  "leave_lines": {
+    "_meta": {
+      "count": 30,
+      "scheme": "line_leave_<reason>_<customer>_<n>; reason is patience (patience ran out) or shiftend (shift ended with a queue); customer is a regular id or 'generic' (speaker 'customer')",
+      "tone": "Warm and neutral, never guilt-tripping. The customer leaves for their own cheerful reason and plans to come back. No Rep or star change implied."
+    },
+    "line_leave_patience_steve_1": {
+      "speaker": "steve",
+      "reason": "patience",
+      "text": "Oh! Meeting in five. I'll grab one tomorrow. Save me a stackable cup?"
+    },
+    "line_leave_shiftend_steve_1": {
+      "speaker": "steve",
+      "reason": "shiftend",
+      "text": "Closing time? Fair. Even staplers need rest. See you tomorrow!"
+    },
+    "line_leave_shiftend_steve_2": {
+      "speaker": "steve",
+      "reason": "shiftend",
+      "text": "No worries. I'll file this under 'tomorrow'. Alphabetically, it's very close."
+    },
+    "line_leave_patience_lamp_lady_1": {
+      "speaker": "lamp_lady",
+      "reason": "patience",
+      "text": "Oh, the light's changing, darling! I'll pop back when it's golden again."
+    },
+    "line_leave_patience_lamp_lady_2": {
+      "speaker": "lamp_lady",
+      "reason": "patience",
+      "text": "I've just remembered a lamp I left on. Back soon, sweetie!"
+    },
+    "line_leave_shiftend_lamp_lady_1": {
+      "speaker": "lamp_lady",
+      "reason": "shiftend",
+      "text": "Lights out already? Lovely. Sleep well, and I'll see you at golden hour."
+    },
+    "line_leave_patience_keyclackr_1": {
+      "speaker": "keyclackr",
+      "reason": "patience",
+      "text": "Brb! Gotta catch a group buy. Back tomorow. Tomorrow."
+    },
+    "line_leave_shiftend_keyclackr_1": {
+      "speaker": "keyclackr",
+      "reason": "shiftend",
+      "text": "Shop's closing? All good, I'll queue up again tomorrow. Saving my order to drafts."
+    },
+    "line_leave_shiftend_keyclackr_2": {
+      "speaker": "keyclackr",
+      "reason": "shiftend",
+      "text": "GG for today! Same time tomorrow, friend. ⌨️"
+    },
+    "line_leave_patience_dottie_1": {
+      "speaker": "dottie",
+      "reason": "patience",
+      "text": "I'll let the young ones go first, sweetie. I'll be back tomorrow. I've got all day, every day."
+    },
+    "line_leave_patience_dottie_2": {
+      "speaker": "dottie",
+      "reason": "patience",
+      "text": "Oh, there's my bus! You're doing wonderfully, dear. See you soon."
+    },
+    "line_leave_shiftend_dottie_1": {
+      "speaker": "dottie",
+      "reason": "shiftend",
+      "text": "Closing up? Good for you, dear. Everyone needs to go home on time. Harold always said so."
+    },
+    "line_leave_patience_theo_1": {
+      "speaker": "theo",
+      "reason": "patience",
+      "text": "My eyes are voting for bed. I'll come back tomorrow. Thank you anyway."
+    },
+    "line_leave_shiftend_theo_1": {
+      "speaker": "theo",
+      "reason": "shiftend",
+      "text": "Closing? Same. Go rest. Doctor's orders. Well, nurse's."
+    },
+    "line_leave_shiftend_theo_2": {
+      "speaker": "theo",
+      "reason": "shiftend",
+      "text": "Shift's over for both of us, then. See you after my next one."
+    },
+    "line_leave_patience_pippa_1": {
+      "speaker": "pippa",
+      "reason": "patience",
+      "text": "I have to go, it's almost snack time. The official review is postponed. Not cancelled!"
+    },
+    "line_leave_patience_pippa_2": {
+      "speaker": "pippa",
+      "reason": "patience",
+      "text": "My mom's waving. I'll be back tomorrow with my clipboard. Be ready!"
+    },
+    "line_leave_shiftend_pippa_1": {
+      "speaker": "pippa",
+      "reason": "shiftend",
+      "text": "Closing time is a smart business choice. I'm writing that down. See you tomorrow!"
+    },
+    "line_leave_patience_rocco_1": {
+      "speaker": "rocco",
+      "reason": "patience",
+      "text": "Gotta keep the route moving, chief! I'll swing by tomorrow. Step count waits for no one!"
+    },
+    "line_leave_shiftend_rocco_1": {
+      "speaker": "rocco",
+      "reason": "shiftend",
+      "text": "All closed up? No problem! I'll deliver myself back tomorrow, first thing."
+    },
+    "line_leave_shiftend_rocco_2": {
+      "speaker": "rocco",
+      "reason": "shiftend",
+      "text": "Out for delivery till tomorrow, chief. Keep the counter warm!"
+    },
+    "line_leave_patience_wren_1": {
+      "speaker": "wren",
+      "reason": "patience",
+      "text": "(Wren smiles and tucks their pencil away.) Another day. The poem can wait."
+    },
+    "line_leave_shiftend_wren_1": {
+      "speaker": "wren",
+      "reason": "shiftend",
+      "text": "The day folds itself\nlike a napkin, soft and small.\nUntil tomorrow.",
+      "lines": [
+        "The day folds itself",
+        "like a napkin, soft and small.",
+        "Until tomorrow."
+      ],
+      "syllables": [
+        5,
+        7,
+        5
+      ]
+    },
+    "line_leave_shiftend_wren_2": {
+      "speaker": "wren",
+      "reason": "shiftend",
+      "text": "Closing is a kind of rest too. Goodnight."
+    },
+    "line_leave_patience_generic_1": {
+      "speaker": "customer",
+      "reason": "patience",
+      "text": "I'll come back tomorrow! Looks like a good one."
+    },
+    "line_leave_patience_generic_2": {
+      "speaker": "customer",
+      "reason": "patience",
+      "text": "Oh, I've got to run. Next time for sure!"
+    },
+    "line_leave_patience_generic_3": {
+      "speaker": "customer",
+      "reason": "patience",
+      "text": "No rush at all, I'll swing by later. Have a lovely day!"
+    },
+    "line_leave_shiftend_generic_1": {
+      "speaker": "customer",
+      "reason": "shiftend",
+      "text": "Closing up? Totally fine. See you tomorrow!"
+    },
+    "line_leave_shiftend_generic_2": {
+      "speaker": "customer",
+      "reason": "shiftend",
+      "text": "Early night for everyone! I'll be first in line next time."
+    },
+    "line_leave_shiftend_generic_3": {
+      "speaker": "customer",
+      "reason": "shiftend",
+      "text": "Thanks for a great day, everyone. Same time tomorrow!"
+    }
+  },
+  "pippa_tips": {
+    "_meta": {
+      "count": 6,
+      "event": "ev_cust_pippa_critique",
+      "scheme": "pippa_tip_<box>_<n>; box is balance | chill | service (the clipboard rows); n is 1 or 2 (alternates)",
+      "use": "On an okay (silver star) result, show the tip for Pippa's lowest-scoring box (by its share: Balance /70, Chill /15, Service /15) in the 'Pippa's tip' panel, alternating _1 and _2. Fallback: line_cust_pippa_critique_silver_tip. Gold and frog results keep gold_seal / frog_tip."
+    },
+    "pippa_tip_balance_1": {
+      "speaker": "pippa",
+      "box": "balance",
+      "sticker": "silver",
+      "band": "okay",
+      "text": "Silver star! Tip: taste first to fix your Balance box. I believe in you."
+    },
+    "pippa_tip_balance_2": {
+      "speaker": "pippa",
+      "box": "balance",
+      "sticker": "silver",
+      "band": "okay",
+      "text": "Silver star! Tip: Balance box. Sweet and sour need to hold hands. Almost!"
+    },
+    "pippa_tip_chill_1": {
+      "speaker": "pippa",
+      "box": "chill",
+      "sticker": "silver",
+      "band": "okay",
+      "text": "Silver star! Tip: Chill box. Ice goes in first, then the pour. You can do it!"
+    },
+    "pippa_tip_chill_2": {
+      "speaker": "pippa",
+      "box": "chill",
+      "sticker": "silver",
+      "band": "okay",
+      "text": "Silver star. Tip: your Chill box is almost frosty. Just a few more cubes!"
+    },
+    "pippa_tip_service_1": {
+      "speaker": "pippa",
+      "box": "service",
+      "sticker": "silver",
+      "band": "okay",
+      "text": "Silver star! Tip: your Service box. Hand it over a teeny bit faster. Go, go!"
+    },
+    "pippa_tip_service_2": {
+      "speaker": "pippa",
+      "box": "service",
+      "sticker": "silver",
+      "band": "okay",
+      "text": "Silver star. Tip: Service box! Smiling is great. Smiling faster is greater."
+    }
+  }
+}

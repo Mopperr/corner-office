@@ -1,0 +1,344 @@
+{
+  "_meta": {
+    "version": 2,
+    "phase": "slice",
+    "product_source": "/workspace/game/drink_unlocks.json (14 drinks; products.json from Programmer Master not yet present, ids to match)",
+    "product_ids": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee",
+      "espresso",
+      "honey_lavender_lemonade",
+      "latte",
+      "cappuccino",
+      "mocha",
+      "iced_coffee",
+      "vanilla_latte",
+      "seasonal_special"
+    ],
+    "product_ids_provisional": false,
+    "tone": "Cozy sitcom. Customers are kind. Off drinks get gentle, funny feedback and the customer still pays.",
+    "placeholders": {
+      "{product}": "display name of the ordered product"
+    },
+    "note": "generic lines use {product}; product_specific lines are only picked when that product is ordered.",
+    "slice_drinks": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee"
+    ],
+    "legacy_product_ids": {
+      "lemonade": "classic_lemonade",
+      "iced_lemonade": "classic_lemonade (served with extra ice; heat-weather variant)",
+      "sweet_coffee": "black_coffee + sugar (no longer a menu item; nearest menu drinks: mocha, vanilla_latte)"
+    },
+    "quality_bands": {
+      "great": ">=80",
+      "okay": "50-79",
+      "off": "<50"
+    },
+    "coverage_customer_specific": {
+      "classic_lemonade": 4,
+      "pink_lemonade": 3,
+      "iced_tea_lemonade": 3,
+      "strawberry_lemonade": 2,
+      "mint_lemonade": 3,
+      "black_coffee": 4,
+      "espresso": 2,
+      "honey_lavender_lemonade": 3,
+      "latte": 4,
+      "cappuccino": 3,
+      "mocha": 2,
+      "iced_coffee": 2,
+      "vanilla_latte": 2,
+      "seasonal_special": 2
+    },
+    "gated_rule": "product_specific_gated: when an entry for customer+product applies at the current level (min_level/max_level inclusive), pick only from the applicable gated entries; they REPLACE product_specific/generic for that order, never add to them. Rocco strawberry_lemonade: L1-L4 'My mint's still in the mail', L5+ 'The mint finally got delivered'.",
+    "unlock_levels": {
+      "classic_lemonade": 1,
+      "pink_lemonade": 2,
+      "iced_tea_lemonade": 3,
+      "strawberry_lemonade": 4,
+      "mint_lemonade": 5,
+      "black_coffee": 6,
+      "espresso": 7,
+      "honey_lavender_lemonade": 8,
+      "latte": 9,
+      "cappuccino": 10,
+      "mocha": 11,
+      "iced_coffee": 12,
+      "vanilla_latte": 14,
+      "seasonal_special": 16
+    },
+    "customer_appears_from": {
+      "steve": "L6",
+      "lamp_lady": "L2",
+      "keyclackr": "L6",
+      "dottie": "L1",
+      "theo": "L6",
+      "pippa": "L1",
+      "rocco": "L4",
+      "wren": "L6"
+    },
+    "order_rule": "Pick product_specific[customer][drink] only if drink unlock_level <= current level. Before a customer's favourite_drink unlocks, they order their slice_order. Wren: black_coffee only until L8.",
+    "customer_order_gates": {
+      "wren": {
+        "before_level": "L8",
+        "only": [
+          "black_coffee"
+        ],
+        "why": "Wren appears at L6 (coffee counter) and orders black coffee until honey_lavender_lemonade unlocks at L8."
+      }
+    }
+  },
+  "generic": {
+    "steve": [
+      "One {product}, please. For the collection. Of memories.",
+      "I'd like to acquire a {product}.",
+      "Could I trouble you for a {product}? Strong as a heavy-duty staple."
+    ],
+    "lamp_lady": [
+      "One {product}, sweetie! Make it glow.",
+      "Ooh, what's brightest today? Surprise me with a {product}."
+    ],
+    "keyclackr": [
+      "{product}, plz. Sorry. Please. Typing habit.",
+      "One {product}, thx. Thanks. I'm working on it."
+    ],
+    "dottie": [
+      "Slow and steady, dear. One {product}.",
+      "Could I get a {product}? Then go help that nice young man behind me."
+    ],
+    "theo": [
+      "One {product}... please. Sorry. Long night.",
+      "{product}, please. You're a lifesaver. Professionally speaking."
+    ],
+    "pippa": [
+      "One {product}, please. This is for research.",
+      "I'll have a {product}. What's your cost per cup? Just curious."
+    ],
+    "rocco": [
+      "Quick {product} for the route, buddy!",
+      "One {product}, special delivery to me!"
+    ],
+    "wren": [
+      "A {product}, if it's no trouble.",
+      "Could I have a {product}? Take your time. I'll watch the clouds."
+    ]
+  },
+  "product_specific": {
+    "steve": {
+      "black_coffee": [
+        "Black coffee, please. No frills, like a good standard stapler.",
+        "Black coffee, please. I'll acquire a second one if this one's a five-stapler."
+      ],
+      "espresso": [
+        "One espresso. Small, dense, reliable. Like a mini stapler."
+      ],
+      "vanilla_latte": [
+        "A vanilla latte, please. My weekend treat. Acquiring it now."
+      ],
+      "cappuccino": [
+        "Cappuccino, please. Is the foam load-bearing?"
+      ],
+      "classic_lemonade": [
+        "A classic lemonade. For the classics collection."
+      ]
+    },
+    "lamp_lady": {
+      "pink_lemonade": [
+        "Pink lemonade, sweetie! It matches my sunhat lining."
+      ],
+      "honey_lavender_lemonade": [
+        "The honey-lavender, please! It sounds like golden hour."
+      ],
+      "latte": [
+        "A latte, please. Lots of foam. Soft lighting for my tummy."
+      ],
+      "seasonal_special": [
+        "What's the season today? I'll have it in a cup!"
+      ],
+      "iced_tea_lemonade": [
+        "Iced tea lemonade! I love how it glows amber."
+      ]
+    },
+    "keyclackr": {
+      "black_coffee": [
+        "Black coffee. Strong. Like a clicky blue switch."
+      ],
+      "espresso": [
+        "Espresso, plz. Please. Double-tap speed."
+      ],
+      "iced_coffee": [
+        "Iced coffee, cold brew, low latency."
+      ],
+      "latte": [
+        "Latte me, friend. Medium foam, high RPM."
+      ],
+      "mocha": [
+        "Mocha. I earned it. I finished a build."
+      ]
+    },
+    "dottie": {
+      "classic_lemonade": [
+        "Lemonade, please, and don't be shy with the sugar."
+      ],
+      "iced_tea_lemonade": [
+        "Iced tea lemonade, dear. Light ice. My teeth are retired too."
+      ],
+      "mocha": [
+        "A mocha, sweetie. Coffee and chocolate, all in one. What a world."
+      ],
+      "strawberry_lemonade": [
+        "Strawberry lemonade, please. Harold grew strawberries too, you know."
+      ]
+    },
+    "theo": {
+      "latte": [
+        "Latte, hot as you can, extra foam. I'm basically a cloud now."
+      ],
+      "cappuccino": [
+        "Cappuccino, please. Extra foam. Foam is a pillow."
+      ],
+      "black_coffee": [
+        "Black coffee, please. I'm going to drink it and then sleep. Don't ask."
+      ],
+      "vanilla_latte": [
+        "Vanilla latte. Something gentle. It's been a night."
+      ],
+      "mint_lemonade": [
+        "Mint lemonade? Sure. It's practically mouthwash, which is basically self-care."
+      ]
+    },
+    "pippa": {
+      "classic_lemonade": [
+        "Lemonade, please! I'm grading it, no pressure."
+      ],
+      "strawberry_lemonade": [
+        "Strawberry lemonade, extra berries. It's for science."
+      ],
+      "pink_lemonade": [
+        "Pink lemonade, please. I'm comparing it to regular. Professionally."
+      ],
+      "mint_lemonade": [
+        "Mint lemonade. Extra sour if you can. I'm brave."
+      ],
+      "honey_lavender_lemonade": [
+        "One fancy one. The lavender. I'm expanding my palate."
+      ]
+    },
+    "rocco": {
+      "mint_lemonade": [
+        "Mint lemonade, lots of ice, lots of zing! It's a long block!"
+      ],
+      "iced_coffee": [
+        "Iced coffee to go! Biscuit the beagle's waiting at number 12."
+      ],
+      "classic_lemonade": [
+        "Plain lemonade today. Keeping it classic, like a first-class stamp."
+      ],
+      "black_coffee": [
+        "Black coffee to go, buddy. Route waits for no one."
+      ]
+    },
+    "wren": {
+      "honey_lavender_lemonade": [
+        "Honey-lavender, please. It sounds like a poem already."
+      ],
+      "cappuccino": [
+        "A cappuccino, if it's no trouble. I like a quiet foam."
+      ],
+      "seasonal_special": [
+        "The seasonal one, please. I write a poem for each one."
+      ],
+      "latte": [
+        "Latte, please. The foam is the poem."
+      ],
+      "iced_tea_lemonade": [
+        "Iced tea lemonade, gently made. I'll write about the rain."
+      ],
+      "pink_lemonade": [
+        "Pink lemonade, please. It's a lovely color to think in."
+      ],
+      "black_coffee": [
+        "Black coffee, please. Plain is a kind of poem too.",
+        "A black coffee, if it's no trouble. I'm saving my fancy words for later.",
+        "Black coffee. Dark as the line before a new stanza."
+      ]
+    }
+  },
+  "any_customer_product": {
+    "classic_lemonade": [
+      "One Classic Lemonade, please.",
+      "Could I get a Classic Lemonade?"
+    ],
+    "pink_lemonade": [
+      "One pink lemonade, please. The pretty one!"
+    ],
+    "iced_tea_lemonade": [
+      "One Iced Tea Lemonade, please.",
+      "Could I get an Iced Tea Lemonade?"
+    ],
+    "strawberry_lemonade": [
+      "One Strawberry Lemonade, please.",
+      "Could I get a Strawberry Lemonade?"
+    ],
+    "mint_lemonade": [
+      "One Mint Lemonade, please.",
+      "Could I get a Mint Lemonade?"
+    ],
+    "black_coffee": [
+      "One Black Coffee, please.",
+      "Could I get a Black Coffee?"
+    ],
+    "espresso": [
+      "Just a quick espresso, please."
+    ],
+    "honey_lavender_lemonade": [
+      "One Honey-Lavender Lemonade, please.",
+      "Could I get a Honey-Lavender Lemonade?"
+    ],
+    "latte": [
+      "One Latte, please.",
+      "Could I get a Latte?"
+    ],
+    "cappuccino": [
+      "Cappuccino, please. Nice foam if you can."
+    ],
+    "mocha": [
+      "Mocha, please. It's a treat day."
+    ],
+    "iced_coffee": [
+      "Iced coffee, please. It's warm out!"
+    ],
+    "vanilla_latte": [
+      "One Vanilla Latte, please.",
+      "Could I get a Vanilla Latte?"
+    ],
+    "seasonal_special": [
+      "I'll try the seasonal special. What is it today?"
+    ]
+  },
+  "product_specific_gated": [
+    {
+      "customer": "rocco",
+      "product": "strawberry_lemonade",
+      "min_level": "L1",
+      "max_level": "L4",
+      "text": "Strawberry lemonade, chief. My mint's still in the mail.",
+      "why": "Mint lemonade unlocks at L5; the joke is stale after that."
+    },
+    {
+      "customer": "rocco",
+      "product": "strawberry_lemonade",
+      "min_level": "L5",
+      "text": "Strawberry lemonade, chief. The mint finally got delivered, but I'm loyal to the berry."
+    }
+  ]
+}

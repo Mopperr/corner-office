@@ -1,0 +1,2080 @@
+{
+ "_about": "Floor plans for the authored places, laid over their venue records: rooms per floor that tile the footprint exactly, stairs where there is an upstairs, and the fixtures each room keeps (model, room, offset from the room's corner, yaw, and a goal surface for the stacking goals). Room ids are a kind plus a digit; the kind sets the floor, the tint and what the place's own things are. Created for the office rework of 4 Nov 2026.",
+ "plans": {
+  "cafe": {
+   "w": 11,
+   "d": 9,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Shop",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "seating",
+       "name": "Seating",
+       "x": 3,
+       "z": 0,
+       "w": 8,
+       "d": 5
+      },
+      {
+       "id": "counter",
+       "name": "Counter",
+       "x": 0,
+       "z": 5,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 4,
+       "z": 5,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "pantry",
+       "name": "Pantry",
+       "x": 8,
+       "z": 5,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "store",
+       "name": "Dry store",
+       "x": 8,
+       "z": 7,
+       "w": 3,
+       "d": 2
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Office",
+       "x": 3,
+       "z": 0,
+       "w": 8,
+       "d": 5
+      },
+      {
+       "id": "staff",
+       "name": "Staff room",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 6
+      },
+      {
+       "id": "store2",
+       "name": "Stock room",
+       "x": 3,
+       "z": 5,
+       "w": 8,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [
+    {
+     "model": "cafe_counter",
+     "room": "counter",
+     "dx": 2.0,
+     "dz": 2.6,
+     "rot": 0,
+     "goal": "cafe_counter",
+     "goal_h": 0.95,
+     "goal_w": 2.05,
+     "goal_d": 0.75
+    },
+    {
+     "model": "mug_rack",
+     "room": "counter",
+     "dx": 0.12,
+     "dz": 1.2,
+     "dy": 1.35,
+     "rot": 90,
+     "goal": "mug_rack",
+     "goal_h": 0.6,
+     "goal_w": 0.7,
+     "goal_d": 0.185
+    },
+    {
+     "model": "hanging_plant",
+     "room": "seating",
+     "dx": 2.0,
+     "dz": 1.5,
+     "dy": 2.15
+    },
+    {
+     "model": "hanging_plant",
+     "room": "seating",
+     "dx": 6.0,
+     "dz": 3.4,
+     "dy": 2.15
+    },
+    {
+     "model": "padding_roll",
+     "room": "store",
+     "dx": 1.4,
+     "dz": 1.0
+    }
+   ]
+  },
+  "train": {
+   "w": 12,
+   "d": 9,
+   "kind": "shop",
+   "style": "brick",
+   "floors": [
+    {
+     "name": "Shop",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "shopfloor",
+       "name": "Shop floor",
+       "x": 3,
+       "z": 0,
+       "w": 9,
+       "d": 5
+      },
+      {
+       "id": "counter",
+       "name": "Counter",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "workshop",
+       "name": "Workshop",
+       "x": 0,
+       "z": 5,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "layout",
+       "name": "Layout room",
+       "x": 6,
+       "z": 5,
+       "w": 6,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Grandpa's office",
+       "x": 3,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "display",
+       "name": "Display loft",
+       "x": 7,
+       "z": 0,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "store",
+       "name": "Parts store",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 6
+      },
+      {
+       "id": "kitchenette",
+       "name": "Kitchenette",
+       "x": 3,
+       "z": 4,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "loo",
+       "name": "Loo",
+       "x": 7,
+       "z": 4,
+       "w": 2,
+       "d": 5
+      },
+      {
+       "id": "boxroom",
+       "name": "Box room",
+       "x": 9,
+       "z": 4,
+       "w": 3,
+       "d": 5
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [
+    {
+     "model": "train_layout_board",
+     "room": "layout",
+     "dx": 3.0,
+     "dz": 2.0,
+     "clip": "loop"
+    },
+    {
+     "model": "display_case",
+     "room": "shopfloor",
+     "dx": 2.0,
+     "dz": 4.4
+    },
+    {
+     "model": "parts_drawer_unit",
+     "room": "workshop",
+     "dx": 3.0,
+     "dz": 3.5
+    },
+    {
+     "model": "cuckoo_clock",
+     "room": "counter",
+     "dx": 0.12,
+     "dz": 1.0,
+     "dy": 1.55,
+     "rot": 90
+    }
+   ]
+  },
+  "bakery": {
+   "w": 12,
+   "d": 10,
+   "kind": "shop",
+   "style": "brick",
+   "floors": [
+    {
+     "name": "Shop",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "shop",
+       "name": "Shop",
+       "x": 3,
+       "z": 0,
+       "w": 9,
+       "d": 4
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "office",
+       "name": "Office",
+       "x": 0,
+       "z": 5,
+       "w": 3,
+       "d": 5
+      },
+      {
+       "id": "bakery",
+       "name": "Bakery",
+       "x": 3,
+       "z": 4,
+       "w": 5,
+       "d": 6
+      },
+      {
+       "id": "prep",
+       "name": "Prep",
+       "x": 8,
+       "z": 4,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "coldstore",
+       "name": "Cold store",
+       "x": 8,
+       "z": 7,
+       "w": 2,
+       "d": 3
+      },
+      {
+       "id": "flourstore",
+       "name": "Flour store",
+       "x": 10,
+       "z": 7,
+       "w": 2,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Loft",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "studio",
+       "name": "Loft studio",
+       "x": 3,
+       "z": 0,
+       "w": 9,
+       "d": 5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 0,
+       "z": 5,
+       "w": 6,
+       "d": 5
+      },
+      {
+       "id": "loft",
+       "name": "Eaves",
+       "x": 6,
+       "z": 5,
+       "w": 6,
+       "d": 5
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [
+    {
+     "model": "skylight_frame",
+     "room": "bakery",
+     "dx": 2.5,
+     "dz": 3.0,
+     "dy": 2.88,
+     "name": "SkylightFrame",
+     "glow": true
+    },
+    {
+     "model": "radiator",
+     "room": "shop",
+     "dx": 0.55,
+     "dz": 2.0,
+     "rot": 90,
+     "name": "Radiator",
+     "goal": "radiator",
+     "goal_h": 0.5
+    },
+    {
+     "model": "flour_sack_rug",
+     "room": "flourstore",
+     "dx": 1.0,
+     "dz": 1.5
+    },
+    {
+     "model": "stair_step",
+     "room": "hall",
+     "dx": 2.6,
+     "dz": 0.8,
+     "rot": 90,
+     "goal": "stair_step",
+     "goal_h": 0.22,
+     "goal_w": 1.0,
+     "goal_d": 0.3,
+     "name": "StairStep0"
+    },
+    {
+     "model": "stair_step",
+     "room": "hall",
+     "dx": 2.6,
+     "dz": 1.1,
+     "dy": 0.22,
+     "rot": 90,
+     "goal": "stair_step",
+     "goal_h": 0.22,
+     "goal_w": 1.0,
+     "goal_d": 0.3,
+     "name": "StairStep1"
+    },
+    {
+     "model": "stair_step",
+     "room": "hall",
+     "dx": 2.6,
+     "dz": 1.4,
+     "dy": 0.44,
+     "rot": 90,
+     "goal": "stair_step",
+     "goal_h": 0.22,
+     "goal_w": 1.0,
+     "goal_d": 0.3,
+     "name": "StairStep2"
+    },
+    {
+     "model": "shelf",
+     "room": "shop",
+     "dx": 6.5,
+     "dz": 0.35,
+     "rot": 0,
+     "name": "GoalShelf",
+     "goal": "shelf",
+     "goal_h": 1.6,
+     "goal_w": 0.4,
+     "goal_d": 0.4
+    },
+    {
+     "model": "plant_tall",
+     "room": "shop",
+     "dx": 6.5,
+     "dz": 0.55,
+     "dy": 1.6,
+     "rot": 15,
+     "name": "GoalFern",
+     "goal": "plant_fern",
+     "goal_model": "plant_tall",
+     "goal_h": 1.14,
+     "goal_w": 0.4,
+     "goal_d": 0.4
+    }
+   ]
+  },
+  "park": {
+   "w": 9,
+   "d": 7,
+   "kind": "shop",
+   "style": "timber",
+   "floors": [
+    {
+     "name": "Shed",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Porch",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "workbench",
+       "name": "Workbench",
+       "x": 3,
+       "z": 0,
+       "w": 3,
+       "d": 4
+      },
+      {
+       "id": "store",
+       "name": "Tool store",
+       "x": 6,
+       "z": 0,
+       "w": 3,
+       "d": 4
+      },
+      {
+       "id": "kiosk",
+       "name": "Kiosk",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 4
+      },
+      {
+       "id": "boathouse",
+       "name": "Boathouse",
+       "x": 3,
+       "z": 4,
+       "w": 6,
+       "d": 3
+      }
+     ]
+    }
+   ],
+   "fixtures": []
+  },
+  "studio": {
+   "w": 10,
+   "d": 8,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Studio",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "reception",
+       "name": "Reception",
+       "x": 3,
+       "z": 0,
+       "w": 7,
+       "d": 3
+      },
+      {
+       "id": "darkroom",
+       "name": "Darkroom",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "kitchenette",
+       "name": "Kitchenette",
+       "x": 0,
+       "z": 5,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "studio",
+       "name": "Studio",
+       "x": 3,
+       "z": 3,
+       "w": 7,
+       "d": 5
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Office",
+       "x": 3,
+       "z": 0,
+       "w": 7,
+       "d": 4
+      },
+      {
+       "id": "props",
+       "name": "Props store",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 5
+      },
+      {
+       "id": "store",
+       "name": "Archive",
+       "x": 3,
+       "z": 4,
+       "w": 7,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [
+    {
+     "model": "hanging_plant",
+     "room": "reception",
+     "dx": 2.2,
+     "dz": 1.5,
+     "dy": 2.15
+    },
+    {
+     "model": "padding_roll",
+     "room": "store",
+     "dx": 5.8,
+     "dz": 1.2
+    },
+    {
+     "model": "folding_table",
+     "room": "studio",
+     "dx": 5.6,
+     "dz": 2.6,
+     "rot": 90
+    }
+   ]
+  },
+  "flat": {
+   "w": 7,
+   "d": 8,
+   "kind": "home",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Downstairs",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Hall",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "lounge",
+       "name": "Lounge",
+       "x": 3,
+       "z": 0,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 5
+      },
+      {
+       "id": "dining",
+       "name": "Dining",
+       "x": 3,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "bedroom",
+       "name": "Bedroom",
+       "x": 3,
+       "z": 0,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 5
+      },
+      {
+       "id": "study",
+       "name": "Study",
+       "x": 3,
+       "z": 5,
+       "w": 4,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [
+    {
+     "model": "radiator",
+     "room": "lounge",
+     "dx": 0.55,
+     "dz": 2.5,
+     "rot": 90,
+     "name": "FlatRadiator"
+    },
+    {
+     "model": "wall_clock",
+     "room": "kitchen",
+     "dx": 0.12,
+     "dz": 2.4,
+     "dy": 1.7,
+     "rot": 90
+    }
+   ]
+  },
+  "dentist": {
+   "w": 11,
+   "d": 9,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Surgery",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "reception",
+       "name": "Reception",
+       "x": 3,
+       "z": 0,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Records",
+       "x": 8,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "seating",
+       "name": "Waiting room",
+       "x": 3,
+       "z": 3,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "store",
+       "name": "Supplies",
+       "x": 8,
+       "z": 3,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "studio",
+       "name": "Surgery one",
+       "x": 0,
+       "z": 6,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "studio2",
+       "name": "Surgery two",
+       "x": 4,
+       "z": 6,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "kitchenette",
+       "name": "Staff kitchen",
+       "x": 8,
+       "z": 6,
+       "w": 3,
+       "d": 3
+      }
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "architect": {
+   "w": 12,
+   "d": 9,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Studio",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "reception",
+       "name": "Reception",
+       "x": 3,
+       "z": 0,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Partner's office",
+       "x": 8,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "studio",
+       "name": "Drawing studio",
+       "x": 0,
+       "z": 3,
+       "w": 8,
+       "d": 6
+      },
+      {
+       "id": "display",
+       "name": "Model room",
+       "x": 8,
+       "z": 3,
+       "w": 4,
+       "d": 6
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Meeting room",
+       "x": 3,
+       "z": 0,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "store",
+       "name": "Plan chest",
+       "x": 8,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "studio",
+       "name": "Studio two",
+       "x": 0,
+       "z": 3,
+       "w": 6,
+       "d": 6
+      },
+      {
+       "id": "kitchenette",
+       "name": "Kitchenette",
+       "x": 6,
+       "z": 3,
+       "w": 3,
+       "d": 6
+      },
+      {
+       "id": "loo",
+       "name": "Loo",
+       "x": 9,
+       "z": 3,
+       "w": 3,
+       "d": 6
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "library": {
+   "w": 13,
+   "d": 10,
+   "kind": "shop",
+   "style": "brick",
+   "floors": [
+    {
+     "name": "Library",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "reception",
+       "name": "Issue desk",
+       "x": 3,
+       "z": 0,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "seating",
+       "name": "Reading room",
+       "x": 9,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "display",
+       "name": "Fiction",
+       "x": 0,
+       "z": 3,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "display2",
+       "name": "Reference",
+       "x": 5,
+       "z": 3,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "display3",
+       "name": "Children's",
+       "x": 9,
+       "z": 3,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "office",
+       "name": "Librarian's office",
+       "x": 0,
+       "z": 7,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "store",
+       "name": "Stack room",
+       "x": 4,
+       "z": 7,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 9,
+       "z": 7,
+       "w": 4,
+       "d": 3
+      }
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "record": {
+   "w": 9,
+   "d": 8,
+   "kind": "shop",
+   "style": "brick",
+   "floors": [
+    {
+     "name": "Shop",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "shopfloor",
+       "name": "Racks",
+       "x": 3,
+       "z": 0,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "counter",
+       "name": "Counter",
+       "x": 0,
+       "z": 3,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "seating",
+       "name": "Listening corner",
+       "x": 3,
+       "z": 3,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "store",
+       "name": "Stock",
+       "x": 0,
+       "z": 6,
+       "w": 4,
+       "d": 2
+      },
+      {
+       "id": "office",
+       "name": "Back office",
+       "x": 4,
+       "z": 6,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "loo",
+       "name": "Loo",
+       "x": 7,
+       "z": 6,
+       "w": 2,
+       "d": 2
+      }
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "florist": {
+   "w": 10,
+   "d": 8,
+   "kind": "shop",
+   "style": "timber",
+   "floors": [
+    {
+     "name": "Greenhouse",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Entrance",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "shopfloor",
+       "name": "Shop",
+       "x": 3,
+       "z": 0,
+       "w": 7,
+       "d": 3
+      },
+      {
+       "id": "workbench",
+       "name": "Potting bench",
+       "x": 0,
+       "z": 3,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "display",
+       "name": "Greenhouse",
+       "x": 4,
+       "z": 3,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "coldstore",
+       "name": "Cold room",
+       "x": 0,
+       "z": 6,
+       "w": 3,
+       "d": 2
+      },
+      {
+       "id": "store",
+       "name": "Pots",
+       "x": 3,
+       "z": 6,
+       "w": 4,
+       "d": 2
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 7,
+       "z": 6,
+       "w": 3,
+       "d": 2
+      }
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "theatre": {
+   "w": 13,
+   "d": 10,
+   "kind": "shop",
+   "style": "brick",
+   "floors": [
+    {
+     "name": "Backstage",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Stage door",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "workshop",
+       "name": "Prop workshop",
+       "x": 3,
+       "z": 0,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "store",
+       "name": "Costume store",
+       "x": 9,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "display",
+       "name": "Prop store",
+       "x": 0,
+       "z": 3,
+       "w": 7,
+       "d": 4
+      },
+      {
+       "id": "studio",
+       "name": "Rehearsal room",
+       "x": 7,
+       "z": 3,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "office",
+       "name": "Director's office",
+       "x": 0,
+       "z": 7,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "staff",
+       "name": "Green room",
+       "x": 4,
+       "z": 7,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "washroom",
+       "name": "Dressing room",
+       "x": 9,
+       "z": 7,
+       "w": 4,
+       "d": 3
+      }
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "broker": {
+   "w": 12,
+   "d": 9,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Ground",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Lobby",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "reception",
+       "name": "Reception",
+       "x": 3,
+       "z": 0,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Broker's office",
+       "x": 8,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "office2",
+       "name": "Deal room",
+       "x": 0,
+       "z": 3,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "office3",
+       "name": "Junior desks",
+       "x": 4,
+       "z": 3,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "kitchenette",
+       "name": "Kitchen",
+       "x": 8,
+       "z": 3,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "seating",
+       "name": "Client lounge",
+       "x": 0,
+       "z": 6,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "store",
+       "name": "Files",
+       "x": 5,
+       "z": 6,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 9,
+       "z": 6,
+       "w": 3,
+       "d": 3
+      }
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "lodge": {
+   "w": 13,
+   "d": 10,
+   "kind": "home",
+   "style": "timber",
+   "floors": [
+    {
+     "name": "Lodge",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Boot room",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "lounge",
+       "name": "Great room",
+       "x": 3,
+       "z": 0,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "x": 9,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "dining",
+       "name": "Dining hall",
+       "x": 0,
+       "z": 3,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "study",
+       "name": "Snug",
+       "x": 6,
+       "z": 3,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "utility",
+       "name": "Drying room",
+       "x": 10,
+       "z": 3,
+       "w": 3,
+       "d": 4
+      },
+      {
+       "id": "bedroom",
+       "name": "Bunk room",
+       "x": 0,
+       "z": 7,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 5,
+       "z": 7,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "shed",
+       "name": "Wood store",
+       "x": 9,
+       "z": 7,
+       "w": 4,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    },
+    {
+     "name": "Upstairs",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 3
+      },
+      {
+       "id": "bedroom",
+       "name": "Owner's room",
+       "x": 3,
+       "z": 0,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "bathroom",
+       "name": "Bathroom",
+       "x": 8,
+       "z": 0,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "bedroom2",
+       "name": "Guest room",
+       "x": 0,
+       "z": 3,
+       "w": 7,
+       "d": 7
+      },
+      {
+       "id": "loft",
+       "name": "Eaves",
+       "x": 7,
+       "z": 3,
+       "w": 6,
+       "d": 7
+      }
+     ],
+     "stairs": [
+      1.5,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "warehouse": {
+   "w": 14,
+   "d": 10,
+   "kind": "shop",
+   "style": "brick",
+   "floors": [
+    {
+     "name": "Loading floor",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Goods in",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 4
+      },
+      {
+       "id": "shopfloor",
+       "name": "Open floor",
+       "x": 3,
+       "z": 0,
+       "w": 7,
+       "d": 4
+      },
+      {
+       "id": "workshop",
+       "name": "Workshop",
+       "x": 10,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "store",
+       "name": "Racking",
+       "x": 0,
+       "z": 4,
+       "w": 5,
+       "d": 6
+      },
+      {
+       "id": "office",
+       "name": "Foreman's office",
+       "x": 5,
+       "z": 4,
+       "w": 5,
+       "d": 6
+      },
+      {
+       "id": "kitchenette",
+       "name": "Mess room",
+       "x": 10,
+       "z": 4,
+       "w": 4,
+       "d": 6
+      }
+     ],
+     "stairs": [
+      1.5,
+      2.0
+     ]
+    },
+    {
+     "name": "Loft",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 3,
+       "d": 5
+      },
+      {
+       "id": "office",
+       "name": "The loft office",
+       "x": 3,
+       "z": 0,
+       "w": 7,
+       "d": 5
+      },
+      {
+       "id": "staff",
+       "name": "Crew room",
+       "x": 10,
+       "z": 0,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "seating",
+       "name": "Lounge",
+       "x": 0,
+       "z": 5,
+       "w": 6,
+       "d": 5
+      },
+      {
+       "id": "display",
+       "name": "Showroom",
+       "x": 6,
+       "z": 5,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "loo",
+       "name": "Washroom",
+       "x": 10,
+       "z": 5,
+       "w": 4,
+       "d": 5
+      }
+     ],
+     "stairs": [
+      1.5,
+      2.0
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "glass": {
+   "w": 16,
+   "d": 12,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Suite",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Lobby",
+       "x": 0,
+       "z": 0,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "reception",
+       "name": "Front desk",
+       "x": 4,
+       "z": 0,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "seating",
+       "name": "Lounge",
+       "x": 10,
+       "z": 0,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "office",
+       "name": "Pod one",
+       "x": 0,
+       "z": 3,
+       "w": 5,
+       "d": 5
+      },
+      {
+       "id": "office2",
+       "name": "Pod two",
+       "x": 5,
+       "z": 3,
+       "w": 5,
+       "d": 5
+      },
+      {
+       "id": "office3",
+       "name": "Pod three",
+       "x": 10,
+       "z": 3,
+       "w": 6,
+       "d": 5
+      },
+      {
+       "id": "kitchenette",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 8,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "washroom",
+       "name": "Washroom",
+       "x": 5,
+       "z": 8,
+       "w": 3,
+       "d": 4
+      },
+      {
+       "id": "store",
+       "name": "Store",
+       "x": 8,
+       "z": 8,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "studio",
+       "name": "Phone booth",
+       "x": 12,
+       "z": 8,
+       "w": 4,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      2.0,
+      1.6
+     ]
+    },
+    {
+     "name": "Skyline floor",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "office",
+       "name": "Boardroom",
+       "x": 4,
+       "z": 0,
+       "w": 8,
+       "d": 4
+      },
+      {
+       "id": "office2",
+       "name": "Corner pod",
+       "x": 12,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "seating",
+       "name": "Terrace lounge",
+       "x": 0,
+       "z": 4,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "office3",
+       "name": "Quiet room",
+       "x": 6,
+       "z": 4,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "staff",
+       "name": "Helper's desk",
+       "x": 11,
+       "z": 4,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "display",
+       "name": "Gallery wall",
+       "x": 0,
+       "z": 8,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "loo",
+       "name": "Washroom",
+       "x": 6,
+       "z": 8,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "kitchenette",
+       "name": "Coffee bar",
+       "x": 10,
+       "z": 8,
+       "w": 6,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      2.0,
+      1.6
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  },
+  "corner": {
+   "w": 18,
+   "d": 14,
+   "kind": "shop",
+   "style": "render",
+   "floors": [
+    {
+     "name": "Ground",
+     "rooms": [
+      {
+       "id": "hall",
+       "name": "Atrium",
+       "x": 0,
+       "z": 0,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "reception",
+       "name": "Reception",
+       "x": 4,
+       "z": 0,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "seating",
+       "name": "Waiting lounge",
+       "x": 10,
+       "z": 0,
+       "w": 8,
+       "d": 4
+      },
+      {
+       "id": "office",
+       "name": "Dispatch",
+       "x": 0,
+       "z": 4,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "office2",
+       "name": "Accounts",
+       "x": 4,
+       "z": 4,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "office3",
+       "name": "Bookings",
+       "x": 9,
+       "z": 4,
+       "w": 5,
+       "d": 4
+      },
+      {
+       "id": "store",
+       "name": "Archive",
+       "x": 14,
+       "z": 4,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "kitchenette",
+       "name": "Kitchen",
+       "x": 0,
+       "z": 8,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "staff",
+       "name": "Crew room",
+       "x": 5,
+       "z": 8,
+       "w": 5,
+       "d": 3
+      },
+      {
+       "id": "washroom",
+       "name": "Washrooms",
+       "x": 10,
+       "z": 8,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "display",
+       "name": "Trophy wall",
+       "x": 14,
+       "z": 8,
+       "w": 4,
+       "d": 3
+      },
+      {
+       "id": "workshop",
+       "name": "Mail room",
+       "x": 0,
+       "z": 11,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "store2",
+       "name": "Stores",
+       "x": 6,
+       "z": 11,
+       "w": 6,
+       "d": 3
+      },
+      {
+       "id": "office4",
+       "name": "Server room",
+       "x": 12,
+       "z": 11,
+       "w": 6,
+       "d": 3
+      }
+     ],
+     "stairs": [
+      2.0,
+      2.0
+     ]
+    },
+    {
+     "name": "Top floor",
+     "rooms": [
+      {
+       "id": "landing",
+       "name": "Landing",
+       "x": 0,
+       "z": 0,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "office",
+       "name": "The corner office",
+       "x": 4,
+       "z": 0,
+       "w": 8,
+       "d": 5
+      },
+      {
+       "id": "seating",
+       "name": "Sunset lounge",
+       "x": 12,
+       "z": 0,
+       "w": 6,
+       "d": 5
+      },
+      {
+       "id": "office2",
+       "name": "Boardroom",
+       "x": 0,
+       "z": 5,
+       "w": 6,
+       "d": 5
+      },
+      {
+       "id": "office3",
+       "name": "Priya's desk",
+       "x": 6,
+       "z": 5,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "office4",
+       "name": "Marge's desk",
+       "x": 10,
+       "z": 5,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "studio",
+       "name": "Map room",
+       "x": 14,
+       "z": 5,
+       "w": 4,
+       "d": 5
+      },
+      {
+       "id": "kitchenette",
+       "name": "Coffee bar",
+       "x": 0,
+       "z": 10,
+       "w": 6,
+       "d": 4
+      },
+      {
+       "id": "loo",
+       "name": "Washroom",
+       "x": 6,
+       "z": 10,
+       "w": 4,
+       "d": 4
+      },
+      {
+       "id": "display",
+       "name": "Gallery",
+       "x": 10,
+       "z": 10,
+       "w": 8,
+       "d": 4
+      }
+     ],
+     "stairs": [
+      2.0,
+      2.0
+     ]
+    }
+   ],
+   "fixtures": [],
+   "authored": "gen_levels"
+  }
+ }
+}

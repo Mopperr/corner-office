@@ -1,0 +1,102 @@
+[
+ {
+  "id": "job_catcafe",
+  "client": "Priya Okafor",
+  "title": "Whisker & Bean Cafe",
+  "tier": 1,
+  "job_number": 1,
+  "brief": "18 items. Pad the mugs. The espresso machine goes on the bottom. Check every box before you seal it, because Biscuit is in one.",
+  "mentor_note": "Strap the espresso machine down first. Cats ride wherever they like.",
+  "base_pay": 120
+ },
+ {
+  "id": "job_clocks",
+  "client": "Delbert Finch",
+  "title": "The Clock Flat",
+  "tier": 1,
+  "job_number": 2,
+  "brief": "Mr. Finch is downsizing. 41 clocks, all fragile, all named. Keep them upright and go easy on the speed bumps.",
+  "mentor_note": "Treat clocks like eggs. Log your rest stops so they get to rest too.",
+  "base_pay": 130
+ },
+ {
+  "id": "job_juno",
+  "client": "Juno Park",
+  "title": "Amps and Ferns",
+  "tier": 1,
+  "job_number": 3,
+  "brief": "New flat. Heavy amps on the bottom, plants on top. The drums are already in pieces, on purpose. Juno will be late.",
+  "mentor_note": "A plant on top of an amp rides bumpy. Pad it.",
+  "base_pay": 110
+ },
+ {
+  "id": "job_twins",
+  "client": "The Pemberton Twins",
+  "title": "Flower Shop Merger",
+  "tier": 2,
+  "job_number": 4,
+  "brief": "Two flower shops are becoming one. Label every box ROSA or RAY, and don't pick a side.",
+  "mentor_note": "Neutral as a weigh station. That's the job.",
+  "base_pay": 160
+ },
+ {
+  "id": "job_popup",
+  "client": "Priya Okafor",
+  "title": "Pop-Up Coffee Cart",
+  "tier": 2,
+  "job_number": 5,
+  "brief": "Priya is testing a weekend coffee cart at the park. It's a small load. Biscuit insists on coming.",
+  "mentor_note": "Short haul, easy money. Watch out for the ducks.",
+  "base_pay": 120
+ },
+ {
+  "id": "job_hobby",
+  "client": "Delbert Finch",
+  "title": "Mr. Finch Takes Up Pottery",
+  "tier": 2,
+  "job_number": 6,
+  "brief": "Mr. Finch found a new hobby. Move his pottery wheel and 30 wobbly bowls to the community studio.",
+  "mentor_note": "Wobbly bowls, wobbly road. Take the long way.",
+  "base_pay": 140
+ },
+ {
+  "id": "job_practice",
+  "client": "Juno Park",
+  "title": "The Laundromats' Practice Space",
+  "tier": 2,
+  "job_number": 7,
+  "brief": "The band rented a room above a laundromat. You're moving amps up one flight of stairs. Juno brought snacks this time.",
+  "mentor_note": "Heavy amps go in first. Snacks go in last.",
+  "base_pay": 150
+ },
+ {
+  "id": "job_reunion",
+  "client": "The Pemberton Twins",
+  "title": "One Shop, Two Names",
+  "tier": 3,
+  "job_number": 8,
+  "brief": "The twins finally agreed on a sign: 'Pemberton & Pemberton.' Move the joint shop to a bigger corner lot.",
+  "mentor_note": "Look at that. They made up. I logged it.",
+  "base_pay": 170
+ },
+ {
+  "id": "job_second",
+  "client": "Priya Okafor",
+  "title": "Whisker & Bean Two",
+  "tier": 3,
+  "job_number": 9,
+  "brief": "Priya is opening a second cafe. Twice the mugs, two cat trees, and Biscuit is hiding in a box again.",
+  "mentor_note": "Same as the first run. Just more of it.",
+  "base_pay": 180
+ },
+ {
+  "id": "job_finale",
+  "client": "Delbert Finch",
+  "title": "Moving In With Beatrice",
+  "tier": 3,
+  "job_number": 10,
+  "brief": "Mr. Finch is moving in with his pottery partner, Beatrice. Bring all 41 clocks and her 12 cuckoos. Take your time.",
+  "mentor_note": "Best load I ever dispatched. Drive it gentle, rookie.",
+  "base_pay": 200
+ }
+]

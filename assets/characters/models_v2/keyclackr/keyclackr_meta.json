@@ -1,0 +1,32 @@
+{
+ "id": "keyclackr",
+ "name": "Kit",
+ "glb": "keyclackr.glb",
+ "height_m": 1.74,
+ "seat_height_m": 0.493,
+ "hip_height_m": 0.887,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Kit_BackpackKeyboard",
+   "bone": "Chest"
+  }
+ ],
+ "tris": 77313
+}

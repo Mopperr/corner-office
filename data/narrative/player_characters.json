@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "characters": [
+    {
+      "id": "pc_dana",
+      "name": "Dana Reyes",
+      "pitch": "Laid off on a Tuesday. Opened a business on a Wednesday.",
+      "backstory": "Dana spent nine years in accounts at Grayline Paper Co. until the whole floor got 'restructured.' She took her stapler, her mug, and a box of sticky notes home. Her garage is about to become headquarters.",
+      "starting_space": {
+        "id": "office_garage_startup",
+        "name": "Garage Startup",
+        "existing": true,
+        "note": "The standard starter office from the level specs."
+      },
+      "starting_money": 120,
+      "starting_items": [
+        {
+          "id": "stapler_red"
+        },
+        {
+          "id": "mug_worlds_okayest"
+        },
+        {
+          "id": "sticky_note_stack",
+          "new": true,
+          "name": "Sticky Note Stack",
+          "type": "decor",
+          "flavor": "Nine years of reminders. Most say 'call back.'"
+        }
+      ],
+      "perk": {
+        "id": "perk_spreadsheet_brain",
+        "name": "Spreadsheet Brain",
+        "desc": "The Market chart shows a soft dotted line for yesterday's price. Just a handy hint."
+      },
+      "welcome_email": {
+        "id": "welcome_dana",
+        "from": "Marge \"Mile Marker\" Holloway",
+        "subject": "Welcome to the garage, boss",
+        "body": "Hey Dana,\n\nHeard Grayline let you go. Their loss. My first office was a garage too. Smelled like diesel and big plans.\n\nUnpack first. The whiteboard's yours to fill.\n\nKeep the shiny side up,\nMile Marker",
+        "trigger": "game_start"
+      },
+      "phase": "slice"
+    },
+    {
+      "id": "pc_hank",
+      "name": "Hank \"Gravel\" Dubois",
+      "pitch": "Thirty years of highway. Now he'd like a desk that doesn't move.",
+      "backstory": "Hank ran flatbed with Marge back in the CB days. He's off the road now, with a rented storage unit full of road souvenirs and no idea what to do next. Marge has some ideas.",
+      "starting_space": {
+        "id": "office_storage_unit",
+        "name": "Unit 14B Storage",
+        "existing": false,
+        "note": "NEW. Small 3x6 m storage unit with a roll-up door, one bare bulb, and a camp chair. Cozy once the string lights go up."
+      },
+      "starting_money": 100,
+      "starting_items": [
+        {
+          "id": "cb_radio",
+          "new": true,
+          "name": "Old CB Radio",
+          "type": "decor",
+          "flavor": "Mostly static. Sometimes a trucker reading the weather."
+        },
+        {
+          "id": "thermos_dented",
+          "new": true,
+          "name": "Dented Thermos",
+          "type": "decor",
+          "flavor": "Kept coffee hot across 41 states."
+        },
+        {
+          "id": "string_lights"
+        }
+      ],
+      "perk": {
+        "id": "perk_road_legs",
+        "name": "Road Legs",
+        "desc": "Bumps on the drive shake the boxes a little less, about 1 point each."
+      },
+      "welcome_email": {
+        "id": "welcome_hank",
+        "from": "Marge \"Mile Marker\" Holloway",
+        "subject": "Breaker breaker, Gravel",
+        "body": "Gravel, you old so-and-so.\n\nA storage unit, huh? I've parked in worse. Hang those lights and it's a palace.\n\nSpare truck's yours whenever. You still know how to back up, I hope.\n\n10-4, good buddy,\nMile Marker",
+        "trigger": "game_start"
+      },
+      "phase": "1.0"
+    },
+    {
+      "id": "pc_milo",
+      "name": "Milo Tran",
+      "pitch": "Fresh diploma. Dorm room. Huge ambitions, tiny desk.",
+      "backstory": "Milo graduated in business last spring and still has one semester left on the dorm lease. His roommate gave him the corner by the window. It has a mini fridge and plenty of ambition.",
+      "starting_space": {
+        "id": "office_dorm_corner",
+        "name": "Dorm Corner",
+        "existing": false,
+        "note": "NEW. 3x3 m corner of a dorm room with a twin bed, window, and mini fridge. Roommate's half is visible but off-limits."
+      },
+      "starting_money": 90,
+      "starting_items": [
+        {
+          "id": "beanbag_mustard"
+        },
+        {
+          "id": "poster_motivational"
+        },
+        {
+          "id": "ramen_kettle",
+          "new": true,
+          "name": "Dorm Kettle",
+          "type": "decor",
+          "flavor": "Makes ramen, tea, and late-night decisions."
+        }
+      ],
+      "perk": {
+        "id": "perk_campus_buzz",
+        "name": "Campus Buzz",
+        "desc": "Market regulars send one extra friendly offer each in-game day."
+      },
+      "welcome_email": {
+        "id": "welcome_milo",
+        "from": "Marge \"Mile Marker\" Holloway",
+        "subject": "Corner of a corner. I like it.",
+        "body": "Hi Milo,\n\nStarting from a dorm corner? Good. Small loads teach you to pack tight.\n\nEat something that isn't ramen. Then check the Market.\n\nShiny side up,\nMile Marker",
+        "trigger": "game_start"
+      },
+      "phase": "1.0"
+    },
+    {
+      "id": "pc_bea",
+      "name": "Bea Lindqvist",
+      "pitch": "Knits, glues, and sells it all from the kitchen table.",
+      "backstory": "Bea makes felt cacti and tiny knitted desk buddies and sells them online. Orders keep growing, and so does the yarn pile on the kitchen table. Her cat thinks it's all for him.",
+      "starting_space": {
+        "id": "office_kitchen_table",
+        "name": "Kitchen Table HQ",
+        "existing": false,
+        "note": "NEW. Cozy 4x4 m kitchen nook with a round table, a window over the sink, and yarn baskets. Good early shop-front seed."
+      },
+      "starting_money": 110,
+      "starting_items": [
+        {
+          "id": "plant_cactus"
+        },
+        {
+          "id": "kettle"
+        },
+        {
+          "id": "yarn_basket",
+          "new": true,
+          "name": "Yarn Basket",
+          "type": "decor",
+          "flavor": "Every color. One mystery knot."
+        }
+      ],
+      "perk": {
+        "id": "perk_handmade_touch",
+        "name": "Handmade Touch",
+        "desc": "Repair taps on damaged items work in one tap instead of two."
+      },
+      "welcome_email": {
+        "id": "welcome_bea",
+        "from": "Marge \"Mile Marker\" Holloway",
+        "subject": "Kitchen tables count",
+        "body": "Hi Bea,\n\nMy first logbook was written at a kitchen table. Coffee rings and all.\n\nYour felt cacti would sell great at a truck stop. I'd buy two.\n\n10-4,\nMile Marker",
+        "trigger": "game_start"
+      },
+      "phase": "1.0"
+    },
+    {
+      "id": "pc_sol",
+      "name": "Sol Achebe",
+      "pitch": "Freelancer, laptop, and a standing order for one more refill.",
+      "backstory": "Sol designs logos from the corner table at Whisker & Bean. Priya never charges for refills. Biscuit sometimes sleeps on the keyboard, which Sol counts as feedback.",
+      "starting_space": {
+        "id": "office_cafe_corner",
+        "name": "Cafe Corner",
+        "existing": false,
+        "note": "NEW. One corner table inside Whisker & Bean (about 3x3 m), with a window, a wall shelf, and ambient cafe regulars. Could reuse the Cat Cafe set dressing and pink palette."
+      },
+      "starting_money": 130,
+      "starting_items": [
+        {
+          "id": "lamp_moody"
+        },
+        {
+          "id": "plant_fern"
+        },
+        {
+          "id": "cat_bed"
+        }
+      ],
+      "perk": {
+        "id": "perk_regular",
+        "name": "Cafe Regular",
+        "desc": "Priya's Cat Cafe job is offered from the start, and Biscuit always leaves a pawprint photo."
+      },
+      "welcome_email": {
+        "id": "welcome_sol",
+        "from": "Marge \"Mile Marker\" Holloway",
+        "subject": "Priya says you're good people",
+        "body": "Hi Sol,\n\nPriya says you've held that corner table for two years. That's a long haul.\n\nWhen you want a bigger desk, I've got a truck. Biscuit rides free.\n\nOver and out,\nMile Marker",
+        "trigger": "game_start"
+      },
+      "phase": "post_slice"
+    }
+  ]
+}

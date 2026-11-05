@@ -1,0 +1,67 @@
+{
+ "_about": "The office staff you can hire from the Books page, and Marge's tips. An accountant is paid a wage every night; they find savings on the day's takings (skill, a share of job pay and shop takings). Pay them under what they ask and some of them help themselves: the chance each night is how far under you pay, times their greed. The jar just shows 'sundries' until you audit.",
+ "accountants": [
+  {
+   "id": "priya",
+   "name": "Priya Nand",
+   "ask": 45,
+   "skill": 0.06,
+   "greed": 0.15,
+   "raise_every": 0,
+   "pitch": "Twelve years at a firm that moved pianos. Tidy, quiet, hates a receipt out of order.",
+   "line_hire": "I'll want the receipts in a shoebox by Friday. The actual shoebox is fine.",
+   "line_happy": "Books balance. Kettle's on.",
+   "line_short": "The wage is a little light for the hours, but the work is good.",
+   "line_caught": "I'd never. Check again. Please check again."
+  },
+  {
+   "id": "len",
+   "name": "Len Ocasio",
+   "ask": 25,
+   "skill": 0.03,
+   "greed": 0.9,
+   "raise_every": 0,
+   "pitch": "Cheap, cheerful, 'between firms'. Did the books for a scrapyard. Nobody says which one.",
+   "line_hire": "Cash is fine. Cash is always fine.",
+   "line_happy": "Lovely jar you've got. Lovely.",
+   "line_short": "Bit light, that. Still, we all do what we can.",
+   "line_caught": "Sundries, I said. SUNDRIES. Who audits sundries?"
+  },
+  {
+   "id": "ferdy",
+   "name": "Ferdinand Blum",
+   "ask": 60,
+   "skill": 0.09,
+   "greed": 0.5,
+   "raise_every": 5,
+   "pitch": "Very good. Knows it. Expects a raise every five days and sulks when it doesn't come.",
+   "line_hire": "I'll find you money you didn't know you had. We'll discuss my fee again on Friday.",
+   "line_happy": "Found another forty in the fuel receipts. You're welcome.",
+   "line_short": "I did mention Friday. I did mention it twice.",
+   "line_caught": "A rounding error. Several. In my favour, yes, but rounding."
+  }
+ ],
+ "audit_cost": 30,
+ "tips": [
+  "Heavy on the bottom, fragile in padding, and the rest sorts itself.",
+  "Buy what's cheap today and sleep on it. Prices move overnight.",
+  "The alley is quicker. The alley is bumpier. Pick one.",
+  "A plant and a lamp raise the vibe more than a second beanbag.",
+  "Goals pay cash and Rep. The clipboard keeps the list.",
+  "If a box meows, open it before the drive.",
+  "Eighteen kilos on top of a box is the line. Over it, something inside gives.",
+  "Fill the truck from the cab wall out and the floor up. The pads only light when they'll take a box.",
+  "Three breaks and the owner comes over. Two and they're already counting.",
+  "Pay the accountant what they ask. Sundries is not a real expense.",
+  "Rent every five days. Keep that much in the jar and the shop never shuts.",
+  "A wrapped sofa takes a floor pad and nothing stacks on it. Load it first.",
+  "The right room pays three dollars a piece. The toaster does not live in the bathroom.",
+  "Serve by hand before the till rings them up and the whole tip is yours.",
+  "Honk at someone on the pavement. Five waves a drive, two dollars each.",
+  "Back into the bay, don't nose in. The beeps mean it's counting.",
+  "Forgive one owner and the next two take a breath before they shove.",
+  "The Books page shows where the money went. Read it before you blame the truck.",
+  "Stack the carried boxes and the floor clears. Open from the top.",
+  "Audit the books the day the jar feels light. It costs thirty. Being robbed costs more."
+ ]
+}

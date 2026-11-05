@@ -1,0 +1,27 @@
+{
+ "id": "dana",
+ "name": "Dana",
+ "glb": "dana_matched.glb",
+ "height_m": 1.7,
+ "seat_height_m": 0.474,
+ "hip_height_m": 0.85,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [],
+ "tris": 48589
+}

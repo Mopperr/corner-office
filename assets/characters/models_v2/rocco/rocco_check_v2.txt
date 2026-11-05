@@ -1,0 +1,24 @@
+v1: customers3d/rocco.glb
+v2: customers3d/v2/rocco/rocco.glb
+v2 loads OK: meshes=['Icosphere', 'Rocco_Body', 'Rocco_Satchel'] tris=86192 (v1 meshes=['Icosphere', 'Rocco_Body', 'Rocco_Satchel'] tris=68746)
+[PASS] bone count 23 vs 23
+[PASS] bone names identical []
+[PASS] hierarchy identical 
+[PASS] rest pose identical max diff 0.00e+00 m
+[PASS] clip names identical ['idle_Rocco_Skeleton', 'sit_Rocco_Skeleton', 'walk_Rocco_Skeleton'] vs ['idle_Rocco_Skeleton', 'sit_Rocco_Skeleton', 'walk_Rocco_Skeleton']
+[PASS] clip idle_Rocco_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip idle_Rocco_Skeleton channel set 230/230 channels
+[PASS] clip idle_Rocco_Skeleton key count + frame times 
+[PASS] clip idle_Rocco_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip idle_Rocco_Skeleton arm/hand key values changed on: ['LeftUpperArm', 'RightUpperArm'] (max diff 0.060)
+[PASS] clip sit_Rocco_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip sit_Rocco_Skeleton channel set 230/230 channels
+[PASS] clip sit_Rocco_Skeleton key count + frame times 
+[PASS] clip sit_Rocco_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip sit_Rocco_Skeleton arm/hand key values changed on: ['LeftUpperArm', 'RightUpperArm'] (max diff 0.059)
+[PASS] clip walk_Rocco_Skeleton frame range (0.0, 25.6) vs (0.0, 25.6)
+[PASS] clip walk_Rocco_Skeleton channel set 230/230 channels
+[PASS] clip walk_Rocco_Skeleton key count + frame times 
+[PASS] clip walk_Rocco_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip walk_Rocco_Skeleton arm/hand key values changed on: ['LeftUpperArm', 'RightUpperArm'] (max diff 0.060)
+RESULT: ALL PASS

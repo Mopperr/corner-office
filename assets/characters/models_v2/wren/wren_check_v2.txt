@@ -1,0 +1,24 @@
+v1: customers3d/wren.glb
+v2: customers3d/v2/wren/wren.glb
+v2 loads OK: meshes=['Icosphere', 'Wren_Body', 'Wren_Notebook'] tris=87385 (v1 meshes=['Icosphere', 'Wren_Body', 'Wren_Notebook'] tris=54877)
+[PASS] bone count 23 vs 23
+[PASS] bone names identical []
+[PASS] hierarchy identical 
+[PASS] rest pose identical max diff 0.00e+00 m
+[PASS] clip names identical ['idle_Wren_Skeleton', 'sit_Wren_Skeleton', 'walk_Wren_Skeleton'] vs ['idle_Wren_Skeleton', 'sit_Wren_Skeleton', 'walk_Wren_Skeleton']
+[PASS] clip idle_Wren_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip idle_Wren_Skeleton channel set 230/230 channels
+[PASS] clip idle_Wren_Skeleton key count + frame times 
+[PASS] clip idle_Wren_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip idle_Wren_Skeleton arm/hand key values changed on: ['LeftUpperArm', 'RightLowerArm', 'RightUpperArm'] (max diff 0.146)
+[PASS] clip sit_Wren_Skeleton frame range (0.0, 57.6) vs (0.0, 57.6)
+[PASS] clip sit_Wren_Skeleton channel set 230/230 channels
+[PASS] clip sit_Wren_Skeleton key count + frame times 
+[PASS] clip sit_Wren_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip sit_Wren_Skeleton arm/hand key values changed on: ['LeftUpperArm', 'RightLowerArm', 'RightUpperArm'] (max diff 0.108)
+[PASS] clip walk_Wren_Skeleton frame range (0.0, 25.6) vs (0.0, 25.6)
+[PASS] clip walk_Wren_Skeleton channel set 230/230 channels
+[PASS] clip walk_Wren_Skeleton key count + frame times 
+[PASS] clip walk_Wren_Skeleton non-arm bone keys identical max diff 0.00e+00
+[INFO] clip walk_Wren_Skeleton arm/hand key values changed on: ['LeftUpperArm', 'RightLowerArm', 'RightUpperArm'] (max diff 0.146)
+RESULT: ALL PASS

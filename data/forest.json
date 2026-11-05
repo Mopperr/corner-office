@@ -1,0 +1,231 @@
+{
+  "deal_count": 2,
+  "deal_discount": 0.25,
+  "freebie_every": 4,
+  "freebies": ["picture_stripes", "plant_cactus"],
+  "bubbles": 5,
+  "return_sealed": 1.0,
+  "return_placed": 0.8,
+  "resell_ratio": 0.6,
+  "prime": {
+    "name": "Toucan Prime",
+    "cost": 40,
+    "earned": 400,
+    "blurb": "Express shipping naps for free. It unlocks once the jar has seen $400."
+  },
+  "shipping": {
+    "standard": { "name": "Standard", "days": 1, "fee": 0, "blurb": "Tomorrow. The bell will wait." },
+    "express": { "name": "Express", "days": 0, "fee": 4, "blurb": "Same day. A small tip for the courier." }
+  },
+  "categories": [
+    { "id": "furniture", "name": "Furniture", "blurb": "Things with legs.", "office": "garage" },
+    { "id": "decor", "name": "Decor", "blurb": "The room's small opinions.", "office": "garage" },
+    { "id": "plants", "name": "Plants", "blurb": "Quiet company.", "office": "garage" },
+    { "id": "electronics", "name": "Electronics", "blurb": "Beige, mostly.", "office": "garage" },
+    { "id": "coffee", "name": "Coffee & Kitchen", "blurb": "The smell does half the work.", "office": "bakery" },
+    { "id": "fun", "name": "Fun & Weird", "blurb": "Nobody needs these. That's the point.", "office": "garage" },
+    { "id": "seasonal", "name": "Seasonal", "blurb": "This week's mood.", "office": "bakery" }
+  ],
+  "items": [
+    {
+      "id": "tf_shelf", "item": "bookshelf_wood", "category": "furniture", "price": 60, "stars": 4.7,
+      "also": ["tf_fern", "tf_rug"],
+      "reviews": [
+        { "who": "SpineCollector", "stars": 5, "text": "It holds books and, somehow, the afternoon." },
+        { "who": "LowShelf", "stars": 4, "text": "One shelf is for plants. The plant knows." }
+      ]
+    },
+    {
+      "id": "tf_cabinet", "item": "filing_cabinet", "category": "furniture", "price": 80, "stars": 4.4,
+      "also": ["tf_phone", "tf_stapler"],
+      "reviews": [
+        { "who": "DrawerSong", "stars": 5, "text": "The drawers close like a polite sentence." }
+      ]
+    },
+    {
+      "id": "tf_bean_m", "item": "beanbag_mustard", "category": "furniture", "price": 48, "stars": 4.8,
+      "also": ["tf_bean_s", "tf_rug"],
+      "reviews": [
+        { "who": "NapAccountant", "stars": 5, "text": "I sat down to think and the thinking took a nap." }
+      ]
+    },
+    {
+      "id": "tf_bean_s", "item": "beanbag_sage", "category": "furniture", "price": 48, "stars": 4.8,
+      "also": ["tf_bean_m", "tf_fern"],
+      "reviews": [
+        { "who": "GreenChair", "stars": 4, "text": "Sage, as in the color and the advice." }
+      ]
+    },
+    {
+      "id": "tf_chair", "item": "office_chair", "category": "furniture", "price": 54, "stars": 4.3,
+      "also": ["tf_lamp", "tf_keys"],
+      "reviews": [
+        { "who": "SwivelPal", "stars": 4, "text": "It turns all the way around. So do I, now." }
+      ]
+    },
+    {
+      "id": "tf_rug", "item": "rug_round", "category": "decor", "price": 40, "stars": 4.6,
+      "also": ["tf_bean_m", "tf_clock"],
+      "reviews": [
+        { "who": "SoftFloor", "stars": 5, "text": "The concrete forgave me." }
+      ]
+    },
+    {
+      "id": "tf_poster", "item": "poster_motivational", "category": "decor", "price": 18, "stars": 4.1,
+      "also": ["tf_stripes", "tf_abstract"],
+      "reviews": [
+        { "who": "HangInThere", "stars": 4, "text": "The cat in the picture is trying. Same." }
+      ]
+    },
+    {
+      "id": "tf_abstract", "item": "picture_abstract", "category": "decor", "price": 16, "stars": 4.5,
+      "also": ["tf_stripes", "tf_poster"],
+      "reviews": [
+        { "who": "BlobFan", "stars": 5, "text": "I see a boat. My friend sees a Tuesday." }
+      ]
+    },
+    {
+      "id": "tf_stripes", "item": "picture_stripes", "category": "decor", "price": 14, "stars": 4.2,
+      "also": ["tf_abstract", "tf_clock"],
+      "reviews": [
+        { "who": "LineCook", "stars": 4, "text": "Stripes, but friendly ones." }
+      ]
+    },
+    {
+      "id": "tf_clock", "item": "clock_wall", "category": "decor", "price": 28, "stars": 4.4,
+      "also": ["tf_lamp", "tf_poster"],
+      "reviews": [
+        { "who": "OnTimeIsh", "stars": 4, "text": "It is right twice a day and kind all day." }
+      ]
+    },
+    {
+      "id": "tf_lights", "item": "string_lights", "category": "decor", "price": 26, "stars": 4.9,
+      "also": ["tf_fern", "tf_bean_s"],
+      "reviews": [
+        { "who": "WarmWire", "stars": 5, "text": "The room exhaled." }
+      ]
+    },
+    {
+      "id": "tf_fern", "item": "plant_fern", "category": "plants", "price": 22, "stars": 4.9,
+      "also": ["tf_cactus", "tf_rug"],
+      "reviews": [
+        { "who": "LeafListener", "stars": 5, "text": "The fern judged me kindly." },
+        { "who": "PotTerracotta", "stars": 5, "text": "It arrived thirsty and polite." }
+      ]
+    },
+    {
+      "id": "tf_cactus", "item": "plant_cactus", "category": "plants", "price": 12, "stars": 4.6,
+      "also": ["tf_fern", "tf_mug"],
+      "reviews": [
+        { "who": "TinySpike", "stars": 5, "text": "Small, round, and not sorry." }
+      ]
+    },
+    {
+      "id": "tf_cafe_fern", "item": "cafe_fern", "category": "plants", "price": 24, "stars": 4.5,
+      "also": ["tf_fern", "tf_coffee"],
+      "reviews": [
+        { "who": "WindowLight", "stars": 4, "text": "It leans toward the good window." }
+      ]
+    },
+    {
+      "id": "tf_lamp", "item": "desk_lamp", "category": "electronics", "price": 36, "stars": 4.7,
+      "also": ["tf_keys", "tf_phone"],
+      "reviews": [
+        { "who": "MustardShade", "stars": 5, "text": "Warm enough to read by. Soft enough to nap by." }
+      ]
+    },
+    {
+      "id": "tf_brass", "item": "lamp_banker", "category": "electronics", "price": 42, "stars": 4.5,
+      "also": ["tf_lamp", "tf_phone"],
+      "reviews": [
+        { "who": "BrassTax", "stars": 4, "text": "It looks like it knows a secret about ledgers." }
+      ]
+    },
+    {
+      "id": "tf_keys", "item": "keyboard_retro", "category": "electronics", "price": 48, "stars": 4.8,
+      "also": ["tf_typewriter", "tf_lamp"],
+      "reviews": [
+        { "who": "ClackClack", "stars": 5, "text": "Every letter sounds like a small decision." }
+      ]
+    },
+    {
+      "id": "tf_typewriter", "item": "keyboard_typewriter", "category": "electronics", "price": 64, "stars": 4.6,
+      "also": ["tf_keys", "tf_paper"],
+      "reviews": [
+        { "who": "RibbonInk", "stars": 5, "text": "I wrote a grocery list and felt historic." }
+      ]
+    },
+    {
+      "id": "tf_phone", "item": "rotary_phone", "category": "electronics", "price": 26, "stars": 4.3,
+      "also": ["tf_cabinet", "tf_stapler"],
+      "reviews": [
+        { "who": "DialTone", "stars": 4, "text": "Nobody called. The phone still felt useful." }
+      ]
+    },
+    {
+      "id": "tf_coffee", "item": "coffee_machine", "category": "coffee", "price": 55, "stars": 4.8,
+      "also": ["tf_kettle", "tf_mug"],
+      "reviews": [
+        { "who": "FirstCup", "stars": 5, "text": "The office smelled like it had a plan." },
+        { "who": "OatLatte", "stars": 4, "text": "Visitors appeared. I blame the steam." }
+      ]
+    },
+    {
+      "id": "tf_kettle", "item": "kettle", "category": "coffee", "price": 20, "stars": 4.4,
+      "also": ["tf_coffee", "tf_mug"],
+      "reviews": [
+        { "who": "ClickBoil", "stars": 4, "text": "It clicks when the water is ready to listen." }
+      ]
+    },
+    {
+      "id": "tf_mug", "item": "cafe_mug", "category": "coffee", "price": 9, "stars": 4.9,
+      "also": ["tf_coffee", "tf_cactus"],
+      "reviews": [
+        { "who": "OkayestFan", "stars": 5, "text": "Honest mug. Honest coffee. Honest Tuesday." }
+      ]
+    },
+    {
+      "id": "tf_stapler", "item": "stapler_vintage", "category": "fun", "price": 16, "stars": 4.2,
+      "also": ["tf_phone", "tf_cabinet"],
+      "reviews": [
+        { "who": "StaplerSteve88", "stars": 5, "text": "Character. Weight. A satisfying ka-chunk." }
+      ]
+    },
+    {
+      "id": "tf_catbed", "item": "cat_bed", "category": "fun", "price": 24, "stars": 5.0,
+      "also": ["tf_fern", "tf_bean_s"],
+      "reviews": [
+        { "who": "BiscuitProxy", "stars": 5, "text": "If a cat is visiting, this is the whole argument." }
+      ]
+    },
+    {
+      "id": "tf_cushion", "item": "cushion", "category": "fun", "price": 18, "stars": 4.4,
+      "also": ["tf_catbed", "tf_bean_m"],
+      "reviews": [
+        { "who": "PinkSquare", "stars": 4, "text": "Soft, and slightly opinionated." }
+      ]
+    },
+    {
+      "id": "tf_mystery", "item": "beanbag_sage", "category": "fun", "price": 18, "stars": 4.2, "mystery": true,
+      "pool": ["plant_cactus", "picture_stripes", "cat_bed", "kettle", "clock_wall"],
+      "also": ["tf_fern", "tf_stapler"],
+      "reviews": [
+        { "who": "BoxGoblin", "stars": 5, "text": "I do not know what I bought. I am delighted." }
+      ]
+    },
+    {
+      "id": "tf_season_lights", "item": "string_lights", "category": "seasonal", "price": 22, "stars": 4.7,
+      "also": ["tf_fern", "tf_poster"],
+      "reviews": [
+        { "who": "ThisWeek", "stars": 5, "text": "Seasonal, in the sense that today is a season." }
+      ]
+    },
+    {
+      "id": "tf_season_plant", "item": "cafe_plant", "category": "seasonal", "price": 14, "stars": 4.3,
+      "also": ["tf_cactus", "tf_mug"],
+      "reviews": [
+        { "who": "WindowPot", "stars": 4, "text": "A small plant for a small celebration." }
+      ]
+    }
+  ]
+}

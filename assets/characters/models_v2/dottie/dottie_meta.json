@@ -1,0 +1,32 @@
+{
+ "id": "dottie",
+ "name": "Dottie",
+ "glb": "dottie.glb",
+ "height_m": 1.55,
+ "seat_height_m": 0.387,
+ "hip_height_m": 0.682,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Dottie_Paddle",
+   "bone": "RightHand"
+  }
+ ],
+ "tris": 73729
+}

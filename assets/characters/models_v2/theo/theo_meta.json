@@ -1,0 +1,32 @@
+{
+ "id": "theo",
+ "name": "Theo",
+ "glb": "theo.glb",
+ "height_m": 1.8,
+ "seat_height_m": 0.501,
+ "hip_height_m": 0.9,
+ "clips": {
+  "idle": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  },
+  "walk": {
+   "frames": 32,
+   "fps": 30,
+   "loop": true
+  },
+  "sit": {
+   "frames": 72,
+   "fps": 30,
+   "loop": true
+  }
+ },
+ "props": [
+  {
+   "node": "Theo_Thermos",
+   "bone": "RightHand"
+  }
+ ],
+ "tris": 87736
+}

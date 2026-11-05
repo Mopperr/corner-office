@@ -1,0 +1,1603 @@
+{
+  "_meta": {
+    "version": 2,
+    "phase": "slice",
+    "product_source": "/workspace/game/drink_unlocks.json (14 drinks; products.json from Programmer Master not yet present, ids to match)",
+    "product_ids": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee",
+      "espresso",
+      "honey_lavender_lemonade",
+      "latte",
+      "cappuccino",
+      "mocha",
+      "iced_coffee",
+      "vanilla_latte",
+      "seasonal_special"
+    ],
+    "product_ids_provisional": false,
+    "tone": "Cozy sitcom. Customers are kind. Off drinks get gentle, funny feedback and the customer still pays.",
+    "context_tags": [
+      "line_wait",
+      "rain",
+      "morning",
+      "stand_type:coffee",
+      "stand_type:lemonade"
+    ],
+    "format": "lines alternate speakers in order: speakers[0], speakers[1], speakers[0], ... Empty context = any time.",
+    "slice_drinks": [
+      "classic_lemonade",
+      "pink_lemonade",
+      "iced_tea_lemonade",
+      "strawberry_lemonade",
+      "mint_lemonade",
+      "black_coffee"
+    ],
+    "legacy_product_ids": {
+      "lemonade": "classic_lemonade",
+      "iced_lemonade": "classic_lemonade (served with extra ice; heat-weather variant)",
+      "sweet_coffee": "black_coffee + sugar (no longer a menu item; nearest menu drinks: mocha, vanilla_latte)"
+    },
+    "quality_bands": {
+      "great": ">=80",
+      "okay": "50-79",
+      "off": "<50"
+    },
+    "drink_banter_ids": [
+      "banter_35",
+      "banter_36",
+      "banter_37",
+      "banter_38",
+      "banter_39",
+      "banter_40",
+      "banter_41",
+      "banter_42",
+      "banter_43",
+      "banter_44",
+      "banter_45",
+      "banter_46",
+      "banter_47",
+      "banter_48",
+      "banter_49",
+      "banter_50"
+    ],
+    "gating": "Pick an exchange only if current level >= min_level (and <= max_level when present)."
+  },
+  "exchanges": [
+    {
+      "id": "banter_01",
+      "speakers": [
+        "dottie",
+        "rocco"
+      ],
+      "context": [
+        "line_wait",
+        "morning"
+      ],
+      "requires_drinks": [],
+      "min_level": "L4",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "Morning, Rocco! You're early."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Dottie! Dogs were in a good mood. Route flew by."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Did Pepper bark at you again?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Only to say hello. We're friends now."
+        }
+      ]
+    },
+    {
+      "id": "banter_02",
+      "speakers": [
+        "steve",
+        "keyclackr"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "steve",
+          "text": "KeyClackr? In person?"
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "StaplerSteve88! Your stapler's even shinier IRL."
+        },
+        {
+          "speaker": "steve",
+          "text": "I polish it on Tuesdays."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Respect."
+        }
+      ]
+    },
+    {
+      "id": "banter_03",
+      "speakers": [
+        "lamp_lady",
+        "wren"
+      ],
+      "context": [
+        "rain"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "lamp_lady",
+          "text": "Isn't the rain lovely? Everything's softly lit."
+        },
+        {
+          "speaker": "wren",
+          "text": "It sounds like the sky is whispering."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Write that down, hon."
+        },
+        {
+          "speaker": "wren",
+          "text": "I already did."
+        }
+      ]
+    },
+    {
+      "id": "banter_04",
+      "speakers": [
+        "pippa",
+        "theo"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "pippa",
+          "text": "Excuse me, how would you rate this stand?"
+        },
+        {
+          "speaker": "theo",
+          "text": "Five stars. I'm too tired to be critical."
+        },
+        {
+          "speaker": "pippa",
+          "text": "That's not scientific."
+        },
+        {
+          "speaker": "theo",
+          "text": "Neither is my sleep schedule."
+        }
+      ]
+    },
+    {
+      "id": "banter_05",
+      "speakers": [
+        "theo",
+        "dottie"
+      ],
+      "context": [
+        "morning",
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "theo",
+          "text": "Coffee to sleep. Don't judge me."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Sweetie, I'd never. You go rest."
+        },
+        {
+          "speaker": "theo",
+          "text": "You're the best, Dottie."
+        }
+      ]
+    },
+    {
+      "id": "banter_06",
+      "speakers": [
+        "rocco",
+        "pippa"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade"
+      ],
+      "min_level": "L4",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Pippa! Running a rival stand yet?"
+        },
+        {
+          "speaker": "pippa",
+          "text": "Not yet. I'm doing market research."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Smart kid. Watch the ice ratio."
+        },
+        {
+          "speaker": "pippa",
+          "text": "Already noted."
+        }
+      ]
+    },
+    {
+      "id": "banter_07",
+      "speakers": [
+        "keyclackr",
+        "wren"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "keyclackr",
+          "text": "What are you writing?"
+        },
+        {
+          "speaker": "wren",
+          "text": "A haiku about the line."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "How many syllables is 'clack'?"
+        },
+        {
+          "speaker": "wren",
+          "text": "One. It's a good one."
+        }
+      ]
+    },
+    {
+      "id": "banter_08",
+      "speakers": [
+        "steve",
+        "lamp_lady"
+      ],
+      "context": [],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "steve",
+          "text": "Lamp_Lady! I almost bought that brass lamp."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "I know, I outbid you. Sorry, dear."
+        },
+        {
+          "speaker": "steve",
+          "text": "It's okay. It looks better in your window."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "It really does."
+        }
+      ]
+    },
+    {
+      "id": "banter_09",
+      "speakers": [
+        "dottie",
+        "pippa"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L1",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "Let the grown-ups go first?"
+        },
+        {
+          "speaker": "pippa",
+          "text": "Customers are customers, ma'am."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Fair enough. Go ahead, boss."
+        }
+      ]
+    },
+    {
+      "id": "banter_10",
+      "speakers": [
+        "rocco",
+        "theo"
+      ],
+      "context": [
+        "rain",
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Rain on the route today. Soaked socks."
+        },
+        {
+          "speaker": "theo",
+          "text": "Warm drink, dry socks, then sleep. Doctor's orders."
+        },
+        {
+          "speaker": "rocco",
+          "text": "You're a nurse, not a doctor."
+        },
+        {
+          "speaker": "theo",
+          "text": "Nurse's orders, then. Stronger."
+        }
+      ]
+    },
+    {
+      "id": "banter_11",
+      "speakers": [
+        "wren",
+        "dottie"
+      ],
+      "context": [
+        "morning"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "Your vest is very bright."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Thirty years of crossing guard. Keeps the habit."
+        },
+        {
+          "speaker": "wren",
+          "text": "It's like wearing a sunrise."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Oh, you're a sweet one."
+        }
+      ]
+    },
+    {
+      "id": "banter_12",
+      "speakers": [
+        "keyclackr",
+        "pippa"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "keyclackr",
+          "text": "Is the lemonade good?"
+        },
+        {
+          "speaker": "pippa",
+          "text": "Silver star so far."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "High bar."
+        },
+        {
+          "speaker": "pippa",
+          "text": "I'm a professional."
+        }
+      ]
+    },
+    {
+      "id": "banter_13",
+      "speakers": [
+        "lamp_lady",
+        "rocco"
+      ],
+      "context": [
+        "morning"
+      ],
+      "requires_drinks": [],
+      "min_level": "L4",
+      "lines": [
+        {
+          "speaker": "lamp_lady",
+          "text": "Any packages for me today, Rocco?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Two! One lamp-shaped, one... also lamp-shaped."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "My favorite shape!"
+        }
+      ]
+    },
+    {
+      "id": "banter_14",
+      "speakers": [
+        "steve",
+        "theo"
+      ],
+      "context": [
+        "line_wait",
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "steve",
+          "text": "You look tired. Want my spot?"
+        },
+        {
+          "speaker": "theo",
+          "text": "You're a good person, Steve."
+        },
+        {
+          "speaker": "steve",
+          "text": "I'm StaplerSteve88 online."
+        },
+        {
+          "speaker": "theo",
+          "text": "You're a good person online too."
+        }
+      ]
+    },
+    {
+      "id": "banter_15",
+      "speakers": [
+        "pippa",
+        "wren"
+      ],
+      "context": [],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "pippa",
+          "text": "Are you a writer?"
+        },
+        {
+          "speaker": "wren",
+          "text": "I try to be."
+        },
+        {
+          "speaker": "pippa",
+          "text": "Write about my stand someday. When I have one."
+        },
+        {
+          "speaker": "wren",
+          "text": "It'll be the first poem in the book."
+        }
+      ]
+    },
+    {
+      "id": "banter_16",
+      "speakers": [
+        "dottie",
+        "keyclackr"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "You're tapping the counter, dear."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Sorry! Keyboard hands."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Tap me a little waltz, then."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "...Okay, that was fun."
+        }
+      ]
+    },
+    {
+      "id": "banter_17",
+      "speakers": [
+        "rocco",
+        "steve"
+      ],
+      "context": [],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Steve, your stapler order shipped!"
+        },
+        {
+          "speaker": "steve",
+          "text": "The heavy-duty one?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "The heavy-duty one."
+        },
+        {
+          "speaker": "steve",
+          "text": "Best day of the week."
+        }
+      ]
+    },
+    {
+      "id": "banter_18",
+      "speakers": [
+        "theo",
+        "wren"
+      ],
+      "context": [
+        "rain"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "theo",
+          "text": "Rain makes me sleepy."
+        },
+        {
+          "speaker": "wren",
+          "text": "Rain makes me write."
+        },
+        {
+          "speaker": "theo",
+          "text": "Want to trade?"
+        },
+        {
+          "speaker": "wren",
+          "text": "Not today."
+        }
+      ]
+    },
+    {
+      "id": "banter_19",
+      "speakers": [
+        "lamp_lady",
+        "pippa"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade"
+      ],
+      "min_level": "L2",
+      "lines": [
+        {
+          "speaker": "lamp_lady",
+          "text": "What a darling clipboard!"
+        },
+        {
+          "speaker": "pippa",
+          "text": "Thank you. It's for business."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Every great empire starts with a clipboard!"
+        }
+      ]
+    },
+    {
+      "id": "banter_20",
+      "speakers": [
+        "keyclackr",
+        "rocco"
+      ],
+      "context": [
+        "morning",
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "keyclackr",
+          "text": "How many steps so far today?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Eight thousand and the sun's barely up."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "I've done eight thousand keystrokes."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Same energy."
+        }
+      ]
+    },
+    {
+      "id": "banter_21",
+      "speakers": [
+        "dottie",
+        "steve"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "Black coffee again, Steve?"
+        },
+        {
+          "speaker": "steve",
+          "text": "Always. No frills."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Harold took two sugars."
+        },
+        {
+          "speaker": "steve",
+          "text": "Harold was a brave man."
+        }
+      ]
+    },
+    {
+      "id": "banter_22",
+      "speakers": [
+        "wren",
+        "rocco"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "Do the dogs on your route have names?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Every single one. Biscuit's my favorite."
+        },
+        {
+          "speaker": "wren",
+          "text": "Biscuit the cat?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Biscuit the beagle. Different Biscuit. Small town, big name."
+        }
+      ]
+    },
+    {
+      "id": "banter_23",
+      "speakers": [
+        "theo",
+        "lamp_lady"
+      ],
+      "context": [
+        "morning"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "theo",
+          "text": "Morning, Lorna. Already bright out."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "It's always bright when you've got good company!"
+        },
+        {
+          "speaker": "theo",
+          "text": "...Too bright. I'm going home to sleep."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Sweet dreams, darling!"
+        }
+      ]
+    },
+    {
+      "id": "banter_24",
+      "speakers": [
+        "pippa",
+        "steve"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "pippa",
+          "text": "Why do you carry a stapler?"
+        },
+        {
+          "speaker": "steve",
+          "text": "In case something needs holding together."
+        },
+        {
+          "speaker": "pippa",
+          "text": "Like what?"
+        },
+        {
+          "speaker": "steve",
+          "text": "Life, mostly."
+        }
+      ]
+    },
+    {
+      "id": "banter_25",
+      "speakers": [
+        "keyclackr",
+        "lamp_lady"
+      ],
+      "context": [
+        "rain"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "keyclackr",
+          "text": "Rain's kinda nice with headphones."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Rain's nice with a lamp on!"
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "You'd put a lamp on in the rain?"
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Especially in the rain."
+        }
+      ]
+    },
+    {
+      "id": "banter_26",
+      "speakers": [
+        "rocco",
+        "dottie"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade"
+      ],
+      "min_level": "L4",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Dottie, try it iced!"
+        },
+        {
+          "speaker": "dottie",
+          "text": "Ice hurts my teeth, sweetie."
+        },
+        {
+          "speaker": "rocco",
+          "text": "More zing for me, then!"
+        }
+      ]
+    },
+    {
+      "id": "banter_27",
+      "speakers": [
+        "wren",
+        "steve"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "How's your coffee?"
+        },
+        {
+          "speaker": "steve",
+          "text": "Four staples."
+        },
+        {
+          "speaker": "wren",
+          "text": "Is that good?"
+        },
+        {
+          "speaker": "steve",
+          "text": "Out of five, it's very good."
+        }
+      ]
+    },
+    {
+      "id": "banter_28",
+      "speakers": [
+        "theo",
+        "keyclackr"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "theo",
+          "text": "Typing on the counter?"
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Muscle memory. Sorry."
+        },
+        {
+          "speaker": "theo",
+          "text": "No, it's soothing. Like a heart monitor."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "...I'll take it as a compliment."
+        }
+      ]
+    },
+    {
+      "id": "banter_29",
+      "speakers": [
+        "pippa",
+        "rocco"
+      ],
+      "context": [
+        "rain"
+      ],
+      "requires_drinks": [],
+      "min_level": "L4",
+      "lines": [
+        {
+          "speaker": "pippa",
+          "text": "Do you deliver in the rain?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Rain or shine, kid!"
+        },
+        {
+          "speaker": "pippa",
+          "text": "And snow?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Snow's my favorite. The dogs bounce."
+        }
+      ]
+    },
+    {
+      "id": "banter_30",
+      "speakers": [
+        "lamp_lady",
+        "dottie"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "lamp_lady",
+          "text": "Dottie, is that a new vest?"
+        },
+        {
+          "speaker": "dottie",
+          "text": "Same vest, new sparkle sticker!"
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Oh, it catches the light beautifully!"
+        }
+      ]
+    },
+    {
+      "id": "banter_31",
+      "speakers": [
+        "wren",
+        "keyclackr"
+      ],
+      "context": [
+        "morning"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "You're up early."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Never went to bed. Building a keyboard."
+        },
+        {
+          "speaker": "wren",
+          "text": "Is it done?"
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "It's never done. That's the fun."
+        }
+      ]
+    },
+    {
+      "id": "banter_32",
+      "speakers": [
+        "steve",
+        "pippa"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "steve",
+          "text": "How's the lemonade, critic?"
+        },
+        {
+          "speaker": "pippa",
+          "text": "Gold star. Don't tell them, it'll go to their head."
+        },
+        {
+          "speaker": "steve",
+          "text": "Your secret's safe with me."
+        },
+        {
+          "speaker": "pippa",
+          "text": "Thank you, stapler man."
+        }
+      ]
+    },
+    {
+      "id": "banter_33",
+      "speakers": [
+        "dottie",
+        "theo"
+      ],
+      "context": [
+        "rain"
+      ],
+      "requires_drinks": [],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "You'll catch a cold, dear."
+        },
+        {
+          "speaker": "theo",
+          "text": "I work in a hospital. Colds are scared of me."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Well, take my umbrella anyway."
+        },
+        {
+          "speaker": "theo",
+          "text": "...Thank you, Dottie."
+        }
+      ]
+    },
+    {
+      "id": "banter_34",
+      "speakers": [
+        "rocco",
+        "lamp_lady"
+      ],
+      "context": [
+        "line_wait"
+      ],
+      "requires_drinks": [],
+      "min_level": "L4",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Another lamp in the bag, Lorna?"
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Just a tiny one!"
+        },
+        {
+          "speaker": "rocco",
+          "text": "It's glowing."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "It's on. I couldn't wait."
+        }
+      ]
+    },
+    {
+      "id": "banter_35",
+      "speakers": [
+        "pippa",
+        "dottie"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade",
+        "pink_lemonade"
+      ],
+      "min_level": "L2",
+      "lines": [
+        {
+          "speaker": "pippa",
+          "text": "Pink or regular? I need data."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Regular, dear. Pink is for celebrations."
+        },
+        {
+          "speaker": "pippa",
+          "text": "What are we celebrating?"
+        },
+        {
+          "speaker": "dottie",
+          "text": "Tuesday."
+        }
+      ]
+    },
+    {
+      "id": "banter_36",
+      "speakers": [
+        "rocco",
+        "theo"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade",
+        "mint_lemonade"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Mint lemonade, Theo. Wakes you right up!"
+        },
+        {
+          "speaker": "theo",
+          "text": "I'm trying to go to sleep, Rocco."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Oh. Then don't drink it fast."
+        }
+      ]
+    },
+    {
+      "id": "banter_37",
+      "speakers": [
+        "keyclackr",
+        "steve"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "espresso"
+      ],
+      "min_level": "L7",
+      "lines": [
+        {
+          "speaker": "keyclackr",
+          "text": "Espresso is the 60% keyboard of coffee."
+        },
+        {
+          "speaker": "steve",
+          "text": "Small but complete?"
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Exactly. No wasted keys."
+        }
+      ]
+    },
+    {
+      "id": "banter_38",
+      "speakers": [
+        "wren",
+        "lamp_lady"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade",
+        "honey_lavender_lemonade"
+      ],
+      "min_level": "L8",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "Honey-lavender tastes purple."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Oh, purple is a lovely wattage."
+        },
+        {
+          "speaker": "wren",
+          "text": "Is wattage a flavor?"
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Today it is!"
+        }
+      ]
+    },
+    {
+      "id": "banter_39",
+      "speakers": [
+        "dottie",
+        "rocco"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "mocha"
+      ],
+      "min_level": "L11",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "Have you tried the mocha, Rocco?"
+        },
+        {
+          "speaker": "rocco",
+          "text": "Coffee AND chocolate? On a route day?"
+        },
+        {
+          "speaker": "dottie",
+          "text": "It's a delivery of joy, sweetie."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Signed for it."
+        }
+      ]
+    },
+    {
+      "id": "banter_40",
+      "speakers": [
+        "theo",
+        "wren"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "cappuccino"
+      ],
+      "min_level": "L10",
+      "lines": [
+        {
+          "speaker": "theo",
+          "text": "Cappuccino foam is basically a nap."
+        },
+        {
+          "speaker": "wren",
+          "text": "Then you're drinking a nap."
+        },
+        {
+          "speaker": "theo",
+          "text": "Don't tell my supervisor."
+        }
+      ]
+    },
+    {
+      "id": "banter_41",
+      "speakers": [
+        "pippa",
+        "rocco"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade",
+        "mint_lemonade",
+        "strawberry_lemonade"
+      ],
+      "min_level": "L5",
+      "lines": [
+        {
+          "speaker": "pippa",
+          "text": "Strawberry is the best one. Fact."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Mint's got more zing!"
+        },
+        {
+          "speaker": "pippa",
+          "text": "Zing isn't a category."
+        },
+        {
+          "speaker": "rocco",
+          "text": "It is on my route."
+        }
+      ]
+    },
+    {
+      "id": "banter_42",
+      "speakers": [
+        "steve",
+        "lamp_lady"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "vanilla_latte"
+      ],
+      "min_level": "L14",
+      "lines": [
+        {
+          "speaker": "steve",
+          "text": "The vanilla latte is very... organized."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Vanilla is just soft lighting for coffee, dear."
+        },
+        {
+          "speaker": "steve",
+          "text": "I'll note that in my binder."
+        }
+      ]
+    },
+    {
+      "id": "banter_43",
+      "speakers": [
+        "keyclackr",
+        "rocco"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "iced_coffee"
+      ],
+      "min_level": "L12",
+      "lines": [
+        {
+          "speaker": "keyclackr",
+          "text": "Iced coffee hits different at noon."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Cold brew, hot route. Perfect match."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Ice clinks like a keypress."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Everything does, to you."
+        }
+      ]
+    },
+    {
+      "id": "banter_44",
+      "speakers": [
+        "lamp_lady",
+        "dottie"
+      ],
+      "context": [
+        "rain",
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade",
+        "iced_tea_lemonade"
+      ],
+      "min_level": "L3",
+      "lines": [
+        {
+          "speaker": "lamp_lady",
+          "text": "Iced tea lemonade in the rain? Bold!"
+        },
+        {
+          "speaker": "dottie",
+          "text": "Tea is for rain, ice is for courage."
+        },
+        {
+          "speaker": "lamp_lady",
+          "text": "Dottie, you're a poet."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Don't tell Wren. They'll want royalties."
+        }
+      ]
+    },
+    {
+      "id": "banter_45",
+      "speakers": [
+        "wren",
+        "steve"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "seasonal_special"
+      ],
+      "min_level": "L16",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "Have you seen the seasonal board?"
+        },
+        {
+          "speaker": "steve",
+          "text": "I photograph it every season. For the archive."
+        },
+        {
+          "speaker": "wren",
+          "text": "You have an archive?"
+        },
+        {
+          "speaker": "steve",
+          "text": "Three binders. Color-coded."
+        }
+      ]
+    },
+    {
+      "id": "banter_46",
+      "speakers": [
+        "theo",
+        "pippa"
+      ],
+      "context": [
+        "stand_type:lemonade"
+      ],
+      "requires_drinks": [
+        "classic_lemonade",
+        "pink_lemonade"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "theo",
+          "text": "Is pink lemonade healthier?"
+        },
+        {
+          "speaker": "pippa",
+          "text": "No. But it's happier."
+        },
+        {
+          "speaker": "theo",
+          "text": "That's medically fine by me."
+        }
+      ]
+    },
+    {
+      "id": "banter_47",
+      "speakers": [
+        "dottie",
+        "keyclackr"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee",
+        "espresso"
+      ],
+      "min_level": "L7",
+      "lines": [
+        {
+          "speaker": "dottie",
+          "text": "Sweetie, that espresso is the size of a thimble."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Tiny cup, big power."
+        },
+        {
+          "speaker": "dottie",
+          "text": "Like me in my crossing guard days."
+        },
+        {
+          "speaker": "keyclackr",
+          "text": "Certified legend, Dottie."
+        }
+      ]
+    },
+    {
+      "id": "banter_48",
+      "speakers": [
+        "rocco",
+        "wren"
+      ],
+      "context": [
+        "morning",
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "rocco",
+          "text": "Black coffee, then 9,000 steps."
+        },
+        {
+          "speaker": "wren",
+          "text": "Black coffee, then one quiet poem."
+        },
+        {
+          "speaker": "rocco",
+          "text": "Same coffee, different miles."
+        },
+        {
+          "speaker": "wren",
+          "text": "Poem material, right there."
+        }
+      ]
+    },
+    {
+      "id": "banter_49",
+      "speakers": [
+        "wren",
+        "theo"
+      ],
+      "context": [
+        "stand_type:coffee",
+        "morning"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "wren",
+          "text": "You take it black too?"
+        },
+        {
+          "speaker": "theo",
+          "text": "Black and fast. You?"
+        },
+        {
+          "speaker": "wren",
+          "text": "Black and slow. I'm waiting for the lavender."
+        },
+        {
+          "speaker": "theo",
+          "text": "Then we'll both be here a while."
+        }
+      ],
+      "max_level": "L7"
+    },
+    {
+      "id": "banter_50",
+      "speakers": [
+        "steve",
+        "wren"
+      ],
+      "context": [
+        "stand_type:coffee"
+      ],
+      "requires_drinks": [
+        "black_coffee"
+      ],
+      "min_level": "L6",
+      "lines": [
+        {
+          "speaker": "steve",
+          "text": "Black coffee is the standard stapler of drinks."
+        },
+        {
+          "speaker": "wren",
+          "text": "Then honey-lavender is the fancy one with the swirl."
+        },
+        {
+          "speaker": "steve",
+          "text": "You understand me."
+        },
+        {
+          "speaker": "wren",
+          "text": "Every word goes in the notebook."
+        }
+      ]
+    }
+  ]
+}

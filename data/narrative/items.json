@@ -1,0 +1,206 @@
+[
+  {
+    "id": "stapler_vintage",
+    "name": "Vintage Stapler",
+    "type": "tradeable",
+    "flavor": "Heavy chrome. Staples like it means it."
+  },
+  {
+    "id": "stapler_red",
+    "name": "Red Stapler",
+    "type": "tradeable",
+    "flavor": "Someone's very attached to this one."
+  },
+  {
+    "id": "lamp_banker",
+    "name": "Banker's Desk Lamp",
+    "type": "tradeable",
+    "flavor": "Green glass shade. Makes any email feel important."
+  },
+  {
+    "id": "lamp_moody",
+    "name": "Moody Desk Lamp",
+    "type": "tradeable",
+    "flavor": "Lamp_Lady's favorite. It looks a bit sad, in a nice way."
+  },
+  {
+    "id": "keyboard_retro",
+    "name": "Retro Keyboard",
+    "type": "tradeable",
+    "flavor": "Beige and clacky. KeyClackr says 9/10."
+  },
+  {
+    "id": "keyboard_typewriter",
+    "name": "Typewriter",
+    "type": "tradeable",
+    "flavor": "Ding! Every line ends with a little celebration."
+  },
+  {
+    "id": "rolodex",
+    "name": "Rolodex",
+    "type": "tradeable",
+    "flavor": "Hundreds of contacts, none of them answering."
+  },
+  {
+    "id": "pencil_sharpener",
+    "name": "Crank Pencil Sharpener",
+    "type": "tradeable",
+    "flavor": "Turns pencils into very small pencils."
+  },
+  {
+    "id": "tape_dispenser",
+    "name": "Weighted Tape Dispenser",
+    "type": "tradeable",
+    "flavor": "Weighs about as much as a small dog."
+  },
+  {
+    "id": "desk_fan",
+    "name": "Oscillating Desk Fan",
+    "type": "tradeable",
+    "flavor": "Turns its head slowly, like it's disappointed."
+  },
+  {
+    "id": "paperweight_glass",
+    "name": "Glass Paperweight",
+    "type": "tradeable",
+    "flavor": "There's a tiny bubble inside. It's been there forever."
+  },
+  {
+    "id": "mug_worlds_okayest",
+    "name": "World's Okayest Boss Mug",
+    "type": "tradeable",
+    "flavor": "Honest, and dishwasher safe."
+  },
+  {
+    "id": "rotary_phone",
+    "name": "Rotary Phone",
+    "type": "tradeable",
+    "flavor": "Every number is a little workout for your finger."
+  },
+  {
+    "id": "calculator_tape",
+    "name": "Adding Machine",
+    "type": "tradeable",
+    "flavor": "Prints every sum on a long paper tail."
+  },
+  {
+    "id": "crt_monitor",
+    "name": "Spare CRT Monitor",
+    "type": "tradeable",
+    "flavor": "Hums softly. Warm to the touch."
+  },
+  {
+    "id": "plant_fern",
+    "name": "Fern in Terracotta",
+    "type": "decor",
+    "flavor": "Asks for very little. Gives a lot."
+  },
+  {
+    "id": "plant_cactus",
+    "name": "Tiny Cactus",
+    "type": "decor",
+    "flavor": "Small. Spiky. Thriving."
+  },
+  {
+    "id": "rug_round",
+    "name": "Round Woven Rug",
+    "type": "decor",
+    "flavor": "Ties the room together. Also your toes."
+  },
+  {
+    "id": "poster_motivational",
+    "name": "Hang In There Poster",
+    "type": "decor",
+    "flavor": "The cat has been hanging there since 1978."
+  },
+  {
+    "id": "beanbag_mustard",
+    "name": "Mustard Beanbag",
+    "type": "decor",
+    "flavor": "Official seat for big thinking and small naps."
+  },
+  {
+    "id": "beanbag_sage",
+    "name": "Sage Beanbag",
+    "type": "decor",
+    "flavor": "A cooler seat for the same small naps."
+  },
+  {
+    "id": "clock_wall",
+    "name": "Wall Clock",
+    "type": "decor",
+    "flavor": "Mr. Finch would name this one Gerald."
+  },
+  {
+    "id": "bookshelf_wood",
+    "name": "Wooden Bookshelf",
+    "type": "decor",
+    "flavor": "Room for books, trinkets, and one important box."
+  },
+  {
+    "id": "kettle",
+    "name": "Electric Kettle",
+    "type": "decor",
+    "flavor": "The real heart of any office."
+  },
+  {
+    "id": "string_lights",
+    "name": "String Lights",
+    "type": "decor",
+    "flavor": "Makes a garage feel like a plan."
+  },
+  {
+    "id": "cat_bed",
+    "name": "Cushioned Cat Bed",
+    "type": "decor",
+    "flavor": "A gift from Priya. Biscuit still prefers boxes."
+  },
+  {
+    "id": "museum_shelf",
+    "name": "Museum Shelf",
+    "type": "decor",
+    "flavor": "Holds photos and souvenirs from every job."
+  },
+  {
+    "id": "sticky_note_stack",
+    "name": "Sticky Note Stack",
+    "type": "decor",
+    "flavor": "Nine years of reminders. Most say 'call back.'"
+  },
+  {
+    "id": "cb_radio",
+    "name": "Old CB Radio",
+    "type": "decor",
+    "flavor": "Mostly static. Sometimes a trucker reading the weather."
+  },
+  {
+    "id": "thermos_dented",
+    "name": "Dented Thermos",
+    "type": "decor",
+    "flavor": "Kept coffee hot across 41 states."
+  },
+  {
+    "id": "ramen_kettle",
+    "name": "Dorm Kettle",
+    "type": "decor",
+    "flavor": "Makes ramen, tea, and late-night decisions."
+  },
+  {
+    "id": "yarn_basket",
+    "name": "Yarn Basket",
+    "type": "decor",
+    "flavor": "Every color. One mystery knot."
+  },
+  {
+    "id": "lemonade_pitcher",
+    "name": "Lemonade Pitcher",
+    "type": "decor",
+    "flavor": "Glass, lemons, a lot of ice. Sits on any counter and turns it into a stand."
+  },
+  {
+    "id": "cup_stack",
+    "name": "Paper Cup Stack",
+    "type": "decor",
+    "flavor": "Forty cups, striped. Lemonade goes in them."
+  }
+]

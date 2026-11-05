@@ -1,0 +1,642 @@
+{
+ "folding_table": {
+  "tris": 972,
+  "size_m": [
+   1.2,
+   0.7,
+   0.76
+  ],
+  "level": "L1",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.6,
+   0.0,
+   -0.35
+  ],
+  "bounds_godot_max": [
+   0.6,
+   0.76,
+   0.35
+  ]
+ },
+ "pegboard": {
+  "tris": 2032,
+  "size_m": [
+   1.2,
+   0.135,
+   0.9
+  ],
+  "level": "L1",
+  "origin": "back",
+  "bounds_godot_min": [
+   -0.6,
+   0.0,
+   -0.0
+  ],
+  "bounds_godot_max": [
+   0.6,
+   0.9,
+   0.135
+  ]
+ },
+ "floor_oil_stain_1m": {
+  "tris": 192,
+  "size_m": [
+   1.0,
+   1.0,
+   0.053
+  ],
+  "level": "L1",
+  "origin": "top",
+  "bounds_godot_min": [
+   -0.5,
+   -0.053,
+   -0.5
+  ],
+  "bounds_godot_max": [
+   0.5,
+   0.0,
+   0.5
+  ]
+ },
+ "bike_hooks": {
+  "tris": 380,
+  "size_m": [
+   0.6,
+   0.17,
+   0.17
+  ],
+  "level": "L1",
+  "origin": "back",
+  "bounds_godot_min": [
+   -0.3,
+   0.0,
+   -0.0
+  ],
+  "bounds_godot_max": [
+   0.3,
+   0.17,
+   0.17
+  ]
+ },
+ "mini_fridge": {
+  "tris": 648,
+  "size_m": [
+   0.5,
+   0.59,
+   0.85
+  ],
+  "level": "L1",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.25,
+   0.0,
+   -0.295
+  ],
+  "bounds_godot_max": [
+   0.25,
+   0.85,
+   0.295
+  ]
+ },
+ "job_clipboard": {
+  "tris": 264,
+  "size_m": [
+   0.22,
+   0.035,
+   0.32
+  ],
+  "level": "L1",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.11,
+   0.0,
+   -0.017
+  ],
+  "bounds_godot_max": [
+   0.11,
+   0.32,
+   0.017
+  ]
+ },
+ "driveway_apron_2m": {
+  "tris": 276,
+  "size_m": [
+   2.0,
+   2.04,
+   0.12
+  ],
+  "level": "L1",
+  "origin": "top",
+  "bounds_godot_min": [
+   -1.0,
+   -0.12,
+   -1.02
+  ],
+  "bounds_godot_max": [
+   1.0,
+   0.0,
+   1.02
+  ]
+ },
+ "espresso_machine_pro": {
+  "tris": 580,
+  "size_m": [
+   0.55,
+   0.44,
+   0.73
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.275,
+   0.0,
+   -0.22
+  ],
+  "bounds_godot_max": [
+   0.275,
+   0.73,
+   0.22
+  ]
+ },
+ "mug_rack": {
+  "tris": 1740,
+  "size_m": [
+   0.7,
+   0.185,
+   0.6
+  ],
+  "level": "L2",
+  "origin": "back",
+  "bounds_godot_min": [
+   -0.35,
+   0.0,
+   -0.0
+  ],
+  "bounds_godot_max": [
+   0.35,
+   0.6,
+   0.185
+  ]
+ },
+ "cat_tree": {
+  "tris": 264,
+  "size_m": [
+   0.525,
+   0.5,
+   1.34
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.262,
+   0.0,
+   -0.25
+  ],
+  "bounds_godot_max": [
+   0.262,
+   1.34,
+   0.25
+  ]
+ },
+ "cafe_cushion": {
+  "tris": 216,
+  "size_m": [
+   0.5,
+   0.5,
+   0.16
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.25,
+   0.0,
+   -0.25
+  ],
+  "bounds_godot_max": [
+   0.25,
+   0.16,
+   0.25
+  ]
+ },
+ "chalk_menu_board": {
+  "tris": 192,
+  "size_m": [
+   0.9,
+   0.048,
+   1.2
+  ],
+  "level": "L2",
+  "origin": "back",
+  "bounds_godot_min": [
+   -0.45,
+   0.0,
+   -0.0
+  ],
+  "bounds_godot_max": [
+   0.45,
+   1.2,
+   0.048
+  ]
+ },
+ "hanging_plant": {
+  "tris": 276,
+  "size_m": [
+   0.285,
+   0.258,
+   0.761
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.143,
+   0.0,
+   -0.129
+  ],
+  "bounds_godot_max": [
+   0.143,
+   0.761,
+   0.129
+  ]
+ },
+ "cafe_counter": {
+  "tris": 336,
+  "size_m": [
+   2.05,
+   0.75,
+   0.95
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -1.025,
+   0.0,
+   -0.375
+  ],
+  "bounds_godot_max": [
+   1.025,
+   0.95,
+   0.375
+  ]
+ },
+ "cat_biscuit": {
+  "tris": 336,
+  "size_m": [
+   0.369,
+   0.232,
+   0.402
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.185,
+   0.0,
+   -0.116
+  ],
+  "bounds_godot_max": [
+   0.185,
+   0.402,
+   0.116
+  ]
+ },
+ "padding_roll": {
+  "tris": 176,
+  "size_m": [
+   0.4,
+   0.164,
+   0.164
+  ],
+  "level": "L2",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.2,
+   0.0,
+   -0.082
+  ],
+  "bounds_godot_max": [
+   0.2,
+   0.164,
+   0.082
+  ]
+ },
+ "train_layout_board": {
+  "tris": 2096,
+  "size_m": [
+   2.0,
+   1.0,
+   0.24
+  ],
+  "level": "L4",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -1.0,
+   0.0,
+   -0.5
+  ],
+  "bounds_godot_max": [
+   1.0,
+   0.24,
+   0.5
+  ]
+ },
+ "display_case": {
+  "tris": 900,
+  "size_m": [
+   1.0,
+   0.411,
+   0.95
+  ],
+  "level": "L4",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.5,
+   0.0,
+   -0.206
+  ],
+  "bounds_godot_max": [
+   0.5,
+   0.95,
+   0.206
+  ]
+ },
+ "parts_drawer_unit": {
+  "tris": 2700,
+  "size_m": [
+   0.6,
+   0.41,
+   0.7
+  ],
+  "level": "L4",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.3,
+   0.0,
+   -0.205
+  ],
+  "bounds_godot_max": [
+   0.3,
+   0.7,
+   0.205
+  ]
+ },
+ "cuckoo_clock": {
+  "tris": 424,
+  "size_m": [
+   0.28,
+   0.177,
+   0.6
+  ],
+  "level": "L4",
+  "origin": "back",
+  "bounds_godot_min": [
+   -0.14,
+   0.0,
+   -0.0
+  ],
+  "bounds_godot_max": [
+   0.14,
+   0.6,
+   0.177
+  ]
+ },
+ "toy_train": {
+  "tris": 432,
+  "size_m": [
+   0.292,
+   0.15,
+   0.18
+  ],
+  "level": "L4",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.146,
+   0.0,
+   -0.075
+  ],
+  "bounds_godot_max": [
+   0.146,
+   0.18,
+   0.075
+  ]
+ },
+ "bakery_loft_wall_1m": {
+  "tris": 36,
+  "size_m": [
+   1.0,
+   0.22,
+   3.0
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.5,
+   0.0,
+   -0.11
+  ],
+  "bounds_godot_max": [
+   0.5,
+   3.0,
+   0.11
+  ]
+ },
+ "bakery_loft_wall_2m": {
+  "tris": 36,
+  "size_m": [
+   2.0,
+   0.22,
+   3.0
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -1.0,
+   0.0,
+   -0.11
+  ],
+  "bounds_godot_max": [
+   1.0,
+   3.0,
+   0.11
+  ]
+ },
+ "bakery_loft_wall_corner": {
+  "tris": 72,
+  "size_m": [
+   1.16,
+   1.16,
+   3.0
+  ],
+  "level": "L6",
+  "origin": "corner",
+  "bounds_godot_min": [
+   -0.11,
+   0.0,
+   -1.05
+  ],
+  "bounds_godot_max": [
+   1.05,
+   3.0,
+   0.11
+  ]
+ },
+ "bakery_loft_floor_1m": {
+  "tris": 108,
+  "size_m": [
+   1.0,
+   1.0,
+   0.05
+  ],
+  "level": "L6",
+  "origin": "top",
+  "bounds_godot_min": [
+   -0.5,
+   -0.05,
+   -0.5
+  ],
+  "bounds_godot_max": [
+   0.5,
+   0.0,
+   0.5
+  ]
+ },
+ "bakery_loft_floor_2m": {
+  "tris": 108,
+  "size_m": [
+   2.0,
+   2.0,
+   0.05
+  ],
+  "level": "L6",
+  "origin": "top",
+  "bounds_godot_min": [
+   -1.0,
+   -0.05,
+   -1.0
+  ],
+  "bounds_godot_max": [
+   1.0,
+   0.0,
+   1.0
+  ]
+ },
+ "skylight_frame": {
+  "tris": 144,
+  "size_m": [
+   1.6,
+   1.2,
+   0.08
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.8,
+   0.0,
+   -0.6
+  ],
+  "bounds_godot_max": [
+   0.8,
+   0.08,
+   0.6
+  ]
+ },
+ "ceiling_beam": {
+  "tris": 120,
+  "size_m": [
+   3.0,
+   0.22,
+   0.29
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -1.5,
+   0.0,
+   -0.11
+  ],
+  "bounds_godot_max": [
+   1.5,
+   0.29,
+   0.11
+  ]
+ },
+ "radiator": {
+  "tris": 784,
+  "size_m": [
+   0.895,
+   0.2,
+   0.5
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.447,
+   0.0,
+   -0.1
+  ],
+  "bounds_godot_max": [
+   0.447,
+   0.5,
+   0.1
+  ]
+ },
+ "flour_sack_rug": {
+  "tris": 228,
+  "size_m": [
+   1.6,
+   1.0,
+   0.048
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.8,
+   0.0,
+   -0.5
+  ],
+  "bounds_godot_max": [
+   0.8,
+   0.048,
+   0.5
+  ]
+ },
+ "pastry_basket": {
+  "tris": 188,
+  "size_m": [
+   0.44,
+   0.44,
+   0.225
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.22,
+   0.0,
+   -0.22
+  ],
+  "bounds_godot_max": [
+   0.22,
+   0.225,
+   0.22
+  ]
+ },
+ "stair_step": {
+  "tris": 216,
+  "size_m": [
+   1.0,
+   0.3,
+   0.22
+  ],
+  "level": "L6",
+  "origin": "bottom",
+  "bounds_godot_min": [
+   -0.5,
+   0.0,
+   -0.15
+  ],
+  "bounds_godot_max": [
+   0.5,
+   0.22,
+   0.15
+  ]
+ }
+}
