@@ -516,6 +516,10 @@ func _build_town() -> void:
 				top.position = at + Vector3(0, 2.2, 0)
 				world.add_child(top)
 			"parked_car":
+				# Never on or beside a bay: the truck parks there, and a car
+				# through its side reads as one vehicle.
+				if _near_bay(spot.get("at", Vector2.ZERO), 260.0):
+					continue
 				var parked := _make_car(Color("C9D2C0"))
 				parked.position = to_world(spot.get("at", Vector2.ZERO), 0.0)
 				world.add_child(parked)
@@ -571,7 +575,7 @@ func _dress_sidewalks(rng: RandomNumberGenerator) -> void:
 							Outdoors._bush(world, to_world(at, 0.5), 0.45)
 					d += step
 			# A bus stop on the south-west corner of every other block (not on a street of houses).
-			if (c + r) % 2 == 0 and not houses_block:
+			if (c + r) % 2 == 0 and not houses_block and not _near_bay(Vector2(rect.position.x + edge * 2.5, rect.end.y - edge), 200.0):
 				var corner := Vector2(rect.position.x + edge * 2.5, rect.end.y - edge)
 				var pole := Props.mesh_cylinder(0.05, 2.6, Color("4E4A48"))
 				pole.position = to_world(corner, 0.12)
@@ -594,8 +598,12 @@ func _dress_sidewalks(rng: RandomNumberGenerator) -> void:
 				if body:
 					(body.mesh as BoxMesh).size = Vector3(4.6, 1.6, 1.9)
 					body.position.y = 0.9
-				van.position = to_world(Vector2(rect.position.x + rect.size.x * rng.randf_range(0.2, 0.5), rect.position.y - city.road * 0.25))
-				world.add_child(van)
+				var van_at := Vector2(rect.position.x + rect.size.x * rng.randf_range(0.2, 0.5), rect.position.y - city.road * 0.25)
+				if _near_bay(van_at, 260.0):
+					van.queue_free()
+				else:
+					van.position = to_world(van_at)
+					world.add_child(van)
 
 
 func _make_walker(color: Color) -> Node3D:
@@ -2720,6 +2728,9 @@ func _snap_camera() -> void:
 		var inward := _inward3(str(place.get("side", "N")))
 		cam.position = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
 		cam_look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
+	# The same clearance the live camera gets, so a snap never lands in a wall.
+	if world != null:
+		cam.position = _camera_clear(cam.position, truck_at)
 	cam.look_at(cam_look, Vector3.UP)
 
 
@@ -3029,6 +3040,16 @@ func _hazard_ahead() -> Dictionary:
 		if best.is_empty() or d < float(best["dist"]):
 			best = {"kind": kind, "dist": d, "hazard": hazard}
 	return best
+
+
+func _near_bay(p: Vector2, reach: float) -> bool:
+	# Within `reach` px of either bay's centre, where the truck parks and
+	# the boxes stack: nothing static is placed there.
+	for place in [pickup, dropoff]:
+		var bay: Rect2 = place.get("bay", Rect2())
+		if bay.size != Vector2.ZERO and bay.get_center().distance_to(p) < reach:
+			return true
+	return false
 
 
 func _in_bay(p: Vector2) -> bool:
