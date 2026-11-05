@@ -1714,7 +1714,7 @@ func _hud() -> void:
 	stamp_label.custom_minimum_size = Vector2(150, 36)
 	card.add_child(stamp_label)
 	if str(course.get("weather", "clear")) == "night":
-		spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
+		spot_label = UIKit.label("Patrols out. Keep it slow.", 24, UIKit.LOSS, "small", false)
 		spot_label.name = "SpotLabel"
 		spot_label.position = Vector2(20, 118)
 		spot_label.custom_minimum_size = Vector2(370, 36)
@@ -2569,7 +2569,7 @@ func _patrols(delta: float) -> void:
 	if spot_label == null and hud_root != null:
 		var card := hud_root.get_node_or_null("ConditionCard")
 		if card:
-			spot_label = UIKit.label("Patrols out. Keep it slow near them.", 24, UIKit.LOSS, "small", false)
+			spot_label = UIKit.label("Patrols out. Keep it slow.", 24, UIKit.LOSS, "small", false)
 			spot_label.name = "SpotLabel"
 			spot_label.position = Vector2(20, 118)
 			spot_label.custom_minimum_size = Vector2(370, 36)
@@ -2597,7 +2597,7 @@ func _patrols(delta: float) -> void:
 		if watched:
 			spot_label.text = "Patrol watching  %d%%" % int(round(spot_meter / maxf(0.1, float(spec.get("spot_seconds", 2.0))) * 100.0))
 		else:
-			spot_label.text = "Spotted %d time%s" % [spotted, "" if spotted == 1 else "s"] if spotted > 0 else "Patrols out. Keep it slow near them."
+			spot_label.text = "Spotted %d time%s" % [spotted, "" if spotted == 1 else "s"] if spotted > 0 else "Patrols out. Keep it slow."
 	_cops(delta)
 
 
