@@ -94,6 +94,9 @@ var stack_room
 var _settle_uid := ""
 var hud_only := false
 var _goal_pip := 0.0
+var _ui_acc := 0.0
+## Set when a piece is picked up, set down, boxed or opened: the goal cards refresh at once.
+var ui_dirty := true
 var view_quadrant := 0
 var view_zoom := 1.0
 var footprint: MeshInstance3D
@@ -142,6 +145,7 @@ func _ready() -> void:
 
 func _on_held_cleared() -> void:
 	held_uid = ""
+	ui_dirty = true
 	held_source = ""
 	if ghost:
 		ghost.visible = false
@@ -1379,10 +1383,21 @@ func _process(delta: float) -> void:
 		_goal_pip = maxf(0.0, _goal_pip - delta)
 		if _goal_pip <= 0.0:
 			_markers_key = ""
-	_sync_goal_markers()
-	_sync_goals_panel()
-	if hint:
-		hint.text = _hint_text()
+	# The goal checks walk every placed piece against every goal; at a
+	# frame a time that was most of the frame budget on a big plan. They
+	# run eight times a second, or at once when something was picked up,
+	# set down or opened (ui_dirty).
+	_ui_acc += delta
+	if ui_dirty or _ui_acc >= 0.125:
+		_ui_acc = 0.0
+		ui_dirty = false
+		_sync_goal_markers()
+		_sync_goals_panel()
+		if hint:
+			hint.text = _hint_text()
+	elif progress != null and is_instance_valid(progress) and progress.visible:
+		# The step bar still eases every frame.
+		progress.value = lerpf(progress.value, _step_progress(), 0.25)
 
 
 func _sync_goals_panel() -> void:
@@ -2071,12 +2086,14 @@ func _try_place_held() -> void:
 			decor["state"] = "settling"
 		AudioDirector.play_sfx("sfx_item_snap", true)
 		held_uid = ""
+		ui_dirty = true
 		held_source = ""
 		_commit_place(uid, source, on_wall)
 		return
 	var rec := GameState.find_office_item(uid) if source == "office" else GameState.job_item(uid)
 	if rec.is_empty():
 		held_uid = ""
+		ui_dirty = true
 		held_source = ""
 		return
 	_remember_safe(rec)
@@ -2094,6 +2111,7 @@ func _try_place_held() -> void:
 	AudioDirector.play_sfx("sfx_item_snap", true)
 	AudioDirector.play_sfx("sfx_box_set_down", true)
 	held_uid = ""
+	ui_dirty = true
 	held_source = ""
 	_last_placed_uid = uid
 	_commit_place(uid, source, on_wall)
@@ -2168,6 +2186,7 @@ func _take_to_hand(rec: Dictionary, source: String) -> void:
 			_toast(where, "Dana")
 	_release_dependents(uid)
 	held_uid = uid
+	ui_dirty = true
 	held_source = source
 	held_rot = float(rec.get("rot", 0))
 	rec["state"] = "hand"
@@ -2446,6 +2465,7 @@ func _unpack_click(uid: String) -> void:
 		# an empty hand takes the next click rather than a ghost of the last one.
 		print("  stale hand: %s (state %s) cleared" % [held_uid, GameState.job_item(held_uid).get("state", "")])
 		held_uid = ""
+		ui_dirty = true
 		held_source = ""
 	if held_uid == "":
 		var item := GameState.job_item(uid)
@@ -4092,6 +4112,7 @@ func _auto_place_item(item: Dictionary, source := "job") -> bool:
 	var was_source := held_source
 	var was_rot := held_rot
 	held_uid = uid
+	ui_dirty = true
 	held_source = source
 	held_rot = float(item.get("rot", 0.0))
 	item["state"] = "hand"
@@ -4169,6 +4190,7 @@ func _auto_place_item(item: Dictionary, source := "job") -> bool:
 	if not placed:
 		item["state"] = "loose"
 	held_uid = was_held
+	ui_dirty = true
 	held_source = was_source
 	held_rot = was_rot
 	return placed
@@ -4924,6 +4946,7 @@ func _stumble() -> void:
 		item["state"] = "loose"
 		item["floor"] = home_floor
 		held_uid = ""
+		ui_dirty = true
 		held_source = ""
 		if ghost:
 			ghost.visible = false
@@ -5248,6 +5271,7 @@ func _held_def() -> Dictionary:
 func _drop_hold() -> void:
 	_restore_held_record()
 	held_uid = ""
+	ui_dirty = true
 	held_source = ""
 	if ghost:
 		ghost.visible = false
@@ -5889,6 +5913,7 @@ func _refresh_hud_buttons() -> void:
 			_act_button(layer, "Place decor", Vector2(1100, y), func():
 				var entry: Dictionary = GameState.decor_queue[0]
 				held_uid = str(entry.get("uid", ""))
+				ui_dirty = true
 				held_source = "decor"
 				held_rot = 0
 				AudioDirector.play_sfx("sfx_item_pick_up")
@@ -7212,6 +7237,7 @@ func _pop_bubble() -> void:
 	if placed.is_empty():
 		return
 	held_uid = str(placed.get("uid", ""))
+	ui_dirty = true
 	held_source = "decor"
 	held_rot = 0
 	_toast("It's out. Click the floor to snap it in.")
@@ -7241,6 +7267,7 @@ func _return_held() -> void:
 		_toast(err)
 		return
 	held_uid = ""
+	ui_dirty = true
 	held_source = ""
 	AudioDirector.play_sfx("sfx_cash_gain")
 	_toast("Sent back. Most of the money came home.")
@@ -7254,6 +7281,7 @@ func _resell_held() -> void:
 		_toast(err)
 		return
 	held_uid = ""
+	ui_dirty = true
 	held_source = ""
 	AudioDirector.play_sfx("sfx_sell_click")
 	AudioDirector.play_sfx("sfx_cash_gain")
@@ -7703,6 +7731,7 @@ func _bubble(node: Node3D, text: String, seconds := 4.0) -> void:
 		old_dot.queue_free()
 	var label := Label3D.new()
 	label.name = "Thought"
+	label.add_to_group("thought_bubbles")
 	label.text = text
 	label.font = UIKit.body_font()
 	label.font_size = 36
@@ -8069,9 +8098,11 @@ func _ward_sleep() -> void:
 
 
 func _tick_bubbles(delta: float) -> void:
-	for label in get_tree().get_nodes_in_group("thought_bubbles"):
-		pass
-	for node in find_children("Thought", "Label3D", true, false):
+	# Bubbles register themselves in a group, so this is a walk of the
+	# bubbles alive, not of every node in the room.
+	for node in get_tree().get_nodes_in_group("thought_bubbles"):
+		if not is_instance_valid(node) or not node.is_inside_tree() or node.is_queued_for_deletion():
+			continue
 		var ttl := float(node.get_meta("ttl", 0.0)) - delta
 		node.set_meta("ttl", ttl)
 		var dot := node.get_parent().get_node_or_null("ThoughtDot")
