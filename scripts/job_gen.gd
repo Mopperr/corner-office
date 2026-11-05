@@ -217,7 +217,78 @@ static func board(seed: int, day: int, rep: int, jobs_done: int, count := 3) -> 
 		if twist == "ducks":
 			job["duck_friend"] = true
 		jobs.append(job)
+	# From the second day, one long haul to a real city the reputation
+	# can reach: the same move, a highway leg before the new town's kerb,
+	# and the pay by the mile.
+	if day >= 2:
+		var reach: Array = Regions.open_to(rep)
+		if not reach.is_empty():
+			var far: Dictionary = reach[rng.randi_range(0, reach.size() - 1)]
+			var haul_job := _haul_job(rng, day, far, pool, used_clients, rep, jobs_done)
+			drives[str(haul_job["drive"])] = haul_job["_drive"]
+			haul_job.erase("_drive")
+			jobs.append(haul_job)
 	return {"jobs": jobs, "drives": drives}
+
+
+static func _haul_job(rng: RandomNumberGenerator, day: int, far: Dictionary, pool: Array, used_clients: Array, rep: int, jobs_done: int) -> Dictionary:
+	var client: Dictionary = pool[rng.randi_range(0, pool.size() - 1)]
+	var guard := 0
+	while used_clients.has(client.get("name", "")) and guard < 12:
+		client = pool[rng.randi_range(0, pool.size() - 1)]
+		guard += 1
+	var id := "haul_d%d" % day
+	var drive_id := "haul_drive_d%d" % day
+	var venue := str(client.get("venue", "cafe"))
+	var home: Dictionary = ItemDB.venues().get(venue, {})
+	var is_home := bool(home.get("home", false))
+	var size := int(Tuning.get_value("jobs.size_min", 18)) + rng.randi_range(4, 12) + mini(jobs_done, 10)
+	size = clampi(size, 12, 48)
+	var twist := "fragile" if rng.randf() < 0.5 else "plain"
+	var recipe := _recipe_home(rng, size, twist, home) if is_home else _recipe(rng, size, twist)
+	size = 0
+	for group in recipe:
+		size += int(group.get("count", 1))
+	var miles := int(far.get("miles", 60))
+	var drive := _drive(rng, drive_id, twist)
+	drive["title"] = "%s to %s" % [far.get("via", "the interstate"), far.get("name", "")]
+	drive["haul"] = {"city": far.get("name", ""), "state": far.get("state", ""), "miles": miles, "region": far.get("region", "midlands"), "via": far.get("via", "I-26"), "id": far.get("id", "")}
+	drive["highway_m"] = Regions.highway_metres(miles)
+	drive["scenery"] = "highway"
+	# No duck crossing on an interstate; the rest of the hazards stay.
+	var kept: Array = []
+	for hazard in drive.get("hazards", []):
+		if str(hazard.get("type", "")) != "ducks":
+			kept.append(hazard)
+	drive["hazards"] = kept
+	var haul_pay := Regions.haul_pay(miles)
+	var pay := 90 + size * 4 + rep * 12 + haul_pay
+	var tier: Dictionary = Regions.tier_for(miles)
+	return {
+		"id": id,
+		"generated": true,
+		"haul": {"city": far.get("name", ""), "state": far.get("state", ""), "miles": miles, "pay": haul_pay, "tier": tier.get("name", "Long haul"), "region": far.get("region", "midlands"), "via": far.get("via", ""), "id": far.get("id", "")},
+		"venue": venue,
+		"drive": drive_id,
+		"_drive": drive,
+		"unlock": "tutorial_done",
+		"title": "%s · %s, %s" % [tier.get("name", "Long haul"), far.get("name", ""), far.get("state", "")],
+		"home": is_home,
+		"client": client.get("name", ""),
+		"party": client.get("party", ["adult"]),
+		"mood": client.get("mood", ""),
+		"story": client.get("story", ""),
+		"why": client.get("why", ""),
+		"brief": "%s is leaving for %s, %s. %d miles on %s, %d pieces, $%d of it for the road. %s %s" % [client.get("name", "They"), far.get("name", ""), far.get("state", ""), miles, far.get("via", "the interstate"), size, haul_pay, far.get("tagline", ""), _twist_line(twist)],
+		"referral": "",
+		"mentor_note": "Long road. Fill up, pick a station, and ease off for the bumps; a box rides a hundred miles the way it rides one.",
+		"narrative_base": pay,
+		"recipe": recipe,
+		"twist": twist,
+		"day": day,
+		"modifiers": [],
+		"wish": {},
+	}
 
 
 static func _recipe(rng: RandomNumberGenerator, size: int, twist: String) -> Array:

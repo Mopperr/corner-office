@@ -191,3 +191,22 @@ lines that can be long (the ride verdict, the patrol warning) get their
 own line rather than sharing one. The kerb signs fade out at ten metres
 so they never fill the windscreen alongside, and at thirty-eight so the
 far end of a street is not a stack of names.
+
+## Long hauls: real cities from Columbia, South Carolina
+
+Home is a garage off a side street in Columbia, SC. From the second day
+the board carries one long haul a morning to a real city the reputation
+can reach (`data/cities.json`: thirty cities with road miles from
+Columbia, the road out, a region and a line about the place; Lexington
+at 13 miles up to Nashville at 425). Pay is the town rate plus $2.20 a
+mile, and the tiers gate by Rep: day trips under 60 miles at Rep 0,
+long hauls to 120 at Rep 1, overnighters to 200 at Rep 2, cross-country
+at Rep 3. A haul is the same move with a highway leg first: a straight
+interstate built by region (pines or palmettos, fields and water,
+hills in the upstate), guardrails, billboards counting the miles down,
+mile markers, an overpass, the city's water tower and a welcome sign (a
+"Leaving South Carolina" board at two thirds when the city is out of
+state). No ducks on an interstate. The highway's box condition carries
+into the second leg, which is the town as usual. The map's Region
+button shows South Carolina with the roads out from Columbia, the
+cities by reach, and today's haul in terracotta.

@@ -346,6 +346,7 @@ func _ready() -> void:
 	failures.append_array(await _home_checks())
 	failures.append_array(await _party_checks())
 	failures.append_array(await _life_checks())
+	failures.append_array(await _haul_checks())
 	failures.append_array(_handling_checks())
 	failures.append_array(_texture_checks())
 	failures.append_array(_catalog_checks())
@@ -387,7 +388,8 @@ func _content_engine() -> Array:
 		found.append("board same on a new day")
 	var city = load("res://scripts/city.gd").load_default()
 	var jobs: Array = a.get("jobs", [])
-	if jobs.size() != 3:
+	# Three town moves and, from the second day, one long haul last.
+	if jobs.size() != 4 or (jobs[3].get("haul", {}) as Dictionary).is_empty():
 		found.append("board size %d" % jobs.size())
 	for job in jobs:
 		var pieces := 0
@@ -4500,3 +4502,149 @@ func _wait_eval(room, id: String, limit: int) -> bool:
 	if room.item_evaluated.is_connected(cb):
 		room.item_evaluated.disconnect(cb)
 	return ok
+
+
+func _haul_checks() -> Array:
+	# The long hauls: real cities with road miles from Columbia, a haul on
+	# the board from the second day paid by the mile, a highway leg that
+	# builds and hands over to the town leg, the Region map, the results line.
+	var found: Array = []
+	var cities: Array = Regions.cities()
+	if cities.size() < 30:
+		found.append("only %d cities" % cities.size())
+	if str(Regions.home().get("name", "")) != "Columbia" or str(Regions.home().get("state", "")) != "SC":
+		found.append("home is not Columbia, SC")
+	var states: Dictionary = {}
+	for entry in cities:
+		if int(entry.get("miles", 0)) <= 0 or absf(float(entry.get("lat", 0.0))) < 1.0 or str(entry.get("tagline", "")) == "":
+			found.append("city %s is short" % entry.get("id", "?"))
+		if Regions.region(str(entry.get("region", ""))).is_empty():
+			found.append("city %s has no region" % entry.get("id", "?"))
+		states[str(entry.get("state", ""))] = true
+	if not states.has("SC") or states.size() < 4:
+		found.append("states: %s" % str(states.keys()))
+	if Regions.open_to(0).size() < 4 or Regions.open_to(3).size() != cities.size():
+		found.append("tiers: rep 0 opens %d, rep 3 opens %d" % [Regions.open_to(0).size(), Regions.open_to(3).size()])
+	if Regions.haul_pay(115) < 200 or Regions.highway_metres(115) < 500 or Regions.highway_metres(425) > 1700:
+		found.append("haul pay or length off: $%d, %d m, %d m" % [Regions.haul_pay(115), Regions.highway_metres(115), Regions.highway_metres(425)])
+	# The board: day one has no haul, day two has one the rep can reach.
+	GameState.new_game("dana")
+	GameState.tutorial_done = true
+	var JobGen = load("res://scripts/job_gen.gd")
+	var day1: Dictionary = JobGen.board(5, 1, 0, 0)
+	for job in day1["jobs"]:
+		if not (job.get("haul", {}) as Dictionary).is_empty():
+			found.append("a haul on day one")
+	var day2: Dictionary = JobGen.board(5, 2, 3, 3)
+	var haul_job: Dictionary = {}
+	for job in day2["jobs"]:
+		if not (job.get("haul", {}) as Dictionary).is_empty():
+			haul_job = job
+	if haul_job.is_empty():
+		found.append("no haul on day two")
+		return found
+	var haul: Dictionary = haul_job["haul"]
+	var drive_def: Dictionary = day2["drives"].get(str(haul_job.get("drive", "")), {})
+	if int(haul_job.get("narrative_base", 0)) <= 320 - 1 and int(haul.get("miles", 0)) > 100:
+		found.append("haul pay $%d for %d miles" % [int(haul_job.get("narrative_base", 0)), int(haul.get("miles", 0))])
+	if drive_def.is_empty() or (drive_def.get("haul", {}) as Dictionary).is_empty() or int(drive_def.get("highway_m", 0)) < 300:
+		found.append("haul drive missing its highway")
+	for hazard in drive_def.get("hazards", []):
+		if str(hazard.get("type", "")) == "ducks":
+			found.append("ducks on the interstate")
+	if not ("miles" in str(haul_job.get("brief", ""))):
+		found.append("haul brief: %s" % haul_job.get("brief", ""))
+	# The highway leg builds, runs to its end, and hands over to the town leg.
+	GameState.generated_jobs = day2["jobs"]
+	GameState.generated_drives = day2["drives"]
+	GameState.start_job(str(haul_job["id"]))
+	GameState.set_mode("drive")
+	var DriveLib = load("res://scripts/drive_course.gd")
+	var drive: Node = DriveLib.new()
+	var landed: Dictionary = {}
+	drive.finished.connect(func(result: Dictionary): landed["result"] = result)
+	add_child(drive)
+	await get_tree().process_frame
+	if not bool(drive.highway):
+		found.append("the haul's first leg is not the highway")
+	if float(drive.lane_total) < 300.0 * 32.0:
+		found.append("highway lane is %.0f px" % float(drive.lane_total))
+	var world: Node = drive.get_node_or_null("Town")
+	var labels := 0
+	var multis := 0
+	if world:
+		for node in world.find_children("*", "Label3D", true, false):
+			labels += 1
+		for node in world.find_children("*", "MultiMeshInstance3D", true, false):
+			multis += 1
+	if labels < 5 or multis < 4:
+		found.append("highway scenery thin: %d labels, %d multimeshes" % [labels, multis])
+	drive.state = "drive"
+	drive.speed = 20.0
+	drive.along = float(drive.lane_total) - 0.2
+	drive.pos = drive._lane_point(drive.along)
+	drive._process(0.016)
+	await get_tree().process_frame
+	var result: Dictionary = landed.get("result", {})
+	if not bool(result.get("highway", false)) or not bool(GameState.job.get("highway_done", false)):
+		found.append("the highway leg did not hand over (%s)" % str(result))
+	_bury(drive)
+	var leg2: Node = DriveLib.new()
+	add_child(leg2)
+	await get_tree().process_frame
+	if bool(leg2.highway):
+		found.append("the second leg is a highway again")
+	if leg2.get_node_or_null("Town") == null or leg2.get_node("Town").find_child("Building", true, false) == null:
+		found.append("the second leg has no town")
+	if str(leg2.dropoff.get("name", "")) == "":
+		found.append("the second leg has no dropoff")
+	_bury(leg2)
+	# The results card says the haul.
+	GameState.job["condition"] = 95
+	GameState.set_mode("job_unpack")
+	GameState.finish_job()
+	if (GameState.payout.get("haul", {}) as Dictionary).is_empty():
+		found.append("payout has no haul")
+	var results: Control = load("res://scripts/results_ui.gd").new()
+	add_child(results)
+	await get_tree().process_frame
+	var said := false
+	for line in results.lines:
+		if str(line).begins_with("Long haul"):
+			said = true
+	if not said:
+		found.append("results card has no haul line")
+	_bury(results)
+	# The Region map: a button, thirty city pins, Columbia's star.
+	GameState.set_mode("office")
+	var map: Control = load("res://scripts/map_ui.gd").new()
+	add_child(map)
+	await get_tree().process_frame
+	var region_button: Button = map.find_child("RegionButton", true, false) as Button
+	if region_button == null:
+		found.append("map has no Region button")
+	else:
+		region_button.pressed.emit()
+		await get_tree().process_frame
+		var pins := 0
+		for node in map.find_children("City_*", "Button", true, false):
+			if node.visible:
+				pins += 1
+		if pins < 30:
+			found.append("region map shows %d city pins" % pins)
+		var charleston: Button = map.find_child("City_charleston", true, false) as Button
+		if charleston:
+			charleston.pressed.emit()
+			await get_tree().process_frame
+			var said_miles := false
+			for node in map.find_children("*", "Label", true, false):
+				if "115 miles" in str(node.text):
+					said_miles = true
+			if not said_miles:
+				found.append("Charleston's card does not say 115 miles")
+		region_button.pressed.emit()
+		await get_tree().process_frame
+		if region_button.text != "Region":
+			found.append("region toggle did not come back")
+	_bury(map)
+	return found

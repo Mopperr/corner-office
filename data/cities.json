@@ -1,0 +1,502 @@
+{
+ "_about": "Real cities for the long hauls. Miles are road miles from the home garage in Columbia; 'via' names the road the truck takes out of town; 'region' picks the scenery on the highway leg.",
+ "home": {
+  "id": "columbia",
+  "name": "Columbia",
+  "state": "SC",
+  "lat": 34.0,
+  "lon": -81.03,
+  "tagline": "The capital, the river, and a garage with a roll-up door."
+ },
+ "cities": [
+  {
+   "id": "lexington",
+   "name": "Lexington",
+   "state": "SC",
+   "lat": 33.98,
+   "lon": -81.24,
+   "miles": 13,
+   "region": "midlands",
+   "via": "US-1",
+   "tagline": "Lake Murray weekends and a main street that still closes for parades."
+  },
+  {
+   "id": "camden",
+   "name": "Camden",
+   "state": "SC",
+   "lat": 34.25,
+   "lon": -80.61,
+   "miles": 34,
+   "region": "midlands",
+   "via": "I-20",
+   "tagline": "Horse country. The Cup, the pines, the porches."
+  },
+  {
+   "id": "newberry",
+   "name": "Newberry",
+   "state": "SC",
+   "lat": 34.27,
+   "lon": -81.62,
+   "miles": 41,
+   "region": "midlands",
+   "via": "I-26",
+   "tagline": "An opera house on a town square."
+  },
+  {
+   "id": "orangeburg",
+   "name": "Orangeburg",
+   "state": "SC",
+   "lat": 33.49,
+   "lon": -80.86,
+   "miles": 42,
+   "region": "midlands",
+   "via": "I-26",
+   "tagline": "Rose gardens and the Edisto."
+  },
+  {
+   "id": "sumter",
+   "name": "Sumter",
+   "state": "SC",
+   "lat": 33.92,
+   "lon": -80.34,
+   "miles": 44,
+   "region": "midlands",
+   "via": "US-378",
+   "tagline": "Swan Lake and the iris gardens."
+  },
+  {
+   "id": "aiken",
+   "name": "Aiken",
+   "state": "SC",
+   "lat": 33.56,
+   "lon": -81.72,
+   "miles": 56,
+   "region": "midlands",
+   "via": "I-20",
+   "tagline": "Wide avenues laid out for carriages."
+  },
+  {
+   "id": "rock_hill",
+   "name": "Rock Hill",
+   "state": "SC",
+   "lat": 34.92,
+   "lon": -81.03,
+   "miles": 73,
+   "region": "upstate",
+   "via": "I-77",
+   "tagline": "Old mills turned into lofts."
+  },
+  {
+   "id": "greenwood",
+   "name": "Greenwood",
+   "state": "SC",
+   "lat": 34.19,
+   "lon": -82.16,
+   "miles": 73,
+   "region": "upstate",
+   "via": "US-178",
+   "tagline": "A main street wide enough for a railroad."
+  },
+  {
+   "id": "florence",
+   "name": "Florence",
+   "state": "SC",
+   "lat": 34.2,
+   "lon": -79.77,
+   "miles": 80,
+   "region": "pee_dee",
+   "via": "I-20",
+   "tagline": "Where the interstates cross the Pee Dee."
+  },
+  {
+   "id": "spartanburg",
+   "name": "Spartanburg",
+   "state": "SC",
+   "lat": 34.95,
+   "lon": -81.93,
+   "miles": 93,
+   "region": "upstate",
+   "via": "I-26",
+   "tagline": "Peach stands on every road in."
+  },
+  {
+   "id": "summerville",
+   "name": "Summerville",
+   "state": "SC",
+   "lat": 33.02,
+   "lon": -80.18,
+   "miles": 95,
+   "region": "lowcountry",
+   "via": "I-26",
+   "tagline": "Flowertown. Azaleas, and the sweet tea was invented here, they say."
+  },
+  {
+   "id": "greenville",
+   "name": "Greenville",
+   "state": "SC",
+   "lat": 34.85,
+   "lon": -82.4,
+   "miles": 104,
+   "region": "upstate",
+   "via": "I-26",
+   "tagline": "A waterfall in the middle of downtown."
+  },
+  {
+   "id": "charleston",
+   "name": "Charleston",
+   "state": "SC",
+   "lat": 32.78,
+   "lon": -79.93,
+   "miles": 115,
+   "region": "lowcountry",
+   "via": "I-26",
+   "tagline": "Rainbow Row, the harbour, church bells over the market."
+  },
+  {
+   "id": "anderson",
+   "name": "Anderson",
+   "state": "SC",
+   "lat": 34.5,
+   "lon": -82.65,
+   "miles": 118,
+   "region": "upstate",
+   "via": "I-85",
+   "tagline": "Lake Hartwell and the Electric City."
+  },
+  {
+   "id": "georgetown",
+   "name": "Georgetown",
+   "state": "SC",
+   "lat": 33.38,
+   "lon": -79.29,
+   "miles": 123,
+   "region": "lowcountry",
+   "via": "US-521",
+   "tagline": "Rice fields gone back to marsh, a harbourwalk."
+  },
+  {
+   "id": "beaufort",
+   "name": "Beaufort",
+   "state": "SC",
+   "lat": 32.43,
+   "lon": -80.67,
+   "miles": 125,
+   "region": "lowcountry",
+   "via": "I-95",
+   "tagline": "Live oaks over the water, porches on every house."
+  },
+  {
+   "id": "clemson",
+   "name": "Clemson",
+   "state": "SC",
+   "lat": 34.68,
+   "lon": -82.84,
+   "miles": 128,
+   "region": "upstate",
+   "via": "I-85",
+   "tagline": "Orange everywhere. The lake on the other days."
+  },
+  {
+   "id": "conway",
+   "name": "Conway",
+   "state": "SC",
+   "lat": 33.84,
+   "lon": -79.05,
+   "miles": 135,
+   "region": "pee_dee",
+   "via": "US-378",
+   "tagline": "A riverwalk on the Waccamaw."
+  },
+  {
+   "id": "myrtle_beach",
+   "name": "Myrtle Beach",
+   "state": "SC",
+   "lat": 33.69,
+   "lon": -78.89,
+   "miles": 148,
+   "region": "coast",
+   "via": "US-378",
+   "tagline": "Sixty miles of beach and a Ferris wheel."
+  },
+  {
+   "id": "hilton_head",
+   "name": "Hilton Head Island",
+   "state": "SC",
+   "lat": 32.22,
+   "lon": -80.75,
+   "miles": 157,
+   "region": "lowcountry",
+   "via": "I-95",
+   "tagline": "Bike paths under the pines, the lighthouse at Harbour Town."
+  },
+  {
+   "id": "augusta",
+   "name": "Augusta",
+   "state": "GA",
+   "lat": 33.47,
+   "lon": -81.97,
+   "miles": 75,
+   "region": "out_of_state",
+   "via": "I-20",
+   "tagline": "Across the Savannah River. Azaleas in April."
+  },
+  {
+   "id": "charlotte",
+   "name": "Charlotte",
+   "state": "NC",
+   "lat": 35.23,
+   "lon": -80.84,
+   "miles": 93,
+   "region": "out_of_state",
+   "via": "I-77",
+   "tagline": "The skyline you can see from the state line."
+  },
+  {
+   "id": "savannah",
+   "name": "Savannah",
+   "state": "GA",
+   "lat": 32.08,
+   "lon": -81.1,
+   "miles": 157,
+   "region": "out_of_state",
+   "via": "I-95",
+   "tagline": "Squares under Spanish moss."
+  },
+  {
+   "id": "asheville",
+   "name": "Asheville",
+   "state": "NC",
+   "lat": 35.6,
+   "lon": -82.55,
+   "miles": 160,
+   "region": "out_of_state",
+   "via": "I-26",
+   "tagline": "Up into the mountains. The air changes at the line."
+  },
+  {
+   "id": "wilmington",
+   "name": "Wilmington",
+   "state": "NC",
+   "lat": 34.23,
+   "lon": -77.94,
+   "miles": 195,
+   "region": "out_of_state",
+   "via": "US-74",
+   "tagline": "A riverfront and the ocean twenty minutes on."
+  },
+  {
+   "id": "atlanta",
+   "name": "Atlanta",
+   "state": "GA",
+   "lat": 33.75,
+   "lon": -84.39,
+   "miles": 215,
+   "region": "out_of_state",
+   "via": "I-20",
+   "tagline": "The big one. Six lanes each way and a client who tips."
+  },
+  {
+   "id": "raleigh",
+   "name": "Raleigh",
+   "state": "NC",
+   "lat": 35.78,
+   "lon": -78.64,
+   "miles": 225,
+   "region": "out_of_state",
+   "via": "I-95",
+   "tagline": "Oaks and universities."
+  },
+  {
+   "id": "knoxville",
+   "name": "Knoxville",
+   "state": "TN",
+   "lat": 35.96,
+   "lon": -83.92,
+   "miles": 265,
+   "region": "out_of_state",
+   "via": "I-40",
+   "tagline": "Over the Smokies and down the other side."
+  },
+  {
+   "id": "jacksonville",
+   "name": "Jacksonville",
+   "state": "FL",
+   "lat": 30.33,
+   "lon": -81.66,
+   "miles": 290,
+   "region": "out_of_state",
+   "via": "I-95",
+   "tagline": "Palms at the welcome centre, the St. Johns bridges."
+  },
+  {
+   "id": "nashville",
+   "name": "Nashville",
+   "state": "TN",
+   "lat": 36.16,
+   "lon": -86.78,
+   "miles": 425,
+   "region": "out_of_state",
+   "via": "I-40",
+   "tagline": "Two days if the radio holds out. The longest haul there is."
+  }
+ ],
+ "pay_per_mile": 2.2,
+ "tiers": [
+  {
+   "max_miles": 60,
+   "rep": 0,
+   "name": "Day trip"
+  },
+  {
+   "max_miles": 120,
+   "rep": 1,
+   "name": "Long haul"
+  },
+  {
+   "max_miles": 200,
+   "rep": 2,
+   "name": "Overnighter"
+  },
+  {
+   "max_miles": 9999,
+   "rep": 3,
+   "name": "Cross-country"
+  }
+ ],
+ "regions": {
+  "midlands": {
+   "ground": "7FA85C",
+   "field": "B9B66A",
+   "trees": "pine",
+   "water": false,
+   "hills": false
+  },
+  "upstate": {
+   "ground": "6E9C55",
+   "field": "9FAE62",
+   "trees": "pine",
+   "water": false,
+   "hills": true
+  },
+  "pee_dee": {
+   "ground": "8AAE63",
+   "field": "C8B96A",
+   "trees": "pine",
+   "water": true,
+   "hills": false
+  },
+  "lowcountry": {
+   "ground": "8FB06A",
+   "field": "A9B27A",
+   "trees": "palmetto",
+   "water": true,
+   "hills": false
+  },
+  "coast": {
+   "ground": "A4B875",
+   "field": "D6CC8E",
+   "trees": "palmetto",
+   "water": true,
+   "hills": false
+  },
+  "out_of_state": {
+   "ground": "7FA85C",
+   "field": "B4AE68",
+   "trees": "pine",
+   "water": false,
+   "hills": true
+  }
+ },
+ "billboards": [
+  "Boiled Peanuts \u00b7 Next Exit",
+  "Pecan Log Rolls",
+  "Fireworks \u00b7 Open All Night",
+  "Peaches \u00b7 Pick Your Own",
+  "Sweet Tea \u00b7 2 for 1",
+  "Corner Movers \u00b7 We Carry It",
+  "Marge's Advice \u00b7 Free",
+  "Gas \u00b7 Food \u00b7 Lodging"
+ ],
+ "outline_sc": [
+  [
+   -83.35,
+   34.99
+  ],
+  [
+   -82.75,
+   35.2
+  ],
+  [
+   -82.4,
+   35.2
+  ],
+  [
+   -81.05,
+   35.15
+  ],
+  [
+   -80.93,
+   35.1
+  ],
+  [
+   -80.78,
+   34.94
+  ],
+  [
+   -79.68,
+   34.8
+  ],
+  [
+   -78.55,
+   33.86
+  ],
+  [
+   -78.9,
+   33.6
+  ],
+  [
+   -79.2,
+   33.2
+  ],
+  [
+   -79.7,
+   32.9
+  ],
+  [
+   -80.0,
+   32.6
+  ],
+  [
+   -80.5,
+   32.5
+  ],
+  [
+   -80.85,
+   32.1
+  ],
+  [
+   -81.1,
+   32.1
+  ],
+  [
+   -81.5,
+   32.6
+  ],
+  [
+   -81.9,
+   33.3
+  ],
+  [
+   -82.3,
+   33.8
+  ],
+  [
+   -82.6,
+   34.2
+  ],
+  [
+   -83.1,
+   34.5
+  ]
+ ]
+}

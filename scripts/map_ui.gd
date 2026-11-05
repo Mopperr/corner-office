@@ -26,6 +26,25 @@ const RAIL := Color("8E8276")
 const HOUSES: Array = [Color("E7C9A8"), Color("D8B4A0"), Color("C9D2C0"), Color("E3D5B8"), Color("BFC8D4"), Color("D4C1D8"), Color("E8B4A8")]
 
 var data: Dictionary = {}
+# The Region view: South Carolina and the roads out of it, the cities a
+# long haul can go to, and today's haul on the board.
+var region_mode := false
+# Where each city's label sits against its dot, in board units; the
+# midlands are crowded, so their labels fan out round Columbia.
+const LABEL_NUDGE := {
+	"lexington": Vector2(-118.0, 6.0), "camden": Vector2(10.0, -34.0), "newberry": Vector2(-110.0, -30.0),
+	"orangeburg": Vector2(8.0, 4.0), "sumter": Vector2(12.0, -10.0), "aiken": Vector2(-30.0, 12.0),
+	"rock_hill": Vector2(10.0, -30.0), "greenwood": Vector2(-120.0, -4.0), "florence": Vector2(10.0, -16.0),
+	"spartanburg": Vector2(-60.0, -34.0), "summerville": Vector2(-130.0, 2.0), "greenville": Vector2(-100.0, -32.0),
+	"charleston": Vector2(10.0, 0.0), "anderson": Vector2(-104.0, 4.0), "georgetown": Vector2(10.0, -8.0),
+	"beaufort": Vector2(-90.0, 6.0), "clemson": Vector2(-96.0, -30.0), "conway": Vector2(10.0, -30.0),
+	"myrtle_beach": Vector2(10.0, -4.0), "hilton_head": Vector2(10.0, 8.0), "augusta": Vector2(-104.0, -34.0),
+	"charlotte": Vector2(10.0, -30.0), "savannah": Vector2(-104.0, -30.0), "asheville": Vector2(-96.0, -30.0),
+	"wilmington": Vector2(-30.0, -34.0), "atlanta": Vector2(10.0, -14.0), "raleigh": Vector2(-30.0, -34.0),
+	"knoxville": Vector2(10.0, -14.0), "jacksonville": Vector2(10.0, -6.0), "nashville": Vector2(-20.0, 10.0),
+}
+var region_pins: Array = []
+var region_button: Button
 var fit := 1.0
 var info_w := 480.0
 var board: Control
@@ -66,13 +85,18 @@ func _build() -> void:
 		view = Vector2(1920, 1080)
 	var card_size := Vector2(minf(CARD.x, view.x - 40.0), minf(CARD.y, view.y - 40.0))
 	UIKit.pin_center(card, card_size)
-	var title := UIKit.label("Corner Town", 40, UIKit.DARK, "title", false)
+	var title := UIKit.label("Columbia, SC", 40, UIKit.DARK, "title", false)
+	title.name = "MapTitle"
 	title.position = Vector2(30, 18)
 	title.size = Vector2(500, 56)
 	card.add_child(title)
 	var sub := UIKit.label("Click a pin to read about a place, take a job, or move in.", 24, UIKit.WOOD, "small", false)
+	sub.name = "MapSub"
+	sub.clip_text = true
+	sub.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	sub.position = Vector2(300, 30)
-	sub.size = Vector2(card_size.x - 520.0, 40)
+	sub.custom_minimum_size = Vector2(card_size.x - 720.0, 40)
+	sub.size = Vector2(card_size.x - 720.0, 40)
 	card.add_child(sub)
 	var close := UIKit.button("Close", UIKit.DARK)
 	close.position = Vector2(card_size.x - 190, 18)
@@ -80,6 +104,13 @@ func _build() -> void:
 	close.custom_minimum_size = Vector2(160, 56)
 	close.pressed.connect(_close)
 	card.add_child(close)
+	region_button = UIKit.button("Region", UIKit.BLUE)
+	region_button.name = "RegionButton"
+	region_button.position = Vector2(card_size.x - 390, 18)
+	region_button.size = Vector2(180, 56)
+	region_button.custom_minimum_size = Vector2(180, 56)
+	region_button.pressed.connect(_toggle_region)
+	card.add_child(region_button)
 	board = Control.new()
 	board.name = "Board"
 	board.position = MAP_ORIGIN
@@ -91,6 +122,7 @@ func _build() -> void:
 	board.draw.connect(_draw_board)
 	card.add_child(board)
 	var paper := Panel.new()
+	paper.name = "Paper"
 	paper.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	paper.add_theme_stylebox_override("panel", UIKit.style(PAPER, 18, 6, PAPER_EDGE))
 	paper.position = Vector2.ZERO
@@ -101,6 +133,7 @@ func _build() -> void:
 	for place in data.get("places", []):
 		pins.append(_pin(place))
 	_legend()
+	_region_pins()
 	info = VBoxContainer.new()
 	info.name = "Info"
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -110,8 +143,9 @@ func _build() -> void:
 	info_w = clampf(560.0 * fit, 300.0, 560.0)
 	info.size = Vector2(info_w, 250)
 	board.add_child(info)
-	var focus: Array = [close]
+	var focus: Array = [close, region_button]
 	focus.append_array(pins)
+	focus.append_array(region_pins)
 	UIKit.link_focus(focus)
 	_show_info("")
 
@@ -141,7 +175,177 @@ func _legend() -> void:
 		row.add_child(text)
 
 
+func _toggle_region() -> void:
+	region_mode = not region_mode
+	region_button.text = "Town" if region_mode else "Region"
+	var title := get_node_or_null("MapCard/MapTitle") as Label
+	if title:
+		title.text = "Long hauls" if region_mode else "Columbia, SC"
+	var sub := get_node_or_null("MapCard/MapSub") as Label
+	if sub:
+		sub.text = "Long hauls: a real city, paid by the mile. Click a city." if region_mode else "Click a pin to read about a place, take a job, or move in."
+	# The info card moves to the lower left in the region, where the paper is empty.
+	info.position = _at(Vector2(40, 400)) if region_mode else _at(Vector2(40, 60))
+	for child in board.get_children():
+		if child.name == "Paper" or child.name == "Info":
+			continue
+		if region_pins.has(child):
+			child.visible = region_mode
+		else:
+			# The town's badges, buttons and legend step aside for the region.
+			child.visible = not region_mode
+	board.queue_redraw()
+	_show_info("")
+
+
+func _geo(lon: float, lat: float) -> Vector2:
+	# Lon and lat onto the paper, centred on the midlands: 185 board units
+	# a degree east and 200 a degree north keep the state's shape, and the
+	# far cities (Nashville, Jacksonville) sit at the paper's edge.
+	var size: Array = data.get("size", [1700, 820])
+	var raw := Vector2(850.0 + (lon + 81.2) * 185.0, 420.0 - (lat - 33.6) * 200.0)
+	return Vector2(clampf(raw.x, 150.0, float(size[0]) - 150.0), clampf(raw.y, 48.0, float(size[1]) - 48.0))
+
+
+func _todays_haul() -> Dictionary:
+	if GameState.mode != "office" or GameState.office_phase != "live":
+		return {}
+	for job in GameState.generated_jobs:
+		var decorated := JobDB.get_job(str(job.get("id", "")))
+		if decorated.is_empty() or (decorated.get("haul", {}) as Dictionary).is_empty():
+			continue
+		if GameState.job_available(decorated):
+			return decorated
+	return {}
+
+
+func _region_pins() -> void:
+	var rep := GameState.rep_rank()
+	var today := _todays_haul()
+	var today_id := str((today.get("haul", {}) as Dictionary).get("id", ""))
+	for entry in Regions.cities():
+		var pin := Button.new()
+		var open := rep >= Regions.rep_needed(entry)
+		var fill: Color = UIKit.WOOD if open else Color("B9B2A6")
+		if str(entry.get("id", "")) == today_id:
+			fill = UIKit.TERRA
+		pin.text = str(entry.get("name", ""))
+		pin.name = "City_%s" % entry.get("id", "")
+		pin.add_theme_font_override("font", UIKit.body_font())
+		pin.add_theme_font_size_override("font_size", UIKit.small_px(18))
+		pin.add_theme_color_override("font_color", UIKit.CREAM_CARD if fill != UIKit.MUSTARD else UIKit.DARK)
+		pin.add_theme_color_override("font_hover_color", UIKit.CREAM_CARD)
+		var style := UIKit.style(fill, 14)
+		pin.add_theme_stylebox_override("normal", style)
+		pin.add_theme_stylebox_override("hover", UIKit.style(fill.lightened(0.1), 14))
+		pin.add_theme_stylebox_override("pressed", UIKit.style(fill.darkened(0.1), 14))
+		pin.add_theme_stylebox_override("focus", UIKit.style(fill.lightened(0.1), 14))
+		var at := _at(_geo(float(entry.get("lon", 0.0)), float(entry.get("lat", 0.0))))
+		# The label sits beside its dot; the close-in cities take turns above
+		# and below the line so the midlands do not pile up.
+		var nudge: Vector2 = LABEL_NUDGE.get(str(entry.get("id", "")), Vector2(8.0, -14.0))
+		pin.position = at + nudge * fit
+		pin.size = Vector2(0, 28)
+		pin.visible = false
+		var id := str(entry.get("id", ""))
+		pin.pressed.connect(func(): _show_city(id))
+		board.add_child(pin)
+		region_pins.append(pin)
+
+
+func _draw_region() -> void:
+	# South Carolina on the paper, the neighbours named, the roads out as
+	# faint lines from home, and the home garage as a star.
+	var outline := PackedVector2Array()
+	for pt in Regions.outline_sc():
+		outline.append(_at(_geo(float(pt[0]), float(pt[1]))))
+	if outline.size() >= 3:
+		board.draw_colored_polygon(outline, Color("DCE4C4"))
+		var closed := outline.duplicate()
+		closed.append(outline[0])
+		board.draw_polyline(closed, Color("8A9B6E"), 3.0 * fit, true)
+	# The coast: a few wave ticks off shore.
+	var coast := [Vector2(-78.6, 33.6), Vector2(-79.0, 33.2), Vector2(-79.5, 32.8), Vector2(-80.1, 32.4), Vector2(-80.6, 32.2)]
+	for c in coast:
+		var a := _at(_geo(c.x + 0.25, c.y - 0.2))
+		board.draw_arc(a, 12.0 * fit, PI * 1.1, PI * 1.9, 8, Color("7FA3B8"), 2.0 * fit, true)
+	var font := UIKit.title_font()
+	var px := int(26.0 * fit)
+	for state in [["GEORGIA", -83.6, 32.6], ["NORTH CAROLINA", -80.4, 35.75], ["TENNESSEE", -85.3, 35.75], ["FLORIDA", -82.6, 30.6], ["SOUTH CAROLINA", -81.2, 33.4]]:
+		var at := _at(_geo(float(state[1]), float(state[2])))
+		board.draw_string(font, at, str(state[0]), HORIZONTAL_ALIGNMENT_CENTER, -1, px, Color("8A9B6E", 0.9))
+	var home: Dictionary = Regions.home()
+	var home_at := _at(_geo(float(home.get("lon", -81.03)), float(home.get("lat", 34.0))))
+	var today := _todays_haul()
+	var rep := GameState.rep_rank()
+	for entry in Regions.cities():
+		var at := _at(_geo(float(entry.get("lon", 0.0)), float(entry.get("lat", 0.0))))
+		var is_today := str(entry.get("id", "")) == str((today.get("haul", {}) as Dictionary).get("id", ""))
+		var open := rep >= Regions.rep_needed(entry)
+		board.draw_line(home_at, at, Color(UIKit.TERRA if is_today else UIKit.WOOD, 0.9 if is_today else (0.3 if open else 0.12)), (3.0 if is_today else 1.5) * fit, true)
+		board.draw_circle(at, 6.0 * fit, UIKit.TERRA if is_today else (UIKit.WOOD if open else Color("B9B2A6")))
+		board.draw_arc(at, 6.0 * fit, 0.0, TAU, 16, UIKit.CREAM_CARD, 1.5 * fit, true)
+	# Home: a star over Columbia.
+	var star := PackedVector2Array()
+	for i in 10:
+		var r := (16.0 if i % 2 == 0 else 7.0) * fit
+		var ang := -PI * 0.5 + TAU * float(i) / 10.0
+		star.append(home_at + Vector2(cos(ang), sin(ang)) * r)
+	board.draw_colored_polygon(star, UIKit.MUSTARD)
+	board.draw_string(font, home_at + Vector2(-60.0 * fit, -22.0 * fit), "Columbia · home", HORIZONTAL_ALIGNMENT_LEFT, -1, int(22.0 * fit), UIKit.DARK)
+
+
+func _show_city(id: String) -> void:
+	selected = ""
+	for child in info.get_children():
+		child.queue_free()
+	var entry := Regions.city(id)
+	if entry.is_empty():
+		return
+	var head := HBoxContainer.new()
+	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	head.add_theme_constant_override("separation", 10)
+	info.add_child(head)
+	head.add_child(UIKit.avatar(str(entry.get("name", "?")).left(1), UIKit.BLUE, 40))
+	var name_row := UIKit.label(Regions.label(entry), 28, UIKit.TERRA, "title", false)
+	name_row.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	head.add_child(name_row)
+	var tier: Dictionary = Regions.tier_for(int(entry.get("miles", 0)))
+	var facts := UIKit.label("%d miles by %s  ·  %s  ·  +$%d for the road" % [int(entry.get("miles", 0)), entry.get("via", "road"), tier.get("name", ""), Regions.haul_pay(int(entry.get("miles", 0)))], 24, UIKit.WOOD, "small")
+	facts.custom_minimum_size = Vector2(info_w - 20.0, 0)
+	info.add_child(facts)
+	var blurb := UIKit.label(str(entry.get("tagline", "")), 24, UIKit.DARK, "small")
+	blurb.custom_minimum_size = Vector2(info_w - 20.0, 0)
+	info.add_child(blurb)
+	var need := Regions.rep_needed(entry)
+	if GameState.rep_rank() < need:
+		var lock := UIKit.label("Needs Rep %d." % need, 24, UIKit.LOSS, "small")
+		lock.custom_minimum_size = Vector2(info_w - 20.0, 0)
+		info.add_child(lock)
+	var today := _todays_haul()
+	if not today.is_empty() and str((today.get("haul", {}) as Dictionary).get("id", "")) == id:
+		var row := UIKit.label("On the board today: %s, %d pieces, $%d." % [today.get("client", ""), 0, JobDB.base_pay(today)], 24, UIKit.DARK, "small")
+		row.custom_minimum_size = Vector2(info_w - 20.0, 0)
+		info.add_child(row)
+		var go := UIKit.button("Take the haul", UIKit.TERRA)
+		go.name = "TakeHaul"
+		go.custom_minimum_size = Vector2(220, 48)
+		var job_id := str(today.get("id", ""))
+		go.pressed.connect(func():
+			emit_signal("job_requested", job_id)
+			_close()
+		)
+		info.add_child(go)
+	else:
+		var note := UIKit.label("One haul a morning on the board, from day two.", 24, UIKit.WOOD, "small")
+		note.custom_minimum_size = Vector2(info_w - 20.0, 0)
+		info.add_child(note)
+
+
 func _draw_board() -> void:
+	if region_mode:
+		_draw_region()
+		return
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 7
 	var size: Array = data.get("size", [1700, 820])

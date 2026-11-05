@@ -101,6 +101,9 @@ func _ready() -> void:
 		lines.append("The clean run ends here.")
 	if int(pay.get("league_points", 0)) > 0:
 		lines.append("Movers' League  +%d points" % int(pay.get("league_points", 0)))
+	var haul: Dictionary = pay.get("haul", {})
+	if not haul.is_empty():
+		lines.append("Long haul  %s, %d miles  +$%d" % [haul.get("city", ""), int(haul.get("miles", 0)), int(haul.get("pay", 0))])
 	if int(pay.get("life_extra", 0)) > 0:
 		lines.append("Your own people  +$%d" % int(pay.get("life_extra", 0)))
 	var network: Dictionary = pay.get("network", {})

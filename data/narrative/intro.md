@@ -1,12 +1,12 @@
 # Intro
 
-You are Dana Reyes. Laid off on a Tuesday. The garage opened on Wednesday.
+You are Dana Reyes, Columbia, SC. Laid off Tuesday. The garage opened Wednesday.
 
 Your old desk fits in nine boxes. Maybe ten.
 
 The new one is the Garage Startup. It has a roll-up door, a folding table, $120 in the jar, and a lot of potential.
 
-Trade odd office treasures on your trusty old computer. Pick up mover jobs around town. Unpack, decorate, and slowly grow your space.
+Trade odd treasures on the old computer. Take mover jobs around town. Unpack, decorate, grow.
 
 Nobody knows you yet. Every job fixes that.
 

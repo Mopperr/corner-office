@@ -121,6 +121,12 @@ func _start_drive() -> void:
 
 
 func _on_drive_finished(result: Dictionary) -> void:
+	if bool(result.get("highway", false)):
+		# The highway leg of a long haul is done; the new town's streets
+		# are the second leg, with the boxes as the road left them.
+		SaveManager.save_game()
+		_start_drive()
+		return
 	if bool(result.get("busted", false)):
 		GameState.bust_job(result)
 		SaveManager.save_game()

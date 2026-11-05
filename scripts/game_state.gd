@@ -1838,6 +1838,10 @@ func finish_job() -> Dictionary:
 		payout["total"] = int(payout.get("total", 0)) - cut
 	payout["job_id"] = job.get("id", "")
 	payout["title"] = def.get("title", "Job")
+	if not (def.get("haul", {}) as Dictionary).is_empty():
+		# The long haul's city and miles, for the results card's own line.
+		payout["haul"] = def.get("haul", {})
+		payout["highway_honks"] = int(job.get("highway_honks", 0))
 	var stars := 1
 	if int(job.get("condition", 0)) >= 70:
 		stars += 1

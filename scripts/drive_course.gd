@@ -165,6 +165,11 @@ var set_line := ""
 var set_line_t := 0.0
 var set_done: Dictionary = {}
 var stray_cat: Node3D
+# A long haul's first leg: a straight interstate out of town, scenery by
+# region, no bays to back into; the new town's streets come after it.
+var haul: Dictionary = {}
+var highway := false
+var highway_px := 0.0
 
 
 func _ready() -> void:
@@ -178,9 +183,21 @@ func _ready() -> void:
 	if course.is_empty():
 		course = JobDB.get_drive("rainy_afternoon")
 	condition = int(Tuning.get_value("box_condition.start", 100))
-	city = City.load_default()
-	pickup = city.place(str(course.get("pickup", "garage")))
-	dropoff = city.place(str(course.get("dropoff", "cafe")))
+	haul = course.get("haul", {})
+	highway = not haul.is_empty() and not bool(GameState.job.get("highway_done", false))
+	if not highway and GameState.job.has("highway_condition"):
+		# The second leg picks the boxes up the way the interstate left them.
+		condition = clampi(int(GameState.job.get("highway_condition", condition)), 0, 100)
+	if highway:
+		highway_px = float(course.get("highway_m", 600)) * PX
+		city = City.new()
+		city.setup({"cols": 1, "rows": 0, "block": [highway_px, 100], "road": 160, "sidewalk": 0, "park": [-1, -1], "places": [], "shops": [], "kinds": {}, "alleys": []})
+		pickup = {"id": "onramp", "name": "the on-ramp", "bay": Rect2(140, 60, 60, 40), "heading": 0.0}
+		dropoff = {"id": "exit", "name": str(haul.get("city", "the exit")), "bay": Rect2(highway_px + 60, 60, 60, 40), "heading": 0.0}
+	else:
+		city = City.load_default()
+		pickup = city.place(str(course.get("pickup", "garage")))
+		dropoff = city.place(str(course.get("dropoff", "cafe")))
 	if pickup.is_empty():
 		pickup = city.place("garage")
 	if dropoff.is_empty():
@@ -201,9 +218,13 @@ func _ready() -> void:
 	world = Node3D.new()
 	world.name = "Town"
 	add_child(world)
-	_build_town()
+	if highway:
+		_build_highway()
+	else:
+		_build_town()
 	_build_truck()
-	_spawn_traffic()
+	if not highway:
+		_spawn_traffic()
 	cam = Camera3D.new()
 	cam.name = "ChaseCamera"
 	cam.fov = 62.0
@@ -213,6 +234,10 @@ func _ready() -> void:
 	cam.current = true
 	_snap_camera()
 	_hud()
+	if not haul.is_empty():
+		# A haul's legs start rolling: the boxes went in back in town, and
+		# the on-ramp has no kerb to load from.
+		state = "drive"
 	UIKit.show_level_beat(self, GameState.present_current_slice_level(), true)
 	var weather := str(course.get("weather", "clear"))
 	var air := str(course.get("ambience", ""))
@@ -1234,6 +1259,292 @@ func _build_hills(size: Vector3) -> void:
 		hills.add_child(hill)
 
 
+func _complete_highway() -> void:
+	# The interstate is done: the boxes' condition and the honks carry to
+	# the second leg, which the app starts as a fresh course in the town.
+	if not running:
+		return
+	running = false
+	state = "done"
+	GameState.job["highway_done"] = true
+	GameState.job["highway_condition"] = condition
+	GameState.job["highway_honks"] = honks
+	AudioDirector.play_sfx("sfx_success_chime")
+	emit_signal("finished", {"highway": true, "condition": condition, "alley": false, "honks": honks, "backed_in": false, "spotted": spotted, "busted": false, "duck_friend": false, "near_miss": near_miss, "time": time_alive})
+
+
+func _build_highway() -> void:
+	# A straight interstate: two lanes and a shoulder each way, guardrails,
+	# a tree line by region, fields and water beyond, billboards and mile
+	# markers along it, an overpass halfway, a water tower with the city's
+	# name and a welcome sign at the far end.
+	var region: Dictionary = Regions.region(str(haul.get("region", "midlands")))
+	var night := str(course.get("weather", "clear")) == "night"
+	# The sun behind the truck, so the signs ahead are lit faces, not shadow.
+	var sun := get_node_or_null("Sun") as DirectionalLight3D
+	if sun:
+		sun.look_at_from_position(Vector3(-30, 40, 14), Vector3.ZERO, Vector3.UP)
+	var snow := str(course.get("weather", "clear")) == "snow"
+	var length := highway_px / PX + 60.0
+	var ground := Color(str(region.get("ground", "7FA85C")))
+	if snow:
+		ground = Color("EEF1F3")
+	elif night:
+		ground = ground.darkened(0.55)
+	var field := Color(str(region.get("field", "B9B66A")))
+	if night:
+		field = field.darkened(0.55)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(str(course.get("id", "")) + "highway")
+	var road_z := 160.0 / PX * 0.5
+	_slab(Vector3(length + 400.0, 0.1, 420.0), Vector3(length * 0.5, -0.1, road_z), ground)
+	# The road: asphalt with a hard shoulder each side.
+	_slab(Vector3(length + 40.0, 0.02, 160.0 / PX), Vector3(length * 0.5, -0.02, road_z), ASPHALT)
+	_slab(Vector3(length + 40.0, 0.021, 0.9), Vector3(length * 0.5, -0.02, road_z - 160.0 / PX * 0.5 + 0.45), ASPHALT.lightened(0.12))
+	_slab(Vector3(length + 40.0, 0.021, 0.9), Vector3(length * 0.5, -0.02, road_z + 160.0 / PX * 0.5 - 0.45), ASPHALT.lightened(0.12))
+	# Lane paint: a dashed centre, solid edges.
+	var dashes: Array = []
+	var x := 0.0
+	while x < length:
+		dashes.append(Transform3D(Basis.IDENTITY, Vector3(x + 1.5, 0.0, road_z)))
+		x += 6.0
+	_multimesh(Vector3(3.0, 0.01, 0.18), LANE_LINE, dashes)
+	_slab(Vector3(length + 40.0, 0.01, 0.14), Vector3(length * 0.5, 0.0, road_z - 160.0 / PX * 0.5 + 1.0), Color(LANE_LINE, 0.85))
+	_slab(Vector3(length + 40.0, 0.01, 0.14), Vector3(length * 0.5, 0.0, road_z + 160.0 / PX * 0.5 - 1.0), Color(LANE_LINE, 0.85))
+	# Guardrails on both verges.
+	var posts: Array = []
+	var rails: Array = []
+	for side: float in [-1.0, 1.0]:
+		var z: float = road_z + side * (160.0 / PX * 0.5 + 1.4)
+		x = 0.0
+		while x < length:
+			posts.append(Transform3D(Basis.IDENTITY, Vector3(x, 0.35, z)))
+			x += 4.0
+		rails.append(Transform3D(Basis.IDENTITY, Vector3(length * 0.5, 0.62, z)))
+	_multimesh(Vector3(0.12, 0.7, 0.12), Color("8A8F94"), posts)
+	for t in rails:
+		_slab(Vector3(length + 40.0, 0.3, 0.08), Vector3(length * 0.5, 0.5, t.origin.z), Color("B5BBC0"))
+	# Fields and water beyond the verge, in strips so the land changes as it goes by.
+	x = -60.0
+	while x < length + 60.0:
+		var w := rng.randf_range(40.0, 110.0)
+		for side: float in [-1.0, 1.0]:
+			var roll := rng.randf()
+			var z0: float = road_z + side * (160.0 / PX * 0.5 + rng.randf_range(14.0, 30.0))
+			var depth := rng.randf_range(30.0, 90.0)
+			if bool(region.get("water", false)) and roll < 0.22:
+				_slab(Vector3(w, 0.03, depth), Vector3(x + w * 0.5, -0.05, z0 + side * depth * 0.5), Color("7FA3B8") if not night else Color("27384A"))
+			elif roll < 0.6:
+				_slab(Vector3(w, 0.03, depth), Vector3(x + w * 0.5, -0.04, z0 + side * depth * 0.5), field.lightened(rng.randf_range(-0.08, 0.1)))
+		x += w
+	# The tree line: pines (a trunk and two stacked cones) or palmettos (a
+	# trunk and a fan of leaves), in multimeshes so a mile of them is cheap.
+	var trunks: Array = []
+	var canopies: Array = []
+	var crowns: Array = []
+	var fans: Array = []
+	var kind := str(region.get("trees", "pine"))
+	x = 0.0
+	while x < length:
+		for side: float in [-1.0, 1.0]:
+			if rng.randf() < 0.75:
+				var z: float = road_z + side * (160.0 / PX * 0.5 + rng.randf_range(6.0, 26.0))
+				var at := Vector3(x + rng.randf_range(-3.0, 3.0), 0.0, z)
+				var sc := rng.randf_range(0.8, 1.4)
+				if kind == "palmetto":
+					trunks.append(Transform3D(Basis.IDENTITY.scaled(Vector3(1, sc, 1)), at + Vector3(0, 2.6 * sc, 0)))
+					for leaf in 6:
+						var yaw := TAU * float(leaf) / 6.0 + rng.randf_range(-0.2, 0.2)
+						var basis := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, -0.5)
+						fans.append(Transform3D(basis, at + Vector3(0, 5.2 * sc, 0) + Vector3(cos(yaw), 0, sin(yaw)) * 0.9))
+				else:
+					trunks.append(Transform3D(Basis.IDENTITY.scaled(Vector3(1, sc, 1)), at + Vector3(0, 2.0 * sc, 0)))
+					canopies.append(Transform3D(Basis.IDENTITY.scaled(Vector3(sc, sc, sc)), at + Vector3(0, 5.0 * sc, 0)))
+					crowns.append(Transform3D(Basis.IDENTITY.scaled(Vector3(sc * 0.7, sc, sc * 0.7)), at + Vector3(0, 7.6 * sc, 0)))
+		x += 9.0
+	var leaf_color := Color("3F6B3A") if not night else Color("1A2E20")
+	if snow:
+		leaf_color = Color("5E7F62")
+	_multimesh_mesh(_cyl_mesh(0.22, 4.0 if kind != "palmetto" else 5.2), Color("5A4330"), trunks)
+	if kind == "palmetto":
+		_multimesh_mesh(_box_mesh(Vector3(0.5, 0.08, 2.6)), Color("4F8A4A") if not night else Color("1F3A24"), fans)
+	else:
+		_multimesh_mesh(_cone_mesh(2.3, 4.0), leaf_color, canopies)
+		_multimesh_mesh(_cone_mesh(1.7, 3.2), leaf_color.lightened(0.08), crowns)
+	# Hills behind the trees in the upstate and out of state.
+	if bool(region.get("hills", false)):
+		var hills := Node3D.new()
+		hills.name = "Hills"
+		world.add_child(hills)
+		x = -40.0
+		while x < length + 40.0:
+			for side: float in [-1.0, 1.0]:
+				var hill := MeshInstance3D.new()
+				var mesh := SphereMesh.new()
+				var radius := rng.randf_range(40.0, 70.0)
+				mesh.radius = radius
+				mesh.height = radius * rng.randf_range(0.5, 0.8)
+				hill.mesh = mesh
+				hill.material_override = Props.mat(Color("8FB573").darkened(0.15 + 0.25 * rng.randf()) if not night else Color("1E2A30"))
+				hill.position = Vector3(x + rng.randf_range(-20.0, 20.0), -mesh.height * 0.35, road_z + side * (120.0 + rng.randf_range(0.0, 60.0)))
+				hills.add_child(hill)
+			x += 90.0
+	# Billboards every so often, alternating sides, the last few counting the miles down.
+	var copy: Array = Regions.billboards()
+	var city_name := str(haul.get("city", ""))
+	var miles := int(haul.get("miles", 0))
+	x = 80.0
+	var n := 0
+	while x < length - 90.0:
+		var side := -1.0 if n % 2 == 0 else 1.0
+		var text := str(copy[rng.randi_range(0, copy.size() - 1)])
+		if n % 3 == 2:
+			text = "%s  %d" % [city_name.to_upper(), int(ceil(float(miles) * (1.0 - x / length)))]
+		_build_billboard(Vector3(x, 0, road_z + side * (160.0 / PX * 0.5 + 9.0)), side, text, night)
+		x += rng.randf_range(110.0, 170.0)
+		n += 1
+	# Mile markers: a small green post every so often, counting down.
+	var markers: Array = []
+	x = 30.0
+	while x < length - 30.0:
+		markers.append(Transform3D(Basis.IDENTITY, Vector3(x, 0.7, road_z + 160.0 / PX * 0.5 + 2.6)))
+		x += 48.0
+	_multimesh(Vector3(0.25, 1.4, 0.06), Color("2E7D4F"), markers)
+	# An overpass halfway: two piers and a deck across the road.
+	var mid := length * 0.5
+	for side: float in [-1.0, 1.0]:
+		_slab(Vector3(2.2, 6.0, 1.6), Vector3(mid, 0.0, road_z + side * (160.0 / PX * 0.5 + 2.2)), Color("9C9A94"))
+	_slab(Vector3(2.8, 1.1, 160.0 / PX + 10.0), Vector3(mid, 6.0, road_z), Color("8E8C86"))
+	_slab(Vector3(2.9, 0.9, 0.2), Vector3(mid, 7.1, road_z - 160.0 / PX * 0.5 - 4.9), Color("B5BBC0"))
+	_slab(Vector3(2.9, 0.9, 0.2), Vector3(mid, 7.1, road_z + 160.0 / PX * 0.5 + 4.9), Color("B5BBC0"))
+	# The water tower with the city's name, and the welcome sign at the end.
+	var tower_at := Vector3(length - 40.0, 0.0, road_z - 160.0 / PX * 0.5 - 22.0)
+	var tank := Props.mesh_cylinder(4.0, 5.0, Color("D8D2C4") if not night else Color("5A5852"))
+	tank.position = tower_at + Vector3(0, 16.0, 0)
+	world.add_child(tank)
+	var cap := Outdoors._cone(4.2, 2.4, Color("C2634F"))
+	cap.position = tower_at + Vector3(0, 18.5, 0)
+	world.add_child(cap)
+	for leg in [Vector3(2.6, 0, 2.6), Vector3(-2.6, 0, -2.6), Vector3(2.6, 0, -2.6), Vector3(-2.6, 0, 2.6)]:
+		var post := Props.mesh_cylinder(0.18, 14.0, Color("8A8F94"))
+		post.position = tower_at + leg + Vector3(0, 7.0, 0)
+		world.add_child(post)
+	var tower_label := _sign_text(city_name.to_upper(), tower_at + Vector3(0, 16.0, 4.1), Color("3E3A4F"))
+	tower_label.font_size = 72
+	tower_label.visibility_range_end = 140.0
+	tower_label.visibility_range_end_margin = 20.0
+	var welcome := "Welcome to %s" % city_name
+	if str(haul.get("state", "SC")) != "SC":
+		welcome = "Welcome to %s" % _state_name(str(haul.get("state", "")))
+		# The state line comes before the city: a second sign at two thirds.
+		_build_billboard(Vector3(length * 0.66, 0, road_z + 160.0 / PX * 0.5 + 9.0), 1.0, "Leaving South Carolina · Y'all come back", night)
+	var board := Props.mesh_box(Vector3(0.16, 1.6, 7.0), Color("2E5E3E"))
+	board.position = Vector3(length - 14.0, 2.6, road_z + 160.0 / PX * 0.5 + 4.0)
+	world.add_child(board)
+	for dz in [-2.8, 2.8]:
+		var post := Props.mesh_cylinder(0.1, 2.0, Color("8A8F94"))
+		post.position = board.position + Vector3(0, -1.8, dz)
+		world.add_child(post)
+	var welcome_label := _sign_text(welcome, board.position + Vector3(-0.2, 0, 0), Color("F4E9D8"))
+	welcome_label.font_size = 56
+	welcome_label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	welcome_label.rotation.y = -PI * 0.5
+	welcome_label.visibility_range_begin = 0.0
+	welcome_label.visibility_range_end = 90.0
+	# A few pulled-over cars on the shoulder for scale, facing the way we go.
+	for i in rng.randi_range(2, 4):
+		var parked := _make_car([Color("F2E5B8"), Color("9FC4D6"), Color("C9D2C0"), Color("7A5C40")][rng.randi_range(0, 3)])
+		parked.position = Vector3(rng.randf_range(60.0, length - 80.0), 0.0, road_z + 160.0 / PX * 0.5 + 0.2)
+		parked.rotation.y = -PI * 0.5
+		world.add_child(parked)
+
+
+func _build_billboard(at: Vector3, side: float, text: String, night: bool) -> void:
+	var face_color := Color("F4E9D8") if not night else Color("3A3A48")
+	var panel := Props.mesh_box(Vector3(0.2, 3.2, 9.0), face_color)
+	panel.position = at + Vector3(0, 7.2, 0)
+	world.add_child(panel)
+	# The frame sits behind the face, so the face and its text meet the truck.
+	var frame := Props.mesh_box(Vector3(0.1, 3.5, 9.3), Color("4E4A48"))
+	frame.position = at + Vector3(0.12, 7.2, 0)
+	world.add_child(frame)
+	var post := Props.mesh_cylinder(0.3, 5.6, Color("4E4A48"))
+	post.position = at + Vector3(0, 2.8, 0)
+	world.add_child(post)
+	# The text on the side the truck comes from, whichever verge the board stands on.
+	var label := _sign_text(text, at + Vector3(-0.16, 6.9, 0), Color("3E3A4F") if not night else Color("FFE7B0"))
+	label.font_size = 112
+	label.outline_size = 0
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	label.rotation.y = -PI * 0.5
+	label.visibility_range_begin = 0.0
+	label.visibility_range_end = 110.0
+	label.visibility_range_end_margin = 16.0
+	if night:
+		# Lit from below after dark.
+		var lamp := Props.mesh_box(Vector3(0.3, 0.2, 2.0), Color("FFE7B0"))
+		lamp.position = at + Vector3(-side * 0.6, 5.3, 0)
+		var glow := Props.mat(Color("FFE7B0"))
+		glow.emission_enabled = true
+		glow.emission = Color("FFE7B0")
+		glow.emission_energy_multiplier = 1.6
+		lamp.material_override = glow
+		world.add_child(lamp)
+
+
+func _state_name(code: String) -> String:
+	match code:
+		"GA":
+			return "Georgia"
+		"NC":
+			return "North Carolina"
+		"TN":
+			return "Tennessee"
+		"FL":
+			return "Florida"
+	return "South Carolina"
+
+
+func _box_mesh(size: Vector3) -> Mesh:
+	var box := BoxMesh.new()
+	box.size = size
+	return box
+
+
+func _cyl_mesh(radius: float, height: float) -> Mesh:
+	var cyl := CylinderMesh.new()
+	cyl.top_radius = radius * 0.8
+	cyl.bottom_radius = radius
+	cyl.height = height
+	cyl.radial_segments = 8
+	return cyl
+
+
+func _cone_mesh(radius: float, height: float) -> Mesh:
+	var cone := CylinderMesh.new()
+	cone.top_radius = 0.0
+	cone.bottom_radius = radius
+	cone.height = height
+	cone.radial_segments = 8
+	return cone
+
+
+func _multimesh_mesh(mesh: Mesh, color: Color, transforms: Array) -> void:
+	if transforms.is_empty():
+		return
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = mesh
+	mm.instance_count = transforms.size()
+	for i in transforms.size():
+		mm.set_instance_transform(i, transforms[i])
+	var node := MultiMeshInstance3D.new()
+	node.multimesh = mm
+	node.material_override = Props.mat(color)
+	world.add_child(node)
+
+
 func _build_house_row(entry: Dictionary, rng: RandomNumberGenerator) -> void:
 	# A street of houses: pitched roofs, chimneys, a front garden with a
 	# hedge and a path on each street side, back gardens with a shed between.
@@ -1753,7 +2064,10 @@ func _hud() -> void:
 	hud_root.add_child(name_bar)
 	# The app's Pause button owns the top-right corner; the title sits to its left.
 	UIKit.pin_top_right(name_bar, -640, 16, -172, 84)
-	var name_label := UIKit.label(str(course.get("title", "Drive")), 28, UIKit.CREAM_CARD, "title", false)
+	var bar_title := str(course.get("title", "Drive"))
+	if not haul.is_empty():
+		bar_title = ("%s to %s" % [haul.get("via", "The interstate"), haul.get("city", "")]) if highway else ("%s, %s" % [haul.get("city", ""), haul.get("state", "")])
+	var name_label := UIKit.label(bar_title, 28, UIKit.CREAM_CARD, "title", false)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_bar.add_child(name_label)
 	UIKit.fill(name_label, 12, 8, 12, 8)
@@ -1806,7 +2120,9 @@ func _hint_text() -> String:
 		"load":
 			line = "The boxes are on the curb. Pull them into the bed."
 		"drive":
-			if at_dropoff:
+			if highway and not at_end:
+				line = "Hold the throttle and let the miles go by. Ease off for the bumps; a box rides a hundred miles the way it rides one."
+			elif at_dropoff:
 				line = "Backed into the bay. Hand the boxes over."
 			elif at_end:
 				line = "Stopped past the bay. Hold the brake to back the truck in."
@@ -1833,7 +2149,10 @@ func _hint_text() -> String:
 			"load":
 				objective.text = "Load up at %s" % pickup.get("name", "the curb")
 			"drive":
-				objective.text = "Backed in" if at_dropoff else ("Back into the bay" if at_end else "To %s%s" % [dest, _turn_cue()])
+				if highway:
+					objective.text = "%s · %s" % [haul.get("via", "the interstate"), str(haul.get("city", ""))]
+				else:
+					objective.text = "Backed in" if at_dropoff else ("Back into the bay" if at_end else "To %s%s" % [dest, _turn_cue()])
 			"unload":
 				objective.text = "Unloading"
 			_:
@@ -2118,7 +2437,11 @@ func _process(delta: float) -> void:
 		hint.text = set_line
 	if distance_label:
 		var left := _route_left()
-		distance_label.text = "%d m to go" % int(round(left / PX)) if state == "drive" and not at_end else ""
+		if highway:
+			var miles_left := int(ceil(float(haul.get("miles", 0)) * clampf(left / maxf(lane_total, 1.0), 0.0, 1.0)))
+			distance_label.text = "%d mi to %s" % [miles_left, str(haul.get("city", ""))] if state == "drive" and not at_end else ""
+		else:
+			distance_label.text = "%d m to go" % int(round(left / PX)) if state == "drive" and not at_end else ""
 	if minimap:
 		minimap.queue_redraw()
 
@@ -2340,6 +2663,9 @@ func _drive(delta: float, weather: String) -> void:
 		vel = Vector2.ZERO
 		back_t = 0.0
 		AudioDirector.play_sfx("sfx_notification_soft")
+		if highway:
+			_complete_highway()
+			return
 	var edge := int(Tuning.get_value("box_condition.collision", 10))
 	_contact("offroad", false, edge)
 
