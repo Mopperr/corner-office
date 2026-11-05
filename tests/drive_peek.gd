@@ -34,13 +34,13 @@ func _ready() -> void:
 	drive.along = drive.lane_total
 	drive.speed = 0.0
 	drive.at_end = true
-	drive.back_t = 1.0
-	drive.pos = drive._bezier(drive.back_path, 1.0)
-	var nose: Vector2 = drive._bezier(drive.back_path, 0.98)
-	drive.heading = (nose - drive.pos).angle()
+	drive.pos = drive._lane_point(drive.lane_total)
+	var tail: Vector2 = drive._lane_point(drive.lane_total - 8.0)
+	drive.heading = (drive.pos - tail).angle()
+	drive._check_dropoff()
 	drive._snap_camera()
 	await _settle(0.5)
-	await _shot("backed_in")
+	await _shot("at_kerb")
 	print("PEEK_OK")
 	get_tree().quit()
 

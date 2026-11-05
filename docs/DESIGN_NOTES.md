@@ -222,3 +222,13 @@ runs east and comes back west past the ends, inner lanes faster, rigs
 lane a touch quicker than the truck so it is never parked behind one.
 After dark every car has head and tail lights. The truck's route is the
 outer eastbound lane, and hazards land in that lane only.
+
+## Arrival at the kerb, not a reverse into the bay
+
+Backing the truck into the bay along an arc never read well: the camera
+had nowhere clean to stand at the kerb, and the manoeuvre was a brake
+held for four seconds. It is gone. The lane ends at the kerb beside the
+bay, the truck eases to a stop there, and that is the arrival: the
+Unload button comes up, the boxes come off onto the pavement beside the
+ramp as before. The camera keeps its kerb pose, behind the truck and a
+little out toward the road.

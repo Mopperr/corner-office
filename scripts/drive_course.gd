@@ -2335,9 +2335,9 @@ func _hint_text() -> String:
 			if highway and not at_end:
 				line = "Hold the throttle and let the miles go by. Ease off for the bumps; a box rides a hundred miles the way it rides one."
 			elif at_dropoff:
-				line = "Backed into the bay. Hand the boxes over."
+				line = "Pulled up at the kerb. Hand the boxes over."
 			elif at_end:
-				line = "Stopped past the bay. Hold the brake to back the truck in."
+				line = "Pulled up at the kerb."
 			elif along < 60.0 and speed < 5.0:
 				line = "Hold the throttle to pull away. The truck keeps its lane."
 			else:
@@ -2364,7 +2364,7 @@ func _hint_text() -> String:
 				if highway:
 					objective.text = "%s · %s" % [haul.get("via", "the interstate"), str(haul.get("city", ""))]
 				else:
-					objective.text = "Backed in" if at_dropoff else ("Back into the bay" if at_end else "To %s%s" % [dest, _turn_cue()])
+					objective.text = "At the kerb" if (at_dropoff or at_end) else "To %s%s" % [dest, _turn_cue()]
 			"unload":
 				objective.text = "Unloading"
 			_:
@@ -2579,8 +2579,6 @@ func _sync_chips() -> void:
 		items = [[Controls.describe_key("interact"), "load up"]]
 	elif state == "drive" and at_dropoff:
 		items = [[Controls.describe_key("interact"), "unload"]]
-	elif state == "drive" and at_end:
-		items = [[Controls.describe_key("drive_back"), "back in"], [Controls.describe_key("drive_forward"), "pull forward"]]
 	elif state == "drive":
 		items = [[Controls.describe_key("drive_forward"), "go"], [Controls.describe_key("drive_back"), "brake"], [Controls.describe_key("horn"), "honk"]]
 	var key := JSON.stringify(items)
@@ -2704,14 +2702,8 @@ func _update_camera(delta: float) -> void:
 		# truck is parked against never swallows it.
 		var place: Dictionary = dropoff if (at_end or state == "unload") else pickup
 		var inward := _inward3(str(place.get("side", "N")))
-		if back_t > 0.0 or at_dropoff or state == "unload":
-			# Backing in, the nose points at the road: the camera stands out
-			# on the road and watches the truck come in, never in the wall.
-			goal = _bay_camera(truck_at, inward)
-			look = truck_at + Vector3(0, 1.2, 0)
-		else:
-			goal = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
-			look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
+		goal = truck_at - forward * 6.0 - inward * 3.4 + Vector3(0, 3.8, 0)
+		look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
 	else:
 		goal = _camera_clear(goal, truck_at)
 	var k := clampf(delta * 3.2, 0.0, 1.0)
@@ -2732,25 +2724,12 @@ func _snap_camera() -> void:
 	if at_end or state != "drive":
 		var place: Dictionary = dropoff if (at_end or state == "unload") else pickup
 		var inward := _inward3(str(place.get("side", "N")))
-		if back_t > 0.0 or at_dropoff or state == "unload":
-			cam.position = _bay_camera(truck_at, inward)
-			cam_look = truck_at + Vector3(0, 1.2, 0)
-		else:
-			cam.position = truck_at - forward * 5.0 - inward * 4.2 + Vector3(0, 3.6, 0)
-			cam_look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
+		cam.position = truck_at - forward * 6.0 - inward * 3.4 + Vector3(0, 3.8, 0)
+		cam_look = truck_at + forward * 2.0 + Vector3(0, 1.2, 0)
 	# The same clearance the live camera gets, so a snap never lands in a wall.
 	if world != null:
 		cam.position = _camera_clear(cam.position, truck_at)
 	cam.look_at(cam_look, Vector3.UP)
-
-
-func _bay_camera(truck_at: Vector3, inward: Vector3) -> Vector3:
-	# Backing in: the camera stands on the road a little way back up it,
-	# just off the kerb, so neither the bay's building nor the one across
-	# the road swallows it, and watches the truck come in.
-	var travel := to_world(_lane_point(lane_total)) - to_world(_lane_point(maxf(0.0, lane_total - 10.0)))
-	var back := -travel.normalized() if travel.length() > 0.01 else Vector3(-inward.z, 0, inward.x)
-	return truck_at - inward * 3.2 + back * 7.5 + Vector3(0, 4.5, 0)
 
 
 func _camera_clear(goal: Vector3, truck_at: Vector3) -> Vector3:
@@ -2827,24 +2806,9 @@ func _drive(delta: float, weather: String) -> void:
 	if lane.size() < 2:
 		return
 	if at_end:
-		# Past the bay: the brake pedal backs the truck in along its own
-		# arc, the throttle pulls it forward again. No wheel to turn.
-		var back_len := _path_length(back_path)
-		var want_back := throttle < 0.0 or handbrake
-		if want_back and back_t < 1.0:
-			back_t = minf(1.0, back_t + reverse_max * delta / maxf(back_len, 1.0))
-			speed = -reverse_max
-		elif throttle > 0.0 and back_t > 0.0:
-			back_t = maxf(0.0, back_t - reverse_max * delta / maxf(back_len, 1.0))
-			speed = reverse_max
-		else:
-			speed = 0.0
-		var here := _bezier(back_path, back_t)
-		var nose := _bezier(back_path, maxf(0.0, back_t - 0.02))
-		if nose.distance_to(here) > 0.01:
-			heading = (nose - here).angle()
-		pos = here
-		vel = Vector2.RIGHT.rotated(heading) * speed
+		# Pulled up at the kerb beside the bay. The engine idles.
+		speed = 0.0
+		vel = Vector2.ZERO
 		return
 	var cap := max_speed
 	# Traffic ahead in our lane sets the pace: ease off and sit behind it.
@@ -2938,12 +2902,10 @@ func _build_lane() -> void:
 			# Abeam the far bay in the lane, then the stop past it.
 			var bay_out: Rect2 = dropoff.get("bay", Rect2())
 			var goal: Vector2 = bay_out.get_center() if bay_out.size != Vector2.ZERO else b
+			# The lane ends at the kerb beside the bay: pulling up there is
+			# the arrival. No backing in.
 			var abeam := a + dir * maxf(0.0, (goal - a).dot(dir)) + side * LANE_OFFSET
 			raw.append(abeam)
-			var stop := abeam + dir * PAST_BAY
-			raw.append(stop)
-			# The reverse arc: from the stop, back and across into the bay.
-			back_path = PackedVector2Array([stop, abeam + dir * 30.0, goal])
 		else:
 			raw.append(b + side * LANE_OFFSET)
 	# Where two offset segments meet at a corner, the lane bends through the
@@ -3477,16 +3439,13 @@ func _check_alley() -> void:
 
 
 func _check_dropoff() -> void:
+	# Pulled up at the kerb beside the bay, stopped: that is parked. The
+	# bay rect is grown to reach the lane the truck stops in.
 	var bay: Rect2 = dropoff.get("bay", Rect2())
-	var inside := bay.has_point(_art_center())
-	# A borrowed truck is backed into the bay: coming in nose-first does not
-	# count until you reverse. Reversing anywhere inside the bay sets it.
-	if inside and speed < -3.0:
-		backed_in = true
-	if not inside:
-		backed_in = false
+	var inside := bay.grow(LANE_OFFSET + 40.0).has_point(_art_center())
+	backed_in = inside and at_end
 	in_bay = inside
-	var parked := inside and backed_in and absf(speed) < 14.0 and vel.length() < 20.0
+	var parked := inside and at_end and absf(speed) < 14.0 and vel.length() < 20.0
 	if parked != at_dropoff:
 		at_dropoff = parked
 		if at_dropoff:

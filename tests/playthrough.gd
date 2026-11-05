@@ -1042,13 +1042,10 @@ var _wp_index := 1
 
 func _steer(drive: Node) -> void:
 	# The truck keeps its own lane. Hold the throttle, brake for a hazard
-	# close ahead, and at the stop past the bay hold the brake to back in.
+	# close ahead; at the kerb beside the bay it stops on its own.
 	if bool(drive.at_end):
 		_key(KEY_W, false)
-		if bool(drive.backed_in) and absf(float(drive.speed)) < 1.0 and bool(drive.at_dropoff):
-			_key(KEY_S, false)
-		else:
-			_key(KEY_S, true)
+		_key(KEY_S, false)
 		return
 	var cue: Dictionary = drive._hazard_ahead()
 	var speed := float(drive.speed)

@@ -1570,25 +1570,27 @@ func _qa_regressions() -> Array:
 	GameState.mode = "office"
 	GameState.job = {}
 	GameState.generated_drives.erase("smoke_night")
-	# The drive wants the truck backed into the bay: nose-first is not parked.
+	# Parked is pulled up at the kerb beside the bay and stopped: rolling
+	# past is not, and the lane's end is.
 	var course_node = load("res://scripts/drive_course.gd").new()
 	course_node.dropoff = {"bay": Rect2(0, 0, 180, 60)}
-	course_node.pos = Vector2(90, 30)
+	course_node.pos = Vector2(90, 90)
+	course_node.speed = 30.0
+	course_node.vel = Vector2(30, 0)
+	course_node._check_dropoff()
+	if course_node.at_dropoff:
+		found.append("rolling past counted as parked")
+	course_node.at_end = true
 	course_node.speed = 0.0
 	course_node.vel = Vector2.ZERO
 	course_node._check_dropoff()
-	if course_node.at_dropoff:
-		found.append("nose-first counted as parked")
-	course_node.speed = -20.0
-	course_node._check_dropoff()
-	course_node.speed = 0.0
-	course_node._check_dropoff()
-	if not course_node.backed_in or not course_node.at_dropoff:
-		found.append("backing in did not park")
+	if not course_node.at_dropoff:
+		found.append("the kerb stop did not park")
+	course_node.at_end = false
 	course_node.pos = Vector2(600, 600)
 	course_node._check_dropoff()
-	if course_node.backed_in:
-		found.append("backed_in stuck after leaving")
+	if course_node.at_dropoff or course_node.backed_in:
+		found.append("parked stuck after leaving")
 	course_node.free()
 	# Unpacking: a piece leaving a box arcs into place instead of popping.
 	GameState.job = {"def": {"id": "arc_test", "venue": "cafe"}, "items": [{"uid": "arc0", "item_id": "cafe_mug", "name": "Mug", "state": "boxed", "box": 0, "damage": 0, "x": 0, "y": 0, "z": 0}], "boxes": [{"id": 0, "sealed": true}], "carried": [0]}
